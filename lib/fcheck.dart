@@ -25,3 +25,4 @@ export 'src/utils.dart';
 export 'src/hardcoded_string_issue.dart';
 export 'src/hardcoded_string_analyzer.dart';
 export 'src/hardcoded_string_visitor.dart';
+export 'src/sort_source.dart';

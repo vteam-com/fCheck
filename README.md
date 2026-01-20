@@ -9,6 +9,7 @@ A command-line tool for analyzing the quality of Flutter and Dart projects. It p
 - ✅ **Code Quality Checks**: Validates compliance with "one class per file" rule
 - 🎯 **StatefulWidget Support**: Special handling for Flutter StatefulWidget classes
 - 🔍 **Hardcoded String Detection**: Identifies potentially hardcoded user-facing strings
+- 🔧 **Source Code Sorting**: Ensures Flutter class members are properly organized
 - 📁 **Recursive Analysis**: Scans entire project directory trees
 - 🚀 **Fast CLI**: Command-line interface with simple usage
 
@@ -78,6 +79,8 @@ Comment Ratio: 12.70%
   - lib/ui/messages.dart:15: "Welcome back!"
   - lib/screens/login.dart:42: "Please enter your password"
   - lib/widgets/buttons.dart:23: "Submit"
+
+✅ All Flutter classes have properly sorted members.
 ```
 
 ## Quality Metrics
@@ -132,6 +135,12 @@ void main() {
 - **Private Classes**: Unlimited (starting with `_` are implementation details)
 - **Non-compliant**: Files with too many public classes
 
+### Member Sorting (Flutter Classes)
+- **Proper Order**: Constructors → Fields → Getters/Setters → Methods → Lifecycle Methods
+- **Lifecycle Methods**: `initState`, `dispose`, `didChangeDependencies`, `didUpdateWidget`, `build`
+- **Field Grouping**: Related getters/setters are grouped with their fields
+- **Validation**: Checks if Flutter class members follow consistent organization patterns
+
 ## Project Structure
 
 ```
@@ -145,6 +154,7 @@ fcheck/
 │       ├── hardcoded_string_analyzer.dart # Hardcoded string detection
 │       ├── hardcoded_string_issue.dart    # Hardcoded string issue model
 │       ├── hardcoded_string_visitor.dart  # AST visitor for strings
+│       ├── sort_source.dart               # Source code sorting analysis
 │       ├── utils.dart                     # File utilities
 │       └── models/
 │           ├── file_metrics.dart          # File-level metrics
@@ -195,6 +205,16 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Flutter projects (for Flutter-specific analysis features)
 
 ## Changelog
+
+### v0.3.0
+- ✨ New source code sorting feature for Flutter classes
+- 🔧 Member organization validation and checking
+- 📋 Ensures proper ordering: constructors → fields → getters/setters → methods → lifecycle methods
+
+### v0.2.0
+- Upgraded to analyzer ^10.0.1
+- Fixed compatibility issues with new analyzer API
+- Improved directory exclusion for cleaner analysis
 
 ### v0.1.0
 - Initial release

@@ -6,6 +6,7 @@
 import 'package:fcheck/src/models/file_metrics.dart';
 
 import '../hardcoded_string_issue.dart';
+import '../sort_source.dart';
 
 class ProjectMetrics {
   /// Total number of folders in the project.
@@ -29,6 +30,9 @@ class ProjectMetrics {
   /// List of hardcoded string issues found in the project.
   final List<HardcodedStringIssue> hardcodedStringIssues;
 
+  /// List of source sorting issues found in the project.
+  final List<SourceSortIssue> sourceSortIssues;
+
   /// Creates a new [ProjectMetrics] instance.
   ///
   /// All parameters are required and represent the aggregated metrics
@@ -41,6 +45,7 @@ class ProjectMetrics {
     required this.totalCommentLines,
     required this.fileMetrics,
     required this.hardcodedStringIssues,
+    required this.sourceSortIssues,
   });
 
   /// The ratio of comment lines to total lines of code, as a value between 0.0 and 1.0.
@@ -56,6 +61,7 @@ class ProjectMetrics {
   /// - Comment ratio analysis
   /// - Compliance status for the "one class per file" rule
   /// - Hardcoded string issues
+  /// - Source sorting issues
   void printReport() {
     print('--- Quality Report ---');
     print('Total Folders: $totalFolders');
@@ -90,6 +96,21 @@ class ProjectMetrics {
       }
       if (hardcodedStringIssues.length > 10) {
         print('  ... and ${hardcodedStringIssues.length - 10} more');
+      }
+    }
+
+    print('');
+
+    if (sourceSortIssues.isEmpty) {
+      print('✅ All Flutter classes have properly sorted members.');
+    } else {
+      print(
+          '🔧 ${sourceSortIssues.length} Flutter classes have unsorted members:');
+      for (var issue in sourceSortIssues.take(10)) {
+        print('  - ${issue.filePath}:${issue.lineNumber} (${issue.className})');
+      }
+      if (sourceSortIssues.length > 10) {
+        print('  ... and ${sourceSortIssues.length - 10} more');
       }
     }
   }

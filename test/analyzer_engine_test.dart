@@ -26,6 +26,7 @@ void main() {
       expect(metrics.totalCommentLines, equals(0));
       expect(metrics.fileMetrics, isEmpty);
       expect(metrics.hardcodedStringIssues, isEmpty);
+      expect(metrics.sourceSortIssues, isEmpty);
     });
 
     test('should analyze directory with Dart files', () {

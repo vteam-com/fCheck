@@ -30,6 +30,7 @@ void main() {
         totalCommentLines: 15,
         fileMetrics: fileMetrics,
         hardcodedStringIssues: [],
+        sourceSortIssues: [],
       );
 
       expect(projectMetrics.totalFolders, equals(5));
@@ -50,6 +51,7 @@ void main() {
         totalCommentLines: 25,
         fileMetrics: [],
         hardcodedStringIssues: [],
+        sourceSortIssues: [],
       );
 
       expect(projectMetrics.commentRatio, equals(0.25));
@@ -64,6 +66,7 @@ void main() {
         totalCommentLines: 0,
         fileMetrics: [],
         hardcodedStringIssues: [],
+        sourceSortIssues: [],
       );
 
       expect(projectMetrics.commentRatio, equals(0.0));
@@ -95,6 +98,7 @@ void main() {
         totalCommentLines: 15,
         fileMetrics: fileMetrics,
         hardcodedStringIssues: [],
+        sourceSortIssues: [],
       );
 
       // Test that printReport doesn't throw an error

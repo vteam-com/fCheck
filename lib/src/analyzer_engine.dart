@@ -4,6 +4,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 import 'hardcoded_string_analyzer.dart';
+import 'sort_source.dart';
 import 'models/project_metrics.dart';
 import 'utils.dart';
 
@@ -51,6 +52,10 @@ class AnalyzerEngine {
     final hardcodedStringIssues =
         hardcodedStringAnalyzer.analyzeDirectory(projectDir);
 
+    // Analyze for source sorting issues
+    final sourceSortAnalyzer = SourceSortAnalyzer();
+    final sourceSortIssues = sourceSortAnalyzer.analyzeDirectory(projectDir);
+
     return ProjectMetrics(
       totalFolders: FileUtils.countFolders(projectDir),
       totalFiles: FileUtils.countAllFiles(projectDir),
@@ -59,6 +64,7 @@ class AnalyzerEngine {
       totalCommentLines: totalComments,
       fileMetrics: fileMetricsList,
       hardcodedStringIssues: hardcodedStringIssues,
+      sourceSortIssues: sourceSortIssues,
     );
   }
 
