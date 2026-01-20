@@ -1,0 +1,42 @@
+# Dart
+.dart_tool/
+.packages
+
+# Flutter
+build/
+android/app/build/
+ios/Flutter/Flutter.framework/
+ios/Flutter/Flutter.podspec
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/App.framework/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+
+# Test artifacts
+test/**/*.out
+test/**/*.expect
+
+# Temporary files
+*.tmp
+*.temp
