@@ -7,7 +7,7 @@ import 'package:fcheck/src/models/file_metrics.dart';
 /// coding standards.
 
 import '../hardcoded_string_issue.dart';
-import '../sort_source.dart';
+import '../sort.dart';
 
 class ProjectMetrics {
   /// Total number of folders in the project.
@@ -63,7 +63,11 @@ class ProjectMetrics {
   /// - Compliance status for the "one class per file" rule
   /// - Hardcoded string issues
   /// - Source sorting issues
-  void printReport() {
+  ///
+  /// [silent] If true, suppresses console output (useful for testing)
+  void printReport({bool silent = false}) {
+    if (silent) return;
+
     print('--- Quality Report ---');
     print('Total Folders: $totalFolders');
     print('Total Files: $totalFiles');

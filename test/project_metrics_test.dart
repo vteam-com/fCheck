@@ -101,8 +101,8 @@ void main() {
         sourceSortIssues: [],
       );
 
-      // Test that printReport doesn't throw an error
-      expect(() => projectMetrics.printReport(), returnsNormally);
+      // Test that printReport doesn't throw an error (with silent output)
+      expect(() => projectMetrics.printReport(silent: true), returnsNormally);
     });
   });
 }

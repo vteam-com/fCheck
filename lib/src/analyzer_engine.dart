@@ -4,7 +4,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 import 'hardcoded_string_analyzer.dart';
-import 'sort_source.dart';
+import 'sort.dart';
 import 'models/project_metrics.dart';
 import 'utils.dart';
 
