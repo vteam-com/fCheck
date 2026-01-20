@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
+import 'hardcoded_strings.dart';
 import 'models.dart';
 import 'utils.dart';
 
@@ -44,6 +45,11 @@ class AnalyzerEngine {
       totalComments += metrics.commentLines;
     }
 
+    // Analyze for hardcoded strings
+    final hardcodedStringAnalyzer = HardcodedStringAnalyzer();
+    final hardcodedStringIssues =
+        hardcodedStringAnalyzer.analyzeDirectory(projectDir);
+
     return ProjectMetrics(
       totalFolders: FileUtils.countFolders(projectDir),
       totalFiles: FileUtils.countAllFiles(projectDir),
@@ -51,6 +57,7 @@ class AnalyzerEngine {
       totalLinesOfCode: totalLoc,
       totalCommentLines: totalComments,
       fileMetrics: fileMetricsList,
+      hardcodedStringIssues: hardcodedStringIssues,
     );
   }
 

@@ -8,6 +8,7 @@ A command-line tool for analyzing the quality of Flutter and Dart projects. It p
 - 📝 **Comment Analysis**: Measures code documentation levels
 - ✅ **Code Quality Checks**: Validates compliance with "one class per file" rule
 - 🎯 **StatefulWidget Support**: Special handling for Flutter StatefulWidget classes
+- 🔍 **Hardcoded String Detection**: Identifies potentially hardcoded user-facing strings
 - 📁 **Recursive Analysis**: Scans entire project directory trees
 - 🚀 **Fast CLI**: Command-line interface with simple usage
 
@@ -72,6 +73,11 @@ Comment Ratio: 12.70%
   - lib/widgets.dart (4 classes found)
   - lib/main.dart (2 classes found)
   - lib/models.dart (3 classes found)
+
+⚠️ 6 potential hardcoded strings detected:
+  - lib/ui/messages.dart:15: "Welcome back!"
+  - lib/screens/login.dart:42: "Please enter your password"
+  - lib/widgets/buttons.dart:23: "Submit"
 ```
 
 ## Quality Metrics
@@ -189,4 +195,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Comment ratio analysis
 - One class per file rule checking
 - StatefulWidget support
+- Hardcoded string detection
 - CLI interface

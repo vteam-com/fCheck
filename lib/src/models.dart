@@ -3,6 +3,8 @@
 /// This class aggregates metrics from all analyzed files in a project,
 /// providing insights into code quality, size, and compliance with
 /// coding standards.
+import 'hardcoded_strings.dart';
+
 class ProjectMetrics {
   /// Total number of folders in the project.
   final int totalFolders;
@@ -22,6 +24,9 @@ class ProjectMetrics {
   /// Metrics for each individual Dart file.
   final List<FileMetrics> fileMetrics;
 
+  /// List of hardcoded string issues found in the project.
+  final List<HardcodedStringIssue> hardcodedStringIssues;
+
   /// Creates a new [ProjectMetrics] instance.
   ///
   /// All parameters are required and represent the aggregated metrics
@@ -33,6 +38,7 @@ class ProjectMetrics {
     required this.totalLinesOfCode,
     required this.totalCommentLines,
     required this.fileMetrics,
+    required this.hardcodedStringIssues,
   });
 
   /// The ratio of comment lines to total lines of code, as a value between 0.0 and 1.0.
@@ -47,6 +53,7 @@ class ProjectMetrics {
   /// - Project statistics (folders, files, lines of code)
   /// - Comment ratio analysis
   /// - Compliance status for the "one class per file" rule
+  /// - Hardcoded string issues
   void printReport() {
     print('--- Quality Report ---');
     print('Total Folders: $totalFolders');
@@ -66,6 +73,21 @@ class ProjectMetrics {
           '❌ ${nonCompliant.length} files violate the "one class per file" rule:');
       for (var m in nonCompliant) {
         print('  - ${m.path} (${m.classCount} classes found)');
+      }
+    }
+
+    print('');
+
+    if (hardcodedStringIssues.isEmpty) {
+      print('✅ No hardcoded strings found.');
+    } else {
+      print(
+          '⚠️ ${hardcodedStringIssues.length} potential hardcoded strings detected:');
+      for (var issue in hardcodedStringIssues.take(10)) {
+        print('  - $issue');
+      }
+      if (hardcodedStringIssues.length > 10) {
+        print('  ... and ${hardcodedStringIssues.length - 10} more');
       }
     }
   }

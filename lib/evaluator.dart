@@ -6,6 +6,7 @@
 /// - Lines of code metrics
 /// - Comment ratio analysis
 /// - One class per file rule compliance
+/// - Hardcoded string detection
 ///
 /// ## Usage
 ///
@@ -21,3 +22,4 @@ library fcheck;
 export 'src/models.dart';
 export 'src/analyzer_engine.dart';
 export 'src/utils.dart';
+export 'src/hardcoded_strings.dart';
