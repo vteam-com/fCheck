@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Upgraded analyzer package to ^10.0.1 for better compatibility
 - Updated code to use new analyzer API methods (replaced deprecated name.lexeme with toString())
+- Modified file analysis to exclude example/, test/, tool/, and build directories from production code metrics
 
 ### Fixed
 - Removed unused _classNode field from MemberSorter class
 - Fixed compatibility issues with analyzer package version 10.x
+- Resolved issue where example directory with intentional "bad code" was being analyzed
 
 ## [0.1.0] - 2026-01-20
 

@@ -5,6 +5,7 @@ import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'hardcoded_string_issue.dart';
 import 'hardcoded_string_visitor.dart';
+import 'utils.dart';
 
 /// Analyzer for detecting hardcoded strings in Dart files.
 ///
@@ -55,7 +56,8 @@ class HardcodedStringAnalyzer {
   /// Analyzes all Dart files in a directory for hardcoded strings.
   ///
   /// This method recursively scans the directory tree starting from [directory]
-  /// and analyzes all `.dart` files found. Generated files (l10n, .g.dart) are
+  /// and analyzes all `.dart` files found, excluding example/, test/, tool/,
+  /// and build directories. Generated files (l10n, .g.dart) are
   /// automatically skipped.
   ///
   /// [directory] The root directory to scan.
@@ -65,11 +67,7 @@ class HardcodedStringAnalyzer {
   List<HardcodedStringIssue> analyzeDirectory(Directory directory) {
     final List<HardcodedStringIssue> allIssues = [];
 
-    final List<File> dartFiles = directory
-        .listSync(recursive: true)
-        .whereType<File>()
-        .where((file) => file.path.endsWith('.dart'))
-        .toList();
+    final List<File> dartFiles = FileUtils.listDartFiles(directory);
 
     for (final File file in dartFiles) {
       allIssues.addAll(analyzeFile(file));
