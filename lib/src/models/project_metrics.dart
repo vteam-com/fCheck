@@ -1,9 +1,10 @@
+import 'package:fcheck/src/models/file_metrics.dart';
+
 /// Represents the overall quality metrics for a Flutter/Dart project.
 ///
 /// This class aggregates metrics from all analyzed files in a project,
 /// providing insights into code quality, size, and compliance with
 /// coding standards.
-import 'package:fcheck/src/models/file_metrics.dart';
 
 import '../hardcoded_string_issue.dart';
 import '../sort_source.dart';
