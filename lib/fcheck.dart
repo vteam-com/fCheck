@@ -7,6 +7,7 @@
 /// - Comment ratio analysis
 /// - One class per file rule compliance
 /// - Hardcoded string detection
+/// - Source code member sorting validation
 ///
 /// ## Usage
 ///

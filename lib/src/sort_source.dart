@@ -8,6 +8,12 @@ import 'utils.dart';
 
 /// Represents an issue found with source code sorting
 class SourceSortIssue {
+  /// Creates a new SourceSortIssue.
+  ///
+  /// [filePath] is the path to the file containing the issue.
+  /// [className] is the name of the class with sorting issues.
+  /// [lineNumber] is the line number where the class is declared.
+  /// [description] describes the sorting issue found.
   SourceSortIssue({
     required this.filePath,
     required this.className,
@@ -15,15 +21,33 @@ class SourceSortIssue {
     required this.description,
   });
 
+  /// The path to the file containing the sorting issue.
   final String filePath;
+
+  /// The name of the class that has sorting issues.
   final String className;
+
+  /// The line number where the class declaration starts.
   final int lineNumber;
+
+  /// A description of the sorting issue.
   final String description;
 }
 
 /// Analyzes Dart files for proper source code member ordering in Flutter classes
 class SourceSortAnalyzer {
-  /// Analyzes a single file for source sorting issues
+  /// Creates a new SourceSortAnalyzer.
+  SourceSortAnalyzer();
+
+  /// Analyzes a single file for source sorting issues.
+  ///
+  /// This method examines Flutter widget classes in the given file and checks
+  /// if their members are properly sorted according to Flutter conventions.
+  ///
+  /// [file] The Dart file to analyze.
+  ///
+  /// Returns a list of [SourceSortIssue] objects representing any sorting
+  /// issues found in Flutter classes within the file.
   List<SourceSortIssue> analyzeFile(File file) {
     final List<SourceSortIssue> issues = <SourceSortIssue>[];
 
@@ -83,7 +107,16 @@ class SourceSortAnalyzer {
     return issues;
   }
 
-  /// Analyzes a directory for source sorting issues
+  /// Analyzes a directory for source sorting issues.
+  ///
+  /// This method recursively scans the directory tree and analyzes all
+  /// Dart files found, excluding example/, test/, tool/, and build directories.
+  /// Only Flutter widget classes are checked for proper member sorting.
+  ///
+  /// [directory] The root directory to scan for Dart files.
+  ///
+  /// Returns a list of all [SourceSortIssue] objects found across
+  /// all analyzed files in the directory.
   List<SourceSortIssue> analyzeDirectory(Directory directory) {
     final List<SourceSortIssue> allIssues = <SourceSortIssue>[];
 
@@ -119,6 +152,14 @@ class SourceSortAnalyzer {
 /// Finds classes that we want to sort: StatelessWidget, StatefulWidget, or
 /// State<...> classes (the typical Flutter patterns).
 class ClassVisitor extends GeneralizingAstVisitor<void> {
+  /// Creates a new ClassVisitor for finding Flutter widget classes.
+  ClassVisitor();
+
+  /// The list of class declarations found that extend Flutter widget classes.
+  ///
+  /// This list contains [ClassDeclaration] nodes for classes that extend
+  /// StatelessWidget, StatefulWidget, or State classes, which are the
+  /// Flutter classes that should have their members sorted.
   final List<ClassDeclaration> targetClasses = <ClassDeclaration>[];
 
   @override
@@ -143,10 +184,24 @@ class ClassVisitor extends GeneralizingAstVisitor<void> {
 /// 2) all public methods (alphabetical) come next
 /// 3) all private methods (alphabetical) come last
 class MemberSorter {
+  /// Creates a new MemberSorter.
+  ///
+  /// [_content] The full source code of the file containing the class.
+  /// [_members] The list of class members to sort.
   MemberSorter(this._content, this._members);
+
   final String _content;
   final NodeList<ClassMember> _members;
 
+  /// Returns the sorted class body as a string.
+  ///
+  /// This method reorganizes the class members according to Flutter conventions:
+  /// - Constructors, fields, and other non-method members first (original order)
+  /// - Lifecycle methods (initState, dispose, build, etc.) in specific order
+  /// - Public methods alphabetically
+  /// - Private methods alphabetically
+  ///
+  /// Returns the sorted class body content as a string, or empty string if no members.
   String getSortedBody() {
     final NodeList<ClassMember> members = _members;
     if (members.isEmpty) {
