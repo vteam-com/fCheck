@@ -1,7 +1,29 @@
+/// Command-line interface for the fcheck Flutter/Dart quality analyzer.
+///
+/// This executable provides a command-line interface to analyze Flutter and
+/// Dart projects for code quality metrics. It can be run from the terminal
+/// to get comprehensive reports on project structure, code metrics, and
+/// compliance with coding standards.
+///
+/// ## Usage
+///
+/// ```bash
+/// # Analyze current directory
+/// dart run fcheck
+///
+/// # Analyze specific path
+/// dart run fcheck --path /path/to/project
+/// ```
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:fcheck/evaluator.dart';
 
+/// Main entry point for the fcheck command-line tool.
+///
+/// Parses command-line arguments, validates the target directory,
+/// and runs the quality analysis on the specified Flutter/Dart project.
+///
+/// [arguments] Command-line arguments passed to the executable.
 void main(List<String> arguments) {
   final parser = ArgParser()
     ..addOption('path',
