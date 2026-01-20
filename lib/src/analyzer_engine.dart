@@ -149,7 +149,7 @@ class _QualityVisitor extends RecursiveAstVisitor<void> {
   /// [node] The class declaration node being visited.
   @override
   void visitClassDeclaration(ClassDeclaration node) {
-    final className = node.name.lexeme;
+    final className = node.namePart.toString();
 
     // Only count public classes for the "one class per file" rule
     // Private classes (starting with _) are implementation details
@@ -157,7 +157,7 @@ class _QualityVisitor extends RecursiveAstVisitor<void> {
       classCount++;
     }
 
-    final superclass = node.extendsClause?.superclass.name2.lexeme;
+    final superclass = node.extendsClause?.superclass.toString();
     if (superclass == 'StatefulWidget') {
       hasStatefulWidget = true;
     }
