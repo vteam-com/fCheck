@@ -18,10 +18,14 @@ class AnalyzerEngine {
   /// The root directory of the project to analyze.
   final Directory projectDir;
 
+  /// Whether to automatically fix sorting issues.
+  final bool fix;
+
   /// Creates a new analyzer engine for the specified project directory.
   ///
   /// [projectDir] should point to the root of a Flutter/Dart project.
-  AnalyzerEngine(this.projectDir);
+  /// [fix] if true, automatically fixes sorting issues by writing sorted code back to files.
+  AnalyzerEngine(this.projectDir, {this.fix = false});
 
   /// Analyzes the entire project and returns comprehensive quality metrics.
   ///
@@ -54,7 +58,8 @@ class AnalyzerEngine {
 
     // Analyze for source sorting issues
     final sourceSortAnalyzer = SourceSortAnalyzer();
-    final sourceSortIssues = sourceSortAnalyzer.analyzeDirectory(projectDir);
+    final sourceSortIssues =
+        sourceSortAnalyzer.analyzeDirectory(projectDir, fix: fix);
 
     return ProjectMetrics(
       totalFolders: FileUtils.countFolders(projectDir),

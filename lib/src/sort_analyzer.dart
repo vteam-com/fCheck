@@ -19,10 +19,11 @@ class SourceSortAnalyzer {
   /// if their members are properly sorted according to Flutter conventions.
   ///
   /// [file] The Dart file to analyze.
+  /// [fix] if true, automatically fixes sorting issues by writing sorted code back to the file.
   ///
   /// Returns a list of [SourceSortIssue] objects representing any sorting
   /// issues found in Flutter classes within the file.
-  List<SourceSortIssue> analyzeFile(File file) {
+  List<SourceSortIssue> analyzeFile(File file, {bool fix = false}) {
     final List<SourceSortIssue> issues = <SourceSortIssue>[];
 
     try {
@@ -66,12 +67,24 @@ class SourceSortAnalyzer {
         // Check if the body needs sorting
         if (_bodiesDiffer(sortedBody, originalBody)) {
           final int lineNumber = _getLineNumber(content, classNode.offset);
-          issues.add(SourceSortIssue(
-            filePath: file.path,
-            className: classNode.namePart.toString(),
-            lineNumber: lineNumber,
-            description: 'Class members are not properly sorted',
-          ));
+          final className = classNode.namePart.toString();
+
+          if (fix) {
+            // Write the sorted content back to the file
+            final sortedContent = content.substring(0, classBodyStart) +
+                sortedBody +
+                content.substring(classBodyEnd);
+            file.writeAsStringSync(sortedContent);
+            print('✅ Fixed sorting for class $className in ${file.path}');
+          } else {
+            // Report the issue
+            issues.add(SourceSortIssue(
+              filePath: file.path,
+              className: className,
+              lineNumber: lineNumber,
+              description: 'Class members are not properly sorted',
+            ));
+          }
         }
       }
     } catch (e) {
@@ -88,15 +101,17 @@ class SourceSortAnalyzer {
   /// Only Flutter widget classes are checked for proper member sorting.
   ///
   /// [directory] The root directory to scan for Dart files.
+  /// [fix] if true, automatically fixes sorting issues by writing sorted code back to files.
   ///
   /// Returns a list of all [SourceSortIssue] objects found across
   /// all analyzed files in the directory.
-  List<SourceSortIssue> analyzeDirectory(Directory directory) {
+  List<SourceSortIssue> analyzeDirectory(Directory directory,
+      {bool fix = false}) {
     final List<SourceSortIssue> allIssues = <SourceSortIssue>[];
 
     final List<File> dartFiles = FileUtils.listDartFiles(directory);
     for (final File file in dartFiles) {
-      allIssues.addAll(analyzeFile(file));
+      allIssues.addAll(analyzeFile(file, fix: fix));
     }
 
     return allIssues;

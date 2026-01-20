@@ -58,6 +58,19 @@ dart run fcheck --path /path/to/project
 dart run fcheck -p /path/to/project
 ```
 
+### Auto-Fix Mode
+
+```bash
+# Automatically fix sorting issues
+dart run fcheck --fix
+
+# Fix sorting issues in specific project
+dart run fcheck --path /path/to/project --fix
+
+# Use short option
+dart run fcheck -f
+```
+
 ### Example Output
 
 ```
