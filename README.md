@@ -141,9 +141,14 @@ fcheck/
 ├── lib/
 │   ├── evaluator.dart       # Public API exports
 │   └── src/
-│       ├── analyzer_engine.dart  # Core analysis logic
-│       ├── models.dart           # Data models
-│       └── utils.dart            # File utilities
+│       ├── analyzer_engine.dart           # Core analysis logic
+│       ├── hardcoded_string_analyzer.dart # Hardcoded string detection
+│       ├── hardcoded_string_issue.dart    # Hardcoded string issue model
+│       ├── hardcoded_string_visitor.dart  # AST visitor for strings
+│       ├── utils.dart                     # File utilities
+│       └── models/
+│           ├── file_metrics.dart          # File-level metrics
+│           └── project_metrics.dart       # Project-level metrics
 ├── example/                 # Test example project
 ├── pubspec.yaml             # Package configuration
 └── README.md               # This file

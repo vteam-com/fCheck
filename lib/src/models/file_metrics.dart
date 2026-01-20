@@ -1,9 +1,3 @@
-/// Represents the overall quality metrics for a Flutter/Dart project.
-///
-/// This class aggregates metrics from all analyzed files in a project,
-/// providing insights into code quality, size, and compliance with
-/// coding standards.
-
 /// Represents quality metrics for a single Dart file.
 ///
 /// This class contains analysis results for an individual file including
