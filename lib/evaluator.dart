@@ -19,7 +19,9 @@
 /// ```
 library fcheck;
 
-export 'src/models.dart';
+export 'src/models/project_metrics.dart';
 export 'src/analyzer_engine.dart';
 export 'src/utils.dart';
-export 'src/hardcoded_strings.dart';
+export 'src/hardcoded_string_issue.dart';
+export 'src/hardcoded_string_analyzer.dart';
+export 'src/hardcoded_string_visitor.dart';

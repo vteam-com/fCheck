@@ -93,9 +93,10 @@ Comment Ratio: 12.70%
 ### Code Quality Rules
 
 #### One Class Per File Rule
-- **Regular Classes**: Maximum 1 class per file
-- **StatefulWidget Classes**: Maximum 2 classes per file (widget + state)
-- **Violations**: Files with too many classes are flagged
+- **Public Classes**: Maximum 1 public class per file (classes not starting with `_`)
+- **StatefulWidget Files**: Maximum 2 public classes per file (widget + state)
+- **Private Classes**: Unlimited (implementation details starting with `_`)
+- **Violations**: Files with too many public classes are flagged
 
 ## Library Usage
 
@@ -126,9 +127,10 @@ void main() {
 - **Needs Improvement**: < 10%
 
 ### Class Organization
-- **Compliant**: Files with appropriate class counts
-- **StatefulWidget**: Allowed 2 classes (widget + State)
-- **Non-compliant**: Files with too many classes
+- **Compliant**: Files with appropriate public class counts
+- **StatefulWidget**: Allowed 2 public classes (widget + State)
+- **Private Classes**: Unlimited (starting with `_` are implementation details)
+- **Non-compliant**: Files with too many public classes
 
 ## Project Structure
 

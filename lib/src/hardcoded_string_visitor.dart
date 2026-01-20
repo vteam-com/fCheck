@@ -1,103 +1,27 @@
-/// Hardcoded string detection for Flutter/Dart projects.
-///
-/// This module analyzes Dart source files to identify hardcoded strings
-/// that may need to be localized or moved to constants. It intelligently
-/// skips strings that are legitimately hardcoded (imports, annotations,
-/// const declarations, etc.).
-import 'dart:io';
-import 'package:analyzer/dart/analysis/features.dart';
-import 'package:analyzer/dart/analysis/results.dart';
-import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
+import 'hardcoded_string_issue.dart';
 
-/// Represents a hardcoded string finding.
-class HardcodedStringIssue {
-  /// The file path where the hardcoded string was found.
-  final String filePath;
-
-  /// The line number where the hardcoded string appears.
-  final int lineNumber;
-
-  /// The hardcoded string value.
-  final String value;
-
-  /// Creates a new hardcoded string issue.
-  HardcodedStringIssue({
-    required this.filePath,
-    required this.lineNumber,
-    required this.value,
-  });
-
-  @override
-  String toString() => '$filePath:$lineNumber: "$value"';
-}
-
-/// Analyzer for detecting hardcoded strings in Dart files.
-class HardcodedStringAnalyzer {
-  /// Analyzes a single Dart file for hardcoded strings.
-  ///
-  /// [file] The Dart file to analyze.
-  ///
-  /// Returns a list of [HardcodedStringIssue] objects representing
-  /// potential hardcoded strings found in the file.
-  List<HardcodedStringIssue> analyzeFile(File file) {
-    final String filePath = file.path;
-
-    // Skip l10n generated files
-    if (filePath.contains('lib/l10n/') || filePath.contains('.g.dart')) {
-      return [];
-    }
-
-    final String content = file.readAsStringSync();
-
-    final ParseStringResult result = parseString(
-      content: content,
-      featureSet: FeatureSet.latestLanguageVersion(),
-    );
-
-    // Skip files with parse errors
-    if (result.errors.isNotEmpty) {
-      return [];
-    }
-
-    final CompilationUnit compilationUnit = result.unit;
-    final HardcodedStringVisitor visitor = HardcodedStringVisitor(
-      filePath,
-      content,
-    );
-    compilationUnit.accept(visitor);
-
-    return visitor.foundIssues;
-  }
-
-  /// Analyzes all Dart files in a directory for hardcoded strings.
-  ///
-  /// [directory] The root directory to scan.
-  ///
-  /// Returns a list of all [HardcodedStringIssue] objects found.
-  List<HardcodedStringIssue> analyzeDirectory(Directory directory) {
-    final List<HardcodedStringIssue> allIssues = [];
-
-    final List<File> dartFiles = directory
-        .listSync(recursive: true)
-        .whereType<File>()
-        .where((file) => file.path.endsWith('.dart'))
-        .toList();
-
-    for (final File file in dartFiles) {
-      allIssues.addAll(analyzeFile(file));
-    }
-
-    return allIssues;
-  }
-}
-
+/// A visitor that traverses the AST to detect hardcoded strings.
+///
+/// This class extends the analyzer's AST visitor to identify string literals
+/// in Dart source code that may represent user-facing content that should be
+/// localized. It intelligently filters out strings that are legitimately
+/// hardcoded (imports, annotations, const declarations, etc.).
 class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
+  /// Creates a new visitor for the specified file.
+  ///
+  /// [filePath] should be the path to the file being analyzed.
+  /// [content] should be the full text content of the file.
   HardcodedStringVisitor(this.filePath, this.content);
 
+  /// The file path being analyzed.
   final String filePath;
+
+  /// The full text content of the file.
   final String content;
+
+  /// The list of hardcoded string issues found during traversal.
   final List<HardcodedStringIssue> foundIssues = <HardcodedStringIssue>[];
 
   @override
@@ -157,6 +81,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     ));
   }
 
+  /// Checks if a string literal is within a directive (import/export/part).
   bool _isInDirective(final AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
@@ -172,6 +97,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Checks if a string literal is within an annotation.
   bool _isInAnnotation(final AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
@@ -183,6 +109,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Checks if a string literal is used as a key in a map literal.
   bool _isMapKey(final AstNode node) {
     final AstNode? parent = node.parent;
     if (parent is MapLiteralEntry) {
@@ -191,6 +118,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Checks if a string literal is within a const declaration.
   bool _isInConstDeclaration(final AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
@@ -211,6 +139,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Checks if a string literal is within an AppLocalizations call.
   bool _isInL10nCall(final AstNode node) {
     // Basic detection for AppLocalizations calls
     AstNode? current = node.parent;
@@ -227,6 +156,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Checks if a string literal is within a RegExp constructor or call.
   bool _isInRegExpCall(final AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
@@ -246,6 +176,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Checks if a string literal is within a Key constructor.
   bool _isInKey(final AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
@@ -264,6 +195,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Checks if a string literal is used as an index in a collection.
   bool _isIndex(final AstNode node) {
     final AstNode? parent = node.parent;
     if (parent is IndexExpression) {
@@ -272,6 +204,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Calculates the 1-based line number for a given character offset.
   int _getLineNumber(final int offset) {
     final List<String> lines = content.substring(0, offset).split('\n');
     return lines.length;

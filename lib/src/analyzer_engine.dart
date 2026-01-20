@@ -2,8 +2,9 @@ import 'dart:io';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
-import 'hardcoded_strings.dart';
-import 'models.dart';
+import 'package:fcheck/src/models/file_metrics.dart';
+import 'hardcoded_string_analyzer.dart';
+import 'models/project_metrics.dart';
 import 'utils.dart';
 
 /// The main engine for analyzing Flutter/Dart project quality.
@@ -148,7 +149,13 @@ class _QualityVisitor extends RecursiveAstVisitor<void> {
   /// [node] The class declaration node being visited.
   @override
   void visitClassDeclaration(ClassDeclaration node) {
-    classCount++;
+    final className = node.name.lexeme;
+
+    // Only count public classes for the "one class per file" rule
+    // Private classes (starting with _) are implementation details
+    if (!className.startsWith('_')) {
+      classCount++;
+    }
 
     final superclass = node.extendsClause?.superclass.name2.lexeme;
     if (superclass == 'StatefulWidget') {
