@@ -16,7 +16,7 @@
 /// ```
 import 'dart:io';
 import 'package:args/args.dart';
-import 'package:fcheck/evaluator.dart';
+import 'package:fcheck/fcheck.dart';
 
 /// Main entry point for the fcheck command-line tool.
 ///

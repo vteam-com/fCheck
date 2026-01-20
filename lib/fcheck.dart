@@ -11,7 +11,7 @@
 /// ## Usage
 ///
 /// ```dart
-/// import 'package:fcheck/evaluator.dart';
+/// import 'package:fcheck/fcheck.dart';
 ///
 /// final engine = AnalyzerEngine(projectDirectory);
 /// final metrics = engine.analyze();
