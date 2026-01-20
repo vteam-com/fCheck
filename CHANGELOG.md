@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.3] - 2026-01-20
+
+### Added
+- ✨ Support for positional path arguments (e.g., `dart run fcheck ./path/`)
+- 🆕 `--input/-i` option replacing `--path/-p` for better CLI design
+- 📚 `--help/-h` flag with comprehensive usage information
+- 🎯 'Explicit option wins' logic when both named and positional arguments provided
+
+### Changed
+- 🔄 CLI argument parsing to support both positional and named arguments
+- 📝 Improved usage messages and help text
+
+### Fixed
+- 🐛 Positional arguments now work correctly (original issue resolved)
+
 ## [0.3.2] - 2026-01-20
 - ✨ Added `--fix` / `-f` flag for automatic sorting fixes
 - 🔧 Automatically fixes sorting issues by writing properly sorted code back to files

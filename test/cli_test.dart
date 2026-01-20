@@ -35,7 +35,7 @@ void main() {
       expect(result.stdout, contains('Quality Report'));
     });
 
-    test('should accept path argument', () async {
+    test('should accept input argument', () async {
       // Create test project structure
       final libDir = Directory('${tempDir.path}/lib')..createSync();
       File('${libDir.path}/test.dart')..writeAsStringSync('''
@@ -47,10 +47,10 @@ class TestClass {
 }
 ''');
 
-      // Run fcheck with path argument
+      // Run fcheck with input argument
       final result = await Process.run(
         'dart',
-        ['run', 'bin/fcheck.dart', '--path', tempDir.path],
+        ['run', 'bin/fcheck.dart', '--input', tempDir.path],
         workingDirectory: Directory.current.path, // Run from project root
         runInShell: true,
       );
@@ -62,7 +62,7 @@ class TestClass {
       expect(result.stdout, contains('Total Dart Files: 1'));
     });
 
-    test('should accept short path option', () async {
+    test('should accept short input option', () async {
       // Create test file
       File('${tempDir.path}/short.dart')
         ..writeAsStringSync('void main() => print("test");');
@@ -70,7 +70,7 @@ class TestClass {
       // Run fcheck with short option
       final result = await Process.run(
         'dart',
-        ['run', 'bin/fcheck.dart', '-p', tempDir.path],
+        ['run', 'bin/fcheck.dart', '-i', tempDir.path],
         workingDirectory: Directory.current.path,
         runInShell: true,
       );
@@ -85,7 +85,7 @@ class TestClass {
 
       final result = await Process.run(
         'dart',
-        ['run', 'bin/fcheck.dart', '--path', nonExistentPath],
+        ['run', 'bin/fcheck.dart', '--input', nonExistentPath],
         workingDirectory: Directory.current.path,
         runInShell: true,
       );
@@ -93,6 +93,37 @@ class TestClass {
       expect(result.exitCode, equals(1));
       expect(result.stdout, contains('Error: Directory'));
       expect(result.stdout, contains('does not exist'));
+    });
+
+    test('should show help with --help flag', () async {
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', '--help'],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout,
+          contains('Usage: dart run fcheck [options] [<folder>]'));
+      expect(result.stdout, contains('Analyze Flutter/Dart code quality'));
+      expect(result.stdout, contains('--input'));
+      expect(result.stdout, contains('--fix'));
+      expect(result.stdout, contains('--help'));
+    });
+
+    test('should show help with -h flag', () async {
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', '-h'],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout,
+          contains('Usage: dart run fcheck [options] [<folder>]'));
+      expect(result.stdout, contains('--input'));
     });
 
     test('should detect class violations', () async {
@@ -110,7 +141,7 @@ class SecondClass {
 
       final result = await Process.run(
         'dart',
-        ['run', 'bin/fcheck.dart', '--path', tempDir.path],
+        ['run', 'bin/fcheck.dart', '--input', tempDir.path],
         workingDirectory: Directory.current.path,
         runInShell: true,
       );
@@ -132,7 +163,7 @@ void main() {
 
       final result = await Process.run(
         'dart',
-        ['run', 'bin/fcheck.dart', '--path', tempDir.path],
+        ['run', 'bin/fcheck.dart', '--input', tempDir.path],
         workingDirectory: Directory.current.path,
         runInShell: true,
       );
@@ -140,6 +171,50 @@ void main() {
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('⚠️'));
       expect(result.stdout, contains('potential hardcoded strings detected'));
+    });
+
+    test('explicit input option should win over positional argument', () async {
+      // Create test files in two different directories
+      final dir1 = Directory('${tempDir.path}/dir1')..createSync();
+      final dir2 = Directory('${tempDir.path}/dir2')..createSync();
+
+      File('${dir1.path}/test1.dart')
+        ..writeAsStringSync('void main() => print("dir1");');
+      File('${dir2.path}/test2.dart')
+        ..writeAsStringSync('void main() => print("dir2");');
+
+      // Run with both explicit option and positional argument - explicit should win
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', '--input', dir1.path, dir2.path],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains('Analyzing project at'));
+      expect(result.stdout, contains(dir1.path));
+      expect(result.stdout, contains('test1.dart'));
+      expect(result.stdout, isNot(contains('test2.dart')));
+    });
+
+    test('should accept positional path argument', () async {
+      // Create test file
+      File('${tempDir.path}/positional.dart')
+        ..writeAsStringSync('void main() => print("positional test");');
+
+      // Run fcheck with positional argument
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', tempDir.path],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains('Analyzing project at'));
+      expect(result.stdout, contains(tempDir.path));
+      expect(result.stdout, contains('Quality Report'));
     });
   });
 }

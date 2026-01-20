@@ -10,17 +10,53 @@ import 'package:fcheck/fcheck.dart';
 /// [arguments] Command-line arguments passed to the executable.
 void main(List<String> arguments) {
   final parser = ArgParser()
-    ..addOption('path',
-        abbr: 'p', help: 'Path to the Flutter/Dart project', defaultsTo: '.')
+    ..addOption('input',
+        abbr: 'i', help: 'Path to the Flutter/Dart project', defaultsTo: '.')
     ..addFlag('fix',
         abbr: 'f',
         help:
             'Automatically fix sorting issues by writing sorted code back to files',
-        negatable: false);
+        negatable: false)
+    ..addFlag('help',
+        abbr: 'h', help: 'Show usage information', negatable: false);
 
-  final argResults = parser.parse(arguments);
-  final path = argResults['path'] as String;
-  final fix = argResults['fix'] as bool;
+  late ArgResults argResults;
+  late String path;
+  late bool fix;
+
+  try {
+    argResults = parser.parse(arguments);
+    fix = argResults['fix'] as bool;
+
+    // Handle help flag
+    if (argResults['help'] as bool) {
+      print('Usage: dart run fcheck [options] [<folder>]');
+      print('');
+      print('Analyze Flutter/Dart code quality and provide metrics.');
+      print('');
+      print(parser.usage);
+      exit(0);
+    }
+
+    // Determine path: explicit option wins over positional argument
+    final explicitPath = argResults['input'] as String;
+    if (explicitPath != '.') {
+      // Named option was provided (not default)
+      path = explicitPath;
+    } else if (argResults.rest.isNotEmpty) {
+      // Positional argument provided
+      path = argResults.rest.first;
+    } else {
+      // Use default (current directory)
+      path = '.';
+    }
+  } catch (e) {
+    print('Error: Invalid arguments provided.');
+    print('Usage: dart run fcheck [options] [<folder>]');
+    print('');
+    print(parser.usage);
+    exit(1);
+  }
 
   final directory = Directory(path);
   if (!directory.existsSync()) {
