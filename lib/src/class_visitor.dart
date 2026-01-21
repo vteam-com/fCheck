@@ -29,4 +29,49 @@ class ClassVisitor extends GeneralizingAstVisitor<void> {
     }
     super.visitClassDeclaration(node);
   }
+
+  /// Visits an adjacent strings node.
+  ///
+  /// This method is called when visiting [AdjacentStrings] AST nodes.
+  /// It continues the traversal by calling the superclass implementation.
+  @override
+  void visitAdjacentStrings(final AdjacentStrings node) {
+    super.visitAdjacentStrings(node);
+  }
+
+  /// Visits an annotated node.
+  ///
+  /// This method is called when visiting [AnnotatedNode] AST nodes.
+  /// It continues the traversal by calling the superclass implementation.
+  @override
+  void visitAnnotatedNode(final AnnotatedNode node) {
+    super.visitAnnotatedNode(node);
+  }
+
+  /// Visits an annotation node.
+  ///
+  /// This method is called when visiting [Annotation] AST nodes.
+  /// It continues the traversal by calling the superclass implementation.
+  @override
+  void visitAnnotation(final Annotation node) {
+    super.visitAnnotation(node);
+  }
+
+  /// Visits an argument list node.
+  ///
+  /// This method is called when visiting [ArgumentList] AST nodes.
+  /// It continues the traversal by calling the superclass implementation.
+  @override
+  void visitArgumentList(final ArgumentList node) {
+    super.visitArgumentList(node);
+  }
+
+  /// Visits an as expression node.
+  ///
+  /// This method is called when visiting [AsExpression] AST nodes.
+  /// It continues the traversal by calling the superclass implementation.
+  @override
+  void visitAsExpression(final AsExpression node) {
+    super.visitAsExpression(node);
+  }
 }

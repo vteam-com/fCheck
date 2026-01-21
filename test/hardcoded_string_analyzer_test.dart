@@ -81,7 +81,7 @@ void main() {
     test('should skip strings in RegExp constructors', () {
       final file = File('${tempDir.path}/regex.dart')..writeAsStringSync('''
 void main() {
-  final regex = RegExp(r'\d+');
+  final regex = RegExp('\\d+');
   print("This should be detected");
 }
 ''');
@@ -175,11 +175,11 @@ class Messages {
 
     test('should analyze directory correctly', () {
       File('${tempDir.path}/file1.dart')
-        ..writeAsStringSync('void main() { print("Hello"); }');
+          .writeAsStringSync('void main() { print("Hello"); }');
       File('${tempDir.path}/file2.dart')
-        ..writeAsStringSync('void main() { print("World"); }');
+          .writeAsStringSync('void main() { print("World"); }');
       File('${tempDir.path}/readme.txt')
-        ..writeAsStringSync('This is not a Dart file');
+          .writeAsStringSync('This is not a Dart file');
 
       final issues = analyzer.analyzeDirectory(tempDir);
 

@@ -15,7 +15,7 @@ void main() {
 
     test('should run without arguments (current directory)', () async {
       // Create a simple Dart file in temp directory
-      File('${tempDir.path}/main.dart')..writeAsStringSync('''
+      File('${tempDir.path}/main.dart').writeAsStringSync('''
 // Test file
 void main() {
   print("Hello");
@@ -38,7 +38,7 @@ void main() {
     test('should accept input argument', () async {
       // Create test project structure
       final libDir = Directory('${tempDir.path}/lib')..createSync();
-      File('${libDir.path}/test.dart')..writeAsStringSync('''
+      File('${libDir.path}/test.dart').writeAsStringSync('''
 // Test file
 class TestClass {
   void method() {
@@ -65,7 +65,7 @@ class TestClass {
     test('should accept short input option', () async {
       // Create test file
       File('${tempDir.path}/short.dart')
-        ..writeAsStringSync('void main() => print("test");');
+          .writeAsStringSync('void main() => print("test");');
 
       // Run fcheck with short option
       final result = await Process.run(
@@ -128,7 +128,7 @@ class TestClass {
 
     test('should detect class violations', () async {
       // Create a file with multiple classes (violates one class per file rule)
-      File('${tempDir.path}/violation.dart')..writeAsStringSync('''
+      File('${tempDir.path}/violation.dart').writeAsStringSync('''
 // File with multiple classes
 class FirstClass {
   void method1() {}
@@ -153,7 +153,7 @@ class SecondClass {
 
     test('should detect hardcoded strings', () async {
       // Create a file with hardcoded strings
-      File('${tempDir.path}/strings.dart')..writeAsStringSync('''
+      File('${tempDir.path}/strings.dart').writeAsStringSync('''
 // File with hardcoded strings
 void main() {
   print("This is hardcoded");
@@ -179,9 +179,9 @@ void main() {
       final dir2 = Directory('${tempDir.path}/dir2')..createSync();
 
       File('${dir1.path}/test1.dart')
-        ..writeAsStringSync('void main() => print("dir1");');
+          .writeAsStringSync('void main() => print("dir1");');
       File('${dir2.path}/test2.dart')
-        ..writeAsStringSync('void main() => print("dir2");');
+          .writeAsStringSync('void main() => print("dir2");');
 
       // Run with both explicit option and positional argument - explicit should win
       final result = await Process.run(
@@ -201,7 +201,7 @@ void main() {
     test('should accept positional path argument', () async {
       // Create test file
       File('${tempDir.path}/positional.dart')
-        ..writeAsStringSync('void main() => print("positional test");');
+          .writeAsStringSync('void main() => print("positional test");');
 
       // Run fcheck with positional argument
       final result = await Process.run(

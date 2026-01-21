@@ -31,7 +31,7 @@ void main() {
 
     test('should analyze directory with Dart files', () {
       // Create a simple Dart file
-      File('${tempDir.path}/example.dart')..writeAsStringSync('''
+      File('${tempDir.path}/example.dart').writeAsStringSync('''
 // This is a comment
 void main() {
   print("Hello World"); // Another comment
@@ -40,7 +40,7 @@ void main() {
 
       // Create a subdirectory with another file
       final subDir = Directory('${tempDir.path}/lib')..createSync();
-      File('${subDir.path}/utils.dart')..writeAsStringSync('''
+      File('${subDir.path}/utils.dart').writeAsStringSync('''
 // Utility functions
 class Utils {
   static void helper() {
@@ -60,7 +60,7 @@ class Utils {
     });
 
     test('should detect hardcoded strings in analyzed files', () {
-      File('${tempDir.path}/strings.dart')..writeAsStringSync('''
+      File('${tempDir.path}/strings.dart').writeAsStringSync('''
 void main() {
   print("This is a hardcoded string");
   const String key = "safe"; // This should not be detected
