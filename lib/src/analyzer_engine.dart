@@ -64,7 +64,7 @@ class AnalyzerEngine {
 
     // Analyze for layers architecture violations
     final layersAnalyzer = LayersAnalyzer();
-    final layersIssues = layersAnalyzer.analyzeDirectory(projectDir);
+    final layersResult = layersAnalyzer.analyzeDirectory(projectDir);
 
     return ProjectMetrics(
       totalFolders: FileUtils.countFolders(projectDir),
@@ -75,7 +75,9 @@ class AnalyzerEngine {
       fileMetrics: fileMetricsList,
       hardcodedStringIssues: hardcodedStringIssues,
       sourceSortIssues: sourceSortIssues,
-      layersIssues: layersIssues,
+      layersIssues: layersResult.issues,
+      layersEdgeCount: layersResult.edgeCount,
+      layersCount: layersResult.layerCount,
     );
   }
 

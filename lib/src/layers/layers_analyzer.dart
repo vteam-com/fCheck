@@ -29,9 +29,8 @@ class LayersAnalyzer {
   ///
   /// [directory] The root directory to scan.
   ///
-  /// Returns a list of all [LayersIssue] objects found across
-  /// all analyzed files in the directory.
-  List<LayersIssue> analyzeDirectory(Directory directory) {
+  /// Returns a [LayersAnalysisResult] containing issues and layer assignments.
+  LayersAnalysisResult analyzeDirectory(Directory directory) {
     final List<File> dartFiles = FileUtils.listDartFiles(directory);
 
     // Build dependency graph: Map<filePath, List<dependencies>>
@@ -84,8 +83,9 @@ class LayersAnalyzer {
   ///
   /// [dependencyGraph] A map from file paths to their dependencies.
   ///
-  /// Returns a list of layers issues found in the graph.
-  List<LayersIssue> _analyzeGraph(Map<String, List<String>> dependencyGraph) {
+  /// Returns a [LayersAnalysisResult] with issues and layer assignments.
+  LayersAnalysisResult _analyzeGraph(
+      Map<String, List<String>> dependencyGraph) {
     final List<LayersIssue> issues = <LayersIssue>[];
 
     // Detect cycles using DFS
@@ -100,17 +100,25 @@ class LayersAnalyzer {
 
     // If there are cycles, we can't reliably assign layers
     if (issues.isNotEmpty) {
-      return issues;
+      return LayersAnalysisResult(
+        issues: issues,
+        layers: <String, int>{},
+        dependencyGraph: dependencyGraph,
+      );
     }
 
     // Perform topological sort to assign layers
-    _assignLayers(dependencyGraph);
+    final Map<String, int> layers = _assignLayers(dependencyGraph);
 
     // Validate layer assignments (for future use - currently no wrong layer issues)
     // In a more complete implementation, we could define layer boundaries
     // and check if components are in the correct layers
 
-    return issues;
+    return LayersAnalysisResult(
+      issues: issues,
+      layers: layers,
+      dependencyGraph: dependencyGraph,
+    );
   }
 
   /// Detects cycles in the dependency graph using DFS.

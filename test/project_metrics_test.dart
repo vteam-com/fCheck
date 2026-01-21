@@ -32,6 +32,8 @@ void main() {
         hardcodedStringIssues: [],
         sourceSortIssues: [],
         layersIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
       );
 
       expect(projectMetrics.totalFolders, equals(5));
@@ -54,6 +56,8 @@ void main() {
         hardcodedStringIssues: [],
         sourceSortIssues: [],
         layersIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
       );
 
       expect(projectMetrics.commentRatio, equals(0.25));
@@ -70,6 +74,8 @@ void main() {
         hardcodedStringIssues: [],
         sourceSortIssues: [],
         layersIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
       );
 
       expect(projectMetrics.commentRatio, equals(0.0));
@@ -103,6 +109,8 @@ void main() {
         hardcodedStringIssues: [],
         sourceSortIssues: [],
         layersIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
       );
 
       // Test that printReport doesn't throw an error (with silent output)

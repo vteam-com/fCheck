@@ -86,12 +86,12 @@ fcheck -i /path/to/project -f
 
 ```
 Analyzing project at: /path/to/project...
---- Quality Report ---
-Total Folders: 15
-Total Files: 89
-Total Dart Files: 23
-Total Lines of Code: 2456
-Total Comment Lines: 312
+--- Stats ---
+Folders: 15
+Files: 89
+Dart Files: 23
+Lines of Code: 2456
+Comment Lines: 312
 Comment Ratio: 12.70%
 ----------------------
 ❌ 3 files violate the "one class per file" rule:

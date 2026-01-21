@@ -35,6 +35,12 @@ class ProjectMetrics {
   /// List of layers architecture issues found in the project.
   final List<LayersIssue> layersIssues;
 
+  /// Total number of dependency edges in the layers graph.
+  final int layersEdgeCount;
+
+  /// Number of layers in the project.
+  final int layersCount;
+
   /// Creates a new [ProjectMetrics] instance.
   ///
   /// All parameters are required and represent the aggregated metrics
@@ -49,6 +55,8 @@ class ProjectMetrics {
     required this.hardcodedStringIssues,
     required this.sourceSortIssues,
     required this.layersIssues,
+    required this.layersEdgeCount,
+    required this.layersCount,
   });
 
   /// The ratio of comment lines to total lines of code, as a value between 0.0 and 1.0.
@@ -57,7 +65,7 @@ class ProjectMetrics {
   double get commentRatio =>
       totalLinesOfCode == 0 ? 0 : totalCommentLines / totalLinesOfCode;
 
-  /// Prints a comprehensive quality report to the console.
+  /// Prints a comprehensive stats report to the console.
   ///
   /// The report includes:
   /// - Project statistics (folders, files, lines of code)
@@ -65,18 +73,21 @@ class ProjectMetrics {
   /// - Compliance status for the "one class per file" rule
   /// - Hardcoded string issues
   /// - Source sorting issues
+  /// - Layers architecture stats
   ///
   /// [silent] If true, suppresses console output (useful for testing)
   void printReport({bool silent = false}) {
     if (silent) return;
 
-    print('--- Quality Report ---');
-    print('Total Folders: $totalFolders');
-    print('Total Files: $totalFiles');
-    print('Total Dart Files: $totalDartFiles');
-    print('Total Lines of Code: $totalLinesOfCode');
-    print('Total Comment Lines: $totalCommentLines');
+    print('--- Stats ---');
+    print('Folders: $totalFolders');
+    print('Files: $totalFiles');
+    print('Dart Files: $totalDartFiles');
+    print('Lines of Code: $totalLinesOfCode');
+    print('Comment Lines: $totalCommentLines');
     print('Comment Ratio: ${(commentRatio * 100).toStringAsFixed(2)}%');
+    print('Layers Edge Count: $layersEdgeCount');
+    print('Layers Count: $layersCount');
     print('----------------------');
 
     final nonCompliant =

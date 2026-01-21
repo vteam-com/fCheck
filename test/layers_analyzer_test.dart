@@ -18,8 +18,8 @@ void main() {
     });
 
     test('should detect no issues in empty directory', () {
-      final issues = analyzer.analyzeDirectory(tempDir);
-      expect(issues, isEmpty);
+      final result = analyzer.analyzeDirectory(tempDir);
+      expect(result.issues, isEmpty);
     });
 
     test('should detect no issues in simple dependency', () {
@@ -30,8 +30,8 @@ void main() {
       final fileB = File('${tempDir.path}/b.dart');
       fileB.writeAsStringSync('class B {}');
 
-      final issues = analyzer.analyzeDirectory(tempDir);
-      expect(issues, isEmpty);
+      final result = analyzer.analyzeDirectory(tempDir);
+      expect(result.issues, isEmpty);
     });
 
     test('should detect cyclic dependency', () {
@@ -42,10 +42,11 @@ void main() {
       final fileB = File('${tempDir.path}/b.dart');
       fileB.writeAsStringSync('import "a.dart";');
 
-      final issues = analyzer.analyzeDirectory(tempDir);
-      expect(issues, isNotEmpty);
-      expect(issues.length, greaterThanOrEqualTo(1));
-      expect(issues.first.type, equals(LayersIssueType.cyclicDependency));
+      final result = analyzer.analyzeDirectory(tempDir);
+      expect(result.issues, isNotEmpty);
+      expect(result.issues.length, greaterThanOrEqualTo(1));
+      expect(
+          result.issues.first.type, equals(LayersIssueType.cyclicDependency));
     });
 
     test('should handle package imports', () {
@@ -53,8 +54,8 @@ void main() {
       final file = File('${tempDir.path}/main.dart');
       file.writeAsStringSync('import "package:flutter/material.dart";');
 
-      final issues = analyzer.analyzeDirectory(tempDir);
-      expect(issues, isEmpty);
+      final result = analyzer.analyzeDirectory(tempDir);
+      expect(result.issues, isEmpty);
     });
 
     test('should handle relative imports with parent directory', () {
@@ -68,8 +69,8 @@ void main() {
       final fileUtils = File('${tempDir.path}/utils.dart');
       fileUtils.writeAsStringSync('class Utils {}');
 
-      final issues = analyzer.analyzeDirectory(tempDir);
-      expect(issues, isEmpty);
+      final result = analyzer.analyzeDirectory(tempDir);
+      expect(result.issues, isEmpty);
     });
   });
 }

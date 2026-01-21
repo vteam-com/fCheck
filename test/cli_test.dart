@@ -32,7 +32,7 @@ void main() {
 
       // CLI may exit with non-zero code in test environment, but should produce output
       expect(result.stdout, contains('Analyzing project at'));
-      expect(result.stdout, contains('Quality Report'));
+      expect(result.stdout, contains('Stats'));
     });
 
     test('should accept input argument', () async {
@@ -58,8 +58,9 @@ class TestClass {
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('Analyzing project at'));
       expect(result.stdout, contains(tempDir.path));
-      expect(result.stdout, contains('Quality Report'));
-      expect(result.stdout, contains('Total Dart Files: 1'));
+      expect(result.stdout, contains('Stats'));
+      expect(result.stdout, contains('Dart Files: 1'));
+      expect(result.stdout, contains(tempDir.path));
     });
 
     test('should accept short input option', () async {
@@ -214,7 +215,7 @@ void main() {
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('Analyzing project at'));
       expect(result.stdout, contains(tempDir.path));
-      expect(result.stdout, contains('Quality Report'));
+      expect(result.stdout, contains('Stats'));
     });
   });
 }
