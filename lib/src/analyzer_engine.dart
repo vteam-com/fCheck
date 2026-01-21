@@ -2,10 +2,10 @@ import 'dart:io';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
-import 'package:fcheck/src/models/file_metrics.dart';
-import 'hardcoded_string_analyzer.dart';
-import 'sort.dart';
-import 'models/project_metrics.dart';
+import 'package:fcheck/src/metrics/file_metrics.dart';
+import 'hardcoded_strings/hardcoded_string_analyzer.dart';
+import 'sort/sort.dart';
+import 'metrics/project_metrics.dart';
 import 'utils.dart';
 
 /// The main engine for analyzing Flutter/Dart project quality.

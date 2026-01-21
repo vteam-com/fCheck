@@ -22,10 +22,10 @@ library fcheck;
 /// metrics.printReport();
 /// ```
 
-export 'src/models/project_metrics.dart';
+export 'src/metrics/project_metrics.dart';
 export 'src/analyzer_engine.dart';
 export 'src/utils.dart';
-export 'src/hardcoded_string_issue.dart';
-export 'src/hardcoded_string_analyzer.dart';
-export 'src/hardcoded_string_visitor.dart';
-export 'src/sort.dart';
+export 'src/hardcoded_strings/hardcoded_string_issue.dart';
+export 'src/hardcoded_strings/hardcoded_string_analyzer.dart';
+export 'src/hardcoded_strings/hardcoded_string_visitor.dart';
+export 'src/sort/sort.dart';

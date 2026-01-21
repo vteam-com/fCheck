@@ -3,10 +3,10 @@ import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
-import 'class_visitor.dart';
+import '../class_visitor.dart';
 import 'sort_members.dart';
 import 'sort_issue.dart';
-import 'utils.dart';
+import '../utils.dart';
 
 /// Analyzes Dart files for proper source code member ordering in Flutter classes
 class SourceSortAnalyzer {

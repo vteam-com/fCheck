@@ -1,5 +1,5 @@
 import 'package:fcheck/fcheck.dart';
-import 'package:fcheck/src/models/file_metrics.dart';
+import 'package:fcheck/src/metrics/file_metrics.dart';
 
 /// Represents the overall quality metrics for a Flutter/Dart project.
 ///

@@ -5,7 +5,7 @@ import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'hardcoded_string_issue.dart';
 import 'hardcoded_string_visitor.dart';
-import 'utils.dart';
+import '../utils.dart';
 
 /// Analyzer for detecting hardcoded strings in Dart files.
 ///
