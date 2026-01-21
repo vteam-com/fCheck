@@ -4,6 +4,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'hardcoded_strings/hardcoded_string_analyzer.dart';
+import 'layers/layers_analyzer.dart';
 import 'sort/sort.dart';
 import 'metrics/project_metrics.dart';
 import 'utils.dart';
@@ -61,6 +62,10 @@ class AnalyzerEngine {
     final sourceSortIssues =
         sourceSortAnalyzer.analyzeDirectory(projectDir, fix: fix);
 
+    // Analyze for layers architecture violations
+    final layersAnalyzer = LayersAnalyzer();
+    final layersIssues = layersAnalyzer.analyzeDirectory(projectDir);
+
     return ProjectMetrics(
       totalFolders: FileUtils.countFolders(projectDir),
       totalFiles: FileUtils.countAllFiles(projectDir),
@@ -70,6 +75,7 @@ class AnalyzerEngine {
       fileMetrics: fileMetricsList,
       hardcodedStringIssues: hardcodedStringIssues,
       sourceSortIssues: sourceSortIssues,
+      layersIssues: layersIssues,
     );
   }
 

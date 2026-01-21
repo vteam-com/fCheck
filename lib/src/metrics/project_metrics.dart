@@ -1,4 +1,5 @@
 import 'package:fcheck/fcheck.dart';
+import 'package:fcheck/src/layers/layers_issue.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
 
 /// Represents the overall quality metrics for a Flutter/Dart project.
@@ -31,6 +32,9 @@ class ProjectMetrics {
   /// List of source sorting issues found in the project.
   final List<SourceSortIssue> sourceSortIssues;
 
+  /// List of layers architecture issues found in the project.
+  final List<LayersIssue> layersIssues;
+
   /// Creates a new [ProjectMetrics] instance.
   ///
   /// All parameters are required and represent the aggregated metrics
@@ -44,6 +48,7 @@ class ProjectMetrics {
     required this.fileMetrics,
     required this.hardcodedStringIssues,
     required this.sourceSortIssues,
+    required this.layersIssues,
   });
 
   /// The ratio of comment lines to total lines of code, as a value between 0.0 and 1.0.
@@ -113,6 +118,21 @@ class ProjectMetrics {
       }
       if (sourceSortIssues.length > 10) {
         print('  ... and ${sourceSortIssues.length - 10} more');
+      }
+    }
+
+    print('');
+
+    if (layersIssues.isEmpty) {
+      print('✅ No layers architecture violations found.');
+    } else {
+      print(
+          '🏗️ ${layersIssues.length} layers architecture violations detected:');
+      for (var issue in layersIssues.take(10)) {
+        print('  - $issue');
+      }
+      if (layersIssues.length > 10) {
+        print('  ... and ${layersIssues.length - 10} more');
       }
     }
   }
