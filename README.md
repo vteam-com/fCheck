@@ -39,8 +39,11 @@ dart run bin/fcheck.dart --path /path/to/your/flutter/project
 # Activate as a global Dart package
 dart pub global activate fcheck
 
-# Run from anywhere
-fcheck --path /path/to/your/project
+# Run from anywhere using direct command
+fcheck --input /path/to/your/project
+
+# Or use positional arguments
+fcheck /path/to/your/project
 ```
 
 ## Usage
@@ -49,26 +52,34 @@ fcheck --path /path/to/your/project
 
 ```bash
 # Analyze current directory
-dart run fcheck
+fcheck
 
-# Analyze specific project
-dart run fcheck --path /path/to/project
+# Analyze specific project (after global installation)
+fcheck --input /path/to/project
+
+# Use positional arguments
+fcheck /path/to/project
 
 # Use short option
-dart run fcheck -p /path/to/project
+fcheck -i /path/to/project
 ```
+
+**Note**: Examples show global installation usage. When running from source, use `dart run fcheck` instead of `fcheck`.
 
 ### Auto-Fix Mode
 
 ```bash
-# Automatically fix sorting issues
-dart run fcheck --fix
+# Automatically fix sorting issues (after global installation)
+fcheck --fix
 
 # Fix sorting issues in specific project
-dart run fcheck --path /path/to/project --fix
+fcheck --input /path/to/project --fix
 
-# Use short option
-dart run fcheck -f
+# Use positional arguments
+fcheck /path/to/project --fix
+
+# Use short options
+fcheck -i /path/to/project -f
 ```
 
 ### Example Output

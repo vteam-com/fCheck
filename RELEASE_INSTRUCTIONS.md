@@ -45,6 +45,13 @@ Add a new entry to `CHANGELOG.md` at the top (under the unreleased section):
 - Removed features or functionality
 ```
 
+**Note**: If adding global executable support, include:
+```markdown
+- 🛠️ Global CLI executable support via `executables` configuration
+- 📦 Users can now install fcheck globally: `dart pub global activate fcheck`
+- 🖥️ Direct command execution: `fcheck ./path/` (after global activation)
+```
+
 Update the date to today's date in YYYY-MM-DD format.
 
 ## 4. Execute the Publish Script
