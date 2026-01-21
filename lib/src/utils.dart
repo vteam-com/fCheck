@@ -7,6 +7,12 @@ import 'package:path/path.dart' as p;
 /// used throughout the fcheck quality analysis tool, including listing
 /// Dart files and counting directories and files.
 class FileUtils {
+  /// Private constructor to prevent instantiation.
+  ///
+  /// This class contains only static methods and should not be instantiated.
+  /// Use the static methods directly instead.
+  FileUtils._();
+
   /// Lists all Dart files in a directory recursively, excluding example and test directories.
   ///
   /// This method traverses the directory tree starting from [dir] and

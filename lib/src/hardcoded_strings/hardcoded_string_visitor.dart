@@ -24,6 +24,15 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   /// The list of hardcoded string issues found during traversal.
   final List<HardcodedStringIssue> foundIssues = <HardcodedStringIssue>[];
 
+  /// Visits a simple string literal node in the AST.
+  ///
+  /// This method is called for each simple string literal encountered during
+  /// AST traversal. It analyzes the string to determine if it represents a
+  /// potentially hardcoded user-facing string that should be localized.
+  /// Various heuristics are used to filter out legitimate hardcoded strings
+  /// such as imports, annotations, const declarations, etc.
+  ///
+  /// [node] The simple string literal node being visited.
   @override
   void visitSimpleStringLiteral(final SimpleStringLiteral node) {
     // Skip empty strings

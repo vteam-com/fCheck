@@ -13,6 +13,13 @@ import '../utils.dart';
 /// for potentially hardcoded strings that may need localization or refactoring.
 /// It uses the Dart analyzer to parse source code and identify string literals.
 class HardcodedStringAnalyzer {
+  /// Creates a new HardcodedStringAnalyzer instance.
+  ///
+  /// This constructor creates an analyzer that can be used to detect
+  /// hardcoded strings in Dart source files. No parameters are required
+  /// as the analyzer maintains no internal state.
+  HardcodedStringAnalyzer();
+
   /// Analyzes a single Dart file for hardcoded strings.
   ///
   /// This method parses the file using the Dart analyzer and identifies

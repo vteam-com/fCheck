@@ -23,6 +23,12 @@ class HardcodedStringIssue {
     required this.value,
   });
 
+  /// Returns a string representation of this hardcoded string issue.
+  ///
+  /// The format is "filePath:lineNumber: "value"" which provides a
+  /// human-readable summary of the issue location and content.
+  ///
+  /// Returns a formatted string describing the issue.
   @override
   String toString() => '$filePath:$lineNumber: "$value"';
 }

@@ -1,6 +1,3 @@
-// ignore: unnecessary_library_name
-library fcheck;
-
 /// A Flutter/Dart code quality analysis tool.
 ///
 /// This library provides functionality to analyze Flutter and Dart projects
@@ -21,6 +18,9 @@ library fcheck;
 /// final metrics = engine.analyze();
 /// metrics.printReport();
 /// ```
+
+// ignore: unnecessary_library_name
+library fcheck;
 
 export 'src/metrics/project_metrics.dart';
 export 'src/analyzer_engine.dart';

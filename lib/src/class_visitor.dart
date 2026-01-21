@@ -14,6 +14,14 @@ class ClassVisitor extends GeneralizingAstVisitor<void> {
   /// Flutter classes that should have their members sorted.
   final List<ClassDeclaration> targetClasses = <ClassDeclaration>[];
 
+  /// Visits a class declaration node in the AST.
+  ///
+  /// This method is called for each class declaration encountered during
+  /// AST traversal. It checks if the class extends StatelessWidget,
+  /// StatefulWidget, or State classes, and if so, adds it to the
+  /// [targetClasses] list for member sorting.
+  ///
+  /// [node] The class declaration node being visited.
   @override
   void visitClassDeclaration(final ClassDeclaration node) {
     final ExtendsClause? extendsClause = node.extendsClause;
