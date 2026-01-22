@@ -1,0 +1,16 @@
+@startuml Architecture
+!theme plain
+
+component [main.dart\n↓0 ↑1] as compmain
+component [utils.dart\n↓1 ↑0] as computils
+component [models.dart\n↓1 ↑0] as compmodels
+component [comments_example.dart] as compcommentsexample
+component [counter_widget.dart\n↓1 ↑1] as compcounterwidget
+component [home_page.dart\n↓1 ↑2] as comphomepage
+
+"compmain" --> "comphomepage"
+"compcounterwidget" ..> "computils"
+"comphomepage" ..> "compcounterwidget"
+"comphomepage" ..> "compmodels"
+
+@enduml

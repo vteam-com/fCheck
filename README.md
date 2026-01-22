@@ -30,7 +30,7 @@ dart pub get
 
 3. Run the tool:
 ```bash
-dart run bin/fcheck.dart --path /path/to/your/flutter/project
+dart run bin/fcheck.dart --input /path/to/your/flutter/project
 ```
 
 ### As a Global Tool
@@ -65,6 +65,35 @@ fcheck -i /path/to/project
 ```
 
 **Note**: Examples show global installation usage. When running from source, use `dart run fcheck` instead of `fcheck`.
+
+### SVG Generation Mode
+
+```bash
+# Generate SVG dependency graph (after global installation)
+fcheck --svg
+
+# Generate SVG in specific project
+fcheck --input /path/to/project --svg
+
+# Use positional arguments
+fcheck /path/to/project --svg
+
+# Use short options
+fcheck -i /path/to/project --svg
+```
+
+### Dependency Debug Mode
+
+```bash
+# Output dependency graph for debugging (after global installation)
+fcheck --dep
+
+# Output dependency graph in specific project
+fcheck --input /path/to/project --dep
+
+# Use positional arguments
+fcheck /path/to/project --dep
+```
 
 ### Auto-Fix Mode
 
@@ -130,7 +159,7 @@ Comment Ratio: 12.70%
 You can also use fcheck as a Dart library in your own tools:
 
 ```dart
-import 'package:fcheck/evaluator.dart';
+import 'package:fcheck/fcheck.dart';
 
 void main() {
   final projectDir = Directory('/path/to/project');
@@ -172,17 +201,25 @@ fcheck/
 ├── bin/
 │   └── fcheck.dart          # CLI entry point
 ├── lib/
-│   ├── evaluator.dart       # Public API exports
+│   ├── fcheck.dart          # Public API exports
 │   └── src/
 │       ├── analyzer_engine.dart           # Core analysis logic
-│       ├── hardcoded_string_analyzer.dart # Hardcoded string detection
-│       ├── hardcoded_string_issue.dart    # Hardcoded string issue model
-│       ├── hardcoded_string_visitor.dart  # AST visitor for strings
-│       ├── sort_source.dart               # Source code sorting analysis
-│       ├── utils.dart                     # File utilities
-│       └── models/
-│           ├── file_metrics.dart          # File-level metrics
-│           └── project_metrics.dart       # Project-level metrics
+│       ├── hardcoded_strings/             # Hardcoded string detection
+│       │   ├── hardcoded_string_analyzer.dart
+│       │   ├── hardcoded_string_issue.dart
+│       │   └── hardcoded_string_visitor.dart
+│       ├── layers/                        # Layer analysis
+│       │   ├── layers_analyzer.dart
+│       │   ├── layers_issue.dart
+│       │   └── layers_visitor.dart
+│       ├── metrics/                       # Code metrics
+│       │   ├── file_metrics.dart
+│       │   └── project_metrics.dart
+│       ├── sort/                          # Source code sorting
+│       │   ├── sort.dart
+│       │   ├── sort_analyzer.dart
+│       │   └── sort_members.dart
+│       └── utils.dart                     # File utilities
 ├── example/                 # Test example project
 ├── pubspec.yaml             # Package configuration
 └── README.md               # This file
@@ -208,7 +245,7 @@ dart compile exe bin/fcheck.dart
 The project includes a test example you can analyze:
 
 ```bash
-dart run fcheck --path example
+dart run fcheck --input example
 ```
 
 ## Contributing

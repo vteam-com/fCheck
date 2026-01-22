@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import './utils.dart';
 
 // This StatefulWidget file has too many classes - non-compliant
 
 /// A custom counter widget
 class CounterWidget extends StatefulWidget {
-  const CounterWidget({super.key});
+  const CounterWidget({super.key, required this.count});
+  final int count = 0;
 
   @override
   State<CounterWidget> createState() => _CounterWidgetState();
@@ -12,8 +14,6 @@ class CounterWidget extends StatefulWidget {
 
 /// State for CounterWidget
 class _CounterWidgetState extends State<CounterWidget> {
-  int _count = 0;
-
   void _increment() {
     setState(() => _count++);
   }

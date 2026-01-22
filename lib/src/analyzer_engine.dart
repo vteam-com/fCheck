@@ -5,6 +5,7 @@ import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'hardcoded_strings/hardcoded_string_analyzer.dart';
 import 'layers/layers_analyzer.dart';
+import 'layers/layers_issue.dart';
 import 'sort/sort.dart';
 import 'metrics/project_metrics.dart';
 import 'utils.dart';
@@ -27,6 +28,17 @@ class AnalyzerEngine {
   /// [projectDir] should point to the root of a Flutter/Dart project.
   /// [fix] if true, automatically fixes sorting issues by writing sorted code back to files.
   AnalyzerEngine(this.projectDir, {this.fix = false});
+
+  /// Analyzes the layers architecture and returns the result.
+  ///
+  /// This method performs dependency analysis and layer assignment
+  /// for the project.
+  ///
+  /// Returns a [LayersAnalysisResult] containing issues and layer assignments.
+  LayersAnalysisResult analyzeLayers() {
+    final layersAnalyzer = LayersAnalyzer(projectDir);
+    return layersAnalyzer.analyzeDirectory(projectDir);
+  }
 
   /// Analyzes the entire project and returns comprehensive quality metrics.
   ///
@@ -63,7 +75,7 @@ class AnalyzerEngine {
         sourceSortAnalyzer.analyzeDirectory(projectDir, fix: fix);
 
     // Analyze for layers architecture violations
-    final layersAnalyzer = LayersAnalyzer();
+    final layersAnalyzer = LayersAnalyzer(projectDir);
     final layersResult = layersAnalyzer.analyzeDirectory(projectDir);
 
     return ProjectMetrics(

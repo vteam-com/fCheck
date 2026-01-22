@@ -10,7 +10,7 @@ void main() {
 
     setUp(() {
       tempDir = Directory.systemTemp.createTempSync('layers_test_');
-      analyzer = LayersAnalyzer();
+      analyzer = LayersAnalyzer(tempDir);
     });
 
     tearDown(() {
@@ -71,6 +71,43 @@ void main() {
 
       final result = analyzer.analyzeDirectory(tempDir);
       expect(result.issues, isEmpty);
+    });
+
+    test('should handle package imports within the same package', () {
+      // Create pubspec.yaml with package name
+      final pubspec = File('${tempDir.path}/pubspec.yaml');
+      pubspec.writeAsStringSync('name: test_package\n');
+
+      // Create lib directory and files
+      final libDir = Directory('${tempDir.path}/lib');
+      libDir.createSync();
+
+      final fileA = File('${libDir.path}/a.dart');
+      fileA.writeAsStringSync('import "package:test_package/b.dart";');
+
+      final fileB = File('${libDir.path}/b.dart');
+      fileB.writeAsStringSync('class B {}');
+
+      final result = analyzer.analyzeDirectory(tempDir);
+      expect(result.issues, isEmpty);
+      expect(result.dependencyGraph[fileA.path], contains(fileB.path));
+    });
+    test('should assign correct layers in a chain', () {
+      // Create chain: a.dart (entry) -> b.dart -> c.dart
+      final fileA = File('${tempDir.path}/a.dart');
+      fileA.writeAsStringSync('import "b.dart";\nvoid main() { print("A"); }');
+
+      final fileB = File('${tempDir.path}/b.dart');
+      fileB.writeAsStringSync('import "c.dart";');
+
+      final fileC = File('${tempDir.path}/c.dart');
+      fileC.writeAsStringSync('class C {}');
+
+      final result = analyzer.analyzeDirectory(tempDir);
+
+      expect(result.layers[fileA.path], equals(1));
+      expect(result.layers[fileB.path], equals(2));
+      expect(result.layers[fileC.path], equals(3));
     });
   });
 }

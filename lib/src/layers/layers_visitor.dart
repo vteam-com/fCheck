@@ -1,22 +1,36 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 
-/// A visitor that traverses the AST to collect import/export references.
+import 'package:path/path.dart' as p;
+
+/// A visitor that traverses the AST to collect import/export references and entry points.
 ///
 /// This class extends the analyzer's AST visitor to identify import and export
 /// directives in Dart source code. It collects all the files that each Dart
-/// file depends on through imports and exports.
+/// file depends on through imports and exports, and identifies entry points
+/// (files containing main() functions).
 class LayersVisitor extends GeneralizingAstVisitor<void> {
   /// Creates a new visitor for the specified file.
   ///
   /// [filePath] should be the path to the file being analyzed.
-  LayersVisitor(this.filePath);
+  /// [rootPath] should be the root directory of the project.
+  /// [packageName] should be the name of the package from pubspec.yaml.
+  LayersVisitor(this.filePath, this.rootPath, this.packageName);
 
   /// The file path being analyzed.
   final String filePath;
 
+  /// The root path of the project.
+  final String rootPath;
+
+  /// The package name from pubspec.yaml.
+  final String packageName;
+
   /// The list of files that this file imports or exports.
   final List<String> dependencies = <String>[];
+
+  /// Whether this file contains a main() function (entry point).
+  bool hasMainFunction = false;
 
   /// Visits an import directive node in the AST.
   ///
@@ -50,10 +64,24 @@ class LayersVisitor extends GeneralizingAstVisitor<void> {
     super.visitExportDirective(node);
   }
 
-  /// Checks if a URI string represents a Dart file import/export.
+  /// Visits a function declaration node in the AST.
   ///
-  /// Returns true if the URI is a relative path ending with .dart or
-  /// a package: import that would resolve to a Dart file.
+  /// This method is called for each function declaration. It checks if
+  /// the function is named 'main' to identify entry points.
+  ///
+  /// [node] The function declaration node being visited.
+  @override
+  void visitFunctionDeclaration(FunctionDeclaration node) {
+    if (node.name.lexeme == 'main') {
+      hasMainFunction = true;
+    }
+    super.visitFunctionDeclaration(node);
+  }
+
+  /// Checks if a URI string represents a Dart file import/export within the project.
+  ///
+  /// For layer analysis, considers relative imports and package: imports within the current package.
+  /// Ignores external package imports and core library imports.
   ///
   /// [uri] The URI string to check.
   bool _isDartFile(String uri) {
@@ -62,40 +90,50 @@ class LayersVisitor extends GeneralizingAstVisitor<void> {
       return false;
     }
 
-    // Include package: imports and relative imports
-    return uri.endsWith('.dart') || uri.startsWith('package:');
+    // Skip external package: imports (not in current package)
+    if (uri.startsWith('package:') &&
+        !uri.startsWith('package:$packageName/')) {
+      return false;
+    }
+
+    // Include package: imports for the current package
+    if (uri.startsWith('package:$packageName/')) {
+      return uri.endsWith('.dart');
+    }
+
+    // Include relative imports ending with .dart
+    return uri.endsWith('.dart');
   }
 
   /// Resolves a dependency URI to an absolute file path.
   ///
+  /// For package: imports, resolves to the lib/ directory.
   /// For relative imports, resolves against the current file's directory.
-  /// For package: imports, returns the URI as-is (simplified resolution).
   ///
-  /// [uri] The import/export URI.
+  /// [uri] The import/export URI (relative path or package: URI).
   /// [currentFile] The path of the file containing the import/export.
   String _resolveDependency(String uri, String currentFile) {
-    if (uri.startsWith('package:')) {
-      // For package imports, we use the URI as the dependency key
-      // In a real implementation, this would resolve to actual file paths
-      return uri;
-    } else {
-      // For relative imports, resolve relative to the current file
-      final currentDir = currentFile.substring(0, currentFile.lastIndexOf('/'));
-      if (uri.startsWith('./')) {
-        return '$currentDir/${uri.substring(2)}';
-      } else if (uri.startsWith('../')) {
-        // Handle parent directory traversal
-        var resolvedPath = currentDir;
-        var remainingUri = uri;
-        while (remainingUri.startsWith('../')) {
-          resolvedPath =
-              resolvedPath.substring(0, resolvedPath.lastIndexOf('/'));
-          remainingUri = remainingUri.substring(3);
-        }
-        return '$resolvedPath/$remainingUri';
-      } else {
-        return '$currentDir/$uri';
+    if (uri.startsWith('package:$packageName/')) {
+      // Package import: resolve to lib/ directory
+      final packagePath = uri.substring('package:$packageName/'.length);
+      return p.join(rootPath, 'lib', packagePath);
+    }
+
+    // For relative imports, resolve relative to the current file
+    final currentDir = currentFile.substring(0, currentFile.lastIndexOf('/'));
+    if (uri.startsWith('./')) {
+      return '$currentDir/${uri.substring(2)}';
+    } else if (uri.startsWith('../')) {
+      // Handle parent directory traversal
+      var resolvedPath = currentDir;
+      var remainingUri = uri;
+      while (remainingUri.startsWith('../')) {
+        resolvedPath = resolvedPath.substring(0, resolvedPath.lastIndexOf('/'));
+        remainingUri = remainingUri.substring(3);
       }
+      return '$resolvedPath/$remainingUri';
+    } else {
+      return '$currentDir/$uri';
     }
   }
 }

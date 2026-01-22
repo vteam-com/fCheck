@@ -1,0 +1,19 @@
+graph TD
+    subgraph Layer_1["Layer 1"]
+        main["main.dart\n↓0 ↑1"]
+        utils["utils.dart\n↓1 ↑0"]
+        models["models.dart\n↓1 ↑0"]
+    end
+    subgraph Layer_4["Layer 4"]
+        comments_example["comments_example.dart"]
+    end
+    subgraph Layer_2["Layer 2"]
+        counter_widget["counter_widget.dart\n↓1 ↑1"]
+    end
+    subgraph Layer_3["Layer 3"]
+        home_page["home_page.dart\n↓1 ↑2"]
+    end
+    main --> home_page
+    counter_widget -.-o utils
+    home_page -.-o counter_widget
+    home_page -.-o models
