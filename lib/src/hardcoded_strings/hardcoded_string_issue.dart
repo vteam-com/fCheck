@@ -31,4 +31,11 @@ class HardcodedStringIssue {
   /// Returns a formatted string describing the issue.
   @override
   String toString() => '$filePath:$lineNumber: "$value"';
+
+  /// Converts this issue to a JSON-compatible map.
+  Map<String, dynamic> toJson() => {
+        'filePath': filePath,
+        'lineNumber': lineNumber,
+        'value': value,
+      };
 }

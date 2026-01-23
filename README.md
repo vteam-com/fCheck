@@ -82,17 +82,17 @@ fcheck /path/to/project --svg
 fcheck -i /path/to/project --svg
 ```
 
-### Dependency Debug Mode
+### JSON Output Mode
 
 ```bash
-# Output dependency graph for debugging (after global installation)
-fcheck --dep
+# Output all analysis results in structured JSON format
+fcheck --json
 
-# Output dependency graph in specific project
-fcheck --input /path/to/project --dep
+# Output JSON in specific project
+fcheck --input /path/to/project --json
 
 # Use positional arguments
-fcheck /path/to/project --dep
+fcheck /path/to/project --json
 ```
 
 ### Auto-Fix Mode

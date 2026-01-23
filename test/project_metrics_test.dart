@@ -34,6 +34,7 @@ void main() {
         layersIssues: [],
         layersEdgeCount: 0,
         layersCount: 0,
+        dependencyGraph: {},
       );
 
       expect(projectMetrics.totalFolders, equals(5));
@@ -58,6 +59,7 @@ void main() {
         layersIssues: [],
         layersEdgeCount: 0,
         layersCount: 0,
+        dependencyGraph: {},
       );
 
       expect(projectMetrics.commentRatio, equals(0.25));
@@ -76,6 +78,7 @@ void main() {
         layersIssues: [],
         layersEdgeCount: 0,
         layersCount: 0,
+        dependencyGraph: {},
       );
 
       expect(projectMetrics.commentRatio, equals(0.0));
@@ -111,6 +114,7 @@ void main() {
         layersIssues: [],
         layersEdgeCount: 0,
         layersCount: 0,
+        dependencyGraph: {},
       );
 
       // Test that printReport doesn't throw an error (with silent output)

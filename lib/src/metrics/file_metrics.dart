@@ -49,4 +49,14 @@ class FileMetrics {
     }
     return classCount <= 1;
   }
+
+  /// Converts these metrics to a JSON-compatible map.
+  Map<String, dynamic> toJson() => {
+        'path': path,
+        'linesOfCode': linesOfCode,
+        'commentLines': commentLines,
+        'classCount': classCount,
+        'isStatefulWidget': isStatefulWidget,
+        'isOneClassPerFileCompliant': isOneClassPerFileCompliant,
+      };
 }

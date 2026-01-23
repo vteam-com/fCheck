@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:args/args.dart';
 import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/generators/svg_generator.dart';
@@ -29,8 +30,8 @@ void main(List<String> arguments) {
     ..addFlag('plantuml',
         help: 'Generate PlantUML file for dependency graph visualization',
         negatable: false)
-    ..addFlag('dep',
-        help: 'Output dependency graph for debugging', negatable: false)
+    ..addFlag('json',
+        help: 'Output results in structured JSON format', negatable: false)
     ..addFlag('help',
         abbr: 'h', help: 'Show usage information', negatable: false);
 
@@ -40,7 +41,7 @@ void main(List<String> arguments) {
   late bool generateSvg;
   late bool generateMermaid;
   late bool generatePlantUML;
-  late bool debugDependencies;
+  late bool outputJson;
 
   try {
     argResults = parser.parse(arguments);
@@ -48,7 +49,7 @@ void main(List<String> arguments) {
     generateSvg = argResults['svg'] as bool;
     generateMermaid = argResults['mermaid'] as bool;
     generatePlantUML = argResults['plantuml'] as bool;
-    debugDependencies = argResults['dep'] as bool;
+    outputJson = argResults['json'] as bool;
 
     // Handle help flag
     if (argResults['help'] as bool) {
@@ -86,26 +87,23 @@ void main(List<String> arguments) {
     exit(1);
   }
 
-  final action = fix ? 'Fixing' : 'Analyzing';
-  print('$action project at: ${directory.absolute.path}...');
+  if (!outputJson) {
+    final action = fix ? 'Fixing' : 'Analyzing';
+    print('$action project at: ${directory.absolute.path}...');
+  }
 
   try {
     final engine = AnalyzerEngine(directory, fix: fix);
     final metrics = engine.analyze();
-    metrics.printReport();
 
-    // Generate layer analysis result for visualization or debugging
-    final layersResult = engine.analyzeLayers();
-
-    if (debugDependencies) {
-      print('\n--- Dependency Graph Debug ---');
-      layersResult.dependencyGraph.forEach((file, deps) {
-        final fileName = file.split('/').last;
-        final depNames = deps.map((dep) => dep.split('/').last).toList();
-        print('$fileName -> $depNames');
-      });
-      print('------------------------------\n');
+    if (outputJson) {
+      print(const JsonEncoder.withIndent('  ').convert(metrics.toJson()));
+    } else {
+      metrics.printReport();
     }
+
+    // Generate layer analysis result for visualization
+    final layersResult = engine.analyzeLayers();
 
     if (generateSvg || generateMermaid || generatePlantUML) {
       if (generateSvg) {

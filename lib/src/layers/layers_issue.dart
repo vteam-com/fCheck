@@ -32,6 +32,13 @@ class LayersIssue {
   /// Returns a formatted string describing the issue.
   @override
   String toString() => '[$type] $filePath: $message';
+
+  /// Converts this issue to a JSON-compatible map.
+  Map<String, dynamic> toJson() => {
+        'type': type.toString().split('.').last,
+        'filePath': filePath,
+        'message': message,
+      };
 }
 
 /// Represents the result of layers analysis.
@@ -67,6 +74,15 @@ class LayersAnalysisResult {
         .map((dependencies) => dependencies.length)
         .fold(0, (sum, count) => sum + count);
   }
+
+  /// Converts this result to a JSON-compatible map.
+  Map<String, dynamic> toJson() => {
+        'issues': issues.map((i) => i.toJson()).toList(),
+        'layers': layers,
+        'dependencyGraph': dependencyGraph,
+        'layerCount': layerCount,
+        'edgeCount': edgeCount,
+      };
 }
 
 /// Types of layers architecture violations.

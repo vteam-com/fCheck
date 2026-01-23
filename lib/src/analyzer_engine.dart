@@ -90,6 +90,7 @@ class AnalyzerEngine {
       layersIssues: layersResult.issues,
       layersEdgeCount: layersResult.edgeCount,
       layersCount: layersResult.layerCount,
+      dependencyGraph: layersResult.dependencyGraph,
     );
   }
 

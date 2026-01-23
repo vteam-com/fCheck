@@ -41,6 +41,9 @@ class ProjectMetrics {
   /// Number of layers in the project.
   final int layersCount;
 
+  /// The dependency graph used for analysis (filePath -> list of dependencies).
+  final Map<String, List<String>> dependencyGraph;
+
   /// Creates a new [ProjectMetrics] instance.
   ///
   /// All parameters are required and represent the aggregated metrics
@@ -57,7 +60,30 @@ class ProjectMetrics {
     required this.layersIssues,
     required this.layersEdgeCount,
     required this.layersCount,
+    required this.dependencyGraph,
   });
+
+  /// Converts these metrics to a JSON-compatible map.
+  Map<String, dynamic> toJson() => {
+        'stats': {
+          'folders': totalFolders,
+          'files': totalFiles,
+          'dartFiles': totalDartFiles,
+          'linesOfCode': totalLinesOfCode,
+          'commentLines': totalCommentLines,
+          'commentRatio': commentRatio,
+        },
+        'layers': {
+          'edgeCount': layersEdgeCount,
+          'layerCount': layersCount,
+          'issues': layersIssues.map((i) => i.toJson()).toList(),
+          'graph': dependencyGraph,
+        },
+        'files': fileMetrics.map((m) => m.toJson()).toList(),
+        'hardcodedStrings':
+            hardcodedStringIssues.map((i) => i.toJson()).toList(),
+        'sourceSorting': sourceSortIssues.map((i) => i.toJson()).toList(),
+      };
 
   /// The ratio of comment lines to total lines of code, as a value between 0.0 and 1.0.
   ///

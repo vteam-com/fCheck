@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:test/test.dart';
 
 void main() {
@@ -217,21 +218,28 @@ void main() {
       expect(result.stdout, contains(tempDir.path));
       expect(result.stdout, contains('Stats'));
     });
-    test('should show dependency graph with --dep flag', () async {
+    test('should output structured JSON with --json flag', () async {
       // Create two files with a dependency
       File('${tempDir.path}/a.dart').writeAsStringSync('import "b.dart";');
       File('${tempDir.path}/b.dart').writeAsStringSync('class B {}');
 
       final result = await Process.run(
         'dart',
-        ['run', 'bin/fcheck.dart', '--input', tempDir.path, '--dep'],
+        ['run', 'bin/fcheck.dart', '--input', tempDir.path, '--json'],
         workingDirectory: Directory.current.path,
         runInShell: true,
       );
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('--- Dependency Graph Debug ---'));
-      expect(result.stdout, contains('a.dart -> [b.dart]'));
+
+      // Verify it's valid JSON
+      final json = jsonDecode(result.stdout as String);
+      expect(json, isA<Map<String, dynamic>>());
+      expect(json['stats'], isNotNull);
+      final graph = json['layers']['graph'] as Map<String, dynamic>;
+      expect(graph.keys.any((k) => k.endsWith('a.dart')), isTrue);
+      final aKey = graph.keys.firstWhere((k) => k.endsWith('a.dart'));
+      expect(graph[aKey], contains(contains('b.dart')));
     });
   });
 }
