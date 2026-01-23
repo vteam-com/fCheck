@@ -5,7 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.0] - 2026-01-23
+## [0.4.1] - 2026-01-23
+
+### Fixed
+- 🐛 **Subdirectory Analysis**: Fixed package import resolution when running analysis on a subdirectory (e.g., `lib/`) by correctly identifying the project root.
+- 📐 **SVG Layout**: Optimized column-based layout to ensure consistent grouping and correct layer ordering (Layer 1 on the left).
+- 🎨 **SVG Z-Order**: Refined drawing order (Layers -> Nodes -> Edges -> Badges -> Labels) so edges are drawn on top of nodes, but behind text.
+- ✨ **Visual Polish**: Added outline dilate filter to node labels for superior readability against edges.
+- ✨ **Visual Polish**: Added white shadow filter to nodes to improve legibility against background edges.
+
+- 📐 **Node Sorting**: Updated intra-column sorting to prioritize Incident dependencies (Incoming descending, then Outgoing descending), and finally alphabetical.
 
 ### Added
 - ✨ **JSON Output Mode**: New `--json` flag to output all analysis results in structured JSON format.

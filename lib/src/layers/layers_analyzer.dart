@@ -76,8 +76,12 @@ class LayersAnalyzer {
     }
 
     final CompilationUnit compilationUnit = result.unit;
+    // Find project root (directory containing pubspec.yaml)
+    final Directory projectRoot = _findProjectRoot() ?? _rootDirectory;
+    final String packageName = _readPackageName(projectRoot);
+
     final LayersVisitor visitor =
-        LayersVisitor(filePath, _rootDirectory.path, _readPackageName());
+        LayersVisitor(filePath, projectRoot.path, packageName);
     compilationUnit.accept(visitor);
 
     return {
@@ -320,23 +324,31 @@ class LayersAnalyzer {
     return sccs;
   }
 
-  /// Reads the package name from pubspec.yaml in the directory hierarchy.
-  String _readPackageName() {
+  /// Finds the project root directory (containing pubspec.yaml).
+  Directory? _findProjectRoot() {
     var currentDir = _rootDirectory;
     while (true) {
-      final pubspecFile = File('${currentDir.path}/pubspec.yaml');
-      if (pubspecFile.existsSync()) {
-        try {
-          final content = pubspecFile.readAsStringSync();
-          final yaml = loadYaml(content) as YamlMap;
-          return yaml['name'] as String? ?? 'unknown';
-        } catch (e) {
-          return 'unknown';
-        }
+      if (File('${currentDir.path}/pubspec.yaml').existsSync()) {
+        return currentDir;
       }
       final parent = currentDir.parent;
       if (parent.path == currentDir.path) break; // reached root
       currentDir = parent;
+    }
+    return null;
+  }
+
+  /// Reads the package name from pubspec.yaml in the project root.
+  String _readPackageName(Directory projectRoot) {
+    final pubspecFile = File('${projectRoot.path}/pubspec.yaml');
+    if (pubspecFile.existsSync()) {
+      try {
+        final content = pubspecFile.readAsStringSync();
+        final yaml = loadYaml(content) as YamlMap;
+        return yaml['name'] as String? ?? 'unknown';
+      } catch (e) {
+        return 'unknown';
+      }
     }
     return 'unknown';
   }

@@ -1,87 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="414" height="640" viewBox="0 0 414 640" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+<svg width="1280" height="260" viewBox="0 0 1280 260" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
 <style>
-  .layerRectangle {
-    stroke: black;
-    stroke-dasharray: 5,5;
-    fill: url(#layers);
-  }
-  .layerText {
-    fill: purple;
-    font-size: 24px;
-    font-weight: bold;
-  }
-  .nodeFile {
-    fill: #ffffff;
-    stroke: gray;
-    opacity: 0.9;
-  }
-  .nodeName {
-    fill: black;
-    font-weight: bold;
-    text-anchor: middle;
-    dominant-baseline: central;
-  }
-  .line {
-    fill: none;
-    stroke: #377E22;
-    stroke-width: 3;
-    opacity: 0.5;
-  }
-  .line:hover {
-    stroke-width: 6;
-    opacity: 1;
-  }
+  .layerBackground { fill: #f8f9fa; stroke: #dee2e6; stroke-width: 1; stroke-dasharray: 4,4; }
+  .layerTitle { fill: #6c757d; font-size: 14px; font-weight: bold; text-anchor: middle; }
+  .nodeRect { fill: #ffffff; stroke: #343a40; stroke-width: 2; rx: 6; ry: 6; cursor: pointer; }
+  .nodeRect:hover { stroke: #007bff; stroke-width: 3; }
+  .nodeText { fill: #212529; font-size: 13px; font-weight: 500; text-anchor: middle; dominant-baseline: middle; }
+  .edge { fill: none; stroke: #adb5bd; stroke-width: 2; opacity: 0.6; }
+  .edge:hover { stroke: #007bff; stroke-width: 3; opacity: 1.0; }
+  .badge { font-size: 10px; font-weight: bold; fill: white; text-anchor: middle; dominant-baseline: middle; }
 </style>
 <rect width="100%" height="100%" fill="white"/>
-<defs>
-  <linearGradient id="layers" gradientTransform="rotate(90)">
-    <stop offset="0%" stop-color="#691872" stop-opacity="0.1"/>
-    <stop offset="100%" stop-color="#691872" stop-opacity="0.3"/>
-  </linearGradient>
-</defs>
-<rect x="0" y="0" width="414" height="220" rx="2" ry="2" class="layerRectangle"/>
-<text x="10" y="30" class="layerText" dominant-baseline="hanging" text-anchor="start">1</text>
-<rect x="0" y="220" width="414" height="100" rx="2" ry="2" class="layerRectangle"/>
-<text x="10" y="250" class="layerText" dominant-baseline="hanging" text-anchor="start">2</text>
-<rect x="0" y="320" width="414" height="220" rx="2" ry="2" class="layerRectangle"/>
-<text x="10" y="350" class="layerText" dominant-baseline="hanging" text-anchor="start">3</text>
-<rect x="0" y="540" width="414" height="100" rx="2" ry="2" class="layerRectangle"/>
-<text x="10" y="570" class="layerText" dominant-baseline="hanging" text-anchor="start">4</text>
-<rect x="50" y="25.0" width="200" height="50" rx="8" ry="8" class="nodeFile"/>
-<rect x="50" y="145.0" width="200" height="50" rx="8" ry="8" class="nodeFile"/>
-<rect x="50" y="245.0" width="200" height="50" rx="8" ry="8" class="nodeFile"/>
-<rect x="50" y="345.0" width="200" height="50" rx="8" ry="8" class="nodeFile"/>
-<rect x="50" y="465.0" width="200" height="50" rx="8" ry="8" class="nodeFile"/>
-<rect x="50" y="565.0" width="200" height="50" rx="8" ry="8" class="nodeFile"/>
-<line x1="235.0" y1="60.0" x2="65.0" y2="260.0" stroke="#6c757d" stroke-width="4"/>
-<line x1="235.0" y1="380.0" x2="65.0" y2="580.0" stroke="#6c757d" stroke-width="4"/>
-<line x1="235.0" y1="280.0" x2="65.0" y2="360.0" stroke="#6c757d" stroke-width="4"/>
-<line x1="235.0" y1="280.0" x2="65.0" y2="480.0" stroke="#6c757d" stroke-width="4"/>
-<rect x="110.0" y="38.0" width="80" height="16" fill="white" fill-opacity="0.8" rx="3" ry="3"/>
-<text x="150.0" y="50.0" class="nodeName">main.dart</text>
-<rect x="62.0" y="158.0" width="176" height="16" fill="white" fill-opacity="0.8" rx="3" ry="3"/>
-<text x="150.0" y="170.0" class="nodeName">comments_example.dart</text>
-<rect x="90.0" y="258.0" width="120" height="16" fill="white" fill-opacity="0.8" rx="3" ry="3"/>
-<text x="150.0" y="270.0" class="nodeName">home_page.dart</text>
-<rect x="70.0" y="358.0" width="160" height="16" fill="white" fill-opacity="0.8" rx="3" ry="3"/>
-<text x="150.0" y="370.0" class="nodeName">counter_widget.dart</text>
-<rect x="102.0" y="478.0" width="96" height="16" fill="white" fill-opacity="0.8" rx="3" ry="3"/>
-<text x="150.0" y="490.0" class="nodeName">models.dart</text>
-<rect x="106.0" y="578.0" width="88" height="16" fill="white" fill-opacity="0.8" rx="3" ry="3"/>
-<text x="150.0" y="590.0" class="nodeName">utils.dart</text>
-<circle cx="235" cy="60.0" r="10" fill="green"/>
-<text x="235" y="60.0" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
-<circle cx="65" cy="260.0" r="10" fill="blue"/>
-<text x="65" y="260.0" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
-<circle cx="235" cy="280.0" r="10" fill="green"/>
-<text x="235" y="280.0" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
-<circle cx="65" cy="360.0" r="10" fill="blue"/>
-<text x="65" y="360.0" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
-<circle cx="235" cy="380.0" r="10" fill="green"/>
-<text x="235" y="380.0" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
-<circle cx="65" cy="480.0" r="10" fill="blue"/>
-<text x="65" y="480.0" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
-<circle cx="65" cy="580.0" r="10" fill="blue"/>
-<text x="65" y="580.0" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+<rect x="25.0" y="50" width="270.0" height="160" rx="8" class="layerBackground"/>
+<text x="160.0" y="75" class="layerTitle">Layer 1</text>
+<rect x="345.0" y="50" width="270.0" height="160" rx="8" class="layerBackground"/>
+<text x="480.0" y="75" class="layerTitle">Layer 2</text>
+<rect x="665.0" y="50" width="270.0" height="160" rx="8" class="layerBackground"/>
+<text x="800.0" y="75" class="layerTitle">Layer 3</text>
+<rect x="985.0" y="50" width="270.0" height="160" rx="8" class="layerBackground"/>
+<text x="1120.0" y="75" class="layerTitle">Layer 4</text>
+<path d="M 270.0 115.0 C 320.0 115.0, 320.0 115.0, 370.0 115.0" class="edge"/>
+<path d="M 910.0 115.0 C 960.0 115.0, 960.0 115.0, 1010.0 115.0" class="edge"/>
+<path d="M 590.0 115.0 C 640.0 115.0, 640.0 115.0, 690.0 115.0" class="edge"/>
+<path d="M 590.0 115.0 C 640.0 115.0, 640.0 185.0, 690.0 185.0" class="edge"/>
+<rect x="50.0" y="90.0" width="220" height="50" class="nodeRect"/>
+<text x="160.0" y="115.0" class="nodeText">main.dart</text>
+<circle cx="258.0" cy="115.0" r="9" fill="#007bff"/>
+<text x="258.0" y="116.0" class="badge">1</text>
+<rect x="50.0" y="160.0" width="220" height="50" class="nodeRect"/>
+<text x="160.0" y="185.0" class="nodeText">comments_example.dart</text>
+<rect x="370.0" y="90.0" width="220" height="50" class="nodeRect"/>
+<text x="480.0" y="115.0" class="nodeText">home_page.dart</text>
+<circle cx="382.0" cy="115.0" r="9" fill="#28a745"/>
+<text x="382.0" y="116.0" class="badge">1</text>
+<circle cx="578.0" cy="115.0" r="9" fill="#007bff"/>
+<text x="578.0" y="116.0" class="badge">2</text>
+<rect x="690.0" y="90.0" width="220" height="50" class="nodeRect"/>
+<text x="800.0" y="115.0" class="nodeText">counter_widget.dart</text>
+<circle cx="702.0" cy="115.0" r="9" fill="#28a745"/>
+<text x="702.0" y="116.0" class="badge">1</text>
+<circle cx="898.0" cy="115.0" r="9" fill="#007bff"/>
+<text x="898.0" y="116.0" class="badge">1</text>
+<rect x="690.0" y="160.0" width="220" height="50" class="nodeRect"/>
+<text x="800.0" y="185.0" class="nodeText">models.dart</text>
+<circle cx="702.0" cy="185.0" r="9" fill="#28a745"/>
+<text x="702.0" y="186.0" class="badge">1</text>
+<rect x="1010.0" y="90.0" width="220" height="50" class="nodeRect"/>
+<text x="1120.0" y="115.0" class="nodeText">utils.dart</text>
+<circle cx="1022.0" cy="115.0" r="9" fill="#28a745"/>
+<text x="1022.0" y="116.0" class="badge">1</text>
 </svg>

@@ -17,7 +17,7 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
     return _generateEmptySvg();
   }
 
-  // Group files by layer (ensure each file appears in only one layer)
+  // Group files by layer
   final layerGroups = <int, List<String>>{};
   for (final entry in layers.entries) {
     final layer = entry.value;
@@ -25,359 +25,228 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
     layerGroups.putIfAbsent(layer, () => []).add(file);
   }
 
-  // Remove duplicates by keeping only the first occurrence of each file
-  final seenFiles = <String>{};
+  // Remove duplicates and clean groups
   final cleanedLayerGroups = <int, List<String>>{};
   for (final layer in layerGroups.keys.toList()..sort()) {
-    final files = layerGroups[layer]!;
-    final uniqueFiles = <String>[];
-    for (final file in files) {
-      if (!seenFiles.contains(file)) {
-        uniqueFiles.add(file);
-        seenFiles.add(file);
-      }
-    }
+    final uniqueFiles = layerGroups[layer]!.toSet().toList();
     if (uniqueFiles.isNotEmpty) {
       cleanedLayerGroups[layer] = uniqueFiles;
     }
   }
 
-  // Sort layers by layer number (top to bottom: lowest layer first for cake layout)
+  // Sort layers by layer number (Layer 1 is left-most) 1..to.N
   final sortedLayers = cleanedLayerGroups.keys.toList()
     ..sort((a, b) => a.compareTo(b));
 
-  // Calculate edge counts for each file
+  // Sort files within each layer
   final incomingCounts = <String, int>{};
   final outgoingCounts = <String, int>{};
 
-  // Initialize counters for all files
-  for (final files in cleanedLayerGroups.values) {
-    for (final file in files) {
-      outgoingCounts[file] = 0;
-      incomingCounts[file] = 0;
-    }
-  }
-
-  // Count edges
+  // Calculate counts
   for (final entry in dependencyGraph.entries) {
-    final sourceFile = entry.key;
-    final dependencies = entry.value;
-
-    for (final targetFile in dependencies) {
-      if (layers.containsKey(sourceFile) && layers.containsKey(targetFile)) {
-        outgoingCounts[sourceFile] = (outgoingCounts[sourceFile] ?? 0) + 1;
-        incomingCounts[targetFile] = (incomingCounts[targetFile] ?? 0) + 1;
+    final source = entry.key;
+    for (final target in entry.value) {
+      if (layers.containsKey(source) && layers.containsKey(target)) {
+        outgoingCounts[source] = (outgoingCounts[source] ?? 0) + 1;
+        incomingCounts[target] = (incomingCounts[target] ?? 0) + 1;
       }
     }
   }
 
-  // Sort files within each layer: first by outgoing count (descending), then by incoming count (ascending), then by name (ascending)
-  // This places components with more dependencies above those with fewer, then importers above imported, then alphabetically
   for (final layerNum in cleanedLayerGroups.keys) {
     cleanedLayerGroups[layerNum]!.sort((a, b) {
-      final aOutgoing = outgoingCounts[a] ?? 0;
-      final bOutgoing = outgoingCounts[b] ?? 0;
+      // Sort priority: Incoming (desc), Outgoing (desc), Name (asc)
+      final inDiff = (incomingCounts[b] ?? 0).compareTo(incomingCounts[a] ?? 0);
+      if (inDiff != 0) return inDiff;
 
-      // First compare by outgoing count (descending)
-      if (aOutgoing != bOutgoing) {
-        return bOutgoing.compareTo(aOutgoing);
-      }
+      final outDiff =
+          (outgoingCounts[b] ?? 0).compareTo(outgoingCounts[a] ?? 0);
+      if (outDiff != 0) return outDiff;
 
-      final aIncoming = incomingCounts[a] ?? 0;
-      final bIncoming = incomingCounts[b] ?? 0;
-
-      // Then compare by incoming count (ascending)
-      if (aIncoming != bIncoming) {
-        return aIncoming.compareTo(bIncoming);
-      }
-
-      // Then compare by name (case-insensitive ascending)
-      final aName = a.split('/').last.split('.').first.toLowerCase();
-      final bName = b.split('/').last.split('.').first.toLowerCase();
-      return aName.compareTo(bName);
+      return a.split('/').last.compareTo(b.split('/').last);
     });
   }
 
-  // Calculate dimensions for vertical cake layout
-  const nodeWidth = 200;
+  // --- Column Layout Dimensions ---
+  const nodeWidth = 220;
   const nodeHeight = 50;
-  const nodeSpacing = 70;
+  const nodeVerticalSpacing = 20; // Space between nodes in a column
+  const columnSpacing = 100; // Space between layer columns
   const margin = 50;
+  const layerHeaderHeight = 40;
 
-  // Calculate height based on content: each layer gets space proportional to its node count
-  final totalContentHeight = sortedLayers.fold(0, (sum, layerNum) {
-    final files = cleanedLayerGroups[layerNum]!;
-    final layerHeight =
-        files.length * nodeHeight + (files.length - 1) * nodeSpacing + margin;
-    return sum + layerHeight;
-  });
+  // Calculate total width based on number of columns
+  final totalWidth = margin +
+      (sortedLayers.length * nodeWidth) +
+      ((sortedLayers.length - 1) * columnSpacing) +
+      margin;
 
-  // Calculate width based on longest filename: each char is ~8px + padding + margins
-  final longestFileName = cleanedLayerGroups.values
-      .expand((files) => files)
-      .fold(
-          '',
-          (longest, current) =>
-              current.length > longest.length ? current : longest);
+  // Calculate max nodes in any layer to determine height
+  int maxNodes = 0;
+  for (final files in cleanedLayerGroups.values) {
+    if (files.length > maxNodes) maxNodes = files.length;
+  }
 
-  final textWidth = longestFileName.length * 8; // Approximate character width
-  final requiredWidth =
-      textWidth + 50 + margin * 2; // text width + node padding + margins
-  final width = requiredWidth > (nodeWidth + margin * 2)
-      ? requiredWidth
-      : (nodeWidth + margin * 2);
-
-  final height = totalContentHeight;
+  final totalHeight = margin +
+      layerHeaderHeight +
+      (maxNodes * nodeHeight) +
+      ((maxNodes - 1) * nodeVerticalSpacing) +
+      margin;
 
   final buffer = StringBuffer();
 
-  // SVG header with viewBox for scalability
+  // SVG Header
   buffer.writeln('<?xml version="1.0" encoding="UTF-8"?>');
   buffer.writeln(
-      '<svg width="$width" height="$height" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">');
+      '<svg width="$totalWidth" height="$totalHeight" viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">');
+
+  // Filter Definitions
+  buffer.writeln('<defs>');
+  buffer.writeln(
+      '  <filter id="whiteShadow" x="-20%" y="-20%" width="140%" height="140%">');
+  buffer.writeln('    <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>');
+  buffer.writeln('    <feOffset dx="0" dy="0" result="offsetblur"/>');
+  buffer.writeln('    <feFlood flood-color="white" flood-opacity="1"/>');
+  buffer.writeln('    <feComposite in2="offsetblur" operator="in"/>');
+  buffer.writeln('    <feMerge>');
+  buffer.writeln('      <feMergeNode/>');
+  buffer.writeln('      <feMergeNode in="SourceGraphic"/>');
+  buffer.writeln('    </feMerge>');
+  buffer.writeln('  </filter>');
+  buffer.writeln('  <filter id="outlineWhite">');
+  buffer.writeln(
+      '    <feMorphology in="SourceAlpha" result="DILATED" operator="dilate" radius="2"/>');
+  buffer.writeln(
+      '    <feFlood flood-color="white" flood-opacity="0.5" result="WHITE"/>');
+  buffer.writeln(
+      '    <feComposite in="WHITE" in2="DILATED" operator="in" result="OUTLINE"/>');
+  buffer.writeln('    <feMerge>');
+  buffer.writeln('      <feMergeNode in="OUTLINE"/>');
+  buffer.writeln('      <feMergeNode in="SourceGraphic"/>');
+  buffer.writeln('    </feMerge>');
+  buffer.writeln('  </filter>');
+  buffer.writeln('</defs>');
 
   // CSS Styles
   buffer.writeln('<style>');
-  buffer.writeln('  .layerRectangle {');
-  buffer.writeln('    stroke: black;');
-  buffer.writeln('    stroke-dasharray: 5,5;');
-  buffer.writeln('    fill: url(#layers);');
-  buffer.writeln('  }');
-  buffer.writeln('  .layerText {');
-  buffer.writeln('    fill: purple;');
-  buffer.writeln('    font-size: 24px;');
-  buffer.writeln('    font-weight: bold;');
-  buffer.writeln('  }');
-  buffer.writeln('  .nodeFile {');
-  buffer.writeln('    fill: #ffffff;');
-  buffer.writeln('    stroke: gray;');
-  buffer.writeln('    opacity: 0.9;');
-  buffer.writeln('  }');
-  buffer.writeln('  .nodeName {');
-  buffer.writeln('    fill: black;');
-  buffer.writeln('    font-weight: bold;');
-  buffer.writeln('    text-anchor: middle;');
-  buffer.writeln('    dominant-baseline: central;');
-  buffer.writeln('  }');
-  buffer.writeln('  .line {');
-  buffer.writeln('    fill: none;');
-  buffer.writeln('    stroke: #377E22;');
-  buffer.writeln('    stroke-width: 3;');
-  buffer.writeln('    opacity: 0.5;');
-  buffer.writeln('  }');
-  buffer.writeln('  .line:hover {');
-  buffer.writeln('    stroke-width: 6;');
-  buffer.writeln('    opacity: 1;');
-  buffer.writeln('  }');
+  buffer.writeln(
+      '  .layerBackground { fill: #f8f9fa; stroke: #dee2e6; stroke-width: 1; stroke-dasharray: 4,4; }');
+  buffer.writeln(
+      '  .layerTitle { fill: #6c757d; font-size: 14px; font-weight: bold; text-anchor: middle; }');
+  buffer.writeln(
+      '  .nodeRect { fill: #ffffff; stroke: #343a40; stroke-width: 2; rx: 6; ry: 6; cursor: pointer; filter: url(#whiteShadow); }');
+  buffer.writeln('  .nodeRect:hover { stroke: #007bff; stroke-width: 3; }');
+  buffer.writeln(
+      '  .nodeText { fill: #212529; font-size: 14px; font-weight: 900; text-anchor: middle; dominant-baseline: middle; filter: url(#outlineWhite); }');
+  buffer.writeln(
+      '  .edge { fill: none; stroke: #adb5bd; stroke-width: 2; opacity: 0.6; }');
+  buffer.writeln(
+      '  .edge:hover { stroke: #007bff; stroke-width: 3; opacity: 1.0; }');
+  buffer.writeln(
+      '  .badge { font-size: 10px; font-weight: bold; fill: white; text-anchor: middle; dominant-baseline: middle; }');
   buffer.writeln('</style>');
 
   // Background
   buffer.writeln('<rect width="100%" height="100%" fill="white"/>');
 
-  // Gradient definition
-  buffer.writeln('<defs>');
-  buffer
-      .writeln('  <linearGradient id="layers" gradientTransform="rotate(90)">');
-  buffer.writeln(
-      '    <stop offset="0%" stop-color="#691872" stop-opacity="0.1"/>');
-  buffer.writeln(
-      '    <stop offset="100%" stop-color="#691872" stop-opacity="0.3"/>');
-  buffer.writeln('  </linearGradient>');
-  buffer.writeln('</defs>');
-
-  // Position all nodes first (vertical cake layout - nodes stacked vertically within each layer)
+  // 1. Calculate positions
   final nodePositions = <String, Point<double>>{};
-  final drawnFiles = <String>{}; // Track files that have been positioned
-  var currentY = 0; // Start at top
 
-  for (var layerIndex = 0; layerIndex < sortedLayers.length; layerIndex++) {
-    final layerNum = sortedLayers[layerIndex];
+  for (var colIndex = 0; colIndex < sortedLayers.length; colIndex++) {
+    final layerNum = sortedLayers[colIndex];
     final files = cleanedLayerGroups[layerNum]!;
-    final startY = currentY + nodeHeight / 2; // Start position for first node
 
-    for (var i = 0; i < files.length; i++) {
-      final file = files[i];
-      // Skip if already positioned (prevent duplicates)
-      if (drawnFiles.contains(file)) continue;
+    final x = margin + (colIndex * (nodeWidth + columnSpacing));
+    var y = margin + layerHeaderHeight;
 
-      final x = margin.toDouble(); // left edge of node
-      final y = startY + i * (nodeHeight + nodeSpacing); // vertically stacked
-      nodePositions[file] = Point(x, y);
-      drawnFiles.add(file);
+    for (final file in files) {
+      nodePositions[file] = Point(x.toDouble(), y.toDouble());
+      y += nodeHeight + nodeVerticalSpacing;
     }
-
-    // Move to next layer: add space for this layer's nodes only
-    final layerNodeHeight =
-        files.length * (nodeHeight + nodeSpacing) - nodeSpacing;
-    currentY +=
-        layerNodeHeight + margin; // Next layer starts after this one's content
   }
 
-  // 1. Draw layer rectangles (background layers) - vertical cake layout
-  var currentLayerY = 0; // Start at top
-  for (var i = 0; i < sortedLayers.length; i++) {
-    final layerNum = sortedLayers[i];
-    final files = cleanedLayerGroups[layerNum]!;
-    // Calculate layer height: just enough for the nodes
-    final layerNodeHeight =
-        files.length * (nodeHeight + nodeSpacing) - nodeSpacing;
-    final layerHeight = layerNodeHeight + margin; // Add bottom margin
-
+  // 2. Draw Layer Columns (Backgrounds)
+  for (var colIndex = 0; colIndex < sortedLayers.length; colIndex++) {
+    final layerNum = sortedLayers[colIndex];
+    final x =
+        margin + (colIndex * (nodeWidth + columnSpacing)) - (columnSpacing / 4);
+    final width = nodeWidth + (columnSpacing / 2);
+    // Draw column background
     buffer.writeln(
-        '<rect x="0" y="$currentLayerY" width="$width" height="$layerHeight" rx="2" ry="2" class="layerRectangle"/>');
+        '<rect x="$x" y="$margin" width="$width" height="${totalHeight - margin * 2}" rx="8" class="layerBackground"/>');
+    // Draw layer title
     buffer.writeln(
-        '<text x="10" y="${currentLayerY + 30}" class="layerText" dominant-baseline="hanging" text-anchor="start">$layerNum</text>');
-
-    // Move to next layer position (same as node positioning)
-    currentLayerY += layerNodeHeight + margin;
+        '<text x="${x + width / 2}" y="${margin + 25}" class="layerTitle">$layerNum</text>');
   }
 
-  // 2. Draw node rectangles - vertical cake layout
-  var currentNodeY = 0; // Start at top
-  final drawnNodes = <String>{}; // Track nodes that have been drawn
-  for (var layerIndex = 0; layerIndex < sortedLayers.length; layerIndex++) {
-    final layerNum = sortedLayers[layerIndex];
-    final files = cleanedLayerGroups[layerNum]!;
-    final startY =
-        currentNodeY + nodeHeight / 2; // Start position for first node
-
-    for (var i = 0; i < files.length; i++) {
-      final file = files[i];
-      // Skip if already drawn (prevent duplicates)
-      if (drawnNodes.contains(file)) continue;
-
-      final x = margin; // left aligned within layer
-      final y = startY + i * (nodeHeight + nodeSpacing); // vertically stacked
-
-      // Node rectangle
-      buffer.writeln(
-          '<rect x="$x" y="$y" width="$nodeWidth" height="$nodeHeight" rx="8" ry="8" class="nodeFile"/>');
-      drawnNodes.add(file);
-    }
-
-    // Move to next layer (same as node positioning)
-    final layerNodeHeight =
-        files.length * (nodeHeight + nodeSpacing) - nodeSpacing;
-    currentNodeY += layerNodeHeight + margin;
+  // 3. Draw Node Rectangles
+  for (final entry in nodePositions.entries) {
+    final pos = entry.value;
+    buffer.writeln(
+        '<rect x="${pos.x}" y="${pos.y}" width="$nodeWidth" height="$nodeHeight" class="nodeRect"/>');
   }
 
-  // 3. Draw edges - vertical cake layout
+  // 4. Draw Edges
   for (final entry in dependencyGraph.entries) {
-    final sourceFile = entry.key;
-    final dependencies = entry.value;
-    for (final targetFile in dependencies) {
-      if (nodePositions.containsKey(targetFile) &&
-          nodePositions.containsKey(sourceFile)) {
-        // Use the stored node positions for edge drawing
-        final startPos = nodePositions[sourceFile]!;
-        final endPos = nodePositions[targetFile]!;
+    final source = entry.key;
+    final targets = entry.value;
 
-        // Draw connection lines centered on counter circles
-        // Outgoing counter is at bottom-right of source node
-        final startX = startPos.x + nodeWidth - 15; // Outgoing counter center
-        final startY = startPos.y + nodeHeight - 15; // Outgoing counter center
+    if (!nodePositions.containsKey(source)) continue;
+    final sourcePos = nodePositions[source]!;
 
-        // Incoming counter is at top-left of target node
-        final endX = endPos.x + 15; // Incoming counter center
-        final endY = endPos.y + 15; // Incoming counter center
+    for (final target in targets) {
+      if (!nodePositions.containsKey(target)) continue;
+      final targetPos = nodePositions[target]!;
 
-        // Draw the line without end marker
-        buffer.writeln('<line x1="$startX" y1="$startY" x2="$endX" y2="$endY" '
-            'stroke="#6c757d" stroke-width="4"/>');
-      }
+      // Anchor points: Right side of source -> Left side of target
+      final startX = sourcePos.x + nodeWidth;
+      final startY = sourcePos.y + nodeHeight / 2;
+
+      final endX = targetPos.x;
+      final endY = targetPos.y + nodeHeight / 2;
+
+      // Bezier curve control points for smooth flow
+      final controlX1 = startX + (columnSpacing * 0.5);
+      final controlX2 = endX - (columnSpacing * 0.5);
+
+      buffer.writeln(
+          '<path d="M $startX $startY C $controlX1 $startY, $controlX2 $endY, $endX $endY" class="edge"/>');
     }
   }
 
-  // 4. Draw node labels - vertical cake layout
-  var currentLabelY = 0; // Start at top
-  final drawnLabels = <String>{}; // Track labels that have been drawn
-  for (var layerIndex = 0; layerIndex < sortedLayers.length; layerIndex++) {
-    final layerNum = sortedLayers[layerIndex];
-    final files = cleanedLayerGroups[layerNum]!;
-    final startY =
-        currentLabelY + nodeHeight / 2; // Start position for first node
+  // 5. Draw Node Content (Counters and Labels)
+  for (final entry in nodePositions.entries) {
+    final file = entry.key;
+    final pos = entry.value;
 
-    for (var i = 0; i < files.length; i++) {
-      final file = files[i];
-      // Skip if already drawn (prevent duplicates)
-      if (drawnLabels.contains(file)) continue;
+    // Badges (Incoming/Outgoing) - Drawn BEFORE text
+    final inCount = incomingCounts[file] ?? 0;
+    final outCount = outgoingCounts[file] ?? 0;
 
-      final x = margin; // left aligned within layer
-      final y = startY + i * (nodeHeight + nodeSpacing); // vertically stacked
-
-      // File name text (vertically centered in node)
-      final parts = file.split('/');
-      final libIndex = parts.indexOf('lib');
-      final relativeFile =
-          libIndex >= 0 ? parts.sublist(libIndex + 1).join('/') : file;
-      final fileName = relativeFile; // relative path
-      final textX = x + nodeWidth / 2;
-      final textY = y + nodeHeight / 2; // Vertically centered in rectangle
-
-      // Add white background rectangle for text readability
-      final textWidth = fileName.length * 8; // Approximate character width
-      final bgX = textX - textWidth / 2 - 4; // 4px padding
-      final bgY = textY - 12; // 12px above text
-      final bgWidth = textWidth + 8; // text width + padding
-      final bgHeight = 16; // text height + padding
-
+    if (inCount > 0) {
+      // Incoming badge (Left)
       buffer.writeln(
-          '<rect x="$bgX" y="$bgY" width="$bgWidth" height="$bgHeight" fill="white" fill-opacity="0.8" rx="3" ry="3"/>');
+          '<circle cx="${pos.x + 12}" cy="${pos.y + nodeHeight / 2}" r="9" fill="#28a745"/>');
       buffer.writeln(
-          '<text x="$textX" y="$textY" class="nodeName">$fileName</text>');
-      drawnLabels.add(file);
+          '<text x="${pos.x + 12}" y="${pos.y + nodeHeight / 2 + 1}" class="badge">$inCount</text>');
     }
 
-    // Move to next layer (same as node positioning)
-    final layerNodeHeight =
-        files.length * (nodeHeight + nodeSpacing) - nodeSpacing;
-    currentLabelY += layerNodeHeight + margin;
-  }
-
-  // 5. Draw edge counters (badges) - vertical cake layout
-  var currentBadgeY = 0; // Start at top
-  final drawnBadges = <String>{}; // Track badges that have been drawn
-  for (var layerIndex = 0; layerIndex < sortedLayers.length; layerIndex++) {
-    final layerNum = sortedLayers[layerIndex];
-    final files = cleanedLayerGroups[layerNum]!;
-    final startY =
-        currentBadgeY + nodeHeight / 2; // Start position for first node
-
-    for (var i = 0; i < files.length; i++) {
-      final file = files[i];
-      // Skip if already drawn (prevent duplicates)
-      if (drawnBadges.contains(file)) continue;
-
-      final x = margin; // left aligned within layer
-      final y = startY + i * (nodeHeight + nodeSpacing); // vertically stacked
-
-      // Counter badges (inside the nodes)
-      final incomingCount = incomingCounts[file] ?? 0;
-      final outgoingCount = outgoingCounts[file] ?? 0;
-
-      if (incomingCount > 0) {
-        // Top-left corner inside the node
-        buffer.writeln(
-            '<circle cx="${x + 15}" cy="${y + 15}" r="10" fill="blue"/>');
-        buffer.writeln(
-            '<text x="${x + 15}" y="${y + 15}" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">$incomingCount</text>');
-      }
-
-      if (outgoingCount > 0) {
-        // Bottom-right corner inside the node
-        buffer.writeln(
-            '<circle cx="${x + nodeWidth - 15}" cy="${y + nodeHeight - 15}" r="10" fill="green"/>');
-        buffer.writeln(
-            '<text x="${x + nodeWidth - 15}" y="${y + nodeHeight - 15}" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">$outgoingCount</text>');
-      }
-
-      drawnBadges.add(file);
+    if (outCount > 0) {
+      // Outgoing badge (Right)
+      buffer.writeln(
+          '<circle cx="${pos.x + nodeWidth - 12}" cy="${pos.y + nodeHeight / 2}" r="9" fill="#007bff"/>');
+      buffer.writeln(
+          '<text x="${pos.x + nodeWidth - 12}" y="${pos.y + nodeHeight / 2 + 1}" class="badge">$outCount</text>');
     }
 
-    // Move to next layer (same as node positioning)
-    final layerNodeHeight =
-        files.length * (nodeHeight + nodeSpacing) - nodeSpacing;
-    currentBadgeY += layerNodeHeight + margin;
+    // Node Text (Filename) - Drawn LAST
+    final fileName = file.split('/').last;
+    // Truncate if too long
+    final displayText =
+        fileName.length > 25 ? '${fileName.substring(0, 22)}...' : fileName;
+
+    buffer.writeln(
+        '<text x="${pos.x + nodeWidth / 2}" y="${pos.y + nodeHeight / 2}" class="nodeText">$displayText</text>');
   }
 
   buffer.writeln('</svg>');
