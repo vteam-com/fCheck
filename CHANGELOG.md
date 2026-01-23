@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-01-23
+
+### Added
+- ✨ **JSON Output Mode**: New `--json` flag to output all analysis results in structured JSON format.
+- 🏗️ **Robust Layering Analysis**: Implemented Tarjan's SCC algorithm to correctly handle circular dependencies.
+- 📐 **Top-Down Layering Logic**: Improved layering algorithm for consistent "cake" layout.
+
+### Changed
+- 📝 **Documentation**: Major improvements to `LAYOUT.md` and `README.md`.
+- ⚡ **Model Updates**: Metrics and issues now support JSON serialization.
+
+
 ## [0.3.5] - 2026-01-21
 
 ### Added
