@@ -18,17 +18,20 @@ A command-line tool for analyzing the quality of Flutter and Dart projects. It p
 ### From Source
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/vteam-com/fCheck.git
 cd fcheck
 ```
 
-2. Install dependencies:
+1. Install dependencies:
+
 ```bash
 dart pub get
 ```
 
-3. Run the tool:
+1. Run the tool:
+
 ```bash
 dart run bin/fcheck.dart --input /path/to/your/flutter/project
 ```
@@ -81,6 +84,24 @@ fcheck /path/to/project --svg
 # Use short options
 fcheck -i /path/to/project --svg
 ```
+
+**Visualization Example**:
+
+![Dependency Graph Visualization](layers.svg)
+
+The SVG visualization shows:
+
+- **Layered Architecture**: Files organized by dependency layers (Layer 1 = entry points, higher numbers = deeper dependencies)
+- **Dependency Graph**: Visual representation of file dependencies with directional edges
+- **Metrics Badges**: Each file shows incoming/outgoing dependency counts
+- **Interactive Features**: Hover over nodes/edges for detailed information
+
+The visualization helps identify:
+
+- ✅ Proper layering and separation of concerns
+- ⚠️ Circular dependencies (handled via Tarjan's SCC algorithm)
+- 📊 Architecture patterns and component relationships
+- 🔍 Potential refactoring opportunities
 
 ### JSON Output Mode
 
@@ -139,6 +160,7 @@ Comment Ratio: 12.70%
 ## Quality Metrics
 
 ### Project Statistics
+
 - **Total Folders**: Number of directories in the project
 - **Total Files**: Total number of files (all types)
 - **Total Dart Files**: Number of `.dart` files analyzed
@@ -149,6 +171,7 @@ Comment Ratio: 12.70%
 ### Code Quality Rules
 
 #### One Class Per File Rule
+
 - **Public Classes**: Maximum 1 public class per file (classes not starting with `_`)
 - **StatefulWidget Files**: Maximum 2 public classes per file (widget + state)
 - **Private Classes**: Unlimited (implementation details starting with `_`)
@@ -178,17 +201,20 @@ void main() {
 ## Quality Standards
 
 ### Comment Ratio Guidelines
+
 - **Excellent**: > 20%
 - **Good**: 10-20%
 - **Needs Improvement**: < 10%
 
 ### Class Organization
+
 - **Compliant**: Files with appropriate public class counts
 - **StatefulWidget**: Allowed 2 public classes (widget + State)
 - **Private Classes**: Unlimited (starting with `_` are implementation details)
 - **Non-compliant**: Files with too many public classes
 
 ### Member Sorting (Flutter Classes)
+
 - **Proper Order**: Constructors → Fields → Getters/Setters → Methods → Lifecycle Methods
 - **Lifecycle Methods**: `initState`, `dispose`, `didChangeDependencies`, `didUpdateWidget`, `build`
 - **Field Grouping**: Related getters/setters are grouped with their fields
@@ -196,7 +222,7 @@ void main() {
 
 ## Project Structure
 
-```
+```text
 fcheck/
 ├── bin/
 │   └── fcheck.dart          # CLI entry point
