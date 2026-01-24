@@ -130,6 +130,15 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
   buffer.writeln('      <feMergeNode in="SourceGraphic"/>');
   buffer.writeln('    </feMerge>');
   buffer.writeln('  </filter>');
+
+  // Gradient for edges (green to blue)
+  buffer.writeln(
+      '  <linearGradient id="edgeGradient" x1="0%" y1="0%" x2="100%" y2="0%">');
+  buffer
+      .writeln('    <stop offset="0%" stop-color="green" stop-opacity="0.3"/>');
+  buffer.writeln(
+      '    <stop offset="100%" stop-color="#007bff" stop-opacity="0.3"/>');
+  buffer.writeln('  </linearGradient>');
   buffer.writeln('</defs>');
 
   // CSS Styles
@@ -143,8 +152,7 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
   buffer.writeln('  .nodeRect:hover { stroke: #007bff; stroke-width: 3; }');
   buffer.writeln(
       '  .nodeText { fill: #212529; font-size: 14px; font-weight: 900; text-anchor: middle; dominant-baseline: middle; filter: url(#outlineWhite); }');
-  buffer.writeln(
-      '  .edge { fill: none; stroke: #adb5bd; stroke-width: 2; opacity: 0.6; }');
+  buffer.writeln('  .edge { fill: none; stroke: url(#edgeGradient); }');
   buffer.writeln(
       '  .edge:hover { stroke: #007bff; stroke-width: 3; opacity: 1.0; }');
   buffer.writeln(
@@ -204,12 +212,12 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
       if (!nodePositions.containsKey(target)) continue;
       final targetPos = nodePositions[target]!;
 
-      // Anchor points: Right side of source -> Left side of target
-      final startX = sourcePos.x + nodeWidth;
-      final startY = sourcePos.y + nodeHeight / 2;
+      // Anchor points: Bottom-right of source -> Top-left of target
+      final startX = sourcePos.x + nodeWidth - badgeOffset;
+      final startY = sourcePos.y + nodeHeight - badgeOffset;
 
-      final endX = targetPos.x;
-      final endY = targetPos.y + nodeHeight / 2;
+      final endX = targetPos.x + badgeOffset;
+      final endY = targetPos.y + badgeOffset;
 
       // Bezier curve control points for smooth flow
       final controlX1 = startX + (columnSpacing * 0.5);
@@ -244,7 +252,7 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
     final inCount = incomingCounts[file] ?? 0;
     final outCount = outgoingCounts[file] ?? 0;
 
-    // Render incoming badge (left)
+    // Render incoming badge (top-left)
     _renderBadge(
       buffer,
       pos,
@@ -253,12 +261,13 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
       inCount,
       incomingNodes[file] ?? [],
       badgeOffset,
+      badgeOffset, // Y offset from top
       badgeRadius,
       badgeTextOffset,
       '#007bff', // Blue for incoming
     );
 
-    // Render outgoing badge (right)
+    // Render outgoing badge (bottom-right)
     _renderBadge(
       buffer,
       pos,
@@ -267,6 +276,7 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
       outCount,
       outgoingNodes[file] ?? [],
       nodeWidth - badgeOffset,
+      nodeHeight - badgeOffset, // Y offset from bottom
       badgeRadius,
       badgeTextOffset,
       '#28a745', // Green for outgoing
@@ -295,6 +305,7 @@ void _renderBadge(
   int count,
   List<String> nodeNames,
   num xOffset,
+  num yOffset,
   num radius,
   num textOffset,
   String color,
@@ -307,9 +318,9 @@ void _renderBadge(
 
   buffer.writeln('<g>');
   buffer.writeln(
-      '<circle cx="${pos.x + xOffset}" cy="${pos.y + nodeHeight / 2}" r="$radius" fill="$color"/>');
+      '<circle cx="${pos.x + xOffset}" cy="${pos.y + yOffset}" r="$radius" fill="$color"/>');
   buffer.writeln(
-      '<text x="${pos.x + xOffset}" y="${pos.y + nodeHeight / 2 + textOffset}" class="badge">$count</text>');
+      '<text x="${pos.x + xOffset}" y="${pos.y + yOffset + textOffset}" class="badge">$count</text>');
   buffer.writeln('<title>$tooltipLines</title>');
   buffer.writeln('</g>');
 }
