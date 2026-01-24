@@ -87,7 +87,7 @@ fcheck -i /path/to/project --svg
 
 **Visualization Example**:
 
-![Dependency Graph Visualization](layers.svg)
+![Dependency Graph Visualization](./layers.svg)
 
 The SVG visualization shows:
 
