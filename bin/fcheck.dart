@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:args/args.dart';
 import 'package:fcheck/fcheck.dart';
-import 'package:fcheck/src/generators/svg_generator.dart';
 import 'package:fcheck/src/generators/mermaid_generator.dart';
+import 'package:fcheck/src/generators/svg_generator.dart';
 import 'package:fcheck/src/generators/plantuml_generator.dart';
 
 /// Main entry point for the fcheck command-line tool.

@@ -1,6 +1,7 @@
-import 'package:fcheck/fcheck.dart';
+import 'package:fcheck/src/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/layers/layers_issue.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
+import 'package:fcheck/src/sort/sort.dart';
 
 /// Represents the overall quality metrics for a Flutter/Dart project.
 ///
