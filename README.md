@@ -85,6 +85,41 @@ fcheck /path/to/project --svg
 fcheck -i /path/to/project --svg
 ```
 
+### Folder-Based SVG Generation Mode
+
+```bash
+# Generate folder-based SVG visualization (after global installation)
+fcheck --svgfolder
+
+# Generate folder-based SVG in specific project
+fcheck --input /path/to/project --svgfolder
+
+# Use positional arguments
+fcheck /path/to/project --svgfolder
+
+# Use short options
+fcheck -i /path/to/project --svgfolder
+```
+
+**Folder-Based Visualization Features**:
+
+![Folder-Based Dependency Graph Visualization](folder_layers.svg)
+
+The folder-based visualization provides:
+
+- **Folder Containers**: Files grouped by their containing folders
+- **Folder-Level Metrics**: Rollup incoming/outgoing dependency counts per folder
+- **File-Level Details**: Individual files shown within each folder with their own dependency badges
+- **Interactive Tooltips**: Hover over folder edges to see specific file dependencies between folders
+- **Visual Hierarchy**: Folders sorted by dependency activity (most connected folders first)
+
+This visualization helps identify:
+
+- 📁 **Folder Coupling**: Which folders have the most inter-dependencies
+- 🔗 **Architecture Patterns**: Natural grouping and separation of concerns
+- 🎯 **Refactoring Opportunities**: Folders that might benefit from consolidation or separation
+- 📊 **Component Relationships**: How different modules/components interact
+
 **Visualization Example**:
 
 ![Dependency Graph Visualization](./layers.svg)

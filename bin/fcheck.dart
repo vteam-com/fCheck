@@ -5,6 +5,7 @@ import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/generators/mermaid_generator.dart';
 import 'package:fcheck/src/generators/svg_generator.dart';
 import 'package:fcheck/src/generators/plantuml_generator.dart';
+import 'package:fcheck/src/generators/folder_svg_generator.dart';
 
 /// Main entry point for the fcheck command-line tool.
 ///
@@ -30,6 +31,9 @@ void main(List<String> arguments) {
     ..addFlag('plantuml',
         help: 'Generate PlantUML file for dependency graph visualization',
         negatable: false)
+    ..addFlag('svgfolder',
+        help: 'Generate folder-based SVG visualization of the dependency graph',
+        negatable: false)
     ..addFlag('json',
         help: 'Output results in structured JSON format', negatable: false)
     ..addMultiOption('exclude',
@@ -45,6 +49,7 @@ void main(List<String> arguments) {
   late bool generateSvg;
   late bool generateMermaid;
   late bool generatePlantUML;
+  late bool generateFolderSvg;
 
   late bool outputJson;
   late List<String> excludePatterns;
@@ -55,6 +60,7 @@ void main(List<String> arguments) {
     generateSvg = argResults['svg'] as bool;
     generateMermaid = argResults['mermaid'] as bool;
     generatePlantUML = argResults['plantuml'] as bool;
+    generateFolderSvg = argResults['svgfolder'] as bool;
     outputJson = argResults['json'] as bool;
     excludePatterns = argResults['exclude'] as List<String>;
 
@@ -113,7 +119,10 @@ void main(List<String> arguments) {
     // Generate layer analysis result for visualization
     final layersResult = engine.analyzeLayers();
 
-    if (generateSvg || generateMermaid || generatePlantUML) {
+    if (generateSvg ||
+        generateMermaid ||
+        generatePlantUML ||
+        generateFolderSvg) {
       if (generateSvg) {
         // Generate SVG visualization
         final svgContent = generateDependencyGraphSvg(layersResult);
@@ -136,6 +145,14 @@ void main(List<String> arguments) {
         final plantUMLFile = File('${directory.path}/layers.puml');
         plantUMLFile.writeAsStringSync(plantUMLContent);
         print('PlantUML layers graph saved to: ${plantUMLFile.path}');
+      }
+
+      if (generateFolderSvg) {
+        // Generate folder-based SVG visualization
+        final folderSvgContent = generateFolderDependencyGraphSvg(layersResult);
+        final folderSvgFile = File('${directory.path}/folder_layers.svg');
+        folderSvgFile.writeAsStringSync(folderSvgContent);
+        print('Folder-based SVG layers graph saved to: ${folderSvgFile.path}');
       }
     }
   } catch (e, stack) {
