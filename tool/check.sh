@@ -19,3 +19,6 @@ flutter analyze lib test --no-pub | sed 's/^/    /'
 echo --- Test
 echo "    Running tests..."
 flutter test --reporter=compact --no-pub
+
+echo --- fCheck
+dart run fcheck.dart --svg .
