@@ -75,6 +75,11 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
   const margin = 50;
   const layerHeaderHeight = 40;
 
+  // Badge constants
+  const badgeRadius = 9;
+  const badgeOffset = 12;
+  const badgeTextOffset = 1;
+
   // Calculate total width based on number of columns
   final totalWidth = margin +
       (sortedLayers.length * nodeWidth) +
@@ -143,7 +148,8 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
   buffer.writeln(
       '  .edge:hover { stroke: #007bff; stroke-width: 3; opacity: 1.0; }');
   buffer.writeln(
-      '  .badge { font-size: 10px; font-weight: bold; fill: white; text-anchor: middle; dominant-baseline: middle; }');
+      '  .badge { font-size: 10px; font-weight: bold; fill: white; text-anchor: middle; dominant-baseline: middle; cursor: help; }');
+  buffer.writeln('  .badge:hover { opacity: 0.8; }');
   buffer.writeln('</style>');
 
   // Background
@@ -215,6 +221,21 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
   }
 
   // 5. Draw Node Content (Counters and Labels)
+
+  // Pre-calculate incoming and outgoing node lists for tooltips
+  final incomingNodes = <String, List<String>>{};
+  final outgoingNodes = <String, List<String>>{};
+
+  for (final entry in dependencyGraph.entries) {
+    final source = entry.key;
+    for (final target in entry.value) {
+      if (layers.containsKey(source) && layers.containsKey(target)) {
+        outgoingNodes.putIfAbsent(source, () => []).add(target.split('/').last);
+        incomingNodes.putIfAbsent(target, () => []).add(source.split('/').last);
+      }
+    }
+  }
+
   for (final entry in nodePositions.entries) {
     final file = entry.key;
     final pos = entry.value;
@@ -223,21 +244,33 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
     final inCount = incomingCounts[file] ?? 0;
     final outCount = outgoingCounts[file] ?? 0;
 
-    if (inCount > 0) {
-      // Incoming badge (Left)
-      buffer.writeln(
-          '<circle cx="${pos.x + 12}" cy="${pos.y + nodeHeight / 2}" r="9" fill="#28a745"/>');
-      buffer.writeln(
-          '<text x="${pos.x + 12}" y="${pos.y + nodeHeight / 2 + 1}" class="badge">$inCount</text>');
-    }
+    // Render incoming badge (left)
+    _renderBadge(
+      buffer,
+      pos,
+      nodeWidth,
+      nodeHeight,
+      inCount,
+      incomingNodes[file] ?? [],
+      badgeOffset,
+      badgeRadius,
+      badgeTextOffset,
+      '#007bff', // Blue for incoming
+    );
 
-    if (outCount > 0) {
-      // Outgoing badge (Right)
-      buffer.writeln(
-          '<circle cx="${pos.x + nodeWidth - 12}" cy="${pos.y + nodeHeight / 2}" r="9" fill="#007bff"/>');
-      buffer.writeln(
-          '<text x="${pos.x + nodeWidth - 12}" y="${pos.y + nodeHeight / 2 + 1}" class="badge">$outCount</text>');
-    }
+    // Render outgoing badge (right)
+    _renderBadge(
+      buffer,
+      pos,
+      nodeWidth,
+      nodeHeight,
+      outCount,
+      outgoingNodes[file] ?? [],
+      nodeWidth - badgeOffset,
+      badgeRadius,
+      badgeTextOffset,
+      '#28a745', // Green for outgoing
+    );
 
     // Node Text (Filename) - Drawn LAST
     final fileName = file.split('/').last;
@@ -251,6 +284,34 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
 
   buffer.writeln('</svg>');
   return buffer.toString();
+}
+
+/// Helper method to render a badge on an SVG node
+void _renderBadge(
+  StringBuffer buffer,
+  Point<double> pos,
+  num nodeWidth,
+  num nodeHeight,
+  int count,
+  List<String> nodeNames,
+  num xOffset,
+  num radius,
+  num textOffset,
+  String color,
+) {
+  if (count <= 0) return;
+
+  // Sort node names alphabetically and generate tooltip
+  final sortedNodeNames = List<String>.from(nodeNames)..sort();
+  final tooltipLines = sortedNodeNames.join('\n');
+
+  buffer.writeln('<g>');
+  buffer.writeln(
+      '<circle cx="${pos.x + xOffset}" cy="${pos.y + nodeHeight / 2}" r="$radius" fill="$color"/>');
+  buffer.writeln(
+      '<text x="${pos.x + xOffset}" y="${pos.y + nodeHeight / 2 + textOffset}" class="badge">$count</text>');
+  buffer.writeln('<title>$tooltipLines</title>');
+  buffer.writeln('</g>');
 }
 
 /// Generates an empty SVG for when there are no dependencies.
