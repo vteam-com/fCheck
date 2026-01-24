@@ -34,8 +34,10 @@ class LayersAnalyzer {
   /// [directory] The root directory to scan.
   ///
   /// Returns a [LayersAnalysisResult] containing issues and layer assignments.
-  LayersAnalysisResult analyzeDirectory(Directory directory) {
-    final List<File> dartFiles = FileUtils.listDartFiles(directory);
+  LayersAnalysisResult analyzeDirectory(Directory directory,
+      {List<String> excludePatterns = const []}) {
+    final List<File> dartFiles =
+        FileUtils.listDartFiles(directory, excludePatterns: excludePatterns);
 
     // Build dependency graph: Map<filePath, List<dependencies>>
     final Map<String, List<String>> dependencyGraph = <String, List<String>>{};
@@ -49,8 +51,20 @@ class LayersAnalyzer {
       entryPoints[file.path] = result['isEntryPoint'] as bool;
     }
 
+    // Filter out excluded files from dependency graph
+    // Remove any dependency targets that point to excluded files
+    final Set<String> analyzedFilePaths = dartFiles.map((f) => f.path).toSet();
+    final Map<String, List<String>> filteredGraph = <String, List<String>>{};
+
+    for (final entry in dependencyGraph.entries) {
+      // Only include dependencies that point to analyzed files
+      final filteredDeps =
+          entry.value.where((dep) => analyzedFilePaths.contains(dep)).toList();
+      filteredGraph[entry.key] = filteredDeps;
+    }
+
     // Analyze the graph for issues
-    return _analyzeGraph(dependencyGraph, entryPoints);
+    return _analyzeGraph(filteredGraph, entryPoints);
   }
 
   /// Analyzes a single Dart file for its dependencies and entry point status.
@@ -197,19 +211,20 @@ class LayersAnalyzer {
     final List<String> allFiles = allFilesSet.toList();
 
     // Step 1: Find Strongly Connected Components (SCCs) to handle cycles
-    final List<List<String>> sccs = _findSCCs(allFiles, dependencyGraph);
+    final List<List<String>> connectedGraph =
+        _findSCCs(allFiles, dependencyGraph);
 
     // Map each file to its SCC index
     final Map<String, int> fileToSccIndex = <String, int>{};
-    for (var i = 0; i < sccs.length; i++) {
-      for (final file in sccs[i]) {
+    for (var i = 0; i < connectedGraph.length; i++) {
+      for (final file in connectedGraph[i]) {
         fileToSccIndex[file] = i;
       }
     }
 
     // Step 2: Build SCC-level dependency graph (SCC Index -> Target SCC Indexes)
     final Map<int, Set<int>> sccDependentsMap = <int, Set<int>>{};
-    for (var i = 0; i < sccs.length; i++) {
+    for (var i = 0; i < connectedGraph.length; i++) {
       sccDependentsMap[i] = <int>{};
     }
 
@@ -228,7 +243,7 @@ class LayersAnalyzer {
     // Step 3: Assign layers to SCCs iteratively
     // Initialize: all are Layer 1 (initially)
     final Map<int, int> sccLayers = <int, int>{};
-    for (var i = 0; i < sccs.length; i++) {
+    for (var i = 0; i < connectedGraph.length; i++) {
       sccLayers[i] = 1;
     }
 
@@ -240,7 +255,7 @@ class LayersAnalyzer {
       changed = false;
       iterations++;
 
-      for (var sourceScc = 0; sourceScc < sccs.length; sourceScc++) {
+      for (var sourceScc = 0; sourceScc < connectedGraph.length; sourceScc++) {
         final currentLayer = sccLayers[sourceScc]!;
         for (final targetScc in sccDependentsMap[sourceScc]!) {
           // sourceScc imports targetScc.
@@ -255,8 +270,8 @@ class LayersAnalyzer {
 
     // Step 4: Map SCC layers back to files
     final Map<String, int> fileLayers = <String, int>{};
-    for (var i = 0; i < sccs.length; i++) {
-      for (final file in sccs[i]) {
+    for (var i = 0; i < connectedGraph.length; i++) {
+      for (final file in connectedGraph[i]) {
         fileLayers[file] = sccLayers[i]!;
       }
     }
@@ -284,9 +299,9 @@ class LayersAnalyzer {
     final Map<String, int> indices = <String, int>{};
     final Map<String, int> lowlink = <String, int>{};
     final Set<String> onStack = <String>{};
-    final List<List<String>> sccs = <List<String>>[];
+    final List<List<String>> connectedGraph = <List<String>>[];
 
-    void strongconnect(String v) {
+    void strongConnect(String v) {
       indices[v] = index;
       lowlink[v] = index;
       index++;
@@ -296,7 +311,7 @@ class LayersAnalyzer {
       final successors = graph[v] ?? <String>[];
       for (final w in successors) {
         if (!indices.containsKey(w)) {
-          strongconnect(w);
+          strongConnect(w);
           lowlink[v] = lowlink[v]! < lowlink[w]! ? lowlink[v]! : lowlink[w]!;
         } else if (onStack.contains(w)) {
           lowlink[v] = lowlink[v]! < indices[w]! ? lowlink[v]! : indices[w]!;
@@ -311,17 +326,17 @@ class LayersAnalyzer {
           onStack.remove(w);
           scc.add(w);
         } while (w != v);
-        sccs.add(scc);
+        connectedGraph.add(scc);
       }
     }
 
     for (final node in nodes) {
       if (!indices.containsKey(node)) {
-        strongconnect(node);
+        strongConnect(node);
       }
     }
 
-    return sccs;
+    return connectedGraph;
   }
 
   /// Finds the project root directory (containing pubspec.yaml).

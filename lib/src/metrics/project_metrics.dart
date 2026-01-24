@@ -44,6 +44,9 @@ class ProjectMetrics {
   /// The dependency graph used for analysis (filePath -> list of dependencies).
   final Map<String, List<String>> dependencyGraph;
 
+  /// Number of files excluded by glob patterns.
+  final int excludedFilesCount;
+
   /// Creates a new [ProjectMetrics] instance.
   ///
   /// All parameters are required and represent the aggregated metrics
@@ -61,6 +64,7 @@ class ProjectMetrics {
     required this.layersEdgeCount,
     required this.layersCount,
     required this.dependencyGraph,
+    this.excludedFilesCount = 0,
   });
 
   /// Converts these metrics to a JSON-compatible map.
@@ -109,6 +113,9 @@ class ProjectMetrics {
     print('Folders: $totalFolders');
     print('Files: $totalFiles');
     print('Dart Files: $totalDartFiles');
+    if (excludedFilesCount > 0) {
+      print('Excluded Files: $excludedFilesCount');
+    }
     print('Lines of Code: $totalLinesOfCode');
     print('Comment Lines: $totalCommentLines');
     print('Comment Ratio: ${(commentRatio * 100).toStringAsFixed(2)}%');

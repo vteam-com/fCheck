@@ -32,6 +32,10 @@ void main(List<String> arguments) {
         negatable: false)
     ..addFlag('json',
         help: 'Output results in structured JSON format', negatable: false)
+    ..addMultiOption('exclude',
+        abbr: 'e',
+        help: 'Glob patterns to exclude from analysis (e.g. "**/generated/**")',
+        defaultsTo: [])
     ..addFlag('help',
         abbr: 'h', help: 'Show usage information', negatable: false);
 
@@ -41,7 +45,9 @@ void main(List<String> arguments) {
   late bool generateSvg;
   late bool generateMermaid;
   late bool generatePlantUML;
+
   late bool outputJson;
+  late List<String> excludePatterns;
 
   try {
     argResults = parser.parse(arguments);
@@ -50,6 +56,7 @@ void main(List<String> arguments) {
     generateMermaid = argResults['mermaid'] as bool;
     generatePlantUML = argResults['plantuml'] as bool;
     outputJson = argResults['json'] as bool;
+    excludePatterns = argResults['exclude'] as List<String>;
 
     // Handle help flag
     if (argResults['help'] as bool) {
@@ -93,7 +100,8 @@ void main(List<String> arguments) {
   }
 
   try {
-    final engine = AnalyzerEngine(directory, fix: fix);
+    final engine =
+        AnalyzerEngine(directory, fix: fix, excludePatterns: excludePatterns);
     final metrics = engine.analyze();
 
     if (outputJson) {

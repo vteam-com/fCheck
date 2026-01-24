@@ -71,10 +71,12 @@ class HardcodedStringAnalyzer {
   ///
   /// Returns a list of all [HardcodedStringIssue] objects found across
   /// all analyzed files in the directory.
-  List<HardcodedStringIssue> analyzeDirectory(Directory directory) {
+  List<HardcodedStringIssue> analyzeDirectory(Directory directory,
+      {List<String> excludePatterns = const []}) {
     final List<HardcodedStringIssue> allIssues = [];
 
-    final List<File> dartFiles = FileUtils.listDartFiles(directory);
+    final List<File> dartFiles =
+        FileUtils.listDartFiles(directory, excludePatterns: excludePatterns);
 
     for (final File file in dartFiles) {
       allIssues.addAll(analyzeFile(file));

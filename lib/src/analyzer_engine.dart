@@ -23,11 +23,16 @@ class AnalyzerEngine {
   /// Whether to automatically fix sorting issues.
   final bool fix;
 
+  /// List of glob patterns to exclude from analysis.
+  final List<String> excludePatterns;
+
   /// Creates a new analyzer engine for the specified project directory.
   ///
   /// [projectDir] should point to the root of a Flutter/Dart project.
   /// [fix] if true, automatically fixes sorting issues by writing sorted code back to files.
-  AnalyzerEngine(this.projectDir, {this.fix = false});
+  /// [excludePatterns] optional list of glob patterns to exclude files/folders.
+  AnalyzerEngine(this.projectDir,
+      {this.fix = false, this.excludePatterns = const []});
 
   /// Analyzes the layers architecture and returns the result.
   ///
@@ -37,7 +42,8 @@ class AnalyzerEngine {
   /// Returns a [LayersAnalysisResult] containing issues and layer assignments.
   LayersAnalysisResult analyzeLayers() {
     final layersAnalyzer = LayersAnalyzer(projectDir);
-    return layersAnalyzer.analyzeDirectory(projectDir);
+    return layersAnalyzer.analyzeDirectory(projectDir,
+        excludePatterns: excludePatterns);
   }
 
   /// Analyzes the entire project and returns comprehensive quality metrics.
@@ -51,7 +57,12 @@ class AnalyzerEngine {
   /// Returns a [ProjectMetrics] instance containing aggregated quality metrics
   /// for the entire project.
   ProjectMetrics analyze() {
-    final dartFiles = FileUtils.listDartFiles(projectDir);
+    // Calculate excluded files count by comparing total vs filtered
+    final allDartFiles = FileUtils.listDartFiles(projectDir);
+    final dartFiles =
+        FileUtils.listDartFiles(projectDir, excludePatterns: excludePatterns);
+    final excludedCount = allDartFiles.length - dartFiles.length;
+
     final fileMetricsList = <FileMetrics>[];
 
     int totalLoc = 0;
@@ -66,21 +77,24 @@ class AnalyzerEngine {
 
     // Analyze for hardcoded strings
     final hardcodedStringAnalyzer = HardcodedStringAnalyzer();
-    final hardcodedStringIssues =
-        hardcodedStringAnalyzer.analyzeDirectory(projectDir);
+    final hardcodedStringIssues = hardcodedStringAnalyzer
+        .analyzeDirectory(projectDir, excludePatterns: excludePatterns);
 
     // Analyze for source sorting issues
     final sourceSortAnalyzer = SourceSortAnalyzer();
-    final sourceSortIssues =
-        sourceSortAnalyzer.analyzeDirectory(projectDir, fix: fix);
+    final sourceSortIssues = sourceSortAnalyzer.analyzeDirectory(projectDir,
+        fix: fix, excludePatterns: excludePatterns);
 
     // Analyze for layers architecture violations
     final layersAnalyzer = LayersAnalyzer(projectDir);
-    final layersResult = layersAnalyzer.analyzeDirectory(projectDir);
+    final layersResult = layersAnalyzer.analyzeDirectory(projectDir,
+        excludePatterns: excludePatterns);
 
     return ProjectMetrics(
-      totalFolders: FileUtils.countFolders(projectDir),
-      totalFiles: FileUtils.countAllFiles(projectDir),
+      totalFolders:
+          FileUtils.countFolders(projectDir, excludePatterns: excludePatterns),
+      totalFiles:
+          FileUtils.countAllFiles(projectDir, excludePatterns: excludePatterns),
       totalDartFiles: dartFiles.length,
       totalLinesOfCode: totalLoc,
       totalCommentLines: totalComments,
@@ -91,6 +105,7 @@ class AnalyzerEngine {
       layersEdgeCount: layersResult.edgeCount,
       layersCount: layersResult.layerCount,
       dependencyGraph: layersResult.dependencyGraph,
+      excludedFilesCount: excludedCount,
     );
   }
 

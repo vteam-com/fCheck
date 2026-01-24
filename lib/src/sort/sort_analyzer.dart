@@ -106,10 +106,11 @@ class SourceSortAnalyzer {
   /// Returns a list of all [SourceSortIssue] objects found across
   /// all analyzed files in the directory.
   List<SourceSortIssue> analyzeDirectory(Directory directory,
-      {bool fix = false}) {
+      {bool fix = false, List<String> excludePatterns = const []}) {
     final List<SourceSortIssue> allIssues = <SourceSortIssue>[];
 
-    final List<File> dartFiles = FileUtils.listDartFiles(directory);
+    final List<File> dartFiles =
+        FileUtils.listDartFiles(directory, excludePatterns: excludePatterns);
     for (final File file in dartFiles) {
       allIssues.addAll(analyzeFile(file, fix: fix));
     }
