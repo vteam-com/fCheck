@@ -69,14 +69,22 @@ String generateFolderDependencyGraphSvg(LayersAnalysisResult layersResult) {
     }
   }
 
-  // Sort folders by dependency activity (incoming + outgoing)
+  // Sort folders by dependency hierarchy (entry points first, leaf folders last)
+  // We want left-to-right ordering: entry points -> dependent folders -> leaf folders
   final sortedFolders = folderGroups.keys.toList()
     ..sort((a, b) {
-      final aScore =
-          (folderIncomingCounts[a] ?? 0) + (folderOutgoingCounts[a] ?? 0);
-      final bScore =
-          (folderIncomingCounts[b] ?? 0) + (folderOutgoingCounts[b] ?? 0);
-      return bScore.compareTo(aScore); // Higher scores first
+      // Calculate dependency scores - higher outgoing = more likely to be entry point
+      final aOutgoing = folderOutgoingCounts[a] ?? 0;
+      final bOutgoing = folderOutgoingCounts[b] ?? 0;
+
+      // Sort by outgoing dependencies descending (entry points first)
+      // Then by incoming dependencies ascending (fewer dependencies first)
+      final outgoingDiff = bOutgoing.compareTo(aOutgoing);
+      if (outgoingDiff != 0) return outgoingDiff;
+
+      final aIncoming = folderIncomingCounts[a] ?? 0;
+      final bIncoming = folderIncomingCounts[b] ?? 0;
+      return aIncoming.compareTo(bIncoming);
     });
 
   // --- Layout Constants ---
