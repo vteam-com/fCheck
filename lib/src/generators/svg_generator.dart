@@ -17,9 +17,21 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
     return _generateEmptySvg();
   }
 
+  // Use provided layers if available; otherwise fall back to a single layer 0 for all files.
+  final effectiveLayers = layers.isNotEmpty
+      ? layers
+      : {
+          for (final file in dependencyGraph.keys) file: 0,
+          for (final deps in dependencyGraph.values)
+            for (final t in deps) t: 0,
+        };
+
+  // Precompute cyclic edges
+  final cyclicEdges = _findCyclicEdges(dependencyGraph);
+
   // Group files by layer
   final layerGroups = <int, List<String>>{};
-  for (final entry in layers.entries) {
+  for (final entry in effectiveLayers.entries) {
     final layer = entry.value;
     final file = entry.key;
     layerGroups.putIfAbsent(layer, () => []).add(file);
@@ -46,7 +58,8 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
   for (final entry in dependencyGraph.entries) {
     final source = entry.key;
     for (final target in entry.value) {
-      if (layers.containsKey(source) && layers.containsKey(target)) {
+      if (effectiveLayers.containsKey(source) &&
+          effectiveLayers.containsKey(target)) {
         outgoingCounts[source] = (outgoingCounts[source] ?? 0) + 1;
         incomingCounts[target] = (incomingCounts[target] ?? 0) + 1;
       }
@@ -155,6 +168,8 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
   buffer.writeln('  .edge { fill: none; stroke: url(#edgeGradient); }');
   buffer.writeln(
       '  .edge:hover { stroke: #007bff; stroke-width: 3; opacity: 1.0; }');
+  buffer
+      .writeln('  .cycleEdge { stroke: red; stroke-width: 5; opacity: 0.9; }');
   buffer.writeln(
       '  .badge { font-size: 10px; font-weight: bold; fill: white; text-anchor: middle; dominant-baseline: middle; cursor: help; }');
   buffer.writeln('  .badge:hover { opacity: 0.8; }');
@@ -223,8 +238,10 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
       final controlX1 = startX + (columnSpacing * 0.5);
       final controlX2 = endX - (columnSpacing * 0.5);
 
+      final isCycle = cyclicEdges.contains('$source|$target');
+      final extraClass = isCycle ? ' cycleEdge' : '';
       buffer.writeln(
-          '<path d="M $startX $startY C $controlX1 $startY, $controlX2 $endY, $endX $endY" class="edge"/>');
+          '<path d="M $startX $startY C $controlX1 $startY, $controlX2 $endY, $endX $endY" class="edge$extraClass"/>');
     }
   }
 
@@ -237,7 +254,8 @@ String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
   for (final entry in dependencyGraph.entries) {
     final source = entry.key;
     for (final target in entry.value) {
-      if (layers.containsKey(source) && layers.containsKey(target)) {
+      if (effectiveLayers.containsKey(source) &&
+          effectiveLayers.containsKey(target)) {
         outgoingNodes.putIfAbsent(source, () => []).add(target.split('/').last);
         incomingNodes.putIfAbsent(target, () => []).add(source.split('/').last);
       }
@@ -333,4 +351,59 @@ String _generateEmptySvg() {
   <text x="200" y="100" text-anchor="middle" fill="#6c757d"
         font-family="Arial, sans-serif" font-size="16">No dependencies found</text>
 </svg>''';
+}
+
+/// Detect cyclic edges using Tarjan SCC; edges inside any SCC of size > 1 are marked cyclic.
+Set<String> _findCyclicEdges(Map<String, List<String>> graph) {
+  final index = <String, int>{};
+  final lowlink = <String, int>{};
+  final onStack = <String, bool>{};
+  final stack = <String>[];
+  var idx = 0;
+  final cycles = <String>{};
+
+  void strongConnect(String v) {
+    index[v] = idx;
+    lowlink[v] = idx;
+    idx++;
+    stack.add(v);
+    onStack[v] = true;
+
+    for (final w in graph[v] ?? const []) {
+      if (!index.containsKey(w)) {
+        strongConnect(w);
+        lowlink[v] = min(lowlink[v]!, lowlink[w]!);
+      } else if (onStack[w] == true) {
+        lowlink[v] = min(lowlink[v]!, index[w]!);
+      }
+    }
+
+    if (lowlink[v] == index[v]) {
+      final component = <String>[];
+      String w;
+      do {
+        w = stack.removeLast();
+        onStack[w] = false;
+        component.add(w);
+      } while (w != v && stack.isNotEmpty);
+
+      if (component.length > 1 ||
+          (component.length == 1 &&
+              (graph[component.first] ?? const []).contains(component.first))) {
+        for (final node in component) {
+          for (final tgt in graph[node] ?? const []) {
+            if (component.contains(tgt)) {
+              cycles.add('$node|$tgt');
+            }
+          }
+        }
+      }
+    }
+  }
+
+  for (final v in graph.keys) {
+    if (!index.containsKey(v)) strongConnect(v);
+  }
+
+  return cycles;
 }

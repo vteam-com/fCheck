@@ -1034,7 +1034,8 @@ List<String> _sortFiles(
     final full = fullPaths[f]!;
     for (final target in graph[full] ?? const []) {
       final localTarget = fullPaths.entries
-          .firstWhere((e) => e.value == target, orElse: () => const MapEntry('', ''))
+          .firstWhere((e) => e.value == target,
+              orElse: () => const MapEntry('', ''))
           .key;
       if (localTarget.isEmpty) continue;
       if (adj[f]!.add(localTarget)) {

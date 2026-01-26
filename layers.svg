@@ -33,6 +33,7 @@
   .nodeText { fill: #212529; font-size: 14px; font-weight: 900; text-anchor: middle; dominant-baseline: middle; filter: url(#outlineWhite); }
   .edge { fill: none; stroke: url(#edgeGradient); }
   .edge:hover { stroke: #007bff; stroke-width: 3; opacity: 1.0; }
+  .cycleEdge { stroke: red; stroke-width: 5; opacity: 0.9; }
   .badge { font-size: 10px; font-weight: bold; fill: white; text-anchor: middle; dominant-baseline: middle; cursor: help; }
   .badge:hover { opacity: 0.8; }
 </style>
