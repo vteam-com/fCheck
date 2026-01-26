@@ -375,6 +375,7 @@ String generateHierarchicalDependencyGraphSvg(
       folderDimensions,
       folderMetrics,
       fileMetrics,
+      relativeGraph,
       fileAnchors,
       titleVisuals,
       fileVisuals,
@@ -779,6 +780,7 @@ void _drawHierarchicalFolders(
     Map<String, Rect> dimensions,
     Map<String, Map<String, int>> metrics,
     Map<String, Map<String, int>> fileMetrics,
+    Map<String, List<String>> dependencyGraph,
     Map<String, Map<String, Point<double>>> fileAnchors,
     List<_TitleVisual> titleVisuals,
     List<_FileVisual> fileVisuals,
@@ -827,7 +829,8 @@ void _drawHierarchicalFolders(
       cssClass: 'hierarchicalBadge',
     );
 
-    final sortedFiles = _sortFiles(folder.files, folder.fullPath, fileMetrics);
+    final sortedFiles =
+        _sortFiles(folder.files, folder.fullPath, fileMetrics, dependencyGraph);
     final filePositions = _calculateFilePositions(
       sortedFiles.length,
       0, // compute positions relative to folder top
@@ -1009,17 +1012,76 @@ String _generateEmptyHierarchicalSvg() {
 </svg>''';
 }
 
-List<String> _sortFiles(List<String> files, String folderPath,
-    Map<String, Map<String, int>> metrics) {
-  final sorted = List<String>.from(files);
-  sorted.sort((a, b) {
-    final aPath = folderPath == '.' ? a : '$folderPath/$a';
-    final bPath = folderPath == '.' ? b : '$folderPath/$b';
-    final aIn = (metrics[aPath]?['incoming'] ?? 0);
-    final bIn = (metrics[bPath]?['incoming'] ?? 0);
-    final diff = bIn.compareTo(aIn); // higher incoming first
-    if (diff != 0) return diff;
-    return a.compareTo(b);
-  });
-  return sorted;
+List<String> _sortFiles(
+  List<String> files,
+  String folderPath,
+  Map<String, Map<String, int>> metrics,
+  Map<String, List<String>> graph,
+) {
+  final fullPaths = {
+    for (final f in files) f: folderPath == '.' ? f : '$folderPath/$f'
+  };
+
+  // Build in-folder dependency graph: edge source -> target when source depends on target in same folder.
+  final adj = <String, Set<String>>{};
+  final indeg = <String, int>{};
+  for (final f in files) {
+    adj[f] = <String>{};
+    indeg[f] = 0;
+  }
+
+  for (final f in files) {
+    final full = fullPaths[f]!;
+    for (final target in graph[full] ?? const []) {
+      final localTarget = fullPaths.entries
+          .firstWhere((e) => e.value == target, orElse: () => const MapEntry('', ''))
+          .key;
+      if (localTarget.isEmpty) continue;
+      if (adj[f]!.add(localTarget)) {
+        indeg[localTarget] = (indeg[localTarget] ?? 0) + 1;
+      }
+    }
+  }
+
+  // Kahn topo: consumers (sources) first
+  final queue = <String>[];
+  queue.addAll(files.where((f) => (indeg[f] ?? 0) == 0));
+
+  final result = <String>[];
+  while (queue.isNotEmpty) {
+    // tie-break within queue by incoming count desc then name
+    queue.sort((a, b) {
+      final aPath = fullPaths[a]!;
+      final bPath = fullPaths[b]!;
+      final aIn = (metrics[aPath]?['incoming'] ?? 0);
+      final bIn = (metrics[bPath]?['incoming'] ?? 0);
+      final diff = bIn.compareTo(aIn);
+      if (diff != 0) return diff;
+      return a.compareTo(b);
+    });
+
+    final f = queue.removeAt(0);
+    result.add(f);
+    for (final t in adj[f]!) {
+      indeg[t] = (indeg[t] ?? 0) - 1;
+      if ((indeg[t] ?? 0) == 0) queue.add(t);
+    }
+  }
+
+  // Append any remaining (cycles) sorted by incoming desc then name
+  if (result.length < files.length) {
+    final remaining = files.where((f) => !result.contains(f)).toList();
+    remaining.sort((a, b) {
+      final aPath = fullPaths[a]!;
+      final bPath = fullPaths[b]!;
+      final aIn = (metrics[aPath]?['incoming'] ?? 0);
+      final bIn = (metrics[bPath]?['incoming'] ?? 0);
+      final diff = bIn.compareTo(aIn);
+      if (diff != 0) return diff;
+      return a.compareTo(b);
+    });
+    result.addAll(remaining);
+  }
+
+  return result;
 }
