@@ -1,52 +1,27 @@
 /// Generates a PlantUML visualization of the dependency graph.
 library;
 
+import 'package:fcheck/src/generators/graph_format_utils.dart';
 import 'package:fcheck/src/layers/layers_results.dart';
 
 ///
 /// [layersResult] The result of layers analysis containing the dependency graph.
 ///
-/// Returns a PlantUML string representing the dependency graph.
+/// Uses shared helpers to normalize labels/IDs and inject per-node counters.
+/// Up-layer dependencies are rendered with a dashed arrow to call out
+/// architectural smells; same-layer deps use dotted lines.
 String generateDependencyGraphPlantUML(LayersAnalysisResult layersResult) {
   final dependencyGraph = layersResult.dependencyGraph;
   final layers = layersResult.layers;
 
   if (dependencyGraph.isEmpty) {
-    return _generateEmptyPlantUML();
+    return emptyPlantUml();
   }
 
-  // Group files by layer
-  final layerGroups = <int, List<String>>{};
-  for (final entry in layers.entries) {
-    final layer = entry.value;
-    final file = entry.key;
-    layerGroups.putIfAbsent(layer, () => []).add(file);
-  }
-
-  // Calculate edge counts for each file
-  final incomingCounts = <String, int>{};
-  final outgoingCounts = <String, int>{};
-
-  // Initialize counters for all files
-  for (final files in layerGroups.values) {
-    for (final file in files) {
-      outgoingCounts[file] = 0;
-      incomingCounts[file] = 0;
-    }
-  }
-
-  // Count edges
-  for (final entry in dependencyGraph.entries) {
-    final sourceFile = entry.key;
-    final dependencies = entry.value;
-
-    for (final targetFile in dependencies) {
-      if (layers.containsKey(sourceFile) && layers.containsKey(targetFile)) {
-        outgoingCounts[sourceFile] = (outgoingCounts[sourceFile] ?? 0) + 1;
-        incomingCounts[targetFile] = (incomingCounts[targetFile] ?? 0) + 1;
-      }
-    }
-  }
+  final formatting = prepareGraphFormatting(layersResult);
+  final layerGroups = formatting.layerGroups;
+  final incomingCounts = formatting.incomingCounts;
+  final outgoingCounts = formatting.outgoingCounts;
 
   final buffer = StringBuffer();
   buffer.writeln('@startuml Architecture');
@@ -59,11 +34,7 @@ String generateDependencyGraphPlantUML(LayersAnalysisResult layersResult) {
 
     for (final file in files) {
       // Normalize to path relative to lib directory
-      final parts = file.split('/');
-      final libIndex = parts.indexOf('lib');
-      final relativeFile =
-          libIndex >= 0 ? parts.sublist(libIndex + 1).join('/') : file;
-      final fileName = relativeFile; // relative path as label
+      final fileName = relativeFileLabel(file); // relative path as label
 
       // Add counter information to label
       final incomingCount = incomingCounts[file] ?? 0;
@@ -74,16 +45,7 @@ String generateDependencyGraphPlantUML(LayersAnalysisResult layersResult) {
       final displayLabel = '$fileName$counterInfo';
 
       // Create a valid PlantUML component ID by replacing special characters
-      final baseName = fileName
-          .replaceAll('.dart', '')
-          .replaceAll('/', '_')
-          .replaceAll('_', ' ');
-      final camelCase = baseName
-          .split(' ')
-          .map((part) =>
-              part.isEmpty ? '' : part[0].toUpperCase() + part.substring(1))
-          .join('');
-      final componentId = 'comp${camelCase.toLowerCase()}';
+      final componentId = plantUmlComponentId(file);
       buffer.writeln('component [$displayLabel] as $componentId');
     }
   }
@@ -100,8 +62,8 @@ String generateDependencyGraphPlantUML(LayersAnalysisResult layersResult) {
         final targetLayer = layers[targetFile]!;
 
         // Generate IDs from file paths
-        final sourceId = _generateComponentId(sourceFile);
-        final targetId = _generateComponentId(targetFile);
+        final sourceId = plantUmlComponentId(sourceFile);
+        final targetId = plantUmlComponentId(targetFile);
 
         // Determine relationship style based on direction
         var relationshipStyle = '-->';
@@ -121,37 +83,4 @@ String generateDependencyGraphPlantUML(LayersAnalysisResult layersResult) {
   buffer.writeln('');
   buffer.writeln('@enduml');
   return buffer.toString();
-}
-
-/// Generates a component ID from a file path.
-String _generateComponentId(String filePath) {
-  // Normalize to path relative to lib directory
-  final parts = filePath.split('/');
-  final libIndex = parts.indexOf('lib');
-  final relativeFile =
-      libIndex >= 0 ? parts.sublist(libIndex + 1).join('/') : filePath;
-  final fileName = relativeFile; // relative path as label
-  // Create a valid PlantUML component ID by replacing special characters
-  final baseName = fileName
-      .replaceAll('.dart', '')
-      .replaceAll('/', '_')
-      .replaceAll('_', ' ');
-  final camelCase = baseName
-      .split(' ')
-      .map((part) =>
-          part.isEmpty ? '' : part[0].toUpperCase() + part.substring(1))
-      .join('');
-  return 'comp${camelCase.toLowerCase()}';
-}
-
-/// Generates an empty PlantUML for when there are no dependencies.
-String _generateEmptyPlantUML() {
-  return '''@startuml Architecture
-!theme plain
-
-package "No Dependencies" {
-  component [No dependencies found] as Empty
-}
-
-@enduml''';
 }

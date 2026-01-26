@@ -3,6 +3,7 @@ library;
 
 import 'dart:math';
 import 'package:fcheck/src/layers/layers_results.dart';
+import 'package:fcheck/src/models/rect.dart';
 
 /// Generates a folder-based SVG visualization of the dependency graph.
 ///
@@ -327,7 +328,10 @@ String generateFolderDependencyGraphSvg(LayersAnalysisResult layersResult) {
   return buffer.toString();
 }
 
-/// Extracts the folder path from a file path
+/// Extracts the folder path from a file path.
+///
+/// Returns only the immediate parent folder name (e.g., `lib/src` -> `src`)
+/// so folder labels stay concise in the diagram.
 String _extractFolderPath(String filePath) {
   // Remove the filename to get the folder path
   final lastSlash = filePath.lastIndexOf('/');
@@ -393,22 +397,4 @@ String _generateEmptyFolderSvg() {
   <text x="200" y="100" text-anchor="middle" fill="#6c757d"
         font-family="Arial, sans-serif" font-size="16">No folder dependencies found</text>
 </svg>''';
-}
-
-/// Simple rectangle class for folder dimensions.
-class Rect {
-  /// Left position.
-  final double x;
-
-  /// Top position.
-  final double y;
-
-  /// Width of the rectangle.
-  final double width;
-
-  /// Height of the rectangle.
-  final double height;
-
-  /// Creates a rectangle from left, top, width, height.
-  Rect.fromLTWH(this.x, this.y, this.width, this.height);
 }

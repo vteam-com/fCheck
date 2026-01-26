@@ -61,6 +61,7 @@
 <rect x="370.0" y="370.0" width="220" height="50" class="nodeRect"/>
 <rect x="690.0" y="90.0" width="220" height="50" class="nodeRect"/>
 <rect x="690.0" y="160.0" width="220" height="50" class="nodeRect"/>
+<rect x="690.0" y="230.0" width="220" height="50" class="nodeRect"/>
 <rect x="1010.0" y="90.0" width="220" height="50" class="nodeRect"/>
 <rect x="1010.0" y="160.0" width="220" height="50" class="nodeRect"/>
 <rect x="1010.0" y="230.0" width="220" height="50" class="nodeRect"/>
@@ -82,7 +83,7 @@
 <path d="M 258.0 128.0 C 308.0 128.0, 332.0 312.0, 382.0 312.0" class="edge"/>
 <path d="M 258.0 128.0 C 308.0 128.0, 332.0 172.0, 382.0 172.0" class="edge"/>
 <path d="M 578.0 128.0 C 628.0 128.0, 972.0 102.0, 1022.0 102.0" class="edge"/>
-<path d="M 578.0 128.0 C 628.0 128.0, 652.0 102.0, 702.0 102.0" class="edge"/>
+<path d="M 578.0 128.0 C 628.0 128.0, 652.0 242.0, 702.0 242.0" class="edge"/>
 <path d="M 578.0 128.0 C 628.0 128.0, 1932.0 102.0, 1982.0 102.0" class="edge"/>
 <path d="M 578.0 128.0 C 628.0 128.0, 1612.0 102.0, 1662.0 102.0" class="edge"/>
 <path d="M 578.0 128.0 C 628.0 128.0, 972.0 172.0, 1022.0 172.0" class="edge"/>
@@ -109,19 +110,23 @@
 <path d="M 1858.0 268.0 C 1908.0 268.0, 1932.0 312.0, 1982.0 312.0" class="edge"/>
 <path d="M 1858.0 268.0 C 1908.0 268.0, 1932.0 242.0, 1982.0 242.0" class="edge"/>
 <path d="M 1858.0 268.0 C 1908.0 268.0, 1932.0 102.0, 1982.0 102.0" class="edge"/>
+<path d="M 898.0 268.0 C 948.0 268.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
+<path d="M 898.0 268.0 C 948.0 268.0, 1292.0 312.0, 1342.0 312.0" class="edge"/>
+<path d="M 898.0 268.0 C 948.0 268.0, 972.0 172.0, 1022.0 172.0" class="edge"/>
+<path d="M 898.0 268.0 C 948.0 268.0, 972.0 242.0, 1022.0 242.0" class="edge"/>
+<path d="M 898.0 268.0 C 948.0 268.0, 1292.0 172.0, 1342.0 172.0" class="edge"/>
+<path d="M 898.0 268.0 C 948.0 268.0, 972.0 102.0, 1022.0 102.0" class="edge"/>
+<path d="M 898.0 268.0 C 948.0 268.0, 1932.0 102.0, 1982.0 102.0" class="edge"/>
 <path d="M 898.0 128.0 C 948.0 128.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
-<path d="M 898.0 128.0 C 948.0 128.0, 1292.0 312.0, 1342.0 312.0" class="edge"/>
-<path d="M 898.0 128.0 C 948.0 128.0, 972.0 172.0, 1022.0 172.0" class="edge"/>
-<path d="M 898.0 128.0 C 948.0 128.0, 972.0 242.0, 1022.0 242.0" class="edge"/>
-<path d="M 898.0 128.0 C 948.0 128.0, 1292.0 172.0, 1342.0 172.0" class="edge"/>
-<path d="M 898.0 128.0 C 948.0 128.0, 972.0 102.0, 1022.0 102.0" class="edge"/>
-<path d="M 898.0 128.0 C 948.0 128.0, 1932.0 102.0, 1982.0 102.0" class="edge"/>
 <path d="M 578.0 408.0 C 628.0 408.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
 <path d="M 578.0 198.0 C 628.0 198.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
 <path d="M 578.0 198.0 C 628.0 198.0, 652.0 172.0, 702.0 172.0" class="edge"/>
+<path d="M 578.0 338.0 C 628.0 338.0, 652.0 102.0, 702.0 102.0" class="edge"/>
 <path d="M 578.0 338.0 C 628.0 338.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
+<path d="M 578.0 268.0 C 628.0 268.0, 652.0 102.0, 702.0 102.0" class="edge"/>
 <path d="M 578.0 268.0 C 628.0 268.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
 <path d="M 258.0 198.0 C 308.0 198.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
+<path d="M 258.0 198.0 C 308.0 198.0, 652.0 172.0, 702.0 172.0" class="edge"/>
 <g>
 <circle cx="258.0" cy="128.0" r="9" fill="#28a745"/>
 <text x="258.0" y="129.0" class="badge">5</text>
@@ -134,8 +139,9 @@ svg_generator.dart</title>
 <text x="160.0" y="115.0" class="nodeText">fcheck.dart</text>
 <g>
 <circle cx="258.0" cy="198.0" r="9" fill="#28a745"/>
-<text x="258.0" y="199.0" class="badge">1</text>
-<title>layers_results.dart</title>
+<text x="258.0" y="199.0" class="badge">2</text>
+<title>layers_results.dart
+rect.dart</title>
 </g>
 <text x="160.0" y="185.0" class="nodeText">folder_svg_generator.dart</text>
 <g>
@@ -174,8 +180,9 @@ rect.dart</title>
 </g>
 <g>
 <circle cx="578.0" cy="268.0" r="9" fill="#28a745"/>
-<text x="578.0" y="269.0" class="badge">1</text>
-<title>layers_results.dart</title>
+<text x="578.0" y="269.0" class="badge">2</text>
+<title>graph_format_utils.dart
+layers_results.dart</title>
 </g>
 <text x="480.0" y="255.0" class="nodeText">mermaid_generator.dart</text>
 <g>
@@ -185,8 +192,9 @@ rect.dart</title>
 </g>
 <g>
 <circle cx="578.0" cy="338.0" r="9" fill="#28a745"/>
-<text x="578.0" y="339.0" class="badge">1</text>
-<title>layers_results.dart</title>
+<text x="578.0" y="339.0" class="badge">2</text>
+<title>graph_format_utils.dart
+layers_results.dart</title>
 </g>
 <text x="480.0" y="325.0" class="nodeText">plantuml_generator.dart</text>
 <g>
@@ -202,12 +210,31 @@ rect.dart</title>
 <text x="480.0" y="395.0" class="nodeText">svg_generator.dart</text>
 <g>
 <circle cx="702.0" cy="102.0" r="9" fill="#007bff"/>
-<text x="702.0" y="103.0" class="badge">1</text>
-<title>fcheck.dart</title>
+<text x="702.0" y="103.0" class="badge">2</text>
+<title>mermaid_generator.dart
+plantuml_generator.dart</title>
 </g>
 <g>
 <circle cx="898.0" cy="128.0" r="9" fill="#28a745"/>
-<text x="898.0" y="129.0" class="badge">7</text>
+<text x="898.0" y="129.0" class="badge">1</text>
+<title>layers_results.dart</title>
+</g>
+<text x="800.0" y="115.0" class="nodeText">graph_format_utils.dart</text>
+<g>
+<circle cx="702.0" cy="172.0" r="9" fill="#007bff"/>
+<text x="702.0" y="173.0" class="badge">2</text>
+<title>folder_svg_generator.dart
+folder_svg_hierarchical.dart</title>
+</g>
+<text x="800.0" y="185.0" class="nodeText">rect.dart</text>
+<g>
+<circle cx="702.0" cy="242.0" r="9" fill="#007bff"/>
+<text x="702.0" y="243.0" class="badge">1</text>
+<title>fcheck.dart</title>
+</g>
+<g>
+<circle cx="898.0" cy="268.0" r="9" fill="#28a745"/>
+<text x="898.0" y="269.0" class="badge">7</text>
 <title>file_metrics.dart
 hardcoded_string_analyzer.dart
 layers_analyzer.dart
@@ -216,13 +243,7 @@ project_metrics.dart
 sort.dart
 utils.dart</title>
 </g>
-<text x="800.0" y="115.0" class="nodeText">analyzer_engine.dart</text>
-<g>
-<circle cx="702.0" cy="172.0" r="9" fill="#007bff"/>
-<text x="702.0" y="173.0" class="badge">1</text>
-<title>folder_svg_hierarchical.dart</title>
-</g>
-<text x="800.0" y="185.0" class="nodeText">rect.dart</text>
+<text x="800.0" y="255.0" class="nodeText">analyzer_engine.dart</text>
 <g>
 <circle cx="1022.0" cy="102.0" r="9" fill="#007bff"/>
 <text x="1022.0" y="103.0" class="badge">2</text>
@@ -268,10 +289,11 @@ utils.dart</title>
 <text x="1120.0" y="255.0" class="nodeText">layers_analyzer.dart</text>
 <g>
 <circle cx="1342.0" cy="102.0" r="9" fill="#007bff"/>
-<text x="1342.0" y="103.0" class="badge">7</text>
+<text x="1342.0" y="103.0" class="badge">8</text>
 <title>analyzer_engine.dart
 folder_svg_generator.dart
 folder_svg_hierarchical.dart
+graph_format_utils.dart
 layers_analyzer.dart
 mermaid_generator.dart
 plantuml_generator.dart
