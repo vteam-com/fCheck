@@ -2,7 +2,7 @@
 library;
 
 import 'dart:math';
-import '../layers/layers_issue.dart';
+import 'package:fcheck/src/layers/layers_results.dart';
 
 /// Generates a folder-based SVG visualization of the dependency graph.
 ///

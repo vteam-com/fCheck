@@ -1,7 +1,7 @@
 /// Generates a Mermaid visualization of the dependency graph.
 library;
 
-import '../layers/layers_issue.dart';
+import 'package:fcheck/src/layers/layers_results.dart';
 
 ///
 /// [layersResult] The result of layers analysis containing the dependency graph.

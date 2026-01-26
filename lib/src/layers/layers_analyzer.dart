@@ -3,6 +3,7 @@ import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:fcheck/src/layers/layers_results.dart';
 import 'package:yaml/yaml.dart';
 import 'layers_issue.dart';
 import 'layers_visitor.dart';

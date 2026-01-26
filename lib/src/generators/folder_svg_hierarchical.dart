@@ -3,9 +3,9 @@
 library;
 
 import 'dart:math';
+import 'package:fcheck/src/layers/layers_results.dart';
 import 'package:fcheck/src/models/rect.dart';
 import 'package:path/path.dart' as p;
-import '../layers/layers_issue.dart';
 
 /// Represents a folder in the hierarchy.
 class FolderNode {
