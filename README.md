@@ -11,6 +11,7 @@ A command-line tool for analyzing the quality of Flutter and Dart projects. It p
 - 🔍 **Hardcoded String Detection**: Identifies potentially hardcoded user-facing strings
 - 🔧 **Source Code Sorting**: Ensures Flutter class members are properly organized
 - 📁 **Recursive Analysis**: Scans entire project directory trees
+- 🌐 **Multiple Diagram Outputs**: Generate SVG, Mermaid, PlantUML, and folder/hierarchical views of dependency graphs
 - 🚀 **Fast CLI**: Command-line interface with simple usage
 
 ## Installation
@@ -137,6 +138,30 @@ The visualization helps identify:
 - ⚠️ Circular dependencies (handled via Tarjan's SCC algorithm)
 - 📊 Architecture patterns and component relationships
 - 🔍 Potential refactoring opportunities
+
+### Mermaid Generation Mode
+
+```bash
+# Generate Mermaid dependency graph (after global installation)
+fcheck --mermaid
+
+# Generate Mermaid file in a specific project
+fcheck --input /path/to/project --mermaid
+```
+
+Outputs `layers.mmd` in the target directory for quick embedding in docs.
+
+### PlantUML Generation Mode
+
+```bash
+# Generate PlantUML dependency graph (after global installation)
+fcheck --plantuml
+
+# Generate PlantUML file in a specific project
+fcheck --input /path/to/project --plantuml
+```
+
+Outputs `layers.puml` in the target directory; render with your preferred PlantUML tool.
 
 ### JSON Output Mode
 
