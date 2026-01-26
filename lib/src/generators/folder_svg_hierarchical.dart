@@ -3,26 +3,9 @@
 library;
 
 import 'dart:math';
+import 'package:fcheck/src/models/rect.dart';
 import 'package:path/path.dart' as p;
 import '../layers/layers_issue.dart';
-
-/// Simple rectangle class for folder dimensions.
-class Rect {
-  /// Left position.
-  final double x;
-
-  /// Top position.
-  final double y;
-
-  /// Width of the rectangle.
-  final double width;
-
-  /// Height of the rectangle.
-  final double height;
-
-  /// Creates a rectangle from left, top, width, height.
-  Rect.fromLTWH(this.x, this.y, this.width, this.height);
-}
 
 /// Represents a folder in the hierarchy.
 class FolderNode {
@@ -54,22 +37,21 @@ class _FileVisual {
   final String name;
   final double textX;
   final double textY;
-  final double incomingBadgeX;
-  final double outgoingBadgeX;
+  final double badgeX;
   final double badgeY;
   final int incoming;
   final int outgoing;
 
-  _FileVisual(
-      {required this.path,
-      required this.name,
-      required this.textX,
-      required this.textY,
-      required this.incomingBadgeX,
-      required this.outgoingBadgeX,
-      required this.badgeY,
-      required this.incoming,
-      required this.outgoing});
+  _FileVisual({
+    required this.path,
+    required this.name,
+    required this.textX,
+    required this.textY,
+    required this.badgeX,
+    required this.badgeY,
+    required this.incoming,
+    required this.outgoing,
+  });
 }
 
 /// Captures folder title info to render above edges.
@@ -233,11 +215,17 @@ String generateHierarchicalDependencyGraphSvg(
 
   final folderPositions = <String, Point<double>>{};
   final folderDimensions = <String, Rect>{};
+  final maxFileNameChars = relativeGraph.keys
+      .followedBy(relativeGraph.values.expand((v) => v))
+      .map((p) => p.split('/').last.length)
+      .fold<int>(0, (a, b) => a > b ? a : b);
+  final labelWidth = (maxFileNameChars * 6).toDouble() + 12.0;
 
   // Measure folders bottom-up so parents grow to fit their children
   final rootSize = _computeFolderDimensions(
     rootNode,
     folderDimensions,
+    labelWidth: labelWidth,
     folderLevels: folderLevels,
     baseWidth: baseFolderWidth,
     minHeight: folderMinHeight,
@@ -273,8 +261,13 @@ String generateHierarchicalDependencyGraphSvg(
   final drawOrder = _collectDepthFirst(rootNode);
   final depthMap = _computeDepths(rootNode);
 
-  // Calculate total width and height based on root container
-  final totalWidth = margin + rootSize.width + margin;
+  // Extra canvas width to accommodate right-routed edges
+  final totalEdges =
+      relativeGraph.values.fold<int>(0, (sum, list) => sum + list.length);
+  final edgeExtraWidth = 60.0 + (28.0 + totalEdges * 2.0);
+
+  // Calculate total width and height based on root container plus edge padding
+  final totalWidth = margin + rootSize.width + edgeExtraWidth + margin;
   final totalHeight = margin + rootSize.height + margin;
 
   final buffer = StringBuffer();
@@ -320,11 +313,11 @@ String generateHierarchicalDependencyGraphSvg(
       '    <stop offset="100%" stop-color="#495057" stop-opacity="0.4"/>');
   buffer.writeln('  </linearGradient>');
   buffer.writeln(
-      '  <linearGradient id="edgeGradient" x1="0%" y1="0%" x2="100%" y2="0%">');
+      '  <linearGradient id="edgeGradient" x1="0%" y1="0%" x2="100%" y2="100%">');
   buffer
-      .writeln('    <stop offset="0%" stop-color="blue" stop-opacity="0.3"/>');
+      .writeln('    <stop offset="0%" stop-color="green" stop-opacity="0.3"/>');
   buffer.writeln(
-      '    <stop offset="100%" stop-color="green" stop-opacity="0.3"/>');
+      '    <stop offset="100%" stop-color="blue" stop-opacity="0.3"/>');
   buffer.writeln('  </linearGradient>');
   buffer.writeln('</defs>');
 
@@ -347,11 +340,16 @@ String generateHierarchicalDependencyGraphSvg(
   buffer.writeln(
       '  .hierarchicalEdge:hover { stroke: #007bff; stroke-width: 4; opacity: 1.0; }');
   buffer.writeln(
-      '  .hierarchicalBadge { font-size: 10px; font-weight: bold; fill: white; text-anchor: middle; dominant-baseline: middle; }');
+      '  .hierarchicalBadge { font-size: 8px; font-weight: bold; fill: white; text-anchor: middle; dominant-baseline: middle; }');
   buffer.writeln('  .hierarchicalBadge:hover { opacity: 0.8; }');
   buffer.writeln(
-      '  .fileEdge { fill: none; stroke: url(#edgeGradient); stroke-width: 1; }');
-  buffer.writeln('  .fileEdge:hover { stroke-width: 5; opacity: 1.0; }');
+      '  .fileEdge { fill: none; stroke: url(#edgeGradient); stroke-width: 0.5; }');
+  buffer.writeln(
+      '  .fileEdge:hover { stroke-width: 1; opacity: 1.0; stroke:purple}');
+  buffer.writeln(
+      '  .fileNode { fill: #ffffff; stroke: #d0d7de; stroke-width: 1; }');
+  buffer.writeln(
+      '  g.folderTitleLayer { pointer-events: none; isolation: isolate; }');
 
   buffer.writeln('</style>');
 
@@ -366,7 +364,6 @@ String generateHierarchicalDependencyGraphSvg(
   final fileAnchors = <String, Map<String, Point<double>>>{};
   final fileVisuals = <_FileVisual>[];
   final titleVisuals = <_TitleVisual>[];
-
   // Draw folder containers with hierarchy visualization
   _drawHierarchicalFolders(
       buffer,
@@ -380,10 +377,14 @@ String generateHierarchicalDependencyGraphSvg(
       titleVisuals,
       fileVisuals,
       depthMap,
+      labelWidth: labelWidth,
       headerHeight: folderHeaderHeight,
       fileItemHeight: fileItemHeight,
       fileItemSpacing: fileItemSpacing,
       fileTopPadding: fileTopPadding);
+
+  // Draw file background pills first
+  _drawFilePanels(buffer, fileVisuals);
 
   // Draw file-to-file dependency edges
   _drawFileEdges(buffer, relativeGraph, fileAnchors);
@@ -570,6 +571,7 @@ void _initializeFolderMetrics(
 Rect _computeFolderDimensions(
   FolderNode node,
   Map<String, Rect> dimensions, {
+  required double labelWidth,
   Map<String, int>? folderLevels,
   required double baseWidth,
   required double minHeight,
@@ -595,6 +597,7 @@ Rect _computeFolderDimensions(
     final childRect = _computeFolderDimensions(
       children[i],
       dimensions,
+      labelWidth: labelWidth,
       folderLevels: folderLevels,
       baseWidth: baseWidth,
       minHeight: minHeight,
@@ -630,7 +633,9 @@ Rect _computeFolderDimensions(
 
   height = height < minHeight ? minHeight : height;
 
-  var width = baseWidth;
+  final fileRowWidth = labelWidth + 50; // room for text + badges + margins
+
+  var width = max(baseWidth, fileRowWidth);
   if (node.children.isNotEmpty) {
     width = max(width, childIndent + maxChildWidth + (padding * 2));
   }
@@ -774,21 +779,23 @@ void _drawHierarchicalEdges(StringBuffer buffer, List<FolderNode> folders,
 
 /// Draw hierarchical folder containers
 void _drawHierarchicalFolders(
-    StringBuffer buffer,
-    List<FolderNode> folders,
-    Map<String, Point<double>> positions,
-    Map<String, Rect> dimensions,
-    Map<String, Map<String, int>> metrics,
-    Map<String, Map<String, int>> fileMetrics,
-    Map<String, List<String>> dependencyGraph,
-    Map<String, Map<String, Point<double>>> fileAnchors,
-    List<_TitleVisual> titleVisuals,
-    List<_FileVisual> fileVisuals,
-    Map<String, int> depths,
-    {required double headerHeight,
-    required double fileItemHeight,
-    required double fileItemSpacing,
-    required double fileTopPadding}) {
+  StringBuffer buffer,
+  List<FolderNode> folders,
+  Map<String, Point<double>> positions,
+  Map<String, Rect> dimensions,
+  Map<String, Map<String, int>> metrics,
+  Map<String, Map<String, int>> fileMetrics,
+  Map<String, List<String>> dependencyGraph,
+  Map<String, Map<String, Point<double>>> fileAnchors,
+  List<_TitleVisual> titleVisuals,
+  List<_FileVisual> fileVisuals,
+  Map<String, int> depths, {
+  required double labelWidth,
+  required double headerHeight,
+  required double fileItemHeight,
+  required double fileItemSpacing,
+  required double fileTopPadding,
+}) {
   void drawFolder(FolderNode folder) {
     final pos = positions[folder.fullPath]!;
     final dim = dimensions[folder.fullPath]!;
@@ -812,8 +819,8 @@ void _drawHierarchicalFolders(
     _renderBadge(
       buffer,
       cx: pos.x,
-      cy: pos.y,
-      radius: 10,
+      cy: pos.y + 4,
+      radius: 8,
       count: incoming,
       color: '#007bff',
       cssClass: 'hierarchicalBadge',
@@ -821,9 +828,9 @@ void _drawHierarchicalFolders(
 
     _renderBadge(
       buffer,
-      cx: pos.x + dim.width,
-      cy: pos.y + dim.height,
-      radius: 10,
+      cx: pos.x,
+      cy: pos.y + dim.height - 4,
+      radius: 8,
       count: outgoing,
       color: '#28a745',
       cssClass: 'hierarchicalBadge',
@@ -841,14 +848,7 @@ void _drawHierarchicalFolders(
       startX: 0.0,
     );
 
-    final badgeRadius = 8.0;
-    final badgeMargin = 12.0;
-    final textPaddingAfterBadge = 6.0;
-    final textX =
-        pos.x + badgeMargin + (badgeRadius * 2) + textPaddingAfterBadge;
-    final incomingBadgeX = pos.x + badgeMargin + badgeRadius;
-    final outgoingBadgeX = pos.x + dim.width - badgeMargin - badgeRadius;
-
+    final textX = pos.x + 12.0; // consistent left padding
     // Draw children after this folder so they appear on top
     for (final child in folder.children) {
       drawFolder(child);
@@ -866,19 +866,19 @@ void _drawHierarchicalFolders(
       final fIncoming = fileMetrics[filePath]?['incoming'] ?? 0;
       final fOutgoing = fileMetrics[filePath]?['outgoing'] ?? 0;
 
-      // Anchors for edges: centers of badges
+      // Anchors for edges: centers of badges, using fixed label width
+      final badgesX = textX + labelWidth;
       fileAnchors[filePath] = {
-        'in': Point(incomingBadgeX, fileY - 4),
-        'out': Point(outgoingBadgeX, fileY - 4),
+        'in': Point(badgesX + 6, fileY - 6),
+        'out': Point(badgesX + 6, fileY + 6),
       };
       fileVisuals.add(_FileVisual(
           path: filePath,
           name: fileName,
           textX: textX,
           textY: fileY,
-          incomingBadgeX: incomingBadgeX,
-          outgoingBadgeX: outgoingBadgeX,
-          badgeY: fileY - 4,
+          badgeX: badgesX + 6,
+          badgeY: fileY,
           incoming: fIncoming,
           outgoing: fOutgoing));
     }
@@ -893,6 +893,7 @@ void _drawHierarchicalFolders(
 /// Draw edges between files based on dependency graph.
 void _drawFileEdges(StringBuffer buffer, Map<String, List<String>> graph,
     Map<String, Map<String, Point<double>>> anchors) {
+  var edgeCounter = 0;
   for (final entry in graph.entries) {
     final source = entry.key;
     final targets = entry.value;
@@ -908,66 +909,81 @@ void _drawFileEdges(StringBuffer buffer, Map<String, List<String>> graph,
       final endX = targetAnchor.x;
       final endY = targetAnchor.y;
 
-      final path = _buildElbowPath(startX, startY, endX, endY);
+      final path =
+          _buildStackedEdgePath(startX, startY, endX, endY, edgeCounter);
       buffer.writeln('<path d="$path" class="fileEdge"/>');
       buffer.writeln('<title>$source → $target</title>');
+      edgeCounter++;
     }
   }
 }
 
-/// Build a rounded-elbow SVG path between two points, handling all directions.
-String _buildElbowPath(double startX, double startY, double endX, double endY) {
-  const double r = 7.0; // corner radius from sample
+/// Build a right-then-vertical-then-left edge with stacked columns.
+String _buildStackedEdgePath(
+    double startX, double startY, double endX, double endY, int edgeIndex) {
+  const double baseOffset = 28.0;
+  const double radius = 6.0;
+  final dirY = endY >= startY ? 1.0 : -1.0;
 
-  final dx = endX - startX;
-  final dy = endY - startY;
-  final dirX = dx >= 0 ? 1 : -1;
-  final dirY = dy >= 0 ? 1 : -1;
+  // Each edge gets a slightly larger offset to avoid overlapping vertical runs.
+  final columnX = startX + baseOffset + edgeIndex * 1.0;
 
-  // Bend column centered horizontally between start and end
-  final bendX = (startX + endX) / 2;
+  final preCurveX = columnX - radius;
+  final postCurveX = columnX - radius;
+  final firstQx = columnX;
+  final firstQy = startY + dirY * radius;
 
-  // Minimal horizontal run into first curve
-  final firstH = bendX - dirX * r;
-  final firstQy = startY + dirY * r;
-
-  // Vertical to near target, then curve into final horizontal
-  final secondVy = endY - dirY * r;
-  final secondQx = bendX + dirX * r;
+  final secondVy = endY - dirY * radius;
+  final secondQy = endY;
 
   return 'M $startX $startY '
-      'H $firstH '
-      'Q $bendX $startY $bendX $firstQy '
+      'H $preCurveX '
+      'Q $firstQx $startY $firstQx $firstQy '
       'V $secondVy '
-      'Q $bendX $endY $secondQx $endY '
+      'Q $firstQx $secondQy $postCurveX $secondQy '
       'H $endX';
 }
 
 /// Render file badges and labels (after edges).
 void _drawFileVisuals(StringBuffer buffer, List<_FileVisual> visuals) {
   for (final v in visuals) {
+    final top = v.textY - 14;
+    const height = 28.0;
+    final textX = v.textX + 10.0;
     _renderBadge(
       buffer,
-      cx: v.incomingBadgeX,
-      cy: v.badgeY,
-      radius: 8,
+      cx: v.badgeX,
+      cy: v.badgeY - 6,
+      radius: 7,
       count: v.incoming,
       color: '#007bff',
       cssClass: 'hierarchicalBadge',
     );
-
     _renderBadge(
       buffer,
-      cx: v.outgoingBadgeX,
-      cy: v.badgeY,
-      radius: 8,
+      cx: v.badgeX,
+      cy: v.badgeY + 6,
+      radius: 7,
       count: v.outgoing,
       color: '#28a745',
       cssClass: 'hierarchicalBadge',
     );
 
     buffer.writeln(
-        '<text x="${v.textX}" y="${v.textY}" class="hierarchicalItem">${v.name}</text>');
+        '<text x="$textX" y="${top + height / 2}" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">${v.name}</text>');
+  }
+}
+
+/// Render file background pills before edges.
+void _drawFilePanels(StringBuffer buffer, List<_FileVisual> visuals) {
+  for (final v in visuals) {
+    final left = v.textX - 6;
+    final rightExtent = v.badgeX + 8 + 6;
+    final width = rightExtent - left;
+    final top = v.textY - 14;
+    const height = 28.0;
+    buffer.writeln(
+        '<rect x="$left" y="$top" width="$width" height="$height" rx="5" ry="5" class="fileNode"/>');
   }
 }
 

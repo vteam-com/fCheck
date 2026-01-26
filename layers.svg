@@ -60,6 +60,7 @@
 <rect x="370.0" y="300.0" width="220" height="50" class="nodeRect"/>
 <rect x="370.0" y="370.0" width="220" height="50" class="nodeRect"/>
 <rect x="690.0" y="90.0" width="220" height="50" class="nodeRect"/>
+<rect x="690.0" y="160.0" width="220" height="50" class="nodeRect"/>
 <rect x="1010.0" y="90.0" width="220" height="50" class="nodeRect"/>
 <rect x="1010.0" y="160.0" width="220" height="50" class="nodeRect"/>
 <rect x="1010.0" y="230.0" width="220" height="50" class="nodeRect"/>
@@ -113,6 +114,7 @@
 <path d="M 898.0 128.0 C 948.0 128.0, 972.0 102.0, 1022.0 102.0" class="edge"/>
 <path d="M 898.0 128.0 C 948.0 128.0, 1932.0 102.0, 1982.0 102.0" class="edge"/>
 <path d="M 578.0 408.0 C 628.0 408.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
+<path d="M 578.0 198.0 C 628.0 198.0, 652.0 172.0, 702.0 172.0" class="edge"/>
 <path d="M 578.0 198.0 C 628.0 198.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
 <path d="M 578.0 338.0 C 628.0 338.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
 <path d="M 578.0 268.0 C 628.0 268.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
@@ -157,8 +159,9 @@ utils.dart</title>
 </g>
 <g>
 <circle cx="578.0" cy="198.0" r="9" fill="#28a745"/>
-<text x="578.0" y="199.0" class="badge">1</text>
-<title>layers_issue.dart</title>
+<text x="578.0" y="199.0" class="badge">2</text>
+<title>layers_issue.dart
+rect.dart</title>
 </g>
 <text x="480.0" y="185.0" class="nodeText">folder_svg_hierarchica...</text>
 <g>
@@ -211,6 +214,12 @@ sort.dart
 utils.dart</title>
 </g>
 <text x="800.0" y="115.0" class="nodeText">analyzer_engine.dart</text>
+<g>
+<circle cx="702.0" cy="172.0" r="9" fill="#007bff"/>
+<text x="702.0" y="173.0" class="badge">1</text>
+<title>folder_svg_hierarchical.dart</title>
+</g>
+<text x="800.0" y="185.0" class="nodeText">rect.dart</text>
 <g>
 <circle cx="1022.0" cy="102.0" r="9" fill="#007bff"/>
 <text x="1022.0" y="103.0" class="badge">2</text>
