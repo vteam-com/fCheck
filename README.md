@@ -169,7 +169,7 @@ fcheck -i /path/to/project -f
 
 ### Example Output
 
-```
+```bash
 Analyzing project at: /path/to/project...
 --- Stats ---
 Folders: 15

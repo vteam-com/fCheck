@@ -52,10 +52,12 @@
 <rect x="1945.0" y="50" width="270.0" height="370" rx="8" class="layerBackground"/>
 <text x="2080.0" y="75" class="layerTitle">7</text>
 <rect x="50.0" y="90.0" width="220" height="50" class="nodeRect"/>
+<rect x="50.0" y="160.0" width="220" height="50" class="nodeRect"/>
 <rect x="370.0" y="90.0" width="220" height="50" class="nodeRect"/>
 <rect x="370.0" y="160.0" width="220" height="50" class="nodeRect"/>
 <rect x="370.0" y="230.0" width="220" height="50" class="nodeRect"/>
 <rect x="370.0" y="300.0" width="220" height="50" class="nodeRect"/>
+<rect x="370.0" y="370.0" width="220" height="50" class="nodeRect"/>
 <rect x="690.0" y="90.0" width="220" height="50" class="nodeRect"/>
 <rect x="1010.0" y="90.0" width="220" height="50" class="nodeRect"/>
 <rect x="1010.0" y="160.0" width="220" height="50" class="nodeRect"/>
@@ -72,9 +74,10 @@
 <rect x="1970.0" y="230.0" width="220" height="50" class="nodeRect"/>
 <rect x="1970.0" y="300.0" width="220" height="50" class="nodeRect"/>
 <path d="M 258.0 128.0 C 308.0 128.0, 332.0 102.0, 382.0 102.0" class="edge"/>
-<path d="M 258.0 128.0 C 308.0 128.0, 332.0 172.0, 382.0 172.0" class="edge"/>
-<path d="M 258.0 128.0 C 308.0 128.0, 332.0 312.0, 382.0 312.0" class="edge"/>
 <path d="M 258.0 128.0 C 308.0 128.0, 332.0 242.0, 382.0 242.0" class="edge"/>
+<path d="M 258.0 128.0 C 308.0 128.0, 332.0 382.0, 382.0 382.0" class="edge"/>
+<path d="M 258.0 128.0 C 308.0 128.0, 332.0 312.0, 382.0 312.0" class="edge"/>
+<path d="M 258.0 128.0 C 308.0 128.0, 332.0 172.0, 382.0 172.0" class="edge"/>
 <path d="M 578.0 128.0 C 628.0 128.0, 972.0 102.0, 1022.0 102.0" class="edge"/>
 <path d="M 578.0 128.0 C 628.0 128.0, 652.0 102.0, 702.0 102.0" class="edge"/>
 <path d="M 578.0 128.0 C 628.0 128.0, 1932.0 102.0, 1982.0 102.0" class="edge"/>
@@ -108,18 +111,27 @@
 <path d="M 898.0 128.0 C 948.0 128.0, 1292.0 172.0, 1342.0 172.0" class="edge"/>
 <path d="M 898.0 128.0 C 948.0 128.0, 972.0 102.0, 1022.0 102.0" class="edge"/>
 <path d="M 898.0 128.0 C 948.0 128.0, 1932.0 102.0, 1982.0 102.0" class="edge"/>
+<path d="M 578.0 408.0 C 628.0 408.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
+<path d="M 578.0 198.0 C 628.0 198.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
 <path d="M 578.0 338.0 C 628.0 338.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
 <path d="M 578.0 268.0 C 628.0 268.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
-<path d="M 578.0 198.0 C 628.0 198.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
+<path d="M 258.0 198.0 C 308.0 198.0, 1292.0 102.0, 1342.0 102.0" class="edge"/>
 <g>
 <circle cx="258.0" cy="128.0" r="9" fill="#28a745"/>
-<text x="258.0" y="129.0" class="badge">4</text>
+<text x="258.0" y="129.0" class="badge">5</text>
 <title>fcheck.dart
+folder_svg_hierarchical.dart
 mermaid_generator.dart
 plantuml_generator.dart
 svg_generator.dart</title>
 </g>
 <text x="160.0" y="115.0" class="nodeText">fcheck.dart</text>
+<g>
+<circle cx="258.0" cy="198.0" r="9" fill="#28a745"/>
+<text x="258.0" y="199.0" class="badge">1</text>
+<title>layers_issue.dart</title>
+</g>
+<text x="160.0" y="185.0" class="nodeText">folder_svg_generator.dart</text>
 <g>
 <circle cx="382.0" cy="102.0" r="9" fill="#007bff"/>
 <text x="382.0" y="103.0" class="badge">1</text>
@@ -147,7 +159,7 @@ utils.dart</title>
 <text x="578.0" y="199.0" class="badge">1</text>
 <title>layers_issue.dart</title>
 </g>
-<text x="480.0" y="185.0" class="nodeText">mermaid_generator.dart</text>
+<text x="480.0" y="185.0" class="nodeText">folder_svg_hierarchica...</text>
 <g>
 <circle cx="382.0" cy="242.0" r="9" fill="#007bff"/>
 <text x="382.0" y="243.0" class="badge">1</text>
@@ -158,7 +170,7 @@ utils.dart</title>
 <text x="578.0" y="269.0" class="badge">1</text>
 <title>layers_issue.dart</title>
 </g>
-<text x="480.0" y="255.0" class="nodeText">plantuml_generator.dart</text>
+<text x="480.0" y="255.0" class="nodeText">mermaid_generator.dart</text>
 <g>
 <circle cx="382.0" cy="312.0" r="9" fill="#007bff"/>
 <text x="382.0" y="313.0" class="badge">1</text>
@@ -169,7 +181,18 @@ utils.dart</title>
 <text x="578.0" y="339.0" class="badge">1</text>
 <title>layers_issue.dart</title>
 </g>
-<text x="480.0" y="325.0" class="nodeText">svg_generator.dart</text>
+<text x="480.0" y="325.0" class="nodeText">plantuml_generator.dart</text>
+<g>
+<circle cx="382.0" cy="382.0" r="9" fill="#007bff"/>
+<text x="382.0" y="383.0" class="badge">1</text>
+<title>fcheck.dart</title>
+</g>
+<g>
+<circle cx="578.0" cy="408.0" r="9" fill="#28a745"/>
+<text x="578.0" y="409.0" class="badge">1</text>
+<title>layers_issue.dart</title>
+</g>
+<text x="480.0" y="395.0" class="nodeText">svg_generator.dart</text>
 <g>
 <circle cx="702.0" cy="102.0" r="9" fill="#007bff"/>
 <text x="702.0" y="103.0" class="badge">1</text>
@@ -231,8 +254,10 @@ utils.dart</title>
 <text x="1120.0" y="255.0" class="nodeText">layers_analyzer.dart</text>
 <g>
 <circle cx="1342.0" cy="102.0" r="9" fill="#007bff"/>
-<text x="1342.0" y="103.0" class="badge">6</text>
+<text x="1342.0" y="103.0" class="badge">8</text>
 <title>analyzer_engine.dart
+folder_svg_generator.dart
+folder_svg_hierarchical.dart
 layers_analyzer.dart
 mermaid_generator.dart
 plantuml_generator.dart

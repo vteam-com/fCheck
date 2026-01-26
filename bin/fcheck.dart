@@ -5,7 +5,8 @@ import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/generators/mermaid_generator.dart';
 import 'package:fcheck/src/generators/svg_generator.dart';
 import 'package:fcheck/src/generators/plantuml_generator.dart';
-import 'package:fcheck/src/generators/folder_svg_generator.dart';
+import 'package:fcheck/src/generators/folder_svg_hierarchical.dart'
+    as hierarchical;
 
 /// Main entry point for the fcheck command-line tool.
 ///
@@ -149,7 +150,9 @@ void main(List<String> arguments) {
 
       if (generateFolderSvg) {
         // Generate folder-based SVG visualization
-        final folderSvgContent = generateFolderDependencyGraphSvg(layersResult);
+        // Use hierarchical layout to preserve parent-child nesting
+        final folderSvgContent =
+            hierarchical.generateHierarchicalDependencyGraphSvg(layersResult);
         final folderSvgFile = File('${directory.path}/folder_layers.svg');
         folderSvgFile.writeAsStringSync(folderSvgContent);
         print('Folder-based SVG layers graph saved to: ${folderSvgFile.path}');

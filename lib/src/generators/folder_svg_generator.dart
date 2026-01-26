@@ -73,23 +73,29 @@ String generateFolderDependencyGraphSvg(LayersAnalysisResult layersResult) {
   // We want left-to-right ordering: entry points -> dependent folders -> leaf folders
   final sortedFolders = folderGroups.keys.toList()
     ..sort((a, b) {
-      // Calculate dependency scores - higher outgoing = more likely to be entry point
+      final aIncoming = folderIncomingCounts[a] ?? 0;
+      final bIncoming = folderIncomingCounts[b] ?? 0;
       final aOutgoing = folderOutgoingCounts[a] ?? 0;
       final bOutgoing = folderOutgoingCounts[b] ?? 0;
 
-      // Sort by outgoing dependencies descending (entry points first)
-      // Then by incoming dependencies ascending (fewer dependencies first)
+      // Primary sort: folders with 0 incoming dependencies come first (true entry points)
+      final aIsEntry = aIncoming == 0;
+      final bIsEntry = bIncoming == 0;
+      if (aIsEntry != bIsEntry) {
+        return aIsEntry ? -1 : 1; // Entry points first
+      }
+
+      // Secondary sort: among entry points, sort by outgoing dependencies descending
+      // Among non-entry points, sort by outgoing dependencies descending
       final outgoingDiff = bOutgoing.compareTo(aOutgoing);
       if (outgoingDiff != 0) return outgoingDiff;
 
-      final aIncoming = folderIncomingCounts[a] ?? 0;
-      final bIncoming = folderIncomingCounts[b] ?? 0;
+      // Tertiary sort: by incoming dependencies ascending (fewer dependencies first)
       return aIncoming.compareTo(bIncoming);
     });
 
   // --- Layout Constants ---
   const folderWidth = 300;
-  const folderHeight = 200;
   const folderMinHeight = 100;
   const folderSpacing = 150;
   const margin = 50;
@@ -293,7 +299,7 @@ String generateFolderDependencyGraphSvg(LayersAnalysisResult layersResult) {
       // File item
       final fileName = _getFileName(file);
       buffer.writeln(
-          '<text x="$fileX" y="$fileY" class="fileItem">📄 $fileName</text>');
+          '<text x="$fileX" y="$fileY" class="fileItem">$fileName</text>');
 
       // File-level metrics (smaller badges)
       final fileInCount = _countFileDependencies(dependencyGraph, file, true);
@@ -389,12 +395,20 @@ String _generateEmptyFolderSvg() {
 </svg>''';
 }
 
-/// Simple rectangle class for folder dimensions
+/// Simple rectangle class for folder dimensions.
 class Rect {
+  /// Left position.
   final double x;
+
+  /// Top position.
   final double y;
+
+  /// Width of the rectangle.
   final double width;
+
+  /// Height of the rectangle.
   final double height;
 
+  /// Creates a rectangle from left, top, width, height.
   Rect.fromLTWH(this.x, this.y, this.width, this.height);
 }
