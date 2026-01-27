@@ -251,23 +251,23 @@ metrics</title>
 <path d="M 488.0 108.0 H 513.0 Q 519.0 108.0 519.0 114.0 V 486.0 Q 519.0 492.0 513.0 492.0 H 424.0" class="dependencyEdge fileEdge"/>
 <title>fcheck.dart → ../lib/src/graphs/export_svg_folders.dart</title>
 <path d="M 488.0 108.0 H 514.0 Q 520.0 108.0 520.0 114.0 V 232.0 Q 520.0 238.0 514.0 238.0 H 456.0" class="dependencyEdge fileEdge"/>
-<title>fcheck.dart → ../lib/analyze_folder.dart</title>
+<title>fcheck.dart → ../lib/fcheck.dart</title>
 <path d="M 488.0 108.0 H 515.0 Q 521.0 108.0 521.0 114.0 V 1412.0 Q 521.0 1418.0 515.0 1418.0 H 424.0" class="dependencyEdge fileEdge"/>
 <title>fcheck.dart → ../lib/src/models/version.dart</title>
 <path d="M 456.0 250.0 H 484.0 Q 490.0 250.0 490.0 256.0 V 808.0 Q 490.0 814.0 484.0 814.0 H 424.0" class="dependencyEdge fileEdge"/>
-<title>../lib/analyze_folder.dart → ../lib/src/layers/layers_results.dart</title>
+<title>../lib/fcheck.dart → ../lib/src/layers/layers_results.dart</title>
 <path d="M 456.0 250.0 H 485.0 Q 491.0 250.0 491.0 256.0 V 650.0 Q 491.0 656.0 485.0 656.0 H 424.0" class="dependencyEdge fileEdge"/>
-<title>../lib/analyze_folder.dart → ../lib/src/metrics/file_metrics.dart</title>
+<title>../lib/fcheck.dart → ../lib/src/metrics/file_metrics.dart</title>
 <path d="M 456.0 250.0 H 486.0 Q 492.0 250.0 492.0 256.0 V 972.0 Q 492.0 978.0 486.0 978.0 H 424.0" class="dependencyEdge fileEdge"/>
-<title>../lib/analyze_folder.dart → ../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart</title>
+<title>../lib/fcheck.dart → ../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart</title>
 <path d="M 456.0 250.0 H 487.0 Q 493.0 250.0 493.0 256.0 V 780.0 Q 493.0 786.0 487.0 786.0 H 424.0" class="dependencyEdge fileEdge"/>
-<title>../lib/analyze_folder.dart → ../lib/src/layers/layers_analyzer.dart</title>
+<title>../lib/fcheck.dart → ../lib/src/layers/layers_analyzer.dart</title>
 <path d="M 456.0 250.0 H 488.0 Q 494.0 250.0 494.0 256.0 V 1136.0 Q 494.0 1142.0 488.0 1142.0 H 424.0" class="dependencyEdge fileEdge"/>
-<title>../lib/analyze_folder.dart → ../lib/src/sort/sort.dart</title>
+<title>../lib/fcheck.dart → ../lib/src/sort/sort.dart</title>
 <path d="M 456.0 250.0 H 489.0 Q 495.0 250.0 495.0 256.0 V 622.0 Q 495.0 628.0 489.0 628.0 H 424.0" class="dependencyEdge fileEdge"/>
-<title>../lib/analyze_folder.dart → ../lib/src/metrics/project_metrics.dart</title>
+<title>../lib/fcheck.dart → ../lib/src/metrics/project_metrics.dart</title>
 <path d="M 456.0 250.0 H 490.0 Q 496.0 250.0 496.0 256.0 V 1328.0 Q 496.0 1334.0 490.0 1334.0 H 424.0" class="dependencyEdge fileEdge"/>
-<title>../lib/analyze_folder.dart → ../lib/src/models/file_utils.dart</title>
+<title>../lib/fcheck.dart → ../lib/src/models/file_utils.dart</title>
 <path d="M 424.0 640.0 H 459.0 Q 465.0 640.0 465.0 646.0 V 1028.0 Q 465.0 1034.0 459.0 1034.0 H 424.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/metrics/project_metrics.dart → ../lib/src/hardcoded_strings/hardcoded_string_issue.dart</title>
 <path d="M 424.0 640.0 H 460.0 Q 466.0 640.0 466.0 646.0 V 836.0 Q 466.0 842.0 460.0 842.0 H 424.0" class="dependencyEdge fileEdge"/>
@@ -401,7 +401,7 @@ export_svg_folders.dart</title>
 <g class="hierarchicalBadge">
 <circle cx="424.0" cy="1334.0" r="7.0" fill="#007bff" opacity="0.85"/>
 <text x="424.0" y="1336.0">4</text>
-<title>analyze_folder.dart
+<title>fcheck.dart
 hardcoded_string_analyzer.dart
 layers_analyzer.dart
 sort_analyzer.dart</title>
@@ -429,7 +429,7 @@ sort_analyzer.dart</title>
 <g class="hierarchicalBadge">
 <circle cx="424.0" cy="786.0" r="7.0" fill="#007bff" opacity="0.85"/>
 <text x="424.0" y="788.0">1</text>
-<title>analyze_folder.dart</title>
+<title>fcheck.dart</title>
 </g>
 <g class="hierarchicalBadge">
 <circle cx="424.0" cy="798.0" r="7.0" fill="#28a745" opacity="0.85"/>
@@ -443,7 +443,7 @@ layers_visitor.dart</title>
 <g class="hierarchicalBadge">
 <circle cx="424.0" cy="814.0" r="7.0" fill="#007bff" opacity="0.85"/>
 <text x="424.0" y="816.0">7</text>
-<title>analyze_folder.dart
+<title>fcheck.dart
 export_mermaid.dart
 export_plantuml.dart
 export_svg.dart
@@ -474,7 +474,7 @@ project_metrics.dart</title>
 <g class="hierarchicalBadge">
 <circle cx="424.0" cy="628.0" r="7.0" fill="#007bff" opacity="0.85"/>
 <text x="424.0" y="630.0">1</text>
-<title>analyze_folder.dart</title>
+<title>fcheck.dart</title>
 </g>
 <g class="hierarchicalBadge">
 <circle cx="424.0" cy="640.0" r="7.0" fill="#28a745" opacity="0.85"/>
@@ -488,14 +488,14 @@ sort.dart</title>
 <g class="hierarchicalBadge">
 <circle cx="424.0" cy="656.0" r="7.0" fill="#007bff" opacity="0.85"/>
 <text x="424.0" y="658.0">2</text>
-<title>analyze_folder.dart
+<title>fcheck.dart
 project_metrics.dart</title>
 </g>
 <text x="208.0" y="662.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">file_metrics.dart</text>
 <g class="hierarchicalBadge">
 <circle cx="424.0" cy="978.0" r="7.0" fill="#007bff" opacity="0.85"/>
 <text x="424.0" y="980.0">1</text>
-<title>analyze_folder.dart</title>
+<title>fcheck.dart</title>
 </g>
 <g class="hierarchicalBadge">
 <circle cx="424.0" cy="990.0" r="7.0" fill="#28a745" opacity="0.85"/>
@@ -527,7 +527,7 @@ project_metrics.dart</title>
 <g class="hierarchicalBadge">
 <circle cx="424.0" cy="1142.0" r="7.0" fill="#007bff" opacity="0.85"/>
 <text x="424.0" y="1144.0">2</text>
-<title>analyze_folder.dart
+<title>fcheck.dart
 project_metrics.dart</title>
 </g>
 <g class="hierarchicalBadge">
@@ -583,11 +583,11 @@ layers_results.dart
 project_metrics.dart
 sort.dart</title>
 </g>
-<text x="140.0" y="244.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">analyze_folder.dart</text>
+<text x="140.0" y="244.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">fcheck.dart</text>
 <g class="hierarchicalBadge">
 <circle cx="488.0" cy="108.0" r="7.0" fill="#28a745" opacity="0.85"/>
 <text x="488.0" y="110.0">6</text>
-<title>analyze_folder.dart
+<title>fcheck.dart
 export_mermaid.dart
 export_plantuml.dart
 export_svg.dart

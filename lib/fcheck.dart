@@ -1,26 +1,22 @@
-/// A Flutter/Dart code quality analysis tool.
-///
-/// This library provides functionality to analyze Flutter and Dart projects
-/// for code quality metrics including:
-/// - File and folder counts
-/// - Lines of code metrics
-/// - Comment ratio analysis
-/// - One class per file rule compliance
-/// - Hardcoded string detection
-/// - Source code member sorting validation
-///
-/// ## Usage
-///
-/// ```dart
-/// import 'package:fcheck/analyze_folder.dart';
-///
-/// final engine = AnalyzeFolder(projectDirectory);
-/// final metrics = engine.analyze();
-/// metrics.printReport();
-/// ```
-
-// ignore: unnecessary_library_name
-library fcheck;
+// A Flutter/Dart code quality analysis tool.
+//
+// This library provides functionality to analyze Flutter and Dart projects
+// for code quality metrics including:
+// - File and folder counts
+// - Lines of code metrics
+// - Comment ratio analysis
+// - One class per file rule compliance
+// - Hardcoded string detection
+// - Source code member sorting validation
+//
+// Usage:
+// ```dart
+// import 'package:fcheck/fcheck.dart';
+//
+// final engine = AnalyzeFolder(projectDirectory);
+// final metrics = engine.analyze();
+// metrics.printReport();
+// ```
 
 import 'dart:io';
 import 'package:analyzer/dart/analysis/utilities.dart';
@@ -318,6 +314,10 @@ class AnalyzeFolder {
     return false;
   }
 }
+
+/// Backward-compatible alias; prefer [AnalyzeFolder].
+@Deprecated('Use AnalyzeFolder instead.')
+typedef FCheck = AnalyzeFolder;
 
 /// A visitor that traverses the AST to collect quality metrics.
 ///

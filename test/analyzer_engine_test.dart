@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:fcheck/analyze_folder.dart';
+import 'package:fcheck/fcheck.dart';
 import 'package:test/test.dart';
 
 void main() {

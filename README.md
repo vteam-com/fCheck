@@ -245,7 +245,7 @@ You can also use fcheck as a Dart library in your own tools:
 
 ```dart
 import 'dart:io';
-import 'package:fcheck/analyze_folder.dart';
+import 'package:fcheck/fcheck.dart';
 
 void main() {
   final projectDir = Directory('/path/to/project');
@@ -295,7 +295,7 @@ fcheck/
 ├── bin/
 │   └── fcheck.dart          # CLI entry point
 ├── lib/
-│   ├── analyze_folder.dart  # Public API (AnalyzeFolder engine)
+│   ├── fcheck.dart  # Public API (AnalyzeFolder engine)
 │   └── src/
 │       ├── graphs/          # Diagram generators
 │       │   ├── export_mermaid.dart

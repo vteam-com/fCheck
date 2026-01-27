@@ -5,7 +5,7 @@ import 'package:fcheck/src/graphs/export_mermaid.dart';
 import 'package:fcheck/src/graphs/export_plantuml.dart';
 import 'package:fcheck/src/graphs/export_svg.dart';
 import 'package:fcheck/src/graphs/export_svg_folders.dart';
-import 'package:fcheck/analyze_folder.dart';
+import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/models/version.dart';
 
 /// Main entry point for the fcheck command-line tool.

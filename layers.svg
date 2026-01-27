@@ -122,7 +122,7 @@
 <g class="badge">
 <circle cx="258.0" cy="128.0" r="9.0" fill="#28a745" opacity="0.85"/>
 <text x="258.0" y="130.0">6</text>
-<title>analyze_folder.dart\nexport_mermaid.dart\nexport_plantuml.dart\nexport_svg.dart\nexport_svg_folders.dart\nversion.dart</title>
+<title>fcheck.dart\nexport_mermaid.dart\nexport_plantuml.dart\nexport_svg.dart\nexport_svg_folders.dart\nversion.dart</title>
 </g>
 <text x="160.0" y="115.0" class="nodeText">fcheck.dart</text>
 <g class="badge">
@@ -135,7 +135,7 @@
 <text x="578.0" y="130.0">7</text>
 <title>file_metrics.dart\nfile_utils.dart\nhardcoded_string_analyzer.dart\nlayers_analyzer.dart\nlayers_results.dart\nproject_metrics.dart\nsort.dart</title>
 </g>
-<text x="480.0" y="115.0" class="nodeText">analyze_folder.dart</text>
+<text x="480.0" y="115.0" class="nodeText">fcheck.dart</text>
 <g class="badge">
 <circle cx="382.0" cy="172.0" r="9.0" fill="#007bff" opacity="0.85"/>
 <text x="382.0" y="174.0">1</text>
@@ -206,7 +206,7 @@
 <g class="badge">
 <circle cx="702.0" cy="242.0" r="9.0" fill="#007bff" opacity="0.85"/>
 <text x="702.0" y="244.0">1</text>
-<title>analyze_folder.dart</title>
+<title>fcheck.dart</title>
 </g>
 <g class="badge">
 <circle cx="898.0" cy="268.0" r="9.0" fill="#28a745" opacity="0.85"/>
@@ -217,7 +217,7 @@
 <g class="badge">
 <circle cx="702.0" cy="312.0" r="9.0" fill="#007bff" opacity="0.85"/>
 <text x="702.0" y="314.0">1</text>
-<title>analyze_folder.dart</title>
+<title>fcheck.dart</title>
 </g>
 <g class="badge">
 <circle cx="898.0" cy="338.0" r="9.0" fill="#28a745" opacity="0.85"/>
@@ -228,7 +228,7 @@
 <g class="badge">
 <circle cx="702.0" cy="382.0" r="9.0" fill="#007bff" opacity="0.85"/>
 <text x="702.0" y="384.0">1</text>
-<title>analyze_folder.dart</title>
+<title>fcheck.dart</title>
 </g>
 <g class="badge">
 <circle cx="898.0" cy="408.0" r="9.0" fill="#28a745" opacity="0.85"/>
@@ -245,7 +245,7 @@
 <g class="badge">
 <circle cx="1022.0" cy="102.0" r="9.0" fill="#007bff" opacity="0.85"/>
 <text x="1022.0" y="104.0">7</text>
-<title>analyze_folder.dart\nexport_mermaid.dart\nexport_plantuml.dart\nexport_svg.dart\nexport_svg_folders.dart\ngraph_format_utils.dart\nlayers_analyzer.dart</title>
+<title>fcheck.dart\nexport_mermaid.dart\nexport_plantuml.dart\nexport_svg.dart\nexport_svg_folders.dart\ngraph_format_utils.dart\nlayers_analyzer.dart</title>
 </g>
 <g class="badge">
 <circle cx="1218.0" cy="128.0" r="9.0" fill="#28a745" opacity="0.85"/>
@@ -256,7 +256,7 @@
 <g class="badge">
 <circle cx="1022.0" cy="172.0" r="9.0" fill="#007bff" opacity="0.85"/>
 <text x="1022.0" y="174.0">2</text>
-<title>analyze_folder.dart\nproject_metrics.dart</title>
+<title>fcheck.dart\nproject_metrics.dart</title>
 </g>
 <g class="badge">
 <circle cx="1218.0" cy="198.0" r="9.0" fill="#28a745" opacity="0.85"/>
@@ -267,7 +267,7 @@
 <g class="badge">
 <circle cx="1022.0" cy="242.0" r="9.0" fill="#007bff" opacity="0.85"/>
 <text x="1022.0" y="244.0">2</text>
-<title>analyze_folder.dart\nproject_metrics.dart</title>
+<title>fcheck.dart\nproject_metrics.dart</title>
 </g>
 <text x="1120.0" y="255.0" class="nodeText">file_metrics.dart</text>
 <g class="badge">
@@ -313,7 +313,7 @@
 <g class="badge">
 <circle cx="1662.0" cy="102.0" r="9.0" fill="#007bff" opacity="0.85"/>
 <text x="1662.0" y="104.0">4</text>
-<title>analyze_folder.dart\nhardcoded_string_analyzer.dart\nlayers_analyzer.dart\nsort_analyzer.dart</title>
+<title>fcheck.dart\nhardcoded_string_analyzer.dart\nlayers_analyzer.dart\nsort_analyzer.dart</title>
 </g>
 <text x="1760.0" y="115.0" class="nodeText">file_utils.dart</text>
 <g class="badge">
