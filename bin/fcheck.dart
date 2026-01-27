@@ -1,12 +1,13 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 import 'package:args/args.dart';
 import 'package:fcheck/fcheck.dart';
-import 'package:fcheck/src/generators/mermaid_generator.dart';
-import 'package:fcheck/src/generators/svg_generator.dart';
-import 'package:fcheck/src/generators/plantuml_generator.dart';
 import 'package:fcheck/src/generators/folder_svg_hierarchical.dart'
     as hierarchical;
+import 'package:fcheck/src/generators/mermaid_generator.dart';
+import 'package:fcheck/src/generators/plantuml_generator.dart';
+import 'package:fcheck/src/generators/svg_generator.dart';
+import 'package:fcheck/src/version.dart';
 
 /// Main entry point for the fcheck command-line tool.
 ///
@@ -37,6 +38,8 @@ void main(List<String> arguments) {
         negatable: false)
     ..addFlag('json',
         help: 'Output results in structured JSON format', negatable: false)
+    ..addFlag('version',
+        abbr: 'v', help: 'Show fCheck version', negatable: false)
     ..addMultiOption('exclude',
         abbr: 'e',
         help: 'Glob patterns to exclude from analysis (e.g. "**/generated/**")',
@@ -72,6 +75,12 @@ void main(List<String> arguments) {
       print('Analyze Flutter/Dart code quality and provide metrics.');
       print('');
       print(parser.usage);
+      exit(0);
+    }
+
+    // Handle version flag
+    if (argResults['version'] as bool) {
+      print(packageVersion);
       exit(0);
     }
 
@@ -114,7 +123,7 @@ void main(List<String> arguments) {
     if (outputJson) {
       print(const JsonEncoder.withIndent('  ').convert(metrics.toJson()));
     } else {
-      metrics.printReport();
+      metrics.printReport(toolVersion: packageVersion);
     }
 
     // Generate layer analysis result for visualization

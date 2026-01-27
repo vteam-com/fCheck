@@ -2,7 +2,6 @@ import 'package:fcheck/src/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/layers/layers_issue.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:fcheck/src/sort/sort.dart';
-import 'package:fcheck/src/version.dart';
 
 /// Represents the overall quality metrics for a Flutter/Dart project.
 ///
@@ -123,10 +122,13 @@ class ProjectMetrics {
   /// - Layers architecture stats
   ///
   /// [silent] If true, suppresses console output (useful for testing)
-  void printReport({bool silent = false}) {
+  /// [toolVersion] Optional fCheck CLI version to show in the banner.
+  void printReport({bool silent = false, String? toolVersion}) {
     if (silent) return;
 
-    print('↓ -------- fCheck v$fcheckVersion -------- ↓');
+    final bannerVersion =
+        (toolVersion != null && toolVersion.isNotEmpty) ? ' v$toolVersion' : '';
+    print('↓ -------- fCheck$bannerVersion -------- ↓');
     print('Project       : $projectName (version: $version)');
     print('Folders       : $totalFolders');
     print('Files         : $totalFiles');
