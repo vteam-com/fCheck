@@ -7,4 +7,3 @@ linter:
 analyzer:
   exclude:
     - example/**
-    - lib/src/version.dart

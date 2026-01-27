@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo --- Pub Clean
+flutter clean > /dev/null || { echo "flutter Clean failed"; exit 1; }
+
 echo --- Pub Get
 flutter pub get > /dev/null || { echo "Pub get failed"; exit 1; }
 
@@ -8,6 +11,9 @@ flutter pub upgrade > /dev/null
 
 echo --- Pub Outdated
 flutter pub outdated
+
+echo --- Extract version
+dart run build_runner build
 
 echo --- Format sources
 dart format . | sed 's/^/    /'
