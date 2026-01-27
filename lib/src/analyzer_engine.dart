@@ -4,6 +4,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/layers/layers_results.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
+import 'package:path/path.dart' as p;
 import 'hardcoded_strings/hardcoded_string_analyzer.dart';
 import 'layers/layers_analyzer.dart';
 import 'sort/sort.dart';
@@ -90,6 +91,9 @@ class AnalyzerEngine {
     final layersResult = layersAnalyzer.analyzeDirectory(projectDir,
         excludePatterns: excludePatterns);
 
+    // Detect whether the project is localized (used to classify hardcoded strings)
+    final usesLocalization = _detectLocalization(dartFiles);
+
     return ProjectMetrics(
       totalFolders:
           FileUtils.countFolders(projectDir, excludePatterns: excludePatterns),
@@ -105,6 +109,7 @@ class AnalyzerEngine {
       layersEdgeCount: layersResult.edgeCount,
       layersCount: layersResult.layerCount,
       dependencyGraph: layersResult.dependencyGraph,
+      usesLocalization: usesLocalization,
       excludedFilesCount: excludedCount,
     );
   }
@@ -169,6 +174,45 @@ class AnalyzerEngine {
       }
     }
     return count;
+  }
+
+  /// Heuristically detects whether the project uses Flutter localization.
+  ///
+  /// Signals localization when:
+  /// - `l10n.yaml` exists, or
+  /// - `.arb` files are present (commonly under lib/l10n), or
+  /// - Source files reference `AppLocalizations` / `flutter_gen/gen_l10n`.
+  bool _detectLocalization(List<File> dartFiles) {
+    final l10nConfig = File(p.join(projectDir.path, 'l10n.yaml'));
+    if (l10nConfig.existsSync()) return true;
+
+    final l10nDir = Directory(p.join(projectDir.path, 'lib', 'l10n'));
+    if (l10nDir.existsSync()) {
+      final hasArb = l10nDir
+          .listSync(recursive: true)
+          .whereType<File>()
+          .any((f) => f.path.endsWith('.arb'));
+      if (hasArb) return true;
+    }
+
+    final arbAnywhere = projectDir
+        .listSync(recursive: true)
+        .whereType<File>()
+        .any((f) => f.path.endsWith('.arb'));
+    if (arbAnywhere) return true;
+
+    for (final file in dartFiles) {
+      try {
+        final content = file.readAsStringSync();
+        if (content.contains('AppLocalizations') ||
+            content.contains('flutter_gen/gen_l10n')) {
+          return true;
+        }
+      } catch (_) {
+        // Ignore unreadable files
+      }
+    }
+    return false;
   }
 }
 

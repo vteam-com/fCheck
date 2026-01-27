@@ -48,6 +48,9 @@ class ProjectMetrics {
   /// Number of files excluded by glob patterns.
   final int excludedFilesCount;
 
+  /// Whether the project appears to be using Flutter localization (l10n).
+  final bool usesLocalization;
+
   /// Creates a new [ProjectMetrics] instance.
   ///
   /// All parameters are required and represent the aggregated metrics
@@ -65,6 +68,7 @@ class ProjectMetrics {
     required this.layersEdgeCount,
     required this.layersCount,
     required this.dependencyGraph,
+    this.usesLocalization = false,
     this.excludedFilesCount = 0,
   });
 
@@ -88,6 +92,7 @@ class ProjectMetrics {
         'hardcodedStrings':
             hardcodedStringIssues.map((i) => i.toJson()).toList(),
         'sourceSorting': sourceSortIssues.map((i) => i.toJson()).toList(),
+        'localization': {'usesLocalization': usesLocalization},
       };
 
   /// The ratio of comment lines to total lines of code, as a value between 0.0 and 1.0.
@@ -140,15 +145,18 @@ class ProjectMetrics {
 
     if (hardcodedStringIssues.isEmpty) {
       print('✅ No hardcoded strings found.');
-    } else {
+    } else if (usesLocalization) {
       print(
-          '⚠️ ${hardcodedStringIssues.length} potential hardcoded strings detected:');
+          '❌ ${hardcodedStringIssues.length} hardcoded strings detected (localization enabled):');
       for (var issue in hardcodedStringIssues.take(10)) {
         print('  - $issue');
       }
       if (hardcodedStringIssues.length > 10) {
         print('  ... and ${hardcodedStringIssues.length - 10} more');
       }
+    } else {
+      print(
+          '⚠️ ${hardcodedStringIssues.length} potential hardcoded strings detected (project not localized; showing count only).');
     }
 
     print('');
