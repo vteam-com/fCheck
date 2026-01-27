@@ -109,7 +109,7 @@ fcheck -i /path/to/project --svgfolder
 
 **Visualization Example**:
 
-![Dependency Graph Visualization](./layers.svg)
+![Dependency Graph Visualization](https://github.com/vteam-com/fCheck/blob/main/layers.svg)
 
 The SVG visualization shows:
 
@@ -127,7 +127,7 @@ The visualization helps identify:
 
 **Folder-Based Visualization Features**:
 
-![Folder-Based Dependency Graph Visualization](layers_folders.svg)
+![Folder-Based Dependency Graph Visualization](https://github.com/vteam-com/fCheck/blob/main/layers_folders.svg)
 
 The folder-based visualization provides:
 
