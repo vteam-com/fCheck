@@ -51,6 +51,12 @@ class ProjectMetrics {
   /// Whether the project appears to be using Flutter localization (l10n).
   final bool usesLocalization;
 
+  /// The version of the analyzed project as defined in its pubspec.yaml.
+  final String version;
+
+  /// The name of the analyzed project as defined in its pubspec.yaml.
+  final String projectName;
+
   /// Creates a new [ProjectMetrics] instance.
   ///
   /// All parameters are required and represent the aggregated metrics
@@ -68,24 +74,28 @@ class ProjectMetrics {
     required this.layersEdgeCount,
     required this.layersCount,
     required this.dependencyGraph,
+    required this.projectName,
+    required this.version,
     this.usesLocalization = false,
     this.excludedFilesCount = 0,
   });
 
   /// Converts these metrics to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
+        'project': {'name': projectName, 'version': version},
         'stats': {
           'folders': totalFolders,
           'files': totalFiles,
           'dartFiles': totalDartFiles,
+          'excludedFiles': excludedFilesCount,
           'linesOfCode': totalLinesOfCode,
           'commentLines': totalCommentLines,
           'commentRatio': commentRatio,
         },
         'layers': {
-          'edgeCount': layersEdgeCount,
-          'layerCount': layersCount,
-          'issues': layersIssues.map((i) => i.toJson()).toList(),
+          'count': layersCount,
+          'dependencies': layersEdgeCount,
+          'violations': layersIssues.map((i) => i.toJson()).toList(),
           'graph': dependencyGraph,
         },
         'files': fileMetrics.map((m) => m.toJson()).toList(),
@@ -115,19 +125,19 @@ class ProjectMetrics {
   void printReport({bool silent = false}) {
     if (silent) return;
 
-    print('--- Stats ---');
-    print('Folders: $totalFolders');
-    print('Files: $totalFiles');
-    print('Dart Files: $totalDartFiles');
+    print('↓ -------- fCheck -------- ↓');
+    print('Project       : $projectName (version: $version)');
+    print('Folders       : $totalFolders');
+    print('Files         : $totalFiles');
+    print('Dart Files    : $totalDartFiles');
     if (excludedFilesCount > 0) {
       print('Excluded Files: $excludedFilesCount');
     }
-    print('Lines of Code: $totalLinesOfCode');
-    print('Comment Lines: $totalCommentLines');
-    print('Comment Ratio: ${(commentRatio * 100).toStringAsFixed(2)}%');
-    print('Layers Edge Count: $layersEdgeCount');
-    print('Layers Count: $layersCount');
-    print('----------------------');
+    print('Lines of Code : $totalLinesOfCode');
+    print('Comment Lines : $totalCommentLines');
+    print('Comment Ratio : ${(commentRatio * 100).toStringAsFixed(2)}%');
+    print('Layers        : $layersCount');
+    print('Dependencies  : $layersEdgeCount');
 
     final nonCompliant =
         fileMetrics.where((m) => !m.isOneClassPerFileCompliant).toList();
@@ -189,5 +199,6 @@ class ProjectMetrics {
         print('  ... and ${layersIssues.length - 10} more');
       }
     }
+    print('↑ ----------------------- ↑');
   }
 }

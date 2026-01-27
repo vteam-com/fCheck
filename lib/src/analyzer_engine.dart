@@ -5,6 +5,7 @@ import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/layers/layers_results.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:path/path.dart' as p;
+import 'package:yaml/yaml.dart';
 import 'hardcoded_strings/hardcoded_string_analyzer.dart';
 import 'layers/layers_analyzer.dart';
 import 'sort/sort.dart';
@@ -63,6 +64,8 @@ class AnalyzerEngine {
     final dartFiles =
         FileUtils.listDartFiles(projectDir, excludePatterns: excludePatterns);
     final excludedCount = allDartFiles.length - dartFiles.length;
+    final projectVersion = _readProjectVersion(projectDir);
+    final projectName = _readProjectName(projectDir);
 
     final fileMetricsList = <FileMetrics>[];
 
@@ -109,6 +112,8 @@ class AnalyzerEngine {
       layersEdgeCount: layersResult.edgeCount,
       layersCount: layersResult.layerCount,
       dependencyGraph: layersResult.dependencyGraph,
+      projectName: projectName,
+      version: projectVersion,
       usesLocalization: usesLocalization,
       excludedFilesCount: excludedCount,
     );
@@ -145,6 +150,48 @@ class AnalyzerEngine {
       classCount: visitor.classCount,
       isStatefulWidget: visitor.hasStatefulWidget,
     );
+  }
+
+  /// Reads the project version from pubspec.yaml if present.
+  String _readProjectVersion(Directory dir) {
+    final pubspecFile = File(p.join(dir.path, 'pubspec.yaml'));
+    if (!pubspecFile.existsSync()) {
+      return 'unknown';
+    }
+
+    try {
+      final content = pubspecFile.readAsStringSync();
+      final yaml = loadYaml(content) as YamlMap?;
+      final versionValue = yaml?['version'];
+      if (versionValue is String && versionValue.isNotEmpty) {
+        return versionValue;
+      }
+    } catch (_) {
+      // ignore parsing errors and fall through to unknown
+    }
+
+    return 'unknown';
+  }
+
+  /// Reads the project name from pubspec.yaml if present.
+  String _readProjectName(Directory dir) {
+    final pubspecFile = File(p.join(dir.path, 'pubspec.yaml'));
+    if (!pubspecFile.existsSync()) {
+      return 'unknown';
+    }
+
+    try {
+      final content = pubspecFile.readAsStringSync();
+      final yaml = loadYaml(content) as YamlMap?;
+      final nameValue = yaml?['name'];
+      if (nameValue is String && nameValue.isNotEmpty) {
+        return nameValue;
+      }
+    } catch (_) {
+      // ignore parsing errors and fall through to unknown
+    }
+
+    return 'unknown';
   }
 
   /// Counts the number of comment lines in a Dart file.

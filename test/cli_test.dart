@@ -33,7 +33,7 @@ void main() {
 
       // CLI may exit with non-zero code in test environment, but should produce output
       expect(result.stdout, contains('Analyzing project at'));
-      expect(result.stdout, contains('Stats'));
+      expect(result.stdout, contains('fCheck'));
     });
 
     test('should accept input argument', () async {
@@ -59,8 +59,8 @@ class TestClass {
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('Analyzing project at'));
       expect(result.stdout, contains(tempDir.path));
-      expect(result.stdout, contains('Stats'));
-      expect(result.stdout, contains('Dart Files: 1'));
+      expect(result.stdout, contains('fCheck'));
+      expect(result.stdout, contains('Dart Files    : 1'));
       expect(result.stdout, contains(tempDir.path));
     });
 
@@ -216,7 +216,7 @@ void main() {
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('Analyzing project at'));
       expect(result.stdout, contains(tempDir.path));
-      expect(result.stdout, contains('Stats'));
+      expect(result.stdout, contains('fCheck'));
     });
     test('should output structured JSON with --json flag', () async {
       // Create two files with a dependency
@@ -235,7 +235,10 @@ void main() {
       // Verify it's valid JSON
       final json = jsonDecode(result.stdout as String);
       expect(json, isA<Map<String, dynamic>>());
+      expect(json['project'], isNotNull);
       expect(json['stats'], isNotNull);
+      expect(json['stats']['excludedFiles'], isNotNull);
+      expect(json['layers']['dependencies'], isNotNull);
       final graph = json['layers']['graph'] as Map<String, dynamic>;
       expect(graph.keys.any((k) => k.endsWith('a.dart')), isTrue);
       final aKey = graph.keys.firstWhere((k) => k.endsWith('a.dart'));
