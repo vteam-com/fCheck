@@ -1,21 +1,21 @@
-/// Generates a PlantUML visualization of the dependency graph.
+/// Generates a Mermaid visualization of the dependency graph.
 library;
 
-import 'package:fcheck/src/generators/graph_format_utils.dart';
+import 'package:fcheck/src/graphs/graph_format_utils.dart';
 import 'package:fcheck/src/layers/layers_results.dart';
 
 ///
 /// [layersResult] The result of layers analysis containing the dependency graph.
 ///
-/// Uses shared helpers to normalize labels/IDs and inject per-node counters.
-/// Up-layer dependencies are rendered with a dashed arrow to call out
-/// architectural smells; same-layer deps use dotted lines.
-String generateDependencyGraphPlantUML(LayersAnalysisResult layersResult) {
+/// Uses shared helpers to normalize labels/IDs and to include per-node
+/// incoming/outgoing counts in the rendered label. Up-layer edges are dashed
+/// with a circle to highlight architectural violations.
+String exportGraphMermaid(LayersAnalysisResult layersResult) {
   final dependencyGraph = layersResult.dependencyGraph;
   final layers = layersResult.layers;
 
   if (dependencyGraph.isEmpty) {
-    return emptyPlantUml();
+    return emptyMermaidGraph();
   }
 
   final formatting = prepareGraphFormatting(layersResult);
@@ -24,13 +24,14 @@ String generateDependencyGraphPlantUML(LayersAnalysisResult layersResult) {
   final outgoingCounts = formatting.outgoingCounts;
 
   final buffer = StringBuffer();
-  buffer.writeln('@startuml Architecture');
-  buffer.writeln('!theme plain');
-  buffer.writeln('');
+  buffer.writeln('graph TD');
 
-  // Define components with counters
+  // Define subgraphs for layers
   for (final entry in layerGroups.entries) {
+    final layerNum = entry.key;
     final files = entry.value;
+
+    buffer.writeln('    subgraph Layer_$layerNum["Layer $layerNum"]');
 
     for (final file in files) {
       // Normalize to path relative to lib directory
@@ -44,14 +45,15 @@ String generateDependencyGraphPlantUML(LayersAnalysisResult layersResult) {
           : '';
       final displayLabel = '$fileName$counterInfo';
 
-      // Create a valid PlantUML component ID by replacing special characters
-      final componentId = plantUmlComponentId(file);
-      buffer.writeln('component [$displayLabel] as $componentId');
+      // Create a valid Mermaid node ID by replacing special characters
+      final nodeId = mermaidNodeId(file);
+      buffer.writeln('        $nodeId["$displayLabel"]');
     }
-  }
-  buffer.writeln('');
 
-  // Add dependencies
+    buffer.writeln('    end');
+  }
+
+  // Add edges
   for (final entry in dependencyGraph.entries) {
     final sourceFile = entry.key;
     final dependencies = entry.value;
@@ -62,25 +64,23 @@ String generateDependencyGraphPlantUML(LayersAnalysisResult layersResult) {
         final targetLayer = layers[targetFile]!;
 
         // Generate IDs from file paths
-        final sourceId = plantUmlComponentId(sourceFile);
-        final targetId = plantUmlComponentId(targetFile);
+        final sourceId = mermaidNodeId(sourceFile);
+        final targetId = mermaidNodeId(targetFile);
 
-        // Determine relationship style based on direction
-        var relationshipStyle = '-->';
+        // Determine edge style based on direction
+        var edgeStyle = '-->';
         if (targetLayer < sourceLayer) {
-          // Upward dependency (architectural smell) - use dashed line
-          relationshipStyle = '..>';
+          // Upward dependency (architectural smell) - use dashed line with circle
+          edgeStyle = '-.-o';
         } else if (sourceLayer == targetLayer) {
-          // Same layer dependency - use dotted line
-          relationshipStyle = '..>';
+          // Same layer dependency - use dashed line
+          edgeStyle = '-.->';
         }
 
-        buffer.writeln('"$sourceId" $relationshipStyle "$targetId"');
+        buffer.writeln('    $sourceId $edgeStyle $targetId');
       }
     }
   }
 
-  buffer.writeln('');
-  buffer.writeln('@enduml');
   return buffer.toString();
 }

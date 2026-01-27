@@ -98,7 +98,7 @@ return aIncoming.compareTo(bIncoming);
 ### Right Side (Leaf Modules)
 
 1. **Specialized Utilities**: Low outgoing, high incoming
-   - `generators/` - Code generators
+   - `graphs/` - Graph exporters (Mermaid, PlantUML, SVG)
    - `helpers/` - Helper functions
 
 2. **Leaf Modules**: Minimal outgoing, high incoming
@@ -162,7 +162,7 @@ return aIncoming.compareTo(bIncoming);
 ### Example 1: Well-Structured Project
 
 ```text
-bin(↓0↑5) → lib(↓2↑7) → src(↓7↑6) → generators(↓5↑4)
+bin(↓0↑5) → lib(↓2↑7) → src(↓7↑6) → graphs(↓5↑4)
    ↓
 metrics(↓3↑3) → sort(↓3↑3)
    ↓

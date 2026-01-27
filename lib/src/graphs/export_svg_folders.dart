@@ -13,7 +13,7 @@ import 'package:fcheck/src/models/rect.dart';
 /// [layersResult] The result of layers analysis containing the dependency graph.
 ///
 /// Returns an SVG string representing the folder-based dependency graph.
-String generateFolderDependencyGraphSvg(LayersAnalysisResult layersResult) {
+String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   final dependencyGraph = layersResult.dependencyGraph;
   final layers = layersResult.layers;
 

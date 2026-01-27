@@ -107,25 +107,6 @@ fcheck /path/to/project --svgfolder
 fcheck -i /path/to/project --svgfolder
 ```
 
-**Folder-Based Visualization Features**:
-
-![Folder-Based Dependency Graph Visualization](folder_layers.svg)
-
-The folder-based visualization provides:
-
-- **Folder Containers**: Files grouped by their containing folders
-- **Folder-Level Metrics**: Rollup incoming/outgoing dependency counts per folder
-- **File-Level Details**: Individual files shown within each folder with their own dependency badges
-- **Interactive Tooltips**: Hover over folder edges to see specific file dependencies between folders
-- **Visual Hierarchy**: Folders sorted by dependency activity (most connected folders first)
-
-This visualization helps identify:
-
-- 📁 **Folder Coupling**: Which folders have the most inter-dependencies
-- 🔗 **Architecture Patterns**: Natural grouping and separation of concerns
-- 🎯 **Refactoring Opportunities**: Folders that might benefit from consolidation or separation
-- 📊 **Component Relationships**: How different modules/components interact
-
 **Visualization Example**:
 
 ![Dependency Graph Visualization](./layers.svg)
@@ -143,6 +124,25 @@ The visualization helps identify:
 - ⚠️ Circular dependencies (handled via Tarjan's SCC algorithm)
 - 📊 Architecture patterns and component relationships
 - 🔍 Potential refactoring opportunities
+
+**Folder-Based Visualization Features**:
+
+![Folder-Based Dependency Graph Visualization](layers_folders.svg)
+
+The folder-based visualization provides:
+
+- **Folder Containers**: Files grouped by their containing folders
+- **Folder-Level Metrics**: Rollup incoming/outgoing dependency counts per folder
+- **File-Level Details**: Individual files shown within each folder with their own dependency badges
+- **Interactive Tooltips**: Hover over folder edges to see specific file dependencies between folders
+- **Visual Hierarchy**: Folders sorted by dependency activity (most connected folders first)
+
+This visualization helps identify:
+
+- 📁 **Folder Coupling**: Which folders have the most inter-dependencies
+- 🔗 **Architecture Patterns**: Natural grouping and separation of concerns
+- 🎯 **Refactoring Opportunities**: Folders that might benefit from consolidation or separation
+- 📊 **Component Relationships**: How different modules/components interact
 
 ### Mermaid Generation Mode
 

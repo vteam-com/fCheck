@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - 🐛 **Dependency Detection**: Fixed generator import dependencies not showing in `bin/fcheck.dart` by properly qualifying generator function calls with package prefixes.
-- 🔗 **SVG Visualization**: Ensured all dependencies from `fcheck.dart` to generator files (`mermaid_generator.dart`, `plantuml_generator.dart`, `svg_generator.dart`) are properly displayed in the dependency graph.
+- 🔗 **SVG Visualization**: Ensured all dependencies from `fcheck.dart` to graph exporters (`export_mermaid.dart`, `export_plantuml.dart`, `export_svg.dart`) are properly displayed in the dependency graph.
 
 ### Changed
 

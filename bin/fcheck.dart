@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:fcheck/fcheck.dart';
-import 'package:fcheck/src/generators/folder_svg_hierarchical.dart'
-    as hierarchical;
-import 'package:fcheck/src/generators/mermaid_generator.dart';
-import 'package:fcheck/src/generators/plantuml_generator.dart';
-import 'package:fcheck/src/generators/svg_generator.dart';
+import 'package:fcheck/src/graphs/export_mermaid.dart';
+import 'package:fcheck/src/graphs/export_plantuml.dart';
+import 'package:fcheck/src/graphs/export_svg.dart';
+import 'package:fcheck/src/graphs/export_svg_folders.dart';
 import 'package:fcheck/src/version.dart';
 
 /// Main entry point for the fcheck command-line tool.
@@ -135,7 +134,7 @@ void main(List<String> arguments) {
         generateFolderSvg) {
       if (generateSvg) {
         // Generate SVG visualization
-        final svgContent = generateDependencyGraphSvg(layersResult);
+        final svgContent = exportGraphSvg(layersResult);
         final svgFile = File('${directory.path}/layers.svg');
         svgFile.writeAsStringSync(svgContent);
         print('SVG layers graph saved to: ${svgFile.path}');
@@ -143,7 +142,7 @@ void main(List<String> arguments) {
 
       if (generateMermaid) {
         // Generate Mermaid visualization
-        final mermaidContent = generateDependencyGraphMermaid(layersResult);
+        final mermaidContent = exportGraphMermaid(layersResult);
         final mermaidFile = File('${directory.path}/layers.mmd');
         mermaidFile.writeAsStringSync(mermaidContent);
         print('Mermaid layers graph saved to: ${mermaidFile.path}');
@@ -151,7 +150,7 @@ void main(List<String> arguments) {
 
       if (generatePlantUML) {
         // Generate PlantUML visualization
-        final plantUMLContent = generateDependencyGraphPlantUML(layersResult);
+        final plantUMLContent = exportGraphPlantUML(layersResult);
         final plantUMLFile = File('${directory.path}/layers.puml');
         plantUMLFile.writeAsStringSync(plantUMLContent);
         print('PlantUML layers graph saved to: ${plantUMLFile.path}');
@@ -160,9 +159,8 @@ void main(List<String> arguments) {
       if (generateFolderSvg) {
         // Generate folder-based SVG visualization
         // Use hierarchical layout to preserve parent-child nesting
-        final folderSvgContent =
-            hierarchical.generateHierarchicalDependencyGraphSvg(layersResult);
-        final folderSvgFile = File('${directory.path}/folder_layers.svg');
+        final folderSvgContent = exportGraphSvgFolders(layersResult);
+        final folderSvgFile = File('${directory.path}/layers_folders.svg');
         folderSvgFile.writeAsStringSync(folderSvgContent);
         print('Folder-based SVG layers graph saved to: ${folderSvgFile.path}');
       }

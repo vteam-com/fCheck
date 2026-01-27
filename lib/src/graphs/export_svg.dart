@@ -9,7 +9,7 @@ import 'package:fcheck/src/layers/layers_results.dart';
 /// [layersResult] The result of layers analysis containing the dependency graph.
 ///
 /// Returns an SVG string representing the dependency graph.
-String generateDependencyGraphSvg(LayersAnalysisResult layersResult) {
+String exportGraphSvg(LayersAnalysisResult layersResult) {
   final dependencyGraph = layersResult.dependencyGraph;
   final layers = layersResult.layers;
 
