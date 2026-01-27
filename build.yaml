@@ -9,6 +9,6 @@ builders:
   version_builder:
     import: "tool/version_builder.dart"
     builder_factories: ["versionBuilder"]
-    build_extensions: {"$package$": ["lib/src/version.dart"]}
+    build_extensions: { "$package$": ["lib/src/models/version.dart"] }
     auto_apply: root_package
     build_to: source

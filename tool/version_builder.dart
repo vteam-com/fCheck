@@ -5,13 +5,13 @@ import 'dart:async';
 import 'package:build/build.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
 
-/// Generates `lib/src/version.dart` with the package version from `pubspec.yaml`.
+/// Generates `lib/src/models/version.dart` with the package version from `pubspec.yaml`.
 Builder versionBuilder(BuilderOptions options) => _VersionBuilder();
 
 class _VersionBuilder implements Builder {
   @override
   final Map<String, List<String>> buildExtensions = const {
-    r'$package$': ['lib/src/version.dart'],
+    r'$package$': ['lib/src/models/version.dart'],
   };
 
   @override
@@ -28,7 +28,8 @@ class _VersionBuilder implements Builder {
       ..writeln('/// Package version, generated from pubspec.yaml.')
       ..writeln("const String packageVersion = '$version';");
 
-    final outputId = AssetId(buildStep.inputId.package, 'lib/src/version.dart');
+    final outputId =
+        AssetId(buildStep.inputId.package, 'lib/src/models/version.dart');
     await buildStep.writeAsString(outputId, buffer.toString());
   }
 }
