@@ -64,8 +64,13 @@ fcheck --input /path/to/project
 # Use positional arguments
 fcheck /path/to/project
 
-# Use short option
+# Use short options
 fcheck -i /path/to/project
+
+# Show fCheck version
+fcheck --version
+# or
+fcheck -v
 ```
 
 **Note**: Examples show global installation usage. When running from source, use `dart run fcheck` instead of `fcheck`.

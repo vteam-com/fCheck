@@ -7,6 +7,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.5] - 2026-01-27
+
+### Added
+
+- 📋 **Version Display**: Added `--version` / `-v` flag to show fCheck CLI version
+- 🏷️ **Project Metadata**: Analysis reports now include the project name and version from pubspec.yaml
+- 🎯 **Enhanced CLI**: Improved argument parsing with better positional vs named argument handling
+
 ## [0.4.4] - 2026-01-27
 
 ### Changed
