@@ -5,7 +5,7 @@ import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'hardcoded_string_issue.dart';
 import 'hardcoded_string_visitor.dart';
-import '../utils.dart';
+import '../models/file_utils.dart';
 
 /// Analyzer for detecting hardcoded strings in Dart files.
 ///
@@ -71,12 +71,16 @@ class HardcodedStringAnalyzer {
   ///
   /// Returns a list of all [HardcodedStringIssue] objects found across
   /// all analyzed files in the directory.
-  List<HardcodedStringIssue> analyzeDirectory(Directory directory,
-      {List<String> excludePatterns = const []}) {
+  List<HardcodedStringIssue> analyzeDirectory(
+    Directory directory, {
+    List<String> excludePatterns = const [],
+  }) {
     final List<HardcodedStringIssue> allIssues = [];
 
-    final List<File> dartFiles =
-        FileUtils.listDartFiles(directory, excludePatterns: excludePatterns);
+    final List<File> dartFiles = FileUtils.listDartFiles(
+      directory,
+      excludePatterns: excludePatterns,
+    );
 
     for (final File file in dartFiles) {
       allIssues.addAll(analyzeFile(file));

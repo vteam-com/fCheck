@@ -244,11 +244,12 @@ Comment Ratio: 12.70%
 You can also use fcheck as a Dart library in your own tools:
 
 ```dart
-import 'package:fcheck/fcheck.dart';
+import 'dart:io';
+import 'package:fcheck/analyze_folder.dart';
 
 void main() {
   final projectDir = Directory('/path/to/project');
-  final engine = AnalyzerEngine(projectDir);
+  final engine = AnalyzeFolder(projectDir);
   final metrics = engine.analyze();
 
   // Access metrics programmatically
@@ -294,28 +295,40 @@ fcheck/
 ├── bin/
 │   └── fcheck.dart          # CLI entry point
 ├── lib/
-│   ├── fcheck.dart          # Public API exports
+│   ├── analyze_folder.dart  # Public API (AnalyzeFolder engine)
 │   └── src/
-│       ├── analyzer_engine.dart           # Core analysis logic
-│       ├── hardcoded_strings/             # Hardcoded string detection
+│       ├── graphs/          # Diagram generators
+│       │   ├── export_mermaid.dart
+│       │   ├── export_plantuml.dart
+│       │   ├── export_svg.dart
+│       │   ├── export_svg_folders.dart
+│       │   ├── graph_format_utils.dart
+│       │   └── svg_common.dart
+│       ├── hardcoded_strings/
 │       │   ├── hardcoded_string_analyzer.dart
 │       │   ├── hardcoded_string_issue.dart
 │       │   └── hardcoded_string_visitor.dart
-│       ├── layers/                        # Layer analysis
+│       ├── layers/
 │       │   ├── layers_analyzer.dart
 │       │   ├── layers_issue.dart
+│       │   ├── layers_results.dart
 │       │   └── layers_visitor.dart
-│       ├── metrics/                       # Code metrics
+│       ├── metrics/
 │       │   ├── file_metrics.dart
 │       │   └── project_metrics.dart
-│       ├── sort/                          # Source code sorting
-│       │   ├── sort.dart
-│       │   ├── sort_analyzer.dart
-│       │   └── sort_members.dart
-│       └── utils.dart                     # File utilities
+│       ├── models/
+│       │   ├── class_visitor.dart
+│       │   ├── file_utils.dart
+│       │   ├── rect.dart
+│       │   └── version.dart
+│       └── sort/
+│           ├── sort.dart
+│           ├── sort_analyzer.dart
+│           ├── sort_issue.dart
+│           └── sort_members.dart
 ├── example/                 # Test example project
 ├── pubspec.yaml             # Package configuration
-└── README.md               # This file
+└── README.md                # This file
 ```
 
 ## Development

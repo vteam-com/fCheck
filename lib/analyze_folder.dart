@@ -1,3 +1,27 @@
+/// A Flutter/Dart code quality analysis tool.
+///
+/// This library provides functionality to analyze Flutter and Dart projects
+/// for code quality metrics including:
+/// - File and folder counts
+/// - Lines of code metrics
+/// - Comment ratio analysis
+/// - One class per file rule compliance
+/// - Hardcoded string detection
+/// - Source code member sorting validation
+///
+/// ## Usage
+///
+/// ```dart
+/// import 'package:fcheck/analyze_folder.dart';
+///
+/// final engine = AnalyzeFolder(projectDirectory);
+/// final metrics = engine.analyze();
+/// metrics.printReport();
+/// ```
+
+// ignore: unnecessary_library_name
+library fcheck;
+
 import 'dart:io';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
@@ -6,11 +30,11 @@ import 'package:fcheck/src/layers/layers_results.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
-import 'hardcoded_strings/hardcoded_string_analyzer.dart';
-import 'layers/layers_analyzer.dart';
-import 'sort/sort.dart';
-import 'metrics/project_metrics.dart';
-import 'utils.dart';
+import 'src/hardcoded_strings/hardcoded_string_analyzer.dart';
+import 'src/layers/layers_analyzer.dart';
+import 'src/sort/sort.dart';
+import 'src/metrics/project_metrics.dart';
+import 'src/models/file_utils.dart';
 
 /// The main engine for analyzing Flutter/Dart project quality.
 ///
@@ -18,7 +42,7 @@ import 'utils.dart';
 /// code metrics, comment ratios, and compliance with coding standards.
 /// It uses the Dart analyzer to parse source code and extract meaningful
 /// quality metrics.
-class AnalyzerEngine {
+class AnalyzeFolder {
   /// The root directory of the project to analyze.
   final Directory projectDir;
 
@@ -33,8 +57,11 @@ class AnalyzerEngine {
   /// [projectDir] should point to the root of a Flutter/Dart project.
   /// [fix] if true, automatically fixes sorting issues by writing sorted code back to files.
   /// [excludePatterns] optional list of glob patterns to exclude files/folders.
-  AnalyzerEngine(this.projectDir,
-      {this.fix = false, this.excludePatterns = const []});
+  AnalyzeFolder(
+    this.projectDir, {
+    this.fix = false,
+    this.excludePatterns = const [],
+  });
 
   /// Analyzes the layers architecture and returns the result.
   ///
@@ -44,8 +71,10 @@ class AnalyzerEngine {
   /// Returns a [LayersAnalysisResult] containing issues and layer assignments.
   LayersAnalysisResult analyzeLayers() {
     final layersAnalyzer = LayersAnalyzer(projectDir);
-    return layersAnalyzer.analyzeDirectory(projectDir,
-        excludePatterns: excludePatterns);
+    return layersAnalyzer.analyzeDirectory(
+      projectDir,
+      excludePatterns: excludePatterns,
+    );
   }
 
   /// Analyzes the entire project and returns comprehensive quality metrics.
@@ -61,8 +90,10 @@ class AnalyzerEngine {
   ProjectMetrics analyze() {
     // Calculate excluded files count by comparing total vs filtered
     final allDartFiles = FileUtils.listDartFiles(projectDir);
-    final dartFiles =
-        FileUtils.listDartFiles(projectDir, excludePatterns: excludePatterns);
+    final dartFiles = FileUtils.listDartFiles(
+      projectDir,
+      excludePatterns: excludePatterns,
+    );
     final excludedCount = allDartFiles.length - dartFiles.length;
     final projectVersion = _readProjectVersion(projectDir);
     final projectName = _readProjectName(projectDir);
@@ -81,27 +112,38 @@ class AnalyzerEngine {
 
     // Analyze for hardcoded strings
     final hardcodedStringAnalyzer = HardcodedStringAnalyzer();
-    final hardcodedStringIssues = hardcodedStringAnalyzer
-        .analyzeDirectory(projectDir, excludePatterns: excludePatterns);
+    final hardcodedStringIssues = hardcodedStringAnalyzer.analyzeDirectory(
+      projectDir,
+      excludePatterns: excludePatterns,
+    );
 
     // Analyze for source sorting issues
     final sourceSortAnalyzer = SourceSortAnalyzer();
-    final sourceSortIssues = sourceSortAnalyzer.analyzeDirectory(projectDir,
-        fix: fix, excludePatterns: excludePatterns);
+    final sourceSortIssues = sourceSortAnalyzer.analyzeDirectory(
+      projectDir,
+      fix: fix,
+      excludePatterns: excludePatterns,
+    );
 
     // Analyze for layers architecture violations
     final layersAnalyzer = LayersAnalyzer(projectDir);
-    final layersResult = layersAnalyzer.analyzeDirectory(projectDir,
-        excludePatterns: excludePatterns);
+    final layersResult = layersAnalyzer.analyzeDirectory(
+      projectDir,
+      excludePatterns: excludePatterns,
+    );
 
     // Detect whether the project is localized (used to classify hardcoded strings)
     final usesLocalization = _detectLocalization(dartFiles);
 
     return ProjectMetrics(
-      totalFolders:
-          FileUtils.countFolders(projectDir, excludePatterns: excludePatterns),
-      totalFiles:
-          FileUtils.countAllFiles(projectDir, excludePatterns: excludePatterns),
+      totalFolders: FileUtils.countFolders(
+        projectDir,
+        excludePatterns: excludePatterns,
+      ),
+      totalFiles: FileUtils.countAllFiles(
+        projectDir,
+        excludePatterns: excludePatterns,
+      ),
       totalDartFiles: dartFiles.length,
       totalLinesOfCode: totalLoc,
       totalCommentLines: totalComments,

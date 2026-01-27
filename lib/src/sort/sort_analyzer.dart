@@ -3,10 +3,10 @@ import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
-import '../class_visitor.dart';
+import '../models/class_visitor.dart';
 import 'sort_members.dart';
 import 'sort_issue.dart';
-import '../utils.dart';
+import '../models/file_utils.dart';
 
 /// Analyzes Dart files for proper source code member ordering in Flutter classes
 class SourceSortAnalyzer {
@@ -78,12 +78,14 @@ class SourceSortAnalyzer {
             print('✅ Fixed sorting for class $className in ${file.path}');
           } else {
             // Report the issue
-            issues.add(SourceSortIssue(
-              filePath: file.path,
-              className: className,
-              lineNumber: lineNumber,
-              description: 'Class members are not properly sorted',
-            ));
+            issues.add(
+              SourceSortIssue(
+                filePath: file.path,
+                className: className,
+                lineNumber: lineNumber,
+                description: 'Class members are not properly sorted',
+              ),
+            );
           }
         }
       }
@@ -105,12 +107,17 @@ class SourceSortAnalyzer {
   ///
   /// Returns a list of all [SourceSortIssue] objects found across
   /// all analyzed files in the directory.
-  List<SourceSortIssue> analyzeDirectory(Directory directory,
-      {bool fix = false, List<String> excludePatterns = const []}) {
+  List<SourceSortIssue> analyzeDirectory(
+    Directory directory, {
+    bool fix = false,
+    List<String> excludePatterns = const [],
+  }) {
     final List<SourceSortIssue> allIssues = <SourceSortIssue>[];
 
-    final List<File> dartFiles =
-        FileUtils.listDartFiles(directory, excludePatterns: excludePatterns);
+    final List<File> dartFiles = FileUtils.listDartFiles(
+      directory,
+      excludePatterns: excludePatterns,
+    );
     for (final File file in dartFiles) {
       allIssues.addAll(analyzeFile(file, fix: fix));
     }
@@ -120,10 +127,14 @@ class SourceSortAnalyzer {
 
   /// Check if two class bodies are different (ignoring whitespace)
   bool _bodiesDiffer(String sorted, String original) {
-    final String normalizedSorted =
-        sorted.trim().replaceAll(RegExp(r'\s+'), ' ');
-    final String normalizedOriginal =
-        original.trim().replaceAll(RegExp(r'\s+'), ' ');
+    final String normalizedSorted = sorted.trim().replaceAll(
+          RegExp(r'\s+'),
+          ' ',
+        );
+    final String normalizedOriginal = original.trim().replaceAll(
+          RegExp(r'\s+'),
+          ' ',
+        );
     return normalizedSorted != normalizedOriginal;
   }
 

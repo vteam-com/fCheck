@@ -5,6 +5,7 @@ library;
 import 'dart:math';
 import 'package:fcheck/src/layers/layers_results.dart';
 import 'package:fcheck/src/models/rect.dart';
+import 'package:fcheck/src/graphs/svg_common.dart';
 import 'package:path/path.dart' as p;
 
 /// Represents a folder in the hierarchy.
@@ -43,6 +44,8 @@ class _FileVisual {
   final double panelWidth;
   final int incoming;
   final int outgoing;
+  final List<String> incomingPeers;
+  final List<String> outgoingPeers;
 
   _FileVisual({
     required this.path,
@@ -55,6 +58,8 @@ class _FileVisual {
     required this.panelWidth,
     required this.incoming,
     required this.outgoing,
+    required this.incomingPeers,
+    required this.outgoingPeers,
   });
 }
 
@@ -87,29 +92,6 @@ class _FolderBadgeVisual {
     required this.isIncoming,
     required this.peers,
   });
-}
-
-/// Renders a badge (circle + text) with optional tooltip.
-void _renderBadge(
-  StringBuffer buffer, {
-  required double cx,
-  required double cy,
-  required double radius,
-  required int count,
-  required String color,
-  required String cssClass,
-  String tooltip = '',
-}) {
-  if (count <= 0) return;
-
-  buffer.writeln('<g class="$cssClass">');
-  buffer.writeln(
-      '<circle cx="$cx" cy="$cy" r="$radius" fill="$color" opacity="0.85"/>');
-  buffer.writeln('<text x="$cx" y="${cy + 2}">$count</text>');
-  if (tooltip.isNotEmpty) {
-    buffer.writeln('<title>$tooltip</title>');
-  }
-  buffer.writeln('</g>');
 }
 
 /// Collects every file mentioned in the dependency graph (keys and targets).
@@ -208,7 +190,7 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   final dependencyGraph = layersResult.dependencyGraph;
 
   if (dependencyGraph.isEmpty) {
-    return _generateEmptyHierarchicalSvg();
+    return generateEmptySvg('No hierarchical dependencies found');
   }
 
   // Normalize paths to a common root and include target-only files
@@ -367,6 +349,7 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
       '  .hierarchicalEdge:hover { stroke: #007bff; stroke-width: 4; opacity: 1.0; }');
   buffer.writeln(
       '  .hierarchicalBadge { font-size: 8px; font-weight: bold; fill: white; text-anchor: middle; dominant-baseline: middle; }');
+  buffer.writeln('  .hierarchicalBadge { cursor: help; }');
   buffer.writeln('  .hierarchicalBadge:hover { opacity: 0.8; }');
   // Shared dependency edge styling
   buffer.writeln(
@@ -395,8 +378,20 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   final titleVisuals = <_TitleVisual>[];
   final folderBadges = <_FolderBadgeVisual>[];
   final folderDependencies = _collectFolderDependencies(relativeGraph);
-  final (folderIncomingPeers, folderOutgoingPeers) =
-      _buildFolderPeerLists(folderDependencies);
+  final folderDepGraph = <String, List<String>>{};
+  for (final edge in folderDependencies) {
+    folderDepGraph
+        .putIfAbsent(edge.sourceFolder, () => [])
+        .add(edge.targetFolder);
+  }
+  final folderPeers =
+      buildPeerLists(folderDepGraph, labelFor: (path) => path.split('/').last);
+  final folderIncomingPeers = folderPeers.incoming;
+  final folderOutgoingPeers = folderPeers.outgoing;
+  final filePeers =
+      buildPeerLists(relativeGraph, labelFor: (path) => path.split('/').last);
+  final fileIncomingPeers = filePeers.incoming;
+  final fileOutgoingPeers = filePeers.outgoing;
   // Draw folder containers with hierarchy visualization
   _drawHierarchicalFolders(
       buffer,
@@ -412,6 +407,8 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
       folderBadges,
       folderIncomingPeers,
       folderOutgoingPeers,
+      fileIncomingPeers,
+      fileOutgoingPeers,
       depthMap,
       labelWidth: labelWidth,
       headerHeight: folderHeaderHeight,
@@ -842,28 +839,6 @@ List<_FolderEdge> _collectFolderDependencies(
   return edges;
 }
 
-/// Build lists of incoming/outgoing folder peers for tooltip display.
-(Map<String, List<String>> incoming, Map<String, List<String>> outgoing)
-    _buildFolderPeerLists(List<_FolderEdge> edges) {
-  final incoming = <String, Set<String>>{};
-  final outgoing = <String, Set<String>>{};
-
-  for (final edge in edges) {
-    final sourceLabel = edge.sourceFolder.split('/').last;
-    final targetLabel = edge.targetFolder.split('/').last;
-
-    outgoing.putIfAbsent(edge.sourceFolder, () => <String>{}).add(targetLabel);
-    incoming.putIfAbsent(edge.targetFolder, () => <String>{}).add(sourceLabel);
-  }
-
-  List<String> sorted(Set<String> s) => (s.toList()..sort());
-
-  return (
-    incoming.map((k, v) => MapEntry(k, sorted(v))),
-    outgoing.map((k, v) => MapEntry(k, sorted(v))),
-  );
-}
-
 /// Draw folder-level dependency edges routed on the left side of folders.
 void _drawFolderDependencyEdges(
   StringBuffer buffer,
@@ -925,7 +900,7 @@ void _drawFolderDependencyEdges(
 void _drawFolderBadges(StringBuffer buffer, List<_FolderBadgeVisual> badges) {
   for (final b in badges) {
     final tooltip = b.peers.isEmpty ? '' : b.peers.join('\n');
-    _renderBadge(
+    renderBadge(
       buffer,
       cx: b.cx,
       cy: b.cy,
@@ -953,6 +928,8 @@ void _drawHierarchicalFolders(
   List<_FolderBadgeVisual> folderBadges,
   Map<String, List<String>> folderIncomingPeers,
   Map<String, List<String>> folderOutgoingPeers,
+  Map<String, List<String>> fileIncomingPeers,
+  Map<String, List<String>> fileOutgoingPeers,
   Map<String, int> depths, {
   required double labelWidth,
   required double headerHeight,
@@ -1036,6 +1013,9 @@ void _drawHierarchicalFolders(
         'out': Point(badgeX, fileY + 6),
       };
 
+      final incomingPeers = fileIncomingPeers[filePath] ?? const [];
+      final outgoingPeers = fileOutgoingPeers[filePath] ?? const [];
+
       fileVisuals.add(_FileVisual(
           path: filePath,
           name: fileName,
@@ -1046,7 +1026,9 @@ void _drawHierarchicalFolders(
           panelX: panelX,
           panelWidth: panelWidth,
           incoming: fIncoming,
-          outgoing: fOutgoing));
+          outgoing: fOutgoing,
+          incomingPeers: incomingPeers,
+          outgoingPeers: outgoingPeers));
     }
   }
 
@@ -1116,7 +1098,7 @@ void _drawFileVisuals(StringBuffer buffer, List<_FileVisual> visuals) {
     final top = v.textY - 14;
     const height = 28.0;
     final textX = v.textX + 10.0;
-    _renderBadge(
+    renderBadge(
       buffer,
       cx: v.badgeX,
       cy: v.badgeY - 6,
@@ -1124,8 +1106,9 @@ void _drawFileVisuals(StringBuffer buffer, List<_FileVisual> visuals) {
       count: v.incoming,
       color: '#007bff',
       cssClass: 'hierarchicalBadge',
+      tooltip: v.incomingPeers.join('\n'),
     );
-    _renderBadge(
+    renderBadge(
       buffer,
       cx: v.badgeX,
       cy: v.badgeY + 6,
@@ -1133,6 +1116,7 @@ void _drawFileVisuals(StringBuffer buffer, List<_FileVisual> visuals) {
       count: v.outgoing,
       color: '#28a745',
       cssClass: 'hierarchicalBadge',
+      tooltip: v.outgoingPeers.join('\n'),
     );
 
     buffer.writeln(
@@ -1181,16 +1165,6 @@ List<Point<double>> _calculateFilePositions(
   }
 
   return filePositions;
-}
-
-/// Generates an empty SVG for when there are no dependencies.
-String _generateEmptyHierarchicalSvg() {
-  return '''<?xml version="1.0" encoding="UTF-8"?>
-<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="400" height="200" fill="#f8f9fa"/>
-  <text x="200" y="100" text-anchor="middle" fill="#6c757d"
-        font-family="Arial, sans-serif" font-size="16">No hierarchical dependencies found</text>
-</svg>''';
 }
 
 List<String> _sortFiles(

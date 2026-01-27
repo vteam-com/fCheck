@@ -3,6 +3,7 @@ library;
 
 import 'dart:math';
 import 'package:fcheck/src/layers/layers_results.dart';
+import 'package:fcheck/src/graphs/svg_common.dart';
 
 /// Generates an SVG visualization of the dependency graph.
 ///
@@ -14,7 +15,7 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
   final layers = layersResult.layers;
 
   if (dependencyGraph.isEmpty) {
-    return _generateEmptySvg();
+    return generateEmptySvg('No dependencies found');
   }
 
   // Use provided layers if available; otherwise fall back to a single layer 0 for all files.
@@ -91,7 +92,6 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
   // Badge constants
   const badgeRadius = 9;
   const badgeOffset = 12;
-  const badgeTextOffset = 1;
 
   // Calculate total width based on number of columns
   final totalWidth = margin +
@@ -247,20 +247,9 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
 
   // 5. Draw Node Content (Counters and Labels)
 
-  // Pre-calculate incoming and outgoing node lists for tooltips
-  final incomingNodes = <String, List<String>>{};
-  final outgoingNodes = <String, List<String>>{};
-
-  for (final entry in dependencyGraph.entries) {
-    final source = entry.key;
-    for (final target in entry.value) {
-      if (effectiveLayers.containsKey(source) &&
-          effectiveLayers.containsKey(target)) {
-        outgoingNodes.putIfAbsent(source, () => []).add(target.split('/').last);
-        incomingNodes.putIfAbsent(target, () => []).add(source.split('/').last);
-      }
-    }
-  }
+  final peers = buildPeerLists(dependencyGraph);
+  final incomingNodes = peers.incoming;
+  final outgoingNodes = peers.outgoing;
 
   for (final entry in nodePositions.entries) {
     final file = entry.key;
@@ -271,33 +260,27 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
     final outCount = outgoingCounts[file] ?? 0;
 
     // Render incoming badge (top-left)
-    _renderBadge(
+    renderBadge(
       buffer,
-      pos,
-      nodeWidth,
-      nodeHeight,
-      inCount,
-      incomingNodes[file] ?? [],
-      badgeOffset,
-      badgeOffset, // Y offset from top
-      badgeRadius,
-      badgeTextOffset,
-      '#007bff', // Blue for incoming
+      cx: pos.x + badgeOffset,
+      cy: pos.y + badgeOffset,
+      radius: badgeRadius.toDouble(),
+      count: inCount,
+      color: '#007bff',
+      cssClass: 'badge',
+      tooltip: (incomingNodes[file] ?? const []).join('\\n'),
     );
 
     // Render outgoing badge (bottom-right)
-    _renderBadge(
+    renderBadge(
       buffer,
-      pos,
-      nodeWidth,
-      nodeHeight,
-      outCount,
-      outgoingNodes[file] ?? [],
-      nodeWidth - badgeOffset,
-      nodeHeight - badgeOffset, // Y offset from bottom
-      badgeRadius,
-      badgeTextOffset,
-      '#28a745', // Green for outgoing
+      cx: pos.x + nodeWidth - badgeOffset,
+      cy: pos.y + nodeHeight - badgeOffset,
+      radius: badgeRadius.toDouble(),
+      count: outCount,
+      color: '#28a745',
+      cssClass: 'badge',
+      tooltip: (outgoingNodes[file] ?? const []).join('\\n'),
     );
 
     // Node Text (Filename) - Drawn LAST
@@ -312,45 +295,6 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
 
   buffer.writeln('</svg>');
   return buffer.toString();
-}
-
-/// Helper method to render a badge on an SVG node
-void _renderBadge(
-  StringBuffer buffer,
-  Point<double> pos,
-  num nodeWidth,
-  num nodeHeight,
-  int count,
-  List<String> nodeNames,
-  num xOffset,
-  num yOffset,
-  num radius,
-  num textOffset,
-  String color,
-) {
-  if (count <= 0) return;
-
-  // Sort node names alphabetically and generate tooltip
-  final sortedNodeNames = List<String>.from(nodeNames)..sort();
-  final tooltipLines = sortedNodeNames.join('\n');
-
-  buffer.writeln('<g>');
-  buffer.writeln(
-      '<circle cx="${pos.x + xOffset}" cy="${pos.y + yOffset}" r="$radius" fill="$color"/>');
-  buffer.writeln(
-      '<text x="${pos.x + xOffset}" y="${pos.y + yOffset + textOffset}" class="badge">$count</text>');
-  buffer.writeln('<title>$tooltipLines</title>');
-  buffer.writeln('</g>');
-}
-
-/// Generates an empty SVG for when there are no dependencies.
-String _generateEmptySvg() {
-  return '''<?xml version="1.0" encoding="UTF-8"?>
-<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="400" height="200" fill="#f8f9fa"/>
-  <text x="200" y="100" text-anchor="middle" fill="#6c757d"
-        font-family="Arial, sans-serif" font-size="16">No dependencies found</text>
-</svg>''';
 }
 
 /// Detect cyclic edges using Tarjan SCC; edges inside any SCC of size > 1 are marked cyclic.

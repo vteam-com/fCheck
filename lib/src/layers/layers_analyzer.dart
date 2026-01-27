@@ -4,10 +4,10 @@ import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:fcheck/src/layers/layers_results.dart';
+import 'package:fcheck/src/models/file_utils.dart';
 import 'package:yaml/yaml.dart';
 import 'layers_issue.dart';
 import 'layers_visitor.dart';
-import '../utils.dart';
 
 /// Analyzer for detecting layers architecture violations.
 ///
@@ -35,10 +35,14 @@ class LayersAnalyzer {
   /// [directory] The root directory to scan.
   ///
   /// Returns a [LayersAnalysisResult] containing issues and layer assignments.
-  LayersAnalysisResult analyzeDirectory(Directory directory,
-      {List<String> excludePatterns = const []}) {
-    final List<File> dartFiles =
-        FileUtils.listDartFiles(directory, excludePatterns: excludePatterns);
+  LayersAnalysisResult analyzeDirectory(
+    Directory directory, {
+    List<String> excludePatterns = const [],
+  }) {
+    final List<File> dartFiles = FileUtils.listDartFiles(
+      directory,
+      excludePatterns: excludePatterns,
+    );
 
     // Build dependency graph: Map<filePath, List<dependencies>>
     final Map<String, List<String>> dependencyGraph = <String, List<String>>{};
@@ -95,8 +99,11 @@ class LayersAnalyzer {
     final Directory projectRoot = _findProjectRoot() ?? _rootDirectory;
     final String packageName = _readPackageName(projectRoot);
 
-    final LayersVisitor visitor =
-        LayersVisitor(filePath, projectRoot.path, packageName);
+    final LayersVisitor visitor = LayersVisitor(
+      filePath,
+      projectRoot.path,
+      packageName,
+    );
     compilationUnit.accept(visitor);
 
     return {
@@ -115,8 +122,10 @@ class LayersAnalyzer {
   /// [entryPoints] A map from file paths to whether they are entry points.
   ///
   /// Returns a [LayersAnalysisResult] with issues and layer assignments.
-  LayersAnalysisResult _analyzeGraph(Map<String, List<String>> dependencyGraph,
-      Map<String, bool> entryPoints) {
+  LayersAnalysisResult _analyzeGraph(
+    Map<String, List<String>> dependencyGraph,
+    Map<String, bool> entryPoints,
+  ) {
     final List<LayersIssue> issues = <LayersIssue>[];
 
     // Detect cycles using DFS
@@ -177,14 +186,21 @@ class LayersAnalyzer {
     for (final String dependency in dependencies) {
       if (!visited.contains(dependency)) {
         _detectCycles(
-            dependency, dependencyGraph, visited, recursionStack, issues);
+          dependency,
+          dependencyGraph,
+          visited,
+          recursionStack,
+          issues,
+        );
       } else if (recursionStack.contains(dependency)) {
         // Found a cycle
-        issues.add(LayersIssue(
-          type: LayersIssueType.cyclicDependency,
-          filePath: file,
-          message: 'Cyclic dependency detected involving $dependency',
-        ));
+        issues.add(
+          LayersIssue(
+            type: LayersIssueType.cyclicDependency,
+            filePath: file,
+            message: 'Cyclic dependency detected involving $dependency',
+          ),
+        );
       }
     }
 
@@ -203,8 +219,10 @@ class LayersAnalyzer {
   /// [entryPoints] A map from file paths to whether they are entry points.
   ///
   /// Returns a map from file paths to their assigned layer numbers (1-based, 1 = top).
-  Map<String, int> _assignLayers(Map<String, List<String>> dependencyGraph,
-      Map<String, bool> entryPoints) {
+  Map<String, int> _assignLayers(
+    Map<String, List<String>> dependencyGraph,
+    Map<String, bool> entryPoints,
+  ) {
     final Set<String> allFilesSet = <String>{}..addAll(dependencyGraph.keys);
     for (final deps in dependencyGraph.values) {
       allFilesSet.addAll(deps);
@@ -212,8 +230,10 @@ class LayersAnalyzer {
     final List<String> allFiles = allFilesSet.toList();
 
     // Step 1: Find Strongly Connected Components (SCCs) to handle cycles
-    final List<List<String>> connectedGraph =
-        _findSCCs(allFiles, dependencyGraph);
+    final List<List<String>> connectedGraph = _findSCCs(
+      allFiles,
+      dependencyGraph,
+    );
 
     // Map each file to its SCC index
     final Map<String, int> fileToSccIndex = <String, int>{};
@@ -294,7 +314,9 @@ class LayersAnalyzer {
 
   /// Finds Strongly Connected Components using Tarjan's algorithm.
   List<List<String>> _findSCCs(
-      List<String> nodes, Map<String, List<String>> graph) {
+    List<String> nodes,
+    Map<String, List<String>> graph,
+  ) {
     var index = 0;
     final List<String> stack = <String>[];
     final Map<String, int> indices = <String, int>{};

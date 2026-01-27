@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:args/args.dart';
-import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/graphs/export_mermaid.dart';
 import 'package:fcheck/src/graphs/export_plantuml.dart';
 import 'package:fcheck/src/graphs/export_svg.dart';
 import 'package:fcheck/src/graphs/export_svg_folders.dart';
+import 'package:fcheck/analyze_folder.dart';
 import 'package:fcheck/src/models/version.dart';
 
 /// Main entry point for the fcheck command-line tool.
@@ -16,35 +16,62 @@ import 'package:fcheck/src/models/version.dart';
 /// [arguments] Command-line arguments passed to the executable.
 void main(List<String> arguments) {
   final parser = ArgParser()
-    ..addOption('input',
-        abbr: 'i', help: 'Path to the Flutter/Dart project', defaultsTo: '.')
-    ..addFlag('fix',
-        abbr: 'f',
-        help:
-            'Automatically fix sorting issues by writing sorted code back to files',
-        negatable: false)
-    ..addFlag('svg',
-        help: 'Generate SVG visualization of the dependency graph',
-        negatable: false)
-    ..addFlag('mermaid',
-        help: 'Generate Mermaid file for dependency graph visualization',
-        negatable: false)
-    ..addFlag('plantuml',
-        help: 'Generate PlantUML file for dependency graph visualization',
-        negatable: false)
-    ..addFlag('svgfolder',
-        help: 'Generate folder-based SVG visualization of the dependency graph',
-        negatable: false)
-    ..addFlag('json',
-        help: 'Output results in structured JSON format', negatable: false)
-    ..addFlag('version',
-        abbr: 'v', help: 'Show fCheck version', negatable: false)
-    ..addMultiOption('exclude',
-        abbr: 'e',
-        help: 'Glob patterns to exclude from analysis (e.g. "**/generated/**")',
-        defaultsTo: [])
-    ..addFlag('help',
-        abbr: 'h', help: 'Show usage information', negatable: false);
+    ..addOption(
+      'input',
+      abbr: 'i',
+      help: 'Path to the Flutter/Dart project',
+      defaultsTo: '.',
+    )
+    ..addFlag(
+      'fix',
+      abbr: 'f',
+      help:
+          'Automatically fix sorting issues by writing sorted code back to files',
+      negatable: false,
+    )
+    ..addFlag(
+      'svg',
+      help: 'Generate SVG visualization of the dependency graph',
+      negatable: false,
+    )
+    ..addFlag(
+      'mermaid',
+      help: 'Generate Mermaid file for dependency graph visualization',
+      negatable: false,
+    )
+    ..addFlag(
+      'plantuml',
+      help: 'Generate PlantUML file for dependency graph visualization',
+      negatable: false,
+    )
+    ..addFlag(
+      'svgfolder',
+      help: 'Generate folder-based SVG visualization of the dependency graph',
+      negatable: false,
+    )
+    ..addFlag(
+      'json',
+      help: 'Output results in structured JSON format',
+      negatable: false,
+    )
+    ..addFlag(
+      'version',
+      abbr: 'v',
+      help: 'Show fCheck version',
+      negatable: false,
+    )
+    ..addMultiOption(
+      'exclude',
+      abbr: 'e',
+      help: 'Glob patterns to exclude from analysis (e.g. "**/generated/**")',
+      defaultsTo: [],
+    )
+    ..addFlag(
+      'help',
+      abbr: 'h',
+      help: 'Show usage information',
+      negatable: false,
+    );
 
   late ArgResults argResults;
   late String path;
@@ -115,8 +142,11 @@ void main(List<String> arguments) {
   }
 
   try {
-    final engine =
-        AnalyzerEngine(directory, fix: fix, excludePatterns: excludePatterns);
+    final engine = AnalyzeFolder(
+      directory,
+      fix: fix,
+      excludePatterns: excludePatterns,
+    );
     final metrics = engine.analyze();
 
     if (outputJson) {

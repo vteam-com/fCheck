@@ -1,15 +1,15 @@
 import 'dart:io';
-import 'package:fcheck/src/analyzer_engine.dart';
+import 'package:fcheck/analyze_folder.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('AnalyzerEngine', () {
     late Directory tempDir;
-    late AnalyzerEngine analyzer;
+    late AnalyzeFolder analyzer;
 
     setUp(() {
       tempDir = Directory.systemTemp.createTempSync('fcheck_test_');
-      analyzer = AnalyzerEngine(tempDir);
+      analyzer = AnalyzeFolder(tempDir);
     });
 
     tearDown(() {
@@ -70,8 +70,10 @@ void main() {
       final metrics = analyzer.analyze();
 
       expect(metrics.hardcodedStringIssues.length, equals(1));
-      expect(metrics.hardcodedStringIssues[0].value,
-          equals('This is a hardcoded string'));
+      expect(
+        metrics.hardcodedStringIssues[0].value,
+        equals('This is a hardcoded string'),
+      );
     });
 
     test('should analyze single file correctly', () {
