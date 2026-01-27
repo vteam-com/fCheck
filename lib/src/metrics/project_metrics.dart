@@ -2,6 +2,7 @@ import 'package:fcheck/src/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/layers/layers_issue.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:fcheck/src/sort/sort.dart';
+import 'package:fcheck/src/version.dart';
 
 /// Represents the overall quality metrics for a Flutter/Dart project.
 ///
@@ -125,7 +126,7 @@ class ProjectMetrics {
   void printReport({bool silent = false}) {
     if (silent) return;
 
-    print('↓ -------- fCheck -------- ↓');
+    print('↓ -------- fCheck v$fcheckVersion -------- ↓');
     print('Project       : $projectName (version: $version)');
     print('Folders       : $totalFolders');
     print('Files         : $totalFiles');
