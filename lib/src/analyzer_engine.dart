@@ -184,7 +184,10 @@ class AnalyzerEngine {
   /// - Source files reference `AppLocalizations` / `flutter_gen/gen_l10n`.
   bool _detectLocalization(List<File> dartFiles) {
     final l10nConfig = File(p.join(projectDir.path, 'l10n.yaml'));
-    if (l10nConfig.existsSync()) return true;
+    if (l10nConfig.existsSync()) {
+      // print('Localization detected: found l10n.yaml at ${l10nConfig.path}');
+      return true;
+    }
 
     final l10nDir = Directory(p.join(projectDir.path, 'lib', 'l10n'));
     if (l10nDir.existsSync()) {
@@ -192,20 +195,31 @@ class AnalyzerEngine {
           .listSync(recursive: true)
           .whereType<File>()
           .any((f) => f.path.endsWith('.arb'));
-      if (hasArb) return true;
+      if (hasArb) {
+        // print('Localization detected: found .arb files under ${l10nDir.path}');
+        return true;
+      }
     }
 
     final arbAnywhere = projectDir
         .listSync(recursive: true)
         .whereType<File>()
         .any((f) => f.path.endsWith('.arb'));
-    if (arbAnywhere) return true;
+    if (arbAnywhere) {
+      // print('Localization detected: found .arb files elsewhere in project');
+      return true;
+    }
+
+    final appLocImport = RegExp(
+      r'''^\s*import\s+["']package:flutter_gen/gen_l10n/app_localizations\.dart["'];''',
+      multiLine: true,
+    );
 
     for (final file in dartFiles) {
       try {
         final content = file.readAsStringSync();
-        if (content.contains('AppLocalizations') ||
-            content.contains('flutter_gen/gen_l10n')) {
+        if (appLocImport.hasMatch(content)) {
+          // print('Localization detected: found app_localizations import in ${file.path}');
           return true;
         }
       } catch (_) {

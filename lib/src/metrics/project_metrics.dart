@@ -155,8 +155,9 @@ class ProjectMetrics {
         print('  ... and ${hardcodedStringIssues.length - 10} more');
       }
     } else {
+      final firstFile = hardcodedStringIssues.first.filePath.split('/').last;
       print(
-          '⚠️ ${hardcodedStringIssues.length} potential hardcoded strings detected (project not localized; showing count only).');
+          '⚠️ ${hardcodedStringIssues.length} potential hardcoded strings detected (project not localized; showing count only). Example file: $firstFile');
     }
 
     print('');

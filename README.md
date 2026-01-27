@@ -8,7 +8,7 @@ A command-line tool for analyzing the quality of Flutter and Dart projects. It p
 - 📝 **Comment Analysis**: Measures code documentation levels
 - ✅ **Code Quality Checks**: Validates compliance with "one class per file" rule
 - 🎯 **StatefulWidget Support**: Special handling for Flutter StatefulWidget classes
-- 🔍 **Hardcoded String Detection**: Identifies potentially hardcoded user-facing strings
+- 🔍 **Hardcoded String Detection**: Flags user-facing strings; treated as errors when localization is enabled, otherwise shown as cautionary counts
 - 🔧 **Source Code Sorting**: Ensures Flutter class members are properly organized
 - 📁 **Recursive Analysis**: Scans entire project directory trees
 - 🌐 **Multiple Diagram Outputs**: Generate SVG, Mermaid, PlantUML, and folder/hierarchical views of dependency graphs
@@ -209,10 +209,7 @@ Comment Ratio: 12.70%
   - lib/main.dart (2 classes found)
   - lib/models.dart (3 classes found)
 
-⚠️ 6 potential hardcoded strings detected:
-  - lib/ui/messages.dart:15: "Welcome back!"
-  - lib/screens/login.dart:42: "Please enter your password"
-  - lib/widgets/buttons.dart:23: "Submit"
+⚠️ 6 potential hardcoded strings detected (project not localized)
 
 ✅ All Flutter classes have properly sorted members.
 ```
@@ -274,6 +271,11 @@ void main() {
 - **Non-compliant**: Files with too many public classes
 
 ### Member Sorting (Flutter Classes)
+
+### Localization-Aware Hardcoded Strings
+
+- **When localization is enabled** (presence of `l10n.yaml`, `.arb` files, or `AppLocalizations` usage): hardcoded strings are treated as errors and the report lists the first few findings (❌).
+- **When localization is not detected**: only the total count is shown as a caution (⚠️) without listing individual strings to reduce noise in non-localized projects.
 
 - **Proper Order**: Constructors → Fields → Getters/Setters → Methods → Lifecycle Methods
 - **Lifecycle Methods**: `initState`, `dispose`, `didChangeDependencies`, `didUpdateWidget`, `build`

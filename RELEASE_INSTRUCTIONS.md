@@ -46,6 +46,7 @@ Add a new entry to `CHANGELOG.md` at the top (under the unreleased section):
 ```
 
 **Note**: If adding global executable support, include:
+
 ```markdown
 - 🛠️ Global CLI executable support via `executables` configuration
 - 📦 Users can now install fcheck globally: `dart pub global activate fcheck`
@@ -63,6 +64,7 @@ Run the automated publishing script:
 ```
 
 The script will:
+
 - ✅ Verify you're in the correct directory
 - ✅ Check that publish_to is not set to 'none'
 - ✅ Run all tests
@@ -83,13 +85,16 @@ After successful publication:
 ## Troubleshooting
 
 **If publish fails:**
+
 - Check that all tests pass: `dart test`
 - Ensure version number is unique and follows semantic versioning
 - Verify you have publish permissions for the package
 - Check that `publish_to` is not set to 'none' in pubspec.yaml
 
 **If you need to unpublish:**
+
 ```bash
 dart pub unpublish fcheck --version <version>
 ```
+
 Note: You can only unpublish within 7 days of publication.</content>
