@@ -60,7 +60,7 @@ class TestClass {
       expect(result.stdout, contains('Analyzing project at'));
       expect(result.stdout, contains(tempDir.path));
       expect(result.stdout, contains('fCheck'));
-      expect(result.stdout, contains('Dart Files    : 1'));
+      expect(result.stdout, contains('Dart Files       : 1'));
       expect(result.stdout, contains(tempDir.path));
     });
 
@@ -184,6 +184,7 @@ class SecondClass {
 void main() {
   print("This is hardcoded");
   print("Another hardcoded string");
+  print(42);
 }
 ''');
 
@@ -197,6 +198,7 @@ void main() {
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('⚠️'));
       expect(result.stdout, contains('potential hardcoded strings detected'));
+      expect(result.stdout, contains('magic numbers detected'));
     });
 
     test('explicit input option should win over positional argument', () async {
@@ -267,6 +269,7 @@ void main() {
       expect(graph.keys.any((k) => k.endsWith('a.dart')), isTrue);
       final aKey = graph.keys.firstWhere((k) => k.endsWith('a.dart'));
       expect(graph[aKey], contains(contains('b.dart')));
+      expect(json['magicNumbers'], isA<List<dynamic>>());
     });
   });
 }

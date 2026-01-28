@@ -28,6 +28,7 @@ import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 import 'src/hardcoded_strings/hardcoded_string_analyzer.dart';
 import 'src/layers/layers_analyzer.dart';
+import 'src/magic_numbers/magic_number_analyzer.dart';
 import 'src/sort/sort.dart';
 import 'src/metrics/project_metrics.dart';
 import 'src/models/file_utils.dart';
@@ -113,6 +114,13 @@ class AnalyzeFolder {
       excludePatterns: excludePatterns,
     );
 
+    // Analyze for magic numbers
+    final magicNumberAnalyzer = MagicNumberAnalyzer();
+    final magicNumberIssues = magicNumberAnalyzer.analyzeDirectory(
+      projectDir,
+      excludePatterns: excludePatterns,
+    );
+
     // Analyze for source sorting issues
     final sourceSortAnalyzer = SourceSortAnalyzer();
     final sourceSortIssues = sourceSortAnalyzer.analyzeDirectory(
@@ -145,6 +153,7 @@ class AnalyzeFolder {
       totalCommentLines: totalComments,
       fileMetrics: fileMetricsList,
       hardcodedStringIssues: hardcodedStringIssues,
+      magicNumberIssues: magicNumberIssues,
       sourceSortIssues: sourceSortIssues,
       layersIssues: layersResult.issues,
       layersEdgeCount: layersResult.edgeCount,

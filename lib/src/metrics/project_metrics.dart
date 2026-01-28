@@ -1,6 +1,7 @@
 import 'package:fcheck/src/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/layers/layers_issue.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
+import 'package:fcheck/src/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/sort/sort.dart';
 
 /// Represents the overall quality metrics for a Flutter/Dart project.
@@ -29,6 +30,9 @@ class ProjectMetrics {
 
   /// List of hardcoded string issues found in the project.
   final List<HardcodedStringIssue> hardcodedStringIssues;
+
+  /// List of detected magic number literals across the project.
+  final List<MagicNumberIssue> magicNumberIssues;
 
   /// List of source sorting issues found in the project.
   final List<SourceSortIssue> sourceSortIssues;
@@ -69,6 +73,7 @@ class ProjectMetrics {
     required this.totalCommentLines,
     required this.fileMetrics,
     required this.hardcodedStringIssues,
+    required this.magicNumberIssues,
     required this.sourceSortIssues,
     required this.layersIssues,
     required this.layersEdgeCount,
@@ -91,6 +96,8 @@ class ProjectMetrics {
           'linesOfCode': totalLinesOfCode,
           'commentLines': totalCommentLines,
           'commentRatio': commentRatio,
+          'hardcodedStrings': hardcodedStringIssues.length,
+          'magicNumbers': magicNumberIssues.length,
         },
         'layers': {
           'count': layersCount,
@@ -101,6 +108,7 @@ class ProjectMetrics {
         'files': fileMetrics.map((m) => m.toJson()).toList(),
         'hardcodedStrings':
             hardcodedStringIssues.map((i) => i.toJson()).toList(),
+        'magicNumbers': magicNumberIssues.map((i) => i.toJson()).toList(),
         'sourceSorting': sourceSortIssues.map((i) => i.toJson()).toList(),
         'localization': {'usesLocalization': usesLocalization},
       };
@@ -129,18 +137,20 @@ class ProjectMetrics {
     final bannerVersion =
         (toolVersion != null && toolVersion.isNotEmpty) ? ' v$toolVersion' : '';
     print('↓ -------- fCheck$bannerVersion -------- ↓');
-    print('Project       : $projectName (version: $version)');
-    print('Folders       : $totalFolders');
-    print('Files         : $totalFiles');
-    print('Dart Files    : $totalDartFiles');
+    print('Project          : $projectName (version: $version)');
+    print('Folders          : $totalFolders');
+    print('Files            : $totalFiles');
+    print('Dart Files       : $totalDartFiles');
     if (excludedFilesCount > 0) {
-      print('Excluded Files: $excludedFilesCount');
+      print('Excluded Files   : $excludedFilesCount');
     }
-    print('Lines of Code : $totalLinesOfCode');
-    print('Comment Lines : $totalCommentLines');
-    print('Comment Ratio : ${(commentRatio * 100).toStringAsFixed(2)}%');
-    print('Layers        : $layersCount');
-    print('Dependencies  : $layersEdgeCount');
+    print('Lines of Code    : $totalLinesOfCode');
+    print('Comment Lines    : $totalCommentLines');
+    print('Comment Ratio    : ${(commentRatio * 100).toStringAsFixed(2)}%');
+    print('Hardcoded Strings: ${hardcodedStringIssues.length}');
+    print('Magic Numbers    : ${magicNumberIssues.length}');
+    print('Layers           : $layersCount');
+    print('Dependencies     : $layersEdgeCount');
 
     final nonCompliant =
         fileMetrics.where((m) => !m.isOneClassPerFileCompliant).toList();
@@ -171,6 +181,20 @@ class ProjectMetrics {
       final firstFile = hardcodedStringIssues.first.filePath.split('/').last;
       print(
           '⚠️ ${hardcodedStringIssues.length} potential hardcoded strings detected (project not localized; showing count only). Example file: $firstFile');
+    }
+
+    print('');
+
+    if (magicNumberIssues.isEmpty) {
+      print('✅ No magic numbers detected.');
+    } else {
+      print('⚠️ ${magicNumberIssues.length} magic numbers detected:');
+      for (var issue in magicNumberIssues.take(10)) {
+        print('  - $issue');
+      }
+      if (magicNumberIssues.length > 10) {
+        print('  ... and ${magicNumberIssues.length - 10} more');
+      }
     }
 
     print('');

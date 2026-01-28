@@ -26,6 +26,7 @@ void main() {
       expect(metrics.totalCommentLines, equals(0));
       expect(metrics.fileMetrics, isEmpty);
       expect(metrics.hardcodedStringIssues, isEmpty);
+      expect(metrics.magicNumberIssues, isEmpty);
       expect(metrics.sourceSortIssues, isEmpty);
     });
 
@@ -74,6 +75,19 @@ void main() {
         metrics.hardcodedStringIssues[0].value,
         equals('This is a hardcoded string'),
       );
+    });
+
+    test('should detect magic numbers in analyzed files', () {
+      File('${tempDir.path}/magic.dart').writeAsStringSync('''
+void main() {
+  print(7);
+  const skipValue = 5;
+}
+''');
+
+      final metrics = analyzer.analyze();
+      expect(metrics.magicNumberIssues.length, equals(1));
+      expect(metrics.magicNumberIssues.first.value, equals('7'));
     });
 
     test('should analyze single file correctly', () {

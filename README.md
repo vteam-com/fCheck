@@ -9,6 +9,7 @@ A command-line tool for analyzing the quality of Flutter and Dart projects. It p
 - ✅ **Code Quality Checks**: Validates compliance with "one class per file" rule
 - 🎯 **StatefulWidget Support**: Special handling for Flutter StatefulWidget classes
 - 🔍 **Hardcoded String Detection**: Flags user-facing strings; treated as errors when localization is enabled, otherwise shown as cautionary counts
+- 🧮 **Magic Number Detection**: Highlights numeric literals that should be expressed as named constants to make intent clearer
 - 🔧 **Source Code Sorting**: Ensures Flutter class members are properly organized
 - 📁 **Recursive Analysis**: Scans entire project directory trees
 - 🌐 **Multiple Diagram Outputs**: Generate SVG, Mermaid, PlantUML, and folder/hierarchical views of dependency graphs
