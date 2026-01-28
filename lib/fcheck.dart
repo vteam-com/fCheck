@@ -180,6 +180,7 @@ class AnalyzeFolder {
     final lines = content.split('\n');
     int loc = lines.length;
     int commentLines = _countCommentLines(unit, lines);
+    final ignoreOneClassPerFile = _hasIgnoreOneClassPerFileDirective(content);
 
     return FileMetrics(
       path: file.path,
@@ -187,6 +188,7 @@ class AnalyzeFolder {
       commentLines: commentLines,
       classCount: visitor.classCount,
       isStatefulWidget: visitor.hasStatefulWidget,
+      ignoreOneClassPerFile: ignoreOneClassPerFile,
     );
   }
 
@@ -259,6 +261,67 @@ class AnalyzeFolder {
       }
     }
     return count;
+  }
+
+  /// Checks for a top-of-file directive to ignore the "one class per file" rule.
+  ///
+  /// The directive must appear in the leading comment block(s) at the top of
+  /// the file (before any code). Example:
+  /// ```dart
+  /// // fcheck: ignore-one-class-per-file
+  /// ```
+  bool _hasIgnoreOneClassPerFileDirective(String content) {
+    final directive = RegExp(
+      r'\bfcheck:\s*ignore[-_ ]*one[-_ ]*class[-_ ]*per[-_ ]*file\b',
+      caseSensitive: false,
+    );
+
+    final lines = content.split('\n');
+    final buffer = StringBuffer();
+    bool inBlockComment = false;
+
+    for (final line in lines) {
+      final trimmed = line.trimLeft();
+
+      if (inBlockComment) {
+        buffer.writeln(trimmed);
+        final endIndex = trimmed.indexOf('*/');
+        if (endIndex != -1) {
+          inBlockComment = false;
+          final after = trimmed.substring(endIndex + 2).trim();
+          if (after.isNotEmpty) {
+            break;
+          }
+        }
+        continue;
+      }
+
+      if (trimmed.isEmpty) {
+        continue;
+      }
+
+      if (trimmed.startsWith('//')) {
+        buffer.writeln(trimmed);
+        continue;
+      }
+
+      if (trimmed.startsWith('/*')) {
+        buffer.writeln(trimmed);
+        if (!trimmed.contains('*/')) {
+          inBlockComment = true;
+        } else {
+          final after = trimmed.split('*/').last.trim();
+          if (after.isNotEmpty) {
+            break;
+          }
+        }
+        continue;
+      }
+
+      break;
+    }
+
+    return directive.hasMatch(buffer.toString());
   }
 
   /// Heuristically detects whether the project uses Flutter localization.

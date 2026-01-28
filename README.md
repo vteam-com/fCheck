@@ -237,6 +237,12 @@ Comment Ratio: 12.70%
 - **Public Classes**: Maximum 1 public class per file (classes not starting with `_`)
 - **StatefulWidget Files**: Maximum 2 public classes per file (widget + state)
 - **Private Classes**: Unlimited (implementation details starting with `_`)
+- **Opt-out per file**: Add a top-of-file comment directive:
+
+```dart
+// fcheck: ignore-one-class-per-file
+```
+
 - **Violations**: Files with too many public classes are flagged
 
 ## Library Usage

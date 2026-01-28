@@ -21,6 +21,11 @@ class FileMetrics {
   /// while still being compliant with the "one class per file" rule.
   final bool isStatefulWidget;
 
+  /// Whether this file opts out of the "one class per file" rule.
+  ///
+  /// This is controlled via a top-of-file comment directive.
+  final bool ignoreOneClassPerFile;
+
   /// Creates a new [FileMetrics] instance.
   ///
   /// All parameters are required and represent the analysis results
@@ -31,6 +36,7 @@ class FileMetrics {
     required this.commentLines,
     required this.classCount,
     required this.isStatefulWidget,
+    this.ignoreOneClassPerFile = false,
   });
 
   /// Whether this file complies with the "one class per file" rule.
@@ -43,6 +49,9 @@ class FileMetrics {
   /// - Private classes: Unlimited (implementation details)
   /// - Returns `true` if compliant, `false` if violates the rule
   bool get isOneClassPerFileCompliant {
+    if (ignoreOneClassPerFile) {
+      return true;
+    }
     if (isStatefulWidget) {
       // StatefulWidget usually has 2 classes: the widget and the state.
       return classCount <= 2;
@@ -58,5 +67,6 @@ class FileMetrics {
         'classCount': classCount,
         'isStatefulWidget': isStatefulWidget,
         'isOneClassPerFileCompliant': isOneClassPerFileCompliant,
+        'ignoreOneClassPerFile': ignoreOneClassPerFile,
       };
 }

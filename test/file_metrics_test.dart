@@ -71,6 +71,19 @@ void main() {
       expect(metrics.isOneClassPerFileCompliant, isFalse);
     });
 
+    test('should be compliant when ignore directive is set', () {
+      final metrics = FileMetrics(
+        path: 'lib/legacy.dart',
+        linesOfCode: 120,
+        commentLines: 5,
+        classCount: 5,
+        isStatefulWidget: false,
+        ignoreOneClassPerFile: true,
+      );
+
+      expect(metrics.isOneClassPerFileCompliant, isTrue);
+    });
+
     test('should handle private classes correctly (only count public classes)',
         () {
       // This test demonstrates that classCount should only include public classes

@@ -153,6 +153,30 @@ class SecondClass {
       expect(result.stdout, contains('violate the "one class per file" rule'));
     });
 
+    test('should ignore class violations with directive', () async {
+      File('${tempDir.path}/ignored_violation.dart').writeAsStringSync('''
+// fcheck: ignore-one-class-per-file
+class FirstClass {
+  void method1() {}
+}
+
+class SecondClass {
+  void method2() {}
+}
+''');
+
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', '--input', tempDir.path],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout,
+          contains('✅ All files comply with the "one class per file" rule.'));
+    });
+
     test('should detect hardcoded strings', () async {
       // Create a file with hardcoded strings
       File('${tempDir.path}/strings.dart').writeAsStringSync('''

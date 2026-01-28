@@ -443,11 +443,11 @@ layers_visitor.dart</title>
 <g class="hierarchicalBadge">
 <circle cx="424.0" cy="814.0" r="7.0" fill="#007bff" opacity="0.85"/>
 <text x="424.0" y="816.0">7</text>
-<title>fcheck.dart
-export_mermaid.dart
+<title>export_mermaid.dart
 export_plantuml.dart
 export_svg.dart
 export_svg_folders.dart
+fcheck.dart
 graph_format_utils.dart
 layers_analyzer.dart</title>
 </g>
@@ -587,11 +587,11 @@ sort.dart</title>
 <g class="hierarchicalBadge">
 <circle cx="488.0" cy="108.0" r="7.0" fill="#28a745" opacity="0.85"/>
 <text x="488.0" y="110.0">6</text>
-<title>fcheck.dart
-export_mermaid.dart
+<title>export_mermaid.dart
 export_plantuml.dart
 export_svg.dart
 export_svg_folders.dart
+fcheck.dart
 version.dart</title>
 </g>
 <text x="72.0" y="102.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">fcheck.dart</text>
