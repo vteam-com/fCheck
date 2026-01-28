@@ -1,6 +1,6 @@
 name: fcheck
 description: A CLI tool for analyzing Flutter and Dart code quality, checking project metrics, comment ratios, class organization, hardcoded strings, and source sorting validation.
-version: 0.5.0
+version: 0.5.1
 repository: https://github.com/vteam-com/fCheck.git
 
 executables:
@@ -17,8 +17,5 @@ dependencies:
   yaml: ^3.1.2
 
 dev_dependencies:
-  build: any
-  build_runner: any
-  pubspec_parse: any
   test: ^1.29.0
   lints: ^6.0.0

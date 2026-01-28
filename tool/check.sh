@@ -13,7 +13,7 @@ echo --- Pub Outdated
 flutter pub outdated
 
 echo --- Extract version
-dart run build_runner build
+./tool/generate_version.sh
 
 echo --- Format sources
 dart format . | sed 's/^/    /'
