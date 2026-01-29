@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="748.0" height="1804.0" viewBox="0 0 748.0 1804.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+<svg width="754.0" height="1832.0" viewBox="0 0 754.0 1832.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
 <defs>
   <filter id="hierarchicalShadow" x="-20%" y="-20%" width="140%" height="140%">
     <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
@@ -49,638 +49,477 @@
   g.folderTitleLayer { pointer-events: none; isolation: isolate; }
 </style>
 <rect width="100%" height="100%" fill="#f8f9fa"/>
-<path d="M 75.0 931.0 C 84.0 931.0, 67.0 931.0, 76.0 931.0" class="hierarchicalEdge"/>
+<path d="M 75.0 945.0 C 84.0 945.0, 67.0 945.0, 76.0 945.0" class="hierarchicalEdge"/>
 <title>. → .. (parent-child)</title>
-<path d="M 109.0 941.0 C 118.0 941.0, 101.0 941.0, 110.0 941.0" class="hierarchicalEdge"/>
+<path d="M 109.0 955.0 C 118.0 955.0, 101.0 955.0, 110.0 955.0" class="hierarchicalEdge"/>
 <title>.. → lib (parent-child)</title>
-<path d="M 143.0 970.0 C 152.0 970.0, 135.0 970.0, 144.0 970.0" class="hierarchicalEdge"/>
+<path d="M 143.0 984.0 C 152.0 984.0, 135.0 984.0, 144.0 984.0" class="hierarchicalEdge"/>
 <title>lib → src (parent-child)</title>
-<path d="M 177.0 449.0 C 186.0 449.0, 169.0 449.0, 178.0 449.0" class="hierarchicalEdge"/>
+<path d="M 177.0 463.0 C 186.0 463.0, 169.0 463.0, 178.0 463.0" class="hierarchicalEdge"/>
 <title>src → graphs (parent-child)</title>
-<path d="M 177.0 1539.0 C 186.0 1539.0, 169.0 1539.0, 178.0 1539.0" class="hierarchicalEdge"/>
+<path d="M 177.0 1567.0 C 186.0 1567.0, 169.0 1567.0, 178.0 1567.0" class="hierarchicalEdge"/>
 <title>src → models (parent-child)</title>
-<path d="M 177.0 827.0 C 186.0 827.0, 169.0 827.0, 178.0 827.0" class="hierarchicalEdge"/>
+<path d="M 177.0 855.0 C 186.0 855.0, 169.0 855.0, 178.0 855.0" class="hierarchicalEdge"/>
 <title>src → layers (parent-child)</title>
-<path d="M 177.0 652.0 C 186.0 652.0, 169.0 652.0, 178.0 652.0" class="hierarchicalEdge"/>
+<path d="M 177.0 680.0 C 186.0 680.0, 169.0 680.0, 178.0 680.0" class="hierarchicalEdge"/>
 <title>src → metrics (parent-child)</title>
-<path d="M 177.0 1005.0 C 186.0 1005.0, 169.0 1005.0, 178.0 1005.0" class="hierarchicalEdge"/>
+<path d="M 177.0 1033.0 C 186.0 1033.0, 169.0 1033.0, 178.0 1033.0" class="hierarchicalEdge"/>
 <title>src → hardcoded_strings (parent-child)</title>
-<path d="M 177.0 1169.0 C 186.0 1169.0, 169.0 1169.0, 178.0 1169.0" class="hierarchicalEdge"/>
+<path d="M 177.0 1197.0 C 186.0 1197.0, 169.0 1197.0, 178.0 1197.0" class="hierarchicalEdge"/>
 <title>src → magic_numbers (parent-child)</title>
-<path d="M 177.0 1347.0 C 186.0 1347.0, 169.0 1347.0, 178.0 1347.0" class="hierarchicalEdge"/>
+<path d="M 177.0 1375.0 C 186.0 1375.0, 169.0 1375.0, 178.0 1375.0" class="hierarchicalEdge"/>
 <title>src → sort (parent-child)</title>
 <g class="folderLayer">
-<rect x="50.0" y="50.0" width="460.0" height="1704.0" rx="12" ry="12" class="hierarchicalBackground"/>
+<rect x="50.0" y="50.0" width="460.0" height="1732.0" rx="12" ry="12" class="hierarchicalBackground"/>
 </g>
 <g class="folderLayer">
-<rect x="84.0" y="140.0" width="410.0" height="1582.0" rx="12" ry="12" class="hierarchicalBackground"/>
+<rect x="84.0" y="140.0" width="410.0" height="1610.0" rx="12" ry="12" class="hierarchicalBackground"/>
 </g>
 <g class="folderLayer">
-<rect x="118.0" y="192.0" width="360.0" height="1498.0" rx="12" ry="12" class="hierarchicalBackground"/>
+<rect x="118.0" y="192.0" width="360.0" height="1526.0" rx="12" ry="12" class="hierarchicalBackground"/>
 </g>
 <g class="folderLayer">
-<rect x="152.0" y="282.0" width="310.0" height="1376.0" rx="12" ry="12" class="hierarchicalBackground"/>
+<rect x="152.0" y="282.0" width="310.0" height="1404.0" rx="12" ry="12" class="hierarchicalBackground"/>
 </g>
 <g class="folderLayer">
-<rect x="186.0" y="334.0" width="260.0" height="230.0" rx="12" ry="12" class="hierarchicalBackground"/>
+<rect x="186.0" y="334.0" width="260.0" height="258.0" rx="12" ry="12" class="hierarchicalBackground"/>
 </g>
 <g class="folderLayer">
-<rect x="186.0" y="1452.0" width="260.0" height="174.0" rx="12" ry="12" class="hierarchicalBackground"/>
+<rect x="186.0" y="1480.0" width="260.0" height="174.0" rx="12" ry="12" class="hierarchicalBackground"/>
 </g>
 <g class="folderLayer">
-<rect x="186.0" y="740.0" width="260.0" height="174.0" rx="12" ry="12" class="hierarchicalBackground"/>
+<rect x="186.0" y="768.0" width="260.0" height="174.0" rx="12" ry="12" class="hierarchicalBackground"/>
 </g>
 <g class="folderLayer">
-<rect x="186.0" y="582.0" width="260.0" height="140.0" rx="12" ry="12" class="hierarchicalBackground"/>
+<rect x="186.0" y="610.0" width="260.0" height="140.0" rx="12" ry="12" class="hierarchicalBackground"/>
 </g>
 <g class="folderLayer">
-<rect x="186.0" y="932.0" width="260.0" height="146.0" rx="12" ry="12" class="hierarchicalBackground"/>
+<rect x="186.0" y="960.0" width="260.0" height="146.0" rx="12" ry="12" class="hierarchicalBackground"/>
 </g>
 <g class="folderLayer">
-<rect x="186.0" y="1096.0" width="260.0" height="146.0" rx="12" ry="12" class="hierarchicalBackground"/>
+<rect x="186.0" y="1124.0" width="260.0" height="146.0" rx="12" ry="12" class="hierarchicalBackground"/>
 </g>
 <g class="folderLayer">
-<rect x="186.0" y="1260.0" width="260.0" height="174.0" rx="12" ry="12" class="hierarchicalBackground"/>
+<rect x="186.0" y="1288.0" width="260.0" height="174.0" rx="12" ry="12" class="hierarchicalBackground"/>
 </g>
-<path d="M 50.0 72.0 H 28.0 Q 18.0 72.0 18.0 82.0 V 328.0 Q 18.0 338.0 28.0 338.0 H 186.0" class="dependencyEdge"/>
+<path d="M 56.0 74.0 H 34.0 Q 24.0 74.0 24.0 84.0 V 337.0 Q 24.0 347.0 34.0 347.0 H 196.0" class="dependencyEdge"/>
 <title>. → ../lib/src/graphs (folder dependency)</title>
-<path d="M 50.0 72.0 H 26.0 Q 16.0 72.0 16.0 82.0 V 186.0 Q 16.0 196.0 26.0 196.0 H 118.0" class="dependencyEdge"/>
+<path d="M 56.0 74.0 H 32.0 Q 22.0 74.0 22.0 84.0 V 195.0 Q 22.0 205.0 32.0 205.0 H 128.0" class="dependencyEdge"/>
 <title>. → ../lib (folder dependency)</title>
-<path d="M 50.0 72.0 H 24.0 Q 14.0 72.0 14.0 82.0 V 1446.0 Q 14.0 1456.0 24.0 1456.0 H 186.0" class="dependencyEdge"/>
+<path d="M 56.0 74.0 H 30.0 Q 20.0 74.0 20.0 84.0 V 1483.0 Q 20.0 1493.0 30.0 1493.0 H 196.0" class="dependencyEdge"/>
 <title>. → ../lib/src/models (folder dependency)</title>
-<path d="M 118.0 214.0 H 90.0 Q 80.0 214.0 80.0 224.0 V 734.0 Q 80.0 744.0 90.0 744.0 H 186.0" class="dependencyEdge"/>
+<path d="M 124.0 216.0 H 96.0 Q 86.0 216.0 86.0 226.0 V 771.0 Q 86.0 781.0 96.0 781.0 H 196.0" class="dependencyEdge"/>
 <title>../lib → ../lib/src/layers (folder dependency)</title>
-<path d="M 118.0 214.0 H 88.0 Q 78.0 214.0 78.0 224.0 V 576.0 Q 78.0 586.0 88.0 586.0 H 186.0" class="dependencyEdge"/>
+<path d="M 124.0 216.0 H 94.0 Q 84.0 216.0 84.0 226.0 V 613.0 Q 84.0 623.0 94.0 623.0 H 196.0" class="dependencyEdge"/>
 <title>../lib → ../lib/src/metrics (folder dependency)</title>
-<path d="M 118.0 214.0 H 86.0 Q 76.0 214.0 76.0 224.0 V 926.0 Q 76.0 936.0 86.0 936.0 H 186.0" class="dependencyEdge"/>
+<path d="M 124.0 216.0 H 92.0 Q 82.0 216.0 82.0 226.0 V 963.0 Q 82.0 973.0 92.0 973.0 H 196.0" class="dependencyEdge"/>
 <title>../lib → ../lib/src/hardcoded_strings (folder dependency)</title>
-<path d="M 118.0 214.0 H 84.0 Q 74.0 214.0 74.0 224.0 V 1090.0 Q 74.0 1100.0 84.0 1100.0 H 186.0" class="dependencyEdge"/>
+<path d="M 124.0 216.0 H 90.0 Q 80.0 216.0 80.0 226.0 V 1127.0 Q 80.0 1137.0 90.0 1137.0 H 196.0" class="dependencyEdge"/>
 <title>../lib → ../lib/src/magic_numbers (folder dependency)</title>
-<path d="M 118.0 214.0 H 82.0 Q 72.0 214.0 72.0 224.0 V 1254.0 Q 72.0 1264.0 82.0 1264.0 H 186.0" class="dependencyEdge"/>
+<path d="M 124.0 216.0 H 88.0 Q 78.0 216.0 78.0 226.0 V 1291.0 Q 78.0 1301.0 88.0 1301.0 H 196.0" class="dependencyEdge"/>
 <title>../lib → ../lib/src/sort (folder dependency)</title>
-<path d="M 118.0 214.0 H 80.0 Q 70.0 214.0 70.0 224.0 V 1446.0 Q 70.0 1456.0 80.0 1456.0 H 186.0" class="dependencyEdge"/>
+<path d="M 124.0 216.0 H 86.0 Q 76.0 216.0 76.0 226.0 V 1483.0 Q 76.0 1493.0 86.0 1493.0 H 196.0" class="dependencyEdge"/>
 <title>../lib → ../lib/src/models (folder dependency)</title>
-<path d="M 186.0 604.0 H 146.0 Q 136.0 604.0 136.0 614.0 V 926.0 Q 136.0 936.0 146.0 936.0 H 186.0" class="dependencyEdge"/>
+<path d="M 192.0 634.0 H 152.0 Q 142.0 634.0 142.0 644.0 V 963.0 Q 142.0 973.0 152.0 973.0 H 196.0" class="dependencyEdge"/>
 <title>../lib/src/metrics → ../lib/src/hardcoded_strings (folder dependency)</title>
-<path d="M 186.0 604.0 H 144.0 Q 134.0 604.0 134.0 614.0 V 734.0 Q 134.0 744.0 144.0 744.0 H 186.0" class="dependencyEdge"/>
+<path d="M 192.0 634.0 H 150.0 Q 140.0 634.0 140.0 644.0 V 771.0 Q 140.0 781.0 150.0 781.0 H 196.0" class="dependencyEdge"/>
 <title>../lib/src/metrics → ../lib/src/layers (folder dependency)</title>
-<path d="M 186.0 604.0 H 142.0 Q 132.0 604.0 132.0 614.0 V 1090.0 Q 132.0 1100.0 142.0 1100.0 H 186.0" class="dependencyEdge"/>
+<path d="M 192.0 634.0 H 148.0 Q 138.0 634.0 138.0 644.0 V 1127.0 Q 138.0 1137.0 148.0 1137.0 H 196.0" class="dependencyEdge"/>
 <title>../lib/src/metrics → ../lib/src/magic_numbers (folder dependency)</title>
-<path d="M 186.0 604.0 H 140.0 Q 130.0 604.0 130.0 614.0 V 1254.0 Q 130.0 1264.0 140.0 1264.0 H 186.0" class="dependencyEdge"/>
+<path d="M 192.0 634.0 H 146.0 Q 136.0 634.0 136.0 644.0 V 1291.0 Q 136.0 1301.0 146.0 1301.0 H 196.0" class="dependencyEdge"/>
 <title>../lib/src/metrics → ../lib/src/sort (folder dependency)</title>
-<path d="M 186.0 954.0 H 138.0 Q 128.0 954.0 128.0 964.0 V 1446.0 Q 128.0 1456.0 138.0 1456.0 H 186.0" class="dependencyEdge"/>
+<path d="M 192.0 984.0 H 144.0 Q 134.0 984.0 134.0 994.0 V 1483.0 Q 134.0 1493.0 144.0 1493.0 H 196.0" class="dependencyEdge"/>
 <title>../lib/src/hardcoded_strings → ../lib/src/models (folder dependency)</title>
-<path d="M 186.0 762.0 H 136.0 Q 126.0 762.0 126.0 772.0 V 1446.0 Q 126.0 1456.0 136.0 1456.0 H 186.0" class="dependencyEdge"/>
+<path d="M 192.0 792.0 H 142.0 Q 132.0 792.0 132.0 802.0 V 1483.0 Q 132.0 1493.0 142.0 1493.0 H 196.0" class="dependencyEdge"/>
 <title>../lib/src/layers → ../lib/src/models (folder dependency)</title>
-<path d="M 186.0 1282.0 H 134.0 Q 124.0 1282.0 124.0 1292.0 V 1446.0 Q 124.0 1456.0 134.0 1456.0 H 186.0" class="dependencyEdge"/>
+<path d="M 192.0 1312.0 H 140.0 Q 130.0 1312.0 130.0 1322.0 V 1483.0 Q 130.0 1493.0 140.0 1493.0 H 196.0" class="dependencyEdge"/>
 <title>../lib/src/sort → ../lib/src/models (folder dependency)</title>
-<path d="M 186.0 1118.0 H 132.0 Q 122.0 1118.0 122.0 1128.0 V 1446.0 Q 122.0 1456.0 132.0 1456.0 H 186.0" class="dependencyEdge"/>
+<path d="M 192.0 1148.0 H 138.0 Q 128.0 1148.0 128.0 1158.0 V 1483.0 Q 128.0 1493.0 138.0 1493.0 H 196.0" class="dependencyEdge"/>
 <title>../lib/src/magic_numbers → ../lib/src/models (folder dependency)</title>
-<path d="M 186.0 356.0 H 130.0 Q 120.0 356.0 120.0 366.0 V 734.0 Q 120.0 744.0 130.0 744.0 H 186.0" class="dependencyEdge"/>
+<path d="M 192.0 358.0 H 136.0 Q 126.0 358.0 126.0 368.0 V 771.0 Q 126.0 781.0 136.0 781.0 H 196.0" class="dependencyEdge"/>
 <title>../lib/src/graphs → ../lib/src/layers (folder dependency)</title>
-<path d="M 186.0 356.0 H 128.0 Q 118.0 356.0 118.0 366.0 V 1446.0 Q 118.0 1456.0 128.0 1456.0 H 186.0" class="dependencyEdge"/>
+<path d="M 192.0 358.0 H 134.0 Q 124.0 358.0 124.0 368.0 V 1483.0 Q 124.0 1493.0 134.0 1493.0 H 196.0" class="dependencyEdge"/>
 <title>../lib/src/graphs → ../lib/src/models (folder dependency)</title>
-<g class="hierarchicalBadge">
-<circle cx="50.0" cy="72.0" r="8.0" fill="#28a745" opacity="0.85"/>
-<text x="50.0" y="74.0">6</text>
-<title>graphs
+<g class="outgoingBadge">
+  <path d="M 50.0,74.0 L 62.0,67.0 Q 65.0,67.0 65.0,70.0 L 65.0,78.0 Q 65.0,81.0 62.0,81.0 Z" fill="#10b981"/>
+  <text x="61.0" y="77.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">6</text><title>graphs
 lib
-models</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="118.0" cy="196.0" r="8.0" fill="#007bff" opacity="0.85"/>
-<text x="118.0" y="198.0">1</text>
-<title>.</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="118.0" cy="214.0" r="8.0" fill="#28a745" opacity="0.85"/>
-<text x="118.0" y="216.0">8</text>
-<title>hardcoded_strings
+models</title></g><g class="incomingBadge">
+  <path d="M 134.0,205.0 L 122.0,198.0 Q 119.0,198.0 119.0,201.0 L 119.0,209.0 Q 119.0,212.0 122.0,212.0 Z" fill="#3b82f6"/>
+  <text x="123.0" y="208.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>.</title></g><g class="outgoingBadge">
+  <path d="M 118.0,216.0 L 130.0,209.0 Q 133.0,209.0 133.0,212.0 L 133.0,220.0 Q 133.0,223.0 130.0,223.0 Z" fill="#10b981"/>
+  <text x="129.0" y="219.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">8</text><title>hardcoded_strings
 layers
 magic_numbers
 metrics
 models
-sort</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="186.0" cy="338.0" r="8.0" fill="#007bff" opacity="0.85"/>
-<text x="186.0" y="340.0">4</text>
-<title>.</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="186.0" cy="356.0" r="8.0" fill="#28a745" opacity="0.85"/>
-<text x="186.0" y="358.0">6</text>
-<title>layers
-models</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="186.0" cy="1456.0" r="8.0" fill="#007bff" opacity="0.85"/>
-<text x="186.0" y="1458.0">9</text>
-<title>.
+sort</title></g><g class="incomingBadge">
+  <path d="M 202.0,347.0 L 190.0,340.0 Q 187.0,340.0 187.0,343.0 L 187.0,351.0 Q 187.0,354.0 190.0,354.0 Z" fill="#3b82f6"/>
+  <text x="191.0" y="350.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">4</text><title>.</title></g><g class="outgoingBadge">
+  <path d="M 186.0,358.0 L 198.0,351.0 Q 201.0,351.0 201.0,354.0 L 201.0,362.0 Q 201.0,365.0 198.0,365.0 Z" fill="#10b981"/>
+  <text x="197.0" y="361.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">6</text><title>layers
+models</title></g><g class="incomingBadge">
+  <path d="M 202.0,1493.0 L 190.0,1486.0 Q 187.0,1486.0 187.0,1489.0 L 187.0,1497.0 Q 187.0,1500.0 190.0,1500.0 Z" fill="#3b82f6"/>
+  <text x="191.0" y="1496.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">9</text><title>.
 graphs
 hardcoded_strings
 layers
 lib
 magic_numbers
-sort</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="186.0" cy="744.0" r="8.0" fill="#007bff" opacity="0.85"/>
-<text x="186.0" y="746.0">8</text>
-<title>graphs
+sort</title></g><g class="incomingBadge">
+  <path d="M 202.0,781.0 L 190.0,774.0 Q 187.0,774.0 187.0,777.0 L 187.0,785.0 Q 187.0,788.0 190.0,788.0 Z" fill="#3b82f6"/>
+  <text x="191.0" y="784.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">8</text><title>graphs
 lib
-metrics</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="186.0" cy="762.0" r="8.0" fill="#28a745" opacity="0.85"/>
-<text x="186.0" y="764.0">1</text>
-<title>models</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="186.0" cy="586.0" r="8.0" fill="#007bff" opacity="0.85"/>
-<text x="186.0" y="588.0">2</text>
-<title>lib</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="186.0" cy="604.0" r="8.0" fill="#28a745" opacity="0.85"/>
-<text x="186.0" y="606.0">4</text>
-<title>hardcoded_strings
+metrics</title></g><g class="outgoingBadge">
+  <path d="M 186.0,792.0 L 198.0,785.0 Q 201.0,785.0 201.0,788.0 L 201.0,796.0 Q 201.0,799.0 198.0,799.0 Z" fill="#10b981"/>
+  <text x="197.0" y="795.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>models</title></g><g class="incomingBadge">
+  <path d="M 202.0,623.0 L 190.0,616.0 Q 187.0,616.0 187.0,619.0 L 187.0,627.0 Q 187.0,630.0 190.0,630.0 Z" fill="#3b82f6"/>
+  <text x="191.0" y="626.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>lib</title></g><g class="outgoingBadge">
+  <path d="M 186.0,634.0 L 198.0,627.0 Q 201.0,627.0 201.0,630.0 L 201.0,638.0 Q 201.0,641.0 198.0,641.0 Z" fill="#10b981"/>
+  <text x="197.0" y="637.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">4</text><title>hardcoded_strings
 layers
 magic_numbers
-sort</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="186.0" cy="936.0" r="8.0" fill="#007bff" opacity="0.85"/>
-<text x="186.0" y="938.0">2</text>
-<title>lib
-metrics</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="186.0" cy="954.0" r="8.0" fill="#28a745" opacity="0.85"/>
-<text x="186.0" y="956.0">1</text>
-<title>models</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="186.0" cy="1100.0" r="8.0" fill="#007bff" opacity="0.85"/>
-<text x="186.0" y="1102.0">2</text>
-<title>lib
-metrics</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="186.0" cy="1118.0" r="8.0" fill="#28a745" opacity="0.85"/>
-<text x="186.0" y="1120.0">1</text>
-<title>models</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="186.0" cy="1264.0" r="8.0" fill="#007bff" opacity="0.85"/>
-<text x="186.0" y="1266.0">2</text>
-<title>lib
-metrics</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="186.0" cy="1282.0" r="8.0" fill="#28a745" opacity="0.85"/>
-<text x="186.0" y="1284.0">3</text>
-<title>models</title>
-</g>
-<rect x="194.0" y="372.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
+sort</title></g><g class="incomingBadge">
+  <path d="M 202.0,973.0 L 190.0,966.0 Q 187.0,966.0 187.0,969.0 L 187.0,977.0 Q 187.0,980.0 190.0,980.0 Z" fill="#3b82f6"/>
+  <text x="191.0" y="976.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>lib
+metrics</title></g><g class="outgoingBadge">
+  <path d="M 186.0,984.0 L 198.0,977.0 Q 201.0,977.0 201.0,980.0 L 201.0,988.0 Q 201.0,991.0 198.0,991.0 Z" fill="#10b981"/>
+  <text x="197.0" y="987.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>models</title></g><g class="incomingBadge">
+  <path d="M 202.0,1137.0 L 190.0,1130.0 Q 187.0,1130.0 187.0,1133.0 L 187.0,1141.0 Q 187.0,1144.0 190.0,1144.0 Z" fill="#3b82f6"/>
+  <text x="191.0" y="1140.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>lib
+metrics</title></g><g class="outgoingBadge">
+  <path d="M 186.0,1148.0 L 198.0,1141.0 Q 201.0,1141.0 201.0,1144.0 L 201.0,1152.0 Q 201.0,1155.0 198.0,1155.0 Z" fill="#10b981"/>
+  <text x="197.0" y="1151.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>models</title></g><g class="incomingBadge">
+  <path d="M 202.0,1301.0 L 190.0,1294.0 Q 187.0,1294.0 187.0,1297.0 L 187.0,1305.0 Q 187.0,1308.0 190.0,1308.0 Z" fill="#3b82f6"/>
+  <text x="191.0" y="1304.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>lib
+metrics</title></g><g class="outgoingBadge">
+  <path d="M 186.0,1312.0 L 198.0,1305.0 Q 201.0,1305.0 201.0,1308.0 L 201.0,1316.0 Q 201.0,1319.0 198.0,1319.0 Z" fill="#10b981"/>
+  <text x="197.0" y="1315.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">3</text><title>models</title></g><rect x="194.0" y="372.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="400.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="428.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="456.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="484.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="512.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<rect x="194.0" y="1490.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
+<rect x="194.0" y="540.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="1518.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="1546.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="1574.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<rect x="194.0" y="778.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
+<rect x="194.0" y="1602.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="806.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="834.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="862.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<rect x="194.0" y="620.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
+<rect x="194.0" y="890.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="648.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<rect x="194.0" y="970.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
+<rect x="194.0" y="676.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="998.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="1026.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<rect x="194.0" y="1134.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
+<rect x="194.0" y="1054.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="1162.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="1190.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<rect x="194.0" y="1298.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
+<rect x="194.0" y="1218.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="1326.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="1354.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="194.0" y="1382.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
+<rect x="194.0" y="1410.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="126.0" y="230.0" width="344.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="58.0" y="88.0" width="444.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<path d="M 488.0 108.0 H 510.0 Q 516.0 108.0 516.0 114.0 V 374.0 Q 516.0 380.0 510.0 380.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 498.0 108.0 H 520.0 Q 526.0 108.0 526.0 114.0 V 375.0 Q 526.0 381.0 520.0 381.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>fcheck.dart → ../lib/src/graphs/export_mermaid.dart</title>
-<path d="M 488.0 108.0 H 511.0 Q 517.0 108.0 517.0 114.0 V 402.0 Q 517.0 408.0 511.0 408.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 498.0 108.0 H 521.0 Q 527.0 108.0 527.0 114.0 V 403.0 Q 527.0 409.0 521.0 409.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>fcheck.dart → ../lib/src/graphs/export_plantuml.dart</title>
-<path d="M 488.0 108.0 H 512.0 Q 518.0 108.0 518.0 114.0 V 458.0 Q 518.0 464.0 512.0 464.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 498.0 108.0 H 522.0 Q 528.0 108.0 528.0 114.0 V 459.0 Q 528.0 465.0 522.0 465.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>fcheck.dart → ../lib/src/graphs/export_svg.dart</title>
-<path d="M 488.0 108.0 H 513.0 Q 519.0 108.0 519.0 114.0 V 486.0 Q 519.0 492.0 513.0 492.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 498.0 108.0 H 523.0 Q 529.0 108.0 529.0 114.0 V 487.0 Q 529.0 493.0 523.0 493.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>fcheck.dart → ../lib/src/graphs/export_svg_folders.dart</title>
-<path d="M 488.0 108.0 H 514.0 Q 520.0 108.0 520.0 114.0 V 232.0 Q 520.0 238.0 514.0 238.0 H 456.0" class="dependencyEdge fileEdge"/>
+<path d="M 498.0 108.0 H 524.0 Q 530.0 108.0 530.0 114.0 V 233.0 Q 530.0 239.0 524.0 239.0 H 462.0" class="dependencyEdge fileEdge"/>
 <title>fcheck.dart → ../lib/fcheck.dart</title>
-<path d="M 488.0 108.0 H 515.0 Q 521.0 108.0 521.0 114.0 V 1576.0 Q 521.0 1582.0 515.0 1582.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 498.0 108.0 H 525.0 Q 531.0 108.0 531.0 114.0 V 1605.0 Q 531.0 1611.0 525.0 1611.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>fcheck.dart → ../lib/src/models/version.dart</title>
-<path d="M 456.0 250.0 H 484.0 Q 490.0 250.0 490.0 256.0 V 808.0 Q 490.0 814.0 484.0 814.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 466.0 250.0 H 494.0 Q 500.0 250.0 500.0 256.0 V 837.0 Q 500.0 843.0 494.0 843.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/fcheck.dart → ../lib/src/layers/layers_results.dart</title>
-<path d="M 456.0 250.0 H 485.0 Q 491.0 250.0 491.0 256.0 V 650.0 Q 491.0 656.0 485.0 656.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 466.0 250.0 H 495.0 Q 501.0 250.0 501.0 256.0 V 679.0 Q 501.0 685.0 495.0 685.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/fcheck.dart → ../lib/src/metrics/file_metrics.dart</title>
-<path d="M 456.0 250.0 H 486.0 Q 492.0 250.0 492.0 256.0 V 972.0 Q 492.0 978.0 486.0 978.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 466.0 250.0 H 496.0 Q 502.0 250.0 502.0 256.0 V 1001.0 Q 502.0 1007.0 496.0 1007.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/fcheck.dart → ../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart</title>
-<path d="M 456.0 250.0 H 487.0 Q 493.0 250.0 493.0 256.0 V 780.0 Q 493.0 786.0 487.0 786.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 466.0 250.0 H 497.0 Q 503.0 250.0 503.0 256.0 V 809.0 Q 503.0 815.0 497.0 815.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/fcheck.dart → ../lib/src/layers/layers_analyzer.dart</title>
-<path d="M 456.0 250.0 H 488.0 Q 494.0 250.0 494.0 256.0 V 1136.0 Q 494.0 1142.0 488.0 1142.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 466.0 250.0 H 498.0 Q 504.0 250.0 504.0 256.0 V 1165.0 Q 504.0 1171.0 498.0 1171.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/fcheck.dart → ../lib/src/magic_numbers/magic_number_analyzer.dart</title>
-<path d="M 456.0 250.0 H 489.0 Q 495.0 250.0 495.0 256.0 V 1300.0 Q 495.0 1306.0 489.0 1306.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 466.0 250.0 H 499.0 Q 505.0 250.0 505.0 256.0 V 1329.0 Q 505.0 1335.0 499.0 1335.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/fcheck.dart → ../lib/src/sort/sort.dart</title>
-<path d="M 456.0 250.0 H 490.0 Q 496.0 250.0 496.0 256.0 V 622.0 Q 496.0 628.0 490.0 628.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 466.0 250.0 H 500.0 Q 506.0 250.0 506.0 256.0 V 651.0 Q 506.0 657.0 500.0 657.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/fcheck.dart → ../lib/src/metrics/project_metrics.dart</title>
-<path d="M 456.0 250.0 H 491.0 Q 497.0 250.0 497.0 256.0 V 1492.0 Q 497.0 1498.0 491.0 1498.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 466.0 250.0 H 501.0 Q 507.0 250.0 507.0 256.0 V 1521.0 Q 507.0 1527.0 501.0 1527.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/fcheck.dart → ../lib/src/models/file_utils.dart</title>
-<path d="M 424.0 640.0 H 460.0 Q 466.0 640.0 466.0 646.0 V 1028.0 Q 466.0 1034.0 460.0 1034.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 668.0 H 470.0 Q 476.0 668.0 476.0 674.0 V 1057.0 Q 476.0 1063.0 470.0 1063.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/metrics/project_metrics.dart → ../lib/src/hardcoded_strings/hardcoded_string_issue.dart</title>
-<path d="M 424.0 640.0 H 461.0 Q 467.0 640.0 467.0 646.0 V 836.0 Q 467.0 842.0 461.0 842.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 668.0 H 471.0 Q 477.0 668.0 477.0 674.0 V 865.0 Q 477.0 871.0 471.0 871.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/metrics/project_metrics.dart → ../lib/src/layers/layers_issue.dart</title>
-<path d="M 424.0 640.0 H 462.0 Q 468.0 640.0 468.0 646.0 V 650.0 Q 468.0 656.0 462.0 656.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 668.0 H 472.0 Q 478.0 668.0 478.0 674.0 V 679.0 Q 478.0 685.0 472.0 685.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/metrics/project_metrics.dart → ../lib/src/metrics/file_metrics.dart</title>
-<path d="M 424.0 640.0 H 463.0 Q 469.0 640.0 469.0 646.0 V 1192.0 Q 469.0 1198.0 463.0 1198.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 668.0 H 473.0 Q 479.0 668.0 479.0 674.0 V 1221.0 Q 479.0 1227.0 473.0 1227.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/metrics/project_metrics.dart → ../lib/src/magic_numbers/magic_number_issue.dart</title>
-<path d="M 424.0 640.0 H 464.0 Q 470.0 640.0 470.0 646.0 V 1300.0 Q 470.0 1306.0 464.0 1306.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 668.0 H 474.0 Q 480.0 668.0 480.0 674.0 V 1329.0 Q 480.0 1335.0 474.0 1335.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/metrics/project_metrics.dart → ../lib/src/sort/sort.dart</title>
-<path d="M 424.0 1018.0 H 465.0 Q 471.0 1018.0 471.0 1024.0 V 1028.0 Q 471.0 1034.0 465.0 1034.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1046.0 H 475.0 Q 481.0 1046.0 481.0 1052.0 V 1057.0 Q 481.0 1063.0 475.0 1063.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/hardcoded_strings/hardcoded_string_visitor.dart → ../lib/src/hardcoded_strings/hardcoded_string_issue.dart</title>
-<path d="M 424.0 990.0 H 466.0 Q 472.0 990.0 472.0 996.0 V 1028.0 Q 472.0 1034.0 466.0 1034.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1018.0 H 476.0 Q 482.0 1018.0 482.0 1024.0 V 1057.0 Q 482.0 1063.0 476.0 1063.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart → ../lib/src/hardcoded_strings/hardcoded_string_issue.dart</title>
-<path d="M 424.0 990.0 H 467.0 Q 473.0 990.0 473.0 996.0 V 1000.0 Q 473.0 1006.0 467.0 1006.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1018.0 H 477.0 Q 483.0 1018.0 483.0 1024.0 V 1029.0 Q 483.0 1035.0 477.0 1035.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart → ../lib/src/hardcoded_strings/hardcoded_string_visitor.dart</title>
-<path d="M 424.0 990.0 H 468.0 Q 474.0 990.0 474.0 996.0 V 1492.0 Q 474.0 1498.0 468.0 1498.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1018.0 H 478.0 Q 484.0 1018.0 484.0 1024.0 V 1521.0 Q 484.0 1527.0 478.0 1527.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart → ../lib/src/models/file_utils.dart</title>
-<path d="M 424.0 826.0 H 469.0 Q 475.0 826.0 475.0 832.0 V 836.0 Q 475.0 842.0 469.0 842.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 854.0 H 479.0 Q 485.0 854.0 485.0 860.0 V 865.0 Q 485.0 871.0 479.0 871.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/layers/layers_results.dart → ../lib/src/layers/layers_issue.dart</title>
-<path d="M 424.0 798.0 H 470.0 Q 476.0 798.0 476.0 804.0 V 808.0 Q 476.0 814.0 470.0 814.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 826.0 H 480.0 Q 486.0 826.0 486.0 832.0 V 837.0 Q 486.0 843.0 480.0 843.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/layers/layers_analyzer.dart → ../lib/src/layers/layers_results.dart</title>
-<path d="M 424.0 798.0 H 471.0 Q 477.0 798.0 477.0 804.0 V 1492.0 Q 477.0 1498.0 471.0 1498.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 826.0 H 481.0 Q 487.0 826.0 487.0 832.0 V 1521.0 Q 487.0 1527.0 481.0 1527.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/layers/layers_analyzer.dart → ../lib/src/models/file_utils.dart</title>
-<path d="M 424.0 798.0 H 472.0 Q 478.0 798.0 478.0 804.0 V 836.0 Q 478.0 842.0 472.0 842.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 826.0 H 482.0 Q 488.0 826.0 488.0 832.0 V 865.0 Q 488.0 871.0 482.0 871.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/layers/layers_analyzer.dart → ../lib/src/layers/layers_issue.dart</title>
-<path d="M 424.0 798.0 H 473.0 Q 479.0 798.0 479.0 804.0 V 864.0 Q 479.0 870.0 473.0 870.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 826.0 H 483.0 Q 489.0 826.0 489.0 832.0 V 893.0 Q 489.0 899.0 483.0 899.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/layers/layers_analyzer.dart → ../lib/src/layers/layers_visitor.dart</title>
-<path d="M 424.0 1318.0 H 474.0 Q 480.0 1318.0 480.0 1324.0 V 1520.0 Q 480.0 1526.0 474.0 1526.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1346.0 H 484.0 Q 490.0 1346.0 490.0 1352.0 V 1549.0 Q 490.0 1555.0 484.0 1555.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/sort/sort.dart → ../lib/src/models/class_visitor.dart</title>
-<path d="M 424.0 1318.0 H 475.0 Q 481.0 1318.0 481.0 1324.0 V 1384.0 Q 481.0 1390.0 475.0 1390.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1346.0 H 485.0 Q 491.0 1346.0 491.0 1352.0 V 1413.0 Q 491.0 1419.0 485.0 1419.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/sort/sort.dart → ../lib/src/sort/sort_members.dart</title>
-<path d="M 424.0 1318.0 H 476.0 Q 482.0 1318.0 482.0 1324.0 V 1328.0 Q 482.0 1334.0 476.0 1334.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1346.0 H 486.0 Q 492.0 1346.0 492.0 1352.0 V 1357.0 Q 492.0 1363.0 486.0 1363.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/sort/sort.dart → ../lib/src/sort/sort_analyzer.dart</title>
-<path d="M 424.0 1318.0 H 477.0 Q 483.0 1318.0 483.0 1324.0 V 1356.0 Q 483.0 1362.0 477.0 1362.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1346.0 H 487.0 Q 493.0 1346.0 493.0 1352.0 V 1385.0 Q 493.0 1391.0 487.0 1391.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/sort/sort.dart → ../lib/src/sort/sort_issue.dart</title>
-<path d="M 424.0 1346.0 H 478.0 Q 484.0 1346.0 484.0 1352.0 V 1520.0 Q 484.0 1526.0 478.0 1526.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1374.0 H 488.0 Q 494.0 1374.0 494.0 1380.0 V 1549.0 Q 494.0 1555.0 488.0 1555.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/sort/sort_analyzer.dart → ../lib/src/models/class_visitor.dart</title>
-<path d="M 424.0 1346.0 H 479.0 Q 485.0 1346.0 485.0 1352.0 V 1384.0 Q 485.0 1390.0 479.0 1390.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1374.0 H 489.0 Q 495.0 1374.0 495.0 1380.0 V 1413.0 Q 495.0 1419.0 489.0 1419.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/sort/sort_analyzer.dart → ../lib/src/sort/sort_members.dart</title>
-<path d="M 424.0 1346.0 H 480.0 Q 486.0 1346.0 486.0 1352.0 V 1356.0 Q 486.0 1362.0 480.0 1362.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1374.0 H 490.0 Q 496.0 1374.0 496.0 1380.0 V 1385.0 Q 496.0 1391.0 490.0 1391.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/sort/sort_analyzer.dart → ../lib/src/sort/sort_issue.dart</title>
-<path d="M 424.0 1346.0 H 481.0 Q 487.0 1346.0 487.0 1352.0 V 1492.0 Q 487.0 1498.0 481.0 1498.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1374.0 H 491.0 Q 497.0 1374.0 497.0 1380.0 V 1521.0 Q 497.0 1527.0 491.0 1527.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/sort/sort_analyzer.dart → ../lib/src/models/file_utils.dart</title>
-<path d="M 424.0 1182.0 H 482.0 Q 488.0 1182.0 488.0 1188.0 V 1192.0 Q 488.0 1198.0 482.0 1198.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1210.0 H 492.0 Q 498.0 1210.0 498.0 1216.0 V 1221.0 Q 498.0 1227.0 492.0 1227.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/magic_numbers/magic_number_visitor.dart → ../lib/src/magic_numbers/magic_number_issue.dart</title>
-<path d="M 424.0 1154.0 H 483.0 Q 489.0 1154.0 489.0 1160.0 V 1192.0 Q 489.0 1198.0 483.0 1198.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1182.0 H 493.0 Q 499.0 1182.0 499.0 1188.0 V 1221.0 Q 499.0 1227.0 493.0 1227.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/magic_numbers/magic_number_analyzer.dart → ../lib/src/magic_numbers/magic_number_issue.dart</title>
-<path d="M 424.0 1154.0 H 484.0 Q 490.0 1154.0 490.0 1160.0 V 1164.0 Q 490.0 1170.0 484.0 1170.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1182.0 H 494.0 Q 500.0 1182.0 500.0 1188.0 V 1193.0 Q 500.0 1199.0 494.0 1199.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/magic_numbers/magic_number_analyzer.dart → ../lib/src/magic_numbers/magic_number_visitor.dart</title>
-<path d="M 424.0 1154.0 H 485.0 Q 491.0 1154.0 491.0 1160.0 V 1492.0 Q 491.0 1498.0 485.0 1498.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 1182.0 H 495.0 Q 501.0 1182.0 501.0 1188.0 V 1521.0 Q 501.0 1527.0 495.0 1527.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/magic_numbers/magic_number_analyzer.dart → ../lib/src/models/file_utils.dart</title>
-<path d="M 424.0 448.0 H 486.0 Q 492.0 448.0 492.0 454.0 V 808.0 Q 492.0 814.0 486.0 814.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 448.0 H 496.0 Q 502.0 448.0 502.0 454.0 V 837.0 Q 502.0 843.0 496.0 843.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/graphs/graph_format_utils.dart → ../lib/src/layers/layers_results.dart</title>
-<path d="M 424.0 420.0 H 487.0 Q 493.0 420.0 493.0 426.0 V 430.0 Q 493.0 436.0 487.0 436.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 532.0 H 497.0 Q 503.0 532.0 503.0 538.0 V 543.0 Q 503.0 549.0 497.0 549.0 H 430.0" class="dependencyEdge fileEdge"/>
+<title>../lib/src/graphs/svg_common.dart → ../lib/src/graphs/badge_model.dart</title>
+<path d="M 434.0 420.0 H 498.0 Q 504.0 420.0 504.0 426.0 V 431.0 Q 504.0 437.0 498.0 437.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/graphs/export_plantuml.dart → ../lib/src/graphs/graph_format_utils.dart</title>
-<path d="M 424.0 420.0 H 488.0 Q 494.0 420.0 494.0 426.0 V 808.0 Q 494.0 814.0 488.0 814.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 420.0 H 499.0 Q 505.0 420.0 505.0 426.0 V 837.0 Q 505.0 843.0 499.0 843.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/graphs/export_plantuml.dart → ../lib/src/layers/layers_results.dart</title>
-<path d="M 424.0 504.0 H 489.0 Q 495.0 504.0 495.0 510.0 V 808.0 Q 495.0 814.0 489.0 814.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 504.0 H 500.0 Q 506.0 504.0 506.0 510.0 V 837.0 Q 506.0 843.0 500.0 843.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/graphs/export_svg_folders.dart → ../lib/src/layers/layers_results.dart</title>
-<path d="M 424.0 504.0 H 490.0 Q 496.0 504.0 496.0 510.0 V 1548.0 Q 496.0 1554.0 490.0 1554.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 504.0 H 501.0 Q 507.0 504.0 507.0 510.0 V 1577.0 Q 507.0 1583.0 501.0 1583.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/graphs/export_svg_folders.dart → ../lib/src/models/rect.dart</title>
-<path d="M 424.0 504.0 H 491.0 Q 497.0 504.0 497.0 510.0 V 514.0 Q 497.0 520.0 491.0 520.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 504.0 H 502.0 Q 508.0 504.0 508.0 510.0 V 515.0 Q 508.0 521.0 502.0 521.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/graphs/export_svg_folders.dart → ../lib/src/graphs/svg_common.dart</title>
-<path d="M 424.0 476.0 H 492.0 Q 498.0 476.0 498.0 482.0 V 808.0 Q 498.0 814.0 492.0 814.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 504.0 H 503.0 Q 509.0 504.0 509.0 510.0 V 543.0 Q 509.0 549.0 503.0 549.0 H 430.0" class="dependencyEdge fileEdge"/>
+<title>../lib/src/graphs/export_svg_folders.dart → ../lib/src/graphs/badge_model.dart</title>
+<path d="M 434.0 476.0 H 504.0 Q 510.0 476.0 510.0 482.0 V 837.0 Q 510.0 843.0 504.0 843.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/graphs/export_svg.dart → ../lib/src/layers/layers_results.dart</title>
-<path d="M 424.0 476.0 H 493.0 Q 499.0 476.0 499.0 482.0 V 514.0 Q 499.0 520.0 493.0 520.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 476.0 H 505.0 Q 511.0 476.0 511.0 482.0 V 515.0 Q 511.0 521.0 505.0 521.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/graphs/export_svg.dart → ../lib/src/graphs/svg_common.dart</title>
-<path d="M 424.0 392.0 H 494.0 Q 500.0 392.0 500.0 398.0 V 430.0 Q 500.0 436.0 494.0 436.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 476.0 H 506.0 Q 512.0 476.0 512.0 482.0 V 543.0 Q 512.0 549.0 506.0 549.0 H 430.0" class="dependencyEdge fileEdge"/>
+<title>../lib/src/graphs/export_svg.dart → ../lib/src/graphs/badge_model.dart</title>
+<path d="M 434.0 392.0 H 507.0 Q 513.0 392.0 513.0 398.0 V 431.0 Q 513.0 437.0 507.0 437.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/graphs/export_mermaid.dart → ../lib/src/graphs/graph_format_utils.dart</title>
-<path d="M 424.0 392.0 H 495.0 Q 501.0 392.0 501.0 398.0 V 808.0 Q 501.0 814.0 495.0 814.0 H 424.0" class="dependencyEdge fileEdge"/>
+<path d="M 434.0 392.0 H 508.0 Q 514.0 392.0 514.0 398.0 V 837.0 Q 514.0 843.0 508.0 843.0 H 430.0" class="dependencyEdge fileEdge"/>
 <title>../lib/src/graphs/export_mermaid.dart → ../lib/src/layers/layers_results.dart</title>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="380.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="382.0">1</text>
-<title>fcheck.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="392.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="394.0">2</text>
-<title>graph_format_utils.dart
-layers_results.dart</title>
-</g>
-<text x="208.0" y="386.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">export_mermaid.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="408.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="410.0">1</text>
-<title>fcheck.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="420.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="422.0">2</text>
-<title>graph_format_utils.dart
-layers_results.dart</title>
-</g>
-<text x="208.0" y="414.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">export_plantuml.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="436.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="438.0">2</text>
-<title>export_mermaid.dart
-export_plantuml.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="448.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="450.0">1</text>
-<title>layers_results.dart</title>
-</g>
-<text x="208.0" y="442.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">graph_format_utils.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="464.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="466.0">1</text>
-<title>fcheck.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="476.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="478.0">2</text>
-<title>layers_results.dart
-svg_common.dart</title>
-</g>
-<text x="208.0" y="470.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">export_svg.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="492.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="494.0">1</text>
-<title>fcheck.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="504.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="506.0">3</text>
-<title>layers_results.dart
+<g class="incomingBadge">
+  <path d="M 424.0,381.0 L 436.0,374.0 Q 439.0,374.0 439.0,377.0 L 439.0,385.0 Q 439.0,388.0 436.0,388.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="384.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>fcheck.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,392.0 L 428.0,385.0 Q 425.0,385.0 425.0,388.0 L 425.0,396.0 Q 425.0,399.0 428.0,399.0 Z" fill="#10b981"/>
+  <text x="429.0" y="395.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>graph_format_utils.dart
+layers_results.dart</title></g><text x="208.0" y="386.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">export_mermaid.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,409.0 L 436.0,402.0 Q 439.0,402.0 439.0,405.0 L 439.0,413.0 Q 439.0,416.0 436.0,416.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="412.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>fcheck.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,420.0 L 428.0,413.0 Q 425.0,413.0 425.0,416.0 L 425.0,424.0 Q 425.0,427.0 428.0,427.0 Z" fill="#10b981"/>
+  <text x="429.0" y="423.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>graph_format_utils.dart
+layers_results.dart</title></g><text x="208.0" y="414.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">export_plantuml.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,437.0 L 436.0,430.0 Q 439.0,430.0 439.0,433.0 L 439.0,441.0 Q 439.0,444.0 436.0,444.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="440.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>export_mermaid.dart
+export_plantuml.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,448.0 L 428.0,441.0 Q 425.0,441.0 425.0,444.0 L 425.0,452.0 Q 425.0,455.0 428.0,455.0 Z" fill="#10b981"/>
+  <text x="429.0" y="451.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>layers_results.dart</title></g><text x="208.0" y="442.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">graph_format_utils.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,465.0 L 436.0,458.0 Q 439.0,458.0 439.0,461.0 L 439.0,469.0 Q 439.0,472.0 436.0,472.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="468.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>fcheck.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,476.0 L 428.0,469.0 Q 425.0,469.0 425.0,472.0 L 425.0,480.0 Q 425.0,483.0 428.0,483.0 Z" fill="#10b981"/>
+  <text x="429.0" y="479.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">3</text><title>badge_model.dart
+layers_results.dart
+svg_common.dart</title></g><text x="208.0" y="470.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">export_svg.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,493.0 L 436.0,486.0 Q 439.0,486.0 439.0,489.0 L 439.0,497.0 Q 439.0,500.0 436.0,500.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="496.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>fcheck.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,504.0 L 428.0,497.0 Q 425.0,497.0 425.0,500.0 L 425.0,508.0 Q 425.0,511.0 428.0,511.0 Z" fill="#10b981"/>
+  <text x="429.0" y="507.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">4</text><title>badge_model.dart
+layers_results.dart
 rect.dart
-svg_common.dart</title>
-</g>
-<text x="208.0" y="498.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">export_svg_folders.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="520.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="522.0">2</text>
-<title>export_svg.dart
-export_svg_folders.dart</title>
-</g>
-<text x="208.0" y="526.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">svg_common.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1498.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="1500.0">5</text>
-<title>fcheck.dart
+svg_common.dart</title></g><text x="208.0" y="498.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">export_svg_folders.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,521.0 L 436.0,514.0 Q 439.0,514.0 439.0,517.0 L 439.0,525.0 Q 439.0,528.0 436.0,528.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="524.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>export_svg.dart
+export_svg_folders.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,532.0 L 428.0,525.0 Q 425.0,525.0 425.0,528.0 L 425.0,536.0 Q 425.0,539.0 428.0,539.0 Z" fill="#10b981"/>
+  <text x="429.0" y="535.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>badge_model.dart</title></g><text x="208.0" y="526.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">svg_common.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,549.0 L 436.0,542.0 Q 439.0,542.0 439.0,545.0 L 439.0,553.0 Q 439.0,556.0 436.0,556.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="552.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">3</text><title>export_svg.dart
+export_svg_folders.dart
+svg_common.dart</title></g><text x="208.0" y="554.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">badge_model.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1527.0 L 436.0,1520.0 Q 439.0,1520.0 439.0,1523.0 L 439.0,1531.0 Q 439.0,1534.0 436.0,1534.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1530.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">5</text><title>fcheck.dart
 hardcoded_string_analyzer.dart
 layers_analyzer.dart
 magic_number_analyzer.dart
-sort_analyzer.dart</title>
-</g>
-<text x="208.0" y="1504.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">file_utils.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1526.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="1528.0">2</text>
-<title>sort.dart
-sort_analyzer.dart</title>
-</g>
-<text x="208.0" y="1532.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">class_visitor.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1554.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="1556.0">1</text>
-<title>export_svg_folders.dart</title>
-</g>
-<text x="208.0" y="1560.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">rect.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1582.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="1584.0">1</text>
-<title>fcheck.dart</title>
-</g>
-<text x="208.0" y="1588.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">version.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="786.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="788.0">1</text>
-<title>fcheck.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="798.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="800.0">4</text>
-<title>file_utils.dart
+sort_analyzer.dart</title></g><text x="208.0" y="1532.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">file_utils.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1555.0 L 436.0,1548.0 Q 439.0,1548.0 439.0,1551.0 L 439.0,1559.0 Q 439.0,1562.0 436.0,1562.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1558.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>sort.dart
+sort_analyzer.dart</title></g><text x="208.0" y="1560.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">class_visitor.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1583.0 L 436.0,1576.0 Q 439.0,1576.0 439.0,1579.0 L 439.0,1587.0 Q 439.0,1590.0 436.0,1590.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1586.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>export_svg_folders.dart</title></g><text x="208.0" y="1588.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">rect.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1611.0 L 436.0,1604.0 Q 439.0,1604.0 439.0,1607.0 L 439.0,1615.0 Q 439.0,1618.0 436.0,1618.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1614.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>fcheck.dart</title></g><text x="208.0" y="1616.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">version.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,815.0 L 436.0,808.0 Q 439.0,808.0 439.0,811.0 L 439.0,819.0 Q 439.0,822.0 436.0,822.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="818.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>fcheck.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,826.0 L 428.0,819.0 Q 425.0,819.0 425.0,822.0 L 425.0,830.0 Q 425.0,833.0 428.0,833.0 Z" fill="#10b981"/>
+  <text x="429.0" y="829.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">4</text><title>file_utils.dart
 layers_issue.dart
 layers_results.dart
-layers_visitor.dart</title>
-</g>
-<text x="208.0" y="792.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">layers_analyzer.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="814.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="816.0">7</text>
-<title>export_mermaid.dart
+layers_visitor.dart</title></g><text x="208.0" y="820.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">layers_analyzer.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,843.0 L 436.0,836.0 Q 439.0,836.0 439.0,839.0 L 439.0,847.0 Q 439.0,850.0 436.0,850.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="846.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">7</text><title>export_mermaid.dart
 export_plantuml.dart
 export_svg.dart
 export_svg_folders.dart
 fcheck.dart
 graph_format_utils.dart
-layers_analyzer.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="826.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="828.0">1</text>
-<title>layers_issue.dart</title>
-</g>
-<text x="208.0" y="820.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">layers_results.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="842.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="844.0">3</text>
-<title>layers_analyzer.dart
+layers_analyzer.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,854.0 L 428.0,847.0 Q 425.0,847.0 425.0,850.0 L 425.0,858.0 Q 425.0,861.0 428.0,861.0 Z" fill="#10b981"/>
+  <text x="429.0" y="857.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>layers_issue.dart</title></g><text x="208.0" y="848.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">layers_results.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,871.0 L 436.0,864.0 Q 439.0,864.0 439.0,867.0 L 439.0,875.0 Q 439.0,878.0 436.0,878.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="874.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">3</text><title>layers_analyzer.dart
 layers_results.dart
-project_metrics.dart</title>
-</g>
-<text x="208.0" y="848.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">layers_issue.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="870.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="872.0">1</text>
-<title>layers_analyzer.dart</title>
-</g>
-<text x="208.0" y="876.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">layers_visitor.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="628.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="630.0">1</text>
-<title>fcheck.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="640.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="642.0">5</text>
-<title>file_metrics.dart
+project_metrics.dart</title></g><text x="208.0" y="876.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">layers_issue.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,899.0 L 436.0,892.0 Q 439.0,892.0 439.0,895.0 L 439.0,903.0 Q 439.0,906.0 436.0,906.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="902.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>layers_analyzer.dart</title></g><text x="208.0" y="904.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">layers_visitor.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,657.0 L 436.0,650.0 Q 439.0,650.0 439.0,653.0 L 439.0,661.0 Q 439.0,664.0 436.0,664.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="660.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>fcheck.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,668.0 L 428.0,661.0 Q 425.0,661.0 425.0,664.0 L 425.0,672.0 Q 425.0,675.0 428.0,675.0 Z" fill="#10b981"/>
+  <text x="429.0" y="671.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">5</text><title>file_metrics.dart
 hardcoded_string_issue.dart
 layers_issue.dart
 magic_number_issue.dart
-sort.dart</title>
-</g>
-<text x="208.0" y="634.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">project_metrics.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="656.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="658.0">2</text>
-<title>fcheck.dart
-project_metrics.dart</title>
-</g>
-<text x="208.0" y="662.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">file_metrics.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="978.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="980.0">1</text>
-<title>fcheck.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="990.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="992.0">3</text>
-<title>file_utils.dart
+sort.dart</title></g><text x="208.0" y="662.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">project_metrics.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,685.0 L 436.0,678.0 Q 439.0,678.0 439.0,681.0 L 439.0,689.0 Q 439.0,692.0 436.0,692.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="688.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>fcheck.dart
+project_metrics.dart</title></g><text x="208.0" y="690.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">file_metrics.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1007.0 L 436.0,1000.0 Q 439.0,1000.0 439.0,1003.0 L 439.0,1011.0 Q 439.0,1014.0 436.0,1014.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1010.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>fcheck.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,1018.0 L 428.0,1011.0 Q 425.0,1011.0 425.0,1014.0 L 425.0,1022.0 Q 425.0,1025.0 428.0,1025.0 Z" fill="#10b981"/>
+  <text x="429.0" y="1021.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">3</text><title>file_utils.dart
 hardcoded_string_issue.dart
-hardcoded_string_visitor.dart</title>
-</g>
-<text x="208.0" y="984.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">hardcoded_string_analyzer.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1006.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="1008.0">1</text>
-<title>hardcoded_string_analyzer.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1018.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="1020.0">1</text>
-<title>hardcoded_string_issue.dart</title>
-</g>
-<text x="208.0" y="1012.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">hardcoded_string_visitor.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1034.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="1036.0">3</text>
-<title>hardcoded_string_analyzer.dart
+hardcoded_string_visitor.dart</title></g><text x="208.0" y="1012.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">hardcoded_string_analyzer.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1035.0 L 436.0,1028.0 Q 439.0,1028.0 439.0,1031.0 L 439.0,1039.0 Q 439.0,1042.0 436.0,1042.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1038.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>hardcoded_string_analyzer.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,1046.0 L 428.0,1039.0 Q 425.0,1039.0 425.0,1042.0 L 425.0,1050.0 Q 425.0,1053.0 428.0,1053.0 Z" fill="#10b981"/>
+  <text x="429.0" y="1049.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>hardcoded_string_issue.dart</title></g><text x="208.0" y="1040.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">hardcoded_string_visitor.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1063.0 L 436.0,1056.0 Q 439.0,1056.0 439.0,1059.0 L 439.0,1067.0 Q 439.0,1070.0 436.0,1070.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1066.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">3</text><title>hardcoded_string_analyzer.dart
 hardcoded_string_visitor.dart
-project_metrics.dart</title>
-</g>
-<text x="208.0" y="1040.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">hardcoded_string_issue.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1142.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="1144.0">1</text>
-<title>fcheck.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1154.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="1156.0">3</text>
-<title>file_utils.dart
+project_metrics.dart</title></g><text x="208.0" y="1068.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">hardcoded_string_issue.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1171.0 L 436.0,1164.0 Q 439.0,1164.0 439.0,1167.0 L 439.0,1175.0 Q 439.0,1178.0 436.0,1178.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1174.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>fcheck.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,1182.0 L 428.0,1175.0 Q 425.0,1175.0 425.0,1178.0 L 425.0,1186.0 Q 425.0,1189.0 428.0,1189.0 Z" fill="#10b981"/>
+  <text x="429.0" y="1185.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">3</text><title>file_utils.dart
 magic_number_issue.dart
-magic_number_visitor.dart</title>
-</g>
-<text x="208.0" y="1148.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">magic_number_analyzer.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1170.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="1172.0">1</text>
-<title>magic_number_analyzer.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1182.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="1184.0">1</text>
-<title>magic_number_issue.dart</title>
-</g>
-<text x="208.0" y="1176.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">magic_number_visitor.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1198.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="1200.0">3</text>
-<title>magic_number_analyzer.dart
+magic_number_visitor.dart</title></g><text x="208.0" y="1176.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">magic_number_analyzer.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1199.0 L 436.0,1192.0 Q 439.0,1192.0 439.0,1195.0 L 439.0,1203.0 Q 439.0,1206.0 436.0,1206.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1202.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>magic_number_analyzer.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,1210.0 L 428.0,1203.0 Q 425.0,1203.0 425.0,1206.0 L 425.0,1214.0 Q 425.0,1217.0 428.0,1217.0 Z" fill="#10b981"/>
+  <text x="429.0" y="1213.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>magic_number_issue.dart</title></g><text x="208.0" y="1204.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">magic_number_visitor.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1227.0 L 436.0,1220.0 Q 439.0,1220.0 439.0,1223.0 L 439.0,1231.0 Q 439.0,1234.0 436.0,1234.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1230.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">3</text><title>magic_number_analyzer.dart
 magic_number_visitor.dart
-project_metrics.dart</title>
-</g>
-<text x="208.0" y="1204.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">magic_number_issue.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1306.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="1308.0">2</text>
-<title>fcheck.dart
-project_metrics.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1318.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="1320.0">4</text>
-<title>class_visitor.dart
+project_metrics.dart</title></g><text x="208.0" y="1232.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">magic_number_issue.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1335.0 L 436.0,1328.0 Q 439.0,1328.0 439.0,1331.0 L 439.0,1339.0 Q 439.0,1342.0 436.0,1342.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1338.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>fcheck.dart
+project_metrics.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,1346.0 L 428.0,1339.0 Q 425.0,1339.0 425.0,1342.0 L 425.0,1350.0 Q 425.0,1353.0 428.0,1353.0 Z" fill="#10b981"/>
+  <text x="429.0" y="1349.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">4</text><title>class_visitor.dart
 sort_analyzer.dart
 sort_issue.dart
-sort_members.dart</title>
-</g>
-<text x="208.0" y="1312.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">sort.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1334.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="1336.0">1</text>
-<title>sort.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1346.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="424.0" y="1348.0">4</text>
-<title>class_visitor.dart
+sort_members.dart</title></g><text x="208.0" y="1340.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">sort.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1363.0 L 436.0,1356.0 Q 439.0,1356.0 439.0,1359.0 L 439.0,1367.0 Q 439.0,1370.0 436.0,1370.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1366.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>sort.dart</title></g><g class="outgoingBadge">
+  <path d="M 440.0,1374.0 L 428.0,1367.0 Q 425.0,1367.0 425.0,1370.0 L 425.0,1378.0 Q 425.0,1381.0 428.0,1381.0 Z" fill="#10b981"/>
+  <text x="429.0" y="1377.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">4</text><title>class_visitor.dart
 file_utils.dart
 sort_issue.dart
-sort_members.dart</title>
-</g>
-<text x="208.0" y="1340.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">sort_analyzer.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1362.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="1364.0">2</text>
-<title>sort.dart
-sort_analyzer.dart</title>
-</g>
-<text x="208.0" y="1368.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">sort_issue.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="424.0" cy="1390.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="424.0" y="1392.0">2</text>
-<title>sort.dart
-sort_analyzer.dart</title>
-</g>
-<text x="208.0" y="1396.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">sort_members.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="456.0" cy="238.0" r="7.0" fill="#007bff" opacity="0.85"/>
-<text x="456.0" y="240.0">1</text>
-<title>fcheck.dart</title>
-</g>
-<g class="hierarchicalBadge">
-<circle cx="456.0" cy="250.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="456.0" y="252.0">8</text>
-<title>file_metrics.dart
+sort_members.dart</title></g><text x="208.0" y="1368.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">sort_analyzer.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1391.0 L 436.0,1384.0 Q 439.0,1384.0 439.0,1387.0 L 439.0,1395.0 Q 439.0,1398.0 436.0,1398.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1394.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>sort.dart
+sort_analyzer.dart</title></g><text x="208.0" y="1396.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">sort_issue.dart</text>
+<g class="incomingBadge">
+  <path d="M 424.0,1419.0 L 436.0,1412.0 Q 439.0,1412.0 439.0,1415.0 L 439.0,1423.0 Q 439.0,1426.0 436.0,1426.0 Z" fill="#3b82f6"/>
+  <text x="435.0" y="1422.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>sort.dart
+sort_analyzer.dart</title></g><text x="208.0" y="1424.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">sort_members.dart</text>
+<g class="incomingBadge">
+  <path d="M 456.0,239.0 L 468.0,232.0 Q 471.0,232.0 471.0,235.0 L 471.0,243.0 Q 471.0,246.0 468.0,246.0 Z" fill="#3b82f6"/>
+  <text x="467.0" y="242.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>fcheck.dart</title></g><g class="outgoingBadge">
+  <path d="M 472.0,250.0 L 460.0,243.0 Q 457.0,243.0 457.0,246.0 L 457.0,254.0 Q 457.0,257.0 460.0,257.0 Z" fill="#10b981"/>
+  <text x="461.0" y="253.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">8</text><title>file_metrics.dart
 file_utils.dart
 hardcoded_string_analyzer.dart
 layers_analyzer.dart
 layers_results.dart
 magic_number_analyzer.dart
 project_metrics.dart
-sort.dart</title>
-</g>
-<text x="140.0" y="244.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">fcheck.dart</text>
-<g class="hierarchicalBadge">
-<circle cx="488.0" cy="108.0" r="7.0" fill="#28a745" opacity="0.85"/>
-<text x="488.0" y="110.0">6</text>
-<title>export_mermaid.dart
+sort.dart</title></g><text x="140.0" y="244.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">fcheck.dart</text>
+<g class="outgoingBadge">
+  <path d="M 504.0,108.0 L 492.0,101.0 Q 489.0,101.0 489.0,104.0 L 489.0,112.0 Q 489.0,115.0 492.0,115.0 Z" fill="#10b981"/>
+  <text x="493.0" y="111.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">6</text><title>export_mermaid.dart
 export_plantuml.dart
 export_svg.dart
 export_svg_folders.dart
 fcheck.dart
-version.dart</title>
-</g>
-<text x="72.0" y="102.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">fcheck.dart</text>
+version.dart</title></g><text x="72.0" y="102.0" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">fcheck.dart</text>
 <g class="folderTitleLayer">
 <text x="280.0" y="75.0" class="hierarchicalTitle">.</text>
 <text x="289.0" y="165.0" class="hierarchicalTitle">  ..</text>
 <text x="298.0" y="217.0" class="hierarchicalTitle">    lib</text>
 <text x="307.0" y="307.0" class="hierarchicalTitle">      src</text>
 <text x="316.0" y="359.0" class="hierarchicalTitle">        graphs</text>
-<text x="316.0" y="1477.0" class="hierarchicalTitle">        models</text>
-<text x="316.0" y="765.0" class="hierarchicalTitle">        layers</text>
-<text x="316.0" y="607.0" class="hierarchicalTitle">        metrics</text>
-<text x="316.0" y="957.0" class="hierarchicalTitle">        hardcoded_strings</text>
-<text x="316.0" y="1121.0" class="hierarchicalTitle">        magic_numbers</text>
-<text x="316.0" y="1285.0" class="hierarchicalTitle">        sort</text>
+<text x="316.0" y="1505.0" class="hierarchicalTitle">        models</text>
+<text x="316.0" y="793.0" class="hierarchicalTitle">        layers</text>
+<text x="316.0" y="635.0" class="hierarchicalTitle">        metrics</text>
+<text x="316.0" y="985.0" class="hierarchicalTitle">        hardcoded_strings</text>
+<text x="316.0" y="1149.0" class="hierarchicalTitle">        magic_numbers</text>
+<text x="316.0" y="1313.0" class="hierarchicalTitle">        sort</text>
 </g>
 </svg>

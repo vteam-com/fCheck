@@ -4,6 +4,7 @@ library;
 import 'dart:math';
 import 'package:fcheck/src/layers/layers_results.dart';
 import 'package:fcheck/src/graphs/svg_common.dart';
+import 'package:fcheck/src/graphs/badge_model.dart';
 
 /// Generates an SVG visualization of the dependency graph.
 ///
@@ -90,7 +91,6 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
   const layerHeaderHeight = 40;
 
   // Badge constants
-  const badgeRadius = 9;
   const badgeOffset = 12;
 
   // Calculate total width based on number of columns
@@ -227,11 +227,11 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
       if (!nodePositions.containsKey(target)) continue;
       final targetPos = nodePositions[target]!;
 
-      // Anchor points: Bottom-right of source -> Top-left of target
-      final startX = sourcePos.x + nodeWidth - badgeOffset;
+      // Anchor points: Source outgoing badge -> Target incoming badge
+      final startX = sourcePos.x + nodeWidth; // Outgoing badge position
       final startY = sourcePos.y + nodeHeight - badgeOffset;
 
-      final endX = targetPos.x + badgeOffset;
+      final endX = targetPos.x + (badgeOffset / 2); // Incoming badge position
       final endY = targetPos.y + badgeOffset;
 
       // Bezier curve control points for smooth flow
@@ -259,29 +259,25 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
     final inCount = incomingCounts[file] ?? 0;
     final outCount = outgoingCounts[file] ?? 0;
 
-    // Render incoming badge (top-left)
-    renderBadge(
-      buffer,
-      cx: pos.x + badgeOffset,
+    // Render incoming badge (top-left, pointing west)
+    final incomingBadge = BadgeModel.incoming(
+      cx: pos.x + (badgeOffset / 2),
       cy: pos.y + badgeOffset,
-      radius: badgeRadius.toDouble(),
       count: inCount,
-      color: '#007bff',
-      cssClass: 'badge',
-      tooltip: (incomingNodes[file] ?? const []).join('\\n'),
+      peers: incomingNodes[file] ?? const [],
+      direction: BadgeDirection.east,
     );
+    renderTriangularBadge(buffer, incomingBadge);
 
-    // Render outgoing badge (bottom-right)
-    renderBadge(
-      buffer,
-      cx: pos.x + nodeWidth - badgeOffset,
+    // Render outgoing badge (bottom-right, pointing east)
+    final outgoingBadge = BadgeModel.outgoing(
+      cx: pos.x + nodeWidth, // - badgeOffset,
       cy: pos.y + nodeHeight - badgeOffset,
-      radius: badgeRadius.toDouble(),
       count: outCount,
-      color: '#28a745',
-      cssClass: 'badge',
-      tooltip: (outgoingNodes[file] ?? const []).join('\\n'),
+      peers: outgoingNodes[file] ?? const [],
+      direction: BadgeDirection.east,
     );
+    renderTriangularBadge(buffer, outgoingBadge);
 
     // Node Text (Filename) - Drawn LAST
     final fileName = file.split('/').last;

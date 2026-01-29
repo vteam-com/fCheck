@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:fcheck/src/layers/layers_results.dart';
 import 'package:fcheck/src/models/rect.dart';
 import 'package:fcheck/src/graphs/svg_common.dart';
+import 'package:fcheck/src/graphs/badge_model.dart';
 import 'package:path/path.dart' as p;
 
 /// Represents a folder in the hierarchy.
@@ -76,22 +77,6 @@ class _FolderEdge {
   final String sourceFolder;
   final String targetFolder;
   _FolderEdge(this.sourceFolder, this.targetFolder);
-}
-
-/// Captures folder badge positions to render after edges.
-class _FolderBadgeVisual {
-  final double cx;
-  final double cy;
-  final int count;
-  final bool isIncoming; // true = blue (incoming), false = green (outgoing)
-  final List<String> peers;
-  _FolderBadgeVisual({
-    required this.cx,
-    required this.cy,
-    required this.count,
-    required this.isIncoming,
-    required this.peers,
-  });
 }
 
 /// Collects every file mentioned in the dependency graph (keys and targets).
@@ -376,7 +361,7 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   final fileAnchors = <String, Map<String, Point<double>>>{};
   final fileVisuals = <_FileVisual>[];
   final titleVisuals = <_TitleVisual>[];
-  final folderBadges = <_FolderBadgeVisual>[];
+  final folderBadges = <BadgeModel>[];
   final folderDependencies = _collectFolderDependencies(relativeGraph);
   final folderDepGraph = <String, List<String>>{};
   for (final edge in folderDependencies) {
@@ -848,8 +833,6 @@ void _drawFolderDependencyEdges(
 ) {
   if (edges.isEmpty) return;
 
-  const double badgeTopOffset = 4.0;
-  const double badgeGap = 18.0; // vertical space between incoming and outgoing
   const double columnGap = 32.0;
   const double columnStep = 2.0; // keep columns separated like file edges
   const double cornerRadius = 10.0;
@@ -869,10 +852,10 @@ void _drawFolderDependencyEdges(
     }
 
     // Start/end at badge centers so strokes originate/terminate at badges.
-    final startX = sourcePos.x;
-    final startY = sourcePos.y + badgeTopOffset + badgeGap; // outgoing badge
-    final endX = targetPos.x;
-    final endY = targetPos.y + badgeTopOffset; // incoming badge
+    final startX = sourcePos.x + 6; // Outgoing badge position (cx: pos.x + 6)
+    final startY = sourcePos.y + 24; // Outgoing badge position (cy: pos.y + 24)
+    final endX = targetPos.x + 10; // Incoming badge position (cx: pos.x + 10)
+    final endY = targetPos.y + 13; // Incoming badge position (cy: pos.y + 13)
 
     // Offset each edge column slightly left of its source to avoid stacking.
     final localMin = min(startX, endX);
@@ -897,19 +880,9 @@ void _drawFolderDependencyEdges(
 }
 
 /// Render folder badges after edges so they sit on top.
-void _drawFolderBadges(StringBuffer buffer, List<_FolderBadgeVisual> badges) {
+void _drawFolderBadges(StringBuffer buffer, List<BadgeModel> badges) {
   for (final b in badges) {
-    final tooltip = b.peers.isEmpty ? '' : b.peers.join('\n');
-    renderBadge(
-      buffer,
-      cx: b.cx,
-      cy: b.cy,
-      radius: 8,
-      count: b.count,
-      color: b.isIncoming ? '#007bff' : '#28a745',
-      cssClass: 'hierarchicalBadge',
-      tooltip: tooltip,
-    );
+    renderTriangularBadge(buffer, b);
   }
 }
 
@@ -925,7 +898,7 @@ void _drawHierarchicalFolders(
   Map<String, Map<String, Point<double>>> fileAnchors,
   List<_TitleVisual> titleVisuals,
   List<_FileVisual> fileVisuals,
-  List<_FolderBadgeVisual> folderBadges,
+  List<BadgeModel> folderBadges,
   Map<String, List<String>> folderIncomingPeers,
   Map<String, List<String>> folderOutgoingPeers,
   Map<String, List<String>> fileIncomingPeers,
@@ -945,8 +918,6 @@ void _drawHierarchicalFolders(
     final incoming = folderMetrics['incoming'] ?? 0;
     final outgoing = folderMetrics['outgoing'] ?? 0;
     final depth = depths[folder.fullPath] ?? 0;
-    const double badgeTopOffset = 4.0;
-    const double badgeGap = 18.0;
 
     buffer.writeln('<g class="folderLayer">');
     buffer.writeln(
@@ -959,19 +930,19 @@ void _drawHierarchicalFolders(
         .add(_TitleVisual(pos.x + dim.width / 2, pos.y + 25, titleText));
     buffer.writeln('</g>');
 
-    folderBadges.add(_FolderBadgeVisual(
-      cx: pos.x,
-      cy: pos.y + badgeTopOffset,
+    folderBadges.add(BadgeModel.incoming(
+      cx: pos.x + 10,
+      cy: pos.y + 13,
       count: incoming,
-      isIncoming: true,
       peers: folderIncomingPeers[folder.fullPath] ?? const [],
+      direction: BadgeDirection.east,
     ));
-    folderBadges.add(_FolderBadgeVisual(
-      cx: pos.x,
-      cy: pos.y + badgeTopOffset + badgeGap,
+    folderBadges.add(BadgeModel.outgoing(
+      cx: pos.x + 6,
+      cy: pos.y + 24,
       count: outgoing,
-      isIncoming: false,
       peers: folderOutgoingPeers[folder.fullPath] ?? const [],
+      direction: BadgeDirection.west,
     ));
 
     final sortedFiles =
@@ -1007,10 +978,10 @@ void _drawHierarchicalFolders(
       final panelX = pos.x + 8.0;
       final panelWidth = dim.width - 16.0; // flush within folder
       // Use panel-based coordinates for badges and edge anchors.
-      final badgeX = panelX + panelWidth - 14; // 8px inset + small padding
+      final badgeX = panelX + panelWidth - 8; // align with folder badges
       fileAnchors[filePath] = {
-        'in': Point(badgeX, fileY - 6),
-        'out': Point(badgeX, fileY + 6),
+        'in': Point(badgeX, fileY - 5), // Incoming badge position
+        'out': Point(badgeX + 4, fileY + 6), // Outgoing badge position
       };
 
       final incomingPeers = fileIncomingPeers[filePath] ?? const [];
@@ -1098,26 +1069,26 @@ void _drawFileVisuals(StringBuffer buffer, List<_FileVisual> visuals) {
     final top = v.textY - 14;
     const height = 28.0;
     final textX = v.textX + 10.0;
-    renderBadge(
-      buffer,
+
+    // Create incoming badge (pointing west)
+    final incomingBadge = BadgeModel.incoming(
       cx: v.badgeX,
-      cy: v.badgeY - 6,
-      radius: 7,
+      cy: v.badgeY - 5,
       count: v.incoming,
-      color: '#007bff',
-      cssClass: 'hierarchicalBadge',
-      tooltip: v.incomingPeers.join('\n'),
+      peers: v.incomingPeers,
+      direction: BadgeDirection.west,
     );
-    renderBadge(
-      buffer,
-      cx: v.badgeX,
+    renderTriangularBadge(buffer, incomingBadge);
+
+    // Create outgoing badge (pointing east)
+    final outgoingBadge = BadgeModel.outgoing(
+      cx: v.badgeX + 4,
       cy: v.badgeY + 6,
-      radius: 7,
       count: v.outgoing,
-      color: '#28a745',
-      cssClass: 'hierarchicalBadge',
-      tooltip: v.outgoingPeers.join('\n'),
+      peers: v.outgoingPeers,
+      direction: BadgeDirection.east,
     );
+    renderTriangularBadge(buffer, outgoingBadge);
 
     buffer.writeln(
         '<text x="$textX" y="${top + height / 2}" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">${v.name}</text>');
