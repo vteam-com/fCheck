@@ -174,12 +174,13 @@ $verticalGradient
     fill: none; 
     stroke: url(#horizontalGradient); 
     stroke-width: 1; 
+    opacity: 0.5;
     transition: all 0.1s ease-in-out; 
   }
   
   .edge:hover { 
     stroke: url(#horizontalGradient); 
-    stroke-width: 5; 
+    stroke-width: 3; 
     opacity: 1.0; 
   }
   
@@ -193,7 +194,7 @@ $verticalGradient
   
   .edgeVertical:hover { 
     stroke: url(#verticalGradient); 
-    stroke-width: 5; 
+    stroke-width: 3; 
     opacity: 1.0; 
   }
   

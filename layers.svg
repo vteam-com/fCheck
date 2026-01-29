@@ -107,12 +107,13 @@
     fill: none; 
     stroke: url(#horizontalGradient); 
     stroke-width: 1; 
+    opacity: 0.5;
     transition: all 0.1s ease-in-out; 
   }
   
   .edge:hover { 
     stroke: url(#horizontalGradient); 
-    stroke-width: 5; 
+    stroke-width: 3; 
     opacity: 1.0; 
   }
   
@@ -126,7 +127,7 @@
   
   .edgeVertical:hover { 
     stroke: url(#verticalGradient); 
-    stroke-width: 5; 
+    stroke-width: 3; 
     opacity: 1.0; 
   }
   
@@ -201,61 +202,226 @@
 <rect x="1650.0" y="160.0" width="220" height="50" class="nodeRect"/>
 <rect x="1650.0" y="230.0" width="220" height="50" class="nodeRect"/>
 <rect x="1650.0" y="300.0" width="220" height="50" class="nodeRect"/>
-<path d="M 270.0 128.0 C 320.0 128.0, 326.0 312.0, 376.0 312.0" class="edge"/>
-<path d="M 270.0 128.0 C 320.0 128.0, 326.0 382.0, 376.0 382.0" class="edge"/>
-<path d="M 270.0 128.0 C 320.0 128.0, 326.0 242.0, 376.0 242.0" class="edge"/>
-<path d="M 270.0 128.0 C 320.0 128.0, 326.0 172.0, 376.0 172.0" class="edge"/>
-<path d="M 270.0 128.0 C 320.0 128.0, 326.0 102.0, 376.0 102.0" class="edge"/>
-<path d="M 270.0 128.0 C 320.0 128.0, 326.0 452.0, 376.0 452.0" class="edge"/>
-<path d="M 590.0 128.0 C 640.0 128.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
-<path d="M 590.0 128.0 C 640.0 128.0, 966.0 312.0, 1016.0 312.0" class="edge"/>
-<path d="M 590.0 128.0 C 640.0 128.0, 646.0 452.0, 696.0 452.0" class="edge"/>
-<path d="M 590.0 128.0 C 640.0 128.0, 646.0 382.0, 696.0 382.0" class="edge"/>
-<path d="M 590.0 128.0 C 640.0 128.0, 646.0 522.0, 696.0 522.0" class="edge"/>
-<path d="M 590.0 128.0 C 640.0 128.0, 966.0 242.0, 1016.0 242.0" class="edge"/>
-<path d="M 590.0 128.0 C 640.0 128.0, 646.0 312.0, 696.0 312.0" class="edge"/>
-<path d="M 590.0 128.0 C 640.0 128.0, 1606.0 102.0, 1656.0 102.0" class="edge"/>
-<path d="M 910.0 338.0 C 960.0 338.0, 1286.0 102.0, 1336.0 102.0" class="edge"/>
-<path d="M 910.0 338.0 C 960.0 338.0, 1286.0 172.0, 1336.0 172.0" class="edge"/>
-<path d="M 910.0 338.0 C 960.0 338.0, 966.0 312.0, 1016.0 312.0" class="edge"/>
-<path d="M 910.0 338.0 C 960.0 338.0, 1286.0 242.0, 1336.0 242.0" class="edge"/>
-<path d="M 910.0 338.0 C 960.0 338.0, 966.0 242.0, 1016.0 242.0" class="edge"/>
-<path d="M 1230.0 408.0 C 1280.0 408.0, 1286.0 102.0, 1336.0 102.0" class="edge"/>
-<path d="M 910.0 478.0 C 960.0 478.0, 1286.0 102.0, 1336.0 102.0" class="edge"/>
-<path d="M 910.0 478.0 C 960.0 478.0, 966.0 382.0, 1016.0 382.0" class="edge"/>
-<path d="M 910.0 478.0 C 960.0 478.0, 1606.0 102.0, 1656.0 102.0" class="edge"/>
-<path d="M 1230.0 128.0 C 1280.0 128.0, 1286.0 172.0, 1336.0 172.0" class="edge"/>
-<path d="M 910.0 408.0 C 960.0 408.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
-<path d="M 910.0 408.0 C 960.0 408.0, 1606.0 102.0, 1656.0 102.0" class="edge"/>
-<path d="M 910.0 408.0 C 960.0 408.0, 1286.0 172.0, 1336.0 172.0" class="edge"/>
-<path d="M 910.0 408.0 C 960.0 408.0, 966.0 522.0, 1016.0 522.0" class="edge"/>
-<path d="M 1230.0 268.0 C 1280.0 268.0, 1606.0 172.0, 1656.0 172.0" class="edge"/>
-<path d="M 1230.0 268.0 C 1280.0 268.0, 1606.0 312.0, 1656.0 312.0" class="edge"/>
-<path d="M 1230.0 268.0 C 1280.0 268.0, 1286.0 312.0, 1336.0 312.0" class="edge"/>
-<path d="M 1230.0 268.0 C 1280.0 268.0, 1606.0 242.0, 1656.0 242.0" class="edge"/>
-<path d="M 1550.0 338.0 C 1600.0 338.0, 1606.0 172.0, 1656.0 172.0" class="edge"/>
-<path d="M 1550.0 338.0 C 1600.0 338.0, 1606.0 312.0, 1656.0 312.0" class="edge"/>
-<path d="M 1550.0 338.0 C 1600.0 338.0, 1606.0 242.0, 1656.0 242.0" class="edge"/>
-<path d="M 1550.0 338.0 C 1600.0 338.0, 1606.0 102.0, 1656.0 102.0" class="edge"/>
-<path d="M 1230.0 478.0 C 1280.0 478.0, 1286.0 242.0, 1336.0 242.0" class="edge"/>
-<path d="M 910.0 548.0 C 960.0 548.0, 1286.0 242.0, 1336.0 242.0" class="edge"/>
-<path d="M 910.0 548.0 C 960.0 548.0, 966.0 452.0, 1016.0 452.0" class="edge"/>
-<path d="M 910.0 548.0 C 960.0 548.0, 1606.0 102.0, 1656.0 102.0" class="edge"/>
-<path d="M 910.0 128.0 C 960.0 128.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
-<path d="M 910.0 198.0 C 960.0 198.0, 966.0 172.0, 1016.0 172.0" class="edge"/>
-<path d="M 590.0 408.0 C 640.0 408.0, 646.0 102.0, 696.0 102.0" class="edge"/>
-<path d="M 590.0 408.0 C 640.0 408.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
-<path d="M 590.0 198.0 C 640.0 198.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
-<path d="M 590.0 198.0 C 640.0 198.0, 646.0 592.0, 696.0 592.0" class="edge"/>
-<path d="M 590.0 198.0 C 640.0 198.0, 646.0 172.0, 696.0 172.0" class="edge"/>
-<path d="M 590.0 198.0 C 640.0 198.0, 646.0 242.0, 696.0 242.0" class="edge"/>
-<path d="M 590.0 198.0 C 640.0 198.0, 966.0 172.0, 1016.0 172.0" class="edge"/>
-<path d="M 590.0 268.0 C 640.0 268.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
-<path d="M 590.0 268.0 C 640.0 268.0, 646.0 172.0, 696.0 172.0" class="edge"/>
-<path d="M 590.0 268.0 C 640.0 268.0, 646.0 242.0, 696.0 242.0" class="edge"/>
-<path d="M 590.0 268.0 C 640.0 268.0, 966.0 172.0, 1016.0 172.0" class="edge"/>
-<path d="M 590.0 338.0 C 640.0 338.0, 646.0 102.0, 696.0 102.0" class="edge"/>
-<path d="M 590.0 338.0 C 640.0 338.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
+<g>
+  <path d="M 270.0 128.0 C 320.0 128.0, 326.0 312.0, 376.0 312.0" class="edge"/>
+  <title>./bin/fcheck.dart ▶ ./lib/src/graphs/export_mermaid.dart</title>
+</g>
+<g>
+  <path d="M 270.0 128.0 C 320.0 128.0, 326.0 382.0, 376.0 382.0" class="edge"/>
+  <title>./bin/fcheck.dart ▶ ./lib/src/graphs/export_plantuml.dart</title>
+</g>
+<g>
+  <path d="M 270.0 128.0 C 320.0 128.0, 326.0 242.0, 376.0 242.0" class="edge"/>
+  <title>./bin/fcheck.dart ▶ ./lib/src/graphs/export_svg.dart</title>
+</g>
+<g>
+  <path d="M 270.0 128.0 C 320.0 128.0, 326.0 172.0, 376.0 172.0" class="edge"/>
+  <title>./bin/fcheck.dart ▶ ./lib/src/graphs/export_svg_folders.dart</title>
+</g>
+<g>
+  <path d="M 270.0 128.0 C 320.0 128.0, 326.0 102.0, 376.0 102.0" class="edge"/>
+  <title>./bin/fcheck.dart ▶ ./lib/fcheck.dart</title>
+</g>
+<g>
+  <path d="M 270.0 128.0 C 320.0 128.0, 326.0 452.0, 376.0 452.0" class="edge"/>
+  <title>./bin/fcheck.dart ▶ ./lib/src/models/version.dart</title>
+</g>
+<g>
+  <path d="M 590.0 128.0 C 640.0 128.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
+  <title>./lib/fcheck.dart ▶ ./lib/src/layers/layers_results.dart</title>
+</g>
+<g>
+  <path d="M 590.0 128.0 C 640.0 128.0, 966.0 312.0, 1016.0 312.0" class="edge"/>
+  <title>./lib/fcheck.dart ▶ ./lib/src/metrics/file_metrics.dart</title>
+</g>
+<g>
+  <path d="M 590.0 128.0 C 640.0 128.0, 646.0 452.0, 696.0 452.0" class="edge"/>
+  <title>./lib/fcheck.dart ▶ ./lib/src/hardcoded_strings/hardcoded_string_analyzer.dart</title>
+</g>
+<g>
+  <path d="M 590.0 128.0 C 640.0 128.0, 646.0 382.0, 696.0 382.0" class="edge"/>
+  <title>./lib/fcheck.dart ▶ ./lib/src/layers/layers_analyzer.dart</title>
+</g>
+<g>
+  <path d="M 590.0 128.0 C 640.0 128.0, 646.0 522.0, 696.0 522.0" class="edge"/>
+  <title>./lib/fcheck.dart ▶ ./lib/src/magic_numbers/magic_number_analyzer.dart</title>
+</g>
+<g>
+  <path d="M 590.0 128.0 C 640.0 128.0, 966.0 242.0, 1016.0 242.0" class="edge"/>
+  <title>./lib/fcheck.dart ▶ ./lib/src/sort/sort.dart</title>
+</g>
+<g>
+  <path d="M 590.0 128.0 C 640.0 128.0, 646.0 312.0, 696.0 312.0" class="edge"/>
+  <title>./lib/fcheck.dart ▶ ./lib/src/metrics/project_metrics.dart</title>
+</g>
+<g>
+  <path d="M 590.0 128.0 C 640.0 128.0, 1606.0 102.0, 1656.0 102.0" class="edge"/>
+  <title>./lib/fcheck.dart ▶ ./lib/src/models/file_utils.dart</title>
+</g>
+<g>
+  <path d="M 910.0 338.0 C 960.0 338.0, 1286.0 102.0, 1336.0 102.0" class="edge"/>
+  <title>./lib/src/metrics/project_metrics.dart ▶ ./lib/src/hardcoded_strings/hardcoded_string_issue.dart</title>
+</g>
+<g>
+  <path d="M 910.0 338.0 C 960.0 338.0, 1286.0 172.0, 1336.0 172.0" class="edge"/>
+  <title>./lib/src/metrics/project_metrics.dart ▶ ./lib/src/layers/layers_issue.dart</title>
+</g>
+<g>
+  <path d="M 910.0 338.0 C 960.0 338.0, 966.0 312.0, 1016.0 312.0" class="edge"/>
+  <title>./lib/src/metrics/project_metrics.dart ▶ ./lib/src/metrics/file_metrics.dart</title>
+</g>
+<g>
+  <path d="M 910.0 338.0 C 960.0 338.0, 1286.0 242.0, 1336.0 242.0" class="edge"/>
+  <title>./lib/src/metrics/project_metrics.dart ▶ ./lib/src/magic_numbers/magic_number_issue.dart</title>
+</g>
+<g>
+  <path d="M 910.0 338.0 C 960.0 338.0, 966.0 242.0, 1016.0 242.0" class="edge"/>
+  <title>./lib/src/metrics/project_metrics.dart ▶ ./lib/src/sort/sort.dart</title>
+</g>
+<g>
+  <path d="M 1230.0 408.0 C 1280.0 408.0, 1286.0 102.0, 1336.0 102.0" class="edge"/>
+  <title>./lib/src/hardcoded_strings/hardcoded_string_visitor.dart ▶ ./lib/src/hardcoded_strings/hardcoded_string_issue.dart</title>
+</g>
+<g>
+  <path d="M 910.0 478.0 C 960.0 478.0, 1286.0 102.0, 1336.0 102.0" class="edge"/>
+  <title>./lib/src/hardcoded_strings/hardcoded_string_analyzer.dart ▶ ./lib/src/hardcoded_strings/hardcoded_string_issue.dart</title>
+</g>
+<g>
+  <path d="M 910.0 478.0 C 960.0 478.0, 966.0 382.0, 1016.0 382.0" class="edge"/>
+  <title>./lib/src/hardcoded_strings/hardcoded_string_analyzer.dart ▶ ./lib/src/hardcoded_strings/hardcoded_string_visitor.dart</title>
+</g>
+<g>
+  <path d="M 910.0 478.0 C 960.0 478.0, 1606.0 102.0, 1656.0 102.0" class="edge"/>
+  <title>./lib/src/hardcoded_strings/hardcoded_string_analyzer.dart ▶ ./lib/src/models/file_utils.dart</title>
+</g>
+<g>
+  <path d="M 1230.0 128.0 C 1280.0 128.0, 1286.0 172.0, 1336.0 172.0" class="edge"/>
+  <title>./lib/src/layers/layers_results.dart ▶ ./lib/src/layers/layers_issue.dart</title>
+</g>
+<g>
+  <path d="M 910.0 408.0 C 960.0 408.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
+  <title>./lib/src/layers/layers_analyzer.dart ▶ ./lib/src/layers/layers_results.dart</title>
+</g>
+<g>
+  <path d="M 910.0 408.0 C 960.0 408.0, 1606.0 102.0, 1656.0 102.0" class="edge"/>
+  <title>./lib/src/layers/layers_analyzer.dart ▶ ./lib/src/models/file_utils.dart</title>
+</g>
+<g>
+  <path d="M 910.0 408.0 C 960.0 408.0, 1286.0 172.0, 1336.0 172.0" class="edge"/>
+  <title>./lib/src/layers/layers_analyzer.dart ▶ ./lib/src/layers/layers_issue.dart</title>
+</g>
+<g>
+  <path d="M 910.0 408.0 C 960.0 408.0, 966.0 522.0, 1016.0 522.0" class="edge"/>
+  <title>./lib/src/layers/layers_analyzer.dart ▶ ./lib/src/layers/layers_visitor.dart</title>
+</g>
+<g>
+  <path d="M 1230.0 268.0 C 1280.0 268.0, 1606.0 172.0, 1656.0 172.0" class="edge"/>
+  <title>./lib/src/sort/sort.dart ▶ ./lib/src/models/class_visitor.dart</title>
+</g>
+<g>
+  <path d="M 1230.0 268.0 C 1280.0 268.0, 1606.0 312.0, 1656.0 312.0" class="edge"/>
+  <title>./lib/src/sort/sort.dart ▶ ./lib/src/sort/sort_members.dart</title>
+</g>
+<g>
+  <path d="M 1230.0 268.0 C 1280.0 268.0, 1286.0 312.0, 1336.0 312.0" class="edge"/>
+  <title>./lib/src/sort/sort.dart ▶ ./lib/src/sort/sort_analyzer.dart</title>
+</g>
+<g>
+  <path d="M 1230.0 268.0 C 1280.0 268.0, 1606.0 242.0, 1656.0 242.0" class="edge"/>
+  <title>./lib/src/sort/sort.dart ▶ ./lib/src/sort/sort_issue.dart</title>
+</g>
+<g>
+  <path d="M 1550.0 338.0 C 1600.0 338.0, 1606.0 172.0, 1656.0 172.0" class="edge"/>
+  <title>./lib/src/sort/sort_analyzer.dart ▶ ./lib/src/models/class_visitor.dart</title>
+</g>
+<g>
+  <path d="M 1550.0 338.0 C 1600.0 338.0, 1606.0 312.0, 1656.0 312.0" class="edge"/>
+  <title>./lib/src/sort/sort_analyzer.dart ▶ ./lib/src/sort/sort_members.dart</title>
+</g>
+<g>
+  <path d="M 1550.0 338.0 C 1600.0 338.0, 1606.0 242.0, 1656.0 242.0" class="edge"/>
+  <title>./lib/src/sort/sort_analyzer.dart ▶ ./lib/src/sort/sort_issue.dart</title>
+</g>
+<g>
+  <path d="M 1550.0 338.0 C 1600.0 338.0, 1606.0 102.0, 1656.0 102.0" class="edge"/>
+  <title>./lib/src/sort/sort_analyzer.dart ▶ ./lib/src/models/file_utils.dart</title>
+</g>
+<g>
+  <path d="M 1230.0 478.0 C 1280.0 478.0, 1286.0 242.0, 1336.0 242.0" class="edge"/>
+  <title>./lib/src/magic_numbers/magic_number_visitor.dart ▶ ./lib/src/magic_numbers/magic_number_issue.dart</title>
+</g>
+<g>
+  <path d="M 910.0 548.0 C 960.0 548.0, 1286.0 242.0, 1336.0 242.0" class="edge"/>
+  <title>./lib/src/magic_numbers/magic_number_analyzer.dart ▶ ./lib/src/magic_numbers/magic_number_issue.dart</title>
+</g>
+<g>
+  <path d="M 910.0 548.0 C 960.0 548.0, 966.0 452.0, 1016.0 452.0" class="edge"/>
+  <title>./lib/src/magic_numbers/magic_number_analyzer.dart ▶ ./lib/src/magic_numbers/magic_number_visitor.dart</title>
+</g>
+<g>
+  <path d="M 910.0 548.0 C 960.0 548.0, 1606.0 102.0, 1656.0 102.0" class="edge"/>
+  <title>./lib/src/magic_numbers/magic_number_analyzer.dart ▶ ./lib/src/models/file_utils.dart</title>
+</g>
+<g>
+  <path d="M 910.0 128.0 C 960.0 128.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
+  <title>./lib/src/graphs/graph_format_utils.dart ▶ ./lib/src/layers/layers_results.dart</title>
+</g>
+<g>
+  <path d="M 910.0 198.0 C 960.0 198.0, 966.0 172.0, 1016.0 172.0" class="edge"/>
+  <title>./lib/src/graphs/svg_common.dart ▶ ./lib/src/graphs/badge_model.dart</title>
+</g>
+<g>
+  <path d="M 590.0 408.0 C 640.0 408.0, 646.0 102.0, 696.0 102.0" class="edge"/>
+  <title>./lib/src/graphs/export_plantuml.dart ▶ ./lib/src/graphs/graph_format_utils.dart</title>
+</g>
+<g>
+  <path d="M 590.0 408.0 C 640.0 408.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
+  <title>./lib/src/graphs/export_plantuml.dart ▶ ./lib/src/layers/layers_results.dart</title>
+</g>
+<g>
+  <path d="M 590.0 198.0 C 640.0 198.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
+  <title>./lib/src/graphs/export_svg_folders.dart ▶ ./lib/src/layers/layers_results.dart</title>
+</g>
+<g>
+  <path d="M 590.0 198.0 C 640.0 198.0, 646.0 592.0, 696.0 592.0" class="edge"/>
+  <title>./lib/src/graphs/export_svg_folders.dart ▶ ./lib/src/models/rect.dart</title>
+</g>
+<g>
+  <path d="M 590.0 198.0 C 640.0 198.0, 646.0 172.0, 696.0 172.0" class="edge"/>
+  <title>./lib/src/graphs/export_svg_folders.dart ▶ ./lib/src/graphs/svg_common.dart</title>
+</g>
+<g>
+  <path d="M 590.0 198.0 C 640.0 198.0, 646.0 242.0, 696.0 242.0" class="edge"/>
+  <title>./lib/src/graphs/export_svg_folders.dart ▶ ./lib/src/graphs/svg_styles.dart</title>
+</g>
+<g>
+  <path d="M 590.0 198.0 C 640.0 198.0, 966.0 172.0, 1016.0 172.0" class="edge"/>
+  <title>./lib/src/graphs/export_svg_folders.dart ▶ ./lib/src/graphs/badge_model.dart</title>
+</g>
+<g>
+  <path d="M 590.0 268.0 C 640.0 268.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
+  <title>./lib/src/graphs/export_svg.dart ▶ ./lib/src/layers/layers_results.dart</title>
+</g>
+<g>
+  <path d="M 590.0 268.0 C 640.0 268.0, 646.0 172.0, 696.0 172.0" class="edge"/>
+  <title>./lib/src/graphs/export_svg.dart ▶ ./lib/src/graphs/svg_common.dart</title>
+</g>
+<g>
+  <path d="M 590.0 268.0 C 640.0 268.0, 646.0 242.0, 696.0 242.0" class="edge"/>
+  <title>./lib/src/graphs/export_svg.dart ▶ ./lib/src/graphs/svg_styles.dart</title>
+</g>
+<g>
+  <path d="M 590.0 268.0 C 640.0 268.0, 966.0 172.0, 1016.0 172.0" class="edge"/>
+  <title>./lib/src/graphs/export_svg.dart ▶ ./lib/src/graphs/badge_model.dart</title>
+</g>
+<g>
+  <path d="M 590.0 338.0 C 640.0 338.0, 646.0 102.0, 696.0 102.0" class="edge"/>
+  <title>./lib/src/graphs/export_mermaid.dart ▶ ./lib/src/graphs/graph_format_utils.dart</title>
+</g>
+<g>
+  <path d="M 590.0 338.0 C 640.0 338.0, 966.0 102.0, 1016.0 102.0" class="edge"/>
+  <title>./lib/src/graphs/export_mermaid.dart ▶ ./lib/src/layers/layers_results.dart</title>
+</g>
 <g class="outgoingBadge">
   <path d="M 276.0,128.0 L 264.0,121.0 Q 261.0,121.0 261.0,124.0 L 261.0,132.0 Q 261.0,135.0 264.0,135.0 Z" fill="#10b981"/>
   <text x="265.0" y="131.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">6</text><title>export_mermaid.dart

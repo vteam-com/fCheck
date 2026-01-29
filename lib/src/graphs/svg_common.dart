@@ -64,6 +64,21 @@ void renderTriangularBadge(
   );
 }
 
+/// Renders an SVG edge with a tooltip containing source and target.
+void renderEdgeWithTooltip(
+  StringBuffer buffer, {
+  required String pathData,
+  required String source,
+  required String target,
+  required String cssClass,
+  String separator = '▶',
+}) {
+  buffer.writeln('<g>');
+  buffer.writeln('  <path d="$pathData" class="$cssClass"/>');
+  buffer.writeln('  <title>$source $separator $target</title>');
+  buffer.writeln('</g>');
+}
+
 /// Generates an empty SVG with a custom message.
 String generateEmptySvg(String message) {
   return '''<?xml version="1.0" encoding="UTF-8"?>

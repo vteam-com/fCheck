@@ -281,7 +281,7 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   buffer.writeln('<rect width="100%" height="100%" fill="#f8f9fa"/>');
 
   // Draw hierarchical edges (parent-child relationships)
-  _drawEdgeVerticals(buffer, drawOrder, folderPositions, folderDimensions,
+  _drawEdgeHorizontalCurve(buffer, drawOrder, folderPositions, folderDimensions,
       padding: folderPadding, childIndent: childIndent);
 
   // Track file anchor positions for dependency edges
@@ -330,7 +330,7 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   );
 
   // Draw inter-folder dependency edges between backgrounds and badges
-  _drawFolderedgeVerticals(
+  _drawEdgeVerticalFolders(
       buffer, folderDependencies, folderPositions, folderDimensions);
 
   // Draw folder badges above dependency edges
@@ -340,7 +340,7 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   _drawFilePanels(buffer, fileVisuals);
 
   // Draw file-to-file dependency edges
-  _drawedgeVerticals(buffer, relativeGraph, fileAnchors);
+  _drawEdgeVerticalsFiles(buffer, relativeGraph, fileAnchors);
 
   // Draw badges and labels after edges for correct stacking
   _drawFileVisuals(buffer, fileVisuals);
@@ -699,7 +699,7 @@ String _getFolderPath(String filePath, String rootPath) {
 }
 
 /// Draw hierarchical edges between parent and child folders
-void _drawEdgeVerticals(StringBuffer buffer, List<FolderNode> folders,
+void _drawEdgeHorizontalCurve(StringBuffer buffer, List<FolderNode> folders,
     Map<String, Point<double>> positions, Map<String, Rect> dimensions,
     {required double padding, required double childIndent}) {
   for (final folder in folders) {
@@ -721,11 +721,16 @@ void _drawEdgeVerticals(StringBuffer buffer, List<FolderNode> folders,
       // Control points for a gentle left-to-right curve within the parent box
       final controlX1 = parentX + (childIndent / 2);
       final controlX2 = childX - (childIndent / 2);
+      final pathData = 'M $parentX $parentY '
+          'C $controlX1 $parentY, $controlX2 $childY, $childX $childY';
 
-      buffer.writeln(
-          '<path d="M $parentX $parentY C $controlX1 $parentY, $controlX2 $childY, $childX $childY" class="edgeVertical"/>');
-      buffer.writeln(
-          '<title>${folder.name} → ${child.name} (parent-child)</title>');
+      renderEdgeWithTooltip(
+        buffer,
+        pathData: pathData,
+        source: folder.name,
+        target: child.name,
+        cssClass: 'edgeVertical',
+      );
     }
   }
 }
@@ -752,19 +757,50 @@ List<_FolderEdge> _collectFolderDependencies(
   return edges;
 }
 
+/// Draw edges between files based on dependency graph.
+void _drawEdgeVerticalsFiles(
+    StringBuffer buffer,
+    Map<String, List<String>> graph,
+    Map<String, Map<String, Point<double>>> anchors) {
+  var edgeCounter = 0;
+  for (final entry in graph.entries) {
+    final source = entry.key;
+    final targets = entry.value;
+    final sourceAnchor = anchors[source]?['out'];
+    if (sourceAnchor == null) continue;
+
+    for (final target in targets) {
+      final targetAnchor = anchors[target]?['in'];
+      if (targetAnchor == null) continue;
+
+      final startX = sourceAnchor.x;
+      final startY = sourceAnchor.y;
+      final endX = targetAnchor.x;
+      final endY = targetAnchor.y;
+
+      final path =
+          _buildStackedEdgePath(startX, startY, endX, endY, edgeCounter);
+
+      renderEdgeWithTooltip(
+        buffer,
+        pathData: path,
+        source: source,
+        target: target,
+        cssClass: 'edgeVertical',
+      );
+      edgeCounter++;
+    }
+  }
+}
+
 /// Draw folder-level dependency edges routed on the left side of folders.
-void _drawFolderedgeVerticals(
+void _drawEdgeVerticalFolders(
   StringBuffer buffer,
   List<_FolderEdge> edges,
   Map<String, Point<double>> positions,
   Map<String, Rect> dimensions,
 ) {
   if (edges.isEmpty) return;
-
-  const double columnGap = 32.0;
-  const double columnStep = 2.0; // keep columns separated like file edges
-  const double cornerRadius = 10.0;
-  const double minCanvasInset = 8.0; // keep a clear margin from the canvas
 
   for (var i = 0; i < edges.length; i++) {
     final edge = edges[i];
@@ -785,25 +821,16 @@ void _drawFolderedgeVerticals(
     final endX = targetPos.x + 10; // Incoming badge position (cx: pos.x + 10)
     final endY = targetPos.y + 13; // Incoming badge position (cy: pos.y + 13)
 
-    // Offset each edge column slightly left of its source to avoid stacking.
-    final localMin = min(startX, endX);
-    final rawColumnX = (localMin - columnGap) - (i * columnStep);
-    final maxLeft = localMin - cornerRadius - minCanvasInset;
-    final columnX = max(minCanvasInset, min(rawColumnX, maxLeft));
+    // Reuse the same path building function as file edges
+    final pathData = _buildStackedEdgePath(startX, startY, endX, endY, i);
 
-    // Rounded corners on both turns.
-    final dirY = endY >= startY ? 1.0 : -1.0;
-    final firstQy = startY + (dirY * cornerRadius);
-    final secondVy = endY - (dirY * cornerRadius);
-
-    buffer.writeln('<path d="M $startX $startY '
-        'H ${columnX + cornerRadius} '
-        'Q $columnX $startY $columnX $firstQy '
-        'V $secondVy '
-        'Q $columnX $endY ${columnX + cornerRadius} $endY '
-        'H $endX" class="edgeVertical"/>');
-    buffer.writeln(
-        '<title>${edge.sourceFolder} → ${edge.targetFolder} (folder dependency)</title>');
+    renderEdgeWithTooltip(
+      buffer,
+      pathData: pathData,
+      source: edge.sourceFolder,
+      target: edge.targetFolder,
+      cssClass: 'edgeVertical',
+    );
   }
 }
 
@@ -938,46 +965,25 @@ void _drawHierarchicalFolders(
   }
 }
 
-/// Draw edges between files based on dependency graph.
-void _drawedgeVerticals(StringBuffer buffer, Map<String, List<String>> graph,
-    Map<String, Map<String, Point<double>>> anchors) {
-  var edgeCounter = 0;
-  for (final entry in graph.entries) {
-    final source = entry.key;
-    final targets = entry.value;
-    final sourceAnchor = anchors[source]?['out'];
-    if (sourceAnchor == null) continue;
-
-    for (final target in targets) {
-      final targetAnchor = anchors[target]?['in'];
-      if (targetAnchor == null) continue;
-
-      final startX = sourceAnchor.x;
-      final startY = sourceAnchor.y;
-      final endX = targetAnchor.x;
-      final endY = targetAnchor.y;
-
-      final path =
-          _buildStackedEdgePath(startX, startY, endX, endY, edgeCounter);
-      buffer.writeln('<path d="$path" class="edgeVertical edgeVertical"/>');
-      buffer.writeln('<title>$source → $target</title>');
-      edgeCounter++;
-    }
-  }
-}
-
-/// Build a right-then-vertical-then-left edge with stacked columns.
+/// Build a directional edge with stacked columns, handling both west-to-east and east-to-west flows.
 String _buildStackedEdgePath(
-    double startX, double startY, double endX, double endY, int edgeIndex) {
+  double startX,
+  double startY,
+  double endX,
+  double endY,
+  int edgeIndex,
+) {
   const double baseOffset = 28.0;
   const double radius = 6.0;
   final dirY = endY >= startY ? 1.0 : -1.0;
+  final dirX = endX >= startX ? -1.0 : 1.0; // Detect horizontal direction
 
-  // Each edge gets a slightly larger offset to avoid overlapping vertical runs.
-  final columnX = startX + baseOffset + edgeIndex * 1.0;
+  // Each edge gets a slightly larger offset to avoid overlapping runs.
+  // Offset in the direction of the initial horizontal movement.
+  final columnX = startX + (dirX * baseOffset) + (dirX * edgeIndex * 2.0);
 
-  final preCurveX = columnX - radius;
-  final postCurveX = columnX - radius;
+  final preCurveX = columnX - (dirX * radius);
+  final postCurveX = columnX - (dirX * radius);
   final firstQx = columnX;
   final firstQy = startY + dirY * radius;
 

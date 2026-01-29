@@ -190,8 +190,16 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
 
       final isCycle = cyclicEdges.contains('$source|$target');
       final extraClass = isCycle ? ' cycleEdge' : '';
-      buffer.writeln(
-          '<path d="M $startX $startY C $controlX1 $startY, $controlX2 $endY, $endX $endY" class="edge$extraClass"/>');
+      final pathData =
+          'M $startX $startY C $controlX1 $startY, $controlX2 $endY, $endX $endY';
+
+      renderEdgeWithTooltip(
+        buffer,
+        pathData: pathData,
+        source: source,
+        target: target,
+        cssClass: 'edge$extraClass',
+      );
     }
   }
 

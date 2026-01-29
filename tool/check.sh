@@ -28,4 +28,4 @@ flutter test --reporter=compact --no-pub
 
 echo --- fCheck
 dart run ./bin/fcheck.dart --svg --svgfolder --mermaid --plantuml ./example/
-dart run ./bin/fcheck.dart --svg --svgfolder .
+dart run ./bin/fcheck.dart --svg --svgfolder --fix . 

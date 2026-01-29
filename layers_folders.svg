@@ -107,12 +107,13 @@
     fill: none; 
     stroke: url(#horizontalGradient); 
     stroke-width: 1; 
+    opacity: 0.5;
     transition: all 0.1s ease-in-out; 
   }
   
   .edge:hover { 
     stroke: url(#horizontalGradient); 
-    stroke-width: 5; 
+    stroke-width: 3; 
     opacity: 1.0; 
   }
   
@@ -126,7 +127,7 @@
   
   .edgeVertical:hover { 
     stroke: url(#verticalGradient); 
-    stroke-width: 5; 
+    stroke-width: 3; 
     opacity: 1.0; 
   }
   
@@ -159,26 +160,46 @@
   }
 </style>
 <rect width="100%" height="100%" fill="#f8f9fa"/>
-<path d="M 75.0 999.0 C 84.0 999.0, 67.0 999.0, 76.0 999.0" class="edgeVertical"/>
-<title>. → .. (parent-child)</title>
-<path d="M 109.0 1009.0 C 118.0 1009.0, 101.0 1009.0, 110.0 1009.0" class="edgeVertical"/>
-<title>.. → lib (parent-child)</title>
-<path d="M 143.0 1038.0 C 152.0 1038.0, 135.0 1038.0, 144.0 1038.0" class="edgeVertical"/>
-<title>lib → src (parent-child)</title>
-<path d="M 177.0 491.0 C 186.0 491.0, 169.0 491.0, 178.0 491.0" class="edgeVertical"/>
-<title>src → graphs (parent-child)</title>
-<path d="M 177.0 1669.0 C 186.0 1669.0, 169.0 1669.0, 178.0 1669.0" class="edgeVertical"/>
-<title>src → models (parent-child)</title>
-<path d="M 177.0 917.0 C 186.0 917.0, 169.0 917.0, 178.0 917.0" class="edgeVertical"/>
-<title>src → layers (parent-child)</title>
-<path d="M 177.0 736.0 C 186.0 736.0, 169.0 736.0, 178.0 736.0" class="edgeVertical"/>
-<title>src → metrics (parent-child)</title>
-<path d="M 177.0 1105.0 C 186.0 1105.0, 169.0 1105.0, 178.0 1105.0" class="edgeVertical"/>
-<title>src → hardcoded_strings (parent-child)</title>
-<path d="M 177.0 1277.0 C 186.0 1277.0, 169.0 1277.0, 178.0 1277.0" class="edgeVertical"/>
-<title>src → magic_numbers (parent-child)</title>
-<path d="M 177.0 1465.0 C 186.0 1465.0, 169.0 1465.0, 178.0 1465.0" class="edgeVertical"/>
-<title>src → sort (parent-child)</title>
+<g>
+  <path d="M 75.0 999.0 C 84.0 999.0, 67.0 999.0, 76.0 999.0" class="edgeVertical"/>
+  <title>. ▶ ..</title>
+</g>
+<g>
+  <path d="M 109.0 1009.0 C 118.0 1009.0, 101.0 1009.0, 110.0 1009.0" class="edgeVertical"/>
+  <title>.. ▶ lib</title>
+</g>
+<g>
+  <path d="M 143.0 1038.0 C 152.0 1038.0, 135.0 1038.0, 144.0 1038.0" class="edgeVertical"/>
+  <title>lib ▶ src</title>
+</g>
+<g>
+  <path d="M 177.0 491.0 C 186.0 491.0, 169.0 491.0, 178.0 491.0" class="edgeVertical"/>
+  <title>src ▶ graphs</title>
+</g>
+<g>
+  <path d="M 177.0 1669.0 C 186.0 1669.0, 169.0 1669.0, 178.0 1669.0" class="edgeVertical"/>
+  <title>src ▶ models</title>
+</g>
+<g>
+  <path d="M 177.0 917.0 C 186.0 917.0, 169.0 917.0, 178.0 917.0" class="edgeVertical"/>
+  <title>src ▶ layers</title>
+</g>
+<g>
+  <path d="M 177.0 736.0 C 186.0 736.0, 169.0 736.0, 178.0 736.0" class="edgeVertical"/>
+  <title>src ▶ metrics</title>
+</g>
+<g>
+  <path d="M 177.0 1105.0 C 186.0 1105.0, 169.0 1105.0, 178.0 1105.0" class="edgeVertical"/>
+  <title>src ▶ hardcoded_strings</title>
+</g>
+<g>
+  <path d="M 177.0 1277.0 C 186.0 1277.0, 169.0 1277.0, 178.0 1277.0" class="edgeVertical"/>
+  <title>src ▶ magic_numbers</title>
+</g>
+<g>
+  <path d="M 177.0 1465.0 C 186.0 1465.0, 169.0 1465.0, 178.0 1465.0" class="edgeVertical"/>
+  <title>src ▶ sort</title>
+</g>
 <g class="folderLayer">
 <rect x="50.0" y="50.0" width="460.0" height="1840.0" rx="12" ry="12" class="layerBackground"/>
 </g>
@@ -212,44 +233,82 @@
 <g class="folderLayer">
 <rect x="186.0" y="1372.0" width="260.0" height="186.0" rx="12" ry="12" class="layerBackground"/>
 </g>
-<path d="M 56.0 74.0 H 34.0 Q 24.0 74.0 24.0 84.0 V 337.0 Q 24.0 347.0 34.0 347.0 H 196.0" class="edgeVertical"/>
-<title>. → ../lib/src/graphs (folder dependency)</title>
-<path d="M 56.0 74.0 H 32.0 Q 22.0 74.0 22.0 84.0 V 195.0 Q 22.0 205.0 32.0 205.0 H 128.0" class="edgeVertical"/>
-<title>. → ../lib (folder dependency)</title>
-<path d="M 56.0 74.0 H 30.0 Q 20.0 74.0 20.0 84.0 V 1579.0 Q 20.0 1589.0 30.0 1589.0 H 196.0" class="edgeVertical"/>
-<title>. → ../lib/src/models (folder dependency)</title>
-<path d="M 124.0 216.0 H 96.0 Q 86.0 216.0 86.0 226.0 V 827.0 Q 86.0 837.0 96.0 837.0 H 196.0" class="edgeVertical"/>
-<title>../lib → ../lib/src/layers (folder dependency)</title>
-<path d="M 124.0 216.0 H 94.0 Q 84.0 216.0 84.0 226.0 V 669.0 Q 84.0 679.0 94.0 679.0 H 196.0" class="edgeVertical"/>
-<title>../lib → ../lib/src/metrics (folder dependency)</title>
-<path d="M 124.0 216.0 H 92.0 Q 82.0 216.0 82.0 226.0 V 1031.0 Q 82.0 1041.0 92.0 1041.0 H 196.0" class="edgeVertical"/>
-<title>../lib → ../lib/src/hardcoded_strings (folder dependency)</title>
-<path d="M 124.0 216.0 H 90.0 Q 80.0 216.0 80.0 226.0 V 1203.0 Q 80.0 1213.0 90.0 1213.0 H 196.0" class="edgeVertical"/>
-<title>../lib → ../lib/src/magic_numbers (folder dependency)</title>
-<path d="M 124.0 216.0 H 88.0 Q 78.0 216.0 78.0 226.0 V 1375.0 Q 78.0 1385.0 88.0 1385.0 H 196.0" class="edgeVertical"/>
-<title>../lib → ../lib/src/sort (folder dependency)</title>
-<path d="M 124.0 216.0 H 86.0 Q 76.0 216.0 76.0 226.0 V 1579.0 Q 76.0 1589.0 86.0 1589.0 H 196.0" class="edgeVertical"/>
-<title>../lib → ../lib/src/models (folder dependency)</title>
-<path d="M 192.0 690.0 H 152.0 Q 142.0 690.0 142.0 700.0 V 1031.0 Q 142.0 1041.0 152.0 1041.0 H 196.0" class="edgeVertical"/>
-<title>../lib/src/metrics → ../lib/src/hardcoded_strings (folder dependency)</title>
-<path d="M 192.0 690.0 H 150.0 Q 140.0 690.0 140.0 700.0 V 827.0 Q 140.0 837.0 150.0 837.0 H 196.0" class="edgeVertical"/>
-<title>../lib/src/metrics → ../lib/src/layers (folder dependency)</title>
-<path d="M 192.0 690.0 H 148.0 Q 138.0 690.0 138.0 700.0 V 1203.0 Q 138.0 1213.0 148.0 1213.0 H 196.0" class="edgeVertical"/>
-<title>../lib/src/metrics → ../lib/src/magic_numbers (folder dependency)</title>
-<path d="M 192.0 690.0 H 146.0 Q 136.0 690.0 136.0 700.0 V 1375.0 Q 136.0 1385.0 146.0 1385.0 H 196.0" class="edgeVertical"/>
-<title>../lib/src/metrics → ../lib/src/sort (folder dependency)</title>
-<path d="M 192.0 1052.0 H 144.0 Q 134.0 1052.0 134.0 1062.0 V 1579.0 Q 134.0 1589.0 144.0 1589.0 H 196.0" class="edgeVertical"/>
-<title>../lib/src/hardcoded_strings → ../lib/src/models (folder dependency)</title>
-<path d="M 192.0 848.0 H 142.0 Q 132.0 848.0 132.0 858.0 V 1579.0 Q 132.0 1589.0 142.0 1589.0 H 196.0" class="edgeVertical"/>
-<title>../lib/src/layers → ../lib/src/models (folder dependency)</title>
-<path d="M 192.0 1396.0 H 140.0 Q 130.0 1396.0 130.0 1406.0 V 1579.0 Q 130.0 1589.0 140.0 1589.0 H 196.0" class="edgeVertical"/>
-<title>../lib/src/sort → ../lib/src/models (folder dependency)</title>
-<path d="M 192.0 1224.0 H 138.0 Q 128.0 1224.0 128.0 1234.0 V 1579.0 Q 128.0 1589.0 138.0 1589.0 H 196.0" class="edgeVertical"/>
-<title>../lib/src/magic_numbers → ../lib/src/models (folder dependency)</title>
-<path d="M 192.0 358.0 H 136.0 Q 126.0 358.0 126.0 368.0 V 827.0 Q 126.0 837.0 136.0 837.0 H 196.0" class="edgeVertical"/>
-<title>../lib/src/graphs → ../lib/src/layers (folder dependency)</title>
-<path d="M 192.0 358.0 H 134.0 Q 124.0 358.0 124.0 368.0 V 1579.0 Q 124.0 1589.0 134.0 1589.0 H 196.0" class="edgeVertical"/>
-<title>../lib/src/graphs → ../lib/src/models (folder dependency)</title>
+<g>
+  <path d="M 56.0 74.0 H 34.0 Q 28.0 74.0 28.0 80.0 V 341.0 Q 28.0 347.0 34.0 347.0 H 196.0" class="edgeVertical"/>
+  <title>. ▶ ../lib/src/graphs</title>
+</g>
+<g>
+  <path d="M 56.0 74.0 H 32.0 Q 26.0 74.0 26.0 80.0 V 199.0 Q 26.0 205.0 32.0 205.0 H 128.0" class="edgeVertical"/>
+  <title>. ▶ ../lib</title>
+</g>
+<g>
+  <path d="M 56.0 74.0 H 30.0 Q 24.0 74.0 24.0 80.0 V 1583.0 Q 24.0 1589.0 30.0 1589.0 H 196.0" class="edgeVertical"/>
+  <title>. ▶ ../lib/src/models</title>
+</g>
+<g>
+  <path d="M 124.0 216.0 H 96.0 Q 90.0 216.0 90.0 222.0 V 831.0 Q 90.0 837.0 96.0 837.0 H 196.0" class="edgeVertical"/>
+  <title>../lib ▶ ../lib/src/layers</title>
+</g>
+<g>
+  <path d="M 124.0 216.0 H 94.0 Q 88.0 216.0 88.0 222.0 V 673.0 Q 88.0 679.0 94.0 679.0 H 196.0" class="edgeVertical"/>
+  <title>../lib ▶ ../lib/src/metrics</title>
+</g>
+<g>
+  <path d="M 124.0 216.0 H 92.0 Q 86.0 216.0 86.0 222.0 V 1035.0 Q 86.0 1041.0 92.0 1041.0 H 196.0" class="edgeVertical"/>
+  <title>../lib ▶ ../lib/src/hardcoded_strings</title>
+</g>
+<g>
+  <path d="M 124.0 216.0 H 90.0 Q 84.0 216.0 84.0 222.0 V 1207.0 Q 84.0 1213.0 90.0 1213.0 H 196.0" class="edgeVertical"/>
+  <title>../lib ▶ ../lib/src/magic_numbers</title>
+</g>
+<g>
+  <path d="M 124.0 216.0 H 88.0 Q 82.0 216.0 82.0 222.0 V 1379.0 Q 82.0 1385.0 88.0 1385.0 H 196.0" class="edgeVertical"/>
+  <title>../lib ▶ ../lib/src/sort</title>
+</g>
+<g>
+  <path d="M 124.0 216.0 H 86.0 Q 80.0 216.0 80.0 222.0 V 1583.0 Q 80.0 1589.0 86.0 1589.0 H 196.0" class="edgeVertical"/>
+  <title>../lib ▶ ../lib/src/models</title>
+</g>
+<g>
+  <path d="M 192.0 690.0 H 152.0 Q 146.0 690.0 146.0 696.0 V 1035.0 Q 146.0 1041.0 152.0 1041.0 H 196.0" class="edgeVertical"/>
+  <title>../lib/src/metrics ▶ ../lib/src/hardcoded_strings</title>
+</g>
+<g>
+  <path d="M 192.0 690.0 H 150.0 Q 144.0 690.0 144.0 696.0 V 831.0 Q 144.0 837.0 150.0 837.0 H 196.0" class="edgeVertical"/>
+  <title>../lib/src/metrics ▶ ../lib/src/layers</title>
+</g>
+<g>
+  <path d="M 192.0 690.0 H 148.0 Q 142.0 690.0 142.0 696.0 V 1207.0 Q 142.0 1213.0 148.0 1213.0 H 196.0" class="edgeVertical"/>
+  <title>../lib/src/metrics ▶ ../lib/src/magic_numbers</title>
+</g>
+<g>
+  <path d="M 192.0 690.0 H 146.0 Q 140.0 690.0 140.0 696.0 V 1379.0 Q 140.0 1385.0 146.0 1385.0 H 196.0" class="edgeVertical"/>
+  <title>../lib/src/metrics ▶ ../lib/src/sort</title>
+</g>
+<g>
+  <path d="M 192.0 1052.0 H 144.0 Q 138.0 1052.0 138.0 1058.0 V 1583.0 Q 138.0 1589.0 144.0 1589.0 H 196.0" class="edgeVertical"/>
+  <title>../lib/src/hardcoded_strings ▶ ../lib/src/models</title>
+</g>
+<g>
+  <path d="M 192.0 848.0 H 142.0 Q 136.0 848.0 136.0 854.0 V 1583.0 Q 136.0 1589.0 142.0 1589.0 H 196.0" class="edgeVertical"/>
+  <title>../lib/src/layers ▶ ../lib/src/models</title>
+</g>
+<g>
+  <path d="M 192.0 1396.0 H 140.0 Q 134.0 1396.0 134.0 1402.0 V 1583.0 Q 134.0 1589.0 140.0 1589.0 H 196.0" class="edgeVertical"/>
+  <title>../lib/src/sort ▶ ../lib/src/models</title>
+</g>
+<g>
+  <path d="M 192.0 1224.0 H 138.0 Q 132.0 1224.0 132.0 1230.0 V 1583.0 Q 132.0 1589.0 138.0 1589.0 H 196.0" class="edgeVertical"/>
+  <title>../lib/src/magic_numbers ▶ ../lib/src/models</title>
+</g>
+<g>
+  <path d="M 192.0 358.0 H 136.0 Q 130.0 358.0 130.0 364.0 V 831.0 Q 130.0 837.0 136.0 837.0 H 196.0" class="edgeVertical"/>
+  <title>../lib/src/graphs ▶ ../lib/src/layers</title>
+</g>
+<g>
+  <path d="M 192.0 358.0 H 134.0 Q 128.0 358.0 128.0 364.0 V 1583.0 Q 128.0 1589.0 134.0 1589.0 H 196.0" class="edgeVertical"/>
+  <title>../lib/src/graphs ▶ ../lib/src/models</title>
+</g>
 <g class="outgoingBadge">
   <path d="M 50.0,74.0 L 62.0,67.0 Q 65.0,67.0 65.0,70.0 L 65.0,78.0 Q 65.0,81.0 62.0,81.0 Z" fill="#10b981"/>
   <text x="61.0" y="77.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">6</text><title>graphs
@@ -334,116 +393,226 @@ metrics</title></g><g class="outgoingBadge">
 <rect x="194.0" y="1506.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="126.0" y="230.0" width="344.0" height="28.0" rx="5" ry="5" class="fileNode"/>
 <rect x="58.0" y="88.0" width="444.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<path d="M 498.0 108.0 H 520.0 Q 526.0 108.0 526.0 114.0 V 375.0 Q 526.0 381.0 520.0 381.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>fcheck.dart → ../lib/src/graphs/export_mermaid.dart</title>
-<path d="M 498.0 108.0 H 521.0 Q 527.0 108.0 527.0 114.0 V 407.0 Q 527.0 413.0 521.0 413.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>fcheck.dart → ../lib/src/graphs/export_plantuml.dart</title>
-<path d="M 498.0 108.0 H 522.0 Q 528.0 108.0 528.0 114.0 V 471.0 Q 528.0 477.0 522.0 477.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>fcheck.dart → ../lib/src/graphs/export_svg.dart</title>
-<path d="M 498.0 108.0 H 523.0 Q 529.0 108.0 529.0 114.0 V 503.0 Q 529.0 509.0 523.0 509.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>fcheck.dart → ../lib/src/graphs/export_svg_folders.dart</title>
-<path d="M 498.0 108.0 H 524.0 Q 530.0 108.0 530.0 114.0 V 233.0 Q 530.0 239.0 524.0 239.0 H 462.0" class="edgeVertical edgeVertical"/>
-<title>fcheck.dart → ../lib/fcheck.dart</title>
-<path d="M 498.0 108.0 H 525.0 Q 531.0 108.0 531.0 114.0 V 1713.0 Q 531.0 1719.0 525.0 1719.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>fcheck.dart → ../lib/src/models/version.dart</title>
-<path d="M 466.0 250.0 H 494.0 Q 500.0 250.0 500.0 256.0 V 897.0 Q 500.0 903.0 494.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/fcheck.dart → ../lib/src/layers/layers_results.dart</title>
-<path d="M 466.0 250.0 H 495.0 Q 501.0 250.0 501.0 256.0 V 739.0 Q 501.0 745.0 495.0 745.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/fcheck.dart → ../lib/src/metrics/file_metrics.dart</title>
-<path d="M 466.0 250.0 H 496.0 Q 502.0 250.0 502.0 256.0 V 1069.0 Q 502.0 1075.0 496.0 1075.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/fcheck.dart → ../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart</title>
-<path d="M 466.0 250.0 H 497.0 Q 503.0 250.0 503.0 256.0 V 865.0 Q 503.0 871.0 497.0 871.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/fcheck.dart → ../lib/src/layers/layers_analyzer.dart</title>
-<path d="M 466.0 250.0 H 498.0 Q 504.0 250.0 504.0 256.0 V 1241.0 Q 504.0 1247.0 498.0 1247.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/fcheck.dart → ../lib/src/magic_numbers/magic_number_analyzer.dart</title>
-<path d="M 466.0 250.0 H 499.0 Q 505.0 250.0 505.0 256.0 V 1413.0 Q 505.0 1419.0 499.0 1419.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/fcheck.dart → ../lib/src/sort/sort.dart</title>
-<path d="M 466.0 250.0 H 500.0 Q 506.0 250.0 506.0 256.0 V 707.0 Q 506.0 713.0 500.0 713.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/fcheck.dart → ../lib/src/metrics/project_metrics.dart</title>
-<path d="M 466.0 250.0 H 501.0 Q 507.0 250.0 507.0 256.0 V 1617.0 Q 507.0 1623.0 501.0 1623.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/fcheck.dart → ../lib/src/models/file_utils.dart</title>
-<path d="M 434.0 724.0 H 470.0 Q 476.0 724.0 476.0 730.0 V 1133.0 Q 476.0 1139.0 470.0 1139.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/metrics/project_metrics.dart → ../lib/src/hardcoded_strings/hardcoded_string_issue.dart</title>
-<path d="M 434.0 724.0 H 471.0 Q 477.0 724.0 477.0 730.0 V 929.0 Q 477.0 935.0 471.0 935.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/metrics/project_metrics.dart → ../lib/src/layers/layers_issue.dart</title>
-<path d="M 434.0 724.0 H 472.0 Q 478.0 724.0 478.0 730.0 V 739.0 Q 478.0 745.0 472.0 745.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/metrics/project_metrics.dart → ../lib/src/metrics/file_metrics.dart</title>
-<path d="M 434.0 724.0 H 473.0 Q 479.0 724.0 479.0 730.0 V 1305.0 Q 479.0 1311.0 473.0 1311.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/metrics/project_metrics.dart → ../lib/src/magic_numbers/magic_number_issue.dart</title>
-<path d="M 434.0 724.0 H 474.0 Q 480.0 724.0 480.0 730.0 V 1413.0 Q 480.0 1419.0 474.0 1419.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/metrics/project_metrics.dart → ../lib/src/sort/sort.dart</title>
-<path d="M 434.0 1118.0 H 475.0 Q 481.0 1118.0 481.0 1124.0 V 1133.0 Q 481.0 1139.0 475.0 1139.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/hardcoded_strings/hardcoded_string_visitor.dart → ../lib/src/hardcoded_strings/hardcoded_string_issue.dart</title>
-<path d="M 434.0 1086.0 H 476.0 Q 482.0 1086.0 482.0 1092.0 V 1133.0 Q 482.0 1139.0 476.0 1139.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart → ../lib/src/hardcoded_strings/hardcoded_string_issue.dart</title>
-<path d="M 434.0 1086.0 H 477.0 Q 483.0 1086.0 483.0 1092.0 V 1101.0 Q 483.0 1107.0 477.0 1107.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart → ../lib/src/hardcoded_strings/hardcoded_string_visitor.dart</title>
-<path d="M 434.0 1086.0 H 478.0 Q 484.0 1086.0 484.0 1092.0 V 1617.0 Q 484.0 1623.0 478.0 1623.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart → ../lib/src/models/file_utils.dart</title>
-<path d="M 434.0 914.0 H 479.0 Q 485.0 914.0 485.0 920.0 V 929.0 Q 485.0 935.0 479.0 935.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/layers/layers_results.dart → ../lib/src/layers/layers_issue.dart</title>
-<path d="M 434.0 882.0 H 480.0 Q 486.0 882.0 486.0 888.0 V 897.0 Q 486.0 903.0 480.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/layers/layers_analyzer.dart → ../lib/src/layers/layers_results.dart</title>
-<path d="M 434.0 882.0 H 481.0 Q 487.0 882.0 487.0 888.0 V 1617.0 Q 487.0 1623.0 481.0 1623.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/layers/layers_analyzer.dart → ../lib/src/models/file_utils.dart</title>
-<path d="M 434.0 882.0 H 482.0 Q 488.0 882.0 488.0 888.0 V 929.0 Q 488.0 935.0 482.0 935.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/layers/layers_analyzer.dart → ../lib/src/layers/layers_issue.dart</title>
-<path d="M 434.0 882.0 H 483.0 Q 489.0 882.0 489.0 888.0 V 961.0 Q 489.0 967.0 483.0 967.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/layers/layers_analyzer.dart → ../lib/src/layers/layers_visitor.dart</title>
-<path d="M 434.0 1430.0 H 484.0 Q 490.0 1430.0 490.0 1436.0 V 1649.0 Q 490.0 1655.0 484.0 1655.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/sort/sort.dart → ../lib/src/models/class_visitor.dart</title>
-<path d="M 434.0 1430.0 H 485.0 Q 491.0 1430.0 491.0 1436.0 V 1509.0 Q 491.0 1515.0 485.0 1515.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/sort/sort.dart → ../lib/src/sort/sort_members.dart</title>
-<path d="M 434.0 1430.0 H 486.0 Q 492.0 1430.0 492.0 1436.0 V 1445.0 Q 492.0 1451.0 486.0 1451.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/sort/sort.dart → ../lib/src/sort/sort_analyzer.dart</title>
-<path d="M 434.0 1430.0 H 487.0 Q 493.0 1430.0 493.0 1436.0 V 1477.0 Q 493.0 1483.0 487.0 1483.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/sort/sort.dart → ../lib/src/sort/sort_issue.dart</title>
-<path d="M 434.0 1462.0 H 488.0 Q 494.0 1462.0 494.0 1468.0 V 1649.0 Q 494.0 1655.0 488.0 1655.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/sort/sort_analyzer.dart → ../lib/src/models/class_visitor.dart</title>
-<path d="M 434.0 1462.0 H 489.0 Q 495.0 1462.0 495.0 1468.0 V 1509.0 Q 495.0 1515.0 489.0 1515.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/sort/sort_analyzer.dart → ../lib/src/sort/sort_members.dart</title>
-<path d="M 434.0 1462.0 H 490.0 Q 496.0 1462.0 496.0 1468.0 V 1477.0 Q 496.0 1483.0 490.0 1483.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/sort/sort_analyzer.dart → ../lib/src/sort/sort_issue.dart</title>
-<path d="M 434.0 1462.0 H 491.0 Q 497.0 1462.0 497.0 1468.0 V 1617.0 Q 497.0 1623.0 491.0 1623.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/sort/sort_analyzer.dart → ../lib/src/models/file_utils.dart</title>
-<path d="M 434.0 1290.0 H 492.0 Q 498.0 1290.0 498.0 1296.0 V 1305.0 Q 498.0 1311.0 492.0 1311.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/magic_numbers/magic_number_visitor.dart → ../lib/src/magic_numbers/magic_number_issue.dart</title>
-<path d="M 434.0 1258.0 H 493.0 Q 499.0 1258.0 499.0 1264.0 V 1305.0 Q 499.0 1311.0 493.0 1311.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/magic_numbers/magic_number_analyzer.dart → ../lib/src/magic_numbers/magic_number_issue.dart</title>
-<path d="M 434.0 1258.0 H 494.0 Q 500.0 1258.0 500.0 1264.0 V 1273.0 Q 500.0 1279.0 494.0 1279.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/magic_numbers/magic_number_analyzer.dart → ../lib/src/magic_numbers/magic_number_visitor.dart</title>
-<path d="M 434.0 1258.0 H 495.0 Q 501.0 1258.0 501.0 1264.0 V 1617.0 Q 501.0 1623.0 495.0 1623.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/magic_numbers/magic_number_analyzer.dart → ../lib/src/models/file_utils.dart</title>
-<path d="M 434.0 456.0 H 496.0 Q 502.0 456.0 502.0 462.0 V 897.0 Q 502.0 903.0 496.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/graph_format_utils.dart → ../lib/src/layers/layers_results.dart</title>
-<path d="M 434.0 552.0 H 497.0 Q 503.0 552.0 503.0 558.0 V 567.0 Q 503.0 573.0 497.0 573.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/svg_common.dart → ../lib/src/graphs/badge_model.dart</title>
-<path d="M 434.0 424.0 H 498.0 Q 504.0 424.0 504.0 430.0 V 439.0 Q 504.0 445.0 498.0 445.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/export_plantuml.dart → ../lib/src/graphs/graph_format_utils.dart</title>
-<path d="M 434.0 424.0 H 499.0 Q 505.0 424.0 505.0 430.0 V 897.0 Q 505.0 903.0 499.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/export_plantuml.dart → ../lib/src/layers/layers_results.dart</title>
-<path d="M 434.0 520.0 H 500.0 Q 506.0 520.0 506.0 526.0 V 897.0 Q 506.0 903.0 500.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/export_svg_folders.dart → ../lib/src/layers/layers_results.dart</title>
-<path d="M 434.0 520.0 H 501.0 Q 507.0 520.0 507.0 526.0 V 1681.0 Q 507.0 1687.0 501.0 1687.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/export_svg_folders.dart → ../lib/src/models/rect.dart</title>
-<path d="M 434.0 520.0 H 502.0 Q 508.0 520.0 508.0 526.0 V 535.0 Q 508.0 541.0 502.0 541.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/export_svg_folders.dart → ../lib/src/graphs/svg_common.dart</title>
-<path d="M 434.0 520.0 H 503.0 Q 509.0 520.0 509.0 526.0 V 599.0 Q 509.0 605.0 503.0 605.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/export_svg_folders.dart → ../lib/src/graphs/svg_styles.dart</title>
-<path d="M 434.0 520.0 H 504.0 Q 510.0 520.0 510.0 526.0 V 567.0 Q 510.0 573.0 504.0 573.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/export_svg_folders.dart → ../lib/src/graphs/badge_model.dart</title>
-<path d="M 434.0 488.0 H 505.0 Q 511.0 488.0 511.0 494.0 V 897.0 Q 511.0 903.0 505.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/export_svg.dart → ../lib/src/layers/layers_results.dart</title>
-<path d="M 434.0 488.0 H 506.0 Q 512.0 488.0 512.0 494.0 V 535.0 Q 512.0 541.0 506.0 541.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/export_svg.dart → ../lib/src/graphs/svg_common.dart</title>
-<path d="M 434.0 488.0 H 507.0 Q 513.0 488.0 513.0 494.0 V 599.0 Q 513.0 605.0 507.0 605.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/export_svg.dart → ../lib/src/graphs/svg_styles.dart</title>
-<path d="M 434.0 488.0 H 508.0 Q 514.0 488.0 514.0 494.0 V 567.0 Q 514.0 573.0 508.0 573.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/export_svg.dart → ../lib/src/graphs/badge_model.dart</title>
-<path d="M 434.0 392.0 H 509.0 Q 515.0 392.0 515.0 398.0 V 439.0 Q 515.0 445.0 509.0 445.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/export_mermaid.dart → ../lib/src/graphs/graph_format_utils.dart</title>
-<path d="M 434.0 392.0 H 510.0 Q 516.0 392.0 516.0 398.0 V 897.0 Q 516.0 903.0 510.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
-<title>../lib/src/graphs/export_mermaid.dart → ../lib/src/layers/layers_results.dart</title>
+<g>
+  <path d="M 498.0 108.0 H 520.0 Q 526.0 108.0 526.0 114.0 V 375.0 Q 526.0 381.0 520.0 381.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>fcheck.dart ▶ ../lib/src/graphs/export_mermaid.dart</title>
+</g>
+<g>
+  <path d="M 498.0 108.0 H 522.0 Q 528.0 108.0 528.0 114.0 V 407.0 Q 528.0 413.0 522.0 413.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>fcheck.dart ▶ ../lib/src/graphs/export_plantuml.dart</title>
+</g>
+<g>
+  <path d="M 498.0 108.0 H 524.0 Q 530.0 108.0 530.0 114.0 V 471.0 Q 530.0 477.0 524.0 477.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>fcheck.dart ▶ ../lib/src/graphs/export_svg.dart</title>
+</g>
+<g>
+  <path d="M 498.0 108.0 H 526.0 Q 532.0 108.0 532.0 114.0 V 503.0 Q 532.0 509.0 526.0 509.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>fcheck.dart ▶ ../lib/src/graphs/export_svg_folders.dart</title>
+</g>
+<g>
+  <path d="M 498.0 108.0 H 528.0 Q 534.0 108.0 534.0 114.0 V 233.0 Q 534.0 239.0 528.0 239.0 H 462.0" class="edgeVertical edgeVertical"/>
+  <title>fcheck.dart ▶ ../lib/fcheck.dart</title>
+</g>
+<g>
+  <path d="M 498.0 108.0 H 530.0 Q 536.0 108.0 536.0 114.0 V 1713.0 Q 536.0 1719.0 530.0 1719.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>fcheck.dart ▶ ../lib/src/models/version.dart</title>
+</g>
+<g>
+  <path d="M 466.0 250.0 H 500.0 Q 506.0 250.0 506.0 256.0 V 897.0 Q 506.0 903.0 500.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/fcheck.dart ▶ ../lib/src/layers/layers_results.dart</title>
+</g>
+<g>
+  <path d="M 466.0 250.0 H 502.0 Q 508.0 250.0 508.0 256.0 V 739.0 Q 508.0 745.0 502.0 745.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/fcheck.dart ▶ ../lib/src/metrics/file_metrics.dart</title>
+</g>
+<g>
+  <path d="M 466.0 250.0 H 504.0 Q 510.0 250.0 510.0 256.0 V 1069.0 Q 510.0 1075.0 504.0 1075.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/fcheck.dart ▶ ../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart</title>
+</g>
+<g>
+  <path d="M 466.0 250.0 H 506.0 Q 512.0 250.0 512.0 256.0 V 865.0 Q 512.0 871.0 506.0 871.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/fcheck.dart ▶ ../lib/src/layers/layers_analyzer.dart</title>
+</g>
+<g>
+  <path d="M 466.0 250.0 H 508.0 Q 514.0 250.0 514.0 256.0 V 1241.0 Q 514.0 1247.0 508.0 1247.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/fcheck.dart ▶ ../lib/src/magic_numbers/magic_number_analyzer.dart</title>
+</g>
+<g>
+  <path d="M 466.0 250.0 H 510.0 Q 516.0 250.0 516.0 256.0 V 1413.0 Q 516.0 1419.0 510.0 1419.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/fcheck.dart ▶ ../lib/src/sort/sort.dart</title>
+</g>
+<g>
+  <path d="M 466.0 250.0 H 512.0 Q 518.0 250.0 518.0 256.0 V 707.0 Q 518.0 713.0 512.0 713.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/fcheck.dart ▶ ../lib/src/metrics/project_metrics.dart</title>
+</g>
+<g>
+  <path d="M 466.0 250.0 H 514.0 Q 520.0 250.0 520.0 256.0 V 1617.0 Q 520.0 1623.0 514.0 1623.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/fcheck.dart ▶ ../lib/src/models/file_utils.dart</title>
+</g>
+<g>
+  <path d="M 434.0 724.0 H 484.0 Q 490.0 724.0 490.0 730.0 V 1133.0 Q 490.0 1139.0 484.0 1139.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/metrics/project_metrics.dart ▶ ../lib/src/hardcoded_strings/hardcoded_string_issue.dart</title>
+</g>
+<g>
+  <path d="M 434.0 724.0 H 486.0 Q 492.0 724.0 492.0 730.0 V 929.0 Q 492.0 935.0 486.0 935.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/metrics/project_metrics.dart ▶ ../lib/src/layers/layers_issue.dart</title>
+</g>
+<g>
+  <path d="M 434.0 724.0 H 488.0 Q 494.0 724.0 494.0 730.0 V 739.0 Q 494.0 745.0 488.0 745.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/metrics/project_metrics.dart ▶ ../lib/src/metrics/file_metrics.dart</title>
+</g>
+<g>
+  <path d="M 434.0 724.0 H 490.0 Q 496.0 724.0 496.0 730.0 V 1305.0 Q 496.0 1311.0 490.0 1311.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/metrics/project_metrics.dart ▶ ../lib/src/magic_numbers/magic_number_issue.dart</title>
+</g>
+<g>
+  <path d="M 434.0 724.0 H 492.0 Q 498.0 724.0 498.0 730.0 V 1413.0 Q 498.0 1419.0 492.0 1419.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/metrics/project_metrics.dart ▶ ../lib/src/sort/sort.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1118.0 H 494.0 Q 500.0 1118.0 500.0 1124.0 V 1133.0 Q 500.0 1139.0 494.0 1139.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/hardcoded_strings/hardcoded_string_visitor.dart ▶ ../lib/src/hardcoded_strings/hardcoded_string_issue.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1086.0 H 496.0 Q 502.0 1086.0 502.0 1092.0 V 1133.0 Q 502.0 1139.0 496.0 1139.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart ▶ ../lib/src/hardcoded_strings/hardcoded_string_issue.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1086.0 H 498.0 Q 504.0 1086.0 504.0 1092.0 V 1101.0 Q 504.0 1107.0 498.0 1107.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart ▶ ../lib/src/hardcoded_strings/hardcoded_string_visitor.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1086.0 H 500.0 Q 506.0 1086.0 506.0 1092.0 V 1617.0 Q 506.0 1623.0 500.0 1623.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/hardcoded_strings/hardcoded_string_analyzer.dart ▶ ../lib/src/models/file_utils.dart</title>
+</g>
+<g>
+  <path d="M 434.0 914.0 H 502.0 Q 508.0 914.0 508.0 920.0 V 929.0 Q 508.0 935.0 502.0 935.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/layers/layers_results.dart ▶ ../lib/src/layers/layers_issue.dart</title>
+</g>
+<g>
+  <path d="M 434.0 882.0 H 504.0 Q 510.0 882.0 510.0 888.0 V 897.0 Q 510.0 903.0 504.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/layers/layers_analyzer.dart ▶ ../lib/src/layers/layers_results.dart</title>
+</g>
+<g>
+  <path d="M 434.0 882.0 H 506.0 Q 512.0 882.0 512.0 888.0 V 1617.0 Q 512.0 1623.0 506.0 1623.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/layers/layers_analyzer.dart ▶ ../lib/src/models/file_utils.dart</title>
+</g>
+<g>
+  <path d="M 434.0 882.0 H 508.0 Q 514.0 882.0 514.0 888.0 V 929.0 Q 514.0 935.0 508.0 935.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/layers/layers_analyzer.dart ▶ ../lib/src/layers/layers_issue.dart</title>
+</g>
+<g>
+  <path d="M 434.0 882.0 H 510.0 Q 516.0 882.0 516.0 888.0 V 961.0 Q 516.0 967.0 510.0 967.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/layers/layers_analyzer.dart ▶ ../lib/src/layers/layers_visitor.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1430.0 H 512.0 Q 518.0 1430.0 518.0 1436.0 V 1649.0 Q 518.0 1655.0 512.0 1655.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/sort/sort.dart ▶ ../lib/src/models/class_visitor.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1430.0 H 514.0 Q 520.0 1430.0 520.0 1436.0 V 1509.0 Q 520.0 1515.0 514.0 1515.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/sort/sort.dart ▶ ../lib/src/sort/sort_members.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1430.0 H 516.0 Q 522.0 1430.0 522.0 1436.0 V 1445.0 Q 522.0 1451.0 516.0 1451.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/sort/sort.dart ▶ ../lib/src/sort/sort_analyzer.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1430.0 H 518.0 Q 524.0 1430.0 524.0 1436.0 V 1477.0 Q 524.0 1483.0 518.0 1483.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/sort/sort.dart ▶ ../lib/src/sort/sort_issue.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1462.0 H 520.0 Q 526.0 1462.0 526.0 1468.0 V 1649.0 Q 526.0 1655.0 520.0 1655.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/sort/sort_analyzer.dart ▶ ../lib/src/models/class_visitor.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1462.0 H 522.0 Q 528.0 1462.0 528.0 1468.0 V 1509.0 Q 528.0 1515.0 522.0 1515.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/sort/sort_analyzer.dart ▶ ../lib/src/sort/sort_members.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1462.0 H 524.0 Q 530.0 1462.0 530.0 1468.0 V 1477.0 Q 530.0 1483.0 524.0 1483.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/sort/sort_analyzer.dart ▶ ../lib/src/sort/sort_issue.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1462.0 H 526.0 Q 532.0 1462.0 532.0 1468.0 V 1617.0 Q 532.0 1623.0 526.0 1623.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/sort/sort_analyzer.dart ▶ ../lib/src/models/file_utils.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1290.0 H 528.0 Q 534.0 1290.0 534.0 1296.0 V 1305.0 Q 534.0 1311.0 528.0 1311.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/magic_numbers/magic_number_visitor.dart ▶ ../lib/src/magic_numbers/magic_number_issue.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1258.0 H 530.0 Q 536.0 1258.0 536.0 1264.0 V 1305.0 Q 536.0 1311.0 530.0 1311.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/magic_numbers/magic_number_analyzer.dart ▶ ../lib/src/magic_numbers/magic_number_issue.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1258.0 H 532.0 Q 538.0 1258.0 538.0 1264.0 V 1273.0 Q 538.0 1279.0 532.0 1279.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/magic_numbers/magic_number_analyzer.dart ▶ ../lib/src/magic_numbers/magic_number_visitor.dart</title>
+</g>
+<g>
+  <path d="M 434.0 1258.0 H 534.0 Q 540.0 1258.0 540.0 1264.0 V 1617.0 Q 540.0 1623.0 534.0 1623.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/magic_numbers/magic_number_analyzer.dart ▶ ../lib/src/models/file_utils.dart</title>
+</g>
+<g>
+  <path d="M 434.0 456.0 H 536.0 Q 542.0 456.0 542.0 462.0 V 897.0 Q 542.0 903.0 536.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/graph_format_utils.dart ▶ ../lib/src/layers/layers_results.dart</title>
+</g>
+<g>
+  <path d="M 434.0 552.0 H 538.0 Q 544.0 552.0 544.0 558.0 V 567.0 Q 544.0 573.0 538.0 573.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/svg_common.dart ▶ ../lib/src/graphs/badge_model.dart</title>
+</g>
+<g>
+  <path d="M 434.0 424.0 H 540.0 Q 546.0 424.0 546.0 430.0 V 439.0 Q 546.0 445.0 540.0 445.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/export_plantuml.dart ▶ ../lib/src/graphs/graph_format_utils.dart</title>
+</g>
+<g>
+  <path d="M 434.0 424.0 H 542.0 Q 548.0 424.0 548.0 430.0 V 897.0 Q 548.0 903.0 542.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/export_plantuml.dart ▶ ../lib/src/layers/layers_results.dart</title>
+</g>
+<g>
+  <path d="M 434.0 520.0 H 544.0 Q 550.0 520.0 550.0 526.0 V 897.0 Q 550.0 903.0 544.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/export_svg_folders.dart ▶ ../lib/src/layers/layers_results.dart</title>
+</g>
+<g>
+  <path d="M 434.0 520.0 H 546.0 Q 552.0 520.0 552.0 526.0 V 1681.0 Q 552.0 1687.0 546.0 1687.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/export_svg_folders.dart ▶ ../lib/src/models/rect.dart</title>
+</g>
+<g>
+  <path d="M 434.0 520.0 H 548.0 Q 554.0 520.0 554.0 526.0 V 535.0 Q 554.0 541.0 548.0 541.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/export_svg_folders.dart ▶ ../lib/src/graphs/svg_common.dart</title>
+</g>
+<g>
+  <path d="M 434.0 520.0 H 550.0 Q 556.0 520.0 556.0 526.0 V 599.0 Q 556.0 605.0 550.0 605.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/export_svg_folders.dart ▶ ../lib/src/graphs/svg_styles.dart</title>
+</g>
+<g>
+  <path d="M 434.0 520.0 H 552.0 Q 558.0 520.0 558.0 526.0 V 567.0 Q 558.0 573.0 552.0 573.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/export_svg_folders.dart ▶ ../lib/src/graphs/badge_model.dart</title>
+</g>
+<g>
+  <path d="M 434.0 488.0 H 554.0 Q 560.0 488.0 560.0 494.0 V 897.0 Q 560.0 903.0 554.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/export_svg.dart ▶ ../lib/src/layers/layers_results.dart</title>
+</g>
+<g>
+  <path d="M 434.0 488.0 H 556.0 Q 562.0 488.0 562.0 494.0 V 535.0 Q 562.0 541.0 556.0 541.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/export_svg.dart ▶ ../lib/src/graphs/svg_common.dart</title>
+</g>
+<g>
+  <path d="M 434.0 488.0 H 558.0 Q 564.0 488.0 564.0 494.0 V 599.0 Q 564.0 605.0 558.0 605.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/export_svg.dart ▶ ../lib/src/graphs/svg_styles.dart</title>
+</g>
+<g>
+  <path d="M 434.0 488.0 H 560.0 Q 566.0 488.0 566.0 494.0 V 567.0 Q 566.0 573.0 560.0 573.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/export_svg.dart ▶ ../lib/src/graphs/badge_model.dart</title>
+</g>
+<g>
+  <path d="M 434.0 392.0 H 562.0 Q 568.0 392.0 568.0 398.0 V 439.0 Q 568.0 445.0 562.0 445.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/export_mermaid.dart ▶ ../lib/src/graphs/graph_format_utils.dart</title>
+</g>
+<g>
+  <path d="M 434.0 392.0 H 564.0 Q 570.0 392.0 570.0 398.0 V 897.0 Q 570.0 903.0 564.0 903.0 H 430.0" class="edgeVertical edgeVertical"/>
+  <title>../lib/src/graphs/export_mermaid.dart ▶ ../lib/src/layers/layers_results.dart</title>
+</g>
 <g class="incomingBadge">
   <path d="M 424.0,381.0 L 436.0,374.0 Q 439.0,374.0 439.0,377.0 L 439.0,385.0 Q 439.0,388.0 436.0,388.0 Z" fill="#3b82f6"/>
   <text x="435.0" y="384.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>fcheck.dart</title></g><g class="outgoingBadge">
