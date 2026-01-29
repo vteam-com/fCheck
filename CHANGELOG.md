@@ -7,6 +7,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-01-29
+
+### Added
+
+- 🔺 **Triangular Directional Badges**: New BadgeModel class with triangular badges that indicate dependency direction (incoming blue pointing west, outgoing green pointing east)
+- 📐 **Enhanced Badge Design**: Triangular badges with rounded corners, improved text positioning, and better visual alignment with dependency edges
+- 📚 **Comprehensive Documentation**: Added detailed DartDoc comments to BadgeModel class and all its methods
+- 🔄 **Edge Alignment Fix**: Updated SVG edge rendering to properly connect to triangular badge centers instead of old circular badge positions
+
+### Changed
+
+- 🎯 **Badge System Refactor**: Complete refactor from circular badges to directional triangular badges with improved visual design
+- ⚡ **Performance Improvements**: Optimized badge rendering and edge calculations for better SVG generation
+
 ## [0.5.2] - 2026-01-29
 
 ### Added
