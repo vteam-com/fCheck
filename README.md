@@ -244,7 +244,17 @@ Comment Ratio: 12.70%
 // fcheck: ignore-one-class-per-file
 ```
 
-- **Violations**: Files with too many public classes are flagged
+#### Magic Number Detection
+
+- **Highlights**: Numeric literals (except 0, 1, and -1) used directly in code instead of as named constants.
+- **Exemptions**: 
+  - Constants (`const`) and numeric literals in annotations are automatically allowed.
+  - Values like 0, 1, and -1 are allowed.
+- **Opt-out per file**: Add a top-of-file comment directive:
+
+```dart
+// fcheck - ignore magic numbers
+```
 
 ## Library Usage
 
