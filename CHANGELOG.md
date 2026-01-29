@@ -7,6 +7,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.2] - 2026-01-29
+
+### Added
+
+- 🧮 **Magic Number Detection**: New feature to detect numeric literals that should be expressed as named constants to make intent clearer
+
+### Changed
+
+- 🔧 Replaced the build_runner-based version builder with a simple bash script that generates `lib/src/models/version.dart` from `pubspec.yaml`.
+
+### Added
+
+- you can optionaly add  ```// fcheck: ignore-one-class-per-file``` to a file to ignore the one-class-per-file rule
+
 ## [0.5.1] - 2026-01-28
 
 ### Changed
