@@ -29,6 +29,9 @@ fi
 
 mkdir -p "$(dirname -- "$OUT_FILE")"
 
+# Remove existing version.dart file if it exists
+rm -f "$OUT_FILE"
+
 cat > "$OUT_FILE" <<EOF2
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint

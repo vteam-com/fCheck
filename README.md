@@ -366,7 +366,7 @@ dart run fcheck --input example
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature-name`
 3. Make your changes
-4. Run tests: `dart test`
+4. **Before committing, run `./tool/check.sh`** - This script runs pub operations, version extraction, source formatting, static analysis, tests, and full fCheck analysis to ensure your changes meet all quality standards.
 5. Submit a pull request
 
 ## License

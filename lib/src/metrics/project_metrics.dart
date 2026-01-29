@@ -215,7 +215,7 @@ class ProjectMetrics {
     print('');
 
     if (layersIssues.isEmpty) {
-      print('✅ No layers architecture violations found.');
+      print('✅ All layers architecture complies with standards.');
     } else {
       print(
           '🏗️ ${layersIssues.length} layers architecture violations detected:');
