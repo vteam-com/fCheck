@@ -17,12 +17,22 @@ Each folder is represented as a container with:
 
 ### Dependency Edges
 
-Connections between folders are shown as curved lines:
+Connections between folders are shown as curved lines using the unified styling system:
 
 - **Direction**: Left-to-right (source → target)
-- **Style**: Gradient from green to blue
+- **Style**: Unified horizontal gradient from green (#28a745) to blue (#007bff) using `url(#horizontalGradient)`
 - **Interactive**: Hover to see specific file dependencies
-- **Thickness**: 3px with hover effect
+- **Hover Behavior**: Maintains gradient color, increases stroke-width to 5px, opacity to 1.0
+- **Transitions**: Smooth 0.1s ease-in-out transitions
+- **Cursor**: Uses help cursor for interactive tooltips
+
+**Edge Styling Classes:**
+
+- `.edgeVertical` - Main folder-to-folder dependencies
+- `.edgeVertical` - Parent-child folder relationships  
+- `.edgeVertical` - File-to-file dependencies within folders
+
+All edge types maintain their gradient colors on hover and use consistent visual feedback.
 
 ### Layout Algorithm
 
@@ -219,10 +229,20 @@ if (sourceFolder != targetFolder) {
 
 ### Visual Encoding
 
-- **Blue Badges (↓)**: Incoming dependencies
-- **Green Badges (↑)**: Outgoing dependencies
+The unified styling system provides consistent visual elements across all visualizations:
+
+- **Blue Badges (↓)**: Incoming dependencies with '?' cursor on hover
+- **Green Badges (↑)**: Outgoing dependencies with '?' cursor on hover
 - **File Icons (📄)**: Individual files within folders
-- **Hover Effects**: Interactive tooltips on edges
+- **Hover Effects**: Interactive tooltips on all badges with smooth transitions
+- **Unified Cursors**: All badges use `cursor: help` showing '?' cursor
+
+**Badge Styling Features:**
+
+- Consistent 0.1s ease-in-out transitions
+- Opacity changes on hover (0.8)
+- Help cursor for all badge types
+- Unified font sizing and positioning
 
 ## Troubleshooting
 

@@ -4,6 +4,7 @@ library;
 import 'dart:math';
 import 'package:fcheck/src/layers/layers_results.dart';
 import 'package:fcheck/src/graphs/svg_common.dart';
+import 'package:fcheck/src/graphs/svg_styles.dart';
 import 'package:fcheck/src/graphs/badge_model.dart';
 
 /// Generates an SVG visualization of the dependency graph.
@@ -118,62 +119,11 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
   buffer.writeln(
       '<svg width="$totalWidth" height="$totalHeight" viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">');
 
-  // Filter Definitions
-  buffer.writeln('<defs>');
-  buffer.writeln(
-      '  <filter id="whiteShadow" x="-20%" y="-20%" width="140%" height="140%">');
-  buffer.writeln('    <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>');
-  buffer.writeln('    <feOffset dx="0" dy="0" result="offsetblur"/>');
-  buffer.writeln('    <feFlood flood-color="white" flood-opacity="1"/>');
-  buffer.writeln('    <feComposite in2="offsetblur" operator="in"/>');
-  buffer.writeln('    <feMerge>');
-  buffer.writeln('      <feMergeNode/>');
-  buffer.writeln('      <feMergeNode in="SourceGraphic"/>');
-  buffer.writeln('    </feMerge>');
-  buffer.writeln('  </filter>');
-  buffer.writeln('  <filter id="outlineWhite">');
-  buffer.writeln(
-      '    <feMorphology in="SourceAlpha" result="DILATED" operator="dilate" radius="2"/>');
-  buffer.writeln(
-      '    <feFlood flood-color="white" flood-opacity="0.5" result="WHITE"/>');
-  buffer.writeln(
-      '    <feComposite in="WHITE" in2="DILATED" operator="in" result="OUTLINE"/>');
-  buffer.writeln('    <feMerge>');
-  buffer.writeln('      <feMergeNode in="OUTLINE"/>');
-  buffer.writeln('      <feMergeNode in="SourceGraphic"/>');
-  buffer.writeln('    </feMerge>');
-  buffer.writeln('  </filter>');
-
-  // Gradient for edges (green to blue)
-  buffer.writeln(
-      '  <linearGradient id="edgeGradient" x1="0%" y1="0%" x2="100%" y2="0%">');
-  buffer
-      .writeln('    <stop offset="0%" stop-color="green" stop-opacity="0.3"/>');
-  buffer.writeln(
-      '    <stop offset="100%" stop-color="#007bff" stop-opacity="0.3"/>');
-  buffer.writeln('  </linearGradient>');
-  buffer.writeln('</defs>');
+  // Common SVG Definitions
+  buffer.writeln(SvgDefinitions.generateUnifiedDefs());
 
   // CSS Styles
-  buffer.writeln('<style>');
-  buffer.writeln(
-      '  .layerBackground { fill: #f8f9fa; stroke: #dee2e6; stroke-width: 1; stroke-dasharray: 4,4; }');
-  buffer.writeln(
-      '  .layerTitle { fill: #6c757d; font-size: 14px; font-weight: bold; text-anchor: middle; }');
-  buffer.writeln(
-      '  .nodeRect { fill: #ffffff; stroke: #343a40; stroke-width: 2; rx: 6; ry: 6; cursor: pointer; filter: url(#whiteShadow); }');
-  buffer.writeln('  .nodeRect:hover { stroke: #007bff; stroke-width: 3; }');
-  buffer.writeln(
-      '  .nodeText { fill: #212529; font-size: 14px; font-weight: 900; text-anchor: middle; dominant-baseline: middle; filter: url(#outlineWhite); }');
-  buffer.writeln('  .edge { fill: none; stroke: url(#edgeGradient); }');
-  buffer.writeln(
-      '  .edge:hover { stroke: #007bff; stroke-width: 3; opacity: 1.0; }');
-  buffer
-      .writeln('  .cycleEdge { stroke: red; stroke-width: 5; opacity: 0.9; }');
-  buffer.writeln(
-      '  .badge { font-size: 10px; font-weight: bold; fill: white; text-anchor: middle; dominant-baseline: middle; cursor: help; }');
-  buffer.writeln('  .badge:hover { opacity: 0.8; }');
-  buffer.writeln('</style>');
+  buffer.writeln(SvgDefinitions.generateUnifiedStyles());
 
   // Background
   buffer.writeln('<rect width="100%" height="100%" fill="white"/>');

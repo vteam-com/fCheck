@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:fcheck/src/layers/layers_results.dart';
 import 'package:fcheck/src/models/rect.dart';
 import 'package:fcheck/src/graphs/svg_common.dart';
+import 'package:fcheck/src/graphs/svg_styles.dart';
 import 'package:fcheck/src/graphs/badge_model.dart';
 import 'package:path/path.dart' as p;
 
@@ -202,7 +203,7 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   const double margin = 50.0;
   const double folderHeaderHeight = 32.0;
   const double fileItemHeight = 22.0;
-  const double fileItemSpacing = 6.0;
+  const double fileItemSpacing = 10.0;
   const double fileTopPadding = 20.0;
   const double filesToChildrenSpacing = 16.0;
 
@@ -270,91 +271,17 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   buffer.writeln(
       '<svg width="$totalWidth" height="$totalHeight" viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">');
 
-  // Filter Definitions
-  buffer.writeln('<defs>');
-  buffer.writeln(
-      '  <filter id="hierarchicalShadow" x="-20%" y="-20%" width="140%" height="140%">');
-  buffer.writeln('    <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>');
-  buffer.writeln('    <feOffset dx="2" dy="2" result="offsetblur"/>');
-  buffer.writeln(
-      '    <feFlood flood-color="rgba(0,0,0,0.1)" flood-opacity="0.8"/>');
-  buffer.writeln('    <feComposite in2="offsetblur" operator="in"/>');
-  buffer.writeln('    <feMerge>');
-  buffer.writeln('      <feMergeNode/>');
-  buffer.writeln('      <feMergeNode in="SourceGraphic"/>');
-  buffer.writeln('    </feMerge>');
-  buffer.writeln('  </filter>');
-  buffer.writeln('  <filter id="outlineWhite">');
-  buffer.writeln(
-      '    <feMorphology in="SourceAlpha" result="DILATED" operator="dilate" radius="2"/>');
-  buffer.writeln(
-      '    <feFlood flood-color="white" flood-opacity="0.7" result="WHITE"/>');
-  buffer.writeln(
-      '    <feComposite in="WHITE" in2="DILATED" operator="in" result="OUTLINE"/>');
-  buffer.writeln('    <feMerge>');
-  buffer.writeln('      <feMergeNode in="OUTLINE"/>');
-  buffer.writeln('      <feMergeNode in="SourceGraphic"/>');
-  buffer.writeln('    </feMerge>');
-  buffer.writeln('  </filter>');
-
-  // Gradient for hierarchical edges
-  buffer.writeln(
-      '  <linearGradient id="hierarchicalEdgeGradient" x1="0%" y1="0%" x2="100%" y2="100%">');
-  buffer.writeln(
-      '    <stop offset="0%" stop-color="#6c757d" stop-opacity="0.4"/>');
-  buffer.writeln(
-      '    <stop offset="100%" stop-color="#495057" stop-opacity="0.4"/>');
-  buffer.writeln('  </linearGradient>');
-  buffer.writeln(
-      '  <linearGradient id="edgeGradient" x1="0%" y1="0%" x2="0%" y2="100%">');
-  buffer
-      .writeln('    <stop offset="0%" stop-color="green" stop-opacity="0.3"/>');
-  buffer.writeln(
-      '    <stop offset="100%" stop-color="blue" stop-opacity="0.3"/>');
-  buffer.writeln('  </linearGradient>');
-  buffer.writeln('</defs>');
+  // Common SVG Definitions
+  buffer.writeln(SvgDefinitions.generateUnifiedDefs());
 
   // CSS Styles
-  buffer.writeln('<style>');
-  buffer.writeln(
-      '  .hierarchicalBackground { fill: rgba(52, 58, 64, 0.08); stroke: none; rx: 12; ry: 12; filter: url(#hierarchicalShadow); }');
-  buffer.writeln(
-      '  .hierarchicalBackground:hover { fill: rgba(52, 58, 64, 0.12); }');
-  buffer.writeln(
-      '  .hierarchicalTitle { fill: #495057; font-size: 16px; font-weight: bold; text-anchor: middle; filter: url(#outlineWhite); }');
-  buffer.writeln(
-      '  .hierarchicalMetric { fill: #6c757d; font-size: 12px; font-weight: normal; text-anchor: middle; }');
-  buffer.writeln(
-      '  .hierarchicalItem { fill: #212529; font-size: 12px; font-weight: normal; cursor: pointer; filter: url(#outlineWhite); }');
-  buffer.writeln(
-      '  .hierarchicalItem:hover { fill: #007bff; font-weight: bold; }');
-  buffer.writeln(
-      '  .hierarchicalEdge { fill: none; stroke: url(#hierarchicalEdgeGradient); stroke-width: 1; }');
-  buffer.writeln(
-      '  .hierarchicalEdge:hover { stroke: #007bff; stroke-width: 4; opacity: 1.0; }');
-  buffer.writeln(
-      '  .hierarchicalBadge { font-size: 8px; font-weight: bold; fill: white; text-anchor: middle; dominant-baseline: middle; }');
-  buffer.writeln('  .hierarchicalBadge { cursor: help; }');
-  buffer.writeln('  .hierarchicalBadge:hover { opacity: 0.8; }');
-  // Shared dependency edge styling
-  buffer.writeln(
-      '  .dependencyEdge { fill: none; stroke: url(#edgeGradient); opacity: 0.9; }');
-  buffer.writeln('  .dependencyEdge:hover { stroke: purple; opacity: 1; }');
-  // File-level edges
-  buffer.writeln('  .fileEdge { stroke-width: 0.5; }');
-  buffer.writeln('  .fileEdge:hover { stroke-width: 1; }');
-  buffer.writeln(
-      '  .fileNode { fill: #ffffff; stroke: #d0d7de; stroke-width: 1; }');
-  buffer.writeln(
-      '  g.folderTitleLayer { pointer-events: none; isolation: isolate; }');
-
-  buffer.writeln('</style>');
+  buffer.writeln(SvgDefinitions.generateUnifiedStyles());
 
   // Background
   buffer.writeln('<rect width="100%" height="100%" fill="#f8f9fa"/>');
 
   // Draw hierarchical edges (parent-child relationships)
-  _drawHierarchicalEdges(buffer, drawOrder, folderPositions, folderDimensions,
+  _drawEdgeVerticals(buffer, drawOrder, folderPositions, folderDimensions,
       padding: folderPadding, childIndent: childIndent);
 
   // Track file anchor positions for dependency edges
@@ -379,30 +306,31 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   final fileOutgoingPeers = filePeers.outgoing;
   // Draw folder containers with hierarchy visualization
   _drawHierarchicalFolders(
-      buffer,
-      drawOrder,
-      folderPositions,
-      folderDimensions,
-      folderMetrics,
-      fileMetrics,
-      relativeGraph,
-      fileAnchors,
-      titleVisuals,
-      fileVisuals,
-      folderBadges,
-      folderIncomingPeers,
-      folderOutgoingPeers,
-      fileIncomingPeers,
-      fileOutgoingPeers,
-      depthMap,
-      labelWidth: labelWidth,
-      headerHeight: folderHeaderHeight,
-      fileItemHeight: fileItemHeight,
-      fileItemSpacing: fileItemSpacing,
-      fileTopPadding: fileTopPadding);
+    buffer,
+    drawOrder,
+    folderPositions,
+    folderDimensions,
+    folderMetrics,
+    fileMetrics,
+    relativeGraph,
+    fileAnchors,
+    titleVisuals,
+    fileVisuals,
+    folderBadges,
+    folderIncomingPeers,
+    folderOutgoingPeers,
+    fileIncomingPeers,
+    fileOutgoingPeers,
+    depthMap,
+    labelWidth: labelWidth,
+    headerHeight: folderHeaderHeight,
+    fileItemHeight: fileItemHeight,
+    fileItemSpacing: fileItemSpacing,
+    fileTopPadding: fileTopPadding,
+  );
 
   // Draw inter-folder dependency edges between backgrounds and badges
-  _drawFolderDependencyEdges(
+  _drawFolderedgeVerticals(
       buffer, folderDependencies, folderPositions, folderDimensions);
 
   // Draw folder badges above dependency edges
@@ -412,7 +340,7 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   _drawFilePanels(buffer, fileVisuals);
 
   // Draw file-to-file dependency edges
-  _drawFileEdges(buffer, relativeGraph, fileAnchors);
+  _drawedgeVerticals(buffer, relativeGraph, fileAnchors);
 
   // Draw badges and labels after edges for correct stacking
   _drawFileVisuals(buffer, fileVisuals);
@@ -771,7 +699,7 @@ String _getFolderPath(String filePath, String rootPath) {
 }
 
 /// Draw hierarchical edges between parent and child folders
-void _drawHierarchicalEdges(StringBuffer buffer, List<FolderNode> folders,
+void _drawEdgeVerticals(StringBuffer buffer, List<FolderNode> folders,
     Map<String, Point<double>> positions, Map<String, Rect> dimensions,
     {required double padding, required double childIndent}) {
   for (final folder in folders) {
@@ -795,7 +723,7 @@ void _drawHierarchicalEdges(StringBuffer buffer, List<FolderNode> folders,
       final controlX2 = childX - (childIndent / 2);
 
       buffer.writeln(
-          '<path d="M $parentX $parentY C $controlX1 $parentY, $controlX2 $childY, $childX $childY" class="hierarchicalEdge"/>');
+          '<path d="M $parentX $parentY C $controlX1 $parentY, $controlX2 $childY, $childX $childY" class="edgeVertical"/>');
       buffer.writeln(
           '<title>${folder.name} → ${child.name} (parent-child)</title>');
     }
@@ -825,7 +753,7 @@ List<_FolderEdge> _collectFolderDependencies(
 }
 
 /// Draw folder-level dependency edges routed on the left side of folders.
-void _drawFolderDependencyEdges(
+void _drawFolderedgeVerticals(
   StringBuffer buffer,
   List<_FolderEdge> edges,
   Map<String, Point<double>> positions,
@@ -873,7 +801,7 @@ void _drawFolderDependencyEdges(
         'Q $columnX $startY $columnX $firstQy '
         'V $secondVy '
         'Q $columnX $endY ${columnX + cornerRadius} $endY '
-        'H $endX" class="dependencyEdge"/>');
+        'H $endX" class="edgeVertical"/>');
     buffer.writeln(
         '<title>${edge.sourceFolder} → ${edge.targetFolder} (folder dependency)</title>');
   }
@@ -921,7 +849,7 @@ void _drawHierarchicalFolders(
 
     buffer.writeln('<g class="folderLayer">');
     buffer.writeln(
-        '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="12" ry="12" class="hierarchicalBackground"/>');
+        '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="12" ry="12" class="layerBackground"/>');
 
     final indentLevels = depth > 0 ? depth : 0;
     final indent = List.filled(indentLevels, '  ').join();
@@ -947,7 +875,7 @@ void _drawHierarchicalFolders(
 
     final sortedFiles =
         _sortFiles(folder.files, folder.fullPath, fileMetrics, dependencyGraph);
-    final filePositions = _calculateFilePositions(
+    final List<Point<double>> filePositions = _calculateFilePositions(
       sortedFiles.length,
       0, // compute positions relative to folder top
       headerHeight: headerHeight,
@@ -957,7 +885,6 @@ void _drawHierarchicalFolders(
       startX: 0.0,
     );
 
-    final textX = pos.x + 12.0; // consistent left padding
     // Draw children after this folder so they appear on top
     for (final child in folder.children) {
       drawFolder(child);
@@ -967,6 +894,7 @@ void _drawHierarchicalFolders(
     for (var j = 0; j < sortedFiles.length; j++) {
       final file = sortedFiles[j];
       final filePos = filePositions[j];
+
       final fileY = pos.y + filePos.y;
       final filePath =
           folder.fullPath == '.' ? file : '${folder.fullPath}/$file';
@@ -977,6 +905,7 @@ void _drawHierarchicalFolders(
 
       final panelX = pos.x + 8.0;
       final panelWidth = dim.width - 16.0; // flush within folder
+      final textX = pos.x + (panelWidth / 2);
       // Use panel-based coordinates for badges and edge anchors.
       final badgeX = panelX + panelWidth - 8; // align with folder badges
       fileAnchors[filePath] = {
@@ -1010,7 +939,7 @@ void _drawHierarchicalFolders(
 }
 
 /// Draw edges between files based on dependency graph.
-void _drawFileEdges(StringBuffer buffer, Map<String, List<String>> graph,
+void _drawedgeVerticals(StringBuffer buffer, Map<String, List<String>> graph,
     Map<String, Map<String, Point<double>>> anchors) {
   var edgeCounter = 0;
   for (final entry in graph.entries) {
@@ -1030,7 +959,7 @@ void _drawFileEdges(StringBuffer buffer, Map<String, List<String>> graph,
 
       final path =
           _buildStackedEdgePath(startX, startY, endX, endY, edgeCounter);
-      buffer.writeln('<path d="$path" class="dependencyEdge fileEdge"/>');
+      buffer.writeln('<path d="$path" class="edgeVertical edgeVertical"/>');
       buffer.writeln('<title>$source → $target</title>');
       edgeCounter++;
     }
@@ -1068,7 +997,6 @@ void _drawFileVisuals(StringBuffer buffer, List<_FileVisual> visuals) {
   for (final v in visuals) {
     final top = v.textY - 14;
     const height = 28.0;
-    final textX = v.textX + 10.0;
 
     // Create incoming badge (pointing west)
     final incomingBadge = BadgeModel.incoming(
@@ -1091,7 +1019,7 @@ void _drawFileVisuals(StringBuffer buffer, List<_FileVisual> visuals) {
     renderTriangularBadge(buffer, outgoingBadge);
 
     buffer.writeln(
-        '<text x="$textX" y="${top + height / 2}" text-anchor="start" dominant-baseline="middle" class="hierarchicalItem">${v.name}</text>');
+        '<text x="${v.textX}" y="${top + height / 2}" text-anchor="start" dominant-baseline="middle" class="nodeText">${v.name}</text>');
   }
 }
 
@@ -1112,7 +1040,7 @@ void _drawTitleVisuals(StringBuffer buffer, List<_TitleVisual> visuals) {
   buffer.writeln('<g class="folderTitleLayer">');
   for (final v in visuals) {
     buffer.writeln(
-        '<text x="${v.x}" y="${v.y}" class="hierarchicalTitle">${v.text}</text>');
+        '<text x="${v.x}" y="${v.y}" class="layerTitle">${v.text}</text>');
   }
   buffer.writeln('</g>');
 }

@@ -11,6 +11,16 @@
       <feMergeNode in="SourceGraphic"/>
     </feMerge>
   </filter>
+  <filter id="hierarchicalShadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
+    <feOffset dx="2" dy="2" result="offsetblur"/>
+    <feFlood flood-color="rgba(0,0,0,0.1)" flood-opacity="0.8"/>
+    <feComposite in2="offsetblur" operator="in"/>
+    <feMerge>
+      <feMergeNode/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
   <filter id="outlineWhite">
     <feMorphology in="SourceAlpha" result="DILATED" operator="dilate" radius="2"/>
     <feFlood flood-color="white" flood-opacity="0.5" result="WHITE"/>
@@ -20,22 +30,133 @@
       <feMergeNode in="SourceGraphic"/>
     </feMerge>
   </filter>
-  <linearGradient id="edgeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%" stop-color="green" stop-opacity="0.3"/>
-    <stop offset="100%" stop-color="#007bff" stop-opacity="0.3"/>
+  <linearGradient id="horizontalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#28a745"/>
+    <stop offset="100%" stop-color="#007bff"/>
+  </linearGradient>
+  <linearGradient id="verticalGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" stop-color="#28a745"/>
+    <stop offset="100%" stop-color="#007bff"/>
   </linearGradient>
 </defs>
 <style>
-  .layerBackground { fill: #f8f9fa; stroke: #dee2e6; stroke-width: 1; stroke-dasharray: 4,4; }
-  .layerTitle { fill: #6c757d; font-size: 14px; font-weight: bold; text-anchor: middle; }
-  .nodeRect { fill: #ffffff; stroke: #343a40; stroke-width: 2; rx: 6; ry: 6; cursor: pointer; filter: url(#whiteShadow); }
-  .nodeRect:hover { stroke: #007bff; stroke-width: 3; }
-  .nodeText { fill: #212529; font-size: 14px; font-weight: 900; text-anchor: middle; dominant-baseline: middle; filter: url(#outlineWhite); }
-  .edge { fill: none; stroke: url(#edgeGradient); }
-  .edge:hover { stroke: #007bff; stroke-width: 3; opacity: 1.0; }
-  .cycleEdge { stroke: red; stroke-width: 5; opacity: 0.9; }
-  .badge { font-size: 10px; font-weight: bold; fill: white; text-anchor: middle; dominant-baseline: middle; cursor: help; }
-  .badge:hover { opacity: 0.8; }
+  /* Container and layer styles */
+  .layerBackground { 
+    fill: rgba(52, 58, 64, 0.08); 
+    stroke: #dee2e6; 
+    stroke-width: 1; 
+    stroke-dasharray: 4,4; 
+  }
+
+  .layerBackground:hover { 
+    fill: rgba(52, 58, 64, 0.12); 
+    stroke: black; 
+    stroke-dasharray: 0; 
+    transition: all 0.3s ease-in-out; 
+  }
+  
+  .layerTitle { 
+    fill: black; 
+    font-size: 14px; 
+    font-weight: bold; 
+    text-anchor: middle; 
+    filter: url(#outlineWhite); 
+  }
+  
+  /* Node styles */
+  .nodeRect { 
+    fill: #ffffff; 
+    stroke: #343a40; 
+    stroke-width: 2; 
+    rx: 6; 
+    ry: 6; 
+    cursor: pointer; 
+    filter: url(#whiteShadow); 
+    transition: all 0.1s ease-in-out; 
+  }
+  
+  .nodeRect:hover { 
+    stroke: black; 
+    stroke-width: 5; 
+  }
+  
+  .nodeText { 
+    fill: #212529; 
+    font-size: 14px; 
+    font-weight: 900; 
+    text-anchor: middle; 
+    dominant-baseline: middle; 
+    filter: url(#outlineWhite); 
+  }
+  
+  /* File node styles */
+  .fileNode { 
+    fill: #ffffff; 
+    stroke: #d0d7de; 
+    stroke-width: 1; 
+    transition: all 0.1s ease-in-out; 
+  }
+  
+  .fileNode:hover { 
+    stroke: #007bff; 
+    stroke-width: 2; 
+  }
+  
+  /* Unified edge styles */
+  .edge { 
+    fill: none; 
+    stroke: url(#horizontalGradient); 
+    stroke-width: 1; 
+    transition: all 0.1s ease-in-out; 
+  }
+  
+  .edge:hover { 
+    stroke: url(#horizontalGradient); 
+    stroke-width: 5; 
+    opacity: 1.0; 
+  }
+  
+  .edgeVertical { 
+    fill: none; 
+    stroke: url(#verticalGradient); 
+    stroke-width: 1; 
+    opacity: 0.5; 
+    transition: all 0.1s ease-in-out; 
+  }
+  
+  .edgeVertical:hover { 
+    stroke: url(#verticalGradient); 
+    stroke-width: 5; 
+    opacity: 1.0; 
+  }
+  
+  /* Special edge styles */
+  .cycleEdge { 
+    stroke: red; 
+    stroke-width: 5; 
+    opacity: 0.9; 
+  }
+  
+  /* Unified badge styles with '?' cursor */
+  .badge { 
+    font-size: 10px; 
+    font-weight: bold; 
+    fill: white; 
+    text-anchor: middle; 
+    dominant-baseline: middle; 
+    cursor: help; 
+    transition: all 0.1s ease-in-out; 
+  }
+  
+  .badge:hover { 
+    opacity: 0.8; 
+  }
+  
+  /* Special styles */
+  .folderTitleLayer { 
+    pointer-events: none; 
+    isolation: isolate; 
+  }
 </style>
 <rect width="100%" height="100%" fill="white"/>
 <rect x="25.0" y="50" width="270.0" height="160" rx="8" class="layerBackground"/>

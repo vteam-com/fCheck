@@ -241,118 +241,142 @@ def calculate_layout(layers, container_width, alignment="center"):
 
 ## SVG Styling System
 
-### CSS Classes
+### Unified CSS Classes
 
-Define visual appearance with CSS classes embedded in the SVG `<defs>` section:
+The SVG visualization system uses a unified styling approach with consistent CSS classes embedded in the SVG `<defs>` section. This ensures visual consistency across both layers and folder-based visualizations.
 
 ```css
-/* Layer styling */
-.layerRectangle {
-  stroke: #691872;
-  stroke-width: 2;
-  stroke-dasharray: 5, 5;
-  fill: url(#layerGradient);
-  opacity: 0.3;
+/* Unified edge styles - all maintain gradients on hover */
+.edge { 
+  fill: none; 
+  stroke: url(#edgeGradient); 
+  stroke-width: 1; 
+  transition: all 0.1s ease-in-out; 
+}
+.edge:hover { 
+  stroke: url(#edgeGradient); 
+  stroke-width: 5; 
+  opacity: 1.0; 
 }
 
-.layerText {
-  fill: #691872;
-  font-size: 24px;
-  font-weight: bold;
-  text-anchor: start;
-  dominant-baseline: hanging;
-  filter: url(#outlineWhite);
+.edgeVertical { 
+  fill: none; 
+  stroke: url(#verticalGradient); 
+  stroke-width: 1; 
+  opacity: 0.5; 
+  transition: all 0.1s ease-in-out; 
+}
+.edgeVertical:hover { 
+  stroke: url(#verticalGradient); 
+  stroke-width: 5; 
+  opacity: 1.0; 
 }
 
-/* Node styling */
-.nodeFolder {
-  fill: #aaaaaa;
-  opacity: 0.3;
-  stroke: whitesmoke;
-  stroke-width: 2;
+.edgeVertical { 
+  fill: none; 
+  stroke: url(#edgeGradient); 
+  opacity: 0.9; 
+  transition: all 0.1s ease-in-out; 
+}
+.edgeVertical:hover { 
+  stroke: url(#edgeGradient); 
+  stroke-width: 5; 
+  opacity: 1.0; 
 }
 
-.nodeFile {
-  fill: #ffffff;
-  opacity: 0.9;
-  stroke: #666666;
-  stroke-width: 2;
+.edgeVertical { 
+  stroke-width: 0.5; 
+  opacity: 0.5; 
+}
+.edgeVertical:hover { 
+  stroke-width: 5; 
+  opacity: 1.0; 
+  transition: all 0.1s ease-in-out; 
 }
 
-.nodeFileOrphan {
-  fill: #ff6b6b;
-  opacity: 0.9;
-  stroke: #cc0000;
-  stroke-width: 3;
+/* Unified badge styles with '?' cursor */
+.badge { 
+  font-size: 10px; 
+  font-weight: bold; 
+  fill: white; 
+  text-anchor: middle; 
+  dominant-baseline: middle; 
+  cursor: help; 
+  transition: all 0.1s ease-in-out; 
+}
+.badge:hover { 
+  opacity: 0.8; 
 }
 
-/* Text styling */
-.folderName {
-  font-size: 28px;
-  fill: white;
-  font-weight: bold;
-  text-anchor: start;
-  letter-spacing: 1px;
-  dominant-baseline: hanging;
-  filter: url(#shadow);
+.badge { 
+  font-size: 8px; 
+  font-weight: bold; 
+  fill: white; 
+  text-anchor: middle; 
+  dominant-baseline: middle; 
+  cursor: help; 
+  transition: all 0.1s ease-in-out; 
+}
+.badge:hover { 
+  opacity: 0.8; 
 }
 
-.nodeName {
-  fill: #000000;
-  font-weight: bold;
-  text-anchor: middle;
-  dominant-baseline: central;
-  filter: url(#outlineWhite);
+/* Node and container styles */
+.nodeRect { 
+  fill: #ffffff; 
+  stroke: #343a40; 
+  stroke-width: 2; 
+  rx: 6; 
+  ry: 6; 
+  cursor: pointer; 
+  filter: url(#whiteShadow); 
+  transition: all 0.1s ease-in-out; 
+}
+.nodeRect:hover { 
+  stroke: #007bff; 
+  stroke-width: 5; 
 }
 
-/* Edge styling - all edges should flow downward in proper architecture */
-.edgeNormal {
-  fill: none;
-  stroke: #377E22;        /* Green: proper downward dependency */
-  stroke-width: 4;
-  opacity: 0.6;
+.layerBackground { 
+  fill: #f8f9fa; 
+  stroke: #dee2e6; 
+  stroke-width: 1; 
+  stroke-dasharray: 4,4; 
 }
 
-.edgeUpward {
-  fill: none;
-  stroke: #F09235;        /* Orange: upward dependency (architectural smell) */
-  stroke-width: 6;
-  opacity: 0.7;
+.layerBackground { 
+  fill: rgba(52, 58, 64, 0.08); 
+  stroke: none; 
+  rx: 12; 
+  ry: 12; 
+  filter: url(#hierarchicalShadow); 
+  transition: all 0.1s ease-in-out; 
+}
+.layerBackground:hover { 
+  fill: rgba(52, 58, 64, 0.12); 
 }
 
-.edgeCircular {
-  fill: none;
-  stroke: #EB4132;        /* Red: circular dependency (architectural problem) */
-  stroke-width: 6;
-  opacity: 0.8;
-}
-
-/* Counter pill styling */
-.counterCircle {
-  stroke: white;
-  stroke-width: 2;
-}
-
-.counterText {
-  fill: white;
-  font-size: 12px;
-  font-weight: bold;
-  text-anchor: middle;
-  dominant-baseline: central;
+/* Special edge styles */
+.cycleEdge { 
+  stroke: red; 
+  stroke-width: 5; 
+  opacity: 0.9; 
 }
 ```
 
 ### Visual Effects
 
-#### SVG Filters
+#### Unified SVG Filters
 
-**Shadow Effect:**
+The unified styling system uses three core filters:
+
+**White Shadow Filter (for nodes and interactive elements):**
 
 ```xml
-<filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-  <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
-  <feOffset dx="2" dy="2" result="offsetblur"/>
-  <feFlood flood-color="#000000" flood-opacity="0.5"/>
+<filter id="whiteShadow" x="-20%" y="-20%" width="140%" height="140%">
+  <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+  <feOffset dx="0" dy="0" result="offsetblur"/>
+  <feFlood flood-color="white" flood-opacity="1"/>
   <feComposite in2="offsetblur" operator="in"/>
   <feMerge>
     <feMergeNode/>
@@ -361,12 +385,27 @@ Define visual appearance with CSS classes embedded in the SVG `<defs>` section:
 </filter>
 ```
 
-**White Outline (for text readability):**
+**Hierarchical Shadow Filter (for folder containers):**
 
 ```xml
-<filter id="outlineWhite" x="-50%" y="-50%" width="200%" height="200%">
+<filter id="hierarchicalShadow" x="-20%" y="-20%" width="140%" height="140%">
+  <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
+  <feOffset dx="2" dy="2" result="offsetblur"/>
+  <feFlood flood-color="rgba(0,0,0,0.1)" flood-opacity="0.8"/>
+  <feComposite in2="offsetblur" operator="in"/>
+  <feMerge>
+    <feMergeNode/>
+    <feMergeNode in="SourceGraphic"/>
+  </feMerge>
+</filter>
+```
+
+**White Outline Filter (for text readability):**
+
+```xml
+<filter id="outlineWhite">
   <feMorphology in="SourceAlpha" result="DILATED" operator="dilate" radius="2"/>
-  <feFlood flood-color="white" flood-opacity="0.8" result="WHITE"/>
+  <feFlood flood-color="white" flood-opacity="0.5" result="WHITE"/>
   <feComposite in="WHITE" in2="DILATED" operator="in" result="OUTLINE"/>
   <feMerge>
     <feMergeNode in="OUTLINE"/>
@@ -375,16 +414,40 @@ Define visual appearance with CSS classes embedded in the SVG `<defs>` section:
 </filter>
 ```
 
-#### Gradients
+#### Simplified Gradients
 
-**Layer Background Gradient:**
+The unified styling system uses three generic gradients with consistent colors:
+
+**Horizontal Gradient (left green to right blue):**
 
 ```xml
-<linearGradient id="layerGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-  <stop offset="0%" stop-color="#691872" stop-opacity="0.1"/>
-  <stop offset="100%" stop-color="#691872" stop-opacity="0.3"/>
+<linearGradient id="horizontalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+  <stop offset="0%" stop-color="#28a745"/>
+  <stop offset="100%" stop-color="#007bff"/>
 </linearGradient>
 ```
+
+**Vertical Gradient (top green to bottom blue):**
+
+```xml
+<linearGradient id="verticalGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#28a745"/>
+  <stop offset="100%" stop-color="#007bff"/>
+</linearGradient>
+```
+
+**Color Consistency:**
+
+- Green: `#28a745` (consistent across all gradients)
+- Blue: `#007bff` (consistent across all gradients)
+
+### Key Features of Unified Approach
+
+1. **Consistent Hover Behavior**: All edges maintain their gradient colors on hover instead of changing to solid colors
+2. **Unified Cursor Styles**: All badges use `cursor: help` to show '?' cursor on hover
+3. **Consistent Transitions**: All interactive elements use 0.1s ease-in-out transitions
+4. **Gradient Maintenance**: Hover states preserve visual gradients for better UX
+5. **Single Source of Truth**: All styles defined in one place, used by both visualization types
 
 ## Rendering Components
 
