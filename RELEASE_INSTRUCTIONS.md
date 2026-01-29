@@ -25,7 +25,31 @@ Update the version in `pubspec.yaml`. Follow semantic versioning:
 version: X.Y.Z
 ```
 
-## 3. Update the Changelog
+## 3. Sync Version and Run Checks
+
+After updating the version in `pubspec.yaml`, you must:
+
+1. **Run the version extraction script** to ensure `version.dart` matches `pubspec.yaml`:
+
+   ```bash
+   ./tool/generate_version.sh
+   ```
+
+2. **Run the complete check suite** to verify all quality standards:
+
+   ```bash
+   ./tool/check.sh
+   ```
+
+This ensures:
+
+- ✅ `version.dart` is synchronized with `pubspec.yaml`
+- ✅ All tests pass
+- ✅ Code formatting is applied
+- ✅ Static analysis passes
+- ✅ No lint warnings or errors
+
+## 4. Update the Changelog
 
 Add a new entry to `CHANGELOG.md` at the top (under the unreleased section):
 
@@ -55,7 +79,7 @@ Add a new entry to `CHANGELOG.md` at the top (under the unreleased section):
 
 Update the date to today's date in YYYY-MM-DD format.
 
-## 4. Execute the Publish Script
+## 5. Execute the Publish Script
 
 Run the automated publishing script:
 
