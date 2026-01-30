@@ -1,272 +1,363 @@
-# Folder-Based Dependency Visualization Layout
+# Folder-Based Dependency Visualization Layout (Execution Spec)
 
-## Overview
-
+This spec defines **how to compute and render** a dependency diagram that shows the project **as it exists**, using folder containers and file nodes. The layout is driven purely by **observed dependencies** (imports), while folders preserve the **human grouping constraint**.
 The folder-based SVG visualization provides a hierarchical view of project dependencies organized by folder structure. This layout helps identify architectural patterns, component relationships, and potential refactoring opportunities.
 
-## Visualization Structure
+---
 
-### Folder Containers
+## 1) Inputs and Outputs
 
-Each folder is represented as a container with:
+### Input
 
-- **Folder Name**: Displayed at the top
-- **Dependency Metrics**: Shows incoming (↓) and outgoing (↑) dependencies
-- **Files**: List of files within the folder with individual dependency badges
-- **Visual Style**: White background with rounded corners and shadow
+A directed file dependency graph:
 
-### Dependency Edges
+- File nodes: `filePath`
+- File edges: `A → B` meaning “A depends on B”
 
-Connections between folders are shown as curved lines using the unified styling system:
+### Output
 
-- **Direction**: Left-to-right (source → target)
-- **Style**: Unified horizontal gradient from green (#28a745) to blue (#007bff) using `url(#horizontalGradient)`
-- **Interactive**: Hover to see specific file dependencies
-- **Hover Behavior**: Maintains gradient color, increases stroke-width to 5px, opacity to 1.0
-- **Transitions**: Smooth 0.1s ease-in-out transitions
-- **Cursor**: Uses help cursor for interactive tooltips
+One SVG diagram with two parallel lanes:
 
-**Edge Styling Classes:**
+- **Left lane:** Folder-to-folder connections (rolled-up)
+- **Right lane:** File-to-file connections (raw)
 
-- `.edgeVertical` - Main folder-to-folder dependencies
-- `.edgeVertical` - Parent-child folder relationships  
-- `.edgeVertical` - File-to-file dependencies within folders
+Folders and files are laid out in the same top-to-bottom ordering logic, but edges are visually separated by lane.
 
-All edge types maintain their gradient colors on hover and use consistent visual feedback.
+---
 
-### Layout Algorithm
+## 2) Folder Extraction and Grouping
 
-## Sorting Logic
+Map each file to a folder key `F(file)` (deterministic, stable).
 
-The folder sorting algorithm follows a three-tier approach:
+- Folder containers list their files.
+- All cross-folder relationships are derived from file edges.
 
-### 1. Entry Point Detection (Primary Sort)
+### 2.1) Virtual Folders and Loose File Grouping
 
-Folders with **0 incoming dependencies** are considered true entry points and appear first:
+When a folder contains both files and subfolders, the system creates a **virtual folder** to group the loose files. This provides a cleaner visualization by separating files from the folder hierarchy.
+
+#### Virtual Folder Creation
+
+- **Trigger**: A folder has both files and subfolders
+- **Name**: Virtual folders are named "..." to indicate they contain loose files
+- **Position**: Virtual folders are positioned **above** all other subfolders within the parent folder
+- **Content**: Contains only the files that are directly in the parent folder (not in any subfolder)
+- **Styling**: Rendered with a **dash-dot border** (`stroke-dasharray: 4 2`) to distinguish from regular subfolders
+- **Ordering**: Follows the same ordering rules as regular subfolders (consumers above providers)
+
+#### Purpose
+
+- Ensures consistent hierarchical visualization where files are always contained within some folder-like container
+- Provides cleaner visual separation between files and folder structure
+- Maintains accurate dependency relationships that originate from where files actually reside
+
+#### Note on File Identity
+
+Virtual folders are a **visual grouping construct only**.
+- They **do not** change the logical relative path of the files they contain.
+- Dependency lookups, edge anchors, and graph keys must always use the **original file path** (e.g., `folder/file.dart`), **not** a path including the virtual folder (e.g., **avoid** `folder/.../file.dart`).
+
+### 2.2) Folder Connection Rules
+
+The system distinguishes between external and internal folder connections:
+
+#### External Folder Connections
+
+- **Definition**: When a file from one folder imports a file from another folder
+- **Behavior**: The connection is routed between the parent folders (not virtual subfolders)
+- **Example**: If Folder A contains file X and Folder B contains file Y, and X imports Y, the connection shows A → B
+
+#### Internal Folder Connections  
+
+- **Definition**: When a file from a virtual subfolder imports a file from a subfolder within the same parent
+- **Behavior**: The connection is routed from the virtual subfolder to the target subfolder
+- **Example**: If Folder B has a virtual subfolder with file Y and a subfolder C with file Z, and Y imports Z, the connection shows "virtual subfolder of B" → C
+
+#### Connection Logic
 
 ```dart
-final aIsEntry = aIncoming == 0;
-final bIsEntry = bIncoming == 0;
-if (aIsEntry != bIsEntry) {
-  return aIsEntry ? -1 : 1; // Entry points first
+// For external connections, return the parent folder
+if (targetParent != currentParent) {
+  // External connection - return parent folder
+  return current.fullPath;
+} else {
+  // Internal connection - return virtual subfolder
+  return child.fullPath;
 }
 ```
 
-**Examples of Entry Points:**
+This distinction ensures that:
 
-- `bin/` - Contains main executable (0 incoming)
-- `.` (root) - Contains configuration files (0 incoming)
-- `test/` - Test files that don't depend on other folders (0 incoming)
+- External dependencies are shown at the folder level for clarity
+- Internal dependencies within the same parent folder show the actual source location (virtual subfolder)
+- The visualization maintains both hierarchical relationships and accurate dependency origins
 
-### 2. Outgoing Dependencies (Secondary Sort)
+### 2.3) Hierarchical Roll-Up Rule (External Connections)
 
-Among folders with the same entry point status, sort by outgoing dependencies (descending):
+To maintain architectural clarity and prevent a "spiderweb" of cross-folder lines, external dependencies MUST be rolled up to the shallowest folders that are distinct siblings under a common parent.
 
-```dart
-final outgoingDiff = bOutgoing.compareTo(aOutgoing);
-if (outgoingDiff != 0) return outgoingDiff;
-```
+- **Rule**: For any file edge `A → B`, find the lowest common ancestor folder `P`.
+- **Source Folder**: The direct child of `P` that contains `A` (or the virtual folder inside `P` if `A` is a loose file in `P`).
+- **Target Folder**: The direct child of `P` that contains `B` (or the virtual folder inside `P` if `B` is a loose file in `P`).
+- **Visual Impact**: External connections always happen between folders at the same "branch" level, ensuring that deep internal structures do not clutter the top-level architectural view.
 
-**Rationale:**
+Example:
+- File `lib/screens/login/auth.dart` depends on `lib/models/user.dart`.
+- Common ancestor is `lib`.
+- Roll-up: `lib/screens` → `lib/models`.
 
-- Folders that depend on many others are typically core modules
-- High outgoing = more fundamental/important
-- Creates natural hierarchy from core → utilities
+---
 
-### 3. Incoming Dependencies (Tertiary Sort)
+## 3) Roll-Up: Folder Consumption Graph
 
-Among folders with similar outgoing dependencies, sort by incoming dependencies (ascending):
+For each file edge `A → B`:
 
-```dart
-return aIncoming.compareTo(bIncoming);
-```
+- `FA = F(A)`
+- `FB = F(B)`
+- If `FA != FB`, accumulate:
 
-**Rationale:**
+`consumes[FA][FB] += 1`
 
-- Fewer incoming dependencies = less coupled
-- Helps identify leaf modules and utilities
+Interpretation:
 
-## Expected Folder Ordering
+- `FA consumes FB` (FA depends on FB)
 
-### Left Side (Entry Points)
+### 3.1) Consumption Weight (for Ordering)
+For each file edge `A → B`:
+- `Weight(FA, FB) += 1` 
+- Used in Phase 2 ordering to determine which consumer is "stronger".
 
-1. **True Entry Points**: Folders with 0 incoming dependencies
-   - `bin/` - Main executables
-   - `.` (root) - Configuration files
-   - `test/` - Test suites
+### 3.2) Connection Degree (for Badges)
+For each unique folder pair `(FA, FB)` where `Weight > 0`:
+- **Degree Out**: `outgoing(FA) += 1`
+- **Degree In**: `incoming(FB) += 1`
 
-2. **Core Modules**: High outgoing, some incoming
-   - `lib/` - Main library code
-   - `src/` - Core source files
+**Visual Rule**: The numbers displayed in folder badges MUST correspond to the **number of unique lines** (Connection Degree) drawn in the left lane, NOT the sum of file-level consumption weights.
 
-### Middle (Dependent Modules)
+---
 
-1. **Shared Components**: Medium outgoing/incoming
-   - `utils/` - Utility functions
-   - `common/` - Shared components
+## 4) Vertical Ordering Rule (Folders)
 
-### Right Side (Leaf Modules)
+The folder vertical order is computed in **two phases**:
 
-1. **Specialized Utilities**: Low outgoing, high incoming
-   - `graphs/` - Graph exporters (Mermaid, PlantUML, SVG)
-   - `helpers/` - Helper functions
+### Phase 1: Hard Dependency Constraints
 
-2. **Leaf Modules**: Minimal outgoing, high incoming
-   - `hardcoded_strings/` - Specific functionality
-   - `layers/` - Layer analysis
+First, apply **hard dependency constraints** based on direct consumption:
 
-## Visual Hierarchy
+For any two folders `A` and `B`:
 
-```text
-[Entry Points] → [Core Modules] → [Dependent Modules] → [Leaf Modules]
-(Left)            (Middle Left)      (Middle Right)        (Right)
-```
+- If `consumes[A][B] > 0` (A consumes B), then **A must be above B**
+- If `consumes[B][A] > 0` (B consumes A), then **B must be above A**
 
-## Folder Metrics Interpretation
+**Hard Constraint Rule:** If both folders consume each other (cyclic), the folder with **higher consumption strength** gets priority (see Phase 2).
 
-### Incoming Dependencies (↓)
+### Phase 2: Consumption Strength Ordering
 
-- **↓0**: Entry point / root folder
-- **↓1-3**: Lightly used by others
-- **↓4-6**: Moderately depended upon
-- **↓7+**: Heavily depended upon (core module)
+After applying hard constraints, order folders by **observed consumption strength** within the remaining flexibility.
 
-### Outgoing Dependencies (↑)
+#### 4.1 Pair Rule (2 folders)
 
-- **↑0**: Leaf module / standalone
-- **↑1-3**: Uses few other modules
-- **↑4-6**: Moderate dependencies
-- **↑7+**: Depends on many modules (integrator)
+For any two folders `A` and `B` that have cross dependencies:
 
-## Common Patterns
+- If `consumes[A][B] > consumes[B][A]` then place **A above B**
+- If `consumes[B][A] > consumes[A][B]` then place **B above A**
+- If equal, apply a deterministic tiebreaker (e.g., folder path ascending)
 
-### Healthy Architecture
+#### 4.2 Group Rule (3+ folders)
 
-```text
-[Entry] → [Core] → [Utils] → [Leaf]
- bin     lib     metrics   layers
-```
+When 3+ folders participate in a connected set (including cyclic or triangular relationships), use aggregate consumption within that set:
 
-### Problematic Patterns
+For a group `G` and folder `F ∈ G`:
 
-**Circular Dependencies:**
+`groupOut(F) = Σ consumes[F][K] for K ∈ G, K != F`
 
-```text
-[A] ↔ [B]  // Avoid bidirectional dependencies
-```
+Sort folders in **descending `groupOut(F)`**:
 
-**Overly Connected Core:**
+- Highest consumer goes **highest**
+- Lowest consumer goes **lowest**
 
-```text
-[Core] → Everything  // Single point of failure
-```
+Tiebreakers:
 
-**Orphaned Modules:**
+1) `groupOut` desc  
+2) `incoming` asc (optional stabilization)  
+3) folder path asc
 
-```text
-[Leaf] with no incoming  // Unused code?
-```
+#### 4.3 Layered Ranking (Global)
 
-## Folder Layout Examples
+To prevent diagrams from becoming excessively tall and to ensure consistent flow:
+1. **Shared Levels**: Multiple folders SHOULD occupy the same level if they can be processed in parallel.
+2. **Rank Calculation**: Use a layering algorithm where `level(N) = max(level(consumers_of_N)) + 1`. This groups independent "leaves" at the same depth and brings "consumer roots" (like `screen`) to the top.
+3. **Global Scope**: Leveling must be calculated on the **global** folder graph before any visual grouping is applied. This ensures that a consumer in one component stays above its providers even if they are logically separated into different connected sets.
 
-### Example 1: Well-Structured Project
+> **Note:** Phase 1 hard constraints take precedence over Phase 2 ordering. If hard constraints create conflicts (e.g., cycles), resolve using Phase 2 consumption strength within the conflicting group, but keep the group aligned with its immediate predecessors.
 
-```text
-bin(↓0↑5) → lib(↓2↑7) → src(↓7↑6) → graphs(↓5↑4)
-   ↓
-metrics(↓3↑3) → sort(↓3↑3)
-   ↓
-hardcoded_strings(↓5↑1) → layers(↓7↑1)
-```
+---
 
-### Example 2: Problematic Architecture
+## 5) Vertical Ordering Rule (Files within a Folder)
 
-```text
-lib(↓10↑15) → Everything  // Overly connected core
-   ↑
-All other folders depend on lib
-```
+Inside each folder container, order files deterministically, for example:
 
-## Best Practices
+- Primary: file outgoing dependencies (desc)
+- Secondary: file incoming dependencies (asc)
+- Tiebreaker: file path asc
 
-### Ideal Folder Structure
+(Any stable rule is acceptable; folder-to-folder ordering is the main requirement.)
 
-1. **Entry Points**: Minimal incoming, moderate outgoing
-2. **Core Modules**: Balanced incoming/outgoing
-3. **Utilities**: Moderate incoming, low outgoing
-4. **Leaf Modules**: High incoming, minimal outgoing
+---
 
-### Refactoring Guidelines
+## 6) Edge Classification and Color Rules
 
-- **Move leaf modules closer to entry points** if they become core
-- **Split overly connected modules** into smaller components
-- **Eliminate circular dependencies** between folders
-- **Group related functionality** in the same folder
+All edges exist as raw file edges, but we render them in two forms:
 
-## Implementation Details
+### 6.1 Folder Edges (Left Lane)
 
-### Folder Extraction
+Render rolled-up folder edges for all pairs where `consumes[A][B] > 0`.
 
-```dart
-String _extractFolderPath(String filePath) {
-  final parts = filePath.split('/');
-  if (parts.length >= 2) {
-    return parts[parts.length - 1]; // Immediate parent folder
-  }
-  return 'root';
-}
-```
+- Lane: **left**
+- Edge represents: `consumes[A][B]` (weight)
+- Tooltip includes: weight and top contributing file edges
 
-### Dependency Counting
+### 6.2 File Edges (Right Lane)
 
-```dart
-// Cross-folder dependency detection
-if (sourceFolder != targetFolder) {
-  folderOutgoingCounts[sourceFolder]++;
-  folderIncomingCounts[targetFolder]++;
-}
-```
+Render raw file-to-file edges.
 
-### Visual Encoding
+- Lane: **right**
+- Tooltip includes: exact `A → B`
 
-The unified styling system provides consistent visual elements across all visualizations:
+---
 
-- **Blue Badges (↓)**: Incoming dependencies with '?' cursor on hover
-- **Green Badges (↑)**: Outgoing dependencies with '?' cursor on hover
-- **File Icons (📄)**: Individual files within folders
-- **Hover Effects**: Interactive tooltips on all badges with smooth transitions
-- **Unified Cursors**: All badges use `cursor: help` showing '?' cursor
+## 7) Direction Semantics and Warnings
 
-**Badge Styling Features:**
+The diagram is read **top-to-bottom**.
 
-- Consistent 0.1s ease-in-out transitions
-- Opacity changes on hover (0.8)
-- Help cursor for all badge types
-- Unified font sizing and positioning
+### 7.1 Normal Direction
 
-## Troubleshooting
+A “healthy / expected” direction is:
 
-### Folder Appears in Wrong Position
+- **Top consumes bottom**  
+(i.e., consumer above provider)
 
-1. Check incoming/outgoing counts with debug script
-2. Verify dependency graph accuracy
-3. Review sorting algorithm logic
+This is purely a visual convention to help humans scan. The diagram remains “as-is”.
 
-### Missing Folder Dependencies
+### 7.2 Upward Consumption Warning (Orange)
 
-1. Ensure cross-folder dependencies are counted
-2. Check folder extraction logic
-3. Verify file-to-folder mapping
+If an edge goes **upward** in the diagram (source is lower than target), it is a warning:
 
-### Performance Issues
+- Condition: `y(source) > y(target)`
+- Style: **Orange** stroke (warning)
 
-1. Optimize dependency graph traversal
-2. Consider caching folder metrics
-3. Review SVG generation efficiency
+> [!IMPORTANT]
+> **Visual Truth**: Upward detection MUST use finalized vertical coordinates (`y`), not logical levels or sorting indices. This ensures the warning strictly matches the visual "point up" behavior, even if logical ordering constraints are partially relaxed for layout stability.
 
-## Future Enhancements
+Applies to both:
 
-- **Folder Grouping**: Group related folders visually
-- **Dependency Strength**: Visualize strong/weak dependencies
-- **Circular Dependency Detection**: Highlight problematic patterns
-- **Interactive Reordering**: Allow manual folder positioning
+- Folder edges (rolled-up)
+- File edges (raw)
+
+This highlights boundary inversions like:
+
+- “lower layer consuming higher layer”
+
+### 7.3 Cycle Highlight (Red)
+
+If an edge is part of a detected cycle, render it in **Red** (overrides orange).
+
+- Style: **Red** stroke for cycle edges
+- Purpose: make cycles immediately visible for refactoring
+
+Applies to:
+
+- Folder graph cycles (derived from rolled-up folder edges)
+- File graph cycles (raw)
+
+**Priority rule:** `Red (cycle) > Orange (upward) > Default (gradient)`
+
+---
+
+## 8) Cycle Detection (Required)
+
+Detect cycles in both graphs:
+
+1) **Folder graph**: nodes are folders, edges exist where `Weight(A, B) > 0`.
+2) **File graph**: nodes are files, edges are file imports
+
+Any edge that participates in at least one cycle is marked as `isCycle = true`.
+
+---
+
+## 9) Rendering Styles
+
+### 9.1 Default Edge Style
+
+Used when not cycle and not upward:
+
+- Stroke: unified horizontal gradient `url(#horizontalGradient)` (green → blue)
+- Width: 3px
+- Opacity: 0.8
+- Cursor: `help`
+- Transition: 0.1s ease-in-out
+
+### 9.2 Warning Edge Style (Upward)
+
+- Stroke: **Orange**
+- Width: 3px (hover 5px)
+- Opacity: 0.9 (hover 1.0)
+
+### 9.3 Cycle Edge Style
+
+- Stroke: **Red**
+- Width: 4px (hover 6px)
+- Opacity: 1.0
+
+### 9.4 Hover Behavior (All Edges)
+
+- Maintain current stroke color (gradient/orange/red)
+- Increase stroke-width
+- Opacity to 1.0
+
+---
+
+## 10) Lane Placement (Left vs Right)
+
+### Left Lane: Folder edges
+
+- Render folder containers centered in the main column
+- Draw aggregated folder edges routed to the **left side** of the folder stack
+- Keep these edges visually distinct from file edges (spacing + consistent left routing)
+
+### Right Lane: File edges
+
+- Render file nodes inside folder containers
+- Draw file-to-file edges routed to the **right side** of the overall diagram
+
+### 10.3) Straight Gutter Alignment (Global and Nested)
+Vertical edge segments MUST use **fixed global X-coordinates** relative to their respective gutters (Gutter Alignment):
+- **Global Left Lane**: For edges between root-level branches, use fixed coordinates from the diagram's left margin.
+- **Nested Left Lanes**: For edges between sibling folders within a parent, use **local fixed coordinates** relative to the parent container's left boundary. This keeps internal lines grouped within their logical scope.
+- **Right Lane**: Use fixed coordinates starting from the right side of the root container.
+- **Visual Impact**: Ensures perfectly straight vertical lines within their scope, preventing a jagged look while making the diagram significantly more compact.
+
+---
+
+## 11) Container Sizing Rules
+
+### 11.1) Uniform Width (Flush Look)
+To maintain a professional, clean grid look, subfolders (including virtual folders) MUST expand horizontally to match the interior width of their parent container.
+- **Rule**: `child.width = parent.innerWidth`
+- **Visual Impact**: All children within a folder appear "flush" on both sides, creating a consistent column regardless of the child's own content width.
+
+### 11.2) Shrink-to-Fit Height
+Folder containers MUST be vertically sized to exactly fit their content (files, subfolders, and padding). 
+- **Rule**: No arbitrary minimum height (e.g., 140px) should be applied.
+- **Visual Impact**: Small folders with only 1-2 files remain compact, reducing the overall vertical footprint of the diagram.
+
+---
+
+## 12) Determinism Requirements
+
+To prevent jitter between runs:
+
+- All ordering steps must have stable tiebreakers.
+- Folder extraction must be deterministic.
+- Cycle detection must be deterministic for the same graph.
+- Edge styling must follow the priority rule strictly.

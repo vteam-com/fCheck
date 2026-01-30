@@ -2,6 +2,7 @@
 !theme plain
 
 component [comments_example.dart] as compcommentsexample
+component [subfolder/subclass.dart] as compsubfoldersubclass
 component [main.dart\n↓0 ↑1] as compmain
 component [utils.dart\n↓1 ↑0] as computils
 component [counter_widget.dart\n↓1 ↑1] as compcounterwidget

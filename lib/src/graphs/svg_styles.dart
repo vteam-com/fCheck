@@ -200,9 +200,25 @@ $verticalGradient
   
   /* Special edge styles */
   .cycleEdge { 
+    fill: none; 
     stroke: red; 
     stroke-width: 5; 
     opacity: 0.9; 
+  }
+  
+  .warningEdge { 
+    fill: none; 
+    stroke: orange; 
+    stroke-width: 3; 
+    opacity: 0.9; 
+    transition: all 0.1s ease-in-out; 
+  }
+  
+  .warningEdge:hover { 
+    fill: none; 
+    stroke: orange; 
+    stroke-width: 5; 
+    opacity: 1.0; 
   }
   
   /* Unified badge styles with '?' cursor */

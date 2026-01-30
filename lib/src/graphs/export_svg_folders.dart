@@ -30,8 +30,12 @@ class FolderNode {
   /// Number of outgoing folder-level dependencies.
   int outgoing = 0;
 
+  /// Whether this is a virtual folder for loose files.
+  final bool isVirtual;
+
   /// Creates a folder node.
-  FolderNode(this.name, this.fullPath, this.children, this.files);
+  FolderNode(this.name, this.fullPath, this.children, this.files,
+      {this.isVirtual = false});
 }
 
 /// Captures file label rendering data so we can draw after edges.
@@ -192,15 +196,29 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   final folderMetrics =
       _calculateFolderMetrics(relativeGraph, rootNode.fullPath, rootNode);
   final fileMetrics = _calculateFileMetrics(relativeGraph);
-  final folderLevels = _computeFolderLevels(relativeGraph);
+  final folderLevels = _computeFolderLevels(relativeGraph, rootNode);
+
+  final folderDependencies =
+      _collectFolderDependencies(relativeGraph, rootNode);
+  final folderDepGraph = <String, List<String>>{};
+  for (final edge in folderDependencies) {
+    folderDepGraph
+        .putIfAbsent(edge.sourceFolder, () => [])
+        .add(edge.targetFolder);
+  }
+
+  // Extra canvas width to accommodate left/right-routed edges
+  final totalFileEdges =
+      relativeGraph.values.fold<int>(0, (sum, list) => sum + list.length);
+  final fileEdgeExtraWidth = 40.0 + (32.0 + totalFileEdges * 4.0);
+  final folderEdgeExtraWidth = 40.0 + (32.0 + folderDependencies.length * 4.0);
 
   // --- Layout Constants ---
   const double baseFolderWidth = 260.0;
-  const double folderMinHeight = 140.0;
-  const double folderPadding = 16.0;
-  const double childIndent = 18.0;
-  const double childSpacing = 18.0;
-  const double margin = 50.0;
+  const double folderPadding = 24.0;
+  const double childIndent = 40.0;
+  const double childSpacing = 24.0;
+  const double margin = 80.0;
   const double folderHeaderHeight = 32.0;
   const double fileItemHeight = 22.0;
   const double fileItemSpacing = 10.0;
@@ -222,7 +240,6 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
     labelWidth: labelWidth,
     folderLevels: folderLevels,
     baseWidth: baseFolderWidth,
-    minHeight: folderMinHeight,
     padding: folderPadding,
     childIndent: childIndent,
     childSpacing: childSpacing,
@@ -239,7 +256,7 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
     folderPositions,
     folderDimensions,
     folderLevels: folderLevels,
-    startX: margin,
+    startX: margin + folderEdgeExtraWidth,
     startY: margin,
     padding: folderPadding,
     childIndent: childIndent,
@@ -255,13 +272,15 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   final drawOrder = _collectDepthFirst(rootNode);
   final depthMap = _computeDepths(rootNode);
 
-  // Extra canvas width to accommodate right-routed edges
-  final totalEdges =
-      relativeGraph.values.fold<int>(0, (sum, list) => sum + list.length);
-  final edgeExtraWidth = 60.0 + (28.0 + totalEdges * 2.0);
+  // Calculate total width and height based on root container plus edge padding
 
   // Calculate total width and height based on root container plus edge padding
-  final totalWidth = margin + rootSize.width + edgeExtraWidth + margin;
+  // Folders are centered, with dedicated lanes for folder and file connections
+  final totalWidth = margin +
+      folderEdgeExtraWidth +
+      rootSize.width +
+      fileEdgeExtraWidth +
+      margin;
   final totalHeight = margin + rootSize.height + margin;
 
   final buffer = StringBuffer();
@@ -289,13 +308,6 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   final fileVisuals = <_FileVisual>[];
   final titleVisuals = <_TitleVisual>[];
   final folderBadges = <BadgeModel>[];
-  final folderDependencies = _collectFolderDependencies(relativeGraph);
-  final folderDepGraph = <String, List<String>>{};
-  for (final edge in folderDependencies) {
-    folderDepGraph
-        .putIfAbsent(edge.sourceFolder, () => [])
-        .add(edge.targetFolder);
-  }
   final folderPeers =
       buildPeerLists(folderDepGraph, labelFor: (path) => path.split('/').last);
   final folderIncomingPeers = folderPeers.incoming;
@@ -329,9 +341,21 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
     fileTopPadding: fileTopPadding,
   );
 
+  // Calculate the horizontal start of the folder column and file lane for aligned vertical edges
+  final leftLaneGutterX = margin + folderEdgeExtraWidth;
+  final rightLaneGutterX = margin + folderEdgeExtraWidth + rootSize.width;
+
   // Draw inter-folder dependency edges between backgrounds and badges
   _drawEdgeVerticalFolders(
-      buffer, folderDependencies, folderPositions, folderDimensions);
+    buffer,
+    folderDependencies,
+    folderPositions,
+    folderDimensions,
+    folderLevels,
+    folderDepGraph,
+    globalGutterX: leftLaneGutterX,
+    rootPath: rootNode.fullPath,
+  );
 
   // Draw folder badges above dependency edges
   _drawFolderBadges(buffer, folderBadges);
@@ -340,7 +364,13 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   _drawFilePanels(buffer, fileVisuals);
 
   // Draw file-to-file dependency edges
-  _drawEdgeVerticalsFiles(buffer, relativeGraph, fileAnchors);
+  _drawEdgeVerticalsFiles(
+    buffer,
+    relativeGraph,
+    fileAnchors,
+    folderLevels,
+    rightLaneGutterX: rightLaneGutterX,
+  );
 
   // Draw badges and labels after edges for correct stacking
   _drawFileVisuals(buffer, fileVisuals);
@@ -388,14 +418,115 @@ FolderNode _buildFolderHierarchy(List<String> filePaths) {
       currentPath = folderPath;
     }
 
-    // Add file to the deepest folder
-    final fileName = parts.last;
-    if (!current.files.contains(fileName)) {
-      current.files.add(fileName);
+    // Add file to the deepest folder (use full relative path as identity)
+    if (!current.files.contains(filePath)) {
+      current.files.add(filePath);
     }
   }
 
+  // Apply loose files rule: create virtual subfolders for folders with both files and subfolders
+  _applyLooseFilesRule(root);
+
   return root;
+}
+
+/// Apply the loose files rule: create virtual subfolders for folders with both files and subfolders.
+void _applyLooseFilesRule(FolderNode node) {
+  // Process children first (bottom-up)
+  for (final child in node.children) {
+    _applyLooseFilesRule(child);
+  }
+
+  // If this folder has both files and subfolders, create a virtual subfolder for the loose files
+  if (node.files.isNotEmpty && node.children.isNotEmpty) {
+    // Create a virtual subfolder for the loose files
+    final virtualFolderName = '...';
+    final virtualFolderPath = node.fullPath == '.'
+        ? virtualFolderName
+        : '${node.fullPath}/$virtualFolderName';
+    // Create a copy of the files list for the virtual folder
+    final virtualFolderFiles = List<String>.from(node.files);
+    final virtualFolder = FolderNode(
+        virtualFolderName, virtualFolderPath, [], virtualFolderFiles,
+        isVirtual: true);
+
+    // Clear the files from the parent folder
+    node.files.clear();
+
+    // Insert the virtual folder at the beginning (above all other subfolders)
+    node.children.insert(0, virtualFolder);
+  }
+}
+
+/// Find the actual folder path where a file ends up, considering virtual subfolders.
+/// For external connections (between different parent folders), return the parent folder.
+/// For internal connections (within the same parent folder), return the actual location (virtual subfolder if applicable).
+String _getActualFolderPath(
+    String filePath, FolderNode rootNode, String? targetFilePath) {
+  // If no target is specified, just return the folder where the file actually is
+  if (targetFilePath == null) {
+    return _getDeepestFolderPath(filePath, rootNode);
+  }
+
+  // Find lowest common ancestor
+  final sourceParts = filePath.split('/');
+  final targetParts = targetFilePath.split('/');
+  int commonDepth = 0;
+  while (commonDepth < sourceParts.length - 1 &&
+      commonDepth < targetParts.length - 1 &&
+      sourceParts[commonDepth] == targetParts[commonDepth]) {
+    commonDepth++;
+  }
+
+  // Find common path segments
+  final commonPathParts = sourceParts.sublist(0, commonDepth);
+
+  // Navigate to the common ancestor node
+  FolderNode commonNode = rootNode;
+  for (final part in commonPathParts) {
+    commonNode = commonNode.children.firstWhere(
+      (f) => f.name == part,
+      orElse: () => commonNode,
+    );
+  }
+
+  // Determine which branch to return for the source file
+  if (commonDepth >= sourceParts.length - 1) {
+    // Source file is directly in commonNode (loose file)
+    // Return the virtual folder of commonNode if it exists
+    final virtual = commonNode.children.where((f) => f.isVirtual).firstOrNull;
+    return virtual?.fullPath ?? commonNode.fullPath;
+  } else {
+    // Source file is in a sub-branch of commonNode
+    // Return the direct child of commonNode that leads to source file
+    final branchName = sourceParts[commonDepth];
+    final branch = commonNode.children.firstWhere(
+      (f) => f.name == branchName,
+      orElse: () => commonNode,
+    );
+    return branch.fullPath;
+  }
+}
+
+/// Helper to find the actual deepest folder containing a file (including virtual folders).
+String _getDeepestFolderPath(String filePath, FolderNode rootNode) {
+  if (!filePath.contains('/')) return rootNode.fullPath;
+  final parts = filePath.split('/');
+  FolderNode current = rootNode;
+  for (var i = 0; i < parts.length - 1; i++) {
+    final folderName = parts[i];
+    current = current.children.firstWhere(
+      (f) => f.name == folderName,
+      orElse: () => current,
+    );
+  }
+  if (current.files.contains(filePath)) return current.fullPath;
+  for (final child in current.children) {
+    if (child.isVirtual && child.files.contains(filePath)) {
+      return child.fullPath;
+    }
+  }
+  return _getFolderPath(filePath, rootNode.fullPath);
 }
 
 /// Calculate dependency metrics for hierarchical folders
@@ -404,6 +535,7 @@ Map<String, Map<String, int>> _calculateFolderMetrics(
     String rootPath,
     FolderNode rootNode) {
   final folderMetrics = <String, Map<String, int>>{};
+  final seenEdges = <String>{};
 
   // Initialize all folders
   _initializeFolderMetrics(rootNode, folderMetrics);
@@ -414,19 +546,25 @@ Map<String, Map<String, int>> _calculateFolderMetrics(
     final targetFiles = entry.value;
 
     for (final targetFile in targetFiles) {
-      final sourceFolder = _getFolderPath(sourceFile, rootPath);
-      final targetFolder = _getFolderPath(targetFile, rootPath);
+      // Use the actual folder paths considering hierarchical roll-ups
+      final sourceFolder =
+          _getActualFolderPath(sourceFile, rootNode, targetFile);
+      final targetFolder =
+          _getActualFolderPath(targetFile, rootNode, sourceFile);
 
       if (sourceFolder != targetFolder) {
-        folderMetrics.putIfAbsent(
-            sourceFolder, () => {'incoming': 0, 'outgoing': 0});
-        folderMetrics.putIfAbsent(
-            targetFolder, () => {'incoming': 0, 'outgoing': 0});
+        final edgeKey = '$sourceFolder->$targetFolder';
+        if (seenEdges.add(edgeKey)) {
+          folderMetrics.putIfAbsent(
+              sourceFolder, () => {'incoming': 0, 'outgoing': 0});
+          folderMetrics.putIfAbsent(
+              targetFolder, () => {'incoming': 0, 'outgoing': 0});
 
-        folderMetrics[sourceFolder]!['outgoing'] =
-            (folderMetrics[sourceFolder]!['outgoing'] ?? 0) + 1;
-        folderMetrics[targetFolder]!['incoming'] =
-            (folderMetrics[targetFolder]!['incoming'] ?? 0) + 1;
+          folderMetrics[sourceFolder]!['outgoing'] =
+              (folderMetrics[sourceFolder]!['outgoing'] ?? 0) + 1;
+          folderMetrics[targetFolder]!['incoming'] =
+              (folderMetrics[targetFolder]!['incoming'] ?? 0) + 1;
+        }
       }
     }
   }
@@ -434,56 +572,114 @@ Map<String, Map<String, int>> _calculateFolderMetrics(
   return folderMetrics;
 }
 
-/// Compute folder levels so that if X depends on Y, Y gets a greater level (drawn lower).
+/// Computes folder levels based on hard dependency constraints and consumption strength.
+///
+/// This implements the spec's two-phase ordering rules:
+/// Phase 1: Hard dependency constraints - consumers must be above providers
+/// Phase 2: Consumption strength ordering - higher consumers go above lower consumers
 Map<String, int> _computeFolderLevels(
-    Map<String, List<String>> dependencyGraph) {
-  final adj = <String, Set<String>>{};
-  final indegree = <String, int>{};
-
-  void ensure(String folder) {
-    adj.putIfAbsent(folder, () => <String>{});
-    indegree.putIfAbsent(folder, () => 0);
-  }
+    Map<String, List<String>> dependencyGraph, FolderNode rootNode) {
+  // Step 1: Build global folder consumption graph using actual folder paths
+  final consumes = <String, Map<String, int>>{};
+  final allFolders = <String>{};
 
   for (final entry in dependencyGraph.entries) {
-    final sourceFolder = _getFolderPath(entry.key, '.');
-    ensure(sourceFolder);
+    final sourceFile = entry.key;
     for (final target in entry.value) {
-      final targetFolder = _getFolderPath(target, '.');
-      ensure(targetFolder);
-      if (sourceFolder == targetFolder) continue;
-      if (adj[sourceFolder]!.add(targetFolder)) {
-        indegree[targetFolder] = (indegree[targetFolder] ?? 0) + 1;
+      final sourceFolder = _getActualFolderPath(sourceFile, rootNode, target);
+      final targetFolder = _getActualFolderPath(target, rootNode, sourceFile);
+      allFolders.add(sourceFolder);
+      allFolders.add(targetFolder);
+
+      if (sourceFolder != targetFolder) {
+        consumes.putIfAbsent(sourceFolder, () => <String, int>{});
+        consumes[sourceFolder]![targetFolder] =
+            (consumes[sourceFolder]![targetFolder] ?? 0) + 1;
       }
     }
+  }
+
+  // Ensure all project folders are included
+  _collectAllFolders(rootNode, allFolders);
+
+  // Step 2: Global Layered Topological Sort
+  final adj = <String, Set<String>>{};
+  final indeg = <String, int>{};
+  for (final folder in allFolders) {
+    adj[folder] = <String>{};
+    indeg[folder] = 0;
+  }
+
+  for (final source in allFolders) {
+    for (final target in (consumes[source]?.keys ?? <String>{})) {
+      if (allFolders.contains(target)) {
+        adj[source]!.add(target);
+        indeg[target] = (indeg[target] ?? 0) + 1;
+      }
+    }
+  }
+
+  int getGroupOut(String folder, Set<String> activeNodes) {
+    var out = 0;
+    for (final target in consumes[folder]?.keys ?? <String>{}) {
+      if (activeNodes.contains(target)) {
+        out += consumes[folder]![target]!;
+      }
+    }
+    return out;
   }
 
   final levels = <String, int>{};
-  final queue = <String>[];
-  queue.addAll(indegree.entries.where((e) => e.value == 0).map((e) => e.key));
+  final remainingNodes = Set<String>.from(allFolders);
+  var currentLevel = 0;
 
-  while (queue.isNotEmpty) {
-    final current = queue.removeAt(0);
-    final currentLevel = levels[current] ?? 0;
+  while (remainingNodes.isNotEmpty) {
+    // Collect all nodes that have no incoming edges from REMAINING nodes
+    var ready = remainingNodes.where((n) => (indeg[n] ?? 0) == 0).toList();
 
-    for (final target in adj[current] ?? const {}) {
-      final nextLevel = currentLevel + 1;
-      if ((levels[target] ?? 0) < nextLevel) {
-        levels[target] = nextLevel;
-      }
-      indegree[target] = (indegree[target] ?? 0) - 1;
-      if ((indegree[target] ?? 0) == 0) {
-        queue.add(target);
+    if (ready.isEmpty) {
+      // Cycle detected - pick the "strongest" consumer among the remaining nodes with least indegree
+      final minIndeg = remainingNodes
+          .map((n) => indeg[n] ?? 0)
+          .reduce((a, b) => a < b ? a : b);
+      final candidates =
+          remainingNodes.where((n) => indeg[n] == minIndeg).toList();
+      candidates.sort((a, b) => getGroupOut(b, remainingNodes)
+          .compareTo(getGroupOut(a, remainingNodes)));
+      ready = [candidates.first];
+    }
+
+    // Sort ready nodes by consumption strength (Phase 2) for deterministic sub-ordering
+    ready.sort((a, b) {
+      final diff = getGroupOut(b, remainingNodes)
+          .compareTo(getGroupOut(a, remainingNodes));
+      if (diff != 0) return diff;
+      return a.compareTo(b);
+    });
+
+    // Assign all ready nodes to the CURRENT level (Layered Ranking)
+    for (final folder in ready) {
+      levels[folder] = currentLevel;
+      remainingNodes.remove(folder);
+
+      // Remove edges and update indegrees
+      for (final neighbor in adj[folder]!) {
+        indeg[neighbor] = (indeg[neighbor] ?? 1) - 1;
       }
     }
-  }
 
-  // For any nodes not processed (cycles), keep level 0
-  for (final folder in adj.keys) {
-    levels.putIfAbsent(folder, () => 0);
+    currentLevel++;
   }
 
   return levels;
+}
+
+/// Recursively collect all folder paths in the hierarchy.
+void _collectAllFolders(FolderNode node, Set<String> allFolders) {
+  allFolders.add(node.fullPath);
+  for (final child in node.children) {
+    _collectAllFolders(child, allFolders);
+  }
 }
 
 /// Calculate per-file incoming/outgoing counts.
@@ -527,7 +723,6 @@ Rect _computeFolderDimensions(
   required double labelWidth,
   Map<String, int>? folderLevels,
   required double baseWidth,
-  required double minHeight,
   required double padding,
   required double childIndent,
   required double childSpacing,
@@ -543,8 +738,15 @@ Rect _computeFolderDimensions(
   final children = folderLevels == null
       ? node.children
       : (List<FolderNode>.from(node.children)
-        ..sort((a, b) => (folderLevels[a.fullPath] ?? 0)
-            .compareTo(folderLevels[b.fullPath] ?? 0)));
+        ..sort((a, b) {
+          // Virtual folders ("...") are always positioned above regular subfolders
+          if (a.isVirtual && !b.isVirtual) return -1;
+          if (!a.isVirtual && b.isVirtual) return 1;
+
+          // Otherwise follow dependency levels
+          return (folderLevels[a.fullPath] ?? 0)
+              .compareTo(folderLevels[b.fullPath] ?? 0);
+        }));
 
   for (var i = 0; i < children.length; i++) {
     final childRect = _computeFolderDimensions(
@@ -553,7 +755,6 @@ Rect _computeFolderDimensions(
       labelWidth: labelWidth,
       folderLevels: folderLevels,
       baseWidth: baseWidth,
-      minHeight: minHeight,
       padding: padding,
       childIndent: childIndent,
       childSpacing: childSpacing,
@@ -584,8 +785,6 @@ Rect _computeFolderDimensions(
     height += padding; // Bottom padding under the children block
   }
 
-  height = height < minHeight ? minHeight : height;
-
   final fileRowWidth = labelWidth + 50; // room for text + badges + margins
 
   var width = max(baseWidth, fileRowWidth);
@@ -595,6 +794,17 @@ Rect _computeFolderDimensions(
 
   final rect = Rect.fromLTWH(0.0, 0.0, width, height);
   dimensions[node.fullPath] = rect;
+
+  // Match children's width to the parent's interior width for a clean flush look
+  if (children.isNotEmpty) {
+    final innerWidth = width - (padding * 2) - childIndent;
+    for (final child in children) {
+      final oldRect = dimensions[child.fullPath]!;
+      dimensions[child.fullPath] =
+          Rect.fromLTWH(0, 0, innerWidth, oldRect.height);
+    }
+  }
+
   return rect;
 }
 
@@ -619,6 +829,7 @@ void _positionFolders(
 
   var childStartY = startY + headerHeight;
 
+  // Add file space for all folders (including virtual folders)
   if (node.files.isNotEmpty) {
     childStartY += fileTopPadding +
         (node.files.length * fileItemHeight) +
@@ -632,8 +843,15 @@ void _positionFolders(
   final childX = startX + padding + childIndent;
 
   final sortedChildren = List<FolderNode>.from(node.children)
-    ..sort((a, b) => (folderLevels[a.fullPath] ?? 0)
-        .compareTo(folderLevels[b.fullPath] ?? 0));
+    ..sort((a, b) {
+      // Virtual folders ("...") are always positioned above regular subfolders
+      if (a.isVirtual && !b.isVirtual) return -1;
+      if (!a.isVirtual && b.isVirtual) return 1;
+
+      // Otherwise follow dependency levels
+      return (folderLevels[a.fullPath] ?? 0)
+          .compareTo(folderLevels[b.fullPath] ?? 0);
+    });
 
   for (final child in sortedChildren) {
     _positionFolders(
@@ -737,14 +955,21 @@ void _drawEdgeHorizontalCurve(StringBuffer buffer, List<FolderNode> folders,
 
 /// Collect unique folder-to-folder dependency edges.
 List<_FolderEdge> _collectFolderDependencies(
-    Map<String, List<String>> dependencyGraph) {
+    Map<String, List<String>> dependencyGraph, FolderNode rootNode) {
   final edges = <_FolderEdge>[];
   final seen = <String>{};
 
   for (final entry in dependencyGraph.entries) {
-    final sourceFolder = _getFolderPath(entry.key, '.');
-    for (final target in entry.value) {
-      final targetFolder = _getFolderPath(target, '.');
+    final sourceFile = entry.key;
+    final targetFiles = entry.value;
+
+    for (final targetFile in targetFiles) {
+      // Get actual folder paths considering virtual subfolders
+      final sourceFolder =
+          _getActualFolderPath(sourceFile, rootNode, targetFile);
+      final targetFolder =
+          _getActualFolderPath(targetFile, rootNode, sourceFile);
+
       if (sourceFolder == targetFolder) continue;
 
       final key = '$sourceFolder->$targetFolder';
@@ -757,12 +982,110 @@ List<_FolderEdge> _collectFolderDependencies(
   return edges;
 }
 
+/// Detect cycles in a directed graph and return a set of edges that are part of at least one cycle.
+/// This uses Tarjan's bridge-finding concepts or SCC detection for more robust marking.
+Set<String> _detectCyclesInGraph(Map<String, List<String>> graph) {
+  final Set<String> cycleEdges = <String>{};
+  final List<List<String>> sccs = _findSCCs(graph);
+
+  for (final scc in sccs) {
+    if (scc.length > 1) {
+      // All edges between nodes within this SCC are part of a cycle
+      for (final node in scc) {
+        for (final neighbor in graph[node] ?? []) {
+          if (scc.contains(neighbor)) {
+            cycleEdges.add('$node->$neighbor');
+          }
+        }
+      }
+    } else if (scc.isNotEmpty) {
+      // Check for self-loops
+      final node = scc.first;
+      if (graph[node]?.contains(node) ?? false) {
+        cycleEdges.add('$node->$node');
+      }
+    }
+  }
+
+  return cycleEdges;
+}
+
+/// Find Strongly Connected Components using Tarjan's algorithm.
+List<List<String>> _findSCCs(Map<String, List<String>> graph) {
+  final List<List<String>> sccs = [];
+  final Map<String, int> index = {};
+  final Map<String, int> lowlink = {};
+  final List<String> stack = [];
+  final Set<String> onStack = {};
+  int time = 0;
+
+  void strongconnect(String v) {
+    index[v] = time;
+    lowlink[v] = time;
+    time++;
+    stack.add(v);
+    onStack.add(v);
+
+    for (final w in graph[v] ?? []) {
+      if (!index.containsKey(w)) {
+        strongconnect(w);
+        lowlink[v] = min(lowlink[v]!, lowlink[w]!);
+      } else if (onStack.contains(w)) {
+        lowlink[v] = min(lowlink[v]!, index[w]!);
+      }
+    }
+
+    if (lowlink[v] == index[v]) {
+      final List<String> scc = [];
+      String w;
+      do {
+        w = stack.removeLast();
+        onStack.remove(w);
+        scc.add(w);
+      } while (w != v);
+      sccs.add(scc);
+    }
+  }
+
+  for (final node in graph.keys) {
+    if (!index.containsKey(node)) {
+      strongconnect(node);
+    }
+  }
+
+  return sccs;
+}
+
+/// Determine the CSS class for an edge based on its properties.
+String _getEdgeCssClass(
+  String sourceFolder,
+  String targetFolder,
+  double startY,
+  double endY,
+  Set<String> cycleEdges,
+) {
+  final edgeKey = '$sourceFolder->$targetFolder';
+
+  // Priority rule: Red (cycle) > Orange (upward) > Default (gradient)
+  if (cycleEdges.contains(edgeKey)) {
+    return 'cycleEdge';
+  } else if (startY > endY) {
+    return 'warningEdge';
+  } else {
+    return 'edgeVertical';
+  }
+}
+
 /// Draw edges between files based on dependency graph.
 void _drawEdgeVerticalsFiles(
-    StringBuffer buffer,
-    Map<String, List<String>> graph,
-    Map<String, Map<String, Point<double>>> anchors) {
+  StringBuffer buffer,
+  Map<String, List<String>> graph,
+  Map<String, Map<String, Point<double>>> anchors,
+  Map<String, int> folderLevels, {
+  double? rightLaneGutterX,
+}) {
   var edgeCounter = 0;
+  final cycleEdges = _detectCyclesInGraph(graph);
   for (final entry in graph.entries) {
     final source = entry.key;
     final targets = entry.value;
@@ -778,18 +1101,54 @@ void _drawEdgeVerticalsFiles(
       final endX = targetAnchor.x;
       final endY = targetAnchor.y;
 
-      final path =
-          _buildStackedEdgePath(startX, startY, endX, endY, edgeCounter);
+      // Calculate fixed vertical column X for the right lane gutter if reference is provided
+      final double? fixedColumnX = rightLaneGutterX != null
+          ? (rightLaneGutterX + 28.0 + edgeCounter * 4.0)
+          : null;
+
+      final path = _buildStackedEdgePath(
+          startX, startY, endX, endY, edgeCounter,
+          isLeft: false, fixedColumnX: fixedColumnX);
+
+      // Determine the appropriate CSS class based on edge properties
+      // Use the actual file top y-coordinate (fileY) for upward detection to avoid badge-offset bias
+      final cssClass = _getFileEdgeCssClass(
+        source,
+        target,
+        startY - 6, // fileY
+        endY + 5, // fileY
+        cycleEdges,
+      );
 
       renderEdgeWithTooltip(
         buffer,
         pathData: path,
         source: source,
         target: target,
-        cssClass: 'edgeVertical',
+        cssClass: cssClass,
       );
       edgeCounter++;
     }
+  }
+}
+
+/// Determine the CSS class for a file-to-file edge based on its properties.
+String _getFileEdgeCssClass(
+  String sourceFile,
+  String targetFile,
+  double startY,
+  double endY,
+  Set<String> cycleEdges,
+) {
+  final edgeKey = '$sourceFile->$targetFile';
+
+  // Priority rule: Red (cycle) > Orange (upward) > Default (gradient)
+  if (cycleEdges.contains(edgeKey)) {
+    return 'cycleEdge';
+  } else if (startY > endY) {
+    return 'warningEdge';
+  } else {
+    return 'edgeVertical';
   }
 }
 
@@ -799,38 +1158,85 @@ void _drawEdgeVerticalFolders(
   List<_FolderEdge> edges,
   Map<String, Point<double>> positions,
   Map<String, Rect> dimensions,
-) {
+  Map<String, int> folderLevels,
+  Map<String, List<String>> dependencyGraph, {
+  required double globalGutterX,
+  required String rootPath,
+}) {
   if (edges.isEmpty) return;
 
-  for (var i = 0; i < edges.length; i++) {
-    final edge = edges[i];
-    final sourcePos = positions[edge.sourceFolder];
-    final targetPos = positions[edge.targetFolder];
-    final sourceDim = dimensions[edge.sourceFolder];
-    final targetDim = dimensions[edge.targetFolder];
-    if (sourcePos == null ||
-        targetPos == null ||
-        sourceDim == null ||
-        targetDim == null) {
-      continue;
+  // Detect cycles in the folder dependency graph
+  final cycleEdges = _detectCyclesInGraph(dependencyGraph);
+
+  // Group edges by their common parent path to create local gutters
+  final edgesByParent = <String, List<_FolderEdge>>{};
+  for (final edge in edges) {
+    // Both folders are siblings due to hierarchical roll-up, so they share a parent
+    final parentPath = _getFolderPath(edge.sourceFolder, rootPath);
+    edgesByParent.putIfAbsent(parentPath, () => []).add(edge);
+  }
+
+  for (final entry in edgesByParent.entries) {
+    final parentPath = entry.key;
+    final parentEdges = entry.value;
+    final parentPos = positions[parentPath];
+
+    for (var i = 0; i < parentEdges.length; i++) {
+      final edge = parentEdges[i];
+      final sourcePos = positions[edge.sourceFolder];
+      final targetPos = positions[edge.targetFolder];
+      final sourceDim = dimensions[edge.sourceFolder];
+      final targetDim = dimensions[edge.targetFolder];
+
+      if (sourcePos == null ||
+          targetPos == null ||
+          sourceDim == null ||
+          targetDim == null) {
+        continue;
+      }
+
+      // Start/end at badge centers
+      final startX = sourcePos.x + 6;
+      final startY = sourcePos.y + 24;
+      final endX = targetPos.x + 10;
+      final endY = targetPos.y + 13;
+
+      // Calculate fixed vertical column X
+      // If parent exists, use its internal lane (indentation area)
+      // If root, use the global lane (outside root)
+      double fixedColumnX;
+      if (parentPos != null) {
+        // Center the stack of edges within the 40px childIndent area for balanced padding.
+        // Gap starts at parentPos.x + 24.0 (border+padding) and ends at parentPos.x + 64.0 (start of children).
+        final stackWidth = (parentEdges.length - 1) * 4.0;
+        final stackStartX =
+            parentPos.x + 24.0 + (40.0 / 2.0) - (stackWidth / 2.0);
+        fixedColumnX = stackStartX + (i * 4.0);
+      } else {
+        // Step LEFT from the global gutter with a comfortable 40px base margin.
+        fixedColumnX = globalGutterX - 40.0 - (i * 4.0);
+      }
+
+      // Folder edges use the LEFT lane (relative to the badges)
+      final pathData = _buildStackedEdgePath(startX, startY, endX, endY, i,
+          isLeft: true, fixedColumnX: fixedColumnX);
+
+      final cssClass = _getEdgeCssClass(
+        edge.sourceFolder,
+        edge.targetFolder,
+        sourcePos.y,
+        targetPos.y,
+        cycleEdges,
+      );
+
+      renderEdgeWithTooltip(
+        buffer,
+        pathData: pathData,
+        source: edge.sourceFolder,
+        target: edge.targetFolder,
+        cssClass: cssClass,
+      );
     }
-
-    // Start/end at badge centers so strokes originate/terminate at badges.
-    final startX = sourcePos.x + 6; // Outgoing badge position (cx: pos.x + 6)
-    final startY = sourcePos.y + 24; // Outgoing badge position (cy: pos.y + 24)
-    final endX = targetPos.x + 10; // Incoming badge position (cx: pos.x + 10)
-    final endY = targetPos.y + 13; // Incoming badge position (cy: pos.y + 13)
-
-    // Reuse the same path building function as file edges
-    final pathData = _buildStackedEdgePath(startX, startY, endX, endY, i);
-
-    renderEdgeWithTooltip(
-      buffer,
-      pathData: pathData,
-      source: edge.sourceFolder,
-      target: edge.targetFolder,
-      cssClass: 'edgeVertical',
-    );
   }
 }
 
@@ -875,8 +1281,15 @@ void _drawHierarchicalFolders(
     final depth = depths[folder.fullPath] ?? 0;
 
     buffer.writeln('<g class="folderLayer">');
-    buffer.writeln(
-        '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="12" ry="12" class="layerBackground"/>');
+    if (folder.isVirtual) {
+      // Render virtual folder with dash-dot border
+      buffer.writeln(
+          '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="12" ry="12" class="layerBackground" stroke-dasharray="4 2"/>');
+    } else {
+      // Render regular folder with solid border
+      buffer.writeln(
+          '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="12" ry="12" class="layerBackground"/>');
+    }
 
     final indentLevels = depth > 0 ? depth : 0;
     final indent = List.filled(indentLevels, '  ').join();
@@ -890,14 +1303,14 @@ void _drawHierarchicalFolders(
       cy: pos.y + 13,
       count: incoming,
       peers: folderIncomingPeers[folder.fullPath] ?? const [],
-      direction: BadgeDirection.east,
+      direction: BadgeDirection.east, // ▶
     ));
     folderBadges.add(BadgeModel.outgoing(
       cx: pos.x + 6,
       cy: pos.y + 24,
       count: outgoing,
       peers: folderOutgoingPeers[folder.fullPath] ?? const [],
-      direction: BadgeDirection.west,
+      direction: BadgeDirection.west, // ◀
     ));
 
     final sortedFiles =
@@ -918,44 +1331,55 @@ void _drawHierarchicalFolders(
     }
 
     // Collect file visuals; badges/text drawn later after edges
-    for (var j = 0; j < sortedFiles.length; j++) {
-      final file = sortedFiles[j];
-      final filePos = filePositions[j];
+    // Process files for all folders (including virtual folders)
+    if (folder.files.isNotEmpty) {
+      for (var j = 0; j < sortedFiles.length; j++) {
+        final file = sortedFiles[j];
+        final filePos = filePositions[j];
 
-      final fileY = pos.y + filePos.y;
-      final filePath =
-          folder.fullPath == '.' ? file : '${folder.fullPath}/$file';
-      final fileName = file.split('/').last;
+        final fileY = pos.y + filePos.y;
+        final filePath = file; // Already the original relative path
+        final fileName = file.split('/').last;
 
-      final fIncoming = fileMetrics[filePath]?['incoming'] ?? 0;
-      final fOutgoing = fileMetrics[filePath]?['outgoing'] ?? 0;
+        final fIncoming = fileMetrics[filePath]?['incoming'] ?? 0;
+        final fOutgoing = fileMetrics[filePath]?['outgoing'] ?? 0;
 
-      final panelX = pos.x + 8.0;
-      final panelWidth = dim.width - 16.0; // flush within folder
-      final textX = pos.x + (panelWidth / 2);
-      // Use panel-based coordinates for badges and edge anchors.
-      final badgeX = panelX + panelWidth - 8; // align with folder badges
-      fileAnchors[filePath] = {
-        'in': Point(badgeX, fileY - 5), // Incoming badge position
-        'out': Point(badgeX + 4, fileY + 6), // Outgoing badge position
-      };
+        final panelX = pos.x + 8.0;
+        final panelWidth = dim.width - 16.0; // flush within folder
+        final textX = pos.x + (panelWidth / 2);
+        // Use panel-based coordinates for badges and edge anchors.
+        final badgeX = panelX + panelWidth - 8; // align with folder badges
+        fileAnchors[filePath] = {
+          'in': Point(badgeX, fileY - 5), // Incoming badge position
+          'out': Point(badgeX + 4, fileY + 6), // Outgoing badge position
+        };
 
-      final incomingPeers = fileIncomingPeers[filePath] ?? const [];
-      final outgoingPeers = fileOutgoingPeers[filePath] ?? const [];
+        // Get full paths for peer lists instead of just names
+        final incomingPeers =
+            (fileIncomingPeers[filePath] ?? const []).map((peer) {
+          // Convert peer name back to full path
+          return folder.fullPath == '.' ? peer : '${folder.fullPath}/$peer';
+        }).toList();
+        final outgoingPeers =
+            (fileOutgoingPeers[filePath] ?? const []).map((peer) {
+          // Convert peer name back to full path
+          return folder.fullPath == '.' ? peer : '${folder.fullPath}/$peer';
+        }).toList();
 
-      fileVisuals.add(_FileVisual(
-          path: filePath,
-          name: fileName,
-          textX: textX,
-          textY: fileY,
-          badgeX: badgeX,
-          badgeY: fileY,
-          panelX: panelX,
-          panelWidth: panelWidth,
-          incoming: fIncoming,
-          outgoing: fOutgoing,
-          incomingPeers: incomingPeers,
-          outgoingPeers: outgoingPeers));
+        fileVisuals.add(_FileVisual(
+            path: filePath,
+            name: fileName,
+            textX: textX,
+            textY: fileY,
+            badgeX: badgeX,
+            badgeY: fileY,
+            panelX: panelX,
+            panelWidth: panelWidth,
+            incoming: fIncoming,
+            outgoing: fOutgoing,
+            incomingPeers: incomingPeers,
+            outgoingPeers: outgoingPeers));
+      }
     }
   }
 
@@ -965,22 +1389,25 @@ void _drawHierarchicalFolders(
   }
 }
 
-/// Build a directional edge with stacked columns, handling both west-to-east and east-to-west flows.
+/// Build a directional edge with stacked columns, handling both left and right lanes.
 String _buildStackedEdgePath(
   double startX,
   double startY,
   double endX,
   double endY,
-  int edgeIndex,
-) {
+  int edgeIndex, {
+  required bool isLeft,
+  double? fixedColumnX,
+}) {
   const double baseOffset = 28.0;
   const double radius = 6.0;
   final dirY = endY >= startY ? 1.0 : -1.0;
-  final dirX = endX >= startX ? -1.0 : 1.0; // Detect horizontal direction
+  final dirX = isLeft ? -1.0 : 1.0;
 
   // Each edge gets a slightly larger offset to avoid overlapping runs.
-  // Offset in the direction of the initial horizontal movement.
-  final columnX = startX + (dirX * baseOffset) + (dirX * edgeIndex * 2.0);
+  // Folder edges (isLeft=true) route to the left lane, File edges to the right.
+  final columnX =
+      fixedColumnX ?? (startX + (dirX * baseOffset) + (dirX * edgeIndex * 4.0));
 
   final preCurveX = columnX - (dirX * radius);
   final postCurveX = columnX - (dirX * radius);
@@ -1025,7 +1452,7 @@ void _drawFileVisuals(StringBuffer buffer, List<_FileVisual> visuals) {
     renderTriangularBadge(buffer, outgoingBadge);
 
     buffer.writeln(
-        '<text x="${v.textX}" y="${top + height / 2}" text-anchor="start" dominant-baseline="middle" class="nodeText">${v.name}</text>');
+        '<text x="${v.textX}" y="${top + height / 2}" text-anchor="middle" dominant-baseline="middle" class="nodeText">${v.name}</text>');
   }
 }
 
@@ -1078,9 +1505,7 @@ List<String> _sortFiles(
   Map<String, Map<String, int>> metrics,
   Map<String, List<String>> graph,
 ) {
-  final fullPaths = {
-    for (final f in files) f: folderPath == '.' ? f : '$folderPath/$f'
-  };
+  final fullPaths = {for (final f in files) f: f};
 
   // Build in-folder dependency graph: edge source -> target when source depends on target in same folder.
   final adj = <String, Set<String>>{};
@@ -1110,15 +1535,25 @@ List<String> _sortFiles(
 
   final result = <String>[];
   while (queue.isNotEmpty) {
-    // tie-break within queue by incoming count desc then name
+    // Tie-break within queue per spec:
+    // Primary: file outgoing dependencies (desc)
+    // Secondary: file incoming dependencies (asc)
+    // Tiebreaker: file path asc
     queue.sort((a, b) {
       final aPath = fullPaths[a]!;
       final bPath = fullPaths[b]!;
+
+      final aOut = (metrics[aPath]?['outgoing'] ?? 0);
+      final bOut = (metrics[bPath]?['outgoing'] ?? 0);
+      var diff = bOut.compareTo(aOut); // desc
+      if (diff != 0) return diff;
+
       final aIn = (metrics[aPath]?['incoming'] ?? 0);
       final bIn = (metrics[bPath]?['incoming'] ?? 0);
-      final diff = bIn.compareTo(aIn);
+      diff = aIn.compareTo(bIn); // asc
       if (diff != 0) return diff;
-      return a.compareTo(b);
+
+      return a.compareTo(b); // path asc
     });
 
     final f = queue.removeAt(0);
@@ -1129,17 +1564,24 @@ List<String> _sortFiles(
     }
   }
 
-  // Append any remaining (cycles) sorted by incoming desc then name
+  // Append any remaining (cycles) sorted by the same criteria
   if (result.length < files.length) {
     final remaining = files.where((f) => !result.contains(f)).toList();
     remaining.sort((a, b) {
       final aPath = fullPaths[a]!;
       final bPath = fullPaths[b]!;
+
+      final aOut = (metrics[aPath]?['outgoing'] ?? 0);
+      final bOut = (metrics[bPath]?['outgoing'] ?? 0);
+      var diff = bOut.compareTo(aOut); // desc
+      if (diff != 0) return diff;
+
       final aIn = (metrics[aPath]?['incoming'] ?? 0);
       final bIn = (metrics[bPath]?['incoming'] ?? 0);
-      final diff = bIn.compareTo(aIn);
+      diff = aIn.compareTo(bIn); // asc
       if (diff != 0) return diff;
-      return a.compareTo(b);
+
+      return a.compareTo(b); // path asc
     });
     result.addAll(remaining);
   }
