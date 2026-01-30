@@ -1,0 +1,12 @@
+# fCheck Configuration File
+# This file allows you to configure global ignore settings for fCheck analysis
+
+ignores:
+  # Set to true to ignore magic numbers globally
+  magic_numbers: false
+
+  # Set to true to ignore hardcoded strings globally
+  hardcoded_strings: false
+
+  # Set to true to ignore layers architecture violations globally
+  layers: false

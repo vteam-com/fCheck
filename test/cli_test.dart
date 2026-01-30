@@ -155,7 +155,7 @@ class SecondClass {
 
     test('should ignore class violations with directive', () async {
       File('${tempDir.path}/ignored_violation.dart').writeAsStringSync('''
-// fcheck: ignore-one-class-per-file
+// ignore: fcheck_one_class_per_file
 class FirstClass {
   void method1() {}
 }

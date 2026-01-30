@@ -1,6 +1,7 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'hardcoded_string_issue.dart';
+import '../config/config_ignore_directives.dart';
 
 /// A visitor that traverses the AST to detect hardcoded strings.
 ///
@@ -77,6 +78,12 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
 
     // Skip strings used as index in collections/maps
     if (_isIndex(node)) {
+      return;
+    }
+
+    // Skip strings in ignored sections
+    if (ConfigIgnoreDirectives.isNodeIgnored(
+        node, content, 'hardcoded_strings')) {
       return;
     }
 

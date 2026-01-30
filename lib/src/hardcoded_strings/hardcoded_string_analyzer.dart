@@ -3,9 +3,10 @@ import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:fcheck/src/models/file_utils.dart';
+import 'package:fcheck/src/config/config_ignore_directives.dart';
 import 'hardcoded_string_issue.dart';
 import 'hardcoded_string_visitor.dart';
-import '../models/file_utils.dart';
 
 /// Analyzer for detecting hardcoded strings in Dart files.
 ///
@@ -33,8 +34,11 @@ class HardcodedStringAnalyzer {
   List<HardcodedStringIssue> analyzeFile(File file) {
     final String filePath = file.path;
 
-    // Skip l10n generated files
-    if (filePath.contains('lib/l10n/') || filePath.contains('.g.dart')) {
+    // Skip l10n generated files and files with ignore directive
+    if (filePath.contains('lib/l10n/') ||
+        filePath.contains('.g.dart') ||
+        ConfigIgnoreDirectives.hasIgnoreDirective(
+            file.readAsStringSync(), 'hardcoded_strings')) {
       return [];
     }
 

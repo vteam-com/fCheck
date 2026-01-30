@@ -32,6 +32,7 @@ import 'src/magic_numbers/magic_number_analyzer.dart';
 import 'src/sort/sort.dart';
 import 'src/metrics/project_metrics.dart';
 import 'src/models/file_utils.dart';
+import 'src/config/config_ignore_directives.dart';
 
 /// The main engine for analyzing Flutter/Dart project quality.
 ///
@@ -54,11 +55,16 @@ class AnalyzeFolder {
   /// [projectDir] should point to the root of a Flutter/Dart project.
   /// [fix] if true, automatically fixes sorting issues by writing sorted code back to files.
   /// [excludePatterns] optional list of glob patterns to exclude files/folders.
+  /// [ignoreConfig] optional configuration for global ignores.
   AnalyzeFolder(
     this.projectDir, {
     this.fix = false,
     this.excludePatterns = const [],
+    this.ignoreConfig = const {},
   });
+
+  /// Global ignore configuration from .fcheck file and constructor.
+  final Map<String, bool> ignoreConfig;
 
   /// Analyzes the layers architecture and returns the result.
   ///
@@ -137,7 +143,7 @@ class AnalyzeFolder {
     );
 
     // Detect whether the project is localized (used to classify hardcoded strings)
-    final usesLocalization = _detectLocalization(dartFiles);
+    final usesLocalization = detectLocalization(dartFiles);
 
     return ProjectMetrics(
       totalFolders: FileUtils.countFolders(
@@ -188,8 +194,8 @@ class AnalyzeFolder {
     // Count lines of code and comments
     final lines = content.split('\n');
     int loc = lines.length;
-    int commentLines = _countCommentLines(unit, lines);
-    final ignoreOneClassPerFile = _hasIgnoreOneClassPerFileDirective(content);
+    int commentLines = countCommentLines(unit, lines);
+    final ignoreOneClassPerFile = hasIgnoreOneClassPerFileDirective(content);
 
     return FileMetrics(
       path: file.path,
@@ -253,7 +259,7 @@ class AnalyzeFolder {
   /// [lines] The raw lines of the file.
   ///
   /// Returns the number of lines that contain comments.
-  int _countCommentLines(CompilationUnit unit, List<String> lines) {
+  int countCommentLines(CompilationUnit unit, List<String> lines) {
     // This is a simplified comment counter.
     // The analyzer's beginToken/endToken are useful for more complex scenarios.
     // We'll count lines that contain comments.
@@ -277,60 +283,11 @@ class AnalyzeFolder {
   /// The directive must appear in the leading comment block(s) at the top of
   /// the file (before any code). Example:
   /// ```dart
-  /// // fcheck: ignore-one-class-per-file
+  /// // ignore: fcheck_one_class_per_file
   /// ```
-  bool _hasIgnoreOneClassPerFileDirective(String content) {
-    final directive = RegExp(
-      r'\bfcheck:\s*ignore[-_ ]*one[-_ ]*class[-_ ]*per[-_ ]*file\b',
-      caseSensitive: false,
-    );
-
-    final lines = content.split('\n');
-    final buffer = StringBuffer();
-    bool inBlockComment = false;
-
-    for (final line in lines) {
-      final trimmed = line.trimLeft();
-
-      if (inBlockComment) {
-        buffer.writeln(trimmed);
-        final endIndex = trimmed.indexOf('*/');
-        if (endIndex != -1) {
-          inBlockComment = false;
-          final after = trimmed.substring(endIndex + 2).trim();
-          if (after.isNotEmpty) {
-            break;
-          }
-        }
-        continue;
-      }
-
-      if (trimmed.isEmpty) {
-        continue;
-      }
-
-      if (trimmed.startsWith('//')) {
-        buffer.writeln(trimmed);
-        continue;
-      }
-
-      if (trimmed.startsWith('/*')) {
-        buffer.writeln(trimmed);
-        if (!trimmed.contains('*/')) {
-          inBlockComment = true;
-        } else {
-          final after = trimmed.split('*/').last.trim();
-          if (after.isNotEmpty) {
-            break;
-          }
-        }
-        continue;
-      }
-
-      break;
-    }
-
-    return directive.hasMatch(buffer.toString());
+  bool hasIgnoreOneClassPerFileDirective(String content) {
+    return ConfigIgnoreDirectives.hasIgnoreDirective(
+        content, 'one_class_per_file');
   }
 
   /// Heuristically detects whether the project uses Flutter localization.
@@ -339,7 +296,7 @@ class AnalyzeFolder {
   /// - `l10n.yaml` exists, or
   /// - `.arb` files are present (commonly under lib/l10n), or
   /// - Source files reference `AppLocalizations` / `flutter_gen/gen_l10n`.
-  bool _detectLocalization(List<File> dartFiles) {
+  bool detectLocalization(List<File> dartFiles) {
     final l10nConfig = File(p.join(projectDir.path, 'l10n.yaml'));
     if (l10nConfig.existsSync()) {
       // print('Localization detected: found l10n.yaml at ${l10nConfig.path}');
@@ -386,10 +343,6 @@ class AnalyzeFolder {
     return false;
   }
 }
-
-/// Backward-compatible alias; prefer [AnalyzeFolder].
-@Deprecated('Use AnalyzeFolder instead.')
-typedef FCheck = AnalyzeFolder;
 
 /// A visitor that traverses the AST to collect quality metrics.
 ///
