@@ -7,6 +7,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-01-30
+
+### Breaking change
+
+- **Unified Ignore Directive System**: Replaced inconsistent ignore patterns with a standardized `// ignore: fcheck_<domain>` format across all analysis domains
+
+### Added
+
+- 🎯 **Generic Ignore Pattern**: New standardized format `// ignore: fcheck_<domain>` for all ignore directives
+- 🔧 **One Class Per File Ignore**: Support for `// ignore: fcheck_one_class_per_file` to skip one-class-per-file rule for individual files
+- 🧮 **Magic Number Ignore**: Enhanced support for `// ignore: fcheck_magic_numbers` with consistent pattern matching
+- 📝 **Hardcoded String Ignore**: Improved `// ignore: fcheck_hardcoded_strings` directive handling
+- 🏗️ **Layers Ignore**: Added `// ignore: fcheck_layers` for layer architecture violations
+- 📚 **Comprehensive Documentation**: Updated all ignore directive examples and documentation
+
 ## [0.6.2] - 2026-01-29
 
 ### Added
@@ -49,7 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- you can optionaly add  ```// fcheck: ignore-one-class-per-file``` to a file to ignore the one-class-per-file rule
+- you can optionally add  ```// fcheck: ignore-one-class-per-file``` to a file to ignore the one-class-per-file rule
 
 ## [0.5.1] - 2026-01-28
 
@@ -59,7 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- you can optionaly add  ```// fcheck: ignore-one-class-per-file``` to a file to ignore the one-class-per-file rule
+- you can optionally add  ```// fcheck: ignore-one-class-per-file``` to a file to ignore the one-class-per-file rule
 
 ## [0.5.0] - 2026-01-27
 
