@@ -308,12 +308,10 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
   final fileVisuals = <_FileVisual>[];
   final titleVisuals = <_TitleVisual>[];
   final folderBadges = <BadgeModel>[];
-  final folderPeers =
-      buildPeerLists(folderDepGraph, labelFor: (path) => path.split('/').last);
+  final folderPeers = buildPeerLists(folderDepGraph, labelFor: (path) => path);
   final folderIncomingPeers = folderPeers.incoming;
   final folderOutgoingPeers = folderPeers.outgoing;
-  final filePeers =
-      buildPeerLists(relativeGraph, labelFor: (path) => path.split('/').last);
+  final filePeers = buildPeerLists(relativeGraph, labelFor: (path) => path);
   final fileIncomingPeers = filePeers.incoming;
   final fileOutgoingPeers = filePeers.outgoing;
   // Draw folder containers with hierarchy visualization
@@ -1354,17 +1352,8 @@ void _drawHierarchicalFolders(
           'out': Point(badgeX + 4, fileY + 6), // Outgoing badge position
         };
 
-        // Get full paths for peer lists instead of just names
-        final incomingPeers =
-            (fileIncomingPeers[filePath] ?? const []).map((peer) {
-          // Convert peer name back to full path
-          return folder.fullPath == '.' ? peer : '${folder.fullPath}/$peer';
-        }).toList();
-        final outgoingPeers =
-            (fileOutgoingPeers[filePath] ?? const []).map((peer) {
-          // Convert peer name back to full path
-          return folder.fullPath == '.' ? peer : '${folder.fullPath}/$peer';
-        }).toList();
+        final incomingPeers = fileIncomingPeers[filePath] ?? const [];
+        final outgoingPeers = fileOutgoingPeers[filePath] ?? const [];
 
         fileVisuals.add(_FileVisual(
             path: filePath,

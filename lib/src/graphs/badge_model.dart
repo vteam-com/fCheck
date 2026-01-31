@@ -83,7 +83,10 @@ class BadgeModel {
       return '';
     }
 
-    final tooltip = peers.isEmpty ? '' : peers.join('\n');
+    final tooltip = peers.isEmpty
+        ? ''
+        : List.generate(peers.length, (i) => '${i + 1}. ${peers[i]}')
+            .join('\n');
     final pathData = _getTrianglePath();
     final textX = direction == BadgeDirection.west ? cx + 5 : cx - 5;
 
