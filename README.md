@@ -165,6 +165,17 @@ fcheck --plantuml   # Generates layers.puml
 - ❌ **Error**: Violations that need attention
 - 🔧 **Fixable**: Issues that can be auto-fixed
 
+## 🛡️ Default Exclusions
+
+By default, **fcheck** excludes common non-project directories:
+`example/`, `test/`, `tool/`, `.dart_tool/`, `build/`, `.git/`, `ios/`, `android/`, `web/`, `macos/`, `windows/`, `linux/`.
+
+### Localization Filtering
+
+To reduce noise and avoid cyclic dependency displays from generated code, **fcheck** automatically filters out generated localization files:
+- 🙈 **Excluded**: `app_localizations_*.dart` and `app_localization_*.dart` (generated locale-specific files)
+- ✅ **Included**: `app_localizations.dart` (the main entry point)
+
 ## 🔧 Configuration
 
 ### Global Ignore (`.fcheck` file)

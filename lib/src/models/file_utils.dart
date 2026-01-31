@@ -81,6 +81,14 @@ class FileUtils {
         .whereType<File>()
         .where((file) => p.extension(file.path) == '.dart')
         .where((file) {
+      // Default hide locale files except for the main app_localizations.dart
+      final fileName = p.basename(file.path);
+      if ((fileName.startsWith('app_localizations_') ||
+              fileName.startsWith('app_localization_')) &&
+          fileName.endsWith('.dart')) {
+        return false;
+      }
+
       // Check if the file is in any default excluded directory
       final relativePath = p.relative(file.path, from: dir.path);
       final pathParts = p.split(relativePath);

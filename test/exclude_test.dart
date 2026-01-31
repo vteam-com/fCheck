@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:fcheck/src/models/file_utils.dart';
 import 'package:fcheck/src/layers/layers_analyzer.dart';
+import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 void main() {
@@ -106,6 +107,24 @@ void main() {
         final files = FileUtils.listDartFiles(tempDir, excludePatterns: []);
 
         expect(files.length, equals(2));
+      });
+
+      test('should exclude app_localizations_ files by default', () {
+        File('${tempDir.path}/app_localizations.dart').writeAsStringSync('');
+        File('${tempDir.path}/app_localizations_en.dart').writeAsStringSync('');
+        File('${tempDir.path}/app_localizations_fr.dart').writeAsStringSync('');
+        File('${tempDir.path}/main.dart').writeAsStringSync('');
+
+        final files = FileUtils.listDartFiles(tempDir);
+
+        // Should include app_localizations.dart and main.dart, but exclude _en and _fr
+        expect(files.length, equals(2));
+        expect(files.any((f) => p.basename(f.path) == 'app_localizations.dart'),
+            isTrue);
+        expect(files.any((f) => p.basename(f.path) == 'main.dart'), isTrue);
+        expect(
+            files.any((f) => p.basename(f.path) == 'app_localizations_en.dart'),
+            isFalse);
       });
     });
 
