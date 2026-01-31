@@ -7,6 +7,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.1] - 2026-01-31
+
+### Added
+
+- 🎨 **SVG Style Improvements**: Enhanced CSS styles for SVG exports
+- 🏷️ **Badge Tooltips**: Improved tooltip text for better clarity
+- 📁 **Folder Layout**: Refined virtual sub-folder logic for folder dependency graphs
+- 📝 **Code Documentation**: Updated internal comments for better maintainability
+
 ## [0.7.0] - 2026-01-30
 
 ### Breaking change
