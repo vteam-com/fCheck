@@ -121,10 +121,13 @@ class MemberSorter {
       for (int i = 0; i < lifecycleOrder.length; i++) lifecycleOrder[i]: i,
     };
 
+    /// Default sort order for unknown lifecycle methods.
+    const int defaultLifecycleSortOrder = 999;
+
     lifecycleMethods.sort(
       (final _SortableMethod a, final _SortableMethod b) =>
-          (lifecycleOrderMap[a.name] ?? 999).compareTo(
-        lifecycleOrderMap[b.name] ?? 999,
+          (lifecycleOrderMap[a.name] ?? defaultLifecycleSortOrder).compareTo(
+        lifecycleOrderMap[b.name] ?? defaultLifecycleSortOrder,
       ),
     );
     publicMethods.sort(

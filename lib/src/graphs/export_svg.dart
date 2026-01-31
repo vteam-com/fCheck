@@ -146,16 +146,29 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
 
   // 2. Draw Layer Columns (Backgrounds)
   for (var colIndex = 0; colIndex < sortedLayers.length; colIndex++) {
+    /// Divisor for halving dimensions.
+    const double halfDivisor = 2.0;
+
+    /// Factor for column spacing offset.
+    const double columnMarginFactor = 4.0;
+
+    /// Corner radius for layer background rectangles.
+    const double layerCornerRadius = 8.0;
+
+    /// Vertical offset for the layer title text.
+    const double titleVerticalOffset = 25.0;
+
     final layerNum = sortedLayers[colIndex];
-    final x =
-        margin + (colIndex * (nodeWidth + columnSpacing)) - (columnSpacing / 4);
-    final width = nodeWidth + (columnSpacing / 2);
+    final x = margin +
+        (colIndex * (nodeWidth + columnSpacing)) -
+        (columnSpacing / columnMarginFactor);
+    final width = nodeWidth + (columnSpacing / halfDivisor);
     // Draw column background
     buffer.writeln(
-        '<rect x="$x" y="$margin" width="$width" height="${totalHeight - margin * 2}" rx="8" class="layerBackground"/>');
+        '<rect x="$x" y="$margin" width="$width" height="${totalHeight - margin * halfDivisor}" rx="$layerCornerRadius" class="layerBackground"/>');
     // Draw layer title
     buffer.writeln(
-        '<text x="${x + width / 2}" y="${margin + 25}" class="layerTitle">$layerNum</text>');
+        '<text x="${x + width / halfDivisor}" y="${margin + titleVerticalOffset}" class="layerTitle">$layerNum</text>');
   }
 
   // 3. Draw Node Rectangles
@@ -178,15 +191,22 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
       final targetPos = nodePositions[target]!;
 
       // Anchor points: Source outgoing badge -> Target incoming badge
+      /// Divisor for halving dimensions.
+      const double halfDivisor = 2.0;
+
+      /// Factor for Bezier curve control points.
+      const double controlPointFactor = 0.5;
+
       final startX = sourcePos.x + nodeWidth; // Outgoing badge position
       final startY = sourcePos.y + nodeHeight - badgeOffset;
 
-      final endX = targetPos.x + (badgeOffset / 2); // Incoming badge position
+      final endX =
+          targetPos.x + (badgeOffset / halfDivisor); // Incoming badge position
       final endY = targetPos.y + badgeOffset;
 
       // Bezier curve control points for smooth flow
-      final controlX1 = startX + (columnSpacing * 0.5);
-      final controlX2 = endX - (columnSpacing * 0.5);
+      final controlX1 = startX + (columnSpacing * controlPointFactor);
+      final controlX2 = endX - (columnSpacing * controlPointFactor);
 
       final isCycle = cyclicEdges.contains('$source|$target');
       final extraClass = isCycle ? ' cycleEdge' : '';
@@ -210,6 +230,9 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
   final outgoingNodes = peers.outgoing;
 
   for (final entry in nodePositions.entries) {
+    /// Divisor for halving dimensions.
+    const double halfDivisor0 = 2.0;
+
     final file = entry.key;
     final pos = entry.value;
 
@@ -219,7 +242,7 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
 
     // Render incoming badge (top-left, pointing west)
     final incomingBadge = BadgeModel.incoming(
-      cx: pos.x + (badgeOffset / 2),
+      cx: pos.x + (badgeOffset / halfDivisor0),
       cy: pos.y + badgeOffset,
       count: inCount,
       peers: incomingNodes[file] ?? const [],
@@ -239,12 +262,20 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
 
     // Node Text (Filename) - Drawn LAST
     final fileName = file.split('/').last;
+
+    /// Maximum length of the filename before truncation.
+    const int maxLabelLength = 25;
+
+    /// Length to truncate the filename to.
+    const int truncateLength = 22;
+
     // Truncate if too long
-    final displayText =
-        fileName.length > 25 ? '${fileName.substring(0, 22)}...' : fileName;
+    final displayText = fileName.length > maxLabelLength
+        ? '${fileName.substring(0, truncateLength)}...'
+        : fileName;
 
     buffer.writeln(
-        '<text x="${pos.x + nodeWidth / 2}" y="${pos.y + nodeHeight / 2}" class="nodeText">$displayText</text>');
+        '<text x="${pos.x + nodeWidth / halfDivisor0}" y="${pos.y + nodeHeight / halfDivisor0}" class="nodeText">$displayText</text>');
   }
 
   buffer.writeln('</svg>');

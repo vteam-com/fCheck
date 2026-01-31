@@ -89,12 +89,24 @@ class BadgeModel {
         ? ''
         : List.generate(peers.length, (i) => '${i + 1}. ${peers[i]}')
             .join('\n');
+
+    /// Horizontal offset for text positioning within the triangular badge.
+    const double textHorizontalOffset = 5.0;
+
+    /// Vertical offset for text positioning within the triangular badge.
+    const double textVerticalOffset = 3.0;
+
+    /// Font size for the dependency count text.
+    const double badgeFontSize = 8.0;
+
     final pathData = _getTrianglePath();
-    final textX = direction == BadgeDirection.west ? cx + 5 : cx - 5;
+    final textX = direction == BadgeDirection.west
+        ? cx + textHorizontalOffset
+        : cx - textHorizontalOffset;
 
     return '''<g class="$cssClass">
   <path d="$pathData" fill="$color"/>
-  <text x="$textX" y="${cy + 3}" text-anchor="middle" fill="white" font-size="8" font-weight="bold">$count</text>${tooltip.isNotEmpty ? '<title>$tooltip</title>' : ''}</g>''';
+  <text x="$textX" y="${cy + textVerticalOffset}" text-anchor="middle" fill="white" font-size="$badgeFontSize" font-weight="bold">$count</text>${tooltip.isNotEmpty ? '<title>$tooltip</title>' : ''}</g>''';
   }
 
   /// Generates the SVG path data for a triangle with rounded corners.
@@ -105,37 +117,45 @@ class BadgeModel {
   /// For west direction: Points left with the flat edge on the right
   /// For east direction: Points right with the flat edge on the left
   String _getTrianglePath() {
-    const size = 14.0;
-    const height = 18.0;
-    const radius = 3.0;
+    /// Total width (base) of the triangular badge.
+    const double badgeSize = 14.0;
+
+    /// Total height (point to base) of the triangular badge.
+    const double badgeHeight = 18.0;
+
+    /// Corner radius for the rounded triangular points.
+    const double badgeRadius = 3.0;
+
+    /// Divisor used to calculate half dimensions.
+    const double halfDivisor = 2.0;
 
     switch (direction) {
       case BadgeDirection.west:
         // Triangle pointing left (incoming) with rounded corners
-        final left = cx - height / 2;
-        final right = cx + height / 2;
-        final top = cy - size / 2;
-        final bottom = cy + size / 2;
+        final left = cx - badgeHeight / halfDivisor;
+        final right = cx + badgeHeight / halfDivisor;
+        final top = cy - badgeSize / halfDivisor;
+        final bottom = cy + badgeSize / halfDivisor;
 
-        return 'M ${left + radius},$cy '
-            'L ${right - radius},$top '
-            'Q $right,$top $right,${top + radius} '
-            'L $right,${bottom - radius} '
-            'Q $right,$bottom ${right - radius},$bottom '
+        return 'M ${left + badgeRadius},$cy '
+            'L ${right - badgeRadius},$top '
+            'Q $right,$top $right,${top + badgeRadius} '
+            'L $right,${bottom - badgeRadius} '
+            'Q $right,$bottom ${right - badgeRadius},$bottom '
             'Z';
 
       case BadgeDirection.east:
         // Triangle pointing right (outgoing) with rounded corners
-        final left = cx - height / 2;
-        final right = cx + height / 2;
-        final top = cy - size / 2;
-        final bottom = cy + size / 2;
+        final left = cx - badgeHeight / halfDivisor;
+        final right = cx + badgeHeight / halfDivisor;
+        final top = cy - badgeSize / halfDivisor;
+        final bottom = cy + badgeSize / halfDivisor;
 
-        return 'M ${right - radius},$cy '
-            'L ${left + radius},$top '
-            'Q $left,$top $left,${top + radius} '
-            'L $left,${bottom - radius} '
-            'Q $left,$bottom ${left + radius},$bottom '
+        return 'M ${right - badgeRadius},$cy '
+            'L ${left + badgeRadius},$top '
+            'Q $left,$top $left,${top + badgeRadius} '
+            'L $left,${bottom - badgeRadius} '
+            'Q $left,$bottom ${left + badgeRadius},$bottom '
             'Z';
     }
   }

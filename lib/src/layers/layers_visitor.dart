@@ -112,6 +112,19 @@ class LayersVisitor extends GeneralizingAstVisitor<void> {
   ///
   /// [uri] The import/export URI (relative path or package: URI).
   /// [currentFile] The path of the file containing the import/export.
+  /// The length of the relative current directory prefix ("./").
+  static const int _relativeCurrentDirPrefixLength = 2;
+
+  /// The length of the relative parent directory prefix ("../").
+  static const int _relativeParentDirPrefixLength = 3;
+
+  /// Resolves a dependency URI to an absolute file path.
+  ///
+  /// For package: imports, resolves to the lib/ directory.
+  /// For relative imports, resolves against the current file's directory.
+  ///
+  /// [uri] The import/export URI (relative path or package: URI).
+  /// [currentFile] The path of the file containing the import/export.
   String _resolveDependency(String uri, String currentFile) {
     if (uri.startsWith('package:$packageName/')) {
       // Package import: resolve to lib/ directory
@@ -122,14 +135,14 @@ class LayersVisitor extends GeneralizingAstVisitor<void> {
     // For relative imports, resolve relative to the current file
     final currentDir = currentFile.substring(0, currentFile.lastIndexOf('/'));
     if (uri.startsWith('./')) {
-      return '$currentDir/${uri.substring(2)}';
+      return '$currentDir/${uri.substring(_relativeCurrentDirPrefixLength)}';
     } else if (uri.startsWith('../')) {
       // Handle parent directory traversal
       var resolvedPath = currentDir;
       var remainingUri = uri;
       while (remainingUri.startsWith('../')) {
         resolvedPath = resolvedPath.substring(0, resolvedPath.lastIndexOf('/'));
-        remainingUri = remainingUri.substring(3);
+        remainingUri = remainingUri.substring(_relativeParentDirPrefixLength);
       }
       return '$resolvedPath/$remainingUri';
     } else {

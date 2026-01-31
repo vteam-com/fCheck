@@ -170,14 +170,14 @@
   }
 </style>
 <rect width="100%" height="100%" fill="white"/>
-<rect x="25.0" y="50" width="270.0" height="230" rx="8" class="layerBackground"/>
-<text x="160.0" y="75" class="layerTitle">1</text>
-<rect x="345.0" y="50" width="270.0" height="230" rx="8" class="layerBackground"/>
-<text x="480.0" y="75" class="layerTitle">2</text>
-<rect x="665.0" y="50" width="270.0" height="230" rx="8" class="layerBackground"/>
-<text x="800.0" y="75" class="layerTitle">3</text>
-<rect x="985.0" y="50" width="270.0" height="230" rx="8" class="layerBackground"/>
-<text x="1120.0" y="75" class="layerTitle">4</text>
+<rect x="25.0" y="50" width="270.0" height="230.0" rx="8.0" class="layerBackground"/>
+<text x="160.0" y="75.0" class="layerTitle">1</text>
+<rect x="345.0" y="50" width="270.0" height="230.0" rx="8.0" class="layerBackground"/>
+<text x="480.0" y="75.0" class="layerTitle">2</text>
+<rect x="665.0" y="50" width="270.0" height="230.0" rx="8.0" class="layerBackground"/>
+<text x="800.0" y="75.0" class="layerTitle">3</text>
+<rect x="985.0" y="50" width="270.0" height="230.0" rx="8.0" class="layerBackground"/>
+<text x="1120.0" y="75.0" class="layerTitle">4</text>
 <rect x="50.0" y="90.0" width="220" height="50" class="fileNode"/>
 <rect x="50.0" y="160.0" width="220" height="50" class="fileNode"/>
 <rect x="50.0" y="230.0" width="220" height="50" class="fileNode"/>
@@ -203,24 +203,24 @@
 </g>
 <g class="outgoingBadge">
   <path d="M 276.0,128.0 L 264.0,121.0 Q 261.0,121.0 261.0,124.0 L 261.0,132.0 Q 261.0,135.0 264.0,135.0 Z" fill="#10b981"/>
-  <text x="265.0" y="131.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>1. home_page.dart</title></g><text x="160.0" y="115.0" class="nodeText">main.dart</text>
+  <text x="265.0" y="131.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. home_page.dart</title></g><text x="160.0" y="115.0" class="nodeText">main.dart</text>
 <text x="160.0" y="185.0" class="nodeText">comments_example.dart</text>
 <text x="160.0" y="255.0" class="nodeText">subclass.dart</text>
 <g class="incomingBadge">
   <path d="M 382.0,102.0 L 370.0,95.0 Q 367.0,95.0 367.0,98.0 L 367.0,106.0 Q 367.0,109.0 370.0,109.0 Z" fill="#3b82f6"/>
-  <text x="371.0" y="105.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>1. main.dart</title></g><g class="outgoingBadge">
+  <text x="371.0" y="105.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. main.dart</title></g><g class="outgoingBadge">
   <path d="M 596.0,128.0 L 584.0,121.0 Q 581.0,121.0 581.0,124.0 L 581.0,132.0 Q 581.0,135.0 584.0,135.0 Z" fill="#10b981"/>
-  <text x="585.0" y="131.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>1. counter_widget.dart
+  <text x="585.0" y="131.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. counter_widget.dart
 2. models.dart</title></g><text x="480.0" y="115.0" class="nodeText">home_page.dart</text>
 <g class="incomingBadge">
   <path d="M 702.0,102.0 L 690.0,95.0 Q 687.0,95.0 687.0,98.0 L 687.0,106.0 Q 687.0,109.0 690.0,109.0 Z" fill="#3b82f6"/>
-  <text x="691.0" y="105.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>1. home_page.dart</title></g><g class="outgoingBadge">
+  <text x="691.0" y="105.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. home_page.dart</title></g><g class="outgoingBadge">
   <path d="M 916.0,128.0 L 904.0,121.0 Q 901.0,121.0 901.0,124.0 L 901.0,132.0 Q 901.0,135.0 904.0,135.0 Z" fill="#10b981"/>
-  <text x="905.0" y="131.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>1. utils.dart</title></g><text x="800.0" y="115.0" class="nodeText">counter_widget.dart</text>
+  <text x="905.0" y="131.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. utils.dart</title></g><text x="800.0" y="115.0" class="nodeText">counter_widget.dart</text>
 <g class="incomingBadge">
   <path d="M 702.0,172.0 L 690.0,165.0 Q 687.0,165.0 687.0,168.0 L 687.0,176.0 Q 687.0,179.0 690.0,179.0 Z" fill="#3b82f6"/>
-  <text x="691.0" y="175.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>1. home_page.dart</title></g><text x="800.0" y="185.0" class="nodeText">models.dart</text>
+  <text x="691.0" y="175.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. home_page.dart</title></g><text x="800.0" y="185.0" class="nodeText">models.dart</text>
 <g class="incomingBadge">
   <path d="M 1022.0,102.0 L 1010.0,95.0 Q 1007.0,95.0 1007.0,98.0 L 1007.0,106.0 Q 1007.0,109.0 1010.0,109.0 Z" fill="#3b82f6"/>
-  <text x="1011.0" y="105.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>1. counter_widget.dart</title></g><text x="1120.0" y="115.0" class="nodeText">utils.dart</text>
+  <text x="1011.0" y="105.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. counter_widget.dart</title></g><text x="1120.0" y="115.0" class="nodeText">utils.dart</text>
 </svg>

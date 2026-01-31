@@ -39,6 +39,9 @@ class FileMetrics {
     this.ignoreOneClassPerFile = false,
   });
 
+  /// Maximum number of public classes allowed in a StatefulWidget file.
+  static const int _maxClassesForStatefulWidget = 2;
+
   /// Whether this file complies with the "one class per file" rule.
   ///
   /// This rule only applies to public classes. Private classes (starting with _)
@@ -54,7 +57,7 @@ class FileMetrics {
     }
     if (isStatefulWidget) {
       // StatefulWidget usually has 2 classes: the widget and the state.
-      return classCount <= 2;
+      return classCount <= _maxClassesForStatefulWidget;
     }
     return classCount <= 1;
   }

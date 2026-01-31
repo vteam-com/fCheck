@@ -26,12 +26,16 @@ class ConfigIgnoreDirectives {
     for (final line in lines) {
       final trimmed = line.trimLeft();
 
+      /// Length of the block comment terminator "*/".
+      const int blockCommentEndLength = 2;
+
       if (inBlockComment) {
         buffer.writeln(trimmed);
         final endIndex = trimmed.indexOf('*/');
         if (endIndex != -1) {
           inBlockComment = false;
-          final after = trimmed.substring(endIndex + 2).trim();
+          final after =
+              trimmed.substring(endIndex + blockCommentEndLength).trim();
           if (after.isNotEmpty) {
             break;
           }

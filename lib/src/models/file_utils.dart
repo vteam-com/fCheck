@@ -25,9 +25,13 @@ class FileUtils {
     // - files directly in the folder (folder/file.dart)
     // - files in subfolders (folder/subfolder/file.dart)
     // - nested folders at any level (some/path/folder/file.dart)
+    /// length of suffix part like "/**" or prefix part like "**/"
+    const int globPrefixLength = 3;
+
     if (pattern.startsWith('**/') && pattern.endsWith('/**')) {
       // Pattern like **/folder/**
-      final folderName = pattern.substring(3, pattern.length - 3);
+      final folderName = pattern.substring(
+          globPrefixLength, pattern.length - globPrefixLength);
       expandedPatterns.add('**/$folderName/*');
       expandedPatterns.add('$folderName/**');
       expandedPatterns.add('$folderName/*');

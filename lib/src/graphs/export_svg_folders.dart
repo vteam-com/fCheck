@@ -207,11 +207,18 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
         .add(edge.targetFolder);
   }
 
+  // --- Extra canvas width to accommodate left/right-routed edges ---
+  const double edgeLanePadding = 40.0;
+  const double edgeLaneBaseWidth = 32.0;
+  const double edgeLanePerEdgeWidth = 4.0;
+
   // Extra canvas width to accommodate left/right-routed edges
   final totalFileEdges =
       relativeGraph.values.fold<int>(0, (sum, list) => sum + list.length);
-  final fileEdgeExtraWidth = 40.0 + (32.0 + totalFileEdges * 4.0);
-  final folderEdgeExtraWidth = 40.0 + (32.0 + folderDependencies.length * 4.0);
+  final fileEdgeExtraWidth = edgeLanePadding +
+      (edgeLaneBaseWidth + totalFileEdges * edgeLanePerEdgeWidth);
+  final folderEdgeExtraWidth = edgeLanePadding +
+      (edgeLaneBaseWidth + folderDependencies.length * edgeLanePerEdgeWidth);
 
   // --- Layout Constants ---
   const double baseFolderWidth = 260.0;
@@ -231,7 +238,9 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
       .followedBy(relativeGraph.values.expand((v) => v))
       .map((p) => p.split('/').last.length)
       .fold<int>(0, (a, b) => a > b ? a : b);
-  final labelWidth = (maxFileNameChars * 6).toDouble() + 12.0;
+  const double charToPixelFactor = 6.0;
+  const double labelPadding = 12.0;
+  final labelWidth = (maxFileNameChars * charToPixelFactor) + labelPadding;
 
   // Measure folders bottom-up so parents grow to fit their children
   final rootSize = _computeFolderDimensions(
@@ -794,11 +803,17 @@ Rect _computeFolderDimensions(
     height += padding; // Bottom padding under the children block
   }
 
-  final fileRowWidth = labelWidth + 50; // room for text + badges + margins
+  /// Extra room for text + badges + margins.
+  const double fileRowBadgeSpace = 50.0;
+  final fileRowWidth = labelWidth + fileRowBadgeSpace;
 
   var width = max(baseWidth, fileRowWidth);
+
+  /// Multiplier for padding when calculating total width.
+  const double paddingMultiplier = 2.0;
   if (node.children.isNotEmpty) {
-    width = max(width, childIndent + maxChildWidth + (padding * 2));
+    width =
+        max(width, childIndent + maxChildWidth + (padding * paddingMultiplier));
   }
 
   final rect = Rect.fromLTWH(0.0, 0.0, width, height);
@@ -806,7 +821,7 @@ Rect _computeFolderDimensions(
 
   // Match children's width to the parent's interior width for a clean flush look
   if (children.isNotEmpty) {
-    final innerWidth = width - (padding * 2) - childIndent;
+    final innerWidth = width - (padding * paddingMultiplier) - childIndent;
     for (final child in children) {
       final oldRect = dimensions[child.fullPath]!;
       dimensions[child.fullPath] =
@@ -940,14 +955,20 @@ void _drawEdgeHorizontalCurve(StringBuffer buffer, List<FolderNode> folders,
       final childPos = positions[child.fullPath]!;
       final childDim = dimensions[child.fullPath]!;
 
-      final parentX = parentPos.x + padding + (childIndent / 2);
-      final parentY = childPos.y + (childDim.height / 2);
-      final childX = childPos.x - 8;
-      final childY = childPos.y + (childDim.height / 2);
+      /// Divisor for halving dimensions.
+      const double halfDivisor = 2.0;
+
+      /// Horizontal offset for the edge connection point.
+      const double edgeHorizontalOffset = 8.0;
+
+      final parentX = parentPos.x + padding + (childIndent / halfDivisor);
+      final parentY = childPos.y + (childDim.height / halfDivisor);
+      final childX = childPos.x - edgeHorizontalOffset;
+      final childY = childPos.y + (childDim.height / halfDivisor);
 
       // Control points for a gentle left-to-right curve within the parent box
-      final controlX1 = parentX + (childIndent / 2);
-      final controlX2 = childX - (childIndent / 2);
+      final controlX1 = parentX + (childIndent / halfDivisor);
+      final controlX2 = childX - (childIndent / halfDivisor);
       final pathData = 'M $parentX $parentY '
           'C $controlX1 $parentY, $controlX2 $childY, $childX $childY';
 
@@ -1110,22 +1131,36 @@ void _drawEdgeVerticalsFiles(
       final endX = targetAnchor.x;
       final endY = targetAnchor.y;
 
+      /// Base offset for the gutter lane.
+      const double gutterBaseOffset = 28.0;
+
+      /// Step width for each subsequent edge in the gutter.
+      const double gutterStepWidth = 4.0;
+
       // Calculate fixed vertical column X for the right lane gutter if reference is provided
       final double? fixedColumnX = rightLaneGutterX != null
-          ? (rightLaneGutterX + 28.0 + edgeCounter * 4.0)
+          ? (rightLaneGutterX +
+              gutterBaseOffset +
+              edgeCounter * gutterStepWidth)
           : null;
 
       final path = _buildStackedEdgePath(
           startX, startY, endX, endY, edgeCounter,
           isLeft: false, fixedColumnX: fixedColumnX);
 
+      /// Vertical offset to recover the original file Y-coordinate (upward).
+      const double fileYOffsetUp = 6.0;
+
+      /// Vertical offset to recover the original file Y-coordinate (downward).
+      const double fileYOffsetDown = 5.0;
+
       // Determine the appropriate CSS class based on edge properties
       // Use the actual file top y-coordinate (fileY) for upward detection to avoid badge-offset bias
       final cssClass = _getFileEdgeCssClass(
         source,
         target,
-        startY - 6, // fileY
-        endY + 5, // fileY
+        startY - fileYOffsetUp, // fileY
+        endY + fileYOffsetDown, // fileY
         cycleEdges,
       );
 
@@ -1204,26 +1239,52 @@ void _drawEdgeVerticalFolders(
         continue;
       }
 
-      // Start/end at badge centers
-      final startX = sourcePos.x + 6;
-      final startY = sourcePos.y + 24;
-      final endX = targetPos.x + 10;
-      final endY = targetPos.y + 13;
+      // Start/end at badge centers.
+      const double sourceBadgeOffsetX = 6.0;
+      const double sourceBadgeOffsetY = 24.0;
+      const double targetBadgeOffsetX = 10.0;
+      const double targetBadgeOffsetY = 13.0;
+
+      final startX = sourcePos.x + sourceBadgeOffsetX;
+      final startY = sourcePos.y + sourceBadgeOffsetY;
+      final endX = targetPos.x + targetBadgeOffsetX;
+      final endY = targetPos.y + targetBadgeOffsetY;
 
       // Calculate fixed vertical column X
       // If parent exists, use its internal lane (indentation area)
       // If root, use the global lane (outside root)
       double fixedColumnX;
       if (parentPos != null) {
+        /// Width of each edge lane in the stack.
+        const double stackStepWidth = 4.0;
+
+        /// Horizontal offset for the lane within the parent folder.
+        const double laneInternalOffset = 24.0;
+
+        /// Width of the indentation area.
+        const double indentWidth = 40.0;
+
+        /// Divisor for halving dimensions.
+        const double halfDivisor = 2.0;
+
         // Center the stack of edges within the 40px childIndent area for balanced padding.
         // Gap starts at parentPos.x + 24.0 (border+padding) and ends at parentPos.x + 64.0 (start of children).
-        final stackWidth = (parentEdges.length - 1) * 4.0;
-        final stackStartX =
-            parentPos.x + 24.0 + (40.0 / 2.0) - (stackWidth / 2.0);
-        fixedColumnX = stackStartX + (i * 4.0);
+        final stackWidth = (parentEdges.length - 1) * stackStepWidth;
+        final stackStartX = parentPos.x +
+            laneInternalOffset +
+            (indentWidth / halfDivisor) -
+            (stackWidth / halfDivisor);
+        fixedColumnX = stackStartX + (i * stackStepWidth);
       } else {
+        /// Base margin for the global gutter.
+        const double globalGutterMargin = 40.0;
+
+        /// Step width for global lane stacking.
+        const double globalStackStepWidth = 4.0;
+
         // Step LEFT from the global gutter with a comfortable 40px base margin.
-        fixedColumnX = globalGutterX - 40.0 - (i * 4.0);
+        fixedColumnX =
+            globalGutterX - globalGutterMargin - (i * globalStackStepWidth);
       }
 
       // Folder edges use the LEFT lane (relative to the badges)
@@ -1289,34 +1350,58 @@ void _drawHierarchicalFolders(
     final outgoing = folderMetrics['outgoing'] ?? 0;
     final depth = depths[folder.fullPath] ?? 0;
 
+    /// Corner radius for folder rectangles.
+    const double folderCornerRadius = 12.0;
+
+    /// Divisor for halving dimensions.
+    const double halfDivisor = 2.0;
+
+    /// Vertical offset for the folder title text.
+    const double titleVerticalOffset = 25.0;
+
     buffer.writeln('<g class="folderLayer">');
     if (folder.isVirtual) {
+      /// Dash array for virtual folder borders.
+      const String virtualFolderDashArray = '4 2';
+
       // Render virtual folder with dash-dot border
       buffer.writeln(
-          '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="12" ry="12" class="layerBackgroundVirtualFolder" stroke-dasharray="4 2"/>');
+          '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="$folderCornerRadius" ry="$folderCornerRadius" class="layerBackgroundVirtualFolder" stroke-dasharray="$virtualFolderDashArray"/>');
     } else {
       // Render regular folder with solid border
       buffer.writeln(
-          '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="12" ry="12" class="layerBackground"/>');
+          '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="$folderCornerRadius" ry="$folderCornerRadius" class="layerBackground"/>');
     }
 
     final indentLevels = depth > 0 ? depth : 0;
     final indent = List.filled(indentLevels, '  ').join();
     final titleText = '$indent${folder.name}';
-    titleVisuals
-        .add(_TitleVisual(pos.x + dim.width / 2, pos.y + 25, titleText));
+    titleVisuals.add(_TitleVisual(pos.x + dim.width / halfDivisor,
+        pos.y + titleVerticalOffset, titleText));
     buffer.writeln('</g>');
 
+    /// Horizontal offset for the target (incoming) badge.
+    const double targetBadgeOffsetX = 10.0;
+
+    /// Vertical offset for the target (incoming) badge.
+    const double targetBadgeOffsetY = 13.0;
+
+    /// Horizontal offset for the source (outgoing) badge.
+    const double sourceBadgeOffsetX = 6.0;
+
+    /// Vertical offset for the source (outgoing) badge.
+    const double sourceBadgeOffsetY = 24.0;
+
     folderBadges.add(BadgeModel.incoming(
-      cx: pos.x + 10,
-      cy: pos.y + 13,
+      cx: pos.x + targetBadgeOffsetX,
+      cy: pos.y + targetBadgeOffsetY,
       count: incoming,
       peers: folderIncomingPeers[folder.fullPath] ?? const [],
       direction: BadgeDirection.east, // ▶
     ));
     folderBadges.add(BadgeModel.outgoing(
-      cx: pos.x + 6,
-      cy: pos.y + 24,
+      cx: pos.x + sourceBadgeOffsetX,
+      cy: pos.y + sourceBadgeOffsetY,
       count: outgoing,
       peers: folderOutgoingPeers[folder.fullPath] ?? const [],
       direction: BadgeDirection.west, // ◀
@@ -1353,14 +1438,32 @@ void _drawHierarchicalFolders(
         final fIncoming = fileMetrics[filePath]?['incoming'] ?? 0;
         final fOutgoing = fileMetrics[filePath]?['outgoing'] ?? 0;
 
-        final panelX = pos.x + 8.0;
-        final panelWidth = dim.width - 16.0; // flush within folder
-        final textX = pos.x + (panelWidth / 2);
+        /// Horizontal margin for the file panel inside the folder.
+        const double panelMarginX = 8.0;
+
+        /// Multiplier to calculate total horizontal padding for the panel.
+        const double panelPaddingMultiplier = 2.0;
+
+        /// Vertical offset to recover the original file Y-coordinate (upward).
+        const double fileYOffsetUp = 5.0;
+
+        /// Vertical offset to recover the original file Y-coordinate (downward).
+        const double fileYOffsetDown = 6.0;
+
+        /// Offset for the outgoing badge anchor.
+        const double outgoingAnchorOffset = 4.0;
+
+        final panelX = pos.x + panelMarginX;
+        final panelWidth = dim.width -
+            (panelMarginX * panelPaddingMultiplier); // flush within folder
+        final textX = pos.x + (panelWidth / halfDivisor);
         // Use panel-based coordinates for badges and edge anchors.
-        final badgeX = panelX + panelWidth - 8; // align with folder badges
+        final badgeX =
+            panelX + panelWidth - panelMarginX; // align with folder badges
         fileAnchors[filePath] = {
-          'in': Point(badgeX, fileY - 5), // Incoming badge position
-          'out': Point(badgeX + 4, fileY + 6), // Outgoing badge position
+          'in': Point(badgeX, fileY - fileYOffsetUp), // Incoming badge position
+          'out': Point(badgeX + outgoingAnchorOffset,
+              fileY + fileYOffsetDown), // Outgoing
         };
 
         final incomingPeers = fileIncomingPeers[filePath] ?? const [];
@@ -1406,8 +1509,11 @@ String _buildStackedEdgePath(
 
   // Each edge gets a slightly larger offset to avoid overlapping runs.
   // Folder edges (isLeft=true) route to the left lane, File edges to the right.
-  final columnX =
-      fixedColumnX ?? (startX + (dirX * baseOffset) + (dirX * edgeIndex * 4.0));
+  /// Step width for each subsequent edge in the gutter.
+  const double gutterStepWidth = 4.0;
+
+  final columnX = fixedColumnX ??
+      (startX + (dirX * baseOffset) + (dirX * edgeIndex * gutterStepWidth));
 
   final preCurveX = columnX - (dirX * radius);
   final postCurveX = columnX - (dirX * radius);
@@ -1428,23 +1534,40 @@ String _buildStackedEdgePath(
 /// Render file badges and labels (after edges).
 void _drawFileVisuals(StringBuffer buffer, List<_FileVisual> visuals) {
   for (final v in visuals) {
-    final top = v.textY - 14;
-    const height = 28.0;
+    /// Half-height offset of the file panel.
+    const double filePanelHalfHeight = 14.0;
+
+    /// Height of the file panel.
+    const double filePanelHeight = 28.0;
+
+    /// Divisor for halving dimensions.
+    const double halfDivisor = 2.0;
+
+    final top = v.textY - filePanelHalfHeight;
+
+    /// Vertical offset to recover the original file Y-coordinate (upward).
+    const double incomingBadgeOffsetY = 5.0;
 
     // Create incoming badge (pointing west)
     final incomingBadge = BadgeModel.incoming(
       cx: v.badgeX,
-      cy: v.badgeY - 5,
+      cy: v.badgeY - incomingBadgeOffsetY,
       count: v.incoming,
       peers: v.incomingPeers,
       direction: BadgeDirection.west,
     );
     renderTriangularBadge(buffer, incomingBadge);
 
+    /// Horizontal offset for the outgoing badge.
+    const double outgoingBadgeOffsetX = 4.0;
+
+    /// Vertical offset to recover the original file Y-coordinate (downward).
+    const double outgoingBadgeOffsetY = 6.0;
+
     // Create outgoing badge (pointing east)
     final outgoingBadge = BadgeModel.outgoing(
-      cx: v.badgeX + 4,
-      cy: v.badgeY + 6,
+      cx: v.badgeX + outgoingBadgeOffsetX,
+      cy: v.badgeY + outgoingBadgeOffsetY,
       count: v.outgoing,
       peers: v.outgoingPeers,
       direction: BadgeDirection.east,
@@ -1452,19 +1575,28 @@ void _drawFileVisuals(StringBuffer buffer, List<_FileVisual> visuals) {
     renderTriangularBadge(buffer, outgoingBadge);
 
     buffer.writeln(
-        '<text x="${v.textX}" y="${top + height / 2}" text-anchor="middle" dominant-baseline="middle" class="nodeText">${v.name}</text>');
+        '<text x="${v.textX}" y="${top + filePanelHeight / halfDivisor}" text-anchor="middle" dominant-baseline="middle" class="nodeText">${v.name}</text>');
   }
 }
 
 /// Render file background pills before edges.
 void _drawFilePanels(StringBuffer buffer, List<_FileVisual> visuals) {
   for (final v in visuals) {
+    /// Half-height offset of the file panel.
+    const double filePanelHalfHeight = 14.0;
+
+    /// Height of the file panel.
+    const double filePanelHeight = 28.0;
+
+    /// Corner radius for file panel rectangles.
+    const double filePanelCornerRadius = 5.0;
+
     final left = v.panelX;
     final width = v.panelWidth;
-    final top = v.textY - 14;
-    const height = 28.0;
+    final top = v.textY - filePanelHalfHeight;
+
     buffer.writeln(
-        '<rect x="$left" y="$top" width="$width" height="$height" rx="5" ry="5" class="fileNode"/>');
+        '<rect x="$left" y="$top" width="$width" height="$filePanelHeight" rx="$filePanelCornerRadius" ry="$filePanelCornerRadius" class="fileNode"/>');
   }
 }
 
@@ -1478,6 +1610,9 @@ void _drawTitleVisuals(StringBuffer buffer, List<_TitleVisual> visuals) {
   buffer.writeln('</g>');
 }
 
+/// Default starting horizontal position for files.
+const double _defaultFileStartX = 20.0;
+
 /// Calculate file positions within folder
 List<Point<double>> _calculateFilePositions(
   int fileCount,
@@ -1486,7 +1621,9 @@ List<Point<double>> _calculateFilePositions(
   required double topPadding,
   required double itemHeight,
   required double itemSpacing,
-  double startX = 20.0,
+
+  /// Default starting horizontal position for files.
+  double startX = _defaultFileStartX,
 }) {
   final filePositions = <Point<double>>[];
   var y = folderY + headerHeight + topPadding;

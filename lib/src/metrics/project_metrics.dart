@@ -122,6 +122,15 @@ class ProjectMetrics {
   double get commentRatio =>
       totalLinesOfCode == 0 ? 0 : totalCommentLines / totalLinesOfCode;
 
+  /// Maximum number of issues to display in the console report for each category.
+  static const int _maxIssuesToShow = 10;
+
+  /// Multiplier for percentage calculations.
+  static const int _percentageMultiplier = 100;
+
+  /// Number of decimal places for percentage formatting.
+  static const int _decimalPlaces = 2;
+
   /// Prints a comprehensive stats report to the console.
   ///
   /// The report includes:
@@ -149,7 +158,8 @@ class ProjectMetrics {
     }
     print('Lines of Code    : $totalLinesOfCode');
     print('Comment Lines    : $totalCommentLines');
-    print('Comment Ratio    : ${(commentRatio * 100).toStringAsFixed(2)}%');
+    print(
+        'Comment Ratio    : ${(commentRatio * _percentageMultiplier).toStringAsFixed(_decimalPlaces)}%');
     print('Hardcoded Strings: ${hardcodedStringIssues.length}');
     print('Magic Numbers    : ${magicNumberIssues.length}');
     print('Layers           : $layersCount');
@@ -174,11 +184,12 @@ class ProjectMetrics {
     } else if (usesLocalization) {
       print(
           '❌ ${hardcodedStringIssues.length} hardcoded strings detected (localization enabled):');
-      for (var issue in hardcodedStringIssues.take(10)) {
+      for (var issue in hardcodedStringIssues.take(_maxIssuesToShow)) {
         print('  - $issue');
       }
-      if (hardcodedStringIssues.length > 10) {
-        print('  ... and ${hardcodedStringIssues.length - 10} more');
+      if (hardcodedStringIssues.length > _maxIssuesToShow) {
+        print(
+            '  ... and ${hardcodedStringIssues.length - _maxIssuesToShow} more');
       }
     } else {
       final firstFile = hardcodedStringIssues.first.filePath.split('/').last;
@@ -192,11 +203,11 @@ class ProjectMetrics {
       print('✅ No magic numbers detected.');
     } else {
       print('⚠️ ${magicNumberIssues.length} magic numbers detected:');
-      for (var issue in magicNumberIssues.take(10)) {
+      for (var issue in magicNumberIssues.take(_maxIssuesToShow)) {
         print('  - $issue');
       }
-      if (magicNumberIssues.length > 10) {
-        print('  ... and ${magicNumberIssues.length - 10} more');
+      if (magicNumberIssues.length > _maxIssuesToShow) {
+        print('  ... and ${magicNumberIssues.length - _maxIssuesToShow} more');
       }
     }
 
@@ -207,11 +218,11 @@ class ProjectMetrics {
     } else {
       print(
           '🔧 ${sourceSortIssues.length} Flutter classes have unsorted members:');
-      for (var issue in sourceSortIssues.take(10)) {
+      for (var issue in sourceSortIssues.take(_maxIssuesToShow)) {
         print('  - ${issue.filePath}:${issue.lineNumber} (${issue.className})');
       }
-      if (sourceSortIssues.length > 10) {
-        print('  ... and ${sourceSortIssues.length - 10} more');
+      if (sourceSortIssues.length > _maxIssuesToShow) {
+        print('  ... and ${sourceSortIssues.length - _maxIssuesToShow} more');
       }
     }
 
@@ -222,11 +233,11 @@ class ProjectMetrics {
     } else {
       print(
           '🏗️ ${layersIssues.length} layers architecture violations detected:');
-      for (var issue in layersIssues.take(10)) {
+      for (var issue in layersIssues.take(_maxIssuesToShow)) {
         print('  - $issue');
       }
-      if (layersIssues.length > 10) {
-        print('  ... and ${layersIssues.length - 10} more');
+      if (layersIssues.length > _maxIssuesToShow) {
+        print('  ... and ${layersIssues.length - _maxIssuesToShow} more');
       }
     }
     print('↑ ----------------------- ↑');

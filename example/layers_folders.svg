@@ -179,21 +179,21 @@
   <title>. ▶ subfolder</title>
 </g>
 <g class="folderLayer">
-<rect x="152.0" y="80.0" width="348.0" height="480.0" rx="12" ry="12" class="layerBackground"/>
+<rect x="152.0" y="80.0" width="348.0" height="480.0" rx="12.0" ry="12.0" class="layerBackground"/>
 </g>
 <g class="folderLayer">
-<rect x="216.0" y="132.0" width="260.0" height="258.0" rx="12" ry="12" class="layerBackgroundVirtualFolder" stroke-dasharray="4 2"/>
+<rect x="216.0" y="132.0" width="260.0" height="258.0" rx="12.0" ry="12.0" class="layerBackgroundVirtualFolder" stroke-dasharray="4 2"/>
 </g>
 <g class="folderLayer">
-<rect x="216.0" y="414.0" width="260.0" height="98.0" rx="12" ry="12" class="layerBackground"/>
+<rect x="216.0" y="414.0" width="260.0" height="98.0" rx="12.0" ry="12.0" class="layerBackground"/>
 </g>
-<rect x="224.0" y="170.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<rect x="224.0" y="202.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<rect x="224.0" y="234.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<rect x="224.0" y="266.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<rect x="224.0" y="298.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<rect x="224.0" y="330.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
-<rect x="224.0" y="452.0" width="244.0" height="28.0" rx="5" ry="5" class="fileNode"/>
+<rect x="224.0" y="170.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
+<rect x="224.0" y="202.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
+<rect x="224.0" y="234.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
+<rect x="224.0" y="266.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
+<rect x="224.0" y="298.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
+<rect x="224.0" y="330.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
+<rect x="224.0" y="452.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
 <g>
   <path d="M 464.0 190.0 H 522.0 Q 528.0 190.0 528.0 196.0 V 205.0 Q 528.0 211.0 522.0 211.0 H 460.0" class="edgeVertical"/>
   <title>main.dart ▶ home_page.dart</title>
@@ -212,25 +212,25 @@
 </g>
 <g class="outgoingBadge">
   <path d="M 470.0,190.0 L 458.0,183.0 Q 455.0,183.0 455.0,186.0 L 455.0,194.0 Q 455.0,197.0 458.0,197.0 Z" fill="#10b981"/>
-  <text x="459.0" y="193.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>1. home_page.dart</title></g><text x="338.0" y="184.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">main.dart</text>
+  <text x="459.0" y="193.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. home_page.dart</title></g><text x="338.0" y="184.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">main.dart</text>
 <g class="incomingBadge">
   <path d="M 454.0,211.0 L 466.0,204.0 Q 469.0,204.0 469.0,207.0 L 469.0,215.0 Q 469.0,218.0 466.0,218.0 Z" fill="#3b82f6"/>
-  <text x="465.0" y="214.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>1. main.dart</title></g><g class="outgoingBadge">
+  <text x="465.0" y="214.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. main.dart</title></g><g class="outgoingBadge">
   <path d="M 470.0,222.0 L 458.0,215.0 Q 455.0,215.0 455.0,218.0 L 455.0,226.0 Q 455.0,229.0 458.0,229.0 Z" fill="#10b981"/>
-  <text x="459.0" y="225.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text><title>1. counter_widget.dart
+  <text x="459.0" y="225.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. counter_widget.dart
 2. models.dart</title></g><text x="338.0" y="216.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">home_page.dart</text>
 <g class="incomingBadge">
   <path d="M 454.0,243.0 L 466.0,236.0 Q 469.0,236.0 469.0,239.0 L 469.0,247.0 Q 469.0,250.0 466.0,250.0 Z" fill="#3b82f6"/>
-  <text x="465.0" y="246.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>1. home_page.dart</title></g><g class="outgoingBadge">
+  <text x="465.0" y="246.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. home_page.dart</title></g><g class="outgoingBadge">
   <path d="M 470.0,254.0 L 458.0,247.0 Q 455.0,247.0 455.0,250.0 L 455.0,258.0 Q 455.0,261.0 458.0,261.0 Z" fill="#10b981"/>
-  <text x="459.0" y="257.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>1. utils.dart</title></g><text x="338.0" y="248.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">counter_widget.dart</text>
+  <text x="459.0" y="257.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. utils.dart</title></g><text x="338.0" y="248.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">counter_widget.dart</text>
 <text x="338.0" y="280.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">comments_example.dart</text>
 <g class="incomingBadge">
   <path d="M 454.0,307.0 L 466.0,300.0 Q 469.0,300.0 469.0,303.0 L 469.0,311.0 Q 469.0,314.0 466.0,314.0 Z" fill="#3b82f6"/>
-  <text x="465.0" y="310.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>1. home_page.dart</title></g><text x="338.0" y="312.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">models.dart</text>
+  <text x="465.0" y="310.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. home_page.dart</title></g><text x="338.0" y="312.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">models.dart</text>
 <g class="incomingBadge">
   <path d="M 454.0,339.0 L 466.0,332.0 Q 469.0,332.0 469.0,335.0 L 469.0,343.0 Q 469.0,346.0 466.0,346.0 Z" fill="#3b82f6"/>
-  <text x="465.0" y="342.0" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text><title>1. counter_widget.dart</title></g><text x="338.0" y="344.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">utils.dart</text>
+  <text x="465.0" y="342.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. counter_widget.dart</title></g><text x="338.0" y="344.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">utils.dart</text>
 <text x="338.0" y="466.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">subclass.dart</text>
 <g class="folderTitleLayer">
 <text x="326.0" y="105.0" class="layerTitle">.</text>

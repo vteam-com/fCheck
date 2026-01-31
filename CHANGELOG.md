@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - 🛡️ **Default Localization Filtering**: Automatically hide generated localization files (`app_localizations_*.dart`) from analysis and dependency graphs by default while keeping the main entry point to avoid cyclic dependency noise.
+- 🧹 **Code Cleanup**: Removed magic number violations across the codebase by introducing named constants for better maintainability.
 
 ## [0.7.1] - 2026-01-31
 
