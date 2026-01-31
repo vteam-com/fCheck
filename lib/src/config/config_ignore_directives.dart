@@ -93,11 +93,13 @@ class ConfigIgnoreDirectives {
     return false;
   }
 
+  /// Calculates the 1-based line number for a given character offset.
   static int _getLineNumber(String content, int offset) {
     final lines = content.substring(0, offset).split('\n');
     return lines.length;
   }
 
+  /// Retrieves the content of a specific line number.
   static String _getLineContent(String content, int lineNumber) {
     final lines = content.split('\n');
     if (lineNumber > 0 && lineNumber <= lines.length) {

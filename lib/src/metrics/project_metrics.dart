@@ -49,10 +49,13 @@ class ProjectMetrics {
   /// The dependency graph used for analysis (filePath -> list of dependencies).
   final Map<String, List<String>> dependencyGraph;
 
-  /// Number of files excluded by glob patterns.
+  /// Number of files successfully skipped based on exclusion glob patterns.
   final int excludedFilesCount;
 
   /// Whether the project appears to be using Flutter localization (l10n).
+  ///
+  /// Detection is based on the presence of `l10n.yaml`, `.arb` files,
+  /// or imports of generated localization files.
   final bool usesLocalization;
 
   /// The version of the analyzed project as defined in its pubspec.yaml.

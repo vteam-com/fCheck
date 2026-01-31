@@ -71,6 +71,8 @@ class BadgeModel {
   ///
   /// Creates a triangular badge with rounded corners, containing the count number.
   /// The triangle points in the specified direction with appropriate colors.
+  /// The text position is adjusted based on the direction (`direction`) to
+  /// ensure it remains centered within the triangular shape.
   ///
   /// Returns an empty string if count is 0 or less.
   ///
@@ -138,13 +140,14 @@ class BadgeModel {
     }
   }
 
-  /// Creates an incoming badge pointing west (left).
+  /// Creates an incoming badge pointing in the specified direction.
   ///
   /// Incoming badges are blue and indicate dependencies flowing into the component.
   ///
   /// [cx] - Center X coordinate
   /// [cy] - Center Y coordinate
   /// [count] - Number of incoming dependencies
+  /// [direction] - The orientation of the triangle point
   /// [peers] - Optional list of source dependency names
   factory BadgeModel.incoming({
     required double cx,
@@ -163,13 +166,14 @@ class BadgeModel {
     );
   }
 
-  /// Creates an outgoing badge pointing east (right).
+  /// Creates an outgoing badge pointing in the specified direction.
   ///
   /// Outgoing badges are green and indicate dependencies flowing from the component.
   ///
   /// [cx] - Center X coordinate
   /// [cy] - Center Y coordinate
   /// [count] - Number of outgoing dependencies
+  /// [direction] - The orientation of the triangle point
   /// [peers] - Optional list of target dependency names
   factory BadgeModel.outgoing({
     required double cx,

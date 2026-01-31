@@ -251,9 +251,13 @@ class AnalyzeFolder {
 
   /// Counts the number of comment lines in a Dart file.
   ///
-  /// This is a simplified implementation that counts lines containing
-  /// comment markers (//, /*, */). For more accurate comment counting,
-  /// the analyzer's token stream could be used.
+  /// This method counts lines that contain Dart comment markers:
+  /// - `//` (single-line or documentation comments)
+  /// - `/*` (start of block comment)
+  /// - `*/` (end of block comment)
+  ///
+  /// It counts a line as a comment line if it starts with a marker or
+  /// contains a marker (even if preceded by code).
   ///
   /// [unit] The parsed compilation unit (currently unused in this implementation).
   /// [lines] The raw lines of the file.
@@ -349,8 +353,11 @@ class AnalyzeFolder {
 /// This internal visitor class extends the analyzer's AST visitor to
 /// count class declarations and detect StatefulWidget usage in Dart files.
 /// It accumulates metrics during the AST traversal process.
+///
+/// Only public classes (not starting with `_`) are counted for the
+/// "one class per file" rule checks.
 class _QualityVisitor extends RecursiveAstVisitor<void> {
-  /// The total number of class declarations found in the visited file.
+  /// The total number of public class declarations found in the visited file.
   int classCount = 0;
 
   /// Whether any of the classes in the file extend StatefulWidget.
@@ -362,8 +369,8 @@ class _QualityVisitor extends RecursiveAstVisitor<void> {
   /// Visits a class declaration node in the AST.
   ///
   /// This method is called for each class declaration encountered during
-  /// AST traversal. It increments the class count and checks if the class
-  /// extends StatefulWidget.
+  /// AST traversal. It increments the class count (if the class is public)
+  /// and checks if the class extends StatefulWidget.
   ///
   /// [node] The class declaration node being visited.
   @override

@@ -429,6 +429,11 @@ FolderNode _buildFolderHierarchy(List<String> filePaths) {
 }
 
 /// Apply the loose files rule: create virtual subfolders for folders with both files and subfolders.
+///
+/// This rule ensures that files directly inside a folder are rendered in a dedicated
+/// "virtual" subfolder (labeled "...") when that same folder also contains other
+/// sub-directories. This resolves visual ambiguity in hierarchical layouts by
+/// treating loose files as a distinct sibling to other sub-folders.
 void _applyLooseFilesRule(FolderNode node) {
   // Process children first (bottom-up)
   for (final child in node.children) {
@@ -457,8 +462,14 @@ void _applyLooseFilesRule(FolderNode node) {
 }
 
 /// Find the actual folder path where a file ends up, considering virtual subfolders.
-/// For external connections (between different parent folders), return the parent folder.
-/// For internal connections (within the same parent folder), return the actual location (virtual subfolder if applicable).
+///
+/// This method determines the effective container for a file in the visualization.
+/// It distinguishes between internal and external dependencies to correctly route
+/// edges:
+/// - External connections (between different parent folders) roll up to the
+///   top-level branch folders under their Lowest Common Ancestor.
+/// - Internal connections (within the same parent sub-tree) use the precise
+///   location, including virtual "..." subfolders if applicable.
 String _getActualFolderPath(
     String filePath, FolderNode rootNode, String? targetFilePath) {
   // If no target is specified, just return the folder where the file actually is

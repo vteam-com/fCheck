@@ -19,8 +19,7 @@ class MagicNumberAnalyzer {
 
     final content = file.readAsStringSync();
     if (_shouldSkipFile(filePath) ||
-        ConfigIgnoreDirectives.hasIgnoreDirective(content, 'magic_numbers') ||
-        content.contains('fcheck: ignore magic numbers')) {
+        ConfigIgnoreDirectives.hasIgnoreDirective(content, 'magic_numbers')) {
       return [];
     }
     final result = parseString(

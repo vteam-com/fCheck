@@ -38,14 +38,8 @@ class LayersAnalyzer {
   List<LayersIssue> analyzeFile(File file) {
     final String content = file.readAsStringSync();
 
-    // Check for ignore directive using a simple string check first
-    final lines = content.split('\n');
-    final firstNonEmptyLine =
-        lines.firstWhere((line) => line.trim().isNotEmpty, orElse: () => '');
-    final hasIgnoreDirective =
-        firstNonEmptyLine.trim().startsWith('// ignore: fcheck_layers');
-
-    if (hasIgnoreDirective) {
+    // Check for ignore directive
+    if (ConfigIgnoreDirectives.hasIgnoreDirective(content, 'layers')) {
       return <LayersIssue>[];
     }
 
