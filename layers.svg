@@ -39,47 +39,53 @@
     <stop offset="100%" stop-color="#007bff"/>
   </linearGradient>
 </defs>
-<style>
-  /* Container and layer styles */
+<style>  
   .layerBackground { 
-    fill: rgba(52, 58, 64, 0.08); 
-    stroke: #dee2e6; 
+    fill: rgba(52, 58, 64, 0.08);     
+  }
+
+  .layerBackground:hover { 
+    fill: PaleGoldenRod ;
+    transition: all 0.1s ease-in-out; 
+  }
+
+  .layerBackgroundVirtualFolder { 
+    fill: rgba(52, 58, 64, 0.05); 
+    stroke: gray; 
     stroke-width: 1; 
     stroke-dasharray: 4,4; 
   }
 
-  .layerBackground:hover { 
-    fill: rgba(52, 58, 64, 0.12); 
-    stroke: black; 
-    stroke-dasharray: 0; 
-    transition: all 0.3s ease-in-out; 
+  .layerBackgroundVirtualFolder:hover { 
+    fill: PaleGoldenRod ;
+    stroke: gray; 
+    stroke-width: 0; 
+    stroke-dasharray: 4,4;
+    transition: all 0.1s ease-in-out; 
   }
   
   .layerTitle { 
     fill: black; 
-    font-size: 14px; 
+    font-size: 16px; 
     font-weight: bold; 
     text-anchor: middle; 
     filter: url(#outlineWhite); 
   }
   
-  /* Node styles */
-  .nodeRect { 
-    fill: #ffffff; 
-    stroke: #343a40; 
-    stroke-width: 2; 
+  /* File node styles */
+  .fileNode { 
+    fill: white; 
+    stroke: gray; 
+    stroke-width: 0.5; 
     rx: 6; 
-    ry: 6; 
-    cursor: pointer; 
-    filter: url(#whiteShadow); 
+    ry: 6;    
+  }
+  
+  .fileNode:hover {     
+    fill: PaleGoldenRod;
     transition: all 0.1s ease-in-out; 
   }
-  
-  .nodeRect:hover { 
-    stroke: black; 
-    stroke-width: 5; 
-  }
-  
+
   .nodeText { 
     fill: #212529; 
     font-size: 14px; 
@@ -88,20 +94,7 @@
     dominant-baseline: middle; 
     filter: url(#outlineWhite); 
   }
-  
-  /* File node styles */
-  .fileNode { 
-    fill: #ffffff; 
-    stroke: #d0d7de; 
-    stroke-width: 1; 
-    transition: all 0.1s ease-in-out; 
-  }
-  
-  .fileNode:hover { 
-    stroke: #007bff; 
-    stroke-width: 2; 
-  }
-  
+
   /* Unified edge styles */
   .edge { 
     fill: none; 
@@ -110,7 +103,8 @@
     opacity: 0.5;
     transition: all 0.1s ease-in-out; 
   }
-  
+
+
   .edge:hover { 
     stroke: url(#horizontalGradient); 
     stroke-width: 3; 
@@ -188,37 +182,37 @@
 <text x="1440.0" y="75" class="layerTitle">5</text>
 <rect x="1625.0" y="50" width="270.0" height="580" rx="8" class="layerBackground"/>
 <text x="1760.0" y="75" class="layerTitle">6</text>
-<rect x="50.0" y="90.0" width="220" height="50" class="nodeRect"/>
-<rect x="370.0" y="90.0" width="220" height="50" class="nodeRect"/>
-<rect x="370.0" y="160.0" width="220" height="50" class="nodeRect"/>
-<rect x="370.0" y="230.0" width="220" height="50" class="nodeRect"/>
-<rect x="370.0" y="300.0" width="220" height="50" class="nodeRect"/>
-<rect x="370.0" y="370.0" width="220" height="50" class="nodeRect"/>
-<rect x="370.0" y="440.0" width="220" height="50" class="nodeRect"/>
-<rect x="690.0" y="90.0" width="220" height="50" class="nodeRect"/>
-<rect x="690.0" y="160.0" width="220" height="50" class="nodeRect"/>
-<rect x="690.0" y="230.0" width="220" height="50" class="nodeRect"/>
-<rect x="690.0" y="300.0" width="220" height="50" class="nodeRect"/>
-<rect x="690.0" y="370.0" width="220" height="50" class="nodeRect"/>
-<rect x="690.0" y="440.0" width="220" height="50" class="nodeRect"/>
-<rect x="690.0" y="510.0" width="220" height="50" class="nodeRect"/>
-<rect x="690.0" y="580.0" width="220" height="50" class="nodeRect"/>
-<rect x="1010.0" y="90.0" width="220" height="50" class="nodeRect"/>
-<rect x="1010.0" y="160.0" width="220" height="50" class="nodeRect"/>
-<rect x="1010.0" y="230.0" width="220" height="50" class="nodeRect"/>
-<rect x="1010.0" y="300.0" width="220" height="50" class="nodeRect"/>
-<rect x="1010.0" y="370.0" width="220" height="50" class="nodeRect"/>
-<rect x="1010.0" y="440.0" width="220" height="50" class="nodeRect"/>
-<rect x="1010.0" y="510.0" width="220" height="50" class="nodeRect"/>
-<rect x="1330.0" y="90.0" width="220" height="50" class="nodeRect"/>
-<rect x="1330.0" y="160.0" width="220" height="50" class="nodeRect"/>
-<rect x="1330.0" y="230.0" width="220" height="50" class="nodeRect"/>
-<rect x="1330.0" y="300.0" width="220" height="50" class="nodeRect"/>
-<rect x="1330.0" y="370.0" width="220" height="50" class="nodeRect"/>
-<rect x="1650.0" y="90.0" width="220" height="50" class="nodeRect"/>
-<rect x="1650.0" y="160.0" width="220" height="50" class="nodeRect"/>
-<rect x="1650.0" y="230.0" width="220" height="50" class="nodeRect"/>
-<rect x="1650.0" y="300.0" width="220" height="50" class="nodeRect"/>
+<rect x="50.0" y="90.0" width="220" height="50" class="fileNode"/>
+<rect x="370.0" y="90.0" width="220" height="50" class="fileNode"/>
+<rect x="370.0" y="160.0" width="220" height="50" class="fileNode"/>
+<rect x="370.0" y="230.0" width="220" height="50" class="fileNode"/>
+<rect x="370.0" y="300.0" width="220" height="50" class="fileNode"/>
+<rect x="370.0" y="370.0" width="220" height="50" class="fileNode"/>
+<rect x="370.0" y="440.0" width="220" height="50" class="fileNode"/>
+<rect x="690.0" y="90.0" width="220" height="50" class="fileNode"/>
+<rect x="690.0" y="160.0" width="220" height="50" class="fileNode"/>
+<rect x="690.0" y="230.0" width="220" height="50" class="fileNode"/>
+<rect x="690.0" y="300.0" width="220" height="50" class="fileNode"/>
+<rect x="690.0" y="370.0" width="220" height="50" class="fileNode"/>
+<rect x="690.0" y="440.0" width="220" height="50" class="fileNode"/>
+<rect x="690.0" y="510.0" width="220" height="50" class="fileNode"/>
+<rect x="690.0" y="580.0" width="220" height="50" class="fileNode"/>
+<rect x="1010.0" y="90.0" width="220" height="50" class="fileNode"/>
+<rect x="1010.0" y="160.0" width="220" height="50" class="fileNode"/>
+<rect x="1010.0" y="230.0" width="220" height="50" class="fileNode"/>
+<rect x="1010.0" y="300.0" width="220" height="50" class="fileNode"/>
+<rect x="1010.0" y="370.0" width="220" height="50" class="fileNode"/>
+<rect x="1010.0" y="440.0" width="220" height="50" class="fileNode"/>
+<rect x="1010.0" y="510.0" width="220" height="50" class="fileNode"/>
+<rect x="1330.0" y="90.0" width="220" height="50" class="fileNode"/>
+<rect x="1330.0" y="160.0" width="220" height="50" class="fileNode"/>
+<rect x="1330.0" y="230.0" width="220" height="50" class="fileNode"/>
+<rect x="1330.0" y="300.0" width="220" height="50" class="fileNode"/>
+<rect x="1330.0" y="370.0" width="220" height="50" class="fileNode"/>
+<rect x="1650.0" y="90.0" width="220" height="50" class="fileNode"/>
+<rect x="1650.0" y="160.0" width="220" height="50" class="fileNode"/>
+<rect x="1650.0" y="230.0" width="220" height="50" class="fileNode"/>
+<rect x="1650.0" y="300.0" width="220" height="50" class="fileNode"/>
 <g>
   <path d="M 270.0 128.0 C 320.0 128.0, 326.0 312.0, 376.0 312.0" class="edge"/>
   <title>./bin/fcheck.dart ▶ ./lib/src/graphs/export_mermaid.dart</title>

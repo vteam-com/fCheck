@@ -322,21 +322,6 @@ The SVG visualization system uses a unified styling approach with consistent CSS
 }
 
 /* Node and container styles */
-.nodeRect { 
-  fill: #ffffff; 
-  stroke: #343a40; 
-  stroke-width: 2; 
-  rx: 6; 
-  ry: 6; 
-  cursor: pointer; 
-  filter: url(#whiteShadow); 
-  transition: all 0.1s ease-in-out; 
-}
-.nodeRect:hover { 
-  stroke: #007bff; 
-  stroke-width: 5; 
-}
-
 .layerBackground { 
   fill: #f8f9fa; 
   stroke: #dee2e6; 

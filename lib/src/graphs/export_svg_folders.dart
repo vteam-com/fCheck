@@ -1293,7 +1293,7 @@ void _drawHierarchicalFolders(
     if (folder.isVirtual) {
       // Render virtual folder with dash-dot border
       buffer.writeln(
-          '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="12" ry="12" class="layerBackground" stroke-dasharray="4 2"/>');
+          '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="12" ry="12" class="layerBackgroundVirtualFolder" stroke-dasharray="4 2"/>');
     } else {
       // Render regular folder with solid border
       buffer.writeln(

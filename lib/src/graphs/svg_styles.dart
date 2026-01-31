@@ -106,47 +106,53 @@ $verticalGradient
   /// - Unified hover behavior for visual consistency
   static String generateUnifiedStyles() {
     return '''
-<style>
-  /* Container and layer styles */
+<style>  
   .layerBackground { 
-    fill: rgba(52, 58, 64, 0.08); 
-    stroke: #dee2e6; 
+    fill: rgba(52, 58, 64, 0.08);     
+  }
+
+  .layerBackground:hover { 
+    fill: PaleGoldenRod ;
+    transition: all 0.1s ease-in-out; 
+  }
+
+  .layerBackgroundVirtualFolder { 
+    fill: rgba(52, 58, 64, 0.05); 
+    stroke: gray; 
     stroke-width: 1; 
     stroke-dasharray: 4,4; 
   }
 
-  .layerBackground:hover { 
-    fill: rgba(52, 58, 64, 0.12); 
-    stroke: black; 
-    stroke-dasharray: 0; 
-    transition: all 0.3s ease-in-out; 
+  .layerBackgroundVirtualFolder:hover { 
+    fill: PaleGoldenRod ;
+    stroke: gray; 
+    stroke-width: 0; 
+    stroke-dasharray: 4,4;
+    transition: all 0.1s ease-in-out; 
   }
   
   .layerTitle { 
     fill: black; 
-    font-size: 14px; 
+    font-size: 16px; 
     font-weight: bold; 
     text-anchor: middle; 
     filter: url(#outlineWhite); 
   }
   
-  /* Node styles */
-  .nodeRect { 
-    fill: #ffffff; 
-    stroke: #343a40; 
-    stroke-width: 2; 
+  /* File node styles */
+  .fileNode { 
+    fill: white; 
+    stroke: gray; 
+    stroke-width: 0.5; 
     rx: 6; 
-    ry: 6; 
-    cursor: pointer; 
-    filter: url(#whiteShadow); 
+    ry: 6;    
+  }
+  
+  .fileNode:hover {     
+    fill: PaleGoldenRod;
     transition: all 0.1s ease-in-out; 
   }
-  
-  .nodeRect:hover { 
-    stroke: black; 
-    stroke-width: 5; 
-  }
-  
+
   .nodeText { 
     fill: #212529; 
     font-size: 14px; 
@@ -155,20 +161,7 @@ $verticalGradient
     dominant-baseline: middle; 
     filter: url(#outlineWhite); 
   }
-  
-  /* File node styles */
-  .fileNode { 
-    fill: #ffffff; 
-    stroke: #d0d7de; 
-    stroke-width: 1; 
-    transition: all 0.1s ease-in-out; 
-  }
-  
-  .fileNode:hover { 
-    stroke: #007bff; 
-    stroke-width: 2; 
-  }
-  
+
   /* Unified edge styles */
   .edge { 
     fill: none; 
@@ -177,7 +170,8 @@ $verticalGradient
     opacity: 0.5;
     transition: all 0.1s ease-in-out; 
   }
-  
+
+
   .edge:hover { 
     stroke: url(#horizontalGradient); 
     stroke-width: 3; 

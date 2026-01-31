@@ -39,47 +39,53 @@
     <stop offset="100%" stop-color="#007bff"/>
   </linearGradient>
 </defs>
-<style>
-  /* Container and layer styles */
+<style>  
   .layerBackground { 
-    fill: rgba(52, 58, 64, 0.08); 
-    stroke: #dee2e6; 
+    fill: rgba(52, 58, 64, 0.08);     
+  }
+
+  .layerBackground:hover { 
+    fill: PaleGoldenRod ;
+    transition: all 0.1s ease-in-out; 
+  }
+
+  .layerBackgroundVirtualFolder { 
+    fill: rgba(52, 58, 64, 0.05); 
+    stroke: gray; 
     stroke-width: 1; 
     stroke-dasharray: 4,4; 
   }
 
-  .layerBackground:hover { 
-    fill: rgba(52, 58, 64, 0.12); 
-    stroke: black; 
-    stroke-dasharray: 0; 
-    transition: all 0.3s ease-in-out; 
+  .layerBackgroundVirtualFolder:hover { 
+    fill: PaleGoldenRod ;
+    stroke: gray; 
+    stroke-width: 0; 
+    stroke-dasharray: 4,4;
+    transition: all 0.1s ease-in-out; 
   }
   
   .layerTitle { 
     fill: black; 
-    font-size: 14px; 
+    font-size: 16px; 
     font-weight: bold; 
     text-anchor: middle; 
     filter: url(#outlineWhite); 
   }
   
-  /* Node styles */
-  .nodeRect { 
-    fill: #ffffff; 
-    stroke: #343a40; 
-    stroke-width: 2; 
+  /* File node styles */
+  .fileNode { 
+    fill: white; 
+    stroke: gray; 
+    stroke-width: 0.5; 
     rx: 6; 
-    ry: 6; 
-    cursor: pointer; 
-    filter: url(#whiteShadow); 
+    ry: 6;    
+  }
+  
+  .fileNode:hover {     
+    fill: PaleGoldenRod;
     transition: all 0.1s ease-in-out; 
   }
-  
-  .nodeRect:hover { 
-    stroke: black; 
-    stroke-width: 5; 
-  }
-  
+
   .nodeText { 
     fill: #212529; 
     font-size: 14px; 
@@ -88,20 +94,7 @@
     dominant-baseline: middle; 
     filter: url(#outlineWhite); 
   }
-  
-  /* File node styles */
-  .fileNode { 
-    fill: #ffffff; 
-    stroke: #d0d7de; 
-    stroke-width: 1; 
-    transition: all 0.1s ease-in-out; 
-  }
-  
-  .fileNode:hover { 
-    stroke: #007bff; 
-    stroke-width: 2; 
-  }
-  
+
   /* Unified edge styles */
   .edge { 
     fill: none; 
@@ -110,7 +103,8 @@
     opacity: 0.5;
     transition: all 0.1s ease-in-out; 
   }
-  
+
+
   .edge:hover { 
     stroke: url(#horizontalGradient); 
     stroke-width: 3; 
@@ -232,7 +226,7 @@
 <rect x="212.0" y="80.0" width="612.0" height="2268.0" rx="12" ry="12" class="layerBackground"/>
 </g>
 <g class="folderLayer">
-<rect x="276.0" y="132.0" width="524.0" height="98.0" rx="12" ry="12" class="layerBackground" stroke-dasharray="4 2"/>
+<rect x="276.0" y="132.0" width="524.0" height="98.0" rx="12" ry="12" class="layerBackgroundVirtualFolder" stroke-dasharray="4 2"/>
 </g>
 <g class="folderLayer">
 <rect x="276.0" y="254.0" width="524.0" height="2046.0" rx="12" ry="12" class="layerBackground"/>
@@ -241,7 +235,7 @@
 <rect x="340.0" y="306.0" width="436.0" height="1946.0" rx="12" ry="12" class="layerBackground"/>
 </g>
 <g class="folderLayer">
-<rect x="404.0" y="358.0" width="348.0" height="98.0" rx="12" ry="12" class="layerBackground" stroke-dasharray="4 2"/>
+<rect x="404.0" y="358.0" width="348.0" height="98.0" rx="12" ry="12" class="layerBackgroundVirtualFolder" stroke-dasharray="4 2"/>
 </g>
 <g class="folderLayer">
 <rect x="404.0" y="480.0" width="348.0" height="1724.0" rx="12" ry="12" class="layerBackground"/>

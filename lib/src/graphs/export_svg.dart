@@ -162,7 +162,7 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
   for (final entry in nodePositions.entries) {
     final pos = entry.value;
     buffer.writeln(
-        '<rect x="${pos.x}" y="${pos.y}" width="$nodeWidth" height="$nodeHeight" class="nodeRect"/>');
+        '<rect x="${pos.x}" y="${pos.y}" width="$nodeWidth" height="$nodeHeight" class="fileNode"/>');
   }
 
   // 4. Draw Edges
