@@ -208,9 +208,10 @@ class AnalyzeFolder {
   }
 
   /// Reads the project version from pubspec.yaml if present.
+  /// Walks up the parent chain to find pubspec.yaml when not in the immediate directory.
   String _readProjectVersion(Directory dir) {
-    final pubspecFile = File(p.join(dir.path, 'pubspec.yaml'));
-    if (!pubspecFile.existsSync()) {
+    final pubspecFile = _findPubspecFile(dir);
+    if (pubspecFile == null) {
       return 'unknown';
     }
 
@@ -229,9 +230,10 @@ class AnalyzeFolder {
   }
 
   /// Reads the project name from pubspec.yaml if present.
+  /// Walks up the parent chain to find pubspec.yaml when not in the immediate directory.
   String _readProjectName(Directory dir) {
-    final pubspecFile = File(p.join(dir.path, 'pubspec.yaml'));
-    if (!pubspecFile.existsSync()) {
+    final pubspecFile = _findPubspecFile(dir);
+    if (pubspecFile == null) {
       return 'unknown';
     }
 
@@ -247,6 +249,48 @@ class AnalyzeFolder {
     }
 
     return 'unknown';
+  }
+
+  /// Finds pubspec.yaml by walking up the parent chain from the given directory.
+  ///
+  /// This method searches for pubspec.yaml in the current directory first,
+  /// then walks up to parent directories until it finds the file or reaches
+  /// guardrail limits to prevent infinite loops or excessive traversal.
+  ///
+  /// [dir] The starting directory to search from.
+  ///
+  /// Returns the File object for pubspec.yaml if found, null otherwise.
+  File? _findPubspecFile(Directory dir) {
+    // Maximum number of parent directories to traverse
+    const maxParentLevels = 10;
+
+    // Guardrail: stop at filesystem root
+    String currentPath = p.normalize(p.absolute(dir.path));
+    String? previousPath;
+
+    for (int level = 0; level < maxParentLevels; level++) {
+      // Check if we've reached the root directory (no change in path after normalization)
+      if (previousPath != null && currentPath == previousPath) {
+        break;
+      }
+      previousPath = currentPath;
+
+      // Check for pubspec.yaml in current directory
+      final pubspecFile = File(p.join(currentPath, 'pubspec.yaml'));
+      if (pubspecFile.existsSync()) {
+        return pubspecFile;
+      }
+
+      // Move to parent directory
+      final parentPath = p.dirname(currentPath);
+      if (parentPath == currentPath) {
+        // We've reached the root directory
+        break;
+      }
+      currentPath = parentPath;
+    }
+
+    return null;
   }
 
   /// Counts the number of comment lines in a Dart file.
