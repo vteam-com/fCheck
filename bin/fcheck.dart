@@ -7,6 +7,7 @@ import 'package:fcheck/src/graphs/export_svg.dart';
 import 'package:fcheck/src/graphs/export_svg_folders.dart';
 import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/models/version.dart';
+import 'package:path/path.dart' as p;
 
 /// Main entry point for the fcheck command-line tool.
 ///
@@ -189,7 +190,18 @@ void main(List<String> arguments) {
       if (generateFolderSvg) {
         // Generate folder-based SVG visualization
         // Use hierarchical layout to preserve parent-child nesting
-        final folderSvgContent = exportGraphSvgFolders(layersResult);
+        String inputFolderName = p.basename(directory.absolute.path);
+        if (inputFolderName.isEmpty || inputFolderName == '.') {
+          // Get the parent directory name as fallback
+          inputFolderName = p.basename(directory.absolute.parent.path);
+        }
+
+        final folderSvgContent = exportGraphSvgFolders(
+          layersResult,
+          projectName: metrics.projectName,
+          projectVersion: metrics.version,
+          inputFolderName: inputFolderName,
+        );
         final folderSvgFile = File('${directory.path}/layers_folders.svg');
         folderSvgFile.writeAsStringSync(folderSvgContent);
         print('Folder-based SVG layers graph saved to: ${folderSvgFile.path}');

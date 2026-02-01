@@ -174,9 +174,17 @@ String? _commonTopLevelSegment(List<String> paths) {
 /// Generates a hierarchical SVG visualization of the dependency graph.
 ///
 /// [layersResult] The result of layers analysis containing the dependency graph.
+/// [projectName] The name of the project from pubspec.yaml.
+/// [projectVersion] The version of the project from pubspec.yaml.
+/// [inputFolderName] The name of the input folder being analyzed.
 ///
 /// Returns an SVG string representing the hierarchical folder dependency graph.
-String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
+String exportGraphSvgFolders(
+  LayersAnalysisResult layersResult, {
+  String projectName = 'unknown',
+  String projectVersion = 'unknown',
+  String inputFolderName = '.',
+}) {
   final dependencyGraph = layersResult.dependencyGraph;
 
   if (dependencyGraph.isEmpty) {
@@ -346,6 +354,9 @@ String exportGraphSvgFolders(LayersAnalysisResult layersResult) {
     fileItemHeight: fileItemHeight,
     fileItemSpacing: fileItemSpacing,
     fileTopPadding: fileTopPadding,
+    projectName: projectName,
+    projectVersion: projectVersion,
+    inputFolderName: inputFolderName,
   );
 
   // Calculate the horizontal start of the folder column and file lane for aligned vertical edges
@@ -1340,6 +1351,9 @@ void _drawHierarchicalFolders(
   required double fileItemHeight,
   required double fileItemSpacing,
   required double fileTopPadding,
+  required String projectName,
+  required String projectVersion,
+  required String inputFolderName,
 }) {
   void drawFolder(FolderNode folder) {
     final pos = positions[folder.fullPath]!;
@@ -1375,7 +1389,19 @@ void _drawHierarchicalFolders(
 
     final indentLevels = depth > 0 ? depth : 0;
     final indent = List.filled(indentLevels, '  ').join();
-    final titleText = '$indent${folder.name}';
+
+    // For root folder (depth 0), show project info instead of folder name
+    String titleText;
+    if (depth == 0 && folder.name == '.') {
+      // Show project name and version, omit folder name if it matches project name
+      if (inputFolderName.toLowerCase() == projectName.toLowerCase()) {
+        titleText = '$projectName v$projectVersion';
+      } else {
+        titleText = '$inputFolderName ($projectName v$projectVersion)';
+      }
+    } else {
+      titleText = '$indent${folder.name}';
+    }
     titleVisuals.add(_TitleVisual(pos.x + dim.width / halfDivisor,
         pos.y + titleVerticalOffset, titleText));
     buffer.writeln('</g>');
@@ -1604,8 +1630,34 @@ void _drawFilePanels(StringBuffer buffer, List<_FileVisual> visuals) {
 void _drawTitleVisuals(StringBuffer buffer, List<_TitleVisual> visuals) {
   buffer.writeln('<g class="folderTitleLayer">');
   for (final v in visuals) {
-    buffer.writeln(
-        '<text x="${v.x}" y="${v.y}" class="layerTitle">${v.text}</text>');
+    if (v.text.contains('|')) {
+      // Multi-line text for root folder (legacy format)
+      final parts = v.text.split('|');
+      buffer.writeln(
+          '<text x="${v.x}" y="${v.y}" class="layerTitle" text-anchor="middle">');
+      for (int i = 0; i < parts.length; i++) {
+        final yOffset = i * 16; // Line height spacing
+        buffer.writeln(
+            '  <tspan x="${v.x}" dy="${i == 0 ? 0 : yOffset}">${parts[i]}</tspan>');
+      }
+      buffer.writeln('</text>');
+    } else if (v.text.contains('(') && v.text.contains(')')) {
+      // Multi-line text for root folder: folder (project v version)
+      final openParen = v.text.indexOf('(');
+      final closeParen = v.text.indexOf(')');
+      final firstLine = v.text.substring(0, openParen).trim();
+      final secondLine = v.text.substring(openParen + 1, closeParen).trim();
+
+      buffer.writeln(
+          '<text x="${v.x}" y="${v.y}" class="layerTitle" text-anchor="middle">');
+      buffer.writeln('  <tspan x="${v.x}" dy="0">$firstLine</tspan>');
+      buffer.writeln('  <tspan x="${v.x}" dy="16">$secondLine</tspan>');
+      buffer.writeln('</text>');
+    } else {
+      // Single line text for regular folders or when folder name matches project name
+      buffer.writeln(
+          '<text x="${v.x}" y="${v.y}" class="layerTitle">${v.text}</text>');
+    }
   }
   buffer.writeln('</g>');
 }
