@@ -1,6 +1,8 @@
+// ignore: fcheck_secrets
 import 'package:fcheck/src/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/layers/layers_issue.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
+import 'package:fcheck/src/secrets/secret_issue.dart';
 import 'package:fcheck/src/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/sort/sort.dart';
 
@@ -27,6 +29,9 @@ class ProjectMetrics {
 
   /// Metrics for each individual Dart file.
   final List<FileMetrics> fileMetrics;
+
+  /// List of secret issues found in the project.
+  final List<SecretIssue> secretIssues;
 
   /// List of hardcoded string issues found in the project.
   final List<HardcodedStringIssue> hardcodedStringIssues;
@@ -64,10 +69,26 @@ class ProjectMetrics {
   /// The name of the analyzed project as defined in its pubspec.yaml.
   final String projectName;
 
-  /// Creates a new [ProjectMetrics] instance.
+  /// Creates a new ProjectMetrics instance.
   ///
-  /// All parameters are required and represent the aggregated metrics
-  /// from analyzing all Dart files in a project.
+  /// [totalFolders] Total number of folders in the project.
+  /// [totalFiles] Total number of files in the project.
+  /// [totalDartFiles] Total number of Dart files in the project.
+  /// [totalLinesOfCode] Total lines of code across all Dart files.
+  /// [totalCommentLines] Total comment lines across all Dart files.
+  /// [fileMetrics] Metrics for each individual Dart file.
+  /// [secretIssues] List of secret issues found in the project.
+  /// [hardcodedStringIssues] List of hardcoded string issues found in the project.
+  /// [magicNumberIssues] List of detected magic number literals across the project.
+  /// [sourceSortIssues] List of source sorting issues found in the project.
+  /// [layersIssues] List of layers architecture issues found in the project.
+  /// [layersEdgeCount] Total number of dependency edges in the layers graph.
+  /// [layersCount] Number of layers in the project.
+  /// [dependencyGraph] The dependency graph used for analysis.
+  /// [projectName] The name of the analyzed project.
+  /// [version] The version of the analyzed project.
+  /// [usesLocalization] Whether the project appears to be using Flutter localization.
+  /// [excludedFilesCount] Number of files successfully skipped based on exclusion glob patterns.
   ProjectMetrics({
     required this.totalFolders,
     required this.totalFiles,
@@ -75,6 +96,7 @@ class ProjectMetrics {
     required this.totalLinesOfCode,
     required this.totalCommentLines,
     required this.fileMetrics,
+    required this.secretIssues,
     required this.hardcodedStringIssues,
     required this.magicNumberIssues,
     required this.sourceSortIssues,
@@ -101,6 +123,7 @@ class ProjectMetrics {
           'commentRatio': commentRatio,
           'hardcodedStrings': hardcodedStringIssues.length,
           'magicNumbers': magicNumberIssues.length,
+          'secretIssues': secretIssues.length,
         },
         'layers': {
           'count': layersCount,
@@ -113,6 +136,7 @@ class ProjectMetrics {
             hardcodedStringIssues.map((i) => i.toJson()).toList(),
         'magicNumbers': magicNumberIssues.map((i) => i.toJson()).toList(),
         'sourceSorting': sourceSortIssues.map((i) => i.toJson()).toList(),
+        'secretIssues': secretIssues.map((i) => i.toJson()).toList(),
         'localization': {'usesLocalization': usesLocalization},
       };
 
@@ -140,15 +164,11 @@ class ProjectMetrics {
   /// - Hardcoded string issues
   /// - Source sorting issues
   /// - Layers architecture stats
+  /// - Secret issues
   ///
-  /// [silent] If true, suppresses console output (useful for testing)
-  /// [toolVersion] Optional fCheck CLI version to show in the banner.
-  void printReport({bool silent = false, String? toolVersion}) {
-    if (silent) return;
-
-    final bannerVersion =
-        (toolVersion != null && toolVersion.isNotEmpty) ? ' v$toolVersion' : '';
-    print('↓ -------- fCheck$bannerVersion -------- ↓');
+  /// It does not return anything.
+  void printReport([String? toolVersion]) {
+    print('↓ -------- fCheck v${toolVersion ?? 'unknown'} -------- ↓');
     print('Project          : $projectName (version: $version)');
     print('Folders          : $totalFolders');
     print('Files            : $totalFiles');
@@ -228,6 +248,20 @@ class ProjectMetrics {
 
     print('');
 
+    if (secretIssues.isEmpty) {
+      print('✅ No secrets detected.');
+    } else {
+      print('⚠️ ${secretIssues.length} potential secrets detected:');
+      for (var issue in secretIssues.take(_maxIssuesToShow)) {
+        print('  - $issue');
+      }
+      if (secretIssues.length > _maxIssuesToShow) {
+        print('  ... and ${secretIssues.length - _maxIssuesToShow} more');
+      }
+    }
+
+    print('');
+
     if (layersIssues.isEmpty) {
       print('✅ All layers architecture complies with standards.');
     } else {
@@ -242,4 +276,14 @@ class ProjectMetrics {
     }
     print('↑ ----------------------- ↑');
   }
+
+  /// Converts all secret issues to a JSON-compatible map.
+  List<Map<String, dynamic>> get secretIssuesJson => secretIssues
+      .map((issue) => {
+            'filePath': issue.filePath,
+            'lineNumber': issue.lineNumber,
+            'secretType': issue.secretType,
+            'value': issue.value,
+          })
+      .toList();
 }

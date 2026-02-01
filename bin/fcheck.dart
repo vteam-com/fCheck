@@ -153,7 +153,7 @@ void main(List<String> arguments) {
     if (outputJson) {
       print(const JsonEncoder.withIndent('  ').convert(metrics.toJson()));
     } else {
-      metrics.printReport(toolVersion: packageVersion);
+      metrics.printReport(packageVersion);
     }
 
     // Generate layer analysis result for visualization

@@ -1,3 +1,5 @@
+// ignore: fcheck_secrets
+
 // A Flutter/Dart code quality analysis tool.
 //
 // This library provides functionality to analyze Flutter and Dart projects
@@ -19,11 +21,14 @@
 // ```
 
 import 'dart:io';
+import 'package:analyzer/dart/analysis/features.dart';
+import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/layers/layers_results.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
+import 'package:fcheck/src/secrets/secret_analyzer.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 import 'src/hardcoded_strings/hardcoded_string_analyzer.dart';
@@ -142,18 +147,19 @@ class AnalyzeFolder {
       excludePatterns: excludePatterns,
     );
 
-    // Detect whether the project is localized (used to classify hardcoded strings)
+    // Analyze for secrets
+    // ignore: fcheck_secrets
+    final secretAnalyzer = SecretAnalyzer();
+    final secretIssues = secretAnalyzer.analyzeDirectory(
+      projectDir,
+      excludePatterns: excludePatterns,
+    );
+
     final usesLocalization = detectLocalization(dartFiles);
 
     return ProjectMetrics(
-      totalFolders: FileUtils.countFolders(
-        projectDir,
-        excludePatterns: excludePatterns,
-      ),
-      totalFiles: FileUtils.countAllFiles(
-        projectDir,
-        excludePatterns: excludePatterns,
-      ),
+      totalFolders: FileUtils.countFolders(projectDir),
+      totalFiles: FileUtils.countAllFiles(projectDir),
       totalDartFiles: dartFiles.length,
       totalLinesOfCode: totalLoc,
       totalCommentLines: totalComments,
@@ -169,128 +175,130 @@ class AnalyzeFolder {
       version: projectVersion,
       usesLocalization: usesLocalization,
       excludedFilesCount: excludedCount,
+      secretIssues: secretIssues,
     );
   }
 
-  /// Analyzes a single Dart file and returns its quality metrics.
+  /// Analyzes a single Dart file and returns its metrics.
   ///
-  /// This method parses the file using the Dart analyzer and extracts:
-  /// - Lines of code count
-  /// - Comment lines count
-  /// - Number of classes declared
-  /// - Whether it contains StatefulWidget classes
+  /// This method parses a single Dart file using the Dart analyzer and
+  /// extracts quality metrics including:
+  /// - Lines of code
+  /// - Comment lines
+  /// - Class count
+  /// - StatefulWidget detection
+  /// - One class per file compliance
   ///
   /// [file] The Dart file to analyze.
   ///
-  /// Returns a [FileMetrics] instance with the analysis results for this file.
+  /// Returns a [FileMetrics] object containing quality metrics for the file.
   FileMetrics analyzeFile(File file) {
     final content = file.readAsStringSync();
-    final result = parseString(content: content);
-    final unit = result.unit;
+    final ParseStringResult result = parseString(
+      content: content,
+      featureSet: FeatureSet.latestLanguageVersion(),
+    );
 
-    final visitor = _QualityVisitor();
+    final hasIgnoreDirective = hasIgnoreOneClassPerFileDirective(content);
+
+    // Skip files with parse errors
+    if (result.errors.isNotEmpty) {
+      return FileMetrics(
+        path: file.path,
+        linesOfCode: 0,
+        commentLines: 0,
+        classCount: 0,
+        isStatefulWidget: false,
+        ignoreOneClassPerFile: hasIgnoreDirective,
+      );
+    }
+
+    final CompilationUnit unit = result.unit;
+    final List<String> lines = content.split('\n');
+    final int commentLines = countCommentLines(unit, lines);
+    final _QualityVisitor visitor = _QualityVisitor();
     unit.accept(visitor);
-
-    // Count lines of code and comments
-    final lines = content.split('\n');
-    int loc = lines.length;
-    int commentLines = countCommentLines(unit, lines);
-    final ignoreOneClassPerFile = hasIgnoreOneClassPerFileDirective(content);
 
     return FileMetrics(
       path: file.path,
-      linesOfCode: loc,
+      linesOfCode: lines.length,
       commentLines: commentLines,
       classCount: visitor.classCount,
       isStatefulWidget: visitor.hasStatefulWidget,
-      ignoreOneClassPerFile: ignoreOneClassPerFile,
+      ignoreOneClassPerFile: hasIgnoreDirective,
     );
   }
 
-  /// Reads the project version from pubspec.yaml if present.
-  /// Walks up the parent chain to find pubspec.yaml when not in the immediate directory.
-  String _readProjectVersion(Directory dir) {
-    final pubspecFile = _findPubspecFile(dir);
-    if (pubspecFile == null) {
-      return 'unknown';
-    }
-
-    try {
-      final content = pubspecFile.readAsStringSync();
-      final yaml = loadYaml(content) as YamlMap?;
-      final versionValue = yaml?['version'];
-      if (versionValue is String && versionValue.isNotEmpty) {
-        return versionValue;
-      }
-    } catch (_) {
-      // ignore parsing errors and fall through to unknown
-    }
-
-    return 'unknown';
-  }
-
-  /// Reads the project name from pubspec.yaml if present.
-  /// Walks up the parent chain to find pubspec.yaml when not in the immediate directory.
-  String _readProjectName(Directory dir) {
-    final pubspecFile = _findPubspecFile(dir);
-    if (pubspecFile == null) {
-      return 'unknown';
-    }
-
-    try {
-      final content = pubspecFile.readAsStringSync();
-      final yaml = loadYaml(content) as YamlMap?;
-      final nameValue = yaml?['name'];
-      if (nameValue is String && nameValue.isNotEmpty) {
-        return nameValue;
-      }
-    } catch (_) {
-      // ignore parsing errors and fall through to unknown
-    }
-
-    return 'unknown';
-  }
-
-  /// Finds pubspec.yaml by walking up the parent chain from the given directory.
+  /// Reads the project name from pubspec.yaml.
   ///
-  /// This method searches for pubspec.yaml in the current directory first,
-  /// then walks up to parent directories until it finds the file or reaches
-  /// guardrail limits to prevent infinite loops or excessive traversal.
+  /// This method looks for the 'name' field in the pubspec.yaml file
+  /// and returns it. Searches up the directory tree from the given directory.
+  /// Returns 'unknown' if the file cannot be read or the name field is missing.
   ///
-  /// [dir] The starting directory to search from.
+  /// [projectDir] The directory to start searching from.
   ///
-  /// Returns the File object for pubspec.yaml if found, null otherwise.
-  File? _findPubspecFile(Directory dir) {
-    // Maximum number of parent directories to traverse
-    const maxParentLevels = 10;
+  /// Returns the project name as defined in pubspec.yaml or 'unknown'.
+  String _readProjectName(Directory projectDir) {
+    Directory? currentDir = projectDir;
 
-    // Guardrail: stop at filesystem root
-    String currentPath = p.normalize(p.absolute(dir.path));
-    String? previousPath;
-
-    for (int level = 0; level < maxParentLevels; level++) {
-      // Check if we've reached the root directory (no change in path after normalization)
-      if (previousPath != null && currentPath == previousPath) {
-        break;
-      }
-      previousPath = currentPath;
-
-      // Check for pubspec.yaml in current directory
-      final pubspecFile = File(p.join(currentPath, 'pubspec.yaml'));
+    // Search up the directory tree for pubspec.yaml
+    while (currentDir != null) {
+      final pubspecFile = File(p.join(currentDir.path, 'pubspec.yaml'));
       if (pubspecFile.existsSync()) {
-        return pubspecFile;
+        try {
+          final yaml = loadYaml(pubspecFile.readAsStringSync());
+          return yaml['name'] ?? 'unknown';
+        } catch (e) {
+          return 'unknown';
+        }
       }
 
-      // Move to parent directory
-      final parentPath = p.dirname(currentPath);
-      if (parentPath == currentPath) {
+      // Move up to parent directory
+      final parent = currentDir.parent;
+      if (parent.path == currentDir.path) {
         // We've reached the root directory
         break;
       }
-      currentPath = parentPath;
+      currentDir = parent;
     }
 
-    return null;
+    return 'unknown';
+  }
+
+  /// Reads the project version from pubspec.yaml.
+  ///
+  /// This method looks for the 'version' field in the pubspec.yaml file
+  /// and returns it. Searches up the directory tree from the given directory.
+  /// Returns 'unknown' if the file cannot be read or the version field is missing.
+  ///
+  /// [projectDir] The directory to start searching from.
+  ///
+  /// Returns the project version as defined in pubspec.yaml or 'unknown'.
+  String _readProjectVersion(Directory projectDir) {
+    Directory? currentDir = projectDir;
+
+    // Search up the directory tree for pubspec.yaml
+    while (currentDir != null) {
+      final pubspecFile = File(p.join(currentDir.path, 'pubspec.yaml'));
+      if (pubspecFile.existsSync()) {
+        try {
+          final yaml = loadYaml(pubspecFile.readAsStringSync());
+          return yaml['version'] ?? 'unknown';
+        } catch (e) {
+          return 'unknown';
+        }
+      }
+
+      // Move up to parent directory
+      final parent = currentDir.parent;
+      if (parent.path == currentDir.path) {
+        // We've reached the root directory
+        break;
+      }
+      currentDir = parent;
+    }
+
+    return 'unknown';
   }
 
   /// Counts the number of comment lines in a Dart file.

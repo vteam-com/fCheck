@@ -29,6 +29,7 @@ void main() {
         totalLinesOfCode: 80,
         totalCommentLines: 15,
         fileMetrics: fileMetrics,
+        secretIssues: [],
         hardcodedStringIssues: [],
         magicNumberIssues: [],
         sourceSortIssues: [],
@@ -57,6 +58,7 @@ void main() {
         totalLinesOfCode: 100,
         totalCommentLines: 25,
         fileMetrics: [],
+        secretIssues: [],
         hardcodedStringIssues: [],
         magicNumberIssues: [],
         sourceSortIssues: [],
@@ -79,6 +81,7 @@ void main() {
         totalLinesOfCode: 0,
         totalCommentLines: 0,
         fileMetrics: [],
+        secretIssues: [],
         hardcodedStringIssues: [],
         magicNumberIssues: [],
         sourceSortIssues: [],
@@ -118,6 +121,7 @@ void main() {
         totalLinesOfCode: 100,
         totalCommentLines: 15,
         fileMetrics: fileMetrics,
+        secretIssues: [],
         hardcodedStringIssues: [],
         magicNumberIssues: [],
         sourceSortIssues: [],
@@ -129,8 +133,8 @@ void main() {
         version: '1.0.0',
       );
 
-      // Test that printReport doesn't throw an error (with silent output)
-      expect(() => projectMetrics.printReport(silent: true), returnsNormally);
+      // Test that printReport doesn't throw an error
+      expect(() => projectMetrics.printReport(), returnsNormally);
     });
   });
 }

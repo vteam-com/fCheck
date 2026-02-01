@@ -16,6 +16,7 @@ fcheck /path/to/your/project --svg
 
 fcheck analyzes your Flutter/Dart project and provides:
 
+- **⚠️ No Duplication**: Unlike Flutter LINT or Dart compiler, fcheck focuses on unique architectural and structural analysis
 - **📊 Project Overview**: Files, folders, lines of code, comment ratios
 - **✅ Code Quality**: One class per file compliance, member sorting
 - **🔍 Issue Detection**: Hardcoded strings, magic numbers, layer violations
@@ -173,6 +174,7 @@ By default, **fcheck** excludes common non-project directories:
 ### Localization Filtering
 
 To reduce noise and avoid cyclic dependency displays from generated code, **fcheck** automatically filters out generated localization files:
+
 - 🙈 **Excluded**: `app_localizations_*.dart` and `app_localization_*.dart` (generated locale-specific files)
 - ✅ **Included**: `app_localizations.dart` (the main entry point)
 
@@ -197,6 +199,7 @@ Add at the top of any Dart file:
 // ignore: fcheck_one_class_per_file
 // ignore: fcheck_magic_numbers
 // ignore: fcheck_hardcoded_strings
+// ignore: fcheck_secrets
 // ignore: fcheck_layers
 ```
 
