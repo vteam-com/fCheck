@@ -7,6 +7,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.3] - 2026-02-01
+
+### Added
+
+- 🔍 **Enhanced pubspec.yaml Detection**: Implemented parent directory traversal to find pubspec.yaml when analyzing from subdirectories, ensuring project name and version are always available regardless of analysis starting point
+- 📊 **Improved SVG Folder Display**: Enhanced folder-based SVG visualization to show project name, version, and input folder information instead of generic "." root folder
+- 🎨 **Smart Folder Title Formatting**: Implemented intelligent title display - shows only "Project vVersion" when folder name matches project name, or multi-line format "Folder\nProject vVersion" when they differ
+
+### Changed
+
+- 📁 **Folder Name Extraction**: Improved folder name detection logic using proper path handling to ensure accurate folder names in SVG outputs
+- 🎯 **SVG Text Rendering**: Enhanced SVG text rendering with proper multi-line support using `<tspan>` elements for better visual hierarchy
+
 ## [0.7.2] - 2026-01-31
 
 ### Changed
