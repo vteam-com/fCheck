@@ -2,7 +2,7 @@
 library;
 
 import 'dart:math';
-import 'package:fcheck/src/layers/layers_results.dart';
+import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/graphs/svg_common.dart';
 import 'package:fcheck/src/graphs/svg_styles.dart';
 import 'package:fcheck/src/graphs/badge_model.dart';

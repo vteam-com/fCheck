@@ -1,7 +1,7 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'hardcoded_string_issue.dart';
-import '../config/config_ignore_directives.dart';
+import '../../config/config_ignore_directives.dart';
 
 /// A visitor that traverses the AST to detect hardcoded strings.
 ///

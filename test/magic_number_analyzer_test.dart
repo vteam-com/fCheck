@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:fcheck/src/magic_numbers/magic_number_analyzer.dart';
+import 'package:fcheck/src/analyzers/magic_numbers/magic_number_analyzer.dart';
 import 'package:test/test.dart';
 
 void main() {

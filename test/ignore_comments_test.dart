@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:test/test.dart';
-import 'package:fcheck/src/magic_numbers/magic_number_analyzer.dart';
-import 'package:fcheck/src/hardcoded_strings/hardcoded_string_analyzer.dart';
-import 'package:fcheck/src/layers/layers_analyzer.dart';
+import 'package:fcheck/src/analyzers/magic_numbers/magic_number_analyzer.dart';
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_analyzer.dart';
+import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
 import 'package:path/path.dart' as p;
 
 void main() {

@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:fcheck/src/layers/layers_analyzer.dart';
-import 'package:fcheck/src/layers/layers_issue.dart';
+import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
+import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -1,4 +1,4 @@
-import 'package:fcheck/src/layers/layers_results.dart';
+import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 
 /// Shared helpers for preparing dependency graphs for text/diagram renderers.
 ///

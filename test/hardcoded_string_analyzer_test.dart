@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:fcheck/src/hardcoded_strings/hardcoded_string_analyzer.dart';
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_analyzer.dart';
 import 'package:test/test.dart';
 
 void main() {

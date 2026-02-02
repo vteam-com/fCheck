@@ -5,8 +5,8 @@ import 'package:analyzer/dart/analysis/utilities.dart';
 
 import 'magic_number_issue.dart';
 import 'magic_number_visitor.dart';
-import '../models/file_utils.dart';
-import '../config/config_ignore_directives.dart';
+import '../../models/file_utils.dart';
+import '../../config/config_ignore_directives.dart';
 
 /// Analyzer that detects magic number literals in Dart source files.
 class MagicNumberAnalyzer {

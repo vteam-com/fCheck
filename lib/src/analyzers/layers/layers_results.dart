@@ -1,4 +1,4 @@
-import 'package:fcheck/src/layers/layers_issue.dart';
+import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 
 /// Represents the result of layers analysis.
 ///

@@ -2,7 +2,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:glob/glob.dart';
-import 'package:fcheck/src/secrets/secret_issue.dart';
+import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 
 /// Advanced Secret Analyzer implementing SECRET.md rules
 class SecretAnalyzer {
@@ -120,16 +120,6 @@ class SecretAnalyzer {
       ));
     }
 
-    // Portugal Phone Numbers
-    if (_detectPortugalPhone(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'pt_phone',
-        value: 'Portugal phone number detected',
-      ));
-    }
-
     // Stripe Keys
     if (_detectStripeKey(line)) {
       findings.add(SecretIssue(
@@ -206,11 +196,6 @@ class SecretAnalyzer {
   bool _detectEmail(String line) {
     final regex = RegExp(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}',
         caseSensitive: false);
-    return regex.hasMatch(line);
-  }
-
-  bool _detectPortugalPhone(String line) {
-    final regex = RegExp(r'\+?351\s?[1-9][0-9]{8}|[1-9][0-9]{8}');
     return regex.hasMatch(line);
   }
 
