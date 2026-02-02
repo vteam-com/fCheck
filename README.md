@@ -16,17 +16,18 @@ fcheck /path/to/your/project --svg
 
 fcheck analyzes your Flutter/Dart project and provides:
 
-- **⚡ High Performance**: 67%+ faster analysis with unified file traversal
+- **⚡ High Performance**: 67%+ faster analysis with unified file traversal and execution timing
 - **⚠️ No Duplication**: Unlike Flutter LINT or Dart compiler, fcheck focuses on unique architectural and structural analysis
 - **📊 Project Overview**: Files, folders, lines of code, comment ratios
 - **✅ Code Quality**: One class per file compliance, member sorting
 - **🔍 Issue Detection**: Hardcoded strings, magic numbers, layer violations, secrets
+- **⏱️ Performance Tracking**: Shows exact execution time for analysis runs
 - **🌐 Visualizations**: SVG, Mermaid, and PlantUML dependency graphs
 
 ## 📈 Example Output
 
 ```text
-↓ -------- fCheck v0.8.0 -------- ↓
+↓ --------------------------------- fCheck 0.8.1 --------------------------------- ↓
 Project          : my_app (version: 1.0.0)
 Folders          : 15
 Files            : 89
@@ -39,13 +40,14 @@ Magic Numbers    : 2
 Secrets          : 0
 Layers           : 5
 Dependencies     : 12
-
+↓ ····································· Lists ····································· ↓
 ✅ All files comply with the "one class per file" rule.
+
 ⚠️ 6 potential hardcoded strings detected
 🔧 2 Flutter classes have unsorted members
 ✅ No secrets detected in your codebase.
 ✅ All layers architecture complies with standards.
-↑ ----------------------- ↑
+↑ --------------------------- fCheck completed (0.42s) --------------------------- ↑
 ```
 
 ## ⚡ Performance Optimization
@@ -64,6 +66,7 @@ fcheck now features **unified file traversal** that dramatically improves analys
 - **67-72% faster** analysis on typical projects
 - **Scales better** with larger codebases
 - **Same results** with better performance
+- **Built-in timing** to track analysis speed
 
 ### Usage
 
@@ -76,6 +79,21 @@ fcheck /path/to/project
 # All existing features work with the optimization
 fcheck --svg --fix
 ```
+
+## ⏱️ Execution Timing
+
+fcheck automatically tracks and displays how long each analysis takes:
+
+```text
+↑ --------------------------- fCheck completed (0.42s) --------------------------- ↑
+```
+
+### Timing Features
+
+- **Precise Measurement**: Shows elapsed time in seconds with 2 decimal places
+- **Always Visible**: Displayed in footer for all output modes (except JSON)
+- **Performance Tracking**: Helps monitor analysis performance over time
+- **JSON Compatible**: Automatically suppressed in JSON output to maintain clean format
 
 ## 🛠️ Installation
 

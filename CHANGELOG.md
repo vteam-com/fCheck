@@ -7,6 +7,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2026-02-02
+
+### Added
+
+- ⏱️ **Execution Timing**: Added elapsed time display in the footer showing how long the analysis took to run
+- 📊 **Performance Visibility**: Footer now shows "fCheck completed (X.XXs)" to help users track analysis performance
+- 🎯 **JSON Compatibility**: Timing display is automatically suppressed in JSON output mode to maintain clean format
+
 ## [0.8.0] - 2026-02-02
 
 ### ⚡ **Major Performance Optimization**
