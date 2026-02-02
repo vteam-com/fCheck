@@ -6,6 +6,7 @@ import 'package:fcheck/src/graphs/export_plantuml.dart';
 import 'package:fcheck/src/graphs/export_svg.dart';
 import 'package:fcheck/src/graphs/export_svg_folders.dart';
 import 'package:fcheck/fcheck.dart';
+import 'package:fcheck/src/metrics/output.dart';
 import 'package:fcheck/src/models/version.dart';
 import 'package:path/path.dart' as p;
 
@@ -163,28 +164,13 @@ void main(List<String> arguments) {
         generateMermaid ||
         generatePlantUML ||
         generateFolderSvg) {
+      printDivider('Output files', dot: true);
       if (generateSvg) {
         // Generate SVG visualization
         final svgContent = exportGraphSvg(layersResult);
         final svgFile = File('${directory.path}/layers.svg');
         svgFile.writeAsStringSync(svgContent);
-        print('SVG layers graph saved to: ${svgFile.path}');
-      }
-
-      if (generateMermaid) {
-        // Generate Mermaid visualization
-        final mermaidContent = exportGraphMermaid(layersResult);
-        final mermaidFile = File('${directory.path}/layers.mmd');
-        mermaidFile.writeAsStringSync(mermaidContent);
-        print('Mermaid layers graph saved to: ${mermaidFile.path}');
-      }
-
-      if (generatePlantUML) {
-        // Generate PlantUML visualization
-        final plantUMLContent = exportGraphPlantUML(layersResult);
-        final plantUMLFile = File('${directory.path}/layers.puml');
-        plantUMLFile.writeAsStringSync(plantUMLContent);
-        print('PlantUML layers graph saved to: ${plantUMLFile.path}');
+        print('SVG layers         : ${svgFile.path}');
       }
 
       if (generateFolderSvg) {
@@ -204,8 +190,26 @@ void main(List<String> arguments) {
         );
         final folderSvgFile = File('${directory.path}/layers_folders.svg');
         folderSvgFile.writeAsStringSync(folderSvgContent);
-        print('Folder-based SVG layers graph saved to: ${folderSvgFile.path}');
+        print('SVG layers (folder): ${folderSvgFile.path}');
       }
+
+      if (generateMermaid) {
+        // Generate Mermaid visualization
+        final mermaidContent = exportGraphMermaid(layersResult);
+        final mermaidFile = File('${directory.path}/layers.mmd');
+        mermaidFile.writeAsStringSync(mermaidContent);
+        print('Mermaid layers.    : ${mermaidFile.path}');
+      }
+
+      if (generatePlantUML) {
+        // Generate PlantUML visualization
+        final plantUMLContent = exportGraphPlantUML(layersResult);
+        final plantUMLFile = File('${directory.path}/layers.puml');
+        plantUMLFile.writeAsStringSync(plantUMLContent);
+        print('PlantUML layers.   : ${plantUMLFile.path}');
+      }
+
+      printDivider('fCheck end', downPointer: false);
     }
   } catch (e, stack) {
     print('Error during analysis: $e');

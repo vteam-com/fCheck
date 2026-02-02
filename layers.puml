@@ -1,0 +1,128 @@
+@startuml Architecture
+!theme plain
+
+component [src/analyzers/layers/layers_issue.dart\n↓3 ↑0] as compsrcanalyzerslayerslayersissue
+component [src/config/config_ignore_directives.dart\n↓7 ↑0] as compsrcconfigconfigignoredirectives
+component [src/analyzers/sorted/sort_analyzer.dart\n↓1 ↑4] as compsrcanalyzerssortedsortanalyzer
+component [src/analyzers/hardcoded_strings/hardcoded_string_issue.dart\n↓5 ↑0] as compsrcanalyzershardcodedstringshardcodedstringissue
+component [src/analyzers/magic_numbers/magic_number_issue.dart\n↓5 ↑0] as compsrcanalyzersmagicnumbersmagicnumberissue
+component [src/analyzers/layers/layers_results.dart\n↓7 ↑1] as compsrcanalyzerslayerslayersresults
+component [src/graphs/badge_model.dart\n↓3 ↑0] as compsrcgraphsbadgemodel
+component [src/metrics/file_metrics.dart\n↓2 ↑0] as compsrcmetricsfilemetrics
+component [src/analyzer_runner/analysis_file_context.dart\n↓3 ↑1] as compsrcanalyzerrunneranalysisfilecontext
+component [src/analyzers/layers/layers_visitor.dart\n↓2 ↑0] as compsrcanalyzerslayerslayersvisitor
+component [src/analyzers/sorted/sort.dart\n↓2 ↑4] as compsrcanalyzerssortedsort
+component [src/analyzers/secrets/secret_issue.dart\n↓4 ↑0] as compsrcanalyzerssecretssecretissue
+component [src/metrics/output.dart\n↓2 ↑0] as compsrcmetricsoutput
+component [src/analyzer_runner/analyzer_runner_result.dart\n↓1 ↑0] as compsrcanalyzerrunneranalyzerrunnerresult
+component [src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart\n↓2 ↑2] as compsrcanalyzershardcodedstringshardcodedstringvisitor
+component [src/analyzers/magic_numbers/magic_number_visitor.dart\n↓2 ↑2] as compsrcanalyzersmagicnumbersmagicnumbervisitor
+component [src/graphs/graph_format_utils.dart\n↓2 ↑1] as compsrcgraphsgraphformatutils
+component [src/graphs/svg_common.dart\n↓2 ↑1] as compsrcgraphssvgcommon
+component [src/graphs/svg_styles.dart\n↓2 ↑0] as compsrcgraphssvgstyles
+component [src/models/rect.dart\n↓1 ↑0] as compsrcmodelsrect
+component [src/analyzers/layers/layers_analyzer.dart\n↓1 ↑5] as compsrcanalyzerslayerslayersanalyzer
+component [src/metrics/project_metrics.dart\n↓1 ↑7] as compsrcmetricsprojectmetrics
+component [src/analyzer_runner/analyzer_runner.dart\n↓1 ↑3] as compsrcanalyzerrunneranalyzerrunner
+component [src/analyzer_runner/analyzer_delegates.dart\n↓1 ↑10] as compsrcanalyzerrunneranalyzerdelegates
+component [src/graphs/export_mermaid.dart\n↓1 ↑2] as compsrcgraphsexportmermaid
+component [src/graphs/export_plantuml.dart\n↓1 ↑2] as compsrcgraphsexportplantuml
+component [src/graphs/export_svg.dart\n↓1 ↑4] as compsrcgraphsexportsvg
+component [src/graphs/export_svg_folders.dart\n↓1 ↑5] as compsrcgraphsexportsvgfolders
+component [fcheck.dart\n↓1 ↑14] as compfcheck
+component [src/models/version.dart\n↓1 ↑0] as compsrcmodelsversion
+component [src/models/file_utils.dart\n↓6 ↑0] as compsrcmodelsfileutils
+component [src/models/class_visitor.dart\n↓3 ↑0] as compsrcmodelsclassvisitor
+component [src/analyzers/sorted/sort_members.dart\n↓3 ↑0] as compsrcanalyzerssortedsortmembers
+component [src/analyzers/sorted/sort_issue.dart\n↓4 ↑0] as compsrcanalyzerssortedsortissue
+component [./bin/fcheck.dart\n↓0 ↑7] as comp.binfcheck
+component [src/analyzers/hardcoded_strings/hardcoded_string_analyzer.dart\n↓0 ↑4] as compsrcanalyzershardcodedstringshardcodedstringanalyzer
+component [src/analyzers/secrets/secret_analyzer.dart\n↓0 ↑1] as compsrcanalyzerssecretssecretanalyzer
+component [src/analyzers/magic_numbers/magic_number_analyzer.dart\n↓0 ↑4] as compsrcanalyzersmagicnumbersmagicnumberanalyzer
+
+"comp.binfcheck" --> "compsrcgraphsexportmermaid"
+"comp.binfcheck" --> "compsrcgraphsexportplantuml"
+"comp.binfcheck" --> "compsrcgraphsexportsvg"
+"comp.binfcheck" --> "compsrcgraphsexportsvgfolders"
+"comp.binfcheck" --> "compfcheck"
+"comp.binfcheck" --> "compsrcmetricsoutput"
+"comp.binfcheck" --> "compsrcmodelsversion"
+"compfcheck" --> "compsrcanalyzerslayerslayersresults"
+"compfcheck" --> "compsrcmetricsfilemetrics"
+"compfcheck" --> "compsrcanalyzerrunneranalysisfilecontext"
+"compfcheck" --> "compsrcanalyzerslayerslayersanalyzer"
+"compfcheck" --> "compsrcanalyzerssortedsort"
+"compfcheck" --> "compsrcmetricsprojectmetrics"
+"compfcheck" --> "compsrcmodelsfileutils"
+"compfcheck" --> "compsrcconfigconfigignoredirectives"
+"compfcheck" --> "compsrcanalyzerrunneranalyzerrunner"
+"compfcheck" --> "compsrcanalyzerrunneranalyzerdelegates"
+"compfcheck" --> "compsrcanalyzershardcodedstringshardcodedstringissue"
+"compfcheck" --> "compsrcanalyzersmagicnumbersmagicnumberissue"
+"compfcheck" --> "compsrcanalyzerssortedsortissue"
+"compfcheck" --> "compsrcanalyzerssecretssecretissue"
+"compsrcmetricsprojectmetrics" --> "compsrcanalyzershardcodedstringshardcodedstringissue"
+"compsrcmetricsprojectmetrics" --> "compsrcanalyzerslayerslayersissue"
+"compsrcmetricsprojectmetrics" --> "compsrcmetricsfilemetrics"
+"compsrcmetricsprojectmetrics" --> "compsrcanalyzerssecretssecretissue"
+"compsrcmetricsprojectmetrics" --> "compsrcanalyzersmagicnumbersmagicnumberissue"
+"compsrcmetricsprojectmetrics" --> "compsrcanalyzerssortedsort"
+"compsrcmetricsprojectmetrics" --> "compsrcmetricsoutput"
+"compsrcanalyzershardcodedstringshardcodedstringvisitor" --> "compsrcanalyzershardcodedstringshardcodedstringissue"
+"compsrcanalyzershardcodedstringshardcodedstringvisitor" --> "compsrcconfigconfigignoredirectives"
+"compsrcanalyzershardcodedstringshardcodedstringanalyzer" --> "compsrcmodelsfileutils"
+"compsrcanalyzershardcodedstringshardcodedstringanalyzer" --> "compsrcconfigconfigignoredirectives"
+"compsrcanalyzershardcodedstringshardcodedstringanalyzer" --> "compsrcanalyzershardcodedstringshardcodedstringissue"
+"compsrcanalyzershardcodedstringshardcodedstringanalyzer" --> "compsrcanalyzershardcodedstringshardcodedstringvisitor"
+"compsrcanalyzerslayerslayersresults" --> "compsrcanalyzerslayerslayersissue"
+"compsrcanalyzerslayerslayersanalyzer" --> "compsrcanalyzerslayerslayersresults"
+"compsrcanalyzerslayerslayersanalyzer" --> "compsrcmodelsfileutils"
+"compsrcanalyzerslayerslayersanalyzer" --> "compsrcanalyzerslayerslayersissue"
+"compsrcanalyzerslayerslayersanalyzer" --> "compsrcanalyzerslayerslayersvisitor"
+"compsrcanalyzerslayerslayersanalyzer" --> "compsrcconfigconfigignoredirectives"
+"compsrcanalyzerssecretssecretanalyzer" --> "compsrcanalyzerssecretssecretissue"
+"compsrcanalyzerssortedsort" --> "compsrcmodelsclassvisitor"
+"compsrcanalyzerssortedsort" --> "compsrcanalyzerssortedsortmembers"
+"compsrcanalyzerssortedsort" --> "compsrcanalyzerssortedsortanalyzer"
+"compsrcanalyzerssortedsort" --> "compsrcanalyzerssortedsortissue"
+"compsrcanalyzerssortedsortanalyzer" --> "compsrcmodelsclassvisitor"
+"compsrcanalyzerssortedsortanalyzer" --> "compsrcanalyzerssortedsortmembers"
+"compsrcanalyzerssortedsortanalyzer" --> "compsrcanalyzerssortedsortissue"
+"compsrcanalyzerssortedsortanalyzer" --> "compsrcmodelsfileutils"
+"compsrcanalyzersmagicnumbersmagicnumbervisitor" --> "compsrcanalyzersmagicnumbersmagicnumberissue"
+"compsrcanalyzersmagicnumbersmagicnumbervisitor" --> "compsrcconfigconfigignoredirectives"
+"compsrcanalyzersmagicnumbersmagicnumberanalyzer" --> "compsrcanalyzersmagicnumbersmagicnumberissue"
+"compsrcanalyzersmagicnumbersmagicnumberanalyzer" --> "compsrcanalyzersmagicnumbersmagicnumbervisitor"
+"compsrcanalyzersmagicnumbersmagicnumberanalyzer" --> "compsrcmodelsfileutils"
+"compsrcanalyzersmagicnumbersmagicnumberanalyzer" --> "compsrcconfigconfigignoredirectives"
+"compsrcanalyzerrunneranalysisfilecontext" --> "compsrcconfigconfigignoredirectives"
+"compsrcanalyzerrunneranalyzerrunner" --> "compsrcmodelsfileutils"
+"compsrcanalyzerrunneranalyzerrunner" --> "compsrcanalyzerrunneranalyzerrunnerresult"
+"compsrcanalyzerrunneranalyzerrunner" --> "compsrcanalyzerrunneranalysisfilecontext"
+"compsrcanalyzerrunneranalyzerdelegates" --> "compsrcanalyzerrunneranalysisfilecontext"
+"compsrcanalyzerrunneranalyzerdelegates" --> "compsrcanalyzershardcodedstringshardcodedstringvisitor"
+"compsrcanalyzerrunneranalyzerdelegates" --> "compsrcanalyzershardcodedstringshardcodedstringissue"
+"compsrcanalyzerrunneranalyzerdelegates" --> "compsrcanalyzersmagicnumbersmagicnumbervisitor"
+"compsrcanalyzerrunneranalyzerdelegates" --> "compsrcanalyzersmagicnumbersmagicnumberissue"
+"compsrcanalyzerrunneranalyzerdelegates" --> "compsrcanalyzerssortedsortissue"
+"compsrcanalyzerrunneranalyzerdelegates" --> "compsrcanalyzerssortedsortmembers"
+"compsrcanalyzerrunneranalyzerdelegates" --> "compsrcmodelsclassvisitor"
+"compsrcanalyzerrunneranalyzerdelegates" --> "compsrcanalyzerslayerslayersvisitor"
+"compsrcanalyzerrunneranalyzerdelegates" --> "compsrcanalyzerssecretssecretissue"
+"compsrcgraphsgraphformatutils" --> "compsrcanalyzerslayerslayersresults"
+"compsrcgraphssvgcommon" --> "compsrcgraphsbadgemodel"
+"compsrcgraphsexportplantuml" --> "compsrcgraphsgraphformatutils"
+"compsrcgraphsexportplantuml" --> "compsrcanalyzerslayerslayersresults"
+"compsrcgraphsexportsvgfolders" --> "compsrcanalyzerslayerslayersresults"
+"compsrcgraphsexportsvgfolders" --> "compsrcmodelsrect"
+"compsrcgraphsexportsvgfolders" --> "compsrcgraphssvgcommon"
+"compsrcgraphsexportsvgfolders" --> "compsrcgraphssvgstyles"
+"compsrcgraphsexportsvgfolders" --> "compsrcgraphsbadgemodel"
+"compsrcgraphsexportsvg" --> "compsrcanalyzerslayerslayersresults"
+"compsrcgraphsexportsvg" --> "compsrcgraphssvgcommon"
+"compsrcgraphsexportsvg" --> "compsrcgraphssvgstyles"
+"compsrcgraphsexportsvg" --> "compsrcgraphsbadgemodel"
+"compsrcgraphsexportmermaid" --> "compsrcgraphsgraphformatutils"
+"compsrcgraphsexportmermaid" --> "compsrcanalyzerslayerslayersresults"
+
+@enduml

@@ -5,6 +5,7 @@ import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort.dart';
+import 'package:fcheck/src/metrics/output.dart';
 
 /// Represents the overall quality metrics for a Flutter/Dart project.
 ///
@@ -168,7 +169,7 @@ class ProjectMetrics {
   ///
   /// It does not return anything.
   void printReport([String? toolVersion]) {
-    print('↓ -------- fCheck v${toolVersion ?? 'unknown'} -------- ↓');
+    printDivider('fCheck ${toolVersion ?? ''}'.trim(), downPointer: true);
     print('Project          : $projectName (version: $version)');
     print('Folders          : $totalFolders');
     print('Files            : $totalFiles');
@@ -184,6 +185,8 @@ class ProjectMetrics {
     print('Magic Numbers    : ${magicNumberIssues.length}');
     print('Layers           : $layersCount');
     print('Dependencies     : $layersEdgeCount');
+
+    printDivider('Lists', dot: true);
 
     final nonCompliant =
         fileMetrics.where((m) => !m.isOneClassPerFileCompliant).toList();
@@ -274,7 +277,6 @@ class ProjectMetrics {
         print('  ... and ${layersIssues.length - _maxIssuesToShow} more');
       }
     }
-    print('↑ ----------------------- ↑');
   }
 
   /// Converts all secret issues to a JSON-compatible map.
