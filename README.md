@@ -26,7 +26,7 @@ fcheck analyzes your Flutter/Dart project and provides:
 ## 📈 Example Output
 
 ```text
-↓ -------- fCheck v0.6.2 -------- ↓
+↓ -------- fCheck v0.8.0 -------- ↓
 Project          : my_app (version: 1.0.0)
 Folders          : 15
 Files            : 89
@@ -148,7 +148,7 @@ fcheck --fix
 ### Secrets Detection
 
 - 🔒 **Security**: Detects API keys, tokens, private keys, and other sensitive information
-- 🚨 **Critical**: AWS keys, GitHub PATs, Stripe keys, emails, phone numbers
+- 🚨 **Critical**: AWS keys, GitHub PATs, Stripe keys, emails
 - 📊 **Advanced**: High entropy string detection for unknown secret patterns
 
 **Opt-out**: Add `// ignore: fcheck_secrets` at the top of the file
