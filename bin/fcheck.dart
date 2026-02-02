@@ -143,6 +143,8 @@ void main(List<String> arguments) {
     print('$action project at: ${directory.absolute.path}...');
   }
 
+  final stopwatch = Stopwatch()..start();
+
   try {
     final engine = AnalyzeFolder(
       directory,
@@ -164,13 +166,17 @@ void main(List<String> arguments) {
         generateMermaid ||
         generatePlantUML ||
         generateFolderSvg) {
-      printDivider('Output files', dot: true);
+      if (!outputJson) {
+        printDivider('Output files', dot: true);
+      }
       if (generateSvg) {
         // Generate SVG visualization
         final svgContent = exportGraphSvg(layersResult);
         final svgFile = File('${directory.path}/layers.svg');
         svgFile.writeAsStringSync(svgContent);
-        print('SVG layers         : ${svgFile.path}');
+        if (!outputJson) {
+          print('SVG layers         : ${svgFile.path}');
+        }
       }
 
       if (generateFolderSvg) {
@@ -190,7 +196,9 @@ void main(List<String> arguments) {
         );
         final folderSvgFile = File('${directory.path}/layers_folders.svg');
         folderSvgFile.writeAsStringSync(folderSvgContent);
-        print('SVG layers (folder): ${folderSvgFile.path}');
+        if (!outputJson) {
+          print('SVG layers (folder): ${folderSvgFile.path}');
+        }
       }
 
       if (generateMermaid) {
@@ -198,7 +206,9 @@ void main(List<String> arguments) {
         final mermaidContent = exportGraphMermaid(layersResult);
         final mermaidFile = File('${directory.path}/layers.mmd');
         mermaidFile.writeAsStringSync(mermaidContent);
-        print('Mermaid layers.    : ${mermaidFile.path}');
+        if (!outputJson) {
+          print('Mermaid layers.    : ${mermaidFile.path}');
+        }
       }
 
       if (generatePlantUML) {
@@ -206,10 +216,16 @@ void main(List<String> arguments) {
         final plantUMLContent = exportGraphPlantUML(layersResult);
         final plantUMLFile = File('${directory.path}/layers.puml');
         plantUMLFile.writeAsStringSync(plantUMLContent);
-        print('PlantUML layers.   : ${plantUMLFile.path}');
+        if (!outputJson) {
+          print('PlantUML layers.   : ${plantUMLFile.path}');
+        }
       }
-
-      printDivider('fCheck end', downPointer: false);
+    }
+    stopwatch.stop();
+    final elapsedMs = stopwatch.elapsedMilliseconds;
+    final elapsedSeconds = (elapsedMs / 1000).toStringAsFixed(2);
+    if (!outputJson) {
+      printDivider('fCheck completed (${elapsedSeconds}s)', downPointer: false);
     }
   } catch (e, stack) {
     print('Error during analysis: $e');
