@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.2] - 2026-02-03
+
+### Changed
+
+- 📘 Clarified the README “Magic Numbers” guidance so it now explains the new definition, outlines when literals are allowed (descriptive const/static/final declarations and annotations/const expressions), and shows how to fix detections by replacing inline literals with named constants before referencing the opt-out directive.
+
 ## [0.8.1] - 2026-02-02
 
 ### Added

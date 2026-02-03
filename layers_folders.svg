@@ -992,7 +992,7 @@
 6. ../lib/src/analyzers/magic_numbers/magic_number_analyzer.dart
 7. ../lib/src/analyzers/magic_numbers/magic_number_visitor.dart</title></g><text x="614.0" y="2614.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">config_ignore_directives.dart</text>
 <g class="folderTitleLayer">
-<text x="542.0" y="105.0" class="layerTitle">fcheck v0.8.1</text>
+<text x="542.0" y="105.0" class="layerTitle">fcheck v0.8.2</text>
 <text x="562.0" y="157.0" class="layerTitle">  ...</text>
 <text x="562.0" y="279.0" class="layerTitle">  ..</text>
 <text x="582.0" y="331.0" class="layerTitle">    lib</text>

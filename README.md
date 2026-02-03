@@ -151,8 +151,9 @@ fcheck --fix
 
 ### Magic Numbers
 
-- 🔍 **Detects**: Numeric literals (except 0, 1, -1) used directly in code
-- ✅ **Allows**: Constants, annotation values, common numbers
+- 🔍 **Detects**: Numeric literals other than `0`, `1`, or `-1` when they appear inline in code (i.e., not part of an annotation, a `const` declaration, a `static const`, a descriptive `final` numeric, or a `const` expression like const lists/maps/sets/constructors).
+- ✅ **Allows**: Descriptive `const`/`static const`/`final` numerics (name length > 3), annotation values, and all const expressions. Example: `final int defaultRetryCount = 2;` is allowed because the name is descriptive.
+- 🔧 **How to fix**: Replace inline literals with a named `const`/`static const`/`final` value (e.g., `const defaultTimeoutMs = 5000;`) or move the literal into a const expression that already documents intent.
 
 **Opt-out**: Add `// ignore: fcheck_magic_numbers` at the top of the file
 
