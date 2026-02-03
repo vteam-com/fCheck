@@ -19,6 +19,7 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
   final List<MagicNumberIssue> foundIssues = <MagicNumberIssue>[];
 
   static const Set<num> _allowedValues = {0, 1, -1};
+  static const int _minDescriptiveNameLength = 3; // New constant
 
   @override
   void visitDoubleLiteral(DoubleLiteral node) {
@@ -43,6 +44,8 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
 
     if (_isInAnnotation(node) ||
         _isInConstDeclaration(node) ||
+        _isInStaticConstDeclaration(node) ||
+        _isInFinalIntDeclaration(node) ||
         _isInsideConstExpression(node) ||
         ConfigIgnoreDirectives.isNodeIgnored(node, content, 'magic_numbers')) {
       return;
@@ -75,15 +78,20 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
         if (current.parent is VariableDeclarationList) {
           final list = current.parent as VariableDeclarationList;
           if (list.isConst) {
-            return true;
+            return _hasDescriptiveName(current);
           }
         }
       } else if (current is FieldDeclaration && current.fields.isConst) {
-        return true;
+        return _hasDescriptiveName(current.fields.variables.first);
       }
       current = current.parent;
     }
     return false;
+  }
+
+  bool _hasDescriptiveName(VariableDeclaration declaration) {
+    final name = declaration.name.toString();
+    return name.length > _minDescriptiveNameLength;
   }
 
   bool _isInsideConstExpression(AstNode node) {
@@ -97,6 +105,38 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
       }
       if (current is SetOrMapLiteral && current.isConst) {
         return true;
+      }
+      current = current.parent;
+    }
+    return false;
+  }
+
+  bool _isInStaticConstDeclaration(AstNode node) {
+    AstNode? current = node.parent;
+    while (current != null) {
+      if (current is FieldDeclaration &&
+          current.isStatic &&
+          current.fields.isConst) {
+        return _hasDescriptiveName(current.fields.variables.first);
+      }
+      current = current.parent;
+    }
+    return false;
+  }
+
+  bool _isInFinalIntDeclaration(AstNode node) {
+    AstNode? current = node.parent;
+    while (current != null) {
+      if (current is VariableDeclaration) {
+        if (current.parent is VariableDeclarationList) {
+          final list = current.parent as VariableDeclarationList;
+          if (list.isFinal &&
+              (list.type?.toString() == 'int' ||
+                  list.type?.toString() == 'double' ||
+                  list.type?.toString() == 'num')) {
+            return _hasDescriptiveName(current);
+          }
+        }
       }
       current = current.parent;
     }

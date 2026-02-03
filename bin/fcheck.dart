@@ -17,6 +17,9 @@ import 'package:path/path.dart' as p;
 ///
 /// [arguments] Command-line arguments passed to the executable.
 void main(List<String> arguments) {
+  const int millisecondsInSecond = 1000;
+  const int decimalPlacesForSeconds = 2;
+
   final parser = ArgParser()
     ..addOption(
       'input',
@@ -223,7 +226,8 @@ void main(List<String> arguments) {
     }
     stopwatch.stop();
     final elapsedMs = stopwatch.elapsedMilliseconds;
-    final elapsedSeconds = (elapsedMs / 1000).toStringAsFixed(2);
+    final elapsedSeconds = (elapsedMs / millisecondsInSecond)
+        .toStringAsFixed(decimalPlacesForSeconds);
     if (!outputJson) {
       printDivider('fCheck completed (${elapsedSeconds}s)', downPointer: false);
     }

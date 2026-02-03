@@ -77,6 +77,8 @@ class _TitleVisual {
   _TitleVisual(this.x, this.y, this.text);
 }
 
+const double _titleLineHeight = 16.0;
+
 /// Represents a folder-to-folder dependency edge.
 class _FolderEdge {
   final String sourceFolder;
@@ -691,7 +693,7 @@ Map<String, int> _computeFolderLevels(
       levels[folder] = currentLevel;
       remainingNodes.remove(folder);
 
-      // Remove edges and update indegrees
+      // Remove edges
       for (final neighbor in adj[folder]!) {
         indeg[neighbor] = (indeg[neighbor] ?? 1) - 1;
       }
@@ -1060,7 +1062,7 @@ List<List<String>> _findSCCs(Map<String, List<String>> graph) {
   final Set<String> onStack = {};
   int time = 0;
 
-  void strongconnect(String v) {
+  void strongConnect(String v) {
     index[v] = time;
     lowlink[v] = time;
     time++;
@@ -1069,7 +1071,7 @@ List<List<String>> _findSCCs(Map<String, List<String>> graph) {
 
     for (final w in graph[v] ?? []) {
       if (!index.containsKey(w)) {
-        strongconnect(w);
+        strongConnect(w);
         lowlink[v] = min(lowlink[v]!, lowlink[w]!);
       } else if (onStack.contains(w)) {
         lowlink[v] = min(lowlink[v]!, index[w]!);
@@ -1090,7 +1092,7 @@ List<List<String>> _findSCCs(Map<String, List<String>> graph) {
 
   for (final node in graph.keys) {
     if (!index.containsKey(node)) {
-      strongconnect(node);
+      strongConnect(node);
     }
   }
 
@@ -1636,7 +1638,7 @@ void _drawTitleVisuals(StringBuffer buffer, List<_TitleVisual> visuals) {
       buffer.writeln(
           '<text x="${v.x}" y="${v.y}" class="layerTitle" text-anchor="middle">');
       for (int i = 0; i < parts.length; i++) {
-        final yOffset = i * 16; // Line height spacing
+        final yOffset = i * _titleLineHeight; // Line height spacing
         buffer.writeln(
             '  <tspan x="${v.x}" dy="${i == 0 ? 0 : yOffset}">${parts[i]}</tspan>');
       }
@@ -1651,7 +1653,8 @@ void _drawTitleVisuals(StringBuffer buffer, List<_TitleVisual> visuals) {
       buffer.writeln(
           '<text x="${v.x}" y="${v.y}" class="layerTitle" text-anchor="middle">');
       buffer.writeln('  <tspan x="${v.x}" dy="0">$firstLine</tspan>');
-      buffer.writeln('  <tspan x="${v.x}" dy="16">$secondLine</tspan>');
+      buffer.writeln(
+          '  <tspan x="${v.x}" dy="$_titleLineHeight">$secondLine</tspan>');
       buffer.writeln('</text>');
     } else {
       // Single line text for regular folders or when folder name matches project name

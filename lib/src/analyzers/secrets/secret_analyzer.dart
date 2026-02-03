@@ -6,6 +6,16 @@ import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 
 /// Advanced Secret Analyzer implementing SECRET.md rules
 class SecretAnalyzer {
+  static const int _ignoreDirectiveScanLines = 10;
+  static const int _awsAccessKeyLength = 20;
+  static const double _awsEntropyThreshold = 3.5;
+  static const int _genericSecretLineMinLength = 20;
+  static const double _genericSecretEntropyThreshold = 4.0;
+  static const int _bearerTokenMinLength = 20;
+  static const double _bearerTokenEntropyThreshold = 3.8;
+  static const int _githubPatMinLength = 40;
+  static const double _highEntropyThreshold = 4.5;
+
   /// Analyze a directory for secrets
   List<SecretIssue> analyzeDirectory(
     Directory directory, {
@@ -52,7 +62,7 @@ class SecretAnalyzer {
     final lines = content.split('\n');
 
     // Check for ignore directive
-    for (final line in lines.take(10)) {
+    for (final line in lines.take(_ignoreDirectiveScanLines)) {
       if (line.trim().contains('// ignore: fcheck_secrets')) {
         return [];
       }
@@ -158,7 +168,8 @@ class SecretAnalyzer {
     final matches = regex.allMatches(line);
     for (final match in matches) {
       final candidate = match.group(0) ?? '';
-      if (candidate.length == 20 && _calculateEntropy(candidate) > 3.5) {
+      if (candidate.length == _awsAccessKeyLength &&
+          _calculateEntropy(candidate) > _awsEntropyThreshold) {
         return true;
       }
     }
@@ -168,18 +179,23 @@ class SecretAnalyzer {
   bool _detectGenericSecret(String line) {
     final regex = RegExp(r'api[_-]?key|token|secret|password|private_key',
         caseSensitive: false);
-    if (regex.hasMatch(line) && line.contains('=') && line.length > 20) {
-      return _calculateEntropy(line) > 4.0;
+    if (regex.hasMatch(line) &&
+        line.contains('=') &&
+        line.length > _genericSecretLineMinLength) {
+      return _calculateEntropy(line) > _genericSecretEntropyThreshold;
     }
     return false;
   }
 
   bool _detectBearerToken(String line) {
-    final regex = RegExp(r'Bearer\s+[a-zA-Z0-9_\-]{20,}', caseSensitive: false);
+    final regex = RegExp(
+      'Bearer\\s+[a-zA-Z0-9_\\-]{$_bearerTokenMinLength,}',
+      caseSensitive: false,
+    );
     final matches = regex.allMatches(line);
     for (final match in matches) {
       final candidate = match.group(0) ?? '';
-      if (_calculateEntropy(candidate) > 3.8) {
+      if (_calculateEntropy(candidate) > _bearerTokenEntropyThreshold) {
         return true;
       }
     }
@@ -209,7 +225,7 @@ class SecretAnalyzer {
     final matches = regex.allMatches(line);
     for (final match in matches) {
       final candidate = match.group(0) ?? '';
-      if (candidate.length >= 40) {
+      if (candidate.length >= _githubPatMinLength) {
         return true;
       }
     }
@@ -221,7 +237,7 @@ class SecretAnalyzer {
     final matches = regex.allMatches(line);
     for (final match in matches) {
       final candidate = match.group(0) ?? '';
-      if (_calculateEntropy(candidate) > 4.5) {
+      if (_calculateEntropy(candidate) > _highEntropyThreshold) {
         return true;
       }
     }

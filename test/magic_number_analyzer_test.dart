@@ -91,5 +91,30 @@ void main() {}
       expect(issues.map((issue) => issue.value), contains('8'));
       expect(issues.map((issue) => issue.value), contains('9'));
     });
+
+    test('skips static const declarations with descriptive names', () {
+      final file = File('${tempDir.path}/static_const.dart')
+        ..writeAsStringSync('''
+        class MyClass {
+          static const int searchBoxFillAlpha = 77;
+          static const double roomItemLeadingWidth = 40.0;
+        }
+      ''');
+      final issues = analyzer.analyzeFile(file);
+      expect(issues, isEmpty);
+    });
+
+    test('skips final numeric declarations with descriptive names', () {
+      final file = File('${tempDir.path}/final_numeric.dart')
+        ..writeAsStringSync('''
+        class MyClass {
+          final int theFinalIntValue = 42;
+          final double theFinalDoubleValue = 3.14;
+          final num theFinalNumValue = 100;
+        }
+      ''');
+      final issues = analyzer.analyzeFile(file);
+      expect(issues, isEmpty);
+    });
   });
 }
