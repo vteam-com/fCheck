@@ -169,7 +169,6 @@ class ProjectMetrics {
   ///
   /// It does not return anything.
   void printReport([String? toolVersion]) {
-    printDivider('fCheck ${toolVersion ?? ''}'.trim(), downPointer: true);
     print('Project          : $projectName (version: $version)');
     print('Folders          : $totalFolders');
     print('Files            : $totalFiles');

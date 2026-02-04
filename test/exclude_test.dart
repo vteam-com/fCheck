@@ -220,35 +220,334 @@ void main() {
       });
     });
 
-    group('FileUtils.countFolders with exclude patterns', () {
-      test('should exclude folders matching pattern', () {
-        Directory('${tempDir.path}/src').createSync();
-        Directory('${tempDir.path}/misc').createSync();
-        Directory('${tempDir.path}/utils').createSync();
+    group('Hidden folder exclusion', () {
+      test('should skip files in hidden directories (starting with .)', () {
+        // Create a hidden directory
+        final hiddenDir = Directory('${tempDir.path}/.hidden');
+        hiddenDir.createSync();
 
-        final count = FileUtils.countFolders(
+        // Create files in hidden directory
+        File('${hiddenDir.path}/hidden_file.dart').writeAsStringSync('');
+        File('${hiddenDir.path}/another_hidden.dart').writeAsStringSync('');
+
+        // Create regular files
+        File('${tempDir.path}/main.dart').writeAsStringSync('');
+        File('${tempDir.path}/utils.dart').writeAsStringSync('');
+
+        // Test listDartFiles
+        final dartFiles = FileUtils.listDartFiles(tempDir);
+        expect(dartFiles.length, equals(2));
+        expect(dartFiles.any((f) => f.path.contains('.hidden')), isFalse);
+        expect(dartFiles.any((f) => f.path.contains('main.dart')), isTrue);
+        expect(dartFiles.any((f) => f.path.contains('utils.dart')), isTrue);
+
+        // Test unified scan for counts
+        final (
+          scanDartFiles,
+          folderCount,
+          fileCount,
+          excludedDartFilesCount,
+          excludedFoldersCount,
+          excludedFilesCount
+        ) = FileUtils.scanDirectory(tempDir);
+        expect(scanDartFiles.length, equals(2));
+        expect(
+            folderCount, equals(0)); // Hidden directory should not be counted
+        expect(fileCount, equals(2));
+      });
+
+      test('should skip nested hidden directories', () {
+        // Create nested structure with hidden directory
+        final srcDir = Directory('${tempDir.path}/src');
+        srcDir.createSync();
+
+        final nestedHiddenDir = Directory('${srcDir.path}/.cache');
+        nestedHiddenDir.createSync();
+
+        // Create files in nested hidden directory
+        File('${nestedHiddenDir.path}/cached_file.dart').writeAsStringSync('');
+
+        // Create regular files
+        File('${tempDir.path}/main.dart').writeAsStringSync('');
+        File('${srcDir.path}/service.dart').writeAsStringSync('');
+
+        // Test listDartFiles
+        final dartFiles = FileUtils.listDartFiles(tempDir);
+        expect(dartFiles.length, equals(2));
+        expect(dartFiles.any((f) => f.path.contains('.cache')), isFalse);
+        expect(dartFiles.any((f) => f.path.contains('main.dart')), isTrue);
+        expect(dartFiles.any((f) => f.path.contains('service.dart')), isTrue);
+
+        // Test unified scan for counts
+        final (
+          scanDartFiles,
+          folderCount,
+          fileCount,
+          excludedDartFilesCount,
+          excludedFoldersCount,
+          excludedFilesCount
+        ) = FileUtils.scanDirectory(tempDir);
+        expect(scanDartFiles.length, equals(2));
+        expect(folderCount, equals(1)); // Only src directory should be counted
+        expect(fileCount, equals(2));
+      });
+
+      test(
+          'should skip files in hidden directories when using exclude patterns',
+          () {
+        // Create hidden directory
+        final hiddenDir = Directory('${tempDir.path}/.hidden');
+        hiddenDir.createSync();
+
+        // Create files in hidden directory
+        File('${hiddenDir.path}/hidden_helper.dart').writeAsStringSync('');
+
+        // Create regular files
+        File('${tempDir.path}/main.dart').writeAsStringSync('');
+        File('${tempDir.path}/test_helper.dart').writeAsStringSync('');
+
+        // Test with exclude patterns - hidden files should be skipped regardless of patterns
+        final dartFiles = FileUtils.listDartFiles(
           tempDir,
-          excludePatterns: ['misc'],
+          excludePatterns: ['*test*'],
         );
 
-        // Should count src and utils, but not misc
-        expect(count, equals(2));
+        expect(dartFiles.length, equals(1));
+        expect(dartFiles.any((f) => f.path.contains('.hidden')), isFalse);
+        expect(dartFiles.any((f) => f.path.contains('test_helper')), isFalse);
+        expect(dartFiles.any((f) => f.path.contains('main.dart')), isTrue);
       });
     });
 
-    group('FileUtils.countAllFiles with exclude patterns', () {
-      test('should exclude files matching pattern', () {
-        File('${tempDir.path}/main.dart').writeAsStringSync('');
-        File('${tempDir.path}/misc_helper.dart').writeAsStringSync('');
-        File('${tempDir.path}/README.md').writeAsStringSync('');
+    group('Excluded files listing', () {
+      test('should list all excluded files and directories', () {
+        // Create test structure with various excluded items
+        final hiddenDir = Directory('${tempDir.path}/.hidden');
+        hiddenDir.createSync();
 
-        final count = FileUtils.countAllFiles(
+        final testDir = Directory('${tempDir.path}/test');
+        testDir.createSync();
+
+        final exampleDir = Directory('${tempDir.path}/example');
+        exampleDir.createSync();
+
+        // Create files
+        File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
+        File('${hiddenDir.path}/hidden.dart')
+            .writeAsStringSync('class Hidden {}');
+        File('${testDir.path}/test_helper.dart')
+            .writeAsStringSync('class TestHelper {}');
+        File('${exampleDir.path}/example.dart')
+            .writeAsStringSync('class Example {}');
+        File('${tempDir.path}/README.md').writeAsStringSync('# Test');
+        File('${hiddenDir.path}/hidden.txt')
+            .writeAsStringSync('hidden content');
+
+        // Test excluded files listing
+        final (excludedDartFiles, excludedNonDartFiles, excludedDirectories) =
+            FileUtils.listExcludedFiles(tempDir);
+
+        expect(excludedDartFiles.length,
+            equals(3)); // hidden.dart, test_helper.dart, example.dart
+        expect(excludedNonDartFiles.length, equals(1)); // hidden.txt
+        expect(excludedDirectories.length, equals(3)); // .hidden, test, example
+
+        expect(excludedDartFiles.any((f) => f.path.contains('hidden.dart')),
+            isTrue);
+        expect(
+            excludedDartFiles.any((f) => f.path.contains('test_helper.dart')),
+            isTrue);
+        expect(excludedDartFiles.any((f) => f.path.contains('example.dart')),
+            isTrue);
+
+        expect(excludedNonDartFiles.any((f) => f.path.contains('hidden.txt')),
+            isTrue);
+
+        expect(
+            excludedDirectories.any((d) => d.path.contains('.hidden')), isTrue);
+        expect(excludedDirectories.any((d) => d.path.contains('test')), isTrue);
+        expect(
+            excludedDirectories.any((d) => d.path.contains('example')), isTrue);
+      });
+
+      test('should list excluded files with custom patterns', () {
+        // Create test structure
+        final helpersDir = Directory('${tempDir.path}/helpers');
+        helpersDir.createSync();
+
+        // Create files
+        File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
+        File('${helpersDir.path}/helper.dart')
+            .writeAsStringSync('class Helper {}');
+        File('${helpersDir.path}/utils.dart')
+            .writeAsStringSync('class Utils {}');
+
+        // Test with exclude patterns
+        final (excludedDartFiles, excludedNonDartFiles, excludedDirectories) =
+            FileUtils.listExcludedFiles(
           tempDir,
-          excludePatterns: ['*misc*'],
+          excludePatterns: ['helpers/*'],
         );
 
-        // Should count main.dart and README.md, but not misc_helper.dart
-        expect(count, equals(2));
+        expect(excludedDartFiles.length, equals(2)); // helper.dart, utils.dart
+        expect(excludedNonDartFiles.length, equals(0));
+        expect(excludedDirectories.length,
+            equals(0)); // helpers directory itself is not excluded
+
+        expect(excludedDartFiles.any((f) => f.path.contains('helper.dart')),
+            isTrue);
+        expect(excludedDartFiles.any((f) => f.path.contains('utils.dart')),
+            isTrue);
+      });
+
+      test('should list locale files as excluded', () {
+        // Create locale files
+        File('${tempDir.path}/app_localizations.dart').writeAsStringSync('');
+        File('${tempDir.path}/app_localizations_en.dart').writeAsStringSync('');
+        File('${tempDir.path}/app_localizations_fr.dart').writeAsStringSync('');
+        File('${tempDir.path}/main.dart').writeAsStringSync('');
+
+        // Test excluded files listing
+        final (excludedDartFiles, excludedNonDartFiles, excludedDirectories) =
+            FileUtils.listExcludedFiles(tempDir);
+
+        expect(excludedDartFiles.length,
+            equals(2)); // app_localizations_en.dart, app_localizations_fr.dart
+        expect(excludedNonDartFiles.length, equals(0));
+        expect(excludedDirectories.length, equals(0));
+
+        expect(
+            excludedDartFiles
+                .any((f) => f.path.contains('app_localizations_en')),
+            isTrue);
+        expect(
+            excludedDartFiles
+                .any((f) => f.path.contains('app_localizations_fr')),
+            isTrue);
+        expect(
+            excludedDartFiles
+                .any((f) => f.path.contains('app_localizations.dart')),
+            isFalse); // main app_localizations.dart should not be excluded
+      });
+    });
+
+    group('Unified directory scan', () {
+      test('should return correct counts in single scan', () {
+        // Create test structure
+        final srcDir = Directory('${tempDir.path}/src');
+        srcDir.createSync();
+
+        final libDir = Directory('${tempDir.path}/lib');
+        libDir.createSync();
+
+        // Create files
+        File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
+        File('${srcDir.path}/service.dart')
+            .writeAsStringSync('class Service {}');
+        File('${libDir.path}/utils.dart').writeAsStringSync('class Utils {}');
+        File('${tempDir.path}/README.md').writeAsStringSync('# Test');
+        File('${srcDir.path}/config.json').writeAsStringSync('{}');
+
+        // Test unified scan
+        final (
+          dartFiles,
+          folderCount,
+          fileCount,
+          excludedDartFilesCount,
+          excludedFoldersCount,
+          excludedFilesCount
+        ) = FileUtils.scanDirectory(tempDir);
+
+        expect(dartFiles.length, equals(3));
+        expect(folderCount, equals(2)); // src and lib
+        expect(fileCount, equals(5)); // 3 dart + 1 md + 1 json
+        expect(excludedDartFilesCount, equals(0));
+        expect(excludedFoldersCount, equals(0));
+        expect(excludedFilesCount, equals(0));
+
+        // Verify dart files
+        expect(dartFiles.any((f) => f.path.contains('main.dart')), isTrue);
+        expect(dartFiles.any((f) => f.path.contains('service.dart')), isTrue);
+        expect(dartFiles.any((f) => f.path.contains('utils.dart')), isTrue);
+      });
+
+      test('should apply exclude patterns in unified scan', () {
+        // Create test structure
+        final srcDir = Directory('${tempDir.path}/src');
+        srcDir.createSync();
+
+        final testDir = Directory('${tempDir.path}/test');
+        testDir.createSync();
+
+        // Create files
+        File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
+        File('${srcDir.path}/service.dart')
+            .writeAsStringSync('class Service {}');
+        File('${testDir.path}/test_helper.dart')
+            .writeAsStringSync('class TestHelper {}');
+
+        // Test unified scan with exclude patterns
+        final (
+          dartFiles,
+          folderCount,
+          fileCount,
+          excludedDartFilesCount,
+          excludedFoldersCount,
+          excludedFilesCount
+        ) = FileUtils.scanDirectory(
+          tempDir,
+          excludePatterns: ['test/*'],
+        );
+
+        expect(dartFiles.length, equals(2)); // main.dart and service.dart only
+        expect(
+            folderCount, equals(1)); // src only (test is excluded by default)
+        expect(fileCount, equals(2)); // main.dart and service.dart only
+        expect(excludedDartFilesCount, equals(1)); // test_helper.dart excluded
+        expect(
+            excludedFoldersCount, equals(1)); // test folder excluded by default
+        expect(excludedFilesCount, equals(1)); // test_helper.dart excluded
+
+        expect(dartFiles.any((f) => f.path.contains('main.dart')), isTrue);
+        expect(dartFiles.any((f) => f.path.contains('service.dart')), isTrue);
+        expect(dartFiles.any((f) => f.path.contains('test_helper')), isFalse);
+      });
+
+      test('should skip hidden folders in unified scan', () {
+        // Create test structure with hidden folder
+        final srcDir = Directory('${tempDir.path}/src');
+        srcDir.createSync();
+
+        final hiddenDir = Directory('${tempDir.path}/.hidden');
+        hiddenDir.createSync();
+
+        // Create files
+        File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
+        File('${srcDir.path}/service.dart')
+            .writeAsStringSync('class Service {}');
+        File('${hiddenDir.path}/hidden.dart')
+            .writeAsStringSync('class Hidden {}');
+
+        // Test unified scan
+        final (
+          dartFiles,
+          folderCount,
+          fileCount,
+          excludedDartFilesCount,
+          excludedFoldersCount,
+          excludedFilesCount
+        ) = FileUtils.scanDirectory(tempDir);
+
+        expect(dartFiles.length, equals(2)); // Only main.dart and service.dart
+        expect(folderCount, equals(1)); // Only src (hidden folder excluded)
+        expect(fileCount, equals(2)); // Only main.dart and service.dart
+        expect(excludedDartFilesCount, equals(1)); // hidden.dart excluded
+        expect(excludedFoldersCount, equals(1)); // .hidden folder excluded
+        expect(excludedFilesCount, equals(1)); // hidden.dart excluded
+
+        expect(dartFiles.any((f) => f.path.contains('main.dart')), isTrue);
+        expect(dartFiles.any((f) => f.path.contains('service.dart')), isTrue);
+        expect(dartFiles.any((f) => f.path.contains('.hidden')), isFalse);
       });
     });
   });

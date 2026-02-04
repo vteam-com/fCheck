@@ -89,6 +89,34 @@ class AnalyzeFolder {
     );
   }
 
+  /// Lists all excluded files and directories in the project.
+  ///
+  /// This method identifies files and directories that are excluded from analysis
+  /// due to hidden directories, default excluded directories, or custom exclude patterns.
+  /// This is useful for understanding what files are being skipped during analysis.
+  ///
+  /// Returns a tuple containing:
+  /// - List of excluded Dart files
+  /// - List of excluded non-Dart files
+  /// - List of excluded directories
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final engine = AnalyzeFolder(projectDir);
+  /// final (excludedDart, excludedNonDart, excludedDirs) = engine.listExcludedFiles();
+  /// print('Excluded Dart files: ${excludedDart.length}');
+  /// ```
+  (
+    List<File> excludedDartFiles,
+    List<File> excludedNonDartFiles,
+    List<Directory> excludedDirectories
+  ) listExcludedFiles() {
+    return FileUtils.listExcludedFiles(
+      projectDir,
+      excludePatterns: excludePatterns,
+    );
+  }
+
   /// Analyzes the entire project and returns comprehensive quality metrics.
   ///
   /// This method performs all analysis types in a single file traversal,
@@ -97,13 +125,19 @@ class AnalyzeFolder {
   ///
   /// Returns a [ProjectMetrics] object with complete analysis results.
   ProjectMetrics analyze() {
-    // Calculate excluded files count
-    final allDartFiles = FileUtils.listDartFiles(projectDir);
-    final dartFiles = FileUtils.listDartFiles(
+    // Perform unified directory scan to get all file system metrics in one pass
+    final (
+      dartFiles,
+      totalFolders,
+      totalFiles,
+      excludedDartFilesCount,
+      excludedFoldersCount,
+      excludedFilesCount
+    ) = FileUtils.scanDirectory(
       projectDir,
       excludePatterns: excludePatterns,
     );
-    final excludedCount = allDartFiles.length - dartFiles.length;
+
     final projectVersion = _readProjectVersion(projectDir);
     final projectName = _readProjectName(projectDir);
 
@@ -160,8 +194,8 @@ class AnalyzeFolder {
     final usesLocalization = detectLocalization(dartFiles);
 
     return ProjectMetrics(
-      totalFolders: FileUtils.countFolders(projectDir),
-      totalFiles: FileUtils.countAllFiles(projectDir),
+      totalFolders: totalFolders,
+      totalFiles: totalFiles,
       totalDartFiles: dartFiles.length,
       totalLinesOfCode: totalLoc,
       totalCommentLines: totalComments,
@@ -176,7 +210,7 @@ class AnalyzeFolder {
       projectName: projectName,
       version: projectVersion,
       usesLocalization: usesLocalization,
-      excludedFilesCount: excludedCount,
+      excludedFilesCount: excludedDartFilesCount,
       secretIssues: secretIssues,
     );
   }

@@ -72,6 +72,13 @@ void main(List<String> arguments) {
       defaultsTo: [],
     )
     ..addFlag(
+      'excluded',
+      abbr: 'x',
+      help:
+          'List excluded files and directories (hidden folders, default exclusions, custom patterns)',
+      negatable: false,
+    )
+    ..addFlag(
       'help',
       abbr: 'h',
       help: 'Show usage information',
@@ -87,6 +94,7 @@ void main(List<String> arguments) {
   late bool generateFolderSvg;
 
   late bool outputJson;
+  late bool listExcluded;
   late List<String> excludePatterns;
 
   try {
@@ -97,6 +105,7 @@ void main(List<String> arguments) {
     generatePlantUML = argResults['plantuml'] as bool;
     generateFolderSvg = argResults['svgfolder'] as bool;
     outputJson = argResults['json'] as bool;
+    listExcluded = argResults['excluded'] as bool;
     excludePatterns = argResults['exclude'] as List<String>;
 
     // Handle help flag
@@ -142,8 +151,8 @@ void main(List<String> arguments) {
   }
 
   if (!outputJson) {
-    final action = fix ? 'Fixing' : 'Analyzing';
-    print('$action project at: ${directory.absolute.path}...');
+    printDivider('fCheck $packageVersion', downPointer: true);
+    print('Input            : ${directory.absolute.path}');
   }
 
   final stopwatch = Stopwatch()..start();
@@ -154,6 +163,52 @@ void main(List<String> arguments) {
       fix: fix,
       excludePatterns: excludePatterns,
     );
+
+    // Handle excluded files listing
+    if (listExcluded) {
+      final (excludedDartFiles, excludedNonDartFiles, excludedDirectories) =
+          engine.listExcludedFiles();
+
+      if (outputJson) {
+        final excludedData = {
+          'excludedDartFiles': excludedDartFiles.map((f) => f.path).toList(),
+          'excludedNonDartFiles':
+              excludedNonDartFiles.map((f) => f.path).toList(),
+          'excludedDirectories':
+              excludedDirectories.map((d) => d.path).toList(),
+        };
+        print(const JsonEncoder.withIndent('  ').convert(excludedData));
+      } else {
+        print('Excluded Dart files (${excludedDartFiles.length}):');
+        if (excludedDartFiles.isEmpty) {
+          print('  (none)');
+        } else {
+          for (final file in excludedDartFiles) {
+            print('  ${file.path}');
+          }
+        }
+
+        print('\nExcluded non-Dart files (${excludedNonDartFiles.length}):');
+        if (excludedNonDartFiles.isEmpty) {
+          print('  (none)');
+        } else {
+          for (final file in excludedNonDartFiles) {
+            print('  ${file.path}');
+          }
+        }
+
+        print('\nExcluded directories (${excludedDirectories.length}):');
+        if (excludedDirectories.isEmpty) {
+          print('  (none)');
+        } else {
+          for (final dir in excludedDirectories) {
+            print('  ${dir.path}');
+          }
+        }
+      }
+      return;
+    }
+
     final metrics = engine.analyze();
 
     if (outputJson) {

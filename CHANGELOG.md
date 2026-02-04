@@ -7,11 +7,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.3] - 2026-02-04
+
+### Added
+
+- 🔍 **Hidden Folder Filtering**: Automatically exclude files in hidden directories (starting with '.') from analysis
+- 📊 **Excluded Files Listing**: New `--excluded`/`-x` CLI flag to list all excluded files and directories
+- 📋 **Comprehensive Exclusion Reporting**: Display excluded Dart files, non-Dart files, and directories separately
+- 🎯 **JSON Support for Exclusions**: Full JSON output support for excluded files listing
+- 📚 **Enhanced Documentation**: Updated README.md with comprehensive documentation for excluded files functionality
+
+### Changed
+
+- ⚡ **Unified Directory Scanning**: Enhanced `scanDirectory` method to return excluded file/folder counts in addition to regular metrics
+- 🏗️ **File Enumeration Logic**: Updated `listDartFiles` method to skip hidden directories consistently
+- 📊 **Performance Optimization**: Maintained 67-72% performance improvement while adding new exclusion tracking
+
 ## [0.8.2] - 2026-02-03
 
 ### Changed
 
-- 📘 Clarified the README “Magic Numbers” guidance so it now explains the new definition, outlines when literals are allowed (descriptive const/static/final declarations and annotations/const expressions), and shows how to fix detections by replacing inline literals with named constants before referencing the opt-out directive.
+- 📘 Clarified the README "Magic Numbers" guidance so it now explains the new definition, outlines when literals are allowed (descriptive const/static/final declarations and annotations/const expressions), and shows how to fix detections by replacing inline literals with named constants before referencing the opt-out directive.
 
 ## [0.8.1] - 2026-02-02
 

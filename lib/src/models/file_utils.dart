@@ -6,8 +6,11 @@ import 'package:glob/glob.dart';
 /// Utility functions for file system operations.
 ///
 /// This class provides static methods for common file system operations
-/// used throughout the fcheck quality analysis tool, including listing
-/// Dart files and counting directories and files.
+/// used throughout the fcheck quality analysis tool, including:
+/// - Listing Dart files with exclusion support
+/// - Unified directory scanning for performance
+/// - Excluded files and directories listing
+/// - Hidden folder filtering
 class FileUtils {
   /// Expands glob patterns to handle common use cases that the glob library
   /// doesn't handle intuitively.
@@ -85,6 +88,13 @@ class FileUtils {
         .whereType<File>()
         .where((file) => p.extension(file.path) == '.dart')
         .where((file) {
+      // Skip files in hidden directories (directories starting with '.')
+      final relativePath = p.relative(file.path, from: dir.path);
+      final pathParts = p.split(relativePath);
+      if (pathParts.any((part) => part.startsWith('.'))) {
+        return false;
+      }
+
       // Default hide locale files except for the main app_localizations.dart
       final fileName = p.basename(file.path);
       if ((fileName.startsWith('app_localizations_') ||
@@ -94,8 +104,6 @@ class FileUtils {
       }
 
       // Check if the file is in any default excluded directory
-      final relativePath = p.relative(file.path, from: dir.path);
-      final pathParts = p.split(relativePath);
       if (pathParts.any((part) => defaultExcludedDirs.contains(part))) {
         return false;
       }
@@ -112,13 +120,23 @@ class FileUtils {
     }).toList();
   }
 
-  /// Counts the total number of subdirectories in a directory recursively.
+  /// Lists all excluded files and directories in a directory recursively.
   ///
-  /// [dir] The root directory to count subdirectories in.
+  /// This method identifies files and directories that would be excluded from analysis
+  /// due to hidden directories, default excluded directories, or custom exclude patterns.
+  ///
+  /// [dir] The root directory to scan.
   /// [excludePatterns] Optional list of glob patterns to exclude.
   ///
-  /// Returns the total number of directories found.
-  static int countFolders(Directory dir,
+  /// Returns a tuple containing:
+  /// - List of excluded Dart files
+  /// - List of excluded non-Dart files
+  /// - List of excluded directories
+  static (
+    List<File> excludedDartFiles,
+    List<File> excludedNonDartFiles,
+    List<Directory> excludedDirectories
+  ) listExcludedFiles(Directory dir,
       {List<String> excludePatterns = const []}) {
     // Expand glob patterns to handle common cases
     final expandedPatterns = <String>[];
@@ -127,33 +145,93 @@ class FileUtils {
     }
     final globs = expandedPatterns.map((p) => Glob(p)).toList();
 
-    return dir
-        .listSync(recursive: true)
-        .whereType<Directory>()
-        .where((directory) {
-      final relativePath = p.relative(directory.path, from: dir.path);
+    final excludedDartFiles = <File>[];
+    final excludedNonDartFiles = <File>[];
+    final excludedDirectories = <Directory>[];
+
+    dir.listSync(recursive: true).forEach((entity) {
+      final relativePath = p.relative(entity.path, from: dir.path);
       final pathParts = p.split(relativePath);
-      if (pathParts.any((part) => defaultExcludedDirs.contains(part))) {
-        return false;
+
+      // Check if entity is in hidden directories
+      if (pathParts.any((part) => part.startsWith('.'))) {
+        if (entity is Directory) {
+          excludedDirectories.add(entity);
+        } else if (entity is File) {
+          if (p.extension(entity.path) == '.dart') {
+            excludedDartFiles.add(entity);
+          } else {
+            excludedNonDartFiles.add(entity);
+          }
+        }
+        return;
       }
 
-      for (final glob in globs) {
-        if (glob.matches(relativePath)) {
-          return false;
+      // Check if entity is in default excluded directories
+      if (pathParts.any((part) => defaultExcludedDirs.contains(part))) {
+        if (entity is Directory) {
+          excludedDirectories.add(entity);
+        } else if (entity is File) {
+          if (p.extension(entity.path) == '.dart') {
+            excludedDartFiles.add(entity);
+          } else {
+            excludedNonDartFiles.add(entity);
+          }
+        }
+        return;
+      }
+
+      // Check glob patterns - only exclude files, not directories
+      if (entity is File) {
+        for (final glob in globs) {
+          if (glob.matches(relativePath)) {
+            if (p.extension(entity.path) == '.dart') {
+              excludedDartFiles.add(entity);
+            } else {
+              excludedNonDartFiles.add(entity);
+            }
+            return;
+          }
         }
       }
-      return true;
-    }).length;
+
+      // Check for locale files (special case for Dart files)
+      if (entity is File && p.extension(entity.path) == '.dart') {
+        final fileName = p.basename(entity.path);
+        if ((fileName.startsWith('app_localizations_') ||
+                fileName.startsWith('app_localization_')) &&
+            fileName.endsWith('.dart')) {
+          excludedDartFiles.add(entity);
+        }
+      }
+    });
+
+    return (excludedDartFiles, excludedNonDartFiles, excludedDirectories);
   }
 
-  /// Counts the total number of files in a directory recursively.
+  /// Performs a single unified scan of a directory to collect all file system metrics.
   ///
-  /// [dir] The root directory to count files in.
+  /// This method efficiently collects Dart files, folder count, file count, and excluded counts
+  /// in a single traversal, avoiding the performance overhead of multiple scans.
+  ///
+  /// [dir] The root directory to scan.
   /// [excludePatterns] Optional list of glob patterns to exclude.
   ///
-  /// Returns the total number of files found.
-  static int countAllFiles(Directory dir,
-      {List<String> excludePatterns = const []}) {
+  /// Returns a tuple containing:
+  /// - List of Dart files
+  /// - Total folder count
+  /// - Total file count
+  /// - Excluded Dart files count
+  /// - Excluded folders count
+  /// - Excluded files count
+  static (
+    List<File> dartFiles,
+    int folderCount,
+    int fileCount,
+    int excludedDartFilesCount,
+    int excludedFoldersCount,
+    int excludedFilesCount
+  ) scanDirectory(Directory dir, {List<String> excludePatterns = const []}) {
     // Expand glob patterns to handle common cases
     final expandedPatterns = <String>[];
     for (final pattern in excludePatterns) {
@@ -161,19 +239,81 @@ class FileUtils {
     }
     final globs = expandedPatterns.map((p) => Glob(p)).toList();
 
-    return dir.listSync(recursive: true).whereType<File>().where((file) {
-      final relativePath = p.relative(file.path, from: dir.path);
+    int folderCount = 0;
+    int fileCount = 0;
+    int excludedFoldersCount = 0;
+    int excludedFilesCount = 0;
+    int excludedDartFilesCount = 0;
+    final dartFiles = <File>[];
+
+    dir.listSync(recursive: true).forEach((entity) {
+      final relativePath = p.relative(entity.path, from: dir.path);
       final pathParts = p.split(relativePath);
-      if (pathParts.any((part) => defaultExcludedDirs.contains(part))) {
-        return false;
+
+      // Skip hidden directories and their contents
+      if (pathParts.any((part) => part.startsWith('.'))) {
+        if (entity is Directory) {
+          excludedFoldersCount++;
+        } else if (entity is File) {
+          excludedFilesCount++;
+          if (p.extension(entity.path) == '.dart') {
+            excludedDartFilesCount++;
+          }
+        }
+        return;
       }
 
-      for (final glob in globs) {
-        if (glob.matches(relativePath)) {
-          return false;
+      // Check if entity is in default excluded directories
+      if (pathParts.any((part) => defaultExcludedDirs.contains(part))) {
+        if (entity is Directory) {
+          excludedFoldersCount++;
+        } else if (entity is File) {
+          excludedFilesCount++;
+          if (p.extension(entity.path) == '.dart') {
+            excludedDartFilesCount++;
+          }
+        }
+        return;
+      }
+
+      // Check glob patterns - only exclude files, not directories
+      if (entity is File) {
+        for (final glob in globs) {
+          if (glob.matches(relativePath)) {
+            excludedFilesCount++;
+            if (p.extension(entity.path) == '.dart') {
+              excludedDartFilesCount++;
+            }
+            return;
+          }
         }
       }
-      return true;
-    }).length;
+
+      if (entity is Directory) {
+        folderCount++;
+      } else if (entity is File) {
+        fileCount++;
+        if (p.extension(entity.path) == '.dart') {
+          // Additional checks for Dart files
+          final fileName = p.basename(entity.path);
+          if ((fileName.startsWith('app_localizations_') ||
+                  fileName.startsWith('app_localization_')) &&
+              fileName.endsWith('.dart')) {
+            excludedDartFilesCount++;
+            return; // Skip locale files except main app_localizations.dart
+          }
+          dartFiles.add(entity);
+        }
+      }
+    });
+
+    return (
+      dartFiles,
+      folderCount,
+      fileCount,
+      excludedDartFilesCount,
+      excludedFoldersCount,
+      excludedFilesCount
+    );
   }
 }

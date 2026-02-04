@@ -138,7 +138,64 @@ fcheck --json
 
 # Auto-fix sorting issues
 fcheck --fix
+
+# List excluded files and directories
+fcheck --excluded
 ```
+
+### Excluded Files Listing
+
+Use the `--excluded` flag to see exactly which files and directories are being excluded from analysis:
+
+```bash
+# List excluded files and directories
+fcheck --excluded
+
+# List excluded files in JSON format
+fcheck --excluded --json
+```
+
+#### Example Output
+
+```text
+Excluded Dart files (18):
+  ./test/layers_analyzer_test.dart
+  ./test/analyzer_engine_test.dart
+  ./example/lib/comments_example.dart
+  ./example/lib/subfolder/subclass.dart
+  ...
+
+Excluded non-Dart files (1528):
+  ./.DS_Store
+  ./.fcheck
+  ./example/pubspec.lock
+  ./example/layers.svg
+  ...
+
+Excluded directories (15):
+  ./.git
+  ./.dart_tool
+  ./test
+  ./example
+  ./build
+  ...
+```
+
+#### What Gets Excluded
+
+**By Default:**
+- Hidden directories (starting with `.`)
+- Common project directories: `test/`, `example/`, `tool/`, `.dart_tool/`, `build/`, `.git/`, `ios/`, `android/`, `web/`, `macos/`, `windows/`, `linux/`
+- Generated localization files (except main `app_localizations.dart`)
+
+**With Custom Patterns:**
+- Files matching glob patterns specified with `--exclude`
+- Files in directories matching exclude patterns
+
+**Hidden Directory Filtering:**
+- Any directory starting with `.` is automatically excluded
+- This includes `.git`, `.dart_tool`, `.vscode`, etc.
+- Nested hidden directories are also excluded (e.g., `src/.cache/`)
 
 ## 🎯 Quality Checks
 
