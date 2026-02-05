@@ -14,6 +14,7 @@ Builds a dependency graph between Dart files in the project, reports cycles, and
 - Uses `FileUtils.listDartFiles` with CLI `--exclude` patterns and default exclusions.
 - Skips files with `// ignore: fcheck_layers`.
 - Parses each file and uses `LayersVisitor` to collect dependencies and entry point status.
+- `LayersAnalyzer` receives `projectRoot` and `packageName` from `AnalyzeFolder` (see `RULES.md` for the project metadata contract).
 - Filters the dependency graph to only include analyzed files.
 - Detects cycles using DFS and emits `LayersIssueType.cyclicDependency`.
 - If no cycles, assigns layers using SCC-based topological layering.
@@ -41,3 +42,4 @@ Builds a dependency graph between Dart files in the project, reports cycles, and
 
 - Only project-local Dart imports are considered. `dart:` and external `package:` imports are ignored.
 - The current layer assignment algorithm does not explicitly use entry points beyond dependency flow.
+- When used outside `AnalyzeFolder`, callers must supply `projectRoot` and `packageName` explicitly to avoid any metadata lookup.

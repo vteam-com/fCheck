@@ -6,6 +6,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import '../../models/class_visitor.dart';
 import 'sort_members.dart';
 import 'sort_issue.dart';
+import 'sort_utils.dart';
 import '../../models/file_utils.dart';
 
 /// Analyzes Dart files for proper source code member ordering in Flutter classes
@@ -65,7 +66,7 @@ class SourceSortAnalyzer {
         );
 
         // Check if the body needs sorting
-        if (_bodiesDiffer(sortedBody, originalBody)) {
+        if (SortUtils.bodiesDiffer(sortedBody, originalBody)) {
           final int lineNumber = _getLineNumber(content, classNode.offset);
           final className = classNode.namePart.toString();
 
@@ -123,19 +124,6 @@ class SourceSortAnalyzer {
     }
 
     return allIssues;
-  }
-
-  /// Check if two class bodies are different (ignoring whitespace)
-  bool _bodiesDiffer(String sorted, String original) {
-    final String normalizedSorted = sorted.trim().replaceAll(
-          RegExp(r'\s+'),
-          ' ',
-        );
-    final String normalizedOriginal = original.trim().replaceAll(
-          RegExp(r'\s+'),
-          ' ',
-        );
-    return normalizedSorted != normalizedOriginal;
   }
 
   /// Get the line number for a given offset in the content

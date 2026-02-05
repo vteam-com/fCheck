@@ -156,7 +156,11 @@ void main() {
 
     setUp(() {
       tempDir = Directory.systemTemp.createTempSync('fcheck_ignore_test');
-      analyzer = LayersAnalyzer(tempDir);
+      analyzer = LayersAnalyzer(
+        tempDir,
+        projectRoot: tempDir,
+        packageName: 'unknown',
+      );
     });
 
     tearDown(() {

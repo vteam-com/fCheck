@@ -4,6 +4,10 @@
 
 Scans Dart source for potential secrets and PII using regex and entropy heuristics.
 
+## Entry-Point Contract
+
+See `RULES.md` for the project metadata contract.
+
 ## What It Flags
 
 - AWS access keys: `AKIA[0-9A-Z]{16}` with entropy > 3.5.

@@ -1,6 +1,7 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'hardcoded_string_issue.dart';
+import 'hardcoded_string_utils.dart';
 import '../../config/config_ignore_directives.dart';
 
 /// Focus modes for hardcoded string detection.
@@ -25,14 +26,6 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   static const int _maxShortWidgetStringLength = 2;
   static const int _previousLineOffset = 2;
   static const int _tripleQuoteLength = 3;
-  static const int _asciiDigitStart = 48;
-  static const int _asciiDigitEnd = 57;
-  static const int _asciiUpperStart = 65;
-  static const int _asciiUpperEnd = 90;
-  static const int _asciiLowerStart = 97;
-  static const int _asciiLowerEnd = 122;
-  static const int _minQuotedLength = 2;
-  static const int _dollarSignOffset = 1;
 
   /// Creates a new visitor for the specified file.
   ///
@@ -245,8 +238,9 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
       return false;
     }
 
-    final String withoutInterpolations = _removeInterpolations(content);
-    return !_containsMeaningfulText(withoutInterpolations);
+    final String withoutInterpolations =
+        HardcodedStringUtils.removeInterpolations(content);
+    return !HardcodedStringUtils.containsMeaningfulText(withoutInterpolations);
   }
 
   (String content, bool isRaw) _stripLiteralDelimiters(String source) {
@@ -259,7 +253,8 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     }
 
     if (working.startsWith("'''") || working.startsWith('"""')) {
-      if (working.length >= _tripleQuoteLength * _minQuotedLength) {
+      if (working.length >=
+          _tripleQuoteLength * HardcodedStringUtils.minQuotedLength) {
         return (
           working.substring(
             _tripleQuoteLength,
@@ -271,69 +266,11 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
       return ('', isRaw);
     }
 
-    if (working.length >= _minQuotedLength) {
+    if (working.length >= HardcodedStringUtils.minQuotedLength) {
       return (working.substring(1, working.length - 1), isRaw);
     }
 
     return ('', isRaw);
-  }
-
-  String _removeInterpolations(String source) {
-    final buffer = StringBuffer();
-    var i = 0;
-    while (i < source.length) {
-      final char = source[i];
-      if (char == r'$' && (i == 0 || source[i - 1] != r'\')) {
-        if (i + _dollarSignOffset < source.length &&
-            source[i + _dollarSignOffset] == '{') {
-          i += _minQuotedLength;
-          var depth = 1;
-          while (i < source.length && depth > 0) {
-            final current = source[i];
-            if (current == '{') {
-              depth++;
-            } else if (current == '}') {
-              depth--;
-            }
-            i++;
-          }
-          continue;
-        }
-
-        i += _dollarSignOffset;
-        while (i < source.length && _isIdentifierChar(source[i])) {
-          i++;
-        }
-        continue;
-      }
-
-      buffer.write(char);
-      i++;
-    }
-
-    return buffer.toString();
-  }
-
-  bool _isIdentifierChar(String char) {
-    final code = char.codeUnitAt(0);
-    return (code >= _asciiDigitStart && code <= _asciiDigitEnd) || // 0-9
-        (code >= _asciiUpperStart && code <= _asciiUpperEnd) || // A-Z
-        (code >= _asciiLowerStart && code <= _asciiLowerEnd) || // a-z
-        char == '_';
-  }
-
-  bool _containsMeaningfulText(String text) {
-    for (var i = 0; i < text.length; i++) {
-      final code = text.codeUnitAt(i);
-      final isAlphaNumeric =
-          (code >= _asciiDigitStart && code <= _asciiDigitEnd) ||
-              (code >= _asciiUpperStart && code <= _asciiUpperEnd) ||
-              (code >= _asciiLowerStart && code <= _asciiLowerEnd);
-      if (isAlphaNumeric) {
-        return true;
-      }
-    }
-    return false;
   }
 
   bool _containsWidgetLintIgnoreComment(final String line) {
@@ -384,20 +321,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   bool _isTechnicalString(final String value) {
-    final technicalPatterns = [
-      RegExp(r'^\w+://'),
-      RegExp(r'^[\w\-\.]+@[\w\-\.]+\.\w+'),
-      RegExp(r'^#[0-9A-Fa-f]{3,8}'),
-      RegExp(r'^\d+(\.\d+)?[a-zA-Z]*'),
-      RegExp(r'^[A-Z][A-Z0-9]*_[A-Z0-9_]*'),
-      RegExp(r'^[a-z]+_[a-z_]+'),
-      RegExp(r'^/[\w/\-\.]*'),
-      RegExp(r'^\w+\.\w+'),
-      RegExp(r'^[\w\-]+\.[\w]+'),
-      RegExp(r'^[a-zA-Z0-9]*[_\-0-9]+[a-zA-Z0-9_\-]*'),
-    ];
-
-    return technicalPatterns.any((pattern) => pattern.hasMatch(value.trim()));
+    return HardcodedStringUtils.isTechnicalString(value);
   }
 
   bool _isDirectArgument(

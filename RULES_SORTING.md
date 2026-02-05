@@ -4,6 +4,10 @@
 
 This rule checks ordering of members inside Flutter widget classes and can optionally auto-fix the ordering.
 
+## Entry-Point Contract
+
+See `RULES.md` for the project metadata contract.
+
 ## Scope
 
 - Only classes that extend `StatelessWidget`, `StatefulWidget`, `State`, or `State<...>`.

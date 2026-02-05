@@ -139,10 +139,14 @@ void main() {
         ).writeAsStringSync('class MiscHelper {}');
         File('${tempDir.path}/utils.dart').writeAsStringSync('class Utils {}');
 
-        final analyzer = LayersAnalyzer(tempDir);
+        final analyzer = LayersAnalyzer(
+          tempDir,
+          projectRoot: tempDir,
+          packageName: 'unknown',
+        );
         final result = analyzer.analyzeDirectory(
           tempDir,
-          excludePatterns: ['*misc*'],
+          ['*misc*'],
         );
 
         // misc_helper.dart should not appear in the dependency graph at all
@@ -173,10 +177,14 @@ void main() {
         ).writeAsStringSync('import "utils.dart"; class MiscHelper {}');
         File('${tempDir.path}/utils.dart').writeAsStringSync('class Utils {}');
 
-        final analyzer = LayersAnalyzer(tempDir);
+        final analyzer = LayersAnalyzer(
+          tempDir,
+          projectRoot: tempDir,
+          packageName: 'unknown',
+        );
         final result = analyzer.analyzeDirectory(
           tempDir,
-          excludePatterns: ['*misc*'],
+          ['*misc*'],
         );
 
         // misc_helper.dart should not have a layer assignment
@@ -201,10 +209,14 @@ void main() {
           '${tempDir.path}/misc_helper.dart',
         ).writeAsStringSync('class MiscHelper {}');
 
-        final analyzer = LayersAnalyzer(tempDir);
+        final analyzer = LayersAnalyzer(
+          tempDir,
+          projectRoot: tempDir,
+          packageName: 'unknown',
+        );
         final result = analyzer.analyzeDirectory(
           tempDir,
-          excludePatterns: ['*misc*'],
+          ['*misc*'],
         );
 
         // Neither a.dart nor b.dart should have misc_helper in dependencies (filtered)

@@ -76,6 +76,9 @@ class AnalyzeFolder {
   /// Global ignore configuration from .fcheck file and constructor.
   final Map<String, bool> ignoreConfig;
 
+  /// Cached pubspec.yaml metadata for this analysis session.
+  late final _PubspecInfo _pubspecInfo = _PubspecInfo.load(projectDir);
+
   /// Analyzes the layers architecture and returns the result.
   ///
   /// This method performs dependency analysis and layer assignment
@@ -83,10 +86,16 @@ class AnalyzeFolder {
   ///
   /// Returns a [LayersAnalysisResult] containing issues and layer assignments.
   LayersAnalysisResult analyzeLayers() {
-    final layersAnalyzer = LayersAnalyzer(projectDir);
+    final pubspecInfo = _pubspecInfo;
+    final projectRoot = pubspecInfo.projectRoot ?? projectDir;
+    final layersAnalyzer = LayersAnalyzer(
+      projectDir,
+      projectRoot: projectRoot,
+      packageName: pubspecInfo.packageName,
+    );
     return layersAnalyzer.analyzeDirectory(
       projectDir,
-      excludePatterns: excludePatterns,
+      excludePatterns,
     );
   }
 
@@ -126,6 +135,9 @@ class AnalyzeFolder {
   ///
   /// Returns a [ProjectMetrics] object with complete analysis results.
   ProjectMetrics analyze() {
+    final pubspecInfo = _pubspecInfo;
+    final projectRoot = pubspecInfo.projectRoot ?? projectDir;
+
     // Perform unified directory scan to get all file system metrics in one pass
     final (
       dartFiles,
@@ -138,10 +150,9 @@ class AnalyzeFolder {
       projectDir,
       excludePatterns: excludePatterns,
     );
-
-    final projectVersion = _readProjectVersion(projectDir);
-    final projectName = _readProjectName(projectDir);
-    final projectType = _detectProjectType(projectDir);
+    final projectVersion = pubspecInfo.version;
+    final projectName = pubspecInfo.name;
+    final projectType = pubspecInfo.projectType;
     final hardcodedStringsFocus = projectType == ProjectType.flutter
         ? HardcodedStringFocus.flutterWidgets
         : projectType == ProjectType.dart
@@ -153,7 +164,7 @@ class AnalyzeFolder {
       HardcodedStringDelegate(focus: hardcodedStringsFocus),
       MagicNumberDelegate(),
       SourceSortDelegate(fix: fix),
-      LayersDelegate(projectDir, _readPackageName(projectDir)),
+      LayersDelegate(projectRoot, pubspecInfo.packageName),
       SecretDelegate(),
     ];
 
@@ -180,10 +191,14 @@ class AnalyzeFolder {
     final secretIssues = allListResults.whereType<SecretIssue>().toList();
 
     // Layers analysis needs special handling for dependency graph
-    final layersAnalyzer = LayersAnalyzer(projectDir);
+    final layersAnalyzer = LayersAnalyzer(
+      projectDir,
+      projectRoot: projectRoot,
+      packageName: pubspecInfo.packageName,
+    );
     final layersResult = layersAnalyzer.analyzeDirectory(
       projectDir,
-      excludePatterns: excludePatterns,
+      excludePatterns,
     );
 
     // File metrics analysis (still needed for LOC and comment analysis)
@@ -271,130 +286,6 @@ class AnalyzeFolder {
       isStatefulWidget: visitor.hasStatefulWidget,
       ignoreOneClassPerFile: hasIgnoreDirective,
     );
-  }
-
-  /// Reads the project name from pubspec.yaml.
-  ///
-  /// This method looks for the 'name' field in the pubspec.yaml file
-  /// and returns it. Searches up the directory tree from the given directory.
-  /// Returns 'unknown' if the file cannot be read or the name field is missing.
-  ///
-  /// [projectDir] The directory to start searching from.
-  ///
-  /// Returns the project name as defined in pubspec.yaml or 'unknown'.
-  String _readProjectName(Directory projectDir) {
-    Directory? currentDir = projectDir;
-
-    // Search up the directory tree for pubspec.yaml
-    while (currentDir != null) {
-      final pubspecFile = File(p.join(currentDir.path, 'pubspec.yaml'));
-      if (pubspecFile.existsSync()) {
-        try {
-          final yaml = loadYaml(pubspecFile.readAsStringSync());
-          return yaml['name'] ?? 'unknown';
-        } catch (e) {
-          return 'unknown';
-        }
-      }
-
-      // Move up to parent directory
-      final parent = currentDir.parent;
-      if (parent.path == currentDir.path) {
-        // We've reached the root directory
-        break;
-      }
-      currentDir = parent;
-    }
-
-    return 'unknown';
-  }
-
-  /// Reads the package name from pubspec.yaml.
-  ///
-  /// This method looks for the 'name' field in the pubspec.yaml file
-  /// and returns it. Used by layers analyzer for dependency resolution.
-  ///
-  /// [projectDir] The directory to start searching from.
-  ///
-  /// Returns the package name as defined in pubspec.yaml or 'unknown'.
-  String _readPackageName(Directory projectDir) {
-    return _readProjectName(projectDir);
-  }
-
-  /// Detects the project type (Flutter, Dart, or Unknown) via pubspec.yaml.
-  ///
-  /// This method looks for a `flutter` dependency in pubspec.yaml and
-  /// searches up the directory tree from the given directory.
-  ProjectType _detectProjectType(Directory projectDir) {
-    Directory? currentDir = projectDir;
-
-    while (currentDir != null) {
-      final pubspecFile = File(p.join(currentDir.path, 'pubspec.yaml'));
-      if (pubspecFile.existsSync()) {
-        try {
-          final yaml = loadYaml(pubspecFile.readAsStringSync());
-          if (yaml is YamlMap) {
-            final dependencies = yaml['dependencies'];
-            if (dependencies is YamlMap &&
-                dependencies.containsKey('flutter')) {
-              return ProjectType.flutter;
-            }
-            final devDependencies = yaml['dev_dependencies'];
-            if (devDependencies is YamlMap &&
-                devDependencies.containsKey('flutter')) {
-              return ProjectType.flutter;
-            }
-          }
-        } catch (e) {
-          return ProjectType.unknown;
-        }
-        return ProjectType.dart;
-      }
-
-      final parent = currentDir.parent;
-      if (parent.path == currentDir.path) {
-        break;
-      }
-      currentDir = parent;
-    }
-
-    return ProjectType.unknown;
-  }
-
-  /// Reads the project version from pubspec.yaml.
-  ///
-  /// This method looks for the 'version' field in the pubspec.yaml file
-  /// and returns it. Searches up the directory tree from the given directory.
-  /// Returns 'unknown' if the file cannot be read or the version field is missing.
-  ///
-  /// [projectDir] The directory to start searching from.
-  ///
-  /// Returns the project version as defined in pubspec.yaml or 'unknown'.
-  String _readProjectVersion(Directory projectDir) {
-    Directory? currentDir = projectDir;
-
-    // Search up the directory tree for pubspec.yaml
-    while (currentDir != null) {
-      final pubspecFile = File(p.join(currentDir.path, 'pubspec.yaml'));
-      if (pubspecFile.existsSync()) {
-        try {
-          final yaml = loadYaml(pubspecFile.readAsStringSync());
-          return yaml['version'] ?? 'unknown';
-        } catch (e) {
-          return 'unknown';
-        }
-      }
-
-      // Move up to parent directory
-      final parent = currentDir.parent;
-      if (parent.path == currentDir.path) {
-        // We've reached the root directory
-        break;
-      }
-      currentDir = parent;
-    }
-
-    return 'unknown';
   }
 
   /// Counts the number of comment lines in a Dart file.
@@ -493,6 +384,96 @@ class AnalyzeFolder {
       }
     }
     return false;
+  }
+}
+
+/// Parsed pubspec.yaml metadata for a project.
+class _PubspecInfo {
+  final Directory? projectRoot;
+  final String name;
+  final String version;
+  final ProjectType projectType;
+
+  const _PubspecInfo({
+    required this.projectRoot,
+    required this.name,
+    required this.version,
+    required this.projectType,
+  });
+
+  String get packageName => name;
+
+  static _PubspecInfo load(Directory startDir) {
+    Directory? currentDir = startDir;
+
+    while (currentDir != null) {
+      final pubspecFile = File(p.join(currentDir.path, 'pubspec.yaml'));
+      if (pubspecFile.existsSync()) {
+        try {
+          final yaml = loadYaml(pubspecFile.readAsStringSync());
+          if (yaml is YamlMap) {
+            final name = _readStringField(yaml, 'name');
+            final version = _readStringField(yaml, 'version');
+            final projectType = _detectProjectType(yaml);
+            return _PubspecInfo(
+              projectRoot: currentDir,
+              name: name,
+              version: version,
+              projectType: projectType,
+            );
+          }
+          return _PubspecInfo(
+            projectRoot: currentDir,
+            name: 'unknown',
+            version: 'unknown',
+            projectType: ProjectType.dart,
+          );
+        } catch (_) {
+          return _PubspecInfo(
+            projectRoot: currentDir,
+            name: 'unknown',
+            version: 'unknown',
+            projectType: ProjectType.unknown,
+          );
+        }
+      }
+
+      final parent = currentDir.parent;
+      if (parent.path == currentDir.path) {
+        break;
+      }
+      currentDir = parent;
+    }
+
+    return const _PubspecInfo(
+      projectRoot: null,
+      name: 'unknown',
+      version: 'unknown',
+      projectType: ProjectType.unknown,
+    );
+  }
+
+  static String _readStringField(YamlMap yaml, String field) {
+    final value = yaml[field];
+    if (value == null) {
+      return 'unknown';
+    }
+    if (value is String) {
+      return value;
+    }
+    return value.toString();
+  }
+
+  static ProjectType _detectProjectType(YamlMap yaml) {
+    final dependencies = yaml['dependencies'];
+    if (dependencies is YamlMap && dependencies.containsKey('flutter')) {
+      return ProjectType.flutter;
+    }
+    final devDependencies = yaml['dev_dependencies'];
+    if (devDependencies is YamlMap && devDependencies.containsKey('flutter')) {
+      return ProjectType.flutter;
+    }
+    return ProjectType.dart;
   }
 }
 

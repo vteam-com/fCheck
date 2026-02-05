@@ -2,10 +2,8 @@ import 'dart:io';
 import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
-import 'package:analyzer/dart/ast/ast.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/models/file_utils.dart';
-import 'package:yaml/yaml.dart';
 import 'layers_issue.dart';
 import 'layers_visitor.dart';
 import '../../config/config_ignore_directives.dart';
@@ -20,11 +18,23 @@ class LayersAnalyzer {
   /// The root directory being analyzed.
   final Directory _rootDirectory;
 
+  /// Project root directory (containing pubspec.yaml).
+  final Directory _projectRoot;
+
+  /// Package name from pubspec.yaml.
+  final String _packageName;
+
   /// Creates a new LayersAnalyzer instance.
   ///
   /// This constructor creates an analyzer that can be used to detect
   /// layers architecture violations in Dart projects.
-  LayersAnalyzer(this._rootDirectory);
+  /// Project metadata must be supplied by the entry point (AnalyzeFolder).
+  LayersAnalyzer(
+    this._rootDirectory, {
+    required Directory projectRoot,
+    required String packageName,
+  })  : _projectRoot = projectRoot,
+        _packageName = packageName;
 
   /// Analyzes a single Dart file for layers violations.
   ///
@@ -73,6 +83,7 @@ class LayersAnalyzer {
   /// Analyzes all Dart files in a directory for layers violations.
   ///
   /// This method recursively scans the directory tree starting from [directory]
+  /// (or the root directory supplied at construction if omitted).
   /// and analyzes all `.dart` files found, excluding example/, test/, tool/,
   /// and build directories. It builds a dependency graph and detects
   /// cyclic dependencies and layering violations.
@@ -80,12 +91,13 @@ class LayersAnalyzer {
   /// [directory] The root directory to scan.
   ///
   /// Returns a [LayersAnalysisResult] containing issues and layer assignments.
-  LayersAnalysisResult analyzeDirectory(
-    Directory directory, {
-    List<String> excludePatterns = const [],
-  }) {
+  LayersAnalysisResult analyzeDirectory([
+    final Directory? directory,
+    final List<String> excludePatterns = const [],
+  ]) {
+    final Directory targetDirectory = directory ?? _rootDirectory;
     final List<File> dartFiles = FileUtils.listDartFiles(
-      directory,
+      targetDirectory,
       excludePatterns: excludePatterns,
     );
 
@@ -145,17 +157,12 @@ class LayersAnalyzer {
       return {'dependencies': <String>[], 'isEntryPoint': false};
     }
 
-    final CompilationUnit compilationUnit = result.unit;
-    // Find project root (directory containing pubspec.yaml)
-    final Directory projectRoot = _findProjectRoot() ?? _rootDirectory;
-    final String packageName = _readPackageName(projectRoot);
-
     final LayersVisitor visitor = LayersVisitor(
       filePath,
-      projectRoot.path,
-      packageName,
+      _projectRoot.path,
+      _packageName,
     );
-    compilationUnit.accept(visitor);
+    result.unit.accept(visitor);
 
     return {
       'dependencies': visitor.dependencies,
@@ -411,34 +418,5 @@ class LayersAnalyzer {
     }
 
     return connectedGraph;
-  }
-
-  /// Finds the project root directory (containing pubspec.yaml).
-  Directory? _findProjectRoot() {
-    var currentDir = _rootDirectory;
-    while (true) {
-      if (File('${currentDir.path}/pubspec.yaml').existsSync()) {
-        return currentDir;
-      }
-      final parent = currentDir.parent;
-      if (parent.path == currentDir.path) break; // reached root
-      currentDir = parent;
-    }
-    return null;
-  }
-
-  /// Reads the package name from pubspec.yaml in the project root.
-  String _readPackageName(Directory projectRoot) {
-    final pubspecFile = File('${projectRoot.path}/pubspec.yaml');
-    if (pubspecFile.existsSync()) {
-      try {
-        final content = pubspecFile.readAsStringSync();
-        final yaml = loadYaml(content) as YamlMap;
-        return yaml['name'] as String? ?? 'unknown';
-      } catch (e) {
-        return 'unknown';
-      }
-    }
-    return 'unknown';
   }
 }

@@ -28,6 +28,9 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
 - Per-domain delegates live in `lib/src/analyzer_runner/analyzer_delegates.dart`.
 - File discovery and default exclusions are centralized in `lib/src/models/file_utils.dart`.
 - Ignore directives are implemented in `lib/src/config/config_ignore_directives.dart`.
+- **Project metadata contract:** `AnalyzeFolder` is the single entry point for analysis and is the only component that reads `pubspec.yaml`.
+- `AnalyzeFolder` reads `pubspec.yaml` once, derives `projectType`, `projectName`, `version`, and `packageName`, and passes these values into delegates/analyzers.
+- Domain analyzers must **not** read `pubspec.yaml` or rescan for project roots; they should rely on values provided by `AnalyzeFolder`.
 
 ## Repository Structure
 

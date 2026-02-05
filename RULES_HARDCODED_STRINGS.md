@@ -16,7 +16,8 @@ This document covers both, so a new contributor understands when each applies an
 
 ### How Focus Is Determined
 
-- The CLI detects Flutter projects by checking for a `flutter` dependency in `pubspec.yaml`.
+- The CLI detects Flutter projects by checking for a `flutter` dependency in `pubspec.yaml` **once** in `AnalyzeFolder`.
+- The hardcoded-strings analyzer receives the precomputed focus mode from the top-level entry point (see `RULES.md` for the project metadata contract).
 - Flutter projects use a widget-output-only filter (heuristic, see below).
 - Non-Flutter projects use a print-only filter.
 

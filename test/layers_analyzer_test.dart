@@ -10,7 +10,11 @@ void main() {
 
     setUp(() {
       tempDir = Directory.systemTemp.createTempSync('layers_test_');
-      analyzer = LayersAnalyzer(tempDir);
+      analyzer = LayersAnalyzer(
+        tempDir,
+        projectRoot: tempDir,
+        packageName: 'unknown',
+      );
     });
 
     tearDown(() {
@@ -74,10 +78,6 @@ void main() {
     });
 
     test('should handle package imports within the same package', () {
-      // Create pubspec.yaml with package name
-      final pubspec = File('${tempDir.path}/pubspec.yaml');
-      pubspec.writeAsStringSync('name: test_package\n');
-
       // Create lib directory and files
       final libDir = Directory('${tempDir.path}/lib');
       libDir.createSync();
@@ -88,6 +88,12 @@ void main() {
       final fileB = File('${libDir.path}/b.dart');
       fileB.writeAsStringSync('class B {}');
 
+      // Provide package name from entry point.
+      final analyzer = LayersAnalyzer(
+        tempDir,
+        projectRoot: tempDir,
+        packageName: 'test_package',
+      );
       final result = analyzer.analyzeDirectory(tempDir);
       expect(result.issues, isEmpty);
       expect(result.dependencyGraph[fileA.path], contains(fileB.path));

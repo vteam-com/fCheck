@@ -4,6 +4,10 @@
 
 Detects numeric literals that should likely be expressed as named constants.
 
+## Entry-Point Contract
+
+See `RULES.md` for the project metadata contract.
+
 ## What It Flags
 
 - Integer and double literals other than 0, 1, or -1.

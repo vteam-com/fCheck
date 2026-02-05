@@ -1,18 +1,20 @@
 // ignore: fcheck_one_class_per_file
 // ignore: fcheck_secrets
 import 'dart:io';
-import 'dart:math';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_utils.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_visitor.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_members.dart';
+import 'package:fcheck/src/analyzers/sorted/sort_utils.dart';
 import 'package:fcheck/src/models/class_visitor.dart';
 import 'package:fcheck/src/analyzers/layers/layers_visitor.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
+import 'package:fcheck/src/analyzers/secrets/secret_scanner.dart';
 
 /// Delegate adapter for HardcodedStringAnalyzer
 class HardcodedStringDelegate implements AnalyzerDelegate {
@@ -26,14 +28,6 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
   final HardcodedStringFocus focus;
 
   static const int _maxShortWidgetStringLength = 2;
-  static const int _minQuotedLength = 2;
-  static const int _dollarSignOffset = 1;
-  static const int _asciiDigitStart = 48;
-  static const int _asciiDigitEnd = 57;
-  static const int _asciiUpperStart = 65;
-  static const int _asciiUpperEnd = 90;
-  static const int _asciiLowerStart = 97;
-  static const int _asciiLowerEnd = 122;
 
   /// Analyzes a file for hardcoded strings using the unified context.
   ///
@@ -100,7 +94,7 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
     );
 
     for (final match in regex.allMatches(context.content)) {
-      final value = match.group(_minQuotedLength) ?? '';
+      final value = match.group(HardcodedStringUtils.minQuotedLength) ?? '';
       if (value.isEmpty || value.length <= _maxShortWidgetStringLength) {
         continue;
       }
@@ -133,7 +127,8 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
       }
 
       if (lineNumber > 1) {
-        final previousLine = context.lines[lineNumber - _minQuotedLength];
+        final previousLine =
+            context.lines[lineNumber - HardcodedStringUtils.minQuotedLength];
         if (_hasWidgetLintIgnoreComment(previousLine)) {
           continue;
         }
@@ -163,83 +158,13 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
   }
 
   bool _isInterpolationOnlyString(String value) {
-    final String withoutInterpolations = _removeInterpolations(value);
-    return !_containsMeaningfulText(withoutInterpolations);
-  }
-
-  String _removeInterpolations(String source) {
-    final buffer = StringBuffer();
-    var i = 0;
-    while (i < source.length) {
-      final char = source[i];
-      if (char == r'$' && (i == 0 || source[i - 1] != r'\')) {
-        if (i + _dollarSignOffset < source.length &&
-            source[i + _dollarSignOffset] == '{') {
-          i += _minQuotedLength;
-          var depth = 1;
-          while (i < source.length && depth > 0) {
-            final current = source[i];
-            if (current == '{') {
-              depth++;
-            } else if (current == '}') {
-              depth--;
-            }
-            i++;
-          }
-          continue;
-        }
-
-        i += _dollarSignOffset;
-        while (i < source.length && _isIdentifierChar(source[i])) {
-          i++;
-        }
-        continue;
-      }
-
-      buffer.write(char);
-      i++;
-    }
-
-    return buffer.toString();
-  }
-
-  bool _isIdentifierChar(String char) {
-    final code = char.codeUnitAt(0);
-    return (code >= _asciiDigitStart && code <= _asciiDigitEnd) || // 0-9
-        (code >= _asciiUpperStart && code <= _asciiUpperEnd) || // A-Z
-        (code >= _asciiLowerStart && code <= _asciiLowerEnd) || // a-z
-        char == '_';
-  }
-
-  bool _containsMeaningfulText(String text) {
-    for (var i = 0; i < text.length; i++) {
-      final code = text.codeUnitAt(i);
-      final isAlphaNumeric =
-          (code >= _asciiDigitStart && code <= _asciiDigitEnd) ||
-              (code >= _asciiUpperStart && code <= _asciiUpperEnd) ||
-              (code >= _asciiLowerStart && code <= _asciiLowerEnd);
-      if (isAlphaNumeric) {
-        return true;
-      }
-    }
-    return false;
+    final String withoutInterpolations =
+        HardcodedStringUtils.removeInterpolations(value);
+    return !HardcodedStringUtils.containsMeaningfulText(withoutInterpolations);
   }
 
   bool _isTechnicalString(String value) {
-    final technicalPatterns = [
-      RegExp(r'^\w+://'),
-      RegExp(r'^[\w\-\.]+@[\w\-\.]+\.\w+'),
-      RegExp(r'^#[0-9A-Fa-f]{3,8}'),
-      RegExp(r'^\d+(\.\d+)?[a-zA-Z]*'),
-      RegExp(r'^[A-Z][A-Z0-9]*_[A-Z0-9_]*'),
-      RegExp(r'^[a-z]+_[a-z_]+'),
-      RegExp(r'^/[\w/\-\.]*'),
-      RegExp(r'^\w+\.\w+'),
-      RegExp(r'^[\w\-]+\.[\w]+'),
-      RegExp(r'^[a-zA-Z0-9]*[_\-0-9]+[a-zA-Z0-9_\-]*'),
-    ];
-
-    return technicalPatterns.any((pattern) => pattern.hasMatch(value.trim()));
+    return HardcodedStringUtils.isTechnicalString(value);
   }
 }
 
@@ -338,7 +263,7 @@ class SourceSortDelegate implements AnalyzerDelegate {
         );
 
         // Check if the body needs sorting
-        if (_bodiesDiffer(sortedBody, originalBody)) {
+        if (SortUtils.bodiesDiffer(sortedBody, originalBody)) {
           final lineNumber = context.getLineNumber(classNode.offset);
           final className = classNode.namePart.toString();
 
@@ -368,18 +293,6 @@ class SourceSortDelegate implements AnalyzerDelegate {
     }
 
     return issues;
-  }
-
-  bool _bodiesDiffer(String sorted, String original) {
-    final normalizedSorted = sorted.trim().replaceAll(
-          RegExp(r'\s+'),
-          ' ',
-        );
-    final normalizedOriginal = original.trim().replaceAll(
-          RegExp(r'\s+'),
-          ' ',
-        );
-    return normalizedSorted != normalizedOriginal;
   }
 }
 
@@ -438,15 +351,7 @@ class LayersDelegate implements AnalyzerDelegate {
 
 /// Delegate adapter for SecretAnalyzer
 class SecretDelegate implements AnalyzerDelegate {
-  static const int _ignoreDirectiveScanLines = 10;
-  static const int _awsAccessKeyLength = 20;
-  static const double _awsEntropyThreshold = 3.5;
-  static const int _genericSecretLineMinLength = 20;
-  static const double _genericSecretEntropyThreshold = 4.0;
-  static const int _bearerTokenMinLength = 20;
-  static const double _bearerTokenEntropyThreshold = 3.8;
-  static const int _githubPatMinLength = 40;
-  static const double _highEntropyThreshold = 4.5;
+  final SecretScanner _scanner = SecretScanner();
 
   /// Analyzes a file for secrets using the unified context.
   ///
@@ -458,208 +363,9 @@ class SecretDelegate implements AnalyzerDelegate {
   /// Returns a list of [SecretIssue] objects representing secrets found in the file.
   @override
   List<SecretIssue> analyzeFileWithContext(AnalysisFileContext context) {
-    // Check for ignore directive
-    for (final line in context.lines.take(_ignoreDirectiveScanLines)) {
-      if (line.trim().contains('// ignore: fcheck_secrets')) {
-        return [];
-      }
-    }
-
-    final issues = <SecretIssue>[];
-
-    for (int i = 0; i < context.lines.length; i++) {
-      final lineFindings =
-          _scanLine(context.lines[i], context.file.path, i + 1);
-      issues.addAll(lineFindings);
-    }
-
-    return issues;
-  }
-
-  List<SecretIssue> _scanLine(String line, String filePath, int lineNumber) {
-    final findings = <SecretIssue>[];
-
-    // AWS Access Key
-    if (_detectAwsAccessKey(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'aws_access_key',
-        value: 'AWS Access Key detected',
-      ));
-    }
-
-    // Generic Secret
-    if (_detectGenericSecret(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'generic_secret',
-        value: 'Generic secret detected',
-      ));
-    }
-
-    // Bearer Token
-    if (_detectBearerToken(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'bearer_token',
-        value: 'Bearer token detected',
-      ));
-    }
-
-    // Private Key
-    if (_detectPrivateKey(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'private_key',
-        value: 'Private key detected',
-      ));
-    }
-
-    // Email PII
-    if (_detectEmail(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'email_pii',
-        value: 'Email address detected',
-      ));
-    }
-
-    // Stripe Keys
-    if (_detectStripeKey(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'stripe_key',
-        value: 'Stripe key detected',
-      ));
-    }
-
-    // GitHub PAT
-    if (_detectGitHubPAT(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'github_pat',
-        value: 'GitHub PAT detected',
-      ));
-    }
-
-    // High Entropy Strings
-    if (_detectHighEntropyString(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'high_entropy',
-        value: 'High entropy string detected',
-      ));
-    }
-
-    return findings;
-  }
-
-  bool _detectAwsAccessKey(String line) {
-    final regex = RegExp(r'AKIA[0-9A-Z]{16}');
-    final matches = regex.allMatches(line);
-    for (final match in matches) {
-      final candidate = match.group(0) ?? '';
-      if (candidate.length == _awsAccessKeyLength &&
-          _calculateEntropy(candidate) > _awsEntropyThreshold) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  bool _detectGenericSecret(String line) {
-    final regex = RegExp(r'api[_-]?key|token|secret|password|private_key',
-        caseSensitive: false);
-    if (regex.hasMatch(line) &&
-        line.contains('=') &&
-        line.length > _genericSecretLineMinLength) {
-      return _calculateEntropy(line) > _genericSecretEntropyThreshold;
-    }
-    return false;
-  }
-
-  bool _detectBearerToken(String line) {
-    final regex = RegExp(
-      'Bearer\\s+[a-zA-Z0-9_\\-]{$_bearerTokenMinLength,}',
-      caseSensitive: false,
+    return _scanner.analyzeLines(
+      filePath: context.file.path,
+      lines: context.lines,
     );
-    final matches = regex.allMatches(line);
-    for (final match in matches) {
-      final candidate = match.group(0) ?? '';
-      if (_calculateEntropy(candidate) > _bearerTokenEntropyThreshold) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  bool _detectPrivateKey(String line) {
-    final regex = RegExp(
-        r'-----BEGIN\s+(RSA|EC|DSA|OPENSSH)\s+PRIVATE\s+KEY-----',
-        caseSensitive: false);
-    return regex.hasMatch(line);
-  }
-
-  bool _detectEmail(String line) {
-    final regex = RegExp(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}',
-        caseSensitive: false);
-    return regex.hasMatch(line);
-  }
-
-  bool _detectStripeKey(String line) {
-    final regex = RegExp(r'(sk_live_|pk_live_)[0-9a-zA-Z]{24}');
-    return regex.hasMatch(line);
-  }
-
-  bool _detectGitHubPAT(String line) {
-    final regex = RegExp(r'gh[p|s|o|u|l]_[0-9a-zA-Z]{36}|[gG]ithub_pat_');
-    final matches = regex.allMatches(line);
-    for (final match in matches) {
-      final candidate = match.group(0) ?? '';
-      if (candidate.length >= _githubPatMinLength) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  bool _detectHighEntropyString(String line) {
-    final regex = RegExp(r'[a-zA-Z0-9+/]{32,}');
-    final matches = regex.allMatches(line);
-    for (final match in matches) {
-      final candidate = match.group(0) ?? '';
-      if (_calculateEntropy(candidate) > _highEntropyThreshold) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  double _calculateEntropy(String str) {
-    if (str.isEmpty) return 0.0;
-
-    final counts = <String, int>{};
-    for (final char in str.runes) {
-      final charStr = String.fromCharCode(char);
-      counts[charStr] = (counts[charStr] ?? 0) + 1;
-    }
-
-    double entropy = 0.0;
-    final length = str.length;
-
-    for (final count in counts.values) {
-      final probability = count / length;
-      entropy -= probability * (log(probability) / ln2);
-    }
-
-    return entropy;
   }
 }

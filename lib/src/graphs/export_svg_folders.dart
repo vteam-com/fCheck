@@ -1698,6 +1698,22 @@ List<String> _sortFiles(
   Map<String, List<String>> graph,
 ) {
   final fullPaths = {for (final f in files) f: f};
+  int compareFilesByMetrics(String a, String b) {
+    final aPath = fullPaths[a]!;
+    final bPath = fullPaths[b]!;
+
+    final aOut = (metrics[aPath]?['outgoing'] ?? 0);
+    final bOut = (metrics[bPath]?['outgoing'] ?? 0);
+    var diff = bOut.compareTo(aOut); // desc
+    if (diff != 0) return diff;
+
+    final aIn = (metrics[aPath]?['incoming'] ?? 0);
+    final bIn = (metrics[bPath]?['incoming'] ?? 0);
+    diff = aIn.compareTo(bIn); // asc
+    if (diff != 0) return diff;
+
+    return a.compareTo(b); // path asc
+  }
 
   // Build in-folder dependency graph: edge source -> target when source depends on target in same folder.
   final adj = <String, Set<String>>{};
@@ -1731,22 +1747,7 @@ List<String> _sortFiles(
     // Primary: file outgoing dependencies (desc)
     // Secondary: file incoming dependencies (asc)
     // Tiebreaker: file path asc
-    queue.sort((a, b) {
-      final aPath = fullPaths[a]!;
-      final bPath = fullPaths[b]!;
-
-      final aOut = (metrics[aPath]?['outgoing'] ?? 0);
-      final bOut = (metrics[bPath]?['outgoing'] ?? 0);
-      var diff = bOut.compareTo(aOut); // desc
-      if (diff != 0) return diff;
-
-      final aIn = (metrics[aPath]?['incoming'] ?? 0);
-      final bIn = (metrics[bPath]?['incoming'] ?? 0);
-      diff = aIn.compareTo(bIn); // asc
-      if (diff != 0) return diff;
-
-      return a.compareTo(b); // path asc
-    });
+    queue.sort(compareFilesByMetrics);
 
     final f = queue.removeAt(0);
     result.add(f);
@@ -1759,22 +1760,7 @@ List<String> _sortFiles(
   // Append any remaining (cycles) sorted by the same criteria
   if (result.length < files.length) {
     final remaining = files.where((f) => !result.contains(f)).toList();
-    remaining.sort((a, b) {
-      final aPath = fullPaths[a]!;
-      final bPath = fullPaths[b]!;
-
-      final aOut = (metrics[aPath]?['outgoing'] ?? 0);
-      final bOut = (metrics[bPath]?['outgoing'] ?? 0);
-      var diff = bOut.compareTo(aOut); // desc
-      if (diff != 0) return diff;
-
-      final aIn = (metrics[aPath]?['incoming'] ?? 0);
-      final bIn = (metrics[bPath]?['incoming'] ?? 0);
-      diff = aIn.compareTo(bIn); // asc
-      if (diff != 0) return diff;
-
-      return a.compareTo(b); // path asc
-    });
+    remaining.sort(compareFilesByMetrics);
     result.addAll(remaining);
   }
 
