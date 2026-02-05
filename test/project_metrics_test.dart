@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:fcheck/src/metrics/project_metrics.dart';
 import 'package:test/test.dart';
@@ -39,6 +41,7 @@ void main() {
         dependencyGraph: {},
         projectName: 'example_project',
         version: '1.0.0',
+        projectType: ProjectType.dart,
       );
 
       expect(projectMetrics.totalFolders, equals(5));
@@ -68,6 +71,7 @@ void main() {
         dependencyGraph: {},
         projectName: 'example_project',
         version: '1.0.0',
+        projectType: ProjectType.dart,
       );
 
       expect(projectMetrics.commentRatio, equals(0.25));
@@ -91,6 +95,7 @@ void main() {
         dependencyGraph: {},
         projectName: 'example_project',
         version: '1.0.0',
+        projectType: ProjectType.dart,
       );
 
       expect(projectMetrics.commentRatio, equals(0.0));
@@ -131,10 +136,23 @@ void main() {
         dependencyGraph: {},
         projectName: 'example_project',
         version: '1.0.0',
+        projectType: ProjectType.dart,
       );
 
-      // Test that printReport doesn't throw an error
-      expect(() => projectMetrics.printReport(), returnsNormally);
+      final output = <String>[];
+
+      runZoned(
+        () {
+          projectMetrics.printReport();
+        },
+        zoneSpecification: ZoneSpecification(
+          print: (self, parent, zone, line) {
+            output.add(line);
+          },
+        ),
+      );
+
+      expect(output, isNotEmpty);
     });
   });
 }

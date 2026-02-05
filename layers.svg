@@ -257,7 +257,7 @@
   <title>./lib/fcheck.dart ▶ ./lib/src/metrics/file_metrics.dart</title>
 </g>
 <g>
-  <path d="M 590.0 128.0 C 640.0 128.0, 966.0 242.0, 1016.0 242.0" class="edge"/>
+  <path d="M 590.0 128.0 C 640.0 128.0, 966.0 312.0, 1016.0 312.0" class="edge"/>
   <title>./lib/fcheck.dart ▶ ./lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
@@ -265,7 +265,7 @@
   <title>./lib/fcheck.dart ▶ ./lib/src/analyzers/layers/layers_analyzer.dart</title>
 </g>
 <g>
-  <path d="M 590.0 128.0 C 640.0 128.0, 966.0 382.0, 1016.0 382.0" class="edge"/>
+  <path d="M 590.0 128.0 C 640.0 128.0, 966.0 452.0, 1016.0 452.0" class="edge"/>
   <title>./lib/fcheck.dart ▶ ./lib/src/analyzers/sorted/sort.dart</title>
 </g>
 <g>
@@ -291,6 +291,10 @@
 <g>
   <path d="M 590.0 128.0 C 640.0 128.0, 1286.0 172.0, 1336.0 172.0" class="edge"/>
   <title>./lib/fcheck.dart ▶ ./lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart</title>
+</g>
+<g>
+  <path d="M 590.0 128.0 C 640.0 128.0, 966.0 242.0, 1016.0 242.0" class="edge"/>
+  <title>./lib/fcheck.dart ▶ ./lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart</title>
 </g>
 <g>
   <path d="M 590.0 128.0 C 640.0 128.0, 1286.0 242.0, 1336.0 242.0" class="edge"/>
@@ -325,7 +329,7 @@
   <title>./lib/src/metrics/project_metrics.dart ▶ ./lib/src/analyzers/magic_numbers/magic_number_issue.dart</title>
 </g>
 <g>
-  <path d="M 910.0 408.0 C 960.0 408.0, 966.0 382.0, 1016.0 382.0" class="edge"/>
+  <path d="M 910.0 408.0 C 960.0 408.0, 966.0 452.0, 1016.0 452.0" class="edge"/>
   <title>./lib/src/metrics/project_metrics.dart ▶ ./lib/src/analyzers/sorted/sort.dart</title>
 </g>
 <g>
@@ -333,11 +337,11 @@
   <title>./lib/src/metrics/project_metrics.dart ▶ ./lib/src/metrics/output.dart</title>
 </g>
 <g>
-  <path d="M 1230.0 478.0 C 1280.0 478.0, 1286.0 172.0, 1336.0 172.0" class="edge"/>
+  <path d="M 1230.0 268.0 C 1280.0 268.0, 1286.0 172.0, 1336.0 172.0" class="edge"/>
   <title>./lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart ▶ ./lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart</title>
 </g>
 <g>
-  <path d="M 1230.0 478.0 C 1280.0 478.0, 1286.0 102.0, 1336.0 102.0" class="edge"/>
+  <path d="M 1230.0 268.0 C 1280.0 268.0, 1286.0 102.0, 1336.0 102.0" class="edge"/>
   <title>./lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart ▶ ./lib/src/config/config_ignore_directives.dart</title>
 </g>
 <g>
@@ -353,7 +357,7 @@
   <title>./lib/src/analyzers/hardcoded_strings/hardcoded_string_analyzer.dart ▶ ./lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart</title>
 </g>
 <g>
-  <path d="M 270.0 198.0 C 320.0 198.0, 966.0 452.0, 1016.0 452.0" class="edge"/>
+  <path d="M 270.0 198.0 C 320.0 198.0, 966.0 242.0, 1016.0 242.0" class="edge"/>
   <title>./lib/src/analyzers/hardcoded_strings/hardcoded_string_analyzer.dart ▶ ./lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart</title>
 </g>
 <g>
@@ -385,19 +389,19 @@
   <title>./lib/src/analyzers/secrets/secret_analyzer.dart ▶ ./lib/src/analyzers/secrets/secret_issue.dart</title>
 </g>
 <g>
-  <path d="M 1230.0 408.0 C 1280.0 408.0, 1606.0 242.0, 1656.0 242.0" class="edge"/>
+  <path d="M 1230.0 478.0 C 1280.0 478.0, 1606.0 242.0, 1656.0 242.0" class="edge"/>
   <title>./lib/src/analyzers/sorted/sort.dart ▶ ./lib/src/models/class_visitor.dart</title>
 </g>
 <g>
-  <path d="M 1230.0 408.0 C 1280.0 408.0, 1606.0 312.0, 1656.0 312.0" class="edge"/>
+  <path d="M 1230.0 478.0 C 1280.0 478.0, 1606.0 312.0, 1656.0 312.0" class="edge"/>
   <title>./lib/src/analyzers/sorted/sort.dart ▶ ./lib/src/analyzers/sorted/sort_members.dart</title>
 </g>
 <g>
-  <path d="M 1230.0 408.0 C 1280.0 408.0, 1286.0 382.0, 1336.0 382.0" class="edge"/>
+  <path d="M 1230.0 478.0 C 1280.0 478.0, 1286.0 382.0, 1336.0 382.0" class="edge"/>
   <title>./lib/src/analyzers/sorted/sort.dart ▶ ./lib/src/analyzers/sorted/sort_analyzer.dart</title>
 </g>
 <g>
-  <path d="M 1230.0 408.0 C 1280.0 408.0, 1606.0 172.0, 1656.0 172.0" class="edge"/>
+  <path d="M 1230.0 478.0 C 1280.0 478.0, 1606.0 172.0, 1656.0 172.0" class="edge"/>
   <title>./lib/src/analyzers/sorted/sort.dart ▶ ./lib/src/analyzers/sorted/sort_issue.dart</title>
 </g>
 <g>
@@ -441,7 +445,7 @@
   <title>./lib/src/analyzers/magic_numbers/magic_number_analyzer.dart ▶ ./lib/src/config/config_ignore_directives.dart</title>
 </g>
 <g>
-  <path d="M 1230.0 268.0 C 1280.0 268.0, 1286.0 102.0, 1336.0 102.0" class="edge"/>
+  <path d="M 1230.0 338.0 C 1280.0 338.0, 1286.0 102.0, 1336.0 102.0" class="edge"/>
   <title>./lib/src/analyzer_runner/analysis_file_context.dart ▶ ./lib/src/config/config_ignore_directives.dart</title>
 </g>
 <g>
@@ -453,15 +457,15 @@
   <title>./lib/src/analyzer_runner/analyzer_runner.dart ▶ ./lib/src/analyzer_runner/analyzer_runner_result.dart</title>
 </g>
 <g>
-  <path d="M 910.0 548.0 C 960.0 548.0, 966.0 242.0, 1016.0 242.0" class="edge"/>
+  <path d="M 910.0 548.0 C 960.0 548.0, 966.0 312.0, 1016.0 312.0" class="edge"/>
   <title>./lib/src/analyzer_runner/analyzer_runner.dart ▶ ./lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 910.0 338.0 C 960.0 338.0, 966.0 242.0, 1016.0 242.0" class="edge"/>
+  <path d="M 910.0 338.0 C 960.0 338.0, 966.0 312.0, 1016.0 312.0" class="edge"/>
   <title>./lib/src/analyzer_runner/analyzer_delegates.dart ▶ ./lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 910.0 338.0 C 960.0 338.0, 966.0 452.0, 1016.0 452.0" class="edge"/>
+  <path d="M 910.0 338.0 C 960.0 338.0, 966.0 242.0, 1016.0 242.0" class="edge"/>
   <title>./lib/src/analyzer_runner/analyzer_delegates.dart ▶ ./lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart</title>
 </g>
 <g>
@@ -501,7 +505,7 @@
   <title>./lib/src/graphs/graph_format_utils.dart ▶ ./lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 910.0 198.0 C 960.0 198.0, 966.0 312.0, 1016.0 312.0" class="edge"/>
+  <path d="M 910.0 198.0 C 960.0 198.0, 966.0 382.0, 1016.0 382.0" class="edge"/>
   <title>./lib/src/graphs/svg_common.dart ▶ ./lib/src/graphs/badge_model.dart</title>
 </g>
 <g>
@@ -529,7 +533,7 @@
   <title>./lib/src/graphs/export_svg_folders.dart ▶ ./lib/src/graphs/svg_styles.dart</title>
 </g>
 <g>
-  <path d="M 590.0 198.0 C 640.0 198.0, 966.0 312.0, 1016.0 312.0" class="edge"/>
+  <path d="M 590.0 198.0 C 640.0 198.0, 966.0 382.0, 1016.0 382.0" class="edge"/>
   <title>./lib/src/graphs/export_svg_folders.dart ▶ ./lib/src/graphs/badge_model.dart</title>
 </g>
 <g>
@@ -545,7 +549,7 @@
   <title>./lib/src/graphs/export_svg.dart ▶ ./lib/src/graphs/svg_styles.dart</title>
 </g>
 <g>
-  <path d="M 590.0 268.0 C 640.0 268.0, 966.0 312.0, 1016.0 312.0" class="edge"/>
+  <path d="M 590.0 268.0 C 640.0 268.0, 966.0 382.0, 1016.0 382.0" class="edge"/>
   <title>./lib/src/graphs/export_svg.dart ▶ ./lib/src/graphs/badge_model.dart</title>
 </g>
 <g>
@@ -584,20 +588,21 @@
   <path d="M 382.0,102.0 L 370.0,95.0 Q 367.0,95.0 367.0,98.0 L 367.0,106.0 Q 367.0,109.0 370.0,109.0 Z" fill="#3b82f6"/>
   <text x="371.0" y="105.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="outgoingBadge">
   <path d="M 596.0,128.0 L 584.0,121.0 Q 581.0,121.0 581.0,124.0 L 581.0,132.0 Q 581.0,135.0 584.0,135.0 Z" fill="#10b981"/>
-  <text x="585.0" y="131.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">14</text><title>1. analysis_file_context.dart
+  <text x="585.0" y="131.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">15</text><title>1. analysis_file_context.dart
 2. analyzer_delegates.dart
 3. analyzer_runner.dart
 4. config_ignore_directives.dart
 5. file_metrics.dart
 6. file_utils.dart
 7. hardcoded_string_issue.dart
-8. layers_analyzer.dart
-9. layers_results.dart
-10. magic_number_issue.dart
-11. project_metrics.dart
-12. secret_issue.dart
-13. sort.dart
-14. sort_issue.dart</title></g><text x="480.0" y="115.0" class="nodeText">fcheck.dart</text>
+8. hardcoded_string_visitor.dart
+9. layers_analyzer.dart
+10. layers_results.dart
+11. magic_number_issue.dart
+12. project_metrics.dart
+13. secret_issue.dart
+14. sort.dart
+15. sort_issue.dart</title></g><text x="480.0" y="115.0" class="nodeText">fcheck.dart</text>
 <g class="incomingBadge">
   <path d="M 382.0,172.0 L 370.0,165.0 Q 367.0,165.0 367.0,168.0 L 367.0,176.0 Q 367.0,179.0 370.0,179.0 Z" fill="#3b82f6"/>
   <text x="371.0" y="175.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="outgoingBadge">
@@ -710,31 +715,32 @@
 <g class="incomingBadge">
   <path d="M 1022.0,242.0 L 1010.0,235.0 Q 1007.0,235.0 1007.0,238.0 L 1007.0,246.0 Q 1007.0,249.0 1010.0,249.0 Z" fill="#3b82f6"/>
   <text x="1011.0" y="245.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. analyzer_delegates.dart
-2. analyzer_runner.dart
-3. fcheck.dart</title></g><g class="outgoingBadge">
+2. fcheck.dart
+3. hardcoded_string_analyzer.dart</title></g><g class="outgoingBadge">
   <path d="M 1236.0,268.0 L 1224.0,261.0 Q 1221.0,261.0 1221.0,264.0 L 1221.0,272.0 Q 1221.0,275.0 1224.0,275.0 Z" fill="#10b981"/>
-  <text x="1225.0" y="271.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. config_ignore_directives.dart</title></g><text x="1120.0" y="255.0" class="nodeText">analysis_file_context....</text>
+  <text x="1225.0" y="271.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. config_ignore_directives.dart
+2. hardcoded_string_issue.dart</title></g><text x="1120.0" y="255.0" class="nodeText">hardcoded_string_visit...</text>
 <g class="incomingBadge">
   <path d="M 1022.0,312.0 L 1010.0,305.0 Q 1007.0,305.0 1007.0,308.0 L 1007.0,316.0 Q 1007.0,319.0 1010.0,319.0 Z" fill="#3b82f6"/>
-  <text x="1011.0" y="315.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. export_svg.dart
-2. export_svg_folders.dart
-3. svg_common.dart</title></g><text x="1120.0" y="325.0" class="nodeText">badge_model.dart</text>
+  <text x="1011.0" y="315.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. analyzer_delegates.dart
+2. analyzer_runner.dart
+3. fcheck.dart</title></g><g class="outgoingBadge">
+  <path d="M 1236.0,338.0 L 1224.0,331.0 Q 1221.0,331.0 1221.0,334.0 L 1221.0,342.0 Q 1221.0,345.0 1224.0,345.0 Z" fill="#10b981"/>
+  <text x="1225.0" y="341.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. config_ignore_directives.dart</title></g><text x="1120.0" y="325.0" class="nodeText">analysis_file_context....</text>
 <g class="incomingBadge">
   <path d="M 1022.0,382.0 L 1010.0,375.0 Q 1007.0,375.0 1007.0,378.0 L 1007.0,386.0 Q 1007.0,389.0 1010.0,389.0 Z" fill="#3b82f6"/>
-  <text x="1011.0" y="385.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. fcheck.dart
-2. project_metrics.dart</title></g><g class="outgoingBadge">
-  <path d="M 1236.0,408.0 L 1224.0,401.0 Q 1221.0,401.0 1221.0,404.0 L 1221.0,412.0 Q 1221.0,415.0 1224.0,415.0 Z" fill="#10b981"/>
-  <text x="1225.0" y="411.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. class_visitor.dart
-2. sort_analyzer.dart
-3. sort_issue.dart
-4. sort_members.dart</title></g><text x="1120.0" y="395.0" class="nodeText">sort.dart</text>
+  <text x="1011.0" y="385.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. export_svg.dart
+2. export_svg_folders.dart
+3. svg_common.dart</title></g><text x="1120.0" y="395.0" class="nodeText">badge_model.dart</text>
 <g class="incomingBadge">
   <path d="M 1022.0,452.0 L 1010.0,445.0 Q 1007.0,445.0 1007.0,448.0 L 1007.0,456.0 Q 1007.0,459.0 1010.0,459.0 Z" fill="#3b82f6"/>
-  <text x="1011.0" y="455.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. analyzer_delegates.dart
-2. hardcoded_string_analyzer.dart</title></g><g class="outgoingBadge">
+  <text x="1011.0" y="455.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. fcheck.dart
+2. project_metrics.dart</title></g><g class="outgoingBadge">
   <path d="M 1236.0,478.0 L 1224.0,471.0 Q 1221.0,471.0 1221.0,474.0 L 1221.0,482.0 Q 1221.0,485.0 1224.0,485.0 Z" fill="#10b981"/>
-  <text x="1225.0" y="481.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. config_ignore_directives.dart
-2. hardcoded_string_issue.dart</title></g><text x="1120.0" y="465.0" class="nodeText">hardcoded_string_visit...</text>
+  <text x="1225.0" y="481.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. class_visitor.dart
+2. sort_analyzer.dart
+3. sort_issue.dart
+4. sort_members.dart</title></g><text x="1120.0" y="465.0" class="nodeText">sort.dart</text>
 <g class="incomingBadge">
   <path d="M 1022.0,522.0 L 1010.0,515.0 Q 1007.0,515.0 1007.0,518.0 L 1007.0,526.0 Q 1007.0,529.0 1010.0,529.0 Z" fill="#3b82f6"/>
   <text x="1011.0" y="525.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. analyzer_delegates.dart

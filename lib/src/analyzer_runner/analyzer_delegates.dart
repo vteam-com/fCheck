@@ -16,6 +16,25 @@ import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 
 /// Delegate adapter for HardcodedStringAnalyzer
 class HardcodedStringDelegate implements AnalyzerDelegate {
+  /// Creates a delegate for hardcoded string analysis.
+  ///
+  /// [focus] controls which string literals are considered (Flutter widgets,
+  /// Dart print output, or general).
+  HardcodedStringDelegate({this.focus = HardcodedStringFocus.general});
+
+  /// Focus mode used by the hardcoded string visitor.
+  final HardcodedStringFocus focus;
+
+  static const int _maxShortWidgetStringLength = 2;
+  static const int _minQuotedLength = 2;
+  static const int _dollarSignOffset = 1;
+  static const int _asciiDigitStart = 48;
+  static const int _asciiDigitEnd = 57;
+  static const int _asciiUpperStart = 65;
+  static const int _asciiUpperEnd = 90;
+  static const int _asciiLowerStart = 97;
+  static const int _asciiLowerEnd = 122;
+
   /// Analyzes a file for hardcoded strings using the unified context.
   ///
   /// This method uses the pre-parsed AST to identify string literals that may
@@ -37,17 +56,190 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
       return [];
     }
 
-    if (context.hasParseErrors || context.compilationUnit == null) {
-      return [];
+    final issues = <HardcodedStringIssue>[];
+
+    if (focus == HardcodedStringFocus.flutterWidgets) {
+      issues.addAll(_scanWidgetTextLiterals(context));
+    }
+
+    if (context.compilationUnit == null) {
+      return issues;
     }
 
     final visitor = HardcodedStringVisitor(
       filePath,
       context.content,
+      focus: focus,
     );
     context.compilationUnit!.accept(visitor);
 
-    return visitor.foundIssues;
+    if (issues.isEmpty) {
+      return visitor.foundIssues;
+    }
+
+    final seen = <String>{
+      for (final issue in issues) '${issue.lineNumber}:${issue.value}',
+    };
+    for (final issue in visitor.foundIssues) {
+      final key = '${issue.lineNumber}:${issue.value}';
+      if (seen.add(key)) {
+        issues.add(issue);
+      }
+    }
+
+    return issues;
+  }
+
+  List<HardcodedStringIssue> _scanWidgetTextLiterals(
+    AnalysisFileContext context,
+  ) {
+    final issues = <HardcodedStringIssue>[];
+    final regex = RegExp(
+      r'''\bText\s*\(\s*(['"])(.*?)\1''',
+      dotAll: true,
+    );
+
+    for (final match in regex.allMatches(context.content)) {
+      final value = match.group(_minQuotedLength) ?? '';
+      if (value.isEmpty || value.length <= _maxShortWidgetStringLength) {
+        continue;
+      }
+
+      if (_isInterpolationOnlyString(value)) {
+        continue;
+      }
+
+      if (_isTechnicalString(value)) {
+        continue;
+      }
+
+      final matchText = match.group(0) ?? '';
+      final valueOffsetInMatch = matchText.indexOf(value);
+      final literalOffset =
+          match.start + (valueOffsetInMatch < 0 ? 0 : valueOffsetInMatch);
+      final lineNumber = context.getLineNumber(literalOffset);
+      if (lineNumber <= 0 || lineNumber > context.lines.length) {
+        continue;
+      }
+
+      final line = context.lines[lineNumber - 1];
+      if (line.trimLeft().startsWith('//')) {
+        continue;
+      }
+
+      if (_hasWidgetLintIgnoreComment(line) ||
+          line.contains('// ignore: fcheck_hardcoded_strings')) {
+        continue;
+      }
+
+      if (lineNumber > 1) {
+        final previousLine = context.lines[lineNumber - _minQuotedLength];
+        if (_hasWidgetLintIgnoreComment(previousLine)) {
+          continue;
+        }
+      }
+
+      issues.add(
+        HardcodedStringIssue(
+          filePath: context.file.path,
+          lineNumber: lineNumber,
+          value: value,
+        ),
+      );
+    }
+
+    return issues;
+  }
+
+  bool _hasWidgetLintIgnoreComment(String line) {
+    final ignorePatterns = [
+      RegExp(r'//\s*ignore:\s*avoid_hardcoded_strings_in_widgets'),
+      RegExp(r'//\s*ignore_for_file:\s*avoid_hardcoded_strings_in_widgets'),
+      RegExp(r'//\s*ignore:\s*hardcoded.string', caseSensitive: false),
+      RegExp(r'//\s*hardcoded.ok', caseSensitive: false),
+    ];
+
+    return ignorePatterns.any((pattern) => pattern.hasMatch(line));
+  }
+
+  bool _isInterpolationOnlyString(String value) {
+    final String withoutInterpolations = _removeInterpolations(value);
+    return !_containsMeaningfulText(withoutInterpolations);
+  }
+
+  String _removeInterpolations(String source) {
+    final buffer = StringBuffer();
+    var i = 0;
+    while (i < source.length) {
+      final char = source[i];
+      if (char == r'$' && (i == 0 || source[i - 1] != r'\')) {
+        if (i + _dollarSignOffset < source.length &&
+            source[i + _dollarSignOffset] == '{') {
+          i += _minQuotedLength;
+          var depth = 1;
+          while (i < source.length && depth > 0) {
+            final current = source[i];
+            if (current == '{') {
+              depth++;
+            } else if (current == '}') {
+              depth--;
+            }
+            i++;
+          }
+          continue;
+        }
+
+        i += _dollarSignOffset;
+        while (i < source.length && _isIdentifierChar(source[i])) {
+          i++;
+        }
+        continue;
+      }
+
+      buffer.write(char);
+      i++;
+    }
+
+    return buffer.toString();
+  }
+
+  bool _isIdentifierChar(String char) {
+    final code = char.codeUnitAt(0);
+    return (code >= _asciiDigitStart && code <= _asciiDigitEnd) || // 0-9
+        (code >= _asciiUpperStart && code <= _asciiUpperEnd) || // A-Z
+        (code >= _asciiLowerStart && code <= _asciiLowerEnd) || // a-z
+        char == '_';
+  }
+
+  bool _containsMeaningfulText(String text) {
+    for (var i = 0; i < text.length; i++) {
+      final code = text.codeUnitAt(i);
+      final isAlphaNumeric =
+          (code >= _asciiDigitStart && code <= _asciiDigitEnd) ||
+              (code >= _asciiUpperStart && code <= _asciiUpperEnd) ||
+              (code >= _asciiLowerStart && code <= _asciiLowerEnd);
+      if (isAlphaNumeric) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool _isTechnicalString(String value) {
+    final technicalPatterns = [
+      RegExp(r'^\w+://'),
+      RegExp(r'^[\w\-\.]+@[\w\-\.]+\.\w+'),
+      RegExp(r'^#[0-9A-Fa-f]{3,8}'),
+      RegExp(r'^\d+(\.\d+)?[a-zA-Z]*'),
+      RegExp(r'^[A-Z][A-Z0-9]*_[A-Z0-9_]*'),
+      RegExp(r'^[a-z]+_[a-z_]+'),
+      RegExp(r'^/[\w/\-\.]*'),
+      RegExp(r'^\w+\.\w+'),
+      RegExp(r'^[\w\-]+\.[\w]+'),
+      RegExp(r'^[a-zA-Z0-9]*[_\-0-9]+[a-zA-Z0-9_\-]*'),
+    ];
+
+    return technicalPatterns.any((pattern) => pattern.hasMatch(value.trim()));
   }
 }
 

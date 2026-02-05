@@ -99,7 +99,7 @@ class AnalyzerRunner {
       content: content,
       parseResult: parseResult,
       lines: lines,
-      compilationUnit: parseResult.errors.isEmpty ? parseResult.unit : null,
+      compilationUnit: parseResult.unit,
       hasParseErrors: parseResult.errors.isNotEmpty,
     );
 

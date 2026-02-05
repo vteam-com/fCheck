@@ -107,10 +107,7 @@ class MyWidget extends StatelessWidget {
 ''');
 
       final issues = analyzer.analyzeFile(file);
-      // The analyzer detects both strings - "myKey" and "This should be detected"
-      // This test verifies that both are detected (the Key detection logic may need improvement)
-      expect(issues.length, equals(2));
-      expect(issues.map((issue) => issue.value), contains('myKey'));
+      expect(issues.length, equals(1));
       expect(issues.map((issue) => issue.value),
           contains('This should be detected'));
     });

@@ -19,7 +19,10 @@ class HardcodedStringAnalyzer {
   /// This constructor creates an analyzer that can be used to detect
   /// hardcoded strings in Dart source files. No parameters are required
   /// as the analyzer maintains no internal state.
-  HardcodedStringAnalyzer();
+  HardcodedStringAnalyzer({this.focus = HardcodedStringFocus.general});
+
+  /// Which focus mode is applied for hardcoded string detection.
+  final HardcodedStringFocus focus;
 
   /// Analyzes a single Dart file for hardcoded strings.
   ///
@@ -49,15 +52,11 @@ class HardcodedStringAnalyzer {
       featureSet: FeatureSet.latestLanguageVersion(),
     );
 
-    // Skip files with parse errors
-    if (result.errors.isNotEmpty) {
-      return [];
-    }
-
     final CompilationUnit compilationUnit = result.unit;
     final HardcodedStringVisitor visitor = HardcodedStringVisitor(
       filePath,
       content,
+      focus: focus,
     );
     compilationUnit.accept(visitor);
 

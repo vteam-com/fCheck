@@ -3,6 +3,18 @@ import 'package:analyzer/dart/ast/visitor.dart';
 import 'hardcoded_string_issue.dart';
 import '../../config/config_ignore_directives.dart';
 
+/// Focus modes for hardcoded string detection.
+enum HardcodedStringFocus {
+  /// Current behavior: detect general hardcoded strings based on skip rules.
+  general,
+
+  /// Flutter mode: focus on widget output strings and ignore print/logger output.
+  flutterWidgets,
+
+  /// Dart mode: focus on print output and ignore logger/debug output.
+  dartPrint,
+}
+
 /// A visitor that traverses the AST to detect hardcoded strings.
 ///
 /// This class extends the analyzer's AST visitor to identify string literals
@@ -10,11 +22,27 @@ import '../../config/config_ignore_directives.dart';
 /// localized. It intelligently filters out strings that are legitimately
 /// hardcoded (imports, annotations, const declarations, etc.).
 class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
+  static const int _maxShortWidgetStringLength = 2;
+  static const int _previousLineOffset = 2;
+  static const int _tripleQuoteLength = 3;
+  static const int _asciiDigitStart = 48;
+  static const int _asciiDigitEnd = 57;
+  static const int _asciiUpperStart = 65;
+  static const int _asciiUpperEnd = 90;
+  static const int _asciiLowerStart = 97;
+  static const int _asciiLowerEnd = 122;
+  static const int _minQuotedLength = 2;
+  static const int _dollarSignOffset = 1;
+
   /// Creates a new visitor for the specified file.
   ///
   /// [filePath] should be the path to the file being analyzed.
   /// [content] should be the full text content of the file.
-  HardcodedStringVisitor(this.filePath, this.content);
+  HardcodedStringVisitor(
+    this.filePath,
+    this.content, {
+    this.focus = HardcodedStringFocus.general,
+  });
 
   /// The file path being analyzed.
   final String filePath;
@@ -24,6 +52,9 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
 
   /// The list of hardcoded string issues found during traversal.
   final List<HardcodedStringIssue> foundIssues = <HardcodedStringIssue>[];
+
+  /// Which focus mode is applied for hardcoded string detection.
+  final HardcodedStringFocus focus;
 
   /// Visits a simple string literal node in the AST.
   ///
@@ -36,9 +67,37 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   /// [node] The simple string literal node being visited.
   @override
   void visitSimpleStringLiteral(final SimpleStringLiteral node) {
+    // Focus filter (Flutter widgets vs Dart print).
+    if (!_matchesFocus(node)) {
+      return;
+    }
+
     // Skip empty strings
     if (node.value.isEmpty) {
       return;
+    }
+
+    // Flutter-only additional filters.
+    if (focus == HardcodedStringFocus.flutterWidgets) {
+      if (_isInterpolationOnlyLiteral(node)) {
+        return;
+      }
+
+      if (_hasWidgetLintIgnoreComment(node)) {
+        return;
+      }
+
+      if (node.value.length <= _maxShortWidgetStringLength) {
+        return;
+      }
+
+      if (_isAcceptableWidgetProperty(node)) {
+        return;
+      }
+
+      if (_isTechnicalString(node.value)) {
+        return;
+      }
     }
 
     // Skip strings that are in import/part/library directives
@@ -97,6 +156,20 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     ));
   }
 
+  bool _matchesFocus(final StringLiteral node) {
+    switch (focus) {
+      case HardcodedStringFocus.general:
+        return true;
+      case HardcodedStringFocus.flutterWidgets:
+        if (_isInPrintOrLoggerCall(node)) {
+          return false;
+        }
+        return _isWidgetOutputString(node);
+      case HardcodedStringFocus.dartPrint:
+        return _isInPrintCall(node);
+    }
+  }
+
   /// Checks if a string literal is within a directive (import/export/part).
   bool _isInDirective(final AstNode node) {
     AstNode? current = node.parent;
@@ -111,6 +184,303 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
       current = current.parent;
     }
     return false;
+  }
+
+  bool _isWidgetOutputString(final StringLiteral node) {
+    final ArgumentList? argumentList =
+        node.thisOrAncestorOfType<ArgumentList>();
+    if (argumentList == null) {
+      return false;
+    }
+
+    if (!_isDirectArgument(node, argumentList)) {
+      return false;
+    }
+
+    if (_hasFunctionBoundary(node, argumentList)) {
+      return false;
+    }
+
+    final owner = argumentList.parent;
+    if (owner is! InstanceCreationExpression) {
+      return false;
+    }
+
+    if (_isInsideWidgetClass(node)) {
+      return true;
+    }
+
+    if (_isInsideBuildMethod(node)) {
+      return true;
+    }
+
+    return _isInsideWidgetReturnFunction(node);
+  }
+
+  bool _hasWidgetLintIgnoreComment(final StringLiteral node) {
+    final int lineNumber = _getLineNumber(node.offset);
+    final List<String> lines = content.split('\n');
+
+    if (lineNumber > 0 && lineNumber <= lines.length) {
+      final String currentLine = lines[lineNumber - 1];
+      if (_containsWidgetLintIgnoreComment(currentLine)) {
+        return true;
+      }
+
+      if (lineNumber > 1) {
+        final String previousLine = lines[lineNumber - _previousLineOffset];
+        if (_containsWidgetLintIgnoreComment(previousLine)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  bool _isInterpolationOnlyLiteral(final StringLiteral node) {
+    final String source = node.toSource();
+    final (content, isRaw) = _stripLiteralDelimiters(source);
+    if (isRaw) {
+      return false;
+    }
+
+    final String withoutInterpolations = _removeInterpolations(content);
+    return !_containsMeaningfulText(withoutInterpolations);
+  }
+
+  (String content, bool isRaw) _stripLiteralDelimiters(String source) {
+    var working = source;
+    var isRaw = false;
+
+    if (working.startsWith('r') || working.startsWith('R')) {
+      isRaw = true;
+      working = working.substring(1);
+    }
+
+    if (working.startsWith("'''") || working.startsWith('"""')) {
+      if (working.length >= _tripleQuoteLength * _minQuotedLength) {
+        return (
+          working.substring(
+            _tripleQuoteLength,
+            working.length - _tripleQuoteLength,
+          ),
+          isRaw,
+        );
+      }
+      return ('', isRaw);
+    }
+
+    if (working.length >= _minQuotedLength) {
+      return (working.substring(1, working.length - 1), isRaw);
+    }
+
+    return ('', isRaw);
+  }
+
+  String _removeInterpolations(String source) {
+    final buffer = StringBuffer();
+    var i = 0;
+    while (i < source.length) {
+      final char = source[i];
+      if (char == r'$' && (i == 0 || source[i - 1] != r'\')) {
+        if (i + _dollarSignOffset < source.length &&
+            source[i + _dollarSignOffset] == '{') {
+          i += _minQuotedLength;
+          var depth = 1;
+          while (i < source.length && depth > 0) {
+            final current = source[i];
+            if (current == '{') {
+              depth++;
+            } else if (current == '}') {
+              depth--;
+            }
+            i++;
+          }
+          continue;
+        }
+
+        i += _dollarSignOffset;
+        while (i < source.length && _isIdentifierChar(source[i])) {
+          i++;
+        }
+        continue;
+      }
+
+      buffer.write(char);
+      i++;
+    }
+
+    return buffer.toString();
+  }
+
+  bool _isIdentifierChar(String char) {
+    final code = char.codeUnitAt(0);
+    return (code >= _asciiDigitStart && code <= _asciiDigitEnd) || // 0-9
+        (code >= _asciiUpperStart && code <= _asciiUpperEnd) || // A-Z
+        (code >= _asciiLowerStart && code <= _asciiLowerEnd) || // a-z
+        char == '_';
+  }
+
+  bool _containsMeaningfulText(String text) {
+    for (var i = 0; i < text.length; i++) {
+      final code = text.codeUnitAt(i);
+      final isAlphaNumeric =
+          (code >= _asciiDigitStart && code <= _asciiDigitEnd) ||
+              (code >= _asciiUpperStart && code <= _asciiUpperEnd) ||
+              (code >= _asciiLowerStart && code <= _asciiLowerEnd);
+      if (isAlphaNumeric) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool _containsWidgetLintIgnoreComment(final String line) {
+    final ignorePatterns = [
+      RegExp(r'//\s*ignore:\s*avoid_hardcoded_strings_in_widgets'),
+      RegExp(r'//\s*ignore_for_file:\s*avoid_hardcoded_strings_in_widgets'),
+      RegExp(r'//\s*ignore:\s*hardcoded.string', caseSensitive: false),
+      RegExp(r'//\s*hardcoded.ok', caseSensitive: false),
+    ];
+
+    return ignorePatterns.any((pattern) => pattern.hasMatch(line));
+  }
+
+  bool _isAcceptableWidgetProperty(final StringLiteral node) {
+    final AstNode? parent = node.parent;
+    if (parent is! NamedExpression) {
+      return false;
+    }
+
+    final String propertyName = parent.name.label.name;
+
+    const acceptableProperties = {
+      'semanticsLabel',
+      'excludeSemantics',
+      'restorationId',
+      'heroTag',
+      'key',
+      'debugLabel',
+      'fontFamily',
+      'package',
+      'name',
+      'asset',
+      'tooltip',
+      'textDirection',
+      'locale',
+      'materialType',
+      'clipBehavior',
+      'crossAxisAlignment',
+      'mainAxisAlignment',
+      'textAlign',
+      'textBaseline',
+      'overflow',
+      'softWrap',
+      'textScaleFactor',
+    };
+
+    return acceptableProperties.contains(propertyName);
+  }
+
+  bool _isTechnicalString(final String value) {
+    final technicalPatterns = [
+      RegExp(r'^\w+://'),
+      RegExp(r'^[\w\-\.]+@[\w\-\.]+\.\w+'),
+      RegExp(r'^#[0-9A-Fa-f]{3,8}'),
+      RegExp(r'^\d+(\.\d+)?[a-zA-Z]*'),
+      RegExp(r'^[A-Z][A-Z0-9]*_[A-Z0-9_]*'),
+      RegExp(r'^[a-z]+_[a-z_]+'),
+      RegExp(r'^/[\w/\-\.]*'),
+      RegExp(r'^\w+\.\w+'),
+      RegExp(r'^[\w\-]+\.[\w]+'),
+      RegExp(r'^[a-zA-Z0-9]*[_\-0-9]+[a-zA-Z0-9_\-]*'),
+    ];
+
+    return technicalPatterns.any((pattern) => pattern.hasMatch(value.trim()));
+  }
+
+  bool _isDirectArgument(
+    final StringLiteral node,
+    final ArgumentList argumentList,
+  ) {
+    for (final arg in argumentList.arguments) {
+      if (identical(arg, node)) {
+        return true;
+      }
+      if (arg is NamedExpression && identical(arg.expression, node)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool _hasFunctionBoundary(
+    final StringLiteral node,
+    final ArgumentList argumentList,
+  ) {
+    AstNode? walker = node.parent;
+    while (walker != null && walker != argumentList) {
+      if (walker is FunctionExpression || walker is FunctionBody) {
+        return true;
+      }
+      walker = walker.parent;
+    }
+    return false;
+  }
+
+  bool _isInsideWidgetClass(final AstNode node) {
+    final ClassDeclaration? classDecl =
+        node.thisOrAncestorOfType<ClassDeclaration>();
+    if (classDecl == null) {
+      return false;
+    }
+    final extendsClause = classDecl.extendsClause;
+    if (extendsClause == null) {
+      return false;
+    }
+
+    final String superName = extendsClause.superclass.toString();
+    return superName == 'StatelessWidget' ||
+        superName == 'StatefulWidget' ||
+        superName == 'State' ||
+        superName.startsWith('State<');
+  }
+
+  bool _isInsideBuildMethod(final AstNode node) {
+    final MethodDeclaration? method =
+        node.thisOrAncestorOfType<MethodDeclaration>();
+    if (method == null) {
+      return false;
+    }
+
+    if (method.name.lexeme == 'build') {
+      return true;
+    }
+
+    return _isWidgetReturnType(method.returnType);
+  }
+
+  bool _isInsideWidgetReturnFunction(final AstNode node) {
+    final FunctionDeclaration? function =
+        node.thisOrAncestorOfType<FunctionDeclaration>();
+    if (function == null) {
+      return false;
+    }
+
+    if (function.name.lexeme == 'build') {
+      return true;
+    }
+
+    return _isWidgetReturnType(function.returnType);
+  }
+
+  bool _isWidgetReturnType(final TypeAnnotation? type) {
+    if (type == null) {
+      return false;
+    }
+    final String typeName = type.toString();
+    return typeName.contains('Widget');
   }
 
   /// Checks if a string literal is within an annotation.
@@ -196,13 +566,17 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   bool _isInKey(final AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
+      if (current is NamedExpression) {
+        if (current.name.label.name == 'key') {
+          return true;
+        }
+      }
       if (current is InstanceCreationExpression) {
-        final InstanceCreationExpression creation = current;
-        final String? constructorName = creation.constructorName.name?.name;
-        if (constructorName == 'Key' ||
-            constructorName == 'ValueKey' ||
-            constructorName == 'ObjectKey' ||
-            constructorName == null) {
+        final String rawTypeName = current.constructorName.type.toString();
+        final String typeName = rawTypeName.split('.').last;
+        if (typeName == 'Key' ||
+            typeName == 'ValueKey' ||
+            typeName == 'ObjectKey') {
           return true;
         }
       }
@@ -218,6 +592,89 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
       return parent.index == node;
     }
     return false;
+  }
+
+  bool _isInPrintCall(final StringLiteral node) {
+    final MethodInvocation? invocation = _getOwningMethodInvocation(node);
+    if (invocation == null) {
+      return false;
+    }
+
+    return invocation.methodName.name == 'print' && invocation.target == null;
+  }
+
+  bool _isInPrintOrLoggerCall(final StringLiteral node) {
+    final MethodInvocation? invocation = _getOwningMethodInvocation(node);
+    if (invocation == null) {
+      return false;
+    }
+
+    final String methodName = invocation.methodName.name;
+    final String targetName = _getInvocationTargetName(invocation);
+
+    const printNames = {
+      'print',
+      'debugPrint',
+      'debugPrintStack',
+    };
+
+    if (printNames.contains(methodName)) {
+      return true;
+    }
+
+    const loggerMethodNames = {
+      'log',
+      'logger',
+      'info',
+      'debug',
+      'warn',
+      'warning',
+      'error',
+      'trace',
+      'fatal',
+      'wtf',
+    };
+
+    if (loggerMethodNames.contains(methodName)) {
+      return true;
+    }
+
+    if (targetName.isEmpty) {
+      return false;
+    }
+
+    final targetLower = targetName.toLowerCase();
+    return targetLower.contains('logger') || targetLower.contains('log');
+  }
+
+  MethodInvocation? _getOwningMethodInvocation(final StringLiteral node) {
+    final ArgumentList? argumentList =
+        node.thisOrAncestorOfType<ArgumentList>();
+    if (argumentList == null) {
+      return null;
+    }
+
+    if (!_isDirectArgument(node, argumentList)) {
+      return null;
+    }
+
+    if (_hasFunctionBoundary(node, argumentList)) {
+      return null;
+    }
+
+    final owner = argumentList.parent;
+    return owner is MethodInvocation ? owner : null;
+  }
+
+  String _getInvocationTargetName(final MethodInvocation invocation) {
+    final Expression? target = invocation.target;
+    if (target == null) {
+      return '';
+    }
+    if (target is SimpleIdentifier) {
+      return target.name;
+    }
+    return target.toString();
   }
 
   /// Calculates the 1-based line number for a given character offset.

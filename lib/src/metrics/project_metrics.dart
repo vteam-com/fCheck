@@ -7,12 +7,42 @@ import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort.dart';
 import 'package:fcheck/src/metrics/output.dart';
 
+/// The detected type of the analyzed project.
+enum ProjectType {
+  /// Flutter application or package (depends on `flutter`).
+  flutter,
+
+  /// Pure Dart project (no `flutter` dependency found).
+  dart,
+
+  /// Unknown project type (pubspec.yaml missing or unreadable).
+  unknown,
+}
+
+/// Adds presentation helpers for [ProjectType].
+extension ProjectTypeLabel on ProjectType {
+  /// Human-readable label for the project type.
+  String get label {
+    switch (this) {
+      case ProjectType.flutter:
+        return 'Flutter';
+      case ProjectType.dart:
+        return 'Dart';
+      case ProjectType.unknown:
+        return 'Unknown';
+    }
+  }
+}
+
 /// Represents the overall quality metrics for a Flutter/Dart project.
 ///
 /// This class aggregates metrics from all analyzed files in a project,
 /// providing insights into code quality, size, and compliance with
 /// coding standards.
 class ProjectMetrics {
+  /// The detected type of the analyzed project.
+  final ProjectType projectType;
+
   /// Total number of folders in the project.
   final int totalFolders;
 
@@ -88,6 +118,7 @@ class ProjectMetrics {
   /// [dependencyGraph] The dependency graph used for analysis.
   /// [projectName] The name of the analyzed project.
   /// [version] The version of the analyzed project.
+  /// [projectType] The detected project type (Flutter, Dart, or Unknown).
   /// [usesLocalization] Whether the project appears to be using Flutter localization.
   /// [excludedFilesCount] Number of files successfully skipped based on exclusion glob patterns.
   ProjectMetrics({
@@ -107,13 +138,18 @@ class ProjectMetrics {
     required this.dependencyGraph,
     required this.projectName,
     required this.version,
+    required this.projectType,
     this.usesLocalization = false,
     this.excludedFilesCount = 0,
   });
 
   /// Converts these metrics to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-        'project': {'name': projectName, 'version': version},
+        'project': {
+          'name': projectName,
+          'version': version,
+          'type': projectType.label,
+        },
         'stats': {
           'folders': totalFolders,
           'files': totalFiles,
@@ -170,6 +206,8 @@ class ProjectMetrics {
   /// It does not return anything.
   void printReport([String? toolVersion]) {
     print('Project          : $projectName (version: $version)');
+    print('Project Type     : ${projectType.label}');
+    print('Localization     : ${usesLocalization ? 'Yes' : 'No'}');
     print('Folders          : $totalFolders');
     print('Files            : $totalFiles');
     print('Dart Files       : $totalDartFiles');

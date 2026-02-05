@@ -39,6 +39,7 @@ import 'src/config/config_ignore_directives.dart';
 import 'src/analyzer_runner/analyzer_runner.dart';
 import 'src/analyzer_runner/analyzer_delegates.dart';
 import 'src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
+import 'src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart';
 import 'src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'src/analyzers/sorted/sort_issue.dart';
 import 'src/analyzers/secrets/secret_issue.dart';
@@ -140,10 +141,16 @@ class AnalyzeFolder {
 
     final projectVersion = _readProjectVersion(projectDir);
     final projectName = _readProjectName(projectDir);
+    final projectType = _detectProjectType(projectDir);
+    final hardcodedStringsFocus = projectType == ProjectType.flutter
+        ? HardcodedStringFocus.flutterWidgets
+        : projectType == ProjectType.dart
+            ? HardcodedStringFocus.dartPrint
+            : HardcodedStringFocus.general;
 
     // Build delegates for unified analysis
     final delegates = <AnalyzerDelegate>[
-      HardcodedStringDelegate(),
+      HardcodedStringDelegate(focus: hardcodedStringsFocus),
       MagicNumberDelegate(),
       SourceSortDelegate(fix: fix),
       LayersDelegate(projectDir, _readPackageName(projectDir)),
@@ -208,6 +215,7 @@ class AnalyzeFolder {
       layersCount: layersResult.layerCount,
       dependencyGraph: layersResult.dependencyGraph,
       projectName: projectName,
+      projectType: projectType,
       version: projectVersion,
       usesLocalization: usesLocalization,
       excludedFilesCount: excludedDartFilesCount,
@@ -311,6 +319,46 @@ class AnalyzeFolder {
   /// Returns the package name as defined in pubspec.yaml or 'unknown'.
   String _readPackageName(Directory projectDir) {
     return _readProjectName(projectDir);
+  }
+
+  /// Detects the project type (Flutter, Dart, or Unknown) via pubspec.yaml.
+  ///
+  /// This method looks for a `flutter` dependency in pubspec.yaml and
+  /// searches up the directory tree from the given directory.
+  ProjectType _detectProjectType(Directory projectDir) {
+    Directory? currentDir = projectDir;
+
+    while (currentDir != null) {
+      final pubspecFile = File(p.join(currentDir.path, 'pubspec.yaml'));
+      if (pubspecFile.existsSync()) {
+        try {
+          final yaml = loadYaml(pubspecFile.readAsStringSync());
+          if (yaml is YamlMap) {
+            final dependencies = yaml['dependencies'];
+            if (dependencies is YamlMap &&
+                dependencies.containsKey('flutter')) {
+              return ProjectType.flutter;
+            }
+            final devDependencies = yaml['dev_dependencies'];
+            if (devDependencies is YamlMap &&
+                devDependencies.containsKey('flutter')) {
+              return ProjectType.flutter;
+            }
+          }
+        } catch (e) {
+          return ProjectType.unknown;
+        }
+        return ProjectType.dart;
+      }
+
+      final parent = currentDir.parent;
+      if (parent.path == currentDir.path) {
+        break;
+      }
+      currentDir = parent;
+    }
+
+    return ProjectType.unknown;
   }
 
   /// Reads the project version from pubspec.yaml.

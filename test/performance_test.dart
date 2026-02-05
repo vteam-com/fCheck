@@ -2,6 +2,11 @@ import 'dart:io';
 import 'package:fcheck/fcheck.dart';
 import 'package:test/test.dart';
 
+const bool _verbose = bool.fromEnvironment(
+  'FHECK_TEST_VERBOSE',
+  defaultValue: false,
+);
+
 void main() {
   group('Performance Tests', () {
     late Directory tempDir;
@@ -59,8 +64,10 @@ version: 1.0.0
       final optimizedEnd = DateTime.now();
       final optimizedDuration = optimizedEnd.difference(optimizedStart);
 
-      print('Original analysis time: ${originalDuration.inMilliseconds}ms');
-      print('Optimized analysis time: ${optimizedDuration.inMilliseconds}ms');
+      if (_verbose) {
+        print('Original analysis time: ${originalDuration.inMilliseconds}ms');
+        print('Optimized analysis time: ${optimizedDuration.inMilliseconds}ms');
+      }
 
       // Verify results are equivalent
       expect(originalResult.totalDartFiles,
@@ -75,8 +82,11 @@ version: 1.0.0
           (originalDuration.inMilliseconds - optimizedDuration.inMilliseconds) /
               originalDuration.inMilliseconds;
 
-      print(
-          'Performance improvement: ${(improvement * 100).toStringAsFixed(1)}%');
+      if (_verbose) {
+        print(
+          'Performance improvement: ${(improvement * 100).toStringAsFixed(1)}%',
+        );
+      }
 
       // For small test cases, the improvement might be less dramatic,
       // but for larger projects it should be substantial
