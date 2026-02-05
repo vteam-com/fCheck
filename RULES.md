@@ -1,87 +1,89 @@
 # RULES.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance on the expectation for contributing to the `fcheck` project and the this repository.
 
 ## Project Overview
 
-This is a Dart CLI tool called `fcheck` designed for analyzing Flutter and Dart project quality. It provides comprehensive metrics and quality checks for codebases, including:
+`fcheck` is a Dart CLI tool for analyzing Flutter and Dart project quality. It provides metrics and domain-specific checks including:
 
-- Project overview (files, folders, lines of code, comment ratios)
-- Code quality checks (one class per file compliance, member sorting)
-- Issue detection (hardcoded strings, magic numbers, layer violations)
-- Visualizations (SVG, Mermaid, and PlantUML dependency graphs)
+- Hardcoded string detection
+- Magic number detection
+- Secret/PII scanning
+- Flutter widget member sorting
+- Layer dependency analysis and visualization
+- Project metrics (files, folders, LOC, comment ratios)
 
-## Key Technologies
+## Domain Rules (Start Here)
 
-- Dart SDK >= 3.0.0
-- Uses the `analyzer` package for code analysis
-- Uses `args` for command-line argument parsing
-- Uses `glob` for file pattern matching
-- Uses `path` for path operations
-- Uses `yaml` for YAML parsing
+- `RULES_HARDCODED_STRINGS.md` for string literal detection rules.
+- `RULES_MAGIC_NUMBERS.md` for numeric literal detection rules.
+- `RULES_SECRETS.md` for secret/PII detection rules.
+- `RULES_SORTING.md` for Flutter widget member ordering rules.
+- `RULES_LAYERS.md` for dependency graph and layer analysis rules.
+
+## Analyzer Architecture
+
+- `AnalyzeFolder` in `lib/fcheck.dart` wires the CLI analysis pipeline.
+- `AnalyzerRunner` in `lib/src/analyzer_runner/analyzer_runner.dart` parses each Dart file once and runs delegates.
+- Per-domain delegates live in `lib/src/analyzer_runner/analyzer_delegates.dart`.
+- File discovery and default exclusions are centralized in `lib/src/models/file_utils.dart`.
+- Ignore directives are implemented in `lib/src/config/config_ignore_directives.dart`.
 
 ## Repository Structure
 
-- `lib/` - Main source code
-- `lib/src/` - Source code organized by functionality:
-  - `metrics/` - Project and file metrics calculation
-  - `hardcoded_strings/` - Hardcoded string detection
-  - `layers/` - Layer architecture analysis
-  - `magic_numbers/` - Magic number detection
-  - `sort/` - Member sorting analysis
-  - `config/` - Configuration handling
-  - `models/` - Data models
-- `test/` - Unit tests
-- `example/` - Example project for testing
-- `tool/` - Development scripts
+- `lib/` main source code
+- `lib/src/analyzers/` domain analyzers
+- `lib/src/analyzer_runner/` unified analysis runner and delegates
+- `lib/src/metrics/` project and file metrics
+- `lib/src/graphs/` graph exporters (SVG, Mermaid, PlantUML)
+- `test/` unit tests
+- `example/` example project for testing
+- `tool/` development scripts
 
 ## Development Commands
 
-- `dart pub get` - Install dependencies
-- `dart pub global activate fcheck` - Install globally for use
-- `dart run ./bin/fcheck.dart` - Run the tool
-- `flutter test` - Run all tests
-- `flutter test --reporter=compact` - Run tests with compact reporter
-- `dart format .` - Format all Dart files
-- `dart fix --apply` - Apply automated fixes
-- `flutter analyze lib test` - Run static analysis
-- `./tool/check.sh` - Run full check (format, analyze, test, and fcheck on example)
+- `dart pub get` install dependencies
+- `dart run ./bin/fcheck.dart` run the tool
+- `dart format .` format all Dart files
+- `dart fix --apply` apply automated fixes
+- `flutter analyze lib test` run static analysis
+- `flutter test` run all tests
+- `./tool/check.sh` run format, analyze, tests, and fcheck on the example
 
 ## Key Files
 
-- `bin/fcheck.dart` - Entry point for the CLI tool
-- `lib/fcheck.dart` - Main library file
-- `lib/src/metrics/project_metrics.dart` - Project metrics calculation
-- `lib/src/layers/layers_analyzer.dart` - Layer architecture analyzer
-- `lib/src/hardcoded_strings/hardcoded_string_analyzer.dart` - Hardcoded string analyzer
-- `lib/src/magic_numbers/magic_number_analyzer.dart` - Magic number analyzer
-- `lib/src/sort/sort_analyzer.dart` - Member sorting analyzer
+- `bin/fcheck.dart` CLI entry point
+- `lib/fcheck.dart` analysis engine and report formatting
+- `lib/src/analyzer_runner/analyzer_runner.dart` unified analysis traversal
+- `lib/src/analyzer_runner/analyzer_delegates.dart` per-domain adapters
+- `lib/src/analyzers/hardcoded_strings/hardcoded_string_analyzer.dart`
+- `lib/src/analyzers/magic_numbers/magic_number_analyzer.dart`
+- `lib/src/analyzers/secrets/secret_analyzer.dart`
+- `lib/src/analyzers/sorted/sort_analyzer.dart`
+- `lib/src/analyzers/layers/layers_analyzer.dart`
 
 ## Test Structure
 
-Tests are organized by feature:
-
-- `test/layers_analyzer_test.dart` - Tests for layer analysis
-- `test/magic_number_analyzer_test.dart` - Tests for magic number detection
-- `test/hardcoded_string_analyzer_test.dart` - Tests for hardcoded string detection
-- `test/sort_analyzer_test.dart` - Tests for member sorting
-- `test/project_metrics_test.dart` - Tests for project metrics
-- `test/file_metrics_test.dart` - Tests for file metrics
+- `test/hardcoded_string_analyzer_test.dart`
+- `test/magic_number_analyzer_test.dart`
+- `test/layers_analyzer_test.dart`
+- `test/project_metrics_test.dart`
+- `test/cli_test.dart`
 
 ## Usage Patterns
 
-The tool supports various command-line options:
-
-- `fcheck` - Analyze current directory
-- `fcheck /path/to/project` - Analyze specific project
-- `fcheck --svg` - Generate SVG dependency graph
-- `fcheck --svgfolder` - Generate folder-based visualization
-- `fcheck --json` - Output as JSON
-- `fcheck --fix` - Auto-fix sorting issues
-- `fcheck --help` - Show help
-- `fcheck --version` - Show version
+- `fcheck` analyze current directory
+- `fcheck /path/to/project` analyze specific project
+- `fcheck --fix` auto-fix sorting issues
+- `fcheck --exclude "**/generated/**"` exclude glob patterns
+- `fcheck --excluded` list excluded files and directories
+- `fcheck --svg` generate SVG dependency graph
+- `fcheck --mermaid` generate Mermaid graph
+- `fcheck --plantuml` generate PlantUML graph
+- `fcheck --json` output results as JSON
 
 ## Configuration
 
-- `.fcheck` file in project root for global ignore settings
-- Per-file ignore comments using `// ignore: fcheck_*` at the top of Dart files
+- File-level ignore: `// ignore: fcheck_<domain>` at the top of a Dart file.
+- Node-level ignore: `// ignore: fcheck_<domain>` on the same line as a literal for AST-based rules.
+- Default excluded directories and hidden folders are defined in `FileUtils.defaultExcludedDirs`.
