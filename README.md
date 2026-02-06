@@ -27,27 +27,33 @@ fcheck analyzes your Flutter/Dart project and provides:
 ## 📈 Example Output
 
 ```text
-↓ --------------------------------- fCheck 0.8.1 --------------------------------- ↓
+↓ --------------------------------- fCheck 0.8.5 --------------------------------- ↓
 Project          : my_app (version: 1.0.0)
-Folders          : 15
-Files            : 89
-Dart Files       : 23
-Lines of Code    : 2,456
-Comment Lines    : 312
-Comment Ratio    : 12.70%
-Hardcoded Strings: 6
-Magic Numbers    : 2
+Project Type     : Flutter | Dart
+Folders          : 14
+Files            : 57
+Dart Files       : 36
+Excluded Files   : 19
+Lines of Code    : 7550
+Comment Lines    : 1452
+Comment Ratio    : 19.23%
+Localization     : No
+Hardcoded Strings: 7 (warning)
+Magic Numbers    : 0
 Secrets          : 0
-Layers           : 5
-Dependencies     : 12
-↓ ····································· Lists ····································· ↓
-✅ All files comply with the "one class per file" rule.
-
-⚠️ 6 potential hardcoded strings detected
-🔧 2 Flutter classes have unsorted members
-✅ No secrets detected in your codebase.
-✅ All layers architecture complies with standards.
-↑ --------------------------- fCheck completed (0.42s) --------------------------- ↑
+Layers           : 6
+Dependencies     : 73
+↓····································· Lists ·····································↓
+[✓] One class per file check passed.
+[!] Hardcoded strings check: 7 found (localization off). Example: fcheck.dart
+[✓] Magic numbers check passed.
+[✓] Flutter class member sorting passed.
+[✓] Secrets scan passed.
+[✓] Layers architecture check passed.
+↓································· Output files ·································↓
+SVG layers         : ./layers.svg
+SVG layers (folder): ./layers_folders.svg
+↑--------------------------- fCheck completed (0.43s) ---------------------------↑
 ```
 
 ## ⚡ Performance Optimization
@@ -184,15 +190,18 @@ Excluded directories (15):
 #### What Gets Excluded
 
 **By Default:**
+
 - Hidden directories (starting with `.`)
 - Common project directories: `test/`, `example/`, `tool/`, `.dart_tool/`, `build/`, `.git/`, `ios/`, `android/`, `web/`, `macos/`, `windows/`, `linux/`
 - Generated localization files (except main `app_localizations.dart`)
 
 **With Custom Patterns:**
+
 - Files matching glob patterns specified with `--exclude`
 - Files in directories matching exclude patterns
 
 **Hidden Directory Filtering:**
+
 - Any directory starting with `.` is automatically excluded
 - This includes `.git`, `.dart_tool`, `.vscode`, etc.
 - Nested hidden directories are also excluded (e.g., `src/.cache/`)

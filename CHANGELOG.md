@@ -7,6 +7,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.5] - 2026-02-06
+
+### Changed
+
+- 🔐 **Secrets Detection**: Generic secrets now extract assignment values (including triple-quoted strings) and apply entropy/length checks to the value, reducing false positives on full-line scans.
+    GH <https://github.com/vteam-com/fCheck/issues/2>
+- 🧾 **CLI Output**: Standardized status markers (`[✓]`, `[!]`, `[✗]`) and clarified report messaging, including explicit secrets counts and always showing excluded file counts.
+- 📚 **Docs**: Updated rules and comments.
+
+### Removed
+
+- 🧹 **Dead Code**: Dropped legacy per-analyzer classes now superseded by the unified delegate-based analyzer runner.
+
 ## [0.8.4] - 2026-02-06
 
 ### Added
