@@ -32,7 +32,7 @@ void main() {
       );
 
       // CLI may exit with non-zero code in test environment, but should produce output
-      expect(result.stdout, contains('fCheck 0.8.3'));
+      expect(result.stdout, contains('fCheck 0.8.4'));
     });
 
     test('should accept input argument', () async {
@@ -56,7 +56,7 @@ class TestClass {
       );
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('fCheck 0.8.3'));
+      expect(result.stdout, contains('fCheck 0.8.4'));
       expect(result.stdout, contains(tempDir.path));
       expect(result.stdout, contains('Dart Files       : 1'));
       expect(result.stdout, contains(tempDir.path));
@@ -76,7 +76,7 @@ class TestClass {
       );
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('fCheck 0.8.3'));
+      expect(result.stdout, contains('fCheck 0.8.4'));
       expect(result.stdout, contains(tempDir.path));
     });
 
@@ -218,7 +218,7 @@ void main() {
       );
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('fCheck 0.8.3'));
+      expect(result.stdout, contains('fCheck 0.8.4'));
       expect(result.stdout, contains(dir1.path));
       expect(result.stdout, contains('test1.dart'));
       expect(result.stdout, isNot(contains('test2.dart')));
@@ -238,7 +238,7 @@ void main() {
       );
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('fCheck 0.8.3'));
+      expect(result.stdout, contains('fCheck 0.8.4'));
       expect(result.stdout, contains(tempDir.path));
     });
     test('should output structured JSON with --json flag', () async {
