@@ -30,7 +30,7 @@ cd secret-scanner
   {
     "id": "generic_secret",
     "severity": "medium",
-    "regex": "(api[_-]?key|token|secret|password|private_key)\\s*[=:]\\s*['\"]?([a-zA-Z0-9+/]{20,})['\"]?",
+    "regex": "(api[_-]?key|token|secret|password|private_key)\\s*[:=]\\s*r?(['\\\"])([^'\\\"]{20,})\\2",
     "validators": ["entropy:4.0", "length:>20"]
   },
   {
@@ -117,7 +117,7 @@ class SecretScanner {
 
   void _loadRules() {
     final rulesJson = '''
-    [{"id":"aws_access_key","severity":"high","regex":"AKIA[0-9A-Z]{16}","validators":["prefix:AKIA","length:20","entropy:3.5"]},{"id":"generic_secret","severity":"medium","regex":"(api[_-]?key|token|secret|password|private_key)\\\\s*[=:]\\\\s*['\\\\\"]?([a-zA-Z0-9+/]{20,})['\\\\\"]?","validators":["entropy:4.0","length:>20"]},{"id":"bearer_token","severity":"high","regex":"Bearer\\\\s+[a-zA-Z0-9_\\\\-]{20,}"}]
+    [{"id":"aws_access_key","severity":"high","regex":"AKIA[0-9A-Z]{16}","validators":["prefix:AKIA","length:20","entropy:3.5"]},{"id":"generic_secret","severity":"medium","regex":"(api[_-]?key|token|secret|password|private_key)\\\\s*[:=]\\\\s*r?(['\\\\\"])([^'\\\\\"]{20,})\\\\2","validators":["entropy:4.0","length:>20"]},{"id":"bearer_token","severity":"high","regex":"Bearer\\\\s+[a-zA-Z0-9_\\\\-]{20,}"}]
     '''; // Embedded minimal rules for standalone
     rules = (jsonDecode(rulesJson) as List).map((r) => Rule.fromJson(r)).toList();
   }

@@ -13,11 +13,14 @@ class SecretScanner {
   /// Minimum entropy required to consider an AWS access key valid.
   static const double awsEntropyThreshold = 3.5;
 
-  /// Minimum line length for generic secret detection.
-  static const int genericSecretLineMinLength = 20;
+  /// Minimum value length for generic secret detection.
+  static const int genericSecretValueMinLength = 20;
 
   /// Minimum entropy required to consider a generic secret valid.
   static const double genericSecretEntropyThreshold = 4.0;
+
+  /// Match group index for extracted generic secret values.
+  static const int genericSecretValueGroupIndex = 3;
 
   /// Minimum bearer token length to consider for detection.
   static const int bearerTokenMinLength = 20;
@@ -158,12 +161,46 @@ class SecretScanner {
   }
 
   bool _detectGenericSecret(String line) {
-    final regex = RegExp(r'api[_-]?key|token|secret|password|private_key',
-        caseSensitive: false);
-    if (regex.hasMatch(line) &&
-        line.contains('=') &&
-        line.length > genericSecretLineMinLength) {
-      return _calculateEntropy(line) > genericSecretEntropyThreshold;
+    final keywordRegex = RegExp(
+      r'api[_-]?key|token|secret|password|private_key',
+      caseSensitive: false,
+    );
+    final assignmentRegex = RegExp(
+      "([\\w\$\"'.-]+)\\s*[:=]\\s*r?(['\"])([^'\"]+)\\2",
+      caseSensitive: false,
+    );
+    final tripleQuoteRegex = RegExp(
+      "([\\w\$\"'.-]+)\\s*[:=]\\s*r?('''|\"\"\")(.+?)\\2",
+      caseSensitive: false,
+    );
+
+    final candidates = <String>[];
+    for (final match in assignmentRegex.allMatches(line)) {
+      final lhs = match.group(1) ?? '';
+      if (!keywordRegex.hasMatch(lhs)) {
+        continue;
+      }
+      final candidate = match.group(genericSecretValueGroupIndex) ?? '';
+      if (candidate.isNotEmpty) {
+        candidates.add(candidate);
+      }
+    }
+    for (final match in tripleQuoteRegex.allMatches(line)) {
+      final lhs = match.group(1) ?? '';
+      if (!keywordRegex.hasMatch(lhs)) {
+        continue;
+      }
+      final candidate = match.group(genericSecretValueGroupIndex) ?? '';
+      if (candidate.isNotEmpty) {
+        candidates.add(candidate);
+      }
+    }
+
+    for (final candidate in candidates) {
+      if (candidate.length >= genericSecretValueMinLength &&
+          _calculateEntropy(candidate) > genericSecretEntropyThreshold) {
+        return true;
+      }
     }
     return false;
   }
