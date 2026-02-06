@@ -24,7 +24,7 @@ See `RULES.md` for the project metadata contract.
 
 ## How It Works
 
-- `SourceSortAnalyzer` parses a file, uses `ClassVisitor` to find target classes, then `MemberSorter` builds a sorted class body.
+- `SourceSortDelegate` runs inside `AnalyzerRunner`, uses `ClassVisitor` to find target classes, then `MemberSorter` builds a sorted class body.
 - It compares the sorted body to the original body with whitespace normalization.
 - If different and `fix` is false, it emits `SourceSortIssue`.
 - If `fix` is true (CLI `--fix`), it rewrites the class body in place.
@@ -41,7 +41,6 @@ See `RULES.md` for the project metadata contract.
 
 ## Related Files
 
-- `lib/src/analyzers/sorted/sort_analyzer.dart`
 - `lib/src/analyzers/sorted/sort_members.dart`
 - `lib/src/models/class_visitor.dart`
 - `lib/src/analyzers/sorted/sort_issue.dart`

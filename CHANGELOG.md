@@ -316,7 +316,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Technical Details
 
-- Added `SourceSortAnalyzer` class for analyzing class member ordering
+- Added sorting analyzer for analyzing class member ordering
 - Added `MemberSorter` class for sorting class members according to Flutter best practices
 - Integrated sorting checks into the main analysis pipeline
 - Supports proper ordering: constructors → fields → getters/setters → methods → lifecycle methods
@@ -329,7 +329,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated code to use new analyzer API methods (replaced deprecated name.lexeme with toString())
 - Modified file analysis to exclude example/, test/, tool/, and build directories from production code metrics
 - Migrated sort_source.dart to work with analyzer ^10.0.1 API changes
-- Updated SourceSortAnalyzer to use consistent directory exclusion filtering
+- Updated sorting analyzer to use consistent directory exclusion filtering
 
 ### Fixed
 

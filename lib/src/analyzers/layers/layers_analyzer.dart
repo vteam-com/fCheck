@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
+import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
+import 'package:fcheck/src/analyzers/layers/layers_visitor.dart';
 import 'package:fcheck/src/input_output/file_utils.dart';
-import 'layers_issue.dart';
-import 'layers_visitor.dart';
-import '../../models/ignore_config.dart';
+import 'package:fcheck/src/models/ignore_config.dart';
 
 /// Analyzer for detecting layers architecture violations.
 ///

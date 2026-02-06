@@ -26,8 +26,8 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
 - `AnalyzeFolder` in `lib/fcheck.dart` wires the CLI analysis pipeline.
 - `AnalyzerRunner` in `lib/src/analyzer_runner/analyzer_runner.dart` parses each Dart file once and runs delegates.
 - Per-domain delegates live in `lib/src/analyzer_runner/analyzer_delegates.dart`.
-- File discovery and default exclusions are centralized in `lib/src/models/file_utils.dart`.
-- Ignore directives are implemented in `lib/src/config/config_ignore_directives.dart`.
+- File discovery and default exclusions are centralized in `lib/src/input_output/file_utils.dart`.
+- Ignore directives are implemented in `lib/src/models/ignore_config.dart`.
 - **Project metadata contract:** `AnalyzeFolder` is the single entry point for analysis and is the only component that reads `pubspec.yaml`.
 - `AnalyzeFolder` reads `pubspec.yaml` once, derives `projectType`, `projectName`, `version`, and `packageName`, and passes these values into delegates/analyzers.
 - Domain analyzers must **not** read `pubspec.yaml` or rescan for project roots; they should rely on values provided by `AnalyzeFolder`.
@@ -37,6 +37,8 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
 - `lib/` main source code
 - `lib/src/analyzers/` domain analyzers
 - `lib/src/analyzer_runner/` unified analysis runner and delegates
+- `lib/src/input_output/` file system scanning and output helpers
+- `lib/src/models/` shared data models and ignore configuration
 - `lib/src/metrics/` project and file metrics
 - `lib/src/graphs/` graph exporters (SVG, Mermaid, PlantUML)
 - `test/` unit tests

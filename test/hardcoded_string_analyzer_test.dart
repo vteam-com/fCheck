@@ -1,14 +1,55 @@
 import 'dart:io';
-import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_analyzer.dart';
+import 'package:analyzer/dart/analysis/features.dart';
+import 'package:analyzer/dart/analysis/utilities.dart';
+import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
+import 'package:fcheck/src/analyzer_runner/analyzer_delegates.dart';
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
+import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:test/test.dart';
 
+AnalysisFileContext _contextForFile(File file) {
+  final content = file.readAsStringSync();
+  final parseResult = parseString(
+    content: content,
+    featureSet: FeatureSet.latestLanguageVersion(),
+  );
+  return AnalysisFileContext(
+    file: file,
+    content: content,
+    parseResult: parseResult,
+    lines: content.split('\n'),
+    compilationUnit: parseResult.unit,
+    hasParseErrors: parseResult.errors.isNotEmpty,
+  );
+}
+
+List<HardcodedStringIssue> _analyzeFile(
+  HardcodedStringDelegate delegate,
+  File file,
+) {
+  final context = _contextForFile(file);
+  return delegate.analyzeFileWithContext(context);
+}
+
+List<HardcodedStringIssue> _analyzeDirectory(
+  HardcodedStringDelegate delegate,
+  Directory directory,
+) {
+  final issues = <HardcodedStringIssue>[];
+  final dartFiles = FileUtils.listDartFiles(directory);
+  for (final file in dartFiles) {
+    issues.addAll(_analyzeFile(delegate, file));
+  }
+  return issues;
+}
+
 void main() {
-  group('HardcodedStringAnalyzer', () {
-    late HardcodedStringAnalyzer analyzer;
+  group('HardcodedStringDelegate', () {
+    late HardcodedStringDelegate delegate;
     late Directory tempDir;
 
     setUp(() {
-      analyzer = HardcodedStringAnalyzer();
+      delegate = HardcodedStringDelegate();
       tempDir = Directory.systemTemp.createTempSync('fcheck_test_');
     });
 
@@ -18,7 +59,7 @@ void main() {
 
     test('should return empty list for empty file', () {
       final file = File('${tempDir.path}/empty.dart')..writeAsStringSync('');
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues, isEmpty);
     });
 
@@ -29,7 +70,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues.length, equals(1));
       expect(issues[0].value, equals('Hello World'));
       expect(issues[0].lineNumber, equals(2));
@@ -44,7 +85,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues.length, equals(1));
       expect(issues[0].value, equals('This should be detected'));
     });
@@ -58,7 +99,7 @@ void method() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues.length, equals(1));
       expect(issues[0].value, equals('This should be detected'));
     });
@@ -73,7 +114,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues.length, equals(1));
       expect(issues[0].value, equals('This should be detected'));
     });
@@ -86,7 +127,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues.length, equals(1));
       expect(issues[0].value, equals('This should be detected'));
     });
@@ -106,7 +147,7 @@ class MyWidget extends StatelessWidget {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues.length, equals(1));
       expect(issues.map((issue) => issue.value),
           contains('This should be detected'));
@@ -123,7 +164,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       // The analyzer currently detects all strings in the map
       // This test verifies the expected behavior (may need improvement in the analyzer)
       expect(issues.length, equals(3));
@@ -139,7 +180,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues.length, equals(1));
       expect(issues[0].value, equals('This should be detected'));
     });
@@ -154,7 +195,7 @@ class Messages {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues, isEmpty);
     });
 
@@ -166,7 +207,7 @@ class Messages {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues, isEmpty);
     });
 
@@ -178,7 +219,7 @@ class Messages {
       File('${tempDir.path}/readme.txt')
           .writeAsStringSync('This is not a Dart file');
 
-      final issues = analyzer.analyzeDirectory(tempDir);
+      final issues = _analyzeDirectory(delegate, tempDir);
 
       expect(issues.length, equals(2));
       expect(issues.map((issue) => issue.value), contains('Hello'));

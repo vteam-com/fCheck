@@ -1,8 +1,7 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
-
-import 'magic_number_issue.dart';
-import '../../models/ignore_config.dart';
+import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
+import 'package:fcheck/src/models/ignore_config.dart';
 
 /// AST visitor that flags numeric literals that look like magic numbers.
 class MagicNumberVisitor extends GeneralizingAstVisitor<void> {

@@ -212,7 +212,7 @@ class MagicNumberDelegate implements AnalyzerDelegate {
   }
 }
 
-/// Delegate adapter for SourceSortAnalyzer
+/// Delegate adapter for source sorting
 class SourceSortDelegate implements AnalyzerDelegate {
   /// Whether to automatically fix sorting issues.
   final bool fix;

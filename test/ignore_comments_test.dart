@@ -1,18 +1,36 @@
 import 'dart:io';
+import 'package:analyzer/dart/analysis/features.dart';
+import 'package:analyzer/dart/analysis/utilities.dart';
+import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
+import 'package:fcheck/src/analyzer_runner/analyzer_delegates.dart';
 import 'package:test/test.dart';
-import 'package:fcheck/src/analyzers/magic_numbers/magic_number_analyzer.dart';
-import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_analyzer.dart';
 import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
 import 'package:path/path.dart' as p;
 
+AnalysisFileContext _contextForFile(File file) {
+  final content = file.readAsStringSync();
+  final parseResult = parseString(
+    content: content,
+    featureSet: FeatureSet.latestLanguageVersion(),
+  );
+  return AnalysisFileContext(
+    file: file,
+    content: content,
+    parseResult: parseResult,
+    lines: content.split('\n'),
+    compilationUnit: parseResult.unit,
+    hasParseErrors: parseResult.errors.isNotEmpty,
+  );
+}
+
 void main() {
-  group('MagicNumberAnalyzer Ignore Directive', () {
+  group('MagicNumberDelegate Ignore Directive', () {
     late Directory tempDir;
-    late MagicNumberAnalyzer analyzer;
+    late MagicNumberDelegate delegate;
 
     setUp(() {
       tempDir = Directory.systemTemp.createTempSync('fcheck_ignore_test');
-      analyzer = MagicNumberAnalyzer();
+      delegate = MagicNumberDelegate();
     });
 
     tearDown(() {
@@ -30,7 +48,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = delegate.analyzeFileWithContext(_contextForFile(file));
       expect(issues, isEmpty);
     });
 
@@ -47,7 +65,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = delegate.analyzeFileWithContext(_contextForFile(file));
       expect(issues, isEmpty);
     });
 
@@ -59,7 +77,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = delegate.analyzeFileWithContext(_contextForFile(file));
       expect(issues, isNotEmpty);
       expect(issues.first.value, '42');
     });
@@ -73,18 +91,18 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = delegate.analyzeFileWithContext(_contextForFile(file));
       expect(issues, isNotEmpty);
     });
   });
 
-  group('HardcodedStringAnalyzer Ignore Directive', () {
+  group('HardcodedStringDelegate Ignore Directive', () {
     late Directory tempDir;
-    late HardcodedStringAnalyzer analyzer;
+    late HardcodedStringDelegate delegate;
 
     setUp(() {
       tempDir = Directory.systemTemp.createTempSync('fcheck_ignore_test');
-      analyzer = HardcodedStringAnalyzer();
+      delegate = HardcodedStringDelegate();
     });
 
     tearDown(() {
@@ -102,7 +120,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = delegate.analyzeFileWithContext(_contextForFile(file));
       expect(issues, isEmpty);
     });
 
@@ -119,7 +137,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = delegate.analyzeFileWithContext(_contextForFile(file));
       expect(issues, isEmpty);
     });
 
@@ -131,7 +149,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = delegate.analyzeFileWithContext(_contextForFile(file));
       expect(issues, isNotEmpty);
       expect(issues.first.value, 'Hello World');
     });
@@ -145,7 +163,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = delegate.analyzeFileWithContext(_contextForFile(file));
       expect(issues, isNotEmpty);
     });
   });

@@ -26,22 +26,22 @@ import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
+import 'package:fcheck/src/analyzer_runner/analyzer_delegates.dart';
+import 'package:fcheck/src/analyzer_runner/analyzer_runner.dart';
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart';
+import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
+import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
+import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
+import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
+import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
+import 'package:fcheck/src/metrics/project_metrics.dart';
+import 'package:fcheck/src/models/ignore_config.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
-import 'src/analyzers/layers/layers_analyzer.dart';
-import 'src/metrics/project_metrics.dart';
-import 'src/input_output/file_utils.dart';
-import 'src/models/ignore_config.dart';
-import 'src/analyzer_runner/analyzer_runner.dart';
-import 'src/analyzer_runner/analyzer_delegates.dart';
-import 'src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
-import 'src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart';
-import 'src/analyzers/magic_numbers/magic_number_issue.dart';
-import 'src/analyzers/sorted/sort_issue.dart';
-import 'src/analyzers/secrets/secret_issue.dart';
 
 /// The main engine for analyzing Flutter/Dart project quality.
 ///

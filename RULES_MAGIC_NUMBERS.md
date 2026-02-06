@@ -37,7 +37,7 @@ See `RULES.md` for the project metadata contract.
 - `lib/src/analyzers/magic_numbers/magic_number_analyzer.dart`
 - `lib/src/analyzers/magic_numbers/magic_number_visitor.dart`
 - `lib/src/analyzers/magic_numbers/magic_number_issue.dart`
-- `lib/src/config/config_ignore_directives.dart`
+- `lib/src/models/ignore_config.dart`
 - `lib/src/analyzer_runner/analyzer_delegates.dart`
 
 ## Notes

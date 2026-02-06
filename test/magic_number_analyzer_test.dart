@@ -1,15 +1,56 @@
 import 'dart:io';
 
-import 'package:fcheck/src/analyzers/magic_numbers/magic_number_analyzer.dart';
+import 'package:analyzer/dart/analysis/features.dart';
+import 'package:analyzer/dart/analysis/utilities.dart';
+import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
+import 'package:fcheck/src/analyzer_runner/analyzer_delegates.dart';
+import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
+import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:test/test.dart';
 
+AnalysisFileContext _contextForFile(File file) {
+  final content = file.readAsStringSync();
+  final parseResult = parseString(
+    content: content,
+    featureSet: FeatureSet.latestLanguageVersion(),
+  );
+  return AnalysisFileContext(
+    file: file,
+    content: content,
+    parseResult: parseResult,
+    lines: content.split('\n'),
+    compilationUnit: parseResult.unit,
+    hasParseErrors: parseResult.errors.isNotEmpty,
+  );
+}
+
+List<MagicNumberIssue> _analyzeFile(
+  MagicNumberDelegate delegate,
+  File file,
+) {
+  final context = _contextForFile(file);
+  return delegate.analyzeFileWithContext(context);
+}
+
+List<MagicNumberIssue> _analyzeDirectory(
+  MagicNumberDelegate delegate,
+  Directory directory,
+) {
+  final issues = <MagicNumberIssue>[];
+  final dartFiles = FileUtils.listDartFiles(directory);
+  for (final file in dartFiles) {
+    issues.addAll(_analyzeFile(delegate, file));
+  }
+  return issues;
+}
+
 void main() {
-  group('MagicNumberAnalyzer', () {
-    late MagicNumberAnalyzer analyzer;
+  group('MagicNumberDelegate', () {
+    late MagicNumberDelegate delegate;
     late Directory tempDir;
 
     setUp(() {
-      analyzer = MagicNumberAnalyzer();
+      delegate = MagicNumberDelegate();
       tempDir = Directory.systemTemp.createTempSync('fcheck_magic_numbers_');
     });
 
@@ -19,7 +60,7 @@ void main() {
 
     test('returns empty list for empty file', () {
       final file = File('${tempDir.path}/empty.dart')..writeAsStringSync('');
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues, isEmpty);
     });
 
@@ -31,7 +72,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
 
       expect(issues.length, equals(1));
       expect(issues[0].value, equals('42'));
@@ -47,7 +88,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues, isEmpty);
     });
 
@@ -61,7 +102,7 @@ void main() {
 }
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues.length, equals(1));
       expect(issues[0].value, equals('2'));
     });
@@ -73,7 +114,7 @@ void main() {
 void main() {}
 ''');
 
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues, isEmpty);
     });
 
@@ -85,7 +126,7 @@ void main() {}
       File('${tempDir.path}/README.txt')
           .writeAsStringSync('This is not a Dart file.');
 
-      final issues = analyzer.analyzeDirectory(tempDir);
+      final issues = _analyzeDirectory(delegate, tempDir);
 
       expect(issues.length, equals(2));
       expect(issues.map((issue) => issue.value), contains('8'));
@@ -100,7 +141,7 @@ void main() {}
           static const double roomItemLeadingWidth = 40.0;
         }
       ''');
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues, isEmpty);
     });
 
@@ -113,7 +154,7 @@ void main() {}
           final num theFinalNumValue = 100;
         }
       ''');
-      final issues = analyzer.analyzeFile(file);
+      final issues = _analyzeFile(delegate, file);
       expect(issues, isEmpty);
     });
   });

@@ -1,8 +1,8 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
+import 'package:fcheck/src/models/ignore_config.dart';
 import 'hardcoded_string_issue.dart';
 import 'hardcoded_string_utils.dart';
-import '../../models/ignore_config.dart';
 
 /// Focus modes for hardcoded string detection.
 enum HardcodedStringFocus {

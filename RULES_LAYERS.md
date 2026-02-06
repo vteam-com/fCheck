@@ -36,7 +36,7 @@ Builds a dependency graph between Dart files in the project, reports cycles, and
 - `lib/src/analyzers/layers/layers_visitor.dart`
 - `lib/src/analyzers/layers/layers_issue.dart`
 - `lib/src/analyzers/layers/layers_results.dart`
-- `lib/src/config/config_ignore_directives.dart`
+- `lib/src/models/ignore_config.dart`
 
 ## Notes
 

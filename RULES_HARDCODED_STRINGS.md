@@ -59,8 +59,8 @@ This document covers both, so a new contributor understands when each applies an
 
 ### Ignore and Exclusions
 
-- File-level ignore uses `ConfigIgnoreDirectives.hasIgnoreDirective` with `// ignore: fcheck_hardcoded_strings`.
-- Node-level ignore uses `ConfigIgnoreDirectives.isNodeIgnored` on the literal line.
+- File-level ignore uses `IgnoreConfig.hasIgnoreDirective` with `// ignore: fcheck_hardcoded_strings`.
+- Node-level ignore uses `IgnoreConfig.isNodeIgnored` on the literal line.
 - CLI `--exclude` patterns and `FileUtils` default exclusions apply in the unified runner.
 
 ### CLI Output
@@ -109,7 +109,7 @@ This document covers both, so a new contributor understands when each applies an
 - `lib/src/analyzers/hardcoded_strings/hardcoded_string_analyzer.dart`
 - `lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart`
 - `lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart`
-- `lib/src/config/config_ignore_directives.dart`
+- `lib/src/models/ignore_config.dart`
 
 ## Notes
 
