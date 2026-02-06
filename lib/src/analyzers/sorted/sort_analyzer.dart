@@ -3,11 +3,12 @@ import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
-import '../../models/class_visitor.dart';
-import 'sort_members.dart';
-import 'sort_issue.dart';
+import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
+import 'package:fcheck/src/analyzers/sorted/sort_members.dart';
+import 'package:fcheck/src/input_output/output.dart';
+import 'package:fcheck/src/models/class_visitor.dart';
+import 'package:fcheck/src/input_output/file_utils.dart';
 import 'sort_utils.dart';
-import '../../models/file_utils.dart';
 
 /// Analyzes Dart files for proper source code member ordering in Flutter classes
 class SourceSortAnalyzer {
@@ -76,7 +77,8 @@ class SourceSortAnalyzer {
                 sortedBody +
                 content.substring(classBodyEnd);
             file.writeAsStringSync(sortedContent);
-            print('✅ Fixed sorting for class $className in ${file.path}');
+            print(
+                '${okTag()} Fixed sorting for class $className in ${file.path}');
           } else {
             // Report the issue
             issues.add(

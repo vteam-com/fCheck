@@ -15,6 +15,7 @@ import 'package:fcheck/src/models/class_visitor.dart';
 import 'package:fcheck/src/analyzers/layers/layers_visitor.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_scanner.dart';
+import 'package:fcheck/src/input_output/output.dart';
 
 /// Delegate adapter for HardcodedStringAnalyzer
 class HardcodedStringDelegate implements AnalyzerDelegate {
@@ -274,7 +275,7 @@ class SourceSortDelegate implements AnalyzerDelegate {
                 context.content.substring(classBodyEnd);
             context.file.writeAsStringSync(sortedContent);
             print(
-                '✅ Fixed sorting for class $className in ${context.file.path}');
+                '${okTag()} Fixed sorting for class $className in ${context.file.path}');
           } else {
             // Report the issue
             issues.add(

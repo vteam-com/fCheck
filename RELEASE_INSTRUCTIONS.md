@@ -79,7 +79,13 @@ Add a new entry to `CHANGELOG.md` at the top (under the unreleased section):
 
 Update the date to today's date in YYYY-MM-DD format.
 
-## 5. Execute the Publish Script
+## 5. Validate README Output Sample
+
+If recent changes affect CLI output, update the sample output in `README.md`.
+At minimum, make sure the version shown in the README `fcheck` output matches
+the version being released.
+
+## 6. Execute the Publish Script
 
 Run the automated publishing script:
 

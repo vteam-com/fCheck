@@ -6,7 +6,7 @@ import 'package:fcheck/src/graphs/export_plantuml.dart';
 import 'package:fcheck/src/graphs/export_svg.dart';
 import 'package:fcheck/src/graphs/export_svg_folders.dart';
 import 'package:fcheck/fcheck.dart';
-import 'package:fcheck/src/metrics/output.dart';
+import 'package:fcheck/src/input_output/output.dart';
 import 'package:fcheck/src/models/version.dart';
 import 'package:path/path.dart' as p;
 

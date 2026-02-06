@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:fcheck/src/models/file_utils.dart';
+import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';

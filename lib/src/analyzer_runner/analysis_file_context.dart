@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:fcheck/src/config/config_ignore_directives.dart';
+import 'package:fcheck/src/models/ignore_config.dart';
 
 /// Context containing pre-analyzed file data shared across analyzers.
 class AnalysisFileContext {
@@ -48,7 +48,7 @@ class AnalysisFileContext {
 
   /// Checks if file has ignore directive for specific analyzer.
   bool hasIgnoreDirective(String analyzerName) {
-    return ConfigIgnoreDirectives.hasIgnoreDirective(content, analyzerName);
+    return IgnoreConfig.hasIgnoreDirective(content, analyzerName);
   }
 }
 

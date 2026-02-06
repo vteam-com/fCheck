@@ -3,10 +3,10 @@ import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
-import 'package:fcheck/src/models/file_utils.dart';
+import 'package:fcheck/src/input_output/file_utils.dart';
 import 'layers_issue.dart';
 import 'layers_visitor.dart';
-import '../../config/config_ignore_directives.dart';
+import '../../models/ignore_config.dart';
 
 /// Analyzer for detecting layers architecture violations.
 ///
@@ -49,7 +49,7 @@ class LayersAnalyzer {
     final String content = file.readAsStringSync();
 
     // Check for ignore directive
-    if (ConfigIgnoreDirectives.hasIgnoreDirective(content, 'layers')) {
+    if (IgnoreConfig.hasIgnoreDirective(content, 'layers')) {
       return <LayersIssue>[];
     }
 
@@ -104,7 +104,7 @@ class LayersAnalyzer {
     // Filter out files with ignore directives
     final filteredFiles = dartFiles.where((file) {
       final content = file.readAsStringSync();
-      return !ConfigIgnoreDirectives.hasIgnoreDirective(content, 'layers');
+      return !IgnoreConfig.hasIgnoreDirective(content, 'layers');
     }).toList();
 
     // Build dependency graph: Map<filePath, List<dependencies>>

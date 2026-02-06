@@ -147,7 +147,7 @@ class SecondClass {
       );
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('❌'));
+      expect(result.stdout, contains('[✗]'));
       expect(result.stdout, contains('violate the "one class per file" rule'));
     });
 
@@ -171,8 +171,7 @@ class SecondClass {
       );
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout,
-          contains('✅ All files comply with the "one class per file" rule.'));
+      expect(result.stdout, contains('[✓] One class per file check passed.'));
     });
 
     test('should detect hardcoded strings', () async {
@@ -194,8 +193,9 @@ void main() {
       );
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('⚠️'));
-      expect(result.stdout, contains('potential hardcoded strings detected'));
+      expect(result.stdout, contains('[!]'));
+      expect(result.stdout, contains('Hardcoded strings check:'));
+      expect(result.stdout, contains('localization off'));
       expect(result.stdout, contains('magic numbers detected'));
     });
 

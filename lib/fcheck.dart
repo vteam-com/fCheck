@@ -32,10 +32,9 @@ import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 import 'src/analyzers/layers/layers_analyzer.dart';
-import 'src/analyzers/sorted/sort.dart';
 import 'src/metrics/project_metrics.dart';
-import 'src/models/file_utils.dart';
-import 'src/config/config_ignore_directives.dart';
+import 'src/input_output/file_utils.dart';
+import 'src/models/ignore_config.dart';
 import 'src/analyzer_runner/analyzer_runner.dart';
 import 'src/analyzer_runner/analyzer_delegates.dart';
 import 'src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
@@ -329,8 +328,7 @@ class AnalyzeFolder {
   /// // ignore: fcheck_one_class_per_file
   /// ```
   bool hasIgnoreOneClassPerFileDirective(String content) {
-    return ConfigIgnoreDirectives.hasIgnoreDirective(
-        content, 'one_class_per_file');
+    return IgnoreConfig.hasIgnoreDirective(content, 'one_class_per_file');
   }
 
   /// Heuristically detects whether the project uses Flutter localization.

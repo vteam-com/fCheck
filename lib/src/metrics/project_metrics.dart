@@ -1,11 +1,11 @@
 // ignore: fcheck_secrets
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
+import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
-import 'package:fcheck/src/analyzers/sorted/sort.dart';
-import 'package:fcheck/src/metrics/output.dart';
+import 'package:fcheck/src/input_output/output.dart';
 
 /// The detected type of the analyzed project.
 enum ProjectType {
@@ -207,19 +207,23 @@ class ProjectMetrics {
   void printReport([String? toolVersion]) {
     print('Project          : $projectName (version: $version)');
     print('Project Type     : ${projectType.label}');
-    print('Localization     : ${usesLocalization ? 'Yes' : 'No'}');
     print('Folders          : $totalFolders');
     print('Files            : $totalFiles');
     print('Dart Files       : $totalDartFiles');
-    if (excludedFilesCount > 0) {
-      print('Excluded Files   : $excludedFilesCount');
-    }
+    print('Excluded Files   : $excludedFilesCount');
     print('Lines of Code    : $totalLinesOfCode');
     print('Comment Lines    : $totalCommentLines');
     print(
         'Comment Ratio    : ${(commentRatio * _percentageMultiplier).toStringAsFixed(_decimalPlaces)}%');
-    print('Hardcoded Strings: ${hardcodedStringIssues.length}');
+    final hardcodedSummary = usesLocalization
+        ? '${hardcodedStringIssues.length}'
+        : (hardcodedStringIssues.isEmpty
+            ? '${hardcodedStringIssues.length}'
+            : '${hardcodedStringIssues.length} (warning)');
+    print('Localization     : ${usesLocalization ? 'Yes' : 'No'}');
+    print('Hardcoded Strings: $hardcodedSummary');
     print('Magic Numbers    : ${magicNumberIssues.length}');
+    print('Secrets          : ${secretIssues.length}');
     print('Layers           : $layersCount');
     print('Dependencies     : $layersEdgeCount');
 
@@ -228,22 +232,21 @@ class ProjectMetrics {
     final nonCompliant =
         fileMetrics.where((m) => !m.isOneClassPerFileCompliant).toList();
     if (nonCompliant.isEmpty) {
-      print('✅ All files comply with the "one class per file" rule.');
+      print('${okTag()} One class per file check passed.');
     } else {
       print(
-          '❌ ${nonCompliant.length} files violate the "one class per file" rule:');
+          '${failTag()} ${nonCompliant.length} files violate the "one class per file" rule:');
       for (var m in nonCompliant) {
         print('  - ${m.path} (${m.classCount} classes found)');
       }
+      print('');
     }
 
-    print('');
-
     if (hardcodedStringIssues.isEmpty) {
-      print('✅ No hardcoded strings found.');
+      print('${okTag()} Hardcoded strings check passed.');
     } else if (usesLocalization) {
       print(
-          '❌ ${hardcodedStringIssues.length} hardcoded strings detected (localization enabled):');
+          '${failTag()} ${hardcodedStringIssues.length} hardcoded strings detected (localization enabled):');
       for (var issue in hardcodedStringIssues.take(_maxIssuesToShow)) {
         print('  - $issue');
       }
@@ -251,62 +254,59 @@ class ProjectMetrics {
         print(
             '  ... and ${hardcodedStringIssues.length - _maxIssuesToShow} more');
       }
+      print('');
     } else {
       final firstFile = hardcodedStringIssues.first.filePath.split('/').last;
       print(
-          '⚠️ ${hardcodedStringIssues.length} potential hardcoded strings detected (project not localized; showing count only). Example file: $firstFile');
+          '${warnTag()} Hardcoded strings check: ${hardcodedStringIssues.length} found (localization off). Example: $firstFile');
     }
 
-    print('');
-
     if (magicNumberIssues.isEmpty) {
-      print('✅ No magic numbers detected.');
+      print('${okTag()} Magic numbers check passed.');
     } else {
-      print('⚠️ ${magicNumberIssues.length} magic numbers detected:');
+      print('${warnTag()} ${magicNumberIssues.length} magic numbers detected:');
       for (var issue in magicNumberIssues.take(_maxIssuesToShow)) {
         print('  - $issue');
       }
+      print('');
       if (magicNumberIssues.length > _maxIssuesToShow) {
         print('  ... and ${magicNumberIssues.length - _maxIssuesToShow} more');
       }
+      print('');
     }
 
-    print('');
-
     if (sourceSortIssues.isEmpty) {
-      print('✅ All Flutter classes have properly sorted members.');
+      print('${okTag()} Flutter class member sorting passed.');
     } else {
       print(
-          '🔧 ${sourceSortIssues.length} Flutter classes have unsorted members:');
+          '${warnTag()} ${sourceSortIssues.length} Flutter classes have unsorted members:');
       for (var issue in sourceSortIssues.take(_maxIssuesToShow)) {
         print('  - ${issue.filePath}:${issue.lineNumber} (${issue.className})');
       }
       if (sourceSortIssues.length > _maxIssuesToShow) {
         print('  ... and ${sourceSortIssues.length - _maxIssuesToShow} more');
       }
+      print('');
     }
 
-    print('');
-
     if (secretIssues.isEmpty) {
-      print('✅ No secrets detected.');
+      print('${okTag()} Secrets scan passed.');
     } else {
-      print('⚠️ ${secretIssues.length} potential secrets detected:');
+      print('${warnTag()} ${secretIssues.length} potential secrets detected:');
       for (var issue in secretIssues.take(_maxIssuesToShow)) {
         print('  - $issue');
       }
       if (secretIssues.length > _maxIssuesToShow) {
         print('  ... and ${secretIssues.length - _maxIssuesToShow} more');
       }
+      print('');
     }
 
-    print('');
-
     if (layersIssues.isEmpty) {
-      print('✅ All layers architecture complies with standards.');
+      print('${okTag()} Layers architecture check passed.');
     } else {
       print(
-          '🏗️ ${layersIssues.length} layers architecture violations detected:');
+          '${failTag()} ${layersIssues.length} layers architecture violations detected:');
       for (var issue in layersIssues.take(_maxIssuesToShow)) {
         print('  - $issue');
       }

@@ -1,7 +1,7 @@
 import 'package:analyzer/dart/ast/ast.dart';
 
 /// Utility for detecting ignore directives in Dart files.
-class ConfigIgnoreDirectives {
+class IgnoreConfig {
   /// Checks if a file should be ignored based on comment directives.
   ///
   /// This method checks for ignore patterns in the leading comment block

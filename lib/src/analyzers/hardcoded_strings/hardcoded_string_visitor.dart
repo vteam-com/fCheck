@@ -2,7 +2,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'hardcoded_string_issue.dart';
 import 'hardcoded_string_utils.dart';
-import '../../config/config_ignore_directives.dart';
+import '../../models/ignore_config.dart';
 
 /// Focus modes for hardcoded string detection.
 enum HardcodedStringFocus {
@@ -134,8 +134,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     }
 
     // Skip strings in ignored sections
-    if (ConfigIgnoreDirectives.isNodeIgnored(
-        node, content, 'hardcoded_strings')) {
+    if (IgnoreConfig.isNodeIgnored(node, content, 'hardcoded_strings')) {
       return;
     }
 
