@@ -5,6 +5,7 @@ import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
+import 'package:fcheck/src/input_output/number_format_utils.dart';
 import 'package:fcheck/src/input_output/output.dart';
 
 /// The detected type of the analyzed project.
@@ -207,25 +208,26 @@ class ProjectMetrics {
   void printReport([String? toolVersion]) {
     print('Project          : $projectName (version: $version)');
     print('Project Type     : ${projectType.label}');
-    print('Folders          : $totalFolders');
-    print('Files            : $totalFiles');
-    print('Dart Files       : $totalDartFiles');
-    print('Excluded Files   : $excludedFilesCount');
-    print('Lines of Code    : $totalLinesOfCode');
-    print('Comment Lines    : $totalCommentLines');
+    print('Folders          : ${formatCount(totalFolders)}');
+    print('Files            : ${formatCount(totalFiles)}');
+    print('Dart Files       : ${formatCount(totalDartFiles)}');
+    print('Excluded Files   : ${formatCount(excludedFilesCount)}');
+    print('Lines of Code    : ${formatCount(totalLinesOfCode)}');
+    print('Comment Lines    : ${formatCount(totalCommentLines)}');
     print(
         'Comment Ratio    : ${(commentRatio * _percentageMultiplier).toStringAsFixed(_decimalPlaces)}%');
+    final hardcodedCount = formatCount(hardcodedStringIssues.length);
     final hardcodedSummary = usesLocalization
-        ? '${hardcodedStringIssues.length}'
+        ? hardcodedCount
         : (hardcodedStringIssues.isEmpty
-            ? '${hardcodedStringIssues.length}'
-            : '${hardcodedStringIssues.length} (warning)');
+            ? hardcodedCount
+            : '$hardcodedCount (warning)');
     print('Localization     : ${usesLocalization ? 'Yes' : 'No'}');
     print('Hardcoded Strings: $hardcodedSummary');
-    print('Magic Numbers    : ${magicNumberIssues.length}');
-    print('Secrets          : ${secretIssues.length}');
-    print('Layers           : $layersCount');
-    print('Dependencies     : $layersEdgeCount');
+    print('Magic Numbers    : ${formatCount(magicNumberIssues.length)}');
+    print('Secrets          : ${formatCount(secretIssues.length)}');
+    print('Layers           : ${formatCount(layersCount)}');
+    print('Dependencies     : ${formatCount(layersEdgeCount)}');
 
     printDivider('Lists', dot: true);
 
@@ -235,9 +237,9 @@ class ProjectMetrics {
       print('${okTag()} One class per file check passed.');
     } else {
       print(
-          '${failTag()} ${nonCompliant.length} files violate the "one class per file" rule:');
+          '${failTag()} ${formatCount(nonCompliant.length)} files violate the "one class per file" rule:');
       for (var m in nonCompliant) {
-        print('  - ${m.path} (${m.classCount} classes found)');
+        print('  - ${m.path} (${formatCount(m.classCount)} classes found)');
       }
       print('');
     }
@@ -246,31 +248,33 @@ class ProjectMetrics {
       print('${okTag()} Hardcoded strings check passed.');
     } else if (usesLocalization) {
       print(
-          '${failTag()} ${hardcodedStringIssues.length} hardcoded strings detected (localization enabled):');
+          '${failTag()} ${formatCount(hardcodedStringIssues.length)} hardcoded strings detected (localization enabled):');
       for (var issue in hardcodedStringIssues.take(_maxIssuesToShow)) {
         print('  - $issue');
       }
       if (hardcodedStringIssues.length > _maxIssuesToShow) {
         print(
-            '  ... and ${hardcodedStringIssues.length - _maxIssuesToShow} more');
+            '  ... and ${formatCount(hardcodedStringIssues.length - _maxIssuesToShow)} more');
       }
       print('');
     } else {
       final firstFile = hardcodedStringIssues.first.filePath.split('/').last;
       print(
-          '${warnTag()} Hardcoded strings check: ${hardcodedStringIssues.length} found (localization off). Example: $firstFile');
+          '${warnTag()} Hardcoded strings check: ${formatCount(hardcodedStringIssues.length)} found (localization off). Example: $firstFile');
     }
 
     if (magicNumberIssues.isEmpty) {
       print('${okTag()} Magic numbers check passed.');
     } else {
-      print('${warnTag()} ${magicNumberIssues.length} magic numbers detected:');
+      print(
+          '${warnTag()} ${formatCount(magicNumberIssues.length)} magic numbers detected:');
       for (var issue in magicNumberIssues.take(_maxIssuesToShow)) {
         print('  - $issue');
       }
       print('');
       if (magicNumberIssues.length > _maxIssuesToShow) {
-        print('  ... and ${magicNumberIssues.length - _maxIssuesToShow} more');
+        print(
+            '  ... and ${formatCount(magicNumberIssues.length - _maxIssuesToShow)} more');
       }
       print('');
     }
@@ -279,12 +283,14 @@ class ProjectMetrics {
       print('${okTag()} Flutter class member sorting passed.');
     } else {
       print(
-          '${warnTag()} ${sourceSortIssues.length} Flutter classes have unsorted members:');
+          '${warnTag()} ${formatCount(sourceSortIssues.length)} Flutter classes have unsorted members:');
       for (var issue in sourceSortIssues.take(_maxIssuesToShow)) {
-        print('  - ${issue.filePath}:${issue.lineNumber} (${issue.className})');
+        print(
+            '  - ${issue.filePath}:${formatCount(issue.lineNumber)} (${issue.className})');
       }
       if (sourceSortIssues.length > _maxIssuesToShow) {
-        print('  ... and ${sourceSortIssues.length - _maxIssuesToShow} more');
+        print(
+            '  ... and ${formatCount(sourceSortIssues.length - _maxIssuesToShow)} more');
       }
       print('');
     }
@@ -292,12 +298,14 @@ class ProjectMetrics {
     if (secretIssues.isEmpty) {
       print('${okTag()} Secrets scan passed.');
     } else {
-      print('${warnTag()} ${secretIssues.length} potential secrets detected:');
+      print(
+          '${warnTag()} ${formatCount(secretIssues.length)} potential secrets detected:');
       for (var issue in secretIssues.take(_maxIssuesToShow)) {
         print('  - $issue');
       }
       if (secretIssues.length > _maxIssuesToShow) {
-        print('  ... and ${secretIssues.length - _maxIssuesToShow} more');
+        print(
+            '  ... and ${formatCount(secretIssues.length - _maxIssuesToShow)} more');
       }
       print('');
     }
@@ -306,12 +314,13 @@ class ProjectMetrics {
       print('${okTag()} Layers architecture check passed.');
     } else {
       print(
-          '${failTag()} ${layersIssues.length} layers architecture violations detected:');
+          '${failTag()} ${formatCount(layersIssues.length)} layers architecture violations detected:');
       for (var issue in layersIssues.take(_maxIssuesToShow)) {
         print('  - $issue');
       }
       if (layersIssues.length > _maxIssuesToShow) {
-        print('  ... and ${layersIssues.length - _maxIssuesToShow} more');
+        print(
+            '  ... and ${formatCount(layersIssues.length - _maxIssuesToShow)} more');
       }
     }
   }

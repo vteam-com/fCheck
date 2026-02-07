@@ -87,6 +87,10 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
 - `fcheck --plantuml` generate PlantUML graph
 - `fcheck --json` output results as JSON
 
+## Output Formatting
+
+- When displaying counts or other numbers `>= 1,000` in CLI output or documentation examples, use comma separators (e.g., `1,234`, `12,345`, `1,234,567`).
+
 ## Configuration
 
 - File-level ignore: `// ignore: fcheck_<domain>` at the top of a Dart file.

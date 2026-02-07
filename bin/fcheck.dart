@@ -6,6 +6,7 @@ import 'package:fcheck/src/graphs/export_plantuml.dart';
 import 'package:fcheck/src/graphs/export_svg.dart';
 import 'package:fcheck/src/graphs/export_svg_folders.dart';
 import 'package:fcheck/fcheck.dart';
+import 'package:fcheck/src/input_output/number_format_utils.dart';
 import 'package:fcheck/src/input_output/output.dart';
 import 'package:fcheck/src/models/version.dart';
 import 'package:path/path.dart' as p;
@@ -179,7 +180,8 @@ void main(List<String> arguments) {
         };
         print(const JsonEncoder.withIndent('  ').convert(excludedData));
       } else {
-        print('Excluded Dart files (${excludedDartFiles.length}):');
+        print(
+            'Excluded Dart files (${formatCount(excludedDartFiles.length)}):');
         if (excludedDartFiles.isEmpty) {
           print('  (none)');
         } else {
@@ -188,7 +190,8 @@ void main(List<String> arguments) {
           }
         }
 
-        print('\nExcluded non-Dart files (${excludedNonDartFiles.length}):');
+        print(
+            '\nExcluded non-Dart files (${formatCount(excludedNonDartFiles.length)}):');
         if (excludedNonDartFiles.isEmpty) {
           print('  (none)');
         } else {
@@ -197,7 +200,8 @@ void main(List<String> arguments) {
           }
         }
 
-        print('\nExcluded directories (${excludedDirectories.length}):');
+        print(
+            '\nExcluded directories (${formatCount(excludedDirectories.length)}):');
         if (excludedDirectories.isEmpty) {
           print('  (none)');
         } else {

@@ -34,8 +34,8 @@ Folders          : 14
 Files            : 57
 Dart Files       : 36
 Excluded Files   : 19
-Lines of Code    : 7550
-Comment Lines    : 1452
+Lines of Code    : 7,550
+Comment Lines    : 1,452
 Comment Ratio    : 19.23%
 Localization     : No
 Hardcoded Strings: 7 (warning)
@@ -171,7 +171,7 @@ Excluded Dart files (18):
   ./example/lib/subfolder/subclass.dart
   ...
 
-Excluded non-Dart files (1528):
+Excluded non-Dart files (1,528):
   ./.DS_Store
   ./.fcheck
   ./example/pubspec.lock
