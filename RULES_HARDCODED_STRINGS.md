@@ -2,12 +2,8 @@
 
 ## Overview
 
-There are two hardcoded-string checks in this repo:
-
-- A general AST analyzer used by the CLI (`HardcodedStringAnalyzer`).
-- A widget-focused `custom_lint` rule (`HardcodedStringLintRule`).
-
-This document covers both, so a new contributor understands when each applies and how they differ.
+This repo includes the CLI hardcoded-strings analysis, implemented by
+`HardcodedStringDelegate` and `HardcodedStringVisitor`.
 
 ## Project-Type Focus
 
@@ -51,7 +47,7 @@ This document covers both, so a new contributor understands when each applies an
 
 ### How It Works
 
-- `HardcodedStringAnalyzer` parses a file and runs `HardcodedStringVisitor`.
+- `HardcodedStringDelegate` uses the pre-parsed AST and runs `HardcodedStringVisitor`.
 - The visitor walks the AST and emits `HardcodedStringIssue` for any literal that survives the skip rules.
 - Focus mode details:
   - Flutter: only string literals used as constructor arguments inside widget/build contexts, and not inside print/logger calls.
@@ -60,7 +56,7 @@ This document covers both, so a new contributor understands when each applies an
 
 ### Ignore and Exclusions
 
-- File-level ignore uses `IgnoreConfig.hasIgnoreDirective` with `// ignore: fcheck_hardcoded_strings`.
+- File-level ignore uses `IgnoreConfig.hasIgnoreForFileDirective` with `// ignore: fcheck_hardcoded_strings`.
 - File-level ignore also respects `// ignore_for_file: avoid_hardcoded_strings_in_widgets` (third-party custom_lint).
 - Node-level ignore uses `IgnoreConfig.isNodeIgnored` on the literal line.
 - CLI `--exclude` patterns and `FileUtils` default exclusions apply in the unified runner.
@@ -69,52 +65,16 @@ This document covers both, so a new contributor understands when each applies an
 
 - `HardcodedStringIssue` contains `filePath`, `lineNumber`, `value`.
 
-## Custom Lint Rule (Widget-Focused)
-
-### What It Flags (Custom Lint)
-
-- `StringLiteral` nodes passed directly to Flutter widget constructors.
-
-### Core Eligibility Checks
-
-- The string must be inside an `ArgumentList` for a widget constructor (`InstanceCreationExpression`).
-- The constructed type must be a Flutter `Widget` (walks the class hierarchy for a widget base class).
-- If the string is inside a function body between the literal and the argument list, it is ignored (e.g., callback bodies).
-
-### Skips (Custom Lint)
-
-- Empty strings.
-- Strings with length <= 2.
-- Map keys and index expressions.
-- Strings passed to specific widget properties that are considered acceptable:
-  - `semanticsLabel`, `excludeSemantics`, `restorationId`, `heroTag`, `key`, `debugLabel`,
-  - `fontFamily`, `package`, `name`, `asset`,
-  - `locale`, `materialType`, `clipBehavior`.
-- Strings that look technical/config-like (matches any of the following patterns):
-  - URLs: `^\w+://`
-  - Email addresses: `^[\w\-\.]+@[\w\-\.]+\.\w+`
-  - Hex colors: `^#[0-9A-Fa-f]{3,8}`
-  - Numbers with optional units: `^\d+(\.\d+)?[a-zA-Z]*`
-  - CONSTANT_CASE identifiers: `^[A-Z][A-Z0-9]*_[A-Z0-9_]*`
-  - snake_case identifiers: `^[a-z]+_[a-z_]+`
-  - File paths: `^/[\w/\-\.]*`
-  - Dotted notation: `^\w+\.\w+`
-  - File names with extensions: `^[\w\-]+\.[\w]+`
-  - Identifiers with numbers/underscores/hyphens: `^[a-zA-Z0-9]*[_\-0-9]+[a-zA-Z0-9_\-]*`
-
-### Lint Output
-
-- Emits `LintCode` with name `avoid_hardcoded_strings_in_widgets` at WARNING severity.
-
 ## Related Files
 
-- `lib/src/analyzers/hardcoded_strings/hardcoded_string_analyzer.dart`
 - `lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart`
 - `lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart`
+- `lib/src/analyzers/hardcoded_strings/hardcoded_string_utils.dart`
+- `lib/src/analyzer_runner/analyzer_delegates.dart`
+- `lib/src/analyzer_runner/analysis_file_context.dart`
 - `lib/src/models/ignore_config.dart`
 
 ## Notes
 
 - The CLI analyzer is general-purpose and not widget-specific unless focus mode is set to Flutter.
-- The `custom_lint` rule is opt-in and focuses on widget constructor usage.
 - Widget-only filtering in the CLI is heuristic (no type resolution). It relies on widget class inheritance (`StatelessWidget`, `StatefulWidget`, `State<...>`) and `build`-method/return-type hints.

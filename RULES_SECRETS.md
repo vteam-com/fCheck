@@ -21,8 +21,8 @@ See `RULES.md` for the project metadata contract.
 
 ## How It Works
 
-- `SecretAnalyzer` recursively scans `.dart` files, applies exclude globs, then scans each line.
-- `SecretDelegate` is used by the unified analyzer runner and scans the pre-split lines for each Dart file.
+- `AnalyzeFolder` / `AnalyzerRunner` select `.dart` files, apply excludes, and provide file contexts.
+- `SecretDelegate` runs `SecretScanner` on the pre-split lines for each Dart file.
 - Matches are emitted as `SecretIssue` entries with a `secretType` label.
 
 ## Ignores and Exclusions
@@ -37,8 +37,8 @@ See `RULES.md` for the project metadata contract.
 
 ## Related Files
 
-- `lib/src/analyzers/secrets/secret_analyzer.dart`
 - `lib/src/analyzers/secrets/secret_issue.dart`
+- `lib/src/analyzers/secrets/secret_scanner.dart`
 - `lib/src/analyzer_runner/analyzer_delegates.dart`
 
 ## Notes

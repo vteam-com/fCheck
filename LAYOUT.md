@@ -92,7 +92,7 @@ The layer assignment algorithm organizes files into a hierarchical "cake" struct
 Analyze all files in the project to build a dependency graph:
 
 - Collect import relationships between files
-- Include all import types: `dart:`, `package:`, and relative imports
+- Include relative imports and `package:` imports for the current package; ignore `dart:` and external `package:` imports
 - Build bidirectional references: each node tracks both `targets` (files it imports) and `sources` (files that import it)
 
 #### Step 2: Layer Assignment Rules

@@ -36,7 +36,7 @@ Dart Files       : 36
 Excluded Files   : 19
 Lines of Code    : 7,550
 Comment Lines    : 1,452
-Comment Ratio    : 19.23%
+Comment Ratio    : 19%
 Localization     : No
 Hardcoded Strings: 7 (warning)
 Magic Numbers    : 0
@@ -65,7 +65,7 @@ fcheck now features **unified file traversal** that dramatically improves analys
 - **Single File Discovery**: One directory scan instead of 6+ separate traversals
 - **Shared AST Parsing**: Each file parsed once, results shared across all analyzers
 - **Cached File Context**: Eliminates redundant I/O operations
-- **Parallel Delegation**: Multiple analyzers work on the same file context
+- **Single-Pass Delegation**: Multiple analyzers run on the same file context in one pass
 
 ### Performance Gains
 

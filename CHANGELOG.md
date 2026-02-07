@@ -278,7 +278,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 📚 Comprehensive API documentation for all public constructors and methods
 - 🏗️ Private constructor for `FileUtils` utility class to prevent instantiation
 - 📖 Enhanced documentation for `ClassVisitor.visitClassDeclaration` method
-- 🔧 Added explicit constructor documentation for `HardcodedStringAnalyzer`
+- 🔧 Added explicit constructor documentation for hardcoded string analysis
 - 📋 Complete documentation for all `@override` methods across the codebase
 
 ## [0.3.4] - 2026-01-21

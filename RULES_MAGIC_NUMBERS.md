@@ -25,7 +25,7 @@ See `RULES.md` for the project metadata contract.
 
 ## How It Works
 
-- `MagicNumberAnalyzer` parses a file and runs `MagicNumberVisitor`.
+- `MagicNumberDelegate` uses the pre-parsed AST and runs `MagicNumberVisitor`.
 - `MagicNumberVisitor` inspects `IntegerLiteral` and `DoubleLiteral` AST nodes and emits `MagicNumberIssue`.
 
 ## Output
@@ -34,7 +34,6 @@ See `RULES.md` for the project metadata contract.
 
 ## Related Files
 
-- `lib/src/analyzers/magic_numbers/magic_number_analyzer.dart`
 - `lib/src/analyzers/magic_numbers/magic_number_visitor.dart`
 - `lib/src/analyzers/magic_numbers/magic_number_issue.dart`
 - `lib/src/models/ignore_config.dart`

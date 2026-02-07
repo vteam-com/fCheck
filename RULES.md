@@ -61,10 +61,14 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
 - `lib/fcheck.dart` analysis engine and report formatting
 - `lib/src/analyzer_runner/analyzer_runner.dart` unified analysis traversal
 - `lib/src/analyzer_runner/analyzer_delegates.dart` per-domain adapters
-- `lib/src/analyzers/hardcoded_strings/hardcoded_string_analyzer.dart`
-- `lib/src/analyzers/magic_numbers/magic_number_analyzer.dart`
-- `lib/src/analyzers/secrets/secret_analyzer.dart`
-- `lib/src/analyzers/sorted/sort_analyzer.dart`
+- `lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart`
+- `lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart`
+- `lib/src/analyzers/magic_numbers/magic_number_visitor.dart`
+- `lib/src/analyzers/magic_numbers/magic_number_issue.dart`
+- `lib/src/analyzers/secrets/secret_scanner.dart`
+- `lib/src/analyzers/secrets/secret_issue.dart`
+- `lib/src/analyzers/sorted/sort_members.dart`
+- `lib/src/analyzers/sorted/sort_issue.dart`
 - `lib/src/analyzers/layers/layers_analyzer.dart`
 
 ## Test Structure

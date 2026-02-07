@@ -18,7 +18,7 @@ import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_scanner.dart';
 import 'package:fcheck/src/input_output/output.dart';
 
-/// Delegate adapter for HardcodedStringAnalyzer
+/// Delegate adapter for hardcoded string analysis.
 class HardcodedStringDelegate implements AnalyzerDelegate {
   /// Creates a delegate for hardcoded string analysis.
   ///
@@ -175,7 +175,7 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
   }
 }
 
-/// Delegate adapter for MagicNumberAnalyzer
+/// Delegate adapter for magic number analysis.
 class MagicNumberDelegate implements AnalyzerDelegate {
   /// Analyzes a file for magic numbers using the unified context.
   ///
@@ -305,7 +305,7 @@ class SourceSortDelegate implements AnalyzerDelegate {
   }
 }
 
-/// Delegate adapter for LayersAnalyzer
+/// Delegate adapter for layers analysis.
 class LayersDelegate implements AnalyzerDelegate {
   /// The root directory of the project.
   final Directory rootDirectory;
@@ -360,7 +360,7 @@ class LayersDelegate implements AnalyzerDelegate {
   }
 }
 
-/// Delegate adapter for SecretAnalyzer
+/// Delegate adapter for secret scanning.
 class SecretDelegate implements AnalyzerDelegate {
   final SecretScanner _scanner = SecretScanner();
 
