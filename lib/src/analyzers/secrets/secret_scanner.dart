@@ -1,6 +1,7 @@
 // ignore: fcheck_secrets
 import 'dart:math';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
+import 'package:fcheck/src/models/ignore_config.dart';
 
 /// Shared scanner for secret detection across analyzers and delegates.
 class SecretScanner {
@@ -49,7 +50,7 @@ class SecretScanner {
     required List<String> lines,
   }) {
     for (final line in lines.take(ignoreDirectiveScanLines)) {
-      if (line.trim().contains('// ignore: fcheck_secrets')) {
+      if (line.trim().contains(IgnoreConfig.ignoreDirectiveForSecrets)) {
         return [];
       }
     }

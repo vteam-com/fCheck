@@ -49,7 +49,10 @@ class LayersAnalyzer {
     final String content = file.readAsStringSync();
 
     // Check for ignore directive
-    if (IgnoreConfig.hasIgnoreDirective(content, 'layers')) {
+    if (IgnoreConfig.hasIgnoreForFileDirective(
+      content,
+      IgnoreConfig.ignoreDirectiveForLayers,
+    )) {
       return <LayersIssue>[];
     }
 
@@ -104,7 +107,10 @@ class LayersAnalyzer {
     // Filter out files with ignore directives
     final filteredFiles = dartFiles.where((file) {
       final content = file.readAsStringSync();
-      return !IgnoreConfig.hasIgnoreDirective(content, 'layers');
+      return !IgnoreConfig.hasIgnoreForFileDirective(
+        content,
+        IgnoreConfig.ignoreDirectiveForLayers,
+      );
     }).toList();
 
     // Build dependency graph: Map<filePath, List<dependencies>>

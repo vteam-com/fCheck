@@ -46,9 +46,9 @@ class AnalysisFileContext {
     return lineNumber;
   }
 
-  /// Checks if file has ignore directive for specific analyzer.
-  bool hasIgnoreDirective(String analyzerName) {
-    return IgnoreConfig.hasIgnoreDirective(content, analyzerName);
+  /// Checks if file has a top-of-file ignore directive that matches the line.
+  bool hasIgnoreForFileDirective(String expectedComment) {
+    return IgnoreConfig.hasIgnoreForFileDirective(content, expectedComment);
   }
 }
 

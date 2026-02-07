@@ -2,23 +2,81 @@ import 'package:analyzer/dart/ast/ast.dart';
 
 /// Utility for detecting ignore directives in Dart files.
 class IgnoreConfig {
-  /// Checks if a file should be ignored based on comment directives.
+  /// `// ignore: fcheck_layers` directive used to skip layers checks.
+  static const String ignoreDirectiveForLayers = '// ignore: fcheck_layers';
+
+  /// `// ignore: fcheck_hardcoded_strings` directive used to skip checks.
+  static const String ignoreDirectiveForHardcodedStrings =
+      '// ignore: fcheck_hardcoded_strings';
+
+  /// `// ignore: fcheck_magic_numbers` directive used to skip checks.
+  static const String ignoreDirectiveForMagicNumbers =
+      '// ignore: fcheck_magic_numbers';
+
+  /// `// ignore: fcheck_secrets` directive used to skip secret scans.
+  static const String ignoreDirectiveForSecrets = '// ignore: fcheck_secrets';
+
+  /// `// ignore: fcheck_one_class_per_file` directive used to skip checks.
+  static const String ignoreDirectiveForOneClassPerFile =
+      '// ignore: fcheck_one_class_per_file';
+
+  /// `// ignore_for_file: avoid_hardcoded_strings_in_widgets` directive.
+  static const String ignoreForFileDirectiveForHardcodedStrings =
+      '// ignore_for_file: avoid_hardcoded_strings_in_widgets';
+
+  /// Checks for a top-of-file ignore directive matching [expectedComment].
   ///
-  /// This method checks for ignore patterns in the leading comment block
-  /// of the file. The pattern should be: `// ignore: fcheck_<domain>`
-  ///
-  /// [content] The raw content of the file to check.
-  /// [domain] The specific domain to check for (e.g., 'magic_numbers').
-  ///
-  /// Returns true if the file contains an ignore directive for the specified domain.
-  static bool hasIgnoreDirective(String content, String domain) {
-    // Check for the new format: // ignore: fcheck_<domain>
+  /// The directive must appear in the leading comment block(s) at the top of
+  /// the file (before any code). Pass the full expected line, for example:
+  /// - `// ignore: fcheck_magic_numbers`
+  /// - `// ignore_for_file: avoid_hardcoded_strings_in_widgets`
+  static bool hasIgnoreForFileDirective(
+    String content,
+    String expectedComment,
+  ) {
+    final trimmed = expectedComment.trim();
+    if (trimmed.isEmpty) {
+      return false;
+    }
+
     final directivePattern = RegExp(
-      r'^\s*//\s*ignore:\s*fcheck_' + domain + r'\s*$',
+      _buildExpectedCommentPattern(trimmed),
       caseSensitive: false,
       multiLine: true,
     );
 
+    final commentBlock = _collectLeadingCommentBlock(content);
+    return directivePattern.hasMatch(commentBlock);
+  }
+
+  static String _buildExpectedCommentPattern(String expectedComment) {
+    /// Length of the line comment prefix "//".
+    const int lineCommentPrefixLength = 2;
+
+    var working = expectedComment;
+    if (working.startsWith('//')) {
+      working = working.substring(lineCommentPrefixLength);
+    }
+    working = working.trimLeft();
+
+    final buffer = StringBuffer(r'^\s*//\s*');
+    for (var i = 0; i < working.length; i++) {
+      final ch = working[i];
+      if (ch.trim().isEmpty) {
+        buffer.write(r'\s*');
+        continue;
+      }
+      if (ch == ':') {
+        buffer.write(r'\s*:\s*');
+        continue;
+      }
+      buffer.write(RegExp.escape(ch));
+    }
+    buffer.write(r'\s*$');
+    return buffer.toString();
+  }
+
+  static String _collectLeadingCommentBlock(String content) {
     final lines = content.split('\n');
     final buffer = StringBuffer();
     bool inBlockComment = false;
@@ -68,7 +126,7 @@ class IgnoreConfig {
       break;
     }
 
-    return directivePattern.hasMatch(buffer.toString());
+    return buffer.toString();
   }
 
   /// Checks if a specific AST node is within an ignored section.

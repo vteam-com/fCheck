@@ -12,6 +12,7 @@ import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_members.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_utils.dart';
 import 'package:fcheck/src/models/class_visitor.dart';
+import 'package:fcheck/src/models/ignore_config.dart';
 import 'package:fcheck/src/analyzers/layers/layers_visitor.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_scanner.dart';
@@ -47,7 +48,12 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
     // Skip l10n generated files and files with ignore directive
     if (filePath.contains('lib/l10n/') ||
         filePath.contains('.g.dart') ||
-        context.hasIgnoreDirective('hardcoded_strings')) {
+        context.hasIgnoreForFileDirective(
+          IgnoreConfig.ignoreDirectiveForHardcodedStrings,
+        ) ||
+        context.hasIgnoreForFileDirective(
+          IgnoreConfig.ignoreForFileDirectiveForHardcodedStrings,
+        )) {
       return [];
     }
 
@@ -123,7 +129,7 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
       }
 
       if (_hasWidgetLintIgnoreComment(line) ||
-          line.contains('// ignore: fcheck_hardcoded_strings')) {
+          line.contains(IgnoreConfig.ignoreDirectiveForHardcodedStrings)) {
         continue;
       }
 
@@ -185,7 +191,9 @@ class MagicNumberDelegate implements AnalyzerDelegate {
     final filePath = context.file.path;
 
     if (_shouldSkipFile(filePath) ||
-        context.hasIgnoreDirective('magic_numbers')) {
+        context.hasIgnoreForFileDirective(
+          IgnoreConfig.ignoreDirectiveForMagicNumbers,
+        )) {
       return [];
     }
 
@@ -322,7 +330,9 @@ class LayersDelegate implements AnalyzerDelegate {
   /// 'isEntryPoint' (boolean indicating if file has main() function).
   @override
   Map<String, dynamic> analyzeFileWithContext(AnalysisFileContext context) {
-    if (context.hasIgnoreDirective('layers')) {
+    if (context.hasIgnoreForFileDirective(
+      IgnoreConfig.ignoreDirectiveForLayers,
+    )) {
       return {
         'dependencies': <String>[],
         'isEntryPoint': false,

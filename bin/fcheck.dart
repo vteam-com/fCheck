@@ -11,6 +11,12 @@ import 'package:fcheck/src/input_output/output.dart';
 import 'package:fcheck/src/models/version.dart';
 import 'package:path/path.dart' as p;
 
+const String _usageLine = 'Usage: dart run fcheck [options] [<folder>]';
+const String _descriptionLine =
+    'Analyze Flutter/Dart code quality and provide metrics.';
+const String _invalidArgumentsLine = 'Error: Invalid arguments provided.';
+const String _noneIndicator = '  (none)';
+
 /// Main entry point for the fcheck command-line tool.
 ///
 /// Parses command-line arguments, validates the target directory,
@@ -111,9 +117,9 @@ void main(List<String> arguments) {
 
     // Handle help flag
     if (argResults['help'] as bool) {
-      print('Usage: dart run fcheck [options] [<folder>]');
+      print(_usageLine);
       print('');
-      print('Analyze Flutter/Dart code quality and provide metrics.');
+      print(_descriptionLine);
       print('');
       print(parser.usage);
       exit(0);
@@ -138,8 +144,8 @@ void main(List<String> arguments) {
       path = '.';
     }
   } catch (e) {
-    print('Error: Invalid arguments provided.');
-    print('Usage: dart run fcheck [options] [<folder>]');
+    print(_invalidArgumentsLine);
+    print(_usageLine);
     print('');
     print(parser.usage);
     exit(1);
@@ -183,7 +189,7 @@ void main(List<String> arguments) {
         print(
             'Excluded Dart files (${formatCount(excludedDartFiles.length)}):');
         if (excludedDartFiles.isEmpty) {
-          print('  (none)');
+          print(_noneIndicator);
         } else {
           for (final file in excludedDartFiles) {
             print('  ${file.path}');
@@ -193,7 +199,7 @@ void main(List<String> arguments) {
         print(
             '\nExcluded non-Dart files (${formatCount(excludedNonDartFiles.length)}):');
         if (excludedNonDartFiles.isEmpty) {
-          print('  (none)');
+          print(_noneIndicator);
         } else {
           for (final file in excludedNonDartFiles) {
             print('  ${file.path}');
@@ -203,7 +209,7 @@ void main(List<String> arguments) {
         print(
             '\nExcluded directories (${formatCount(excludedDirectories.length)}):');
         if (excludedDirectories.isEmpty) {
-          print('  (none)');
+          print(_noneIndicator);
         } else {
           for (final dir in excludedDirectories) {
             print('  ${dir.path}');

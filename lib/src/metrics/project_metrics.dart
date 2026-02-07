@@ -191,7 +191,7 @@ class ProjectMetrics {
   static const int _percentageMultiplier = 100;
 
   /// Number of decimal places for percentage formatting.
-  static const int _decimalPlaces = 2;
+  static const int _commentRatioDecimalPlaces = 0;
 
   /// Prints a comprehensive stats report to the console.
   ///
@@ -215,7 +215,7 @@ class ProjectMetrics {
     print('Lines of Code    : ${formatCount(totalLinesOfCode)}');
     print('Comment Lines    : ${formatCount(totalCommentLines)}');
     print(
-        'Comment Ratio    : ${(commentRatio * _percentageMultiplier).toStringAsFixed(_decimalPlaces)}%');
+        'Comment Ratio    : ${(commentRatio * _percentageMultiplier).toStringAsFixed(_commentRatioDecimalPlaces)}%');
     final hardcodedCount = formatCount(hardcodedStringIssues.length);
     final hardcodedSummary = usesLocalization
         ? hardcodedCount

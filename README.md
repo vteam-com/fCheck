@@ -229,6 +229,7 @@ Excluded directories (15):
 - ❌ **Error**: Hardcoded strings when localization is enabled
 
 **Opt-out**: Add `// ignore: fcheck_hardcoded_strings` at the top of the file
+**Alternative**: Add `// ignore_for_file: avoid_hardcoded_strings_in_widgets` at the top of the file
 
 ### Secrets Detection
 

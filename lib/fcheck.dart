@@ -328,7 +328,10 @@ class AnalyzeFolder {
   /// // ignore: fcheck_one_class_per_file
   /// ```
   bool hasIgnoreOneClassPerFileDirective(String content) {
-    return IgnoreConfig.hasIgnoreDirective(content, 'one_class_per_file');
+    return IgnoreConfig.hasIgnoreForFileDirective(
+      content,
+      IgnoreConfig.ignoreDirectiveForOneClassPerFile,
+    );
   }
 
   /// Heuristically detects whether the project uses Flutter localization.

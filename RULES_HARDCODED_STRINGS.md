@@ -41,6 +41,7 @@ This document covers both, so a new contributor understands when each applies an
 - Nodes with `// ignore: fcheck_hardcoded_strings`.
 - Files in `lib/l10n/` and generated `.g.dart` files.
 - Files with a top-of-file `// ignore: fcheck_hardcoded_strings` directive.
+- Files with a top-of-file `// ignore_for_file: avoid_hardcoded_strings_in_widgets` directive (third-party custom_lint).
 - Parse errors do not prevent scanning; the AST may be partial.
 - Flutter focus only: strings with length <= 2.
 - Flutter focus only: strings on lines with `avoid_hardcoded_strings_in_widgets`, `hardcoded.string`, or `hardcoded.ok` ignore comments.
@@ -60,6 +61,7 @@ This document covers both, so a new contributor understands when each applies an
 ### Ignore and Exclusions
 
 - File-level ignore uses `IgnoreConfig.hasIgnoreDirective` with `// ignore: fcheck_hardcoded_strings`.
+- File-level ignore also respects `// ignore_for_file: avoid_hardcoded_strings_in_widgets` (third-party custom_lint).
 - Node-level ignore uses `IgnoreConfig.isNodeIgnored` on the literal line.
 - CLI `--exclude` patterns and `FileUtils` default exclusions apply in the unified runner.
 
