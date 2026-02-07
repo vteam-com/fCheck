@@ -952,7 +952,7 @@
   <text x="789.0" y="1178.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/fcheck.dart
 2. ../lib/src/metrics/project_metrics.dart</title></g><text x="618.0" y="1180.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">file_metrics.dart</text>
 <g class="folderTitleLayer">
-<text x="546.0" y="105.0" class="layerTitle">fcheck v0.8.5</text>
+<text x="546.0" y="105.0" class="layerTitle">fcheck v0.8.6</text>
 <text x="566.0" y="157.0" class="layerTitle">  ...</text>
 <text x="566.0" y="279.0" class="layerTitle">  ..</text>
 <text x="586.0" y="331.0" class="layerTitle">    lib</text>

@@ -27,7 +27,7 @@ fcheck analyzes your Flutter/Dart project and provides:
 ## 📈 Example Output
 
 ```text
-↓ --------------------------------- fCheck 0.8.5 --------------------------------- ↓
+↓ --------------------------------- fCheck 0.8.6 --------------------------------- ↓
 Project          : my_app (version: 1.0.0)
 Project Type     : Flutter | Dart
 Folders          : 14

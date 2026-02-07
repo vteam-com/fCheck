@@ -7,6 +7,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.6] - 2026-02-07
+
+### Added
+
+- 🧵 **Hardcoded Strings**: Added support for additional ignore comments (`hardcoded.string`, `hardcoded.ok`, and `avoid_hardcoded_strings_in_widgets`) to suppress specific string literals.
+
+### Changed
+
+- 🔢 **CLI Output**: Counts now use comma separators for thousands grouping.
+
 ## [0.8.5] - 2026-02-06
 
 ### Changed
