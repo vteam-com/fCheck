@@ -30,7 +30,7 @@ dart run fcheck .
 ## 📈 Example Output
 
 ```text
-↓ --------------------------------- fCheck 0.8.6 --------------------------------- ↓
+↓ --------------------------------- fCheck 0.9.2 --------------------------------- ↓
 Project          : my_app (version: 1.0.0)
 Project Type     : Flutter | Dart
 Folders          : 14
