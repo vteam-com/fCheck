@@ -25,11 +25,15 @@ import 'a.dart';
 void main() {
   final a = A();
   a.toString();
+  final box = Box<int>();
+  box.toString();
 }
 ''');
 
       File(p.join(libDir.path, 'a.dart')).writeAsStringSync('''
 class A {}
+
+class Box<T> {}
 ''');
 
       File(p.join(libDir.path, 'b.dart')).writeAsStringSync('''
@@ -102,6 +106,12 @@ class GameWidget extends WidgetBase {
       expect(
         issues.where(
             (i) => i.type == DeadCodeIssueType.deadClass && i.name == 'A'),
+        isEmpty,
+      );
+
+      expect(
+        issues.where(
+            (i) => i.type == DeadCodeIssueType.deadClass && i.name == 'Box'),
         isEmpty,
       );
     });

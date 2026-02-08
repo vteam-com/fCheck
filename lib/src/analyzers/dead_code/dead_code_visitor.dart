@@ -156,8 +156,9 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
   @override
   void visitClassDeclaration(ClassDeclaration node) {
     if (!IgnoreConfig.isNodeIgnored(node, content, 'dead_code')) {
+      final className = _stripTypeParameters(node.namePart.toString());
       classes.add(DeadCodeSymbol(
-        name: node.namePart.toString(),
+        name: className,
         lineNumber: lineNumberForOffset(node.offset),
       ));
     }
@@ -394,6 +395,14 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
       }
     }
     return false;
+  }
+
+  String _stripTypeParameters(String name) {
+    final typeStart = name.indexOf('<');
+    if (typeStart == -1) {
+      return name;
+    }
+    return name.substring(0, typeStart).trimRight();
   }
 
   bool _isDartFile(String uri) {
