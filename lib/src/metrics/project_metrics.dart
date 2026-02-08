@@ -188,7 +188,7 @@ class ProjectMetrics {
   /// - Secret issues
   ///
   /// It does not return anything.
-  void printReport([String? toolVersion]) {
+  void printReport() {
     print('Project          : $projectName (version: $version)');
     print('Project Type     : ${projectType.label}');
     print('Folders          : ${formatCount(totalFolders)}');

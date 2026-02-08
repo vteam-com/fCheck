@@ -84,21 +84,35 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
       ));
     }
 
-    _pushScope(functionName);
+    final treatParametersAsUsed =
+        node.functionExpression.body is EmptyFunctionBody;
+    _pushScope(
+      functionName,
+      treatParametersAsUsed: treatParametersAsUsed,
+    );
     super.visitFunctionDeclaration(node);
     _popScope();
   }
 
   @override
   void visitMethodDeclaration(MethodDeclaration node) {
-    _pushScope(node.name.lexeme);
+    final treatParametersAsUsed =
+        _hasOverrideAnnotation(node.metadata) || node.body is EmptyFunctionBody;
+    _pushScope(
+      node.name.lexeme,
+      treatParametersAsUsed: treatParametersAsUsed,
+    );
     super.visitMethodDeclaration(node);
     _popScope();
   }
 
   @override
   void visitConstructorDeclaration(ConstructorDeclaration node) {
-    _pushScope(node.name?.lexeme ?? 'constructor');
+    final treatParametersAsUsed = node.body is EmptyFunctionBody;
+    _pushScope(
+      node.name?.lexeme ?? 'constructor',
+      treatParametersAsUsed: treatParametersAsUsed,
+    );
     super.visitConstructorDeclaration(node);
     _popScope();
   }
@@ -180,7 +194,12 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
   @override
   void visitFieldFormalParameter(FieldFormalParameter node) {
     if (!IgnoreConfig.isNodeIgnored(node, content, 'dead_code')) {
-      _declareVariable(node.name.lexeme, node, isParameter: true);
+      _declareVariable(
+        node.name.lexeme,
+        node,
+        isParameter: true,
+        markUsed: true,
+      );
     }
     super.visitFieldFormalParameter(node);
   }
@@ -196,7 +215,12 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
   @override
   void visitSuperFormalParameter(SuperFormalParameter node) {
     if (!IgnoreConfig.isNodeIgnored(node, content, 'dead_code')) {
-      _declareVariable(node.name.lexeme, node, isParameter: true);
+      _declareVariable(
+        node.name.lexeme,
+        node,
+        isParameter: true,
+        markUsed: true,
+      );
     }
     super.visitSuperFormalParameter(node);
   }
@@ -224,8 +248,16 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     super.visitNamedType(node);
   }
 
-  void _pushScope(String? ownerName) {
-    _scopes.add(_VariableScope(ownerName: ownerName));
+  void _pushScope(
+    String? ownerName, {
+    bool treatParametersAsUsed = false,
+  }) {
+    _scopes.add(
+      _VariableScope(
+        ownerName: ownerName,
+        treatParametersAsUsed: treatParametersAsUsed,
+      ),
+    );
   }
 
   String? _currentOwnerName() {
@@ -263,6 +295,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     String name,
     AstNode node, {
     bool isParameter = false,
+    bool markUsed = false,
   }) {
     if (_scopes.isEmpty) {
       return;
@@ -280,6 +313,9 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
       ownerName: scope.ownerName,
       isParameter: isParameter,
     );
+    if (markUsed || (isParameter && scope.treatParametersAsUsed)) {
+      scope.used.add(name);
+    }
   }
 
   void _markUsed(String name) {
@@ -347,6 +383,19 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  bool _hasOverrideAnnotation(List<Annotation> metadata) {
+    for (final annotation in metadata) {
+      final name = annotation.name;
+      if (name is SimpleIdentifier && name.name == 'override') {
+        return true;
+      }
+      if (name is PrefixedIdentifier && name.identifier.name == 'override') {
+        return true;
+      }
+    }
+    return false;
+  }
+
   bool _isDartFile(String uri) {
     if (uri.startsWith('dart:')) {
       return false;
@@ -408,9 +457,13 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
 }
 
 class _VariableScope {
-  _VariableScope({required this.ownerName});
+  _VariableScope({
+    required this.ownerName,
+    required this.treatParametersAsUsed,
+  });
 
   final String? ownerName;
+  final bool treatParametersAsUsed;
   final Map<String, _VariableInfo> declared = <String, _VariableInfo>{};
   final Set<String> used = <String>{};
 }

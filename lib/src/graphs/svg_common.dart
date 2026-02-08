@@ -15,7 +15,7 @@ void renderTriangularBadge(
 ({Map<String, List<String>> incoming, Map<String, List<String>> outgoing})
     buildPeerLists(
   Map<String, List<String>> graph, {
-  String Function(String path)? labelFor,
+  String Function(String)? labelFor,
 }) {
   final incoming = <String, Set<String>>{};
   final outgoing = <String, Set<String>>{};

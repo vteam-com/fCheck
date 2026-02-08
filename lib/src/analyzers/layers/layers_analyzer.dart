@@ -138,7 +138,7 @@ class LayersAnalyzer {
     }
 
     // Analyze the graph for issues
-    return _analyzeGraph(filteredGraph, entryPoints);
+    return _analyzeGraph(filteredGraph);
   }
 
   /// Analyzes a single Dart file for its dependencies and entry point status.
@@ -183,12 +183,10 @@ class LayersAnalyzer {
   /// dependencies.
   ///
   /// [dependencyGraph] A map from file paths to their dependencies.
-  /// [entryPoints] A map from file paths to whether they are entry points.
   ///
   /// Returns a [LayersAnalysisResult] with issues and layer assignments.
   LayersAnalysisResult _analyzeGraph(
     Map<String, List<String>> dependencyGraph,
-    Map<String, bool> entryPoints,
   ) {
     final List<LayersIssue> issues = <LayersIssue>[];
 
@@ -212,7 +210,7 @@ class LayersAnalyzer {
     }
 
     // Perform topological sort to assign layers
-    final Map<String, int> layers = _assignLayers(dependencyGraph, entryPoints);
+    final Map<String, int> layers = _assignLayers(dependencyGraph);
 
     // Validate layer assignments (for future use - currently no wrong layer issues)
     // In a more complete implementation, we could define layer boundaries
@@ -285,7 +283,6 @@ class LayersAnalyzer {
   /// Returns a map from file paths to their assigned layer numbers (1-based, 1 = top).
   Map<String, int> _assignLayers(
     Map<String, List<String>> dependencyGraph,
-    Map<String, bool> entryPoints,
   ) {
     final Set<String> allFilesSet = <String>{}..addAll(dependencyGraph.keys);
     for (final deps in dependencyGraph.values) {

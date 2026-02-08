@@ -203,8 +203,7 @@ String exportGraphSvgFolders(
   final rootNode = _buildFolderHierarchy(allRelativePaths);
 
   // Calculate folder-level dependency counts using relative paths
-  final folderMetrics =
-      _calculateFolderMetrics(relativeGraph, rootNode.fullPath, rootNode);
+  final folderMetrics = _calculateFolderMetrics(relativeGraph, rootNode);
   final fileMetrics = _calculateFileMetrics(relativeGraph);
   final folderLevels = _computeFolderLevels(relativeGraph, rootNode);
 
@@ -351,7 +350,6 @@ String exportGraphSvgFolders(
     fileIncomingPeers,
     fileOutgoingPeers,
     depthMap,
-    labelWidth: labelWidth,
     headerHeight: folderHeaderHeight,
     fileItemHeight: fileItemHeight,
     fileItemSpacing: fileItemSpacing,
@@ -371,7 +369,6 @@ String exportGraphSvgFolders(
     folderDependencies,
     folderPositions,
     folderDimensions,
-    folderLevels,
     folderDepGraph,
     globalGutterX: leftLaneGutterX,
     rootPath: rootNode.fullPath,
@@ -562,9 +559,7 @@ String _getDeepestFolderPath(String filePath, FolderNode rootNode) {
 
 /// Calculate dependency metrics for hierarchical folders
 Map<String, Map<String, int>> _calculateFolderMetrics(
-    Map<String, List<String>> dependencyGraph,
-    String rootPath,
-    FolderNode rootNode) {
+    Map<String, List<String>> dependencyGraph, FolderNode rootNode) {
   final folderMetrics = <String, Map<String, int>>{};
   final seenEdges = <String>{};
 
@@ -1124,7 +1119,8 @@ void _drawEdgeVerticalsFiles(
   StringBuffer buffer,
   Map<String, List<String>> graph,
   Map<String, Map<String, Point<double>>> anchors,
-  Map<String, int> folderLevels, {
+  Map<String, int> _, // folderLevels
+  {
   double? rightLaneGutterX,
 }) {
   var edgeCounter = 0;
@@ -1215,7 +1211,6 @@ void _drawEdgeVerticalFolders(
   List<_FolderEdge> edges,
   Map<String, Point<double>> positions,
   Map<String, Rect> dimensions,
-  Map<String, int> folderLevels,
   Map<String, List<String>> dependencyGraph, {
   required double globalGutterX,
   required String rootPath,
@@ -1348,7 +1343,6 @@ void _drawHierarchicalFolders(
   Map<String, List<String>> fileIncomingPeers,
   Map<String, List<String>> fileOutgoingPeers,
   Map<String, int> depths, {
-  required double labelWidth,
   required double headerHeight,
   required double fileItemHeight,
   required double fileItemSpacing,
@@ -1693,7 +1687,7 @@ List<Point<double>> _calculateFilePositions(
 
 List<String> _sortFiles(
   List<String> files,
-  String folderPath,
+  String _, //folderPath,
   Map<String, Map<String, int>> metrics,
   Map<String, List<String>> graph,
 ) {

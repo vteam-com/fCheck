@@ -43,6 +43,19 @@ void doStuff() {
   var x = 1;
 }
 ''');
+
+      File(p.join(libDir.path, 'override.dart')).writeAsStringSync('''
+class BuildContext {}
+
+abstract class WidgetBase {
+  void build(BuildContext context);
+}
+
+class GameWidget extends WidgetBase {
+  @override
+  void build(BuildContext context) {}
+}
+''');
     });
 
     tearDown(() {
@@ -78,6 +91,12 @@ void doStuff() {
         issues.where(
             (i) => i.type == DeadCodeIssueType.unusedVariable && i.name == 'x'),
         isNotEmpty,
+      );
+
+      expect(
+        issues.where((i) =>
+            i.type == DeadCodeIssueType.unusedVariable && i.name == 'context'),
+        isEmpty,
       );
 
       expect(

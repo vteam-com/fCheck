@@ -299,7 +299,7 @@ class SourceSortDelegate implements AnalyzerDelegate {
           }
         }
       }
-    } catch (e) {
+    } catch (_) {
       // Skip files that can't be analyzed
     }
 

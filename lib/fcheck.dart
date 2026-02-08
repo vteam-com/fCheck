@@ -320,7 +320,7 @@ class AnalyzeFolder {
   /// [lines] The raw lines of the file.
   ///
   /// Returns the number of lines that contain comments.
-  int countCommentLines(CompilationUnit unit, List<String> lines) {
+  int countCommentLines(CompilationUnit _, List<String> lines) {
     // This is a simplified comment counter.
     // The analyzer's beginToken/endToken are useful for more complex scenarios.
     // We'll count lines that contain comments.

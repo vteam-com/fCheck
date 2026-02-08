@@ -143,7 +143,7 @@ void main(List<String> arguments) {
       // Use default (current directory)
       path = '.';
     }
-  } catch (e) {
+  } catch (_) {
     print(_invalidArgumentsLine);
     print(_usageLine);
     print('');
@@ -224,7 +224,7 @@ void main(List<String> arguments) {
     if (outputJson) {
       print(const JsonEncoder.withIndent('  ').convert(metrics.toJson()));
     } else {
-      metrics.printReport(packageVersion);
+      metrics.printReport();
     }
 
     // Generate layer analysis result for visualization
