@@ -7,6 +7,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-02-08
+
+### Added
+
+- 🧹 **Dead Code Analyzer**: Detects dead files, unused top-level classes/functions, and unused local variables using dependency reachability and symbol usage tracking.
+- 🚫 **Dead Code Ignore**: New `// ignore: fcheck_dead_code` directive for file-level and node-level suppression.
+- 📚 **Rules**: Added `RULES_DEAD_CODE.md` documentation.
+
+### Changed
+
+- 🧩 **Layers Dependency Graph**: Conditional imports/exports (`if (dart.library...)`) are now included in dependency resolution.
+- 📊 **Metrics Output**: Added dead code counts and issue lists to CLI and JSON reports.
+
 ## [0.8.6] - 2026-02-07
 
 ### Added
