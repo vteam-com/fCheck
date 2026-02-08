@@ -1,3 +1,4 @@
+// ignore: fcheck_one_class_per_file
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 
 /// Simple symbol metadata used for dead code analysis.
