@@ -16,6 +16,10 @@ class IgnoreConfig {
   /// `// ignore: fcheck_secrets` directive used to skip secret scans.
   static const String ignoreDirectiveForSecrets = '// ignore: fcheck_secrets';
 
+  /// `// ignore: fcheck_dead_code` directive used to skip dead code checks.
+  static const String ignoreDirectiveForDeadCode =
+      '// ignore: fcheck_dead_code';
+
   /// `// ignore: fcheck_one_class_per_file` directive used to skip checks.
   static const String ignoreDirectiveForOneClassPerFile =
       '// ignore: fcheck_one_class_per_file';

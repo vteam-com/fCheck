@@ -1,30 +1,5 @@
 import 'badge_model.dart';
 
-/// Renders a circular badge with optional tooltip.
-void renderBadge(
-  StringBuffer buffer, {
-  required double cx,
-  required double cy,
-  required double radius,
-  required int count,
-  required String color,
-  required String cssClass,
-  String tooltip = '',
-}) {
-  if (count <= 0) {
-    return;
-  }
-
-  buffer.writeln('<g class="$cssClass">');
-  buffer.writeln(
-      '<circle cx="$cx" cy="$cy" r="$radius" fill="$color" opacity="0.85"/>');
-  buffer.writeln('<text x="$cx" y="${cy + 1}">$count</text>');
-  if (tooltip.isNotEmpty) {
-    buffer.writeln('<title>$tooltip</title>');
-  }
-  buffer.writeln('</g>');
-}
-
 /// Renders a triangular directional badge using BadgeModel
 void renderTriangularBadge(
   StringBuffer buffer,

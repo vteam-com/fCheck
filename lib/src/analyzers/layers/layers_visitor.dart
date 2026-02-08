@@ -41,10 +41,7 @@ class LayersVisitor extends GeneralizingAstVisitor<void> {
   /// [node] The import directive node being visited.
   @override
   void visitImportDirective(ImportDirective node) {
-    final uri = node.uri.stringValue;
-    if (uri != null && _isDartFile(uri)) {
-      dependencies.add(_resolveDependency(uri, filePath));
-    }
+    _addDirectiveDependencies(node.uri.stringValue, node.configurations);
     super.visitImportDirective(node);
   }
 
@@ -57,10 +54,7 @@ class LayersVisitor extends GeneralizingAstVisitor<void> {
   /// [node] The export directive node being visited.
   @override
   void visitExportDirective(ExportDirective node) {
-    final uri = node.uri.stringValue;
-    if (uri != null && _isDartFile(uri)) {
-      dependencies.add(_resolveDependency(uri, filePath));
-    }
+    _addDirectiveDependencies(node.uri.stringValue, node.configurations);
     super.visitExportDirective(node);
   }
 
@@ -148,5 +142,25 @@ class LayersVisitor extends GeneralizingAstVisitor<void> {
     } else {
       return '$currentDir/$uri';
     }
+  }
+
+  void _addDirectiveDependencies(
+    String? uri,
+    List<Configuration> configurations,
+  ) {
+    _addDependencyIfDart(uri);
+    if (configurations.isEmpty) {
+      return;
+    }
+    for (final configuration in configurations) {
+      _addDependencyIfDart(configuration.uri.stringValue);
+    }
+  }
+
+  void _addDependencyIfDart(String? uri) {
+    if (uri == null || !_isDartFile(uri)) {
+      return;
+    }
+    dependencies.add(_resolveDependency(uri, filePath));
   }
 }

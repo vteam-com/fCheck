@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:fcheck/src/metrics/project_metrics.dart';
+import 'package:fcheck/src/models/project_type.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -36,6 +37,7 @@ void main() {
         magicNumberIssues: [],
         sourceSortIssues: [],
         layersIssues: [],
+        deadCodeIssues: [],
         layersEdgeCount: 0,
         layersCount: 0,
         dependencyGraph: {},
@@ -66,6 +68,7 @@ void main() {
         magicNumberIssues: [],
         sourceSortIssues: [],
         layersIssues: [],
+        deadCodeIssues: [],
         layersEdgeCount: 0,
         layersCount: 0,
         dependencyGraph: {},
@@ -90,6 +93,7 @@ void main() {
         magicNumberIssues: [],
         sourceSortIssues: [],
         layersIssues: [],
+        deadCodeIssues: [],
         layersEdgeCount: 0,
         layersCount: 0,
         dependencyGraph: {},
@@ -131,6 +135,7 @@ void main() {
         magicNumberIssues: [],
         sourceSortIssues: [],
         layersIssues: [],
+        deadCodeIssues: [],
         layersEdgeCount: 0,
         layersCount: 0,
         dependencyGraph: {},

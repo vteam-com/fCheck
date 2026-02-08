@@ -28,6 +28,8 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegates.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner.dart';
+import 'package:fcheck/src/analyzers/dead_code/dead_code_analyzer.dart';
+import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart';
 import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
@@ -39,6 +41,7 @@ import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/metrics/project_metrics.dart';
+import 'package:fcheck/src/models/project_type.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
@@ -165,6 +168,10 @@ class AnalyzeFolder {
       SourceSortDelegate(fix: fix),
       LayersDelegate(projectRoot, pubspecInfo.packageName),
       SecretDelegate(),
+      DeadCodeDelegate(
+        projectRoot: projectRoot,
+        packageName: pubspecInfo.packageName,
+      ),
     ];
 
     // Perform unified analysis
@@ -188,6 +195,17 @@ class AnalyzeFolder {
     final sourceSortIssues =
         allListResults.whereType<SourceSortIssue>().toList();
     final secretIssues = allListResults.whereType<SecretIssue>().toList();
+
+    final deadCodeFileDataRaw =
+        unifiedResult.resultsByType[DeadCodeFileData] ?? <dynamic>[];
+    final deadCodeFileData =
+        deadCodeFileDataRaw.whereType<DeadCodeFileData>().toList();
+    final deadCodeAnalyzer = DeadCodeAnalyzer(
+      projectRoot: projectRoot,
+      packageName: pubspecInfo.packageName,
+      projectType: projectType,
+    );
+    final deadCodeIssues = deadCodeAnalyzer.analyze(deadCodeFileData);
 
     // Layers analysis needs special handling for dependency graph
     final layersAnalyzer = LayersAnalyzer(
@@ -234,6 +252,7 @@ class AnalyzeFolder {
       usesLocalization: usesLocalization,
       excludedFilesCount: excludedDartFilesCount,
       secretIssues: secretIssues,
+      deadCodeIssues: deadCodeIssues,
     );
   }
 

@@ -1,28 +1,31 @@
 # fcheck
 
-A command-line tool for analyzing the quality of Flutter and Dart projects. Get instant insights into your codebase with comprehensive metrics and quality checks.
+Fast quality checks for Flutter and Dart. Run one command to see architecture issues, risky strings, magic numbers, and high-level project metrics - without replacing your existing lint setup.
 
-## 🚀 Quick Start
+## ✨ Why fcheck
+
+- **Easy wins**: actionable checks in a single run
+- **Architectural focus**: layers, one-class-per-file, sorting
+- **Risk detection**: secrets, hardcoded strings, magic numbers
+- **Code surface reduction**: dead code
+- **Fast**: optimized traversal, visible timing
+- **Nice output**: JSON and diagrams when you need them
+
+fcheck exists to fill a gap today. We hope these features become first-class in Dart and Flutter by default, and that one day you won’t need fcheck at all.
+
+## 🛠️ Installation
 
 ```bash
-# Install
+# Global (recommended)
 dart pub global activate fcheck
-
-# Analyze your project & Generate beautiful dependency diagrams
-fcheck /path/to/your/project --svg
+fcheck .
 ```
 
-## ✨ What fcheck Does
-
-fcheck analyzes your Flutter/Dart project and provides:
-
-- **⚡ High Performance**: 67%+ faster analysis with unified file traversal and execution timing
-- **⚠️ No Duplication**: Unlike Flutter LINT or Dart compiler, fcheck focuses on unique architectural and structural analysis
-- **📊 Project Overview**: Files, folders, lines of code, comment ratios
-- **✅ Code Quality**: One class per file compliance, member sorting
-- **🔍 Issue Detection**: Hardcoded strings, magic numbers, layer violations, secrets
-- **⏱️ Performance Tracking**: Shows exact execution time for analysis runs
-- **🌐 Visualizations**: SVG, Mermaid, and PlantUML dependency graphs
+```bash
+# Project-local
+dart pub add fcheck -d
+dart run fcheck .
+```
 
 ## 📈 Example Output
 
@@ -41,12 +44,14 @@ Localization     : No
 Hardcoded Strings: 7 (warning)
 Magic Numbers    : 0
 Secrets          : 0
+Dead Code        : 0
 Layers           : 6
 Dependencies     : 73
 ↓····································· Lists ·····································↓
 [✓] One class per file check passed.
 [!] Hardcoded strings check: 7 found (localization off). Example: fcheck.dart
 [✓] Magic numbers check passed.
+[✓] Dead code check passed.
 [✓] Flutter class member sorting passed.
 [✓] Secrets scan passed.
 [✓] Layers architecture check passed.
@@ -56,164 +61,59 @@ SVG layers (folder): ./layers_folders.svg
 ↑--------------------------- fCheck completed (0.43s) ---------------------------↑
 ```
 
-## ⚡ Performance Optimization
-
-fcheck now features **unified file traversal** that dramatically improves analysis speed:
-
-### How It Works
-
-- **Single File Discovery**: One directory scan instead of 6+ separate traversals
-- **Shared AST Parsing**: Each file parsed once, results shared across all analyzers
-- **Cached File Context**: Eliminates redundant I/O operations
-- **Single-Pass Delegation**: Multiple analyzers run on the same file context in one pass
-
-### Performance Gains
-
-- **67-72% faster** analysis on typical projects
-- **Scales better** with larger codebases
-- **Same results** with better performance
-- **Built-in timing** to track analysis speed
-
-### Usage
-
-The performance optimization is automatic - just use fcheck normally:
-
-```bash
-# Uses optimized unified traversal automatically
-fcheck /path/to/project
-
-# All existing features work with the optimization
-fcheck --svg --fix
-```
-
-## ⏱️ Execution Timing
-
-fcheck automatically tracks and displays how long each analysis takes:
-
-```text
-↑ --------------------------- fCheck completed (0.42s) --------------------------- ↑
-```
-
-### Timing Features
-
-- **Precise Measurement**: Shows elapsed time in seconds with 2 decimal places
-- **Always Visible**: Displayed in footer for all output modes (except JSON)
-- **Performance Tracking**: Helps monitor analysis performance over time
-- **JSON Compatible**: Automatically suppressed in JSON output to maintain clean format
-
-## 🛠️ Installation
-
-### Option 1: Global Installation (Recommended)
-
-```bash
-dart pub global activate fcheck
-```
-
-### Option 2: DevDependencies
-
-```bash
-dart pub add fcheck -d
-dart run fcheck
-```
-
 ## 📋 Usage
 
 ### Basic Commands
 
 ```bash
-# Analyze current directory
-fcheck
-
-# Analyze specific project
-fcheck /path/to/project
-
 # Show help
 fcheck --help
 
 # Show version
 fcheck --version
 
-# Generate SVG dependency graph
-fcheck --svg
-
-# Generate folder-based visualization
-fcheck --svgfolder
-
 # Output as JSON
 fcheck --json
 
 # Auto-fix sorting issues
 fcheck --fix
-
-# List excluded files and directories
-fcheck --excluded
 ```
 
-### Excluded Files Listing
+## 🙈 Ignore Warnings (Quick Opt-Out)
 
-Use the `--excluded` flag to see exactly which files and directories are being excluded from analysis:
+You can silence a specific warning with a `// ignore:` comment on the same line,
+or ignore an entire file by placing a directive at the top (before any code).
 
-```bash
-# List excluded files and directories
-fcheck --excluded
+### File-Level Ignore (entire file)
 
-# List excluded files in JSON format
-fcheck --excluded --json
+```dart
+// ignore: fcheck_hardcoded_strings
+// ignore: fcheck_magic_numbers
+// ignore: fcheck_secrets
+// ignore: fcheck_dead_code
+// ignore: fcheck_layers
+// ignore: fcheck_one_class_per_file
 ```
 
-#### Example Output
+### Hardcoded Strings (extra ignores)
 
-```text
-Excluded Dart files (18):
-  ./test/layers_analyzer_test.dart
-  ./test/analyzer_engine_test.dart
-  ./example/lib/comments_example.dart
-  ./example/lib/subfolder/subclass.dart
-  ...
+Use the flags from `analysis_options.yaml`
 
-Excluded non-Dart files (1,528):
-  ./.DS_Store
-  ./.fcheck
-  ./example/pubspec.lock
-  ./example/layers.svg
-  ...
+```dart
+// ignore_for_file: avoid_hardcoded_strings_in_widgets
 
-Excluded directories (15):
-  ./.git
-  ./.dart_tool
-  ./test
-  ./example
-  ./build
-  ...
+Text('OK'); // ignore: hardcoded.ok
+Text('Title'); // ignore: hardcoded.string
 ```
-
-#### What Gets Excluded
-
-**By Default:**
-
-- Hidden directories (starting with `.`)
-- Common project directories: `test/`, `example/`, `tool/`, `.dart_tool/`, `build/`, `.git/`, `ios/`, `android/`, `web/`, `macos/`, `windows/`, `linux/`
-- Generated localization files (except main `app_localizations.dart`)
-
-**With Custom Patterns:**
-
-- Files matching glob patterns specified with `--exclude`
-- Files in directories matching exclude patterns
-
-**Hidden Directory Filtering:**
-
-- Any directory starting with `.` is automatically excluded
-- This includes `.git`, `.dart_tool`, `.vscode`, etc.
-- Nested hidden directories are also excluded (e.g., `src/.cache/`)
 
 ## 🎯 Quality Checks
+
+Need to silence a rule? See Ignore Warnings above.
 
 ### One Class Per File Rule
 
 - ✅ **Compliant**: 1 public class per file (or 2 for StatefulWidget)
 - ❌ **Violation**: Too many public classes in one file
-
-**Opt-out**: Add `// ignore: fcheck_one_class_per_file` at the top of the file
 
 ### Magic Numbers
 
@@ -221,15 +121,10 @@ Excluded directories (15):
 - ✅ **Allows**: Descriptive `const`/`static const`/`final` numerics (name length > 3), annotation values, and all const expressions. Example: `final int defaultRetryCount = 2;` is allowed because the name is descriptive.
 - 🔧 **How to fix**: Replace inline literals with a named `const`/`static const`/`final` value (e.g., `const defaultTimeoutMs = 5000;`) or move the literal into a const expression that already documents intent.
 
-**Opt-out**: Add `// ignore: fcheck_magic_numbers` at the top of the file
-
 ### Hardcoded Strings
 
 - ⚠️ **Caution**: Potential user-facing strings (project not localized)
 - ❌ **Error**: Hardcoded strings when localization is enabled
-
-**Opt-out**: Add `// ignore: fcheck_hardcoded_strings` at the top of the file
-**Alternative**: Add `// ignore_for_file: avoid_hardcoded_strings_in_widgets` at the top of the file
 
 ### Secrets Detection
 
@@ -237,7 +132,12 @@ Excluded directories (15):
 - 🚨 **Critical**: AWS keys, GitHub PATs, Stripe keys, emails
 - 📊 **Advanced**: High entropy string detection for unknown secret patterns
 
-**Opt-out**: Add `// ignore: fcheck_secrets` at the top of the file
+### Dead Code
+
+- 🧹 **Detects**: Dead files, dead classes, dead functions, and unused variables
+- 🎯 **Goal**: Reduce code surface area and improve maintainability
+- 🔍 **How it works**: Builds a dependency graph from imports/exports and tracks symbol usage
+- 🔧 **How to fix**: Remove unused code or reference it explicitly
 
 ### Member Sorting
 
@@ -275,6 +175,49 @@ fcheck --mermaid    # Generates layers.mmd
 fcheck --plantuml   # Generates layers.puml
 ```
 
+## 🛡️ Exclusions
+
+Use `--excluded` to see which files and directories are skipped:
+
+```bash
+fcheck --excluded
+fcheck --excluded --json
+```
+
+### Example Output
+
+```text
+Excluded Dart files (18):
+  ./test/layers_analyzer_test.dart
+  ./test/analyzer_engine_test.dart
+  ./example/lib/comments_example.dart
+  ./example/lib/subfolder/subclass.dart
+  ...
+
+Excluded non-Dart files (1,528):
+  ./.DS_Store
+  ./.fcheck
+  ./example/pubspec.lock
+  ./example/layers.svg
+  ...
+
+Excluded directories (15):
+  ./.git
+  ./.dart_tool
+  ./test
+  ./example
+  ./build
+  ...
+```
+
+### What Gets Excluded
+
+- Hidden directories (starting with `.`), including nested hidden folders
+- Common project directories: `test/`, `example/`, `tool/`, `.dart_tool/`, `build/`, `.git/`, `ios/`, `android/`, `web/`, `macos/`, `windows/`, `linux/`
+- Generated localization files (`app_localizations_*.dart`, `app_localization_*.dart`), while keeping `app_localizations.dart`
+- Files matching `--exclude` glob patterns
+- Files in directories that match exclude patterns
+
 ## 📊 Understanding the Output
 
 ### Project Statistics
@@ -292,18 +235,6 @@ fcheck --plantuml   # Generates layers.puml
 - ❌ **Error**: Violations that need attention
 - 🔧 **Fixable**: Issues that can be auto-fixed
 
-## 🛡️ Default Exclusions
-
-By default, **fcheck** excludes common non-project directories:
-`example/`, `test/`, `tool/`, `.dart_tool/`, `build/`, `.git/`, `ios/`, `android/`, `web/`, `macos/`, `windows/`, `linux/`.
-
-### Localization Filtering
-
-To reduce noise and avoid cyclic dependency displays from generated code, **fcheck** automatically filters out generated localization files:
-
-- 🙈 **Excluded**: `app_localizations_*.dart` and `app_localization_*.dart` (generated locale-specific files)
-- ✅ **Included**: `app_localizations.dart` (the main entry point)
-
 ## 🔧 Configuration
 
 ### Global Ignore (`.fcheck` file)
@@ -317,17 +248,7 @@ ignores:
   layers: true
 ```
 
-### Per-File Ignore
-
-Add at the top of any Dart file:
-
-```dart
-// ignore: fcheck_one_class_per_file
-// ignore: fcheck_magic_numbers
-// ignore: fcheck_hardcoded_strings
-// ignore: fcheck_secrets
-// ignore: fcheck_layers
-```
+Per-line and per-file ignore comments are covered in Ignore Warnings above.
 
 ## 🤝 Contributing
 

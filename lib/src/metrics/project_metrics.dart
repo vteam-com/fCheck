@@ -1,39 +1,14 @@
 // ignore: fcheck_secrets
+import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
-import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
-import 'package:fcheck/src/metrics/file_metrics.dart';
-import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
+import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
+import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/input_output/number_format_utils.dart';
 import 'package:fcheck/src/input_output/output.dart';
-
-/// The detected type of the analyzed project.
-enum ProjectType {
-  /// Flutter application or package (depends on `flutter`).
-  flutter,
-
-  /// Pure Dart project (no `flutter` dependency found).
-  dart,
-
-  /// Unknown project type (pubspec.yaml missing or unreadable).
-  unknown,
-}
-
-/// Adds presentation helpers for [ProjectType].
-extension ProjectTypeLabel on ProjectType {
-  /// Human-readable label for the project type.
-  String get label {
-    switch (this) {
-      case ProjectType.flutter:
-        return 'Flutter';
-      case ProjectType.dart:
-        return 'Dart';
-      case ProjectType.unknown:
-        return 'Unknown';
-    }
-  }
-}
+import 'package:fcheck/src/metrics/file_metrics.dart';
+import 'package:fcheck/src/models/project_type.dart';
 
 /// Represents the overall quality metrics for a Flutter/Dart project.
 ///
@@ -77,6 +52,9 @@ class ProjectMetrics {
   /// List of layers architecture issues found in the project.
   final List<LayersIssue> layersIssues;
 
+  /// List of dead code issues found in the project.
+  final List<DeadCodeIssue> deadCodeIssues;
+
   /// Total number of dependency edges in the layers graph.
   final int layersEdgeCount;
 
@@ -114,6 +92,7 @@ class ProjectMetrics {
   /// [magicNumberIssues] List of detected magic number literals across the project.
   /// [sourceSortIssues] List of source sorting issues found in the project.
   /// [layersIssues] List of layers architecture issues found in the project.
+  /// [deadCodeIssues] List of dead code issues found in the project.
   /// [layersEdgeCount] Total number of dependency edges in the layers graph.
   /// [layersCount] Number of layers in the project.
   /// [dependencyGraph] The dependency graph used for analysis.
@@ -134,6 +113,7 @@ class ProjectMetrics {
     required this.magicNumberIssues,
     required this.sourceSortIssues,
     required this.layersIssues,
+    required this.deadCodeIssues,
     required this.layersEdgeCount,
     required this.layersCount,
     required this.dependencyGraph,
@@ -162,6 +142,7 @@ class ProjectMetrics {
           'hardcodedStrings': hardcodedStringIssues.length,
           'magicNumbers': magicNumberIssues.length,
           'secretIssues': secretIssues.length,
+          'deadCodeIssues': deadCodeIssues.length,
         },
         'layers': {
           'count': layersCount,
@@ -175,6 +156,7 @@ class ProjectMetrics {
         'magicNumbers': magicNumberIssues.map((i) => i.toJson()).toList(),
         'sourceSorting': sourceSortIssues.map((i) => i.toJson()).toList(),
         'secretIssues': secretIssues.map((i) => i.toJson()).toList(),
+        'deadCodeIssues': deadCodeIssues.map((i) => i.toJson()).toList(),
         'localization': {'usesLocalization': usesLocalization},
       };
 
@@ -201,6 +183,7 @@ class ProjectMetrics {
   /// - Compliance status for the "one class per file" rule
   /// - Hardcoded string issues
   /// - Source sorting issues
+  /// - Dead code issues
   /// - Layers architecture stats
   /// - Secret issues
   ///
@@ -226,6 +209,7 @@ class ProjectMetrics {
     print('Hardcoded Strings: $hardcodedSummary');
     print('Magic Numbers    : ${formatCount(magicNumberIssues.length)}');
     print('Secrets          : ${formatCount(secretIssues.length)}');
+    print('Dead Code        : ${formatCount(deadCodeIssues.length)}');
     print('Layers           : ${formatCount(layersCount)}');
     print('Dependencies     : ${formatCount(layersEdgeCount)}');
 
@@ -307,6 +291,73 @@ class ProjectMetrics {
         print(
             '  ... and ${formatCount(secretIssues.length - _maxIssuesToShow)} more');
       }
+      print('');
+    }
+
+    if (deadCodeIssues.isEmpty) {
+      print('${okTag()} Dead code check passed.');
+    } else {
+      final deadFileIssues = deadCodeIssues
+          .where((issue) => issue.type == DeadCodeIssueType.deadFile)
+          .toList();
+      final deadClassIssues = deadCodeIssues
+          .where((issue) => issue.type == DeadCodeIssueType.deadClass)
+          .toList();
+      final deadFunctionIssues = deadCodeIssues
+          .where((issue) => issue.type == DeadCodeIssueType.deadFunction)
+          .toList();
+      final unusedVariableIssues = deadCodeIssues
+          .where((issue) => issue.type == DeadCodeIssueType.unusedVariable)
+          .toList();
+
+      print(
+          '${warnTag()} ${formatCount(deadCodeIssues.length)} dead code issues detected:');
+
+      if (deadFileIssues.isNotEmpty) {
+        print('  Dead files (${formatCount(deadFileIssues.length)}):');
+        for (final issue in deadFileIssues.take(_maxIssuesToShow)) {
+          print('    - $issue');
+        }
+        if (deadFileIssues.length > _maxIssuesToShow) {
+          print(
+              '    ... and ${formatCount(deadFileIssues.length - _maxIssuesToShow)} more');
+        }
+      }
+
+      if (deadClassIssues.isNotEmpty) {
+        print('  Dead classes (${formatCount(deadClassIssues.length)}):');
+        for (final issue in deadClassIssues.take(_maxIssuesToShow)) {
+          print('    - $issue');
+        }
+        if (deadClassIssues.length > _maxIssuesToShow) {
+          print(
+              '    ... and ${formatCount(deadClassIssues.length - _maxIssuesToShow)} more');
+        }
+      }
+
+      if (deadFunctionIssues.isNotEmpty) {
+        print('  Dead functions (${formatCount(deadFunctionIssues.length)}):');
+        for (final issue in deadFunctionIssues.take(_maxIssuesToShow)) {
+          print('    - $issue');
+        }
+        if (deadFunctionIssues.length > _maxIssuesToShow) {
+          print(
+              '    ... and ${formatCount(deadFunctionIssues.length - _maxIssuesToShow)} more');
+        }
+      }
+
+      if (unusedVariableIssues.isNotEmpty) {
+        print(
+            '  Unused variables (${formatCount(unusedVariableIssues.length)}):');
+        for (final issue in unusedVariableIssues.take(_maxIssuesToShow)) {
+          print('    - $issue');
+        }
+        if (unusedVariableIssues.length > _maxIssuesToShow) {
+          print(
+              '    ... and ${formatCount(unusedVariableIssues.length - _maxIssuesToShow)} more');
+        }
+      }
+
       print('');
     }
 
