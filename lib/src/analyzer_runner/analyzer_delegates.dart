@@ -18,7 +18,6 @@ import 'package:fcheck/src/models/ignore_config.dart';
 import 'package:fcheck/src/analyzers/layers/layers_visitor.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_scanner.dart';
-import 'package:fcheck/src/input_output/output.dart';
 
 /// Delegate adapter for hardcoded string analysis.
 class HardcodedStringDelegate implements AnalyzerDelegate {
@@ -275,24 +274,19 @@ class SourceSortDelegate implements AnalyzerDelegate {
 
         // Check if the body needs sorting
         if (SortUtils.bodiesDiffer(sortedBody, originalBody)) {
-          final lineNumber = context.getLineNumber(classNode.offset);
-          final className = classNode.namePart.toString();
-
           if (fix) {
             // Write the sorted content back to the file
             final sortedContent = context.content.substring(0, classBodyStart) +
                 sortedBody +
                 context.content.substring(classBodyEnd);
             context.file.writeAsStringSync(sortedContent);
-            print(
-                '${okTag()} Fixed sorting for class $className in ${context.file.path}');
           } else {
             // Report the issue
             issues.add(
               SourceSortIssue(
                 filePath: context.file.path,
-                className: className,
-                lineNumber: lineNumber,
+                className: classNode.namePart.toString(),
+                lineNumber: context.getLineNumber(classNode.offset),
                 description: 'Class members are not properly sorted',
               ),
             );

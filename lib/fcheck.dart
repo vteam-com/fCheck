@@ -17,7 +17,6 @@
 //
 // final engine = AnalyzeFolder(projectDirectory);
 // final metrics = engine.analyze();
-// metrics.printReport();
 // ```
 
 import 'dart:io';
@@ -126,7 +125,7 @@ class AnalyzeFolder {
   /// ```dart
   /// final engine = AnalyzeFolder(projectDir);
   /// final (excludedDart, excludedNonDart, excludedDirs) = engine.listExcludedFiles();
-  /// print('Excluded Dart files: ${excludedDart.length}');
+  /// final excludedCount = excludedDart.length;
   /// ```
   (
     List<File> excludedDartFiles,
@@ -396,7 +395,6 @@ class AnalyzeFolder {
   bool detectLocalization(List<File> dartFiles) {
     final l10nConfig = File(p.join(projectDir.path, 'l10n.yaml'));
     if (l10nConfig.existsSync()) {
-      // print('Localization detected: found l10n.yaml at ${l10nConfig.path}');
       return true;
     }
 
@@ -407,7 +405,6 @@ class AnalyzeFolder {
           .whereType<File>()
           .any((f) => f.path.endsWith('.arb'));
       if (hasArb) {
-        // print('Localization detected: found .arb files under ${l10nDir.path}');
         return true;
       }
     }
@@ -417,7 +414,6 @@ class AnalyzeFolder {
         .whereType<File>()
         .any((f) => f.path.endsWith('.arb'));
     if (arbAnywhere) {
-      // print('Localization detected: found .arb files elsewhere in project');
       return true;
     }
 
@@ -430,7 +426,6 @@ class AnalyzeFolder {
       try {
         final content = file.readAsStringSync();
         if (appLocImport.hasMatch(content)) {
-          // print('Localization detected: found app_localizations import in ${file.path}');
           return true;
         }
       } catch (_) {

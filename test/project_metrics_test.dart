@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
@@ -10,6 +8,9 @@ import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:fcheck/src/metrics/project_metrics.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:test/test.dart';
+
+import '../bin/console_common.dart';
+import '../bin/console_output.dart';
 
 void main() {
   group('ProjectMetrics', () {
@@ -111,7 +112,171 @@ void main() {
       expect(projectMetrics.commentRatio, equals(0.0));
     });
 
-    test('should print report correctly', () {
+    test('should serialize toJson with all sections and issue details', () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 3,
+        totalFiles: 8,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 2,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/non_compliant.dart',
+            linesOfCode: 10,
+            commentLines: 2,
+            classCount: 3,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: [
+          SecretIssue(
+            filePath: 'lib/.env',
+            lineNumber: 3,
+            secretType: 'api_key',
+            value: 'SECRET',
+          ),
+        ],
+        hardcodedStringIssues: [
+          HardcodedStringIssue(
+            filePath: 'lib/ui.dart',
+            lineNumber: 11,
+            value: 'Hello',
+          ),
+        ],
+        magicNumberIssues: [
+          MagicNumberIssue(
+            filePath: 'lib/calc.dart',
+            lineNumber: 7,
+            value: '42',
+          ),
+        ],
+        sourceSortIssues: [
+          SourceSortIssue(
+            filePath: 'lib/sort.dart',
+            className: 'SortMe',
+            lineNumber: 4,
+            description: 'Members are not sorted',
+          ),
+        ],
+        layersIssues: [
+          LayersIssue(
+            type: LayersIssueType.wrongLayer,
+            filePath: 'lib/data/repo.dart',
+            message: 'Data layer depends on presentation',
+          ),
+        ],
+        deadCodeIssues: [
+          DeadCodeIssue(
+            type: DeadCodeIssueType.deadFunction,
+            filePath: 'lib/utils.dart',
+            lineNumber: 21,
+            name: 'unusedHelper',
+            owner: 'Utils',
+          ),
+        ],
+        layersEdgeCount: 6,
+        layersCount: 4,
+        dependencyGraph: {
+          'lib/data/repo.dart': ['lib/presentation/view.dart'],
+        },
+        excludedFilesCount: 5,
+        usesLocalization: true,
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.flutter,
+      );
+
+      expect(
+        projectMetrics.toJson(),
+        equals({
+          'project': {
+            'name': 'example_project',
+            'version': '1.0.0',
+            'type': 'Flutter',
+          },
+          'stats': {
+            'folders': 3,
+            'files': 8,
+            'dartFiles': 1,
+            'excludedFiles': 5,
+            'linesOfCode': 10,
+            'commentLines': 2,
+            'commentRatio': 0.2,
+            'hardcodedStrings': 1,
+            'magicNumbers': 1,
+            'secretIssues': 1,
+            'deadCodeIssues': 1,
+          },
+          'layers': {
+            'count': 4,
+            'dependencies': 6,
+            'violations': [
+              {
+                'type': 'wrongLayer',
+                'filePath': 'lib/data/repo.dart',
+                'message': 'Data layer depends on presentation',
+              },
+            ],
+            'graph': {
+              'lib/data/repo.dart': ['lib/presentation/view.dart'],
+            },
+          },
+          'files': [
+            {
+              'path': 'lib/non_compliant.dart',
+              'linesOfCode': 10,
+              'commentLines': 2,
+              'classCount': 3,
+              'isStatefulWidget': false,
+              'isOneClassPerFileCompliant': false,
+              'ignoreOneClassPerFile': false,
+            },
+          ],
+          'hardcodedStrings': [
+            {
+              'filePath': 'lib/ui.dart',
+              'lineNumber': 11,
+              'value': 'Hello',
+            },
+          ],
+          'magicNumbers': [
+            {
+              'filePath': 'lib/calc.dart',
+              'lineNumber': 7,
+              'value': '42',
+            },
+          ],
+          'sourceSorting': [
+            {
+              'filePath': 'lib/sort.dart',
+              'className': 'SortMe',
+              'lineNumber': 4,
+              'description': 'Members are not sorted',
+            },
+          ],
+          'secretIssues': [
+            {
+              'filePath': 'lib/.env',
+              'lineNumber': 3,
+              'secretType': 'api_key',
+              'value': 'SECRET',
+            },
+          ],
+          'deadCodeIssues': [
+            {
+              'type': 'deadFunction',
+              'filePath': 'lib/utils.dart',
+              'lineNumber': 21,
+              'name': 'unusedHelper',
+              'owner': 'Utils',
+            },
+          ],
+          'localization': {'usesLocalization': true},
+        }),
+      );
+    });
+
+    test('should build report correctly', () {
       final fileMetrics = [
         FileMetrics(
           path: 'lib/compliant.dart',
@@ -150,18 +315,7 @@ void main() {
         projectType: ProjectType.dart,
       );
 
-      final output = <String>[];
-
-      runZoned(
-        () {
-          projectMetrics.printReport();
-        },
-        zoneSpecification: ZoneSpecification(
-          print: (self, parent, zone, line) {
-            output.add(line);
-          },
-        ),
-      );
+      final output = buildReportLines(projectMetrics);
 
       expect(output, isNotEmpty);
     });
@@ -196,17 +350,8 @@ void main() {
         projectType: ProjectType.dart,
       );
 
-      final output = <String>[];
-      runZoned(
-        () {
-          projectMetrics.printReport(listMode: ReportListMode.none);
-        },
-        zoneSpecification: ZoneSpecification(
-          print: (self, parent, zone, line) {
-            output.add(line);
-          },
-        ),
-      );
+      final output =
+          buildReportLines(projectMetrics, listMode: ReportListMode.none);
 
       expect(output.any((line) => line.contains('Lists')), isFalse);
     });
@@ -279,17 +424,8 @@ void main() {
         projectType: ProjectType.dart,
       );
 
-      final output = <String>[];
-      runZoned(
-        () {
-          projectMetrics.printReport(listMode: ReportListMode.filenames);
-        },
-        zoneSpecification: ZoneSpecification(
-          print: (self, parent, zone, line) {
-            output.add(line);
-          },
-        ),
-      );
+      final output =
+          buildReportLines(projectMetrics, listMode: ReportListMode.filenames);
 
       final joined = output.join('\n');
       expect(joined, contains('lib/non_compliant.dart'));
@@ -331,17 +467,8 @@ void main() {
         usesLocalization: true,
       );
 
-      final output = <String>[];
-      runZoned(
-        () {
-          projectMetrics.printReport(listMode: ReportListMode.full);
-        },
-        zoneSpecification: ZoneSpecification(
-          print: (self, parent, zone, line) {
-            output.add(line);
-          },
-        ),
-      );
+      final output =
+          buildReportLines(projectMetrics, listMode: ReportListMode.full);
 
       final joined = output.join('\n');
       expect(joined, contains('lib/num_11.dart'));

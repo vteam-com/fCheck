@@ -1,22 +1,14 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:args/args.dart';
 import 'package:fcheck/src/graphs/export_mermaid.dart';
 import 'package:fcheck/src/graphs/export_plantuml.dart';
 import 'package:fcheck/src/graphs/export_svg.dart';
 import 'package:fcheck/src/graphs/export_svg_folders.dart';
 import 'package:fcheck/fcheck.dart';
-import 'package:fcheck/src/input_output/number_format_utils.dart';
-import 'package:fcheck/src/input_output/output.dart';
-import 'package:fcheck/src/metrics/project_metrics.dart';
 import 'package:fcheck/src/models/version.dart';
 import 'package:path/path.dart' as p;
-
-const String _usageLine = 'Usage: dart run fcheck [options] [<folder>]';
-const String _descriptionLine =
-    'Analyze Flutter/Dart code quality and provide metrics.';
-const String _invalidArgumentsLine = 'Error: Invalid arguments provided.';
-const String _noneIndicator = '  (none)';
+import 'console_input.dart';
+import 'console_output.dart';
+import 'console_common.dart';
 
 /// Main entry point for the fcheck command-line tool.
 ///
@@ -28,154 +20,42 @@ void main(List<String> arguments) {
   const int millisecondsInSecond = 1000;
   const int decimalPlacesForSeconds = 2;
 
-  final parser = ArgParser()
-    ..addOption(
-      'input',
-      abbr: 'i',
-      help: 'Path to the Flutter/Dart project',
-      defaultsTo: '.',
-    )
-    ..addFlag(
-      'fix',
-      abbr: 'f',
-      help:
-          'Automatically fix sorting issues by writing sorted code back to files',
-      negatable: false,
-    )
-    ..addFlag(
-      'svg',
-      help: 'Generate SVG visualization of the dependency graph',
-      negatable: false,
-    )
-    ..addFlag(
-      'mermaid',
-      help: 'Generate Mermaid file for dependency graph visualization',
-      negatable: false,
-    )
-    ..addFlag(
-      'plantuml',
-      help: 'Generate PlantUML file for dependency graph visualization',
-      negatable: false,
-    )
-    ..addFlag(
-      'svgfolder',
-      help: 'Generate folder-based SVG visualization of the dependency graph',
-      negatable: false,
-    )
-    ..addFlag(
-      'json',
-      help: 'Output results in structured JSON format',
-      negatable: false,
-    )
-    ..addOption(
-      'list',
-      abbr: 'l',
-      help: 'Control list output in the console report',
-      allowed: ['none', 'partial', 'full', 'filenames'],
-      allowedHelp: {
-        'none': 'Summary only (no Lists section)',
-        'partial': 'Top 10 items per list (default)',
-        'full': 'Show all list entries',
-        'filenames': 'Show unique file names only',
-      },
-      defaultsTo: 'partial',
-    )
-    ..addFlag(
-      'version',
-      abbr: 'v',
-      help: 'Show fCheck version',
-      negatable: false,
-    )
-    ..addMultiOption(
-      'exclude',
-      abbr: 'e',
-      help: 'Glob patterns to exclude from analysis (e.g. "**/generated/**")',
-      defaultsTo: [],
-    )
-    ..addFlag(
-      'excluded',
-      abbr: 'x',
-      help:
-          'List excluded files and directories (hidden folders, default exclusions, custom patterns)',
-      negatable: false,
-    )
-    ..addFlag(
-      'help',
-      abbr: 'h',
-      help: 'Show usage information',
-      negatable: false,
-    );
-
-  late ArgResults argResults;
-  late String path;
-  late bool fix;
-  late bool generateSvg;
-  late bool generateMermaid;
-  late bool generatePlantUML;
-  late bool generateFolderSvg;
-
-  late bool outputJson;
-  late ReportListMode listMode;
-  late bool listExcluded;
-  late List<String> excludePatterns;
+  final parser = createConsoleArgParser();
+  late ConsoleInput input;
 
   try {
-    argResults = parser.parse(arguments);
-    fix = argResults['fix'] as bool;
-    generateSvg = argResults['svg'] as bool;
-    generateMermaid = argResults['mermaid'] as bool;
-    generatePlantUML = argResults['plantuml'] as bool;
-    generateFolderSvg = argResults['svgfolder'] as bool;
-    outputJson = argResults['json'] as bool;
-    listMode = ReportListMode.values.byName(argResults['list'] as String);
-    listExcluded = argResults['excluded'] as bool;
-    excludePatterns = argResults['exclude'] as List<String>;
-
-    // Handle help flag
-    if (argResults['help'] as bool) {
-      print(_usageLine);
-      print('');
-      print(_descriptionLine);
-      print('');
-      print(parser.usage);
-      exit(0);
-    }
-
-    // Handle version flag
-    if (argResults['version'] as bool) {
-      print(packageVersion);
-      exit(0);
-    }
-
-    // Determine path: explicit option wins over positional argument
-    final explicitPath = argResults['input'] as String;
-    if (explicitPath != '.') {
-      // Named option was provided (not default)
-      path = explicitPath;
-    } else if (argResults.rest.isNotEmpty) {
-      // Positional argument provided
-      path = argResults.rest.first;
-    } else {
-      // Use default (current directory)
-      path = '.';
-    }
+    input = parseConsoleInput(arguments, parser);
   } catch (_) {
-    print(_invalidArgumentsLine);
-    print(_usageLine);
-    print('');
-    print(parser.usage);
+    printInvalidArgumentsScreen(
+      invalidArgumentsLine: invalidArgumentsLine,
+      usageLine: usageLine,
+      parserUsage: parser.usage,
+    );
     exit(1);
   }
 
-  final directory = Directory(path);
+  if (input.showHelp) {
+    printHelpScreen(
+      usageLine: usageLine,
+      descriptionLine: descriptionLine,
+      parserUsage: parser.usage,
+    );
+    exit(0);
+  }
+
+  if (input.showVersion) {
+    printVersionLine(packageVersion);
+    exit(0);
+  }
+
+  final directory = Directory(input.path);
   if (!directory.existsSync()) {
-    print('Error: Directory "$path" does not exist.');
+    printMissingDirectoryError(input.path);
     exit(1);
   }
 
-  if (!outputJson) {
-    printDivider('fCheck $packageVersion', downPointer: true);
-    print('Input            : ${directory.absolute.path}');
+  if (!input.outputJson) {
+    printRunHeader(version: packageVersion, directory: directory);
   }
 
   final stopwatch = Stopwatch()..start();
@@ -183,16 +63,16 @@ void main(List<String> arguments) {
   try {
     final engine = AnalyzeFolder(
       directory,
-      fix: fix,
-      excludePatterns: excludePatterns,
+      fix: input.fix,
+      excludePatterns: input.excludePatterns,
     );
 
     // Handle excluded files listing
-    if (listExcluded) {
+    if (input.listExcluded) {
       final (excludedDartFiles, excludedNonDartFiles, excludedDirectories) =
           engine.listExcludedFiles();
 
-      if (outputJson) {
+      if (input.outputJson) {
         final excludedData = {
           'excludedDartFiles': excludedDartFiles.map((f) => f.path).toList(),
           'excludedNonDartFiles':
@@ -200,70 +80,49 @@ void main(List<String> arguments) {
           'excludedDirectories':
               excludedDirectories.map((d) => d.path).toList(),
         };
-        print(const JsonEncoder.withIndent('  ').convert(excludedData));
+        printJsonOutput(excludedData);
       } else {
-        print(
-            'Excluded Dart files (${formatCount(excludedDartFiles.length)}):');
-        if (excludedDartFiles.isEmpty) {
-          print(_noneIndicator);
-        } else {
-          for (final file in excludedDartFiles) {
-            print('  ${file.path}');
-          }
-        }
-
-        print(
-            '\nExcluded non-Dart files (${formatCount(excludedNonDartFiles.length)}):');
-        if (excludedNonDartFiles.isEmpty) {
-          print(_noneIndicator);
-        } else {
-          for (final file in excludedNonDartFiles) {
-            print('  ${file.path}');
-          }
-        }
-
-        print(
-            '\nExcluded directories (${formatCount(excludedDirectories.length)}):');
-        if (excludedDirectories.isEmpty) {
-          print(_noneIndicator);
-        } else {
-          for (final dir in excludedDirectories) {
-            print('  ${dir.path}');
-          }
-        }
+        printExcludedItems(
+          excludedDartFiles: excludedDartFiles,
+          excludedNonDartFiles: excludedNonDartFiles,
+          excludedDirectories: excludedDirectories,
+        );
       }
       return;
     }
 
     final metrics = engine.analyze();
 
-    if (outputJson) {
-      print(const JsonEncoder.withIndent('  ').convert(metrics.toJson()));
+    if (input.outputJson) {
+      printJsonOutput(metrics.toJson());
     } else {
-      metrics.printReport(listMode: listMode);
+      printReportLines(buildReportLines(metrics, listMode: input.listMode));
     }
 
     // Generate layer analysis result for visualization
     final layersResult = engine.analyzeLayers();
 
-    if (generateSvg ||
-        generateMermaid ||
-        generatePlantUML ||
-        generateFolderSvg) {
-      if (!outputJson) {
-        printDivider('Output files', dot: true);
+    if (input.generateSvg ||
+        input.generateMermaid ||
+        input.generatePlantUML ||
+        input.generateFolderSvg) {
+      if (!input.outputJson) {
+        printOutputFilesHeader();
       }
-      if (generateSvg) {
+      if (input.generateSvg) {
         // Generate SVG visualization
         final svgContent = exportGraphSvg(layersResult);
         final svgFile = File('${directory.path}/layers.svg');
         svgFile.writeAsStringSync(svgContent);
-        if (!outputJson) {
-          print('SVG layers         : ${svgFile.path}');
+        if (!input.outputJson) {
+          printOutputFileLine(
+            label: 'SVG layers         ',
+            path: svgFile.path,
+          );
         }
       }
 
-      if (generateFolderSvg) {
+      if (input.generateFolderSvg) {
         // Generate folder-based SVG visualization
         // Use hierarchical layout to preserve parent-child nesting
         String inputFolderName = p.basename(directory.absolute.path);
@@ -280,28 +139,37 @@ void main(List<String> arguments) {
         );
         final folderSvgFile = File('${directory.path}/layers_folders.svg');
         folderSvgFile.writeAsStringSync(folderSvgContent);
-        if (!outputJson) {
-          print('SVG layers (folder): ${folderSvgFile.path}');
+        if (!input.outputJson) {
+          printOutputFileLine(
+            label: 'SVG layers (folder)',
+            path: folderSvgFile.path,
+          );
         }
       }
 
-      if (generateMermaid) {
+      if (input.generateMermaid) {
         // Generate Mermaid visualization
         final mermaidContent = exportGraphMermaid(layersResult);
         final mermaidFile = File('${directory.path}/layers.mmd');
         mermaidFile.writeAsStringSync(mermaidContent);
-        if (!outputJson) {
-          print('Mermaid layers.    : ${mermaidFile.path}');
+        if (!input.outputJson) {
+          printOutputFileLine(
+            label: 'Mermaid layers.    ',
+            path: mermaidFile.path,
+          );
         }
       }
 
-      if (generatePlantUML) {
+      if (input.generatePlantUML) {
         // Generate PlantUML visualization
         final plantUMLContent = exportGraphPlantUML(layersResult);
         final plantUMLFile = File('${directory.path}/layers.puml');
         plantUMLFile.writeAsStringSync(plantUMLContent);
-        if (!outputJson) {
-          print('PlantUML layers.   : ${plantUMLFile.path}');
+        if (!input.outputJson) {
+          printOutputFileLine(
+            label: 'PlantUML layers.   ',
+            path: plantUMLFile.path,
+          );
         }
       }
     }
@@ -309,12 +177,11 @@ void main(List<String> arguments) {
     final elapsedMs = stopwatch.elapsedMilliseconds;
     final elapsedSeconds = (elapsedMs / millisecondsInSecond)
         .toStringAsFixed(decimalPlacesForSeconds);
-    if (!outputJson) {
-      printDivider('fCheck completed (${elapsedSeconds}s)', downPointer: false);
+    if (!input.outputJson) {
+      printRunCompleted(elapsedSeconds);
     }
   } catch (e, stack) {
-    print('Error during analysis: $e');
-    print(stack);
+    printAnalysisError(e, stack);
     exit(1);
   }
 }
