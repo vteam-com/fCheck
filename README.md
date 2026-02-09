@@ -51,7 +51,7 @@ fcheck --svg --svgfolder --mermaid --plantuml
 ## 📈 Example Output
 
 ```text
-↓--------------------------------- fCheck 0.9.4 ---------------------------------↓
+↓--------------------------------- fCheck 0.9.5 ---------------------------------↓
 Input            : /Users/me/my_app/.
 Project          : my_app (version: 1.0.0)
 Project Type     : Dart
