@@ -1,8 +1,10 @@
 # fcheck
 
-Fast quality checks for Flutter and Dart. Run one command to see architecture issues, risky strings, magic numbers, and high-level project metrics - without replacing your existing lint setup.
+Fast quality checks for Flutter and Dart. Run one command to see architecture issues, risky strings, magic numbers, and high-level project metrics without replacing your existing lint setup.
 
 ## ✨ Why fcheck
+
+fcheck exists to fill a gap today. The goal is to encourage good engineering practices in the Dart and Flutter ecosystem until these capabilities become first-class in the SDK.
 
 - **Easy wins**: actionable checks in a single run
 - **Architectural focus**: layers, one-class-per-file, sorting
@@ -10,8 +12,6 @@ Fast quality checks for Flutter and Dart. Run one command to see architecture is
 - **Code surface reduction**: dead code
 - **Fast**: optimized traversal, visible timing
 - **Nice output**: JSON and diagrams when you need them
-
-fcheck exists to fill a gap today. We hope these features become first-class in Dart and Flutter by default, and that one day you won’t need fcheck at all.
 
 ## 🛠️ Installation
 
@@ -52,7 +52,7 @@ fcheck --svg --svgfolder --mermaid --plantuml
 
 ```text
 ↓--------------------------------- fCheck 0.9.5 ---------------------------------↓
-Input            : /Users/me/my_app/.
+Input            : /Users/me/my_app
 Project          : my_app (version: 1.0.0)
 Project Type     : Dart
 Folders          : 14
@@ -78,8 +78,8 @@ Dependencies     : 73
 [✓] Dead code check passed.
 [✓] Layers architecture check passed.
 ↓································· Output files ·································↓
-SVG layers         : ./layers.svg
-SVG layers (folder): ./layers_folders.svg
+SVG layers         : /Users/me/my_app/layers.svg
+SVG layers (folder): /Users/me/my_app/layers_folders.svg
 ↑--------------------------- fCheck completed (0.43s) ---------------------------↑
 ```
 
@@ -105,6 +105,7 @@ fcheck --input ../my_app
 fcheck --json
 
 # Control list output (console only)
+# (ignored when --json is used)
 fcheck --list none       # summary only
 fcheck --list partial    # top 10 per list (default)
 fcheck --list full       # full lists
@@ -139,6 +140,7 @@ fcheck --help
 fcheck --version
 
 # Auto-fix sorting issues
+# (applies to Flutter member sorting)
 fcheck --fix
 ```
 
@@ -207,6 +209,11 @@ Need to silence a rule? See Ignore Warnings above.
 - 🔧 **Auto-fix**: Reorganizes Flutter class members automatically
 - ✅ **Validates**: Proper order of constructors, fields, methods, lifecycle methods
 
+### Layers
+
+- 🧭 **Detects**: Layering/cycle issues in file dependency graphs
+- 📈 **Outputs**: Layer count and dependency count in the report
+
 ## 🌐 Visualizations
 
 ### SVG Dependency Graph
@@ -220,6 +227,7 @@ Generates `layers.svg` showing:
 - Layered architecture (Layer 1 = entry points)
 - File dependencies with directional edges
 - Interactive tooltips
+
 ![Dependency Graph Visualization](https://raw.githubusercontent.com/vteam-com/fcheck/main/layers.svg)
 
 ### Folder-Based Visualization
@@ -229,6 +237,7 @@ fcheck --svgfolder
 ```
 
 - Shows files grouped by folders with dependencies.
+
 ![Folder-Based Dependency Graph Visualization](https://raw.githubusercontent.com/vteam-com/fcheck/main/layers_folders.svg)
 
 ### Mermaid & PlantUML
@@ -324,6 +333,8 @@ analyzers:
 ```
 
 `input.root` is resolved relative to the `.fcheck` file directory.
+
+`analyzers.default` accepts both `on`/`off` and `true`/`false`.
 
 To run in opt-in mode (everything off by default):
 
