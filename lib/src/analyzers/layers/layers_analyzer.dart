@@ -113,31 +113,55 @@ class LayersAnalyzer {
       );
     }).toList();
 
-    // Build dependency graph: Map<filePath, List<dependencies>>
-    final Map<String, List<String>> dependencyGraph = <String, List<String>>{};
-    // Track entry points: Map<filePath, isEntryPoint>
-    final Map<String, bool> entryPoints = <String, bool>{};
+    final List<Map<String, dynamic>> fileData = <Map<String, dynamic>>[];
 
     // Collect dependencies and entry points for each file
     for (final File file in filteredFiles) {
       final Map<String, dynamic> result = _analyzeFile(file);
-      dependencyGraph[file.path] = result['dependencies'] as List<String>;
-      entryPoints[file.path] = result['isEntryPoint'] as bool;
+      fileData.add({
+        'filePath': file.path,
+        'dependencies': result['dependencies'] as List<String>,
+        'isEntryPoint': result['isEntryPoint'] as bool,
+      });
     }
 
-    // Filter out excluded files from dependency graph
-    // Remove any dependency targets that point to excluded files
-    final Set<String> analyzedFilePaths = dartFiles.map((f) => f.path).toSet();
+    return analyzeFromFileData(
+      fileData,
+      analyzedFilePaths: dartFiles.map((f) => f.path).toSet(),
+    );
+  }
+
+  /// Analyzes pre-collected per-file dependency data for layers violations.
+  ///
+  /// [fileData] should contain maps:
+  /// [analyzedFilePaths] can be provided to drop dependency edges to files
+  /// not in the analyzed set.
+  LayersAnalysisResult analyzeFromFileData(
+    List<Map<String, dynamic>> fileData, {
+    Set<String>? analyzedFilePaths,
+  }) {
+    // Build dependency graph: Map<filePath, List<dependencies>>
+    final Map<String, List<String>> dependencyGraph = <String, List<String>>{};
+
+    for (final data in fileData) {
+      final filePath = data['filePath'];
+      final dependencies = data['dependencies'];
+      if (filePath is! String || dependencies is! List<String>) {
+        continue;
+      }
+      dependencyGraph[filePath] = dependencies;
+    }
+
+    final Set<String> allowedPaths =
+        analyzedFilePaths ?? dependencyGraph.keys.toSet();
     final Map<String, List<String>> filteredGraph = <String, List<String>>{};
 
     for (final entry in dependencyGraph.entries) {
-      // Only include dependencies that point to analyzed files
       final filteredDeps =
-          entry.value.where((dep) => analyzedFilePaths.contains(dep)).toList();
+          entry.value.where((dep) => allowedPaths.contains(dep)).toList();
       filteredGraph[entry.key] = filteredDeps;
     }
 
-    // Analyze the graph for issues
     return _analyzeGraph(filteredGraph);
   }
 

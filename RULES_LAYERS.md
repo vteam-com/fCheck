@@ -9,6 +9,13 @@ Builds a dependency graph between Dart files in the project, reports cycles, and
 - Dependencies from `import` and `export` directives.
 - Entry points are files with a top-level `main()` function.
 
+## How It Works (Project Analysis via `AnalyzeFolder.analyze()`)
+
+- `LayersDelegate` runs inside the unified `AnalyzerRunner` pass and emits per-file dependency metadata (`filePath`, `dependencies`, `isEntryPoint`).
+- `LayersAnalyzer.analyzeFromFileData` builds and validates the graph from that metadata.
+- This avoids a second parse/traversal pass for layers during full-project analysis.
+- `AnalyzeFolder.analyzeLayers()` also uses the same unified pass + `LayersDelegate` flow.
+
 ## How It Works (Directory Analysis)
 
 - Uses `FileUtils.listDartFiles` with CLI `--exclude` patterns and default exclusions.

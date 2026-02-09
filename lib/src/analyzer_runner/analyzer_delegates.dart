@@ -336,6 +336,7 @@ class LayersDelegate implements AnalyzerDelegate {
       IgnoreConfig.ignoreDirectiveForLayers,
     )) {
       return {
+        'filePath': context.file.path,
         'dependencies': <String>[],
         'isEntryPoint': false,
       };
@@ -343,6 +344,7 @@ class LayersDelegate implements AnalyzerDelegate {
 
     if (context.hasParseErrors || context.compilationUnit == null) {
       return {
+        'filePath': context.file.path,
         'dependencies': <String>[],
         'isEntryPoint': false,
       };
@@ -356,6 +358,7 @@ class LayersDelegate implements AnalyzerDelegate {
     context.compilationUnit!.accept(visitor);
 
     return {
+      'filePath': context.file.path,
       'dependencies': visitor.dependencies,
       'isEntryPoint': visitor.hasMainFunction,
     };

@@ -28,6 +28,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegates.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner.dart';
+import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_analyzer.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
@@ -90,14 +91,23 @@ class AnalyzeFolder {
   LayersAnalysisResult analyzeLayers() {
     final pubspecInfo = _pubspecInfo;
     final projectRoot = pubspecInfo.projectRoot ?? projectDir;
+    final unifiedAnalyzer = AnalyzerRunner(
+      projectDir: projectDir,
+      excludePatterns: excludePatterns,
+      delegates: [
+        LayersDelegate(projectRoot, pubspecInfo.packageName),
+      ],
+    );
+    final unifiedResult = unifiedAnalyzer.analyzeAll();
+    final layersFileData = _extractLayersFileData(unifiedResult);
+
     final layersAnalyzer = LayersAnalyzer(
       projectDir,
       projectRoot: projectRoot,
       packageName: pubspecInfo.packageName,
     );
-    return layersAnalyzer.analyzeDirectory(
-      projectDir,
-      excludePatterns,
+    return layersAnalyzer.analyzeFromFileData(
+      layersFileData,
     );
   }
 
@@ -207,15 +217,17 @@ class AnalyzeFolder {
     );
     final deadCodeIssues = deadCodeAnalyzer.analyze(deadCodeFileData);
 
-    // Layers analysis needs special handling for dependency graph
+    final layersFileData = _extractLayersFileData(unifiedResult);
+
+    // Layers analysis from unified per-file delegate output.
     final layersAnalyzer = LayersAnalyzer(
       projectDir,
       projectRoot: projectRoot,
       packageName: pubspecInfo.packageName,
     );
-    final layersResult = layersAnalyzer.analyzeDirectory(
-      projectDir,
-      excludePatterns,
+    final layersResult = layersAnalyzer.analyzeFromFileData(
+      layersFileData,
+      analyzedFilePaths: dartFiles.map((file) => file.path).toSet(),
     );
 
     // File metrics analysis (still needed for LOC and comment analysis)
@@ -254,6 +266,28 @@ class AnalyzeFolder {
       secretIssues: secretIssues,
       deadCodeIssues: deadCodeIssues,
     );
+  }
+
+  List<Map<String, dynamic>> _extractLayersFileData(
+    AnalysisRunnerResult unifiedResult,
+  ) {
+    final layersFileData = <Map<String, dynamic>>[];
+    for (final typeResults in unifiedResult.resultsByType.values) {
+      for (final result in typeResults) {
+        if (result is! Map<String, dynamic>) {
+          continue;
+        }
+        final filePath = result['filePath'];
+        final dependencies = result['dependencies'];
+        final isEntryPoint = result['isEntryPoint'];
+        if (filePath is String &&
+            dependencies is List<String> &&
+            isEntryPoint is bool) {
+          layersFileData.add(result);
+        }
+      }
+    }
+    return layersFileData;
   }
 
   /// Analyzes a single Dart file and returns its metrics.
