@@ -4,6 +4,7 @@ import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegates.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart';
 import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:test/test.dart';
 
@@ -59,6 +60,19 @@ void main() {
 
     test('should return empty list for empty file', () {
       final file = File('${tempDir.path}/empty.dart')..writeAsStringSync('');
+      final issues = _analyzeFile(delegate, file);
+      expect(issues, isEmpty);
+    });
+
+    test('should skip empty string literals', () {
+      final file = File('${tempDir.path}/empty_strings.dart')
+        ..writeAsStringSync('''
+void main() {
+  print("");
+  print('');
+}
+''');
+
       final issues = _analyzeFile(delegate, file);
       expect(issues, isEmpty);
     });
@@ -224,6 +238,44 @@ class Messages {
       expect(issues.length, equals(2));
       expect(issues.map((issue) => issue.value), contains('Hello'));
       expect(issues.map((issue) => issue.value), contains('World'));
+    });
+  });
+
+  group('HardcodedStringDelegate flutter focus', () {
+    late Directory tempDir;
+
+    setUp(() {
+      tempDir = Directory.systemTemp.createTempSync('fcheck_test_');
+    });
+
+    tearDown(() {
+      tempDir.deleteSync(recursive: true);
+    });
+
+    test('should ignore empty widget text literals', () {
+      final delegate =
+          HardcodedStringDelegate(focus: HardcodedStringFocus.flutterWidgets);
+      final file = File('${tempDir.path}/widget_empty.dart')
+        ..writeAsStringSync('''
+import 'package:flutter/widgets.dart';
+
+class MyWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        Text(""),
+        Text(''),
+        Text("Hello"),
+      ],
+    );
+  }
+}
+''');
+
+      final issues = _analyzeFile(delegate, file);
+      expect(issues.length, equals(1));
+      expect(issues[0].value, equals('Hello'));
     });
   });
 }

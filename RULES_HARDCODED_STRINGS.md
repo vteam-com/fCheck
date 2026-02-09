@@ -25,7 +25,7 @@ This repo includes the CLI hardcoded-strings analysis, implemented by
 
 ### Skips (CLI)
 
-- Empty strings.
+- Empty strings (`""` or `''`).
 - Strings in import/export/part/library directives.
 - Strings in annotations.
 - Map keys (but not map values).
