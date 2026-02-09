@@ -7,6 +7,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.4] - 2026-02-09
+
+### Added
+
+- ✅ Added more test, code coverage is now at 81%
+
+### Changed
+
+- 🧭 **Layers Analyzer** now runs through the unified single directory pass for more consistent dependency analysis.
+- 📘 Updated `RULES_LAYERS.md` guidance to match the latest layers analysis behavior.
+- 🖥️ Refactored CLI console input/output into focused modules and simplified output rendering paths.
+- 🎨 SVG graph exports now use adaptive text sizing to keep labels and titles readable across different graph densities.
+
 ## [0.9.3] - 2026-02-08
 
 ### Added

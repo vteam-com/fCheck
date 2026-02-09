@@ -27,12 +27,34 @@ dart pub add fcheck -d
 dart run fcheck .
 ```
 
+## 🚀 Quick Start
+
+If you installed project-local, run the same commands with `dart run` (for example, `dart run fcheck --json`).
+
+```bash
+# Analyze current folder
+fcheck .
+
+# Analyze a different folder (positional)
+fcheck ../my_app
+
+# Analyze a different folder (explicit option)
+fcheck --input ../my_app
+
+# CI-friendly output
+fcheck --json
+
+# Generate all dependency graph outputs
+fcheck --svg --svgfolder --mermaid --plantuml
+```
+
 ## 📈 Example Output
 
 ```text
-↓ --------------------------------- fCheck 0.9.2 --------------------------------- ↓
+↓--------------------------------- fCheck 0.9.4 ---------------------------------↓
+Input            : /Users/me/my_app/.
 Project          : my_app (version: 1.0.0)
-Project Type     : Flutter | Dart
+Project Type     : Dart
 Folders          : 14
 Files            : 57
 Dart Files       : 36
@@ -51,9 +73,9 @@ Dependencies     : 73
 [✓] One class per file check passed.
 [!] Hardcoded strings check: 7 found (localization off). Example: fcheck.dart
 [✓] Magic numbers check passed.
-[✓] Dead code check passed.
 [✓] Flutter class member sorting passed.
 [✓] Secrets scan passed.
+[✓] Dead code check passed.
 [✓] Layers architecture check passed.
 ↓································· Output files ·································↓
 SVG layers         : ./layers.svg
@@ -63,16 +85,23 @@ SVG layers (folder): ./layers_folders.svg
 
 ## 📋 Usage
 
-### Basic Commands
+### Target Folder
 
 ```bash
-# Show help
-fcheck --help
+# Current folder (default)
+fcheck .
 
-# Show version
-fcheck --version
+# Positional folder
+fcheck ../my_app
 
-# Output as JSON
+# Explicit folder option (wins over positional folder)
+fcheck --input ../my_app
+```
+
+### Report Controls
+
+```bash
+# Output as JSON (machine-readable)
 fcheck --json
 
 # Control list output (console only)
@@ -80,6 +109,34 @@ fcheck --list none       # summary only
 fcheck --list partial    # top 10 per list (default)
 fcheck --list full       # full lists
 fcheck --list filenames  # unique file names only
+
+# Exclude custom patterns
+fcheck --exclude "**/generated/**" --exclude "**/*.g.dart"
+
+# Show excluded files/directories
+fcheck --excluded
+
+# Excluded items as JSON
+fcheck --excluded --json
+```
+
+### Visualizations
+
+```bash
+fcheck --svg
+fcheck --svgfolder
+fcheck --mermaid
+fcheck --plantuml
+```
+
+### Utility Commands
+
+```bash
+# Show help
+fcheck --help
+
+# Show version
+fcheck --version
 
 # Auto-fix sorting issues
 fcheck --fix
@@ -103,7 +160,7 @@ or ignore an entire file by placing a directive at the top (before any code).
 
 ### Hardcoded Strings (extra ignores)
 
-Use the flags from `analysis_options.yaml`
+fcheck also respects common analyzer ignore comments used in Flutter projects:
 
 ```dart
 // ignore_for_file: avoid_hardcoded_strings_in_widgets
@@ -183,9 +240,13 @@ fcheck --plantuml   # Generates layers.puml
 
 ## 🛡️ Exclusions
 
-Use `--excluded` to see which files and directories are skipped:
+Use `--exclude` to skip custom glob patterns, and `--excluded` to inspect what was skipped:
 
 ```bash
+# Custom excludes
+fcheck --exclude "**/generated/**" --exclude "**/*.g.dart"
+
+# Inspect excluded items
 fcheck --excluded
 fcheck --excluded --json
 ```
@@ -266,7 +327,7 @@ Per-line and per-file ignore comments are covered in Ignore Warnings above.
 
 ## 📋 Requirements
 
-- Dart SDK >= 3.0.0
+- Dart SDK >= 3.0.0 < 4.0.0
 - Works with any Flutter/Dart project
 
 ## 📄 License
