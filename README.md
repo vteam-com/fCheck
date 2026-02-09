@@ -75,6 +75,12 @@ fcheck --version
 # Output as JSON
 fcheck --json
 
+# Control list output (console only)
+fcheck --list none       # summary only
+fcheck --list partial    # top 10 per list (default)
+fcheck --list full       # full lists
+fcheck --list filenames  # unique file names only
+
 # Auto-fix sorting issues
 fcheck --fix
 ```

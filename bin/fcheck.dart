@@ -8,6 +8,7 @@ import 'package:fcheck/src/graphs/export_svg_folders.dart';
 import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/input_output/number_format_utils.dart';
 import 'package:fcheck/src/input_output/output.dart';
+import 'package:fcheck/src/metrics/project_metrics.dart';
 import 'package:fcheck/src/models/version.dart';
 import 'package:path/path.dart' as p;
 
@@ -66,6 +67,19 @@ void main(List<String> arguments) {
       help: 'Output results in structured JSON format',
       negatable: false,
     )
+    ..addOption(
+      'list',
+      abbr: 'l',
+      help: 'Control list output in the console report',
+      allowed: ['none', 'partial', 'full', 'filenames'],
+      allowedHelp: {
+        'none': 'Summary only (no Lists section)',
+        'partial': 'Top 10 items per list (default)',
+        'full': 'Show all list entries',
+        'filenames': 'Show unique file names only',
+      },
+      defaultsTo: 'partial',
+    )
     ..addFlag(
       'version',
       abbr: 'v',
@@ -101,6 +115,7 @@ void main(List<String> arguments) {
   late bool generateFolderSvg;
 
   late bool outputJson;
+  late ReportListMode listMode;
   late bool listExcluded;
   late List<String> excludePatterns;
 
@@ -112,6 +127,7 @@ void main(List<String> arguments) {
     generatePlantUML = argResults['plantuml'] as bool;
     generateFolderSvg = argResults['svgfolder'] as bool;
     outputJson = argResults['json'] as bool;
+    listMode = ReportListMode.values.byName(argResults['list'] as String);
     listExcluded = argResults['excluded'] as bool;
     excludePatterns = argResults['exclude'] as List<String>;
 
@@ -224,7 +240,7 @@ void main(List<String> arguments) {
     if (outputJson) {
       print(const JsonEncoder.withIndent('  ').convert(metrics.toJson()));
     } else {
-      metrics.printReport();
+      metrics.printReport(listMode: listMode);
     }
 
     // Generate layer analysis result for visualization

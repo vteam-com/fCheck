@@ -10,6 +10,21 @@ import 'package:fcheck/src/input_output/output.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:fcheck/src/models/project_type.dart';
 
+/// Controls how detailed issue lists are printed in console reports.
+enum ReportListMode {
+  /// Do not print the Lists section (summary only).
+  none,
+
+  /// Print a partial list (default).
+  partial,
+
+  /// Print the full list.
+  full,
+
+  /// Print unique file names only.
+  filenames,
+}
+
 /// Represents the overall quality metrics for a Flutter/Dart project.
 ///
 /// This class aggregates metrics from all analyzed files in a project,
@@ -175,6 +190,28 @@ class ProjectMetrics {
   /// Number of decimal places for percentage formatting.
   static const int _commentRatioDecimalPlaces = 0;
 
+  static Iterable<T> _issuesForMode<T>(
+    List<T> issues,
+    ReportListMode listMode,
+  ) {
+    if (listMode == ReportListMode.partial) {
+      return issues.take(_maxIssuesToShow);
+    }
+    return issues;
+  }
+
+  static List<String> _uniqueFilePaths(Iterable<String?> paths) {
+    final unique = <String>{};
+    final result = <String>[];
+    for (final path in paths) {
+      final value = path ?? 'unknown location';
+      if (unique.add(value)) {
+        result.add(value);
+      }
+    }
+    return result;
+  }
+
   /// Prints a comprehensive stats report to the console.
   ///
   /// The report includes:
@@ -188,7 +225,9 @@ class ProjectMetrics {
   /// - Secret issues
   ///
   /// It does not return anything.
-  void printReport() {
+  void printReport({ReportListMode listMode = ReportListMode.partial}) {
+    final filenamesOnly = listMode == ReportListMode.filenames;
+
     print('Project          : $projectName (version: $version)');
     print('Project Type     : ${projectType.label}');
     print('Folders          : ${formatCount(totalFolders)}');
@@ -213,6 +252,10 @@ class ProjectMetrics {
     print('Layers           : ${formatCount(layersCount)}');
     print('Dependencies     : ${formatCount(layersEdgeCount)}');
 
+    if (listMode == ReportListMode.none) {
+      return;
+    }
+
     printDivider('Lists', dot: true);
 
     final nonCompliant =
@@ -222,8 +265,16 @@ class ProjectMetrics {
     } else {
       print(
           '${failTag()} ${formatCount(nonCompliant.length)} files violate the "one class per file" rule:');
-      for (var m in nonCompliant) {
-        print('  - ${m.path} (${formatCount(m.classCount)} classes found)');
+      if (filenamesOnly) {
+        final filePaths =
+            _uniqueFilePaths(nonCompliant.map((m) => m.path).toList());
+        for (final path in filePaths) {
+          print('  - $path');
+        }
+      } else {
+        for (var m in nonCompliant) {
+          print('  - ${m.path} (${formatCount(m.classCount)} classes found)');
+        }
       }
       print('');
     }
@@ -233,18 +284,41 @@ class ProjectMetrics {
     } else if (usesLocalization) {
       print(
           '${failTag()} ${formatCount(hardcodedStringIssues.length)} hardcoded strings detected (localization enabled):');
-      for (var issue in hardcodedStringIssues.take(_maxIssuesToShow)) {
-        print('  - $issue');
-      }
-      if (hardcodedStringIssues.length > _maxIssuesToShow) {
-        print(
-            '  ... and ${formatCount(hardcodedStringIssues.length - _maxIssuesToShow)} more');
+      if (filenamesOnly) {
+        final filePaths =
+            _uniqueFilePaths(hardcodedStringIssues.map((i) => i.filePath));
+        for (final path in filePaths) {
+          print('  - $path');
+        }
+      } else {
+        for (var issue in _issuesForMode(hardcodedStringIssues, listMode)) {
+          print('  - $issue');
+        }
+        if (listMode == ReportListMode.partial &&
+            hardcodedStringIssues.length > _maxIssuesToShow) {
+          print(
+              '  ... and ${formatCount(hardcodedStringIssues.length - _maxIssuesToShow)} more');
+        }
       }
       print('');
     } else {
       final firstFile = hardcodedStringIssues.first.filePath.split('/').last;
       print(
           '${warnTag()} Hardcoded strings check: ${formatCount(hardcodedStringIssues.length)} found (localization off). Example: $firstFile');
+      if (listMode != ReportListMode.partial) {
+        if (filenamesOnly) {
+          final filePaths =
+              _uniqueFilePaths(hardcodedStringIssues.map((i) => i.filePath));
+          for (final path in filePaths) {
+            print('  - $path');
+          }
+        } else {
+          for (var issue in _issuesForMode(hardcodedStringIssues, listMode)) {
+            print('  - $issue');
+          }
+        }
+        print('');
+      }
     }
 
     if (magicNumberIssues.isEmpty) {
@@ -252,13 +326,22 @@ class ProjectMetrics {
     } else {
       print(
           '${warnTag()} ${formatCount(magicNumberIssues.length)} magic numbers detected:');
-      for (var issue in magicNumberIssues.take(_maxIssuesToShow)) {
-        print('  - $issue');
-      }
-      print('');
-      if (magicNumberIssues.length > _maxIssuesToShow) {
-        print(
-            '  ... and ${formatCount(magicNumberIssues.length - _maxIssuesToShow)} more');
+      if (filenamesOnly) {
+        final filePaths =
+            _uniqueFilePaths(magicNumberIssues.map((i) => i.filePath));
+        for (final path in filePaths) {
+          print('  - $path');
+        }
+      } else {
+        for (var issue in _issuesForMode(magicNumberIssues, listMode)) {
+          print('  - $issue');
+        }
+        print('');
+        if (listMode == ReportListMode.partial &&
+            magicNumberIssues.length > _maxIssuesToShow) {
+          print(
+              '  ... and ${formatCount(magicNumberIssues.length - _maxIssuesToShow)} more');
+        }
       }
       print('');
     }
@@ -268,13 +351,22 @@ class ProjectMetrics {
     } else {
       print(
           '${warnTag()} ${formatCount(sourceSortIssues.length)} Flutter classes have unsorted members:');
-      for (var issue in sourceSortIssues.take(_maxIssuesToShow)) {
-        print(
-            '  - ${issue.filePath}:${formatCount(issue.lineNumber)} (${issue.className})');
-      }
-      if (sourceSortIssues.length > _maxIssuesToShow) {
-        print(
-            '  ... and ${formatCount(sourceSortIssues.length - _maxIssuesToShow)} more');
+      if (filenamesOnly) {
+        final filePaths =
+            _uniqueFilePaths(sourceSortIssues.map((i) => i.filePath));
+        for (final path in filePaths) {
+          print('  - $path');
+        }
+      } else {
+        for (var issue in _issuesForMode(sourceSortIssues, listMode)) {
+          print(
+              '  - ${issue.filePath}:${formatCount(issue.lineNumber)} (${issue.className})');
+        }
+        if (listMode == ReportListMode.partial &&
+            sourceSortIssues.length > _maxIssuesToShow) {
+          print(
+              '  ... and ${formatCount(sourceSortIssues.length - _maxIssuesToShow)} more');
+        }
       }
       print('');
     }
@@ -284,12 +376,21 @@ class ProjectMetrics {
     } else {
       print(
           '${warnTag()} ${formatCount(secretIssues.length)} potential secrets detected:');
-      for (var issue in secretIssues.take(_maxIssuesToShow)) {
-        print('  - $issue');
-      }
-      if (secretIssues.length > _maxIssuesToShow) {
-        print(
-            '  ... and ${formatCount(secretIssues.length - _maxIssuesToShow)} more');
+      if (filenamesOnly) {
+        final filePaths = _uniqueFilePaths(
+            secretIssues.map((i) => i.filePath ?? 'unknown location'));
+        for (final path in filePaths) {
+          print('  - $path');
+        }
+      } else {
+        for (var issue in _issuesForMode(secretIssues, listMode)) {
+          print('  - $issue');
+        }
+        if (listMode == ReportListMode.partial &&
+            secretIssues.length > _maxIssuesToShow) {
+          print(
+              '  ... and ${formatCount(secretIssues.length - _maxIssuesToShow)} more');
+        }
       }
       print('');
     }
@@ -314,47 +415,96 @@ class ProjectMetrics {
           '${warnTag()} ${formatCount(deadCodeIssues.length)} dead code issues detected:');
 
       if (deadFileIssues.isNotEmpty) {
-        print('  Dead files (${formatCount(deadFileIssues.length)}):');
-        for (final issue in deadFileIssues.take(_maxIssuesToShow)) {
-          print('    - $issue');
-        }
-        if (deadFileIssues.length > _maxIssuesToShow) {
-          print(
-              '    ... and ${formatCount(deadFileIssues.length - _maxIssuesToShow)} more');
+        final deadFilePaths = filenamesOnly
+            ? _uniqueFilePaths(deadFileIssues.map((i) => i.filePath))
+            : const <String>[];
+        final deadFileCount =
+            filenamesOnly ? deadFilePaths.length : deadFileIssues.length;
+        print('  Dead files (${formatCount(deadFileCount)}):');
+        if (filenamesOnly) {
+          for (final path in deadFilePaths) {
+            print('    - $path');
+          }
+        } else {
+          for (final issue in _issuesForMode(deadFileIssues, listMode)) {
+            print('    - $issue');
+          }
+          if (listMode == ReportListMode.partial &&
+              deadFileIssues.length > _maxIssuesToShow) {
+            print(
+                '    ... and ${formatCount(deadFileIssues.length - _maxIssuesToShow)} more');
+          }
         }
       }
 
       if (deadClassIssues.isNotEmpty) {
-        print('  Dead classes (${formatCount(deadClassIssues.length)}):');
-        for (final issue in deadClassIssues.take(_maxIssuesToShow)) {
-          print('    - $issue');
-        }
-        if (deadClassIssues.length > _maxIssuesToShow) {
-          print(
-              '    ... and ${formatCount(deadClassIssues.length - _maxIssuesToShow)} more');
+        final deadClassPaths = filenamesOnly
+            ? _uniqueFilePaths(deadClassIssues.map((i) => i.filePath))
+            : const <String>[];
+        final deadClassCount =
+            filenamesOnly ? deadClassPaths.length : deadClassIssues.length;
+        print('  Dead classes (${formatCount(deadClassCount)}):');
+        if (filenamesOnly) {
+          for (final path in deadClassPaths) {
+            print('    - $path');
+          }
+        } else {
+          for (final issue in _issuesForMode(deadClassIssues, listMode)) {
+            print('    - $issue');
+          }
+          if (listMode == ReportListMode.partial &&
+              deadClassIssues.length > _maxIssuesToShow) {
+            print(
+                '    ... and ${formatCount(deadClassIssues.length - _maxIssuesToShow)} more');
+          }
         }
       }
 
       if (deadFunctionIssues.isNotEmpty) {
-        print('  Dead functions (${formatCount(deadFunctionIssues.length)}):');
-        for (final issue in deadFunctionIssues.take(_maxIssuesToShow)) {
-          print('    - $issue');
-        }
-        if (deadFunctionIssues.length > _maxIssuesToShow) {
-          print(
-              '    ... and ${formatCount(deadFunctionIssues.length - _maxIssuesToShow)} more');
+        final deadFunctionPaths = filenamesOnly
+            ? _uniqueFilePaths(deadFunctionIssues.map((i) => i.filePath))
+            : const <String>[];
+        final deadFunctionCount = filenamesOnly
+            ? deadFunctionPaths.length
+            : deadFunctionIssues.length;
+        print('  Dead functions (${formatCount(deadFunctionCount)}):');
+        if (filenamesOnly) {
+          for (final path in deadFunctionPaths) {
+            print('    - $path');
+          }
+        } else {
+          for (final issue in _issuesForMode(deadFunctionIssues, listMode)) {
+            print('    - $issue');
+          }
+          if (listMode == ReportListMode.partial &&
+              deadFunctionIssues.length > _maxIssuesToShow) {
+            print(
+                '    ... and ${formatCount(deadFunctionIssues.length - _maxIssuesToShow)} more');
+          }
         }
       }
 
       if (unusedVariableIssues.isNotEmpty) {
-        print(
-            '  Unused variables (${formatCount(unusedVariableIssues.length)}):');
-        for (final issue in unusedVariableIssues.take(_maxIssuesToShow)) {
-          print('    - $issue');
-        }
-        if (unusedVariableIssues.length > _maxIssuesToShow) {
-          print(
-              '    ... and ${formatCount(unusedVariableIssues.length - _maxIssuesToShow)} more');
+        final unusedVariablePaths = filenamesOnly
+            ? _uniqueFilePaths(unusedVariableIssues.map((i) => i.filePath))
+            : const <String>[];
+        final unusedVariableCount = filenamesOnly
+            ? unusedVariablePaths.length
+            : unusedVariableIssues.length;
+        print('  Unused variables (${formatCount(unusedVariableCount)}):');
+        if (filenamesOnly) {
+          for (final path in unusedVariablePaths) {
+            print('    - $path');
+          }
+        } else {
+          for (final issue in _issuesForMode(unusedVariableIssues, listMode)) {
+            print('    - $issue');
+          }
+          if (listMode == ReportListMode.partial &&
+              unusedVariableIssues.length > _maxIssuesToShow) {
+            print(
+                '    ... and ${formatCount(unusedVariableIssues.length - _maxIssuesToShow)} more');
+          }
         }
       }
 
@@ -366,12 +516,20 @@ class ProjectMetrics {
     } else {
       print(
           '${failTag()} ${formatCount(layersIssues.length)} layers architecture violations detected:');
-      for (var issue in layersIssues.take(_maxIssuesToShow)) {
-        print('  - $issue');
-      }
-      if (layersIssues.length > _maxIssuesToShow) {
-        print(
-            '  ... and ${formatCount(layersIssues.length - _maxIssuesToShow)} more');
+      if (filenamesOnly) {
+        final filePaths = _uniqueFilePaths(layersIssues.map((i) => i.filePath));
+        for (final path in filePaths) {
+          print('  - $path');
+        }
+      } else {
+        for (var issue in _issuesForMode(layersIssues, listMode)) {
+          print('  - $issue');
+        }
+        if (listMode == ReportListMode.partial &&
+            layersIssues.length > _maxIssuesToShow) {
+          print(
+              '  ... and ${formatCount(layersIssues.length - _maxIssuesToShow)} more');
+        }
       }
     }
   }
