@@ -60,7 +60,9 @@ void main(List<String> arguments) {
   late final List<String> effectiveExcludePatterns;
   try {
     fcheckConfig = FcheckConfig.loadForInputDirectory(inputDirectory);
-    directory = fcheckConfig.resolveAnalysisDirectory();
+    directory = Directory(
+      p.normalize(fcheckConfig.resolveAnalysisDirectory().absolute.path),
+    );
     if (!directory.existsSync()) {
       printMissingDirectoryError(directory.path);
       exit(1);
