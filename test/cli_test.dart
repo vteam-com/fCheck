@@ -127,6 +127,22 @@ class TestClass {
       expect(result.stdout, contains('--input'));
     });
 
+    test('should respect --list none flag', () async {
+      File('${tempDir.path}/list_none.dart')
+          .writeAsStringSync('void main() => print("list none");');
+
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', '--input', tempDir.path, '--list', 'none'],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains('fCheck $packageVersion'));
+      expect(result.stdout, isNot(contains('Lists')));
+    });
+
     test('should detect class violations', () async {
       // Create a file with multiple classes (violates one class per file rule)
       File('${tempDir.path}/violation.dart').writeAsStringSync('''

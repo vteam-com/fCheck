@@ -8,6 +8,7 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
 
 - Hardcoded string detection
 - Magic number detection
+- Dead code detection
 - Secret/PII scanning
 - Flutter widget member sorting
 - Layer dependency analysis and visualization
@@ -78,6 +79,20 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
 - `test/layers_analyzer_test.dart`
 - `test/project_metrics_test.dart`
 - `test/cli_test.dart`
+
+## Test Coverage Rules
+
+- Maintain overall project code coverage at `>= 80%`.
+- Do not merge changes that reduce overall coverage.
+- Add or update tests for every behavior change (new feature, bug fix, or rule change).
+- For new/modified files in `lib/src/analyzers/` and `lib/src/analyzer_runner/`, add direct unit tests that cover:
+  - happy path behavior
+  - guard/skip paths
+  - serialization/formatting paths (`toJson()`, `toString()`) for issue models
+- Prefer focused unit tests for small models/utilities and integration tests for CLI/report behavior.
+- Run the full test suite before merging: `dart test` (or `flutter test` if required by the task).
+- When validating coverage locally, generate coverage data with:
+  - `dart test --coverage=coverage`
 
 ## Usage Patterns
 
