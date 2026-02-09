@@ -285,5 +285,156 @@ void main() {
       expect(graph[aKey], contains(contains('b.dart')));
       expect(json['magicNumbers'], isA<List<dynamic>>());
     });
+
+    test('should disable analyzers via .fcheck', () async {
+      File('${tempDir.path}/main.dart').writeAsStringSync('''
+void main() {
+  print("Hardcoded");
+}
+''');
+      File('${tempDir.path}/.fcheck').writeAsStringSync('''
+analyzers:
+  disabled:
+    - hardcoded_strings
+''');
+
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', '--input', tempDir.path, '--json'],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      final json = jsonDecode(result.stdout as String) as Map<String, dynamic>;
+      final stats = json['stats'] as Map<String, dynamic>;
+      expect(stats['hardcodedStrings'], equals(0));
+    });
+
+    test('should show skipped message for disabled analyzer in text output',
+        () async {
+      File('${tempDir.path}/main.dart').writeAsStringSync('''
+void main() {
+  print("Hardcoded");
+}
+''');
+      File('${tempDir.path}/.fcheck').writeAsStringSync('''
+analyzers:
+  disabled:
+    - hardcoded_strings
+''');
+
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', '--input', tempDir.path],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains('Hardcoded Strings: disabled'));
+      expect(
+        result.stdout,
+        contains('Hardcoded strings check skipped (disabled).'),
+      );
+      expect(result.stdout, isNot(contains('Hardcoded strings check passed.')));
+    });
+
+    test('should support analyzer opt-in mode via .fcheck', () async {
+      File('${tempDir.path}/main.dart').writeAsStringSync('''
+void main() {
+  print("Hardcoded");
+  print(7);
+}
+''');
+      File('${tempDir.path}/.fcheck').writeAsStringSync('''
+analyzers:
+  default: off
+  enabled:
+    - magic_numbers
+''');
+
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', '--input', tempDir.path, '--json'],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      final json = jsonDecode(result.stdout as String) as Map<String, dynamic>;
+      final stats = json['stats'] as Map<String, dynamic>;
+      expect(stats['hardcodedStrings'], equals(0));
+      expect(stats['magicNumbers'], equals(1));
+    });
+
+    test('should respect input root and exclude patterns from .fcheck',
+        () async {
+      final appDir = Directory('${tempDir.path}/app')..createSync();
+      final generatedDir = Directory('${appDir.path}/generated')..createSync();
+      File('${appDir.path}/main.dart').writeAsStringSync('''
+void main() {
+  print(2);
+}
+''');
+      File('${generatedDir.path}/skip.dart').writeAsStringSync('''
+void skip() {
+  print(7);
+}
+''');
+      File('${tempDir.path}/outside.dart').writeAsStringSync('''
+void outside() {
+  print(9);
+}
+''');
+      File('${tempDir.path}/.fcheck').writeAsStringSync('''
+input:
+  root: app
+  exclude:
+    - "**/generated/**"
+analyzers:
+  default: off
+  enabled:
+    - magic_numbers
+    - layers
+''');
+
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', '--input', tempDir.path, '--json'],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      final json = jsonDecode(result.stdout as String) as Map<String, dynamic>;
+      final stats = json['stats'] as Map<String, dynamic>;
+      expect(stats['dartFiles'], equals(1));
+      expect(stats['magicNumbers'], equals(1));
+
+      final graph = json['layers']['graph'] as Map<String, dynamic>;
+      expect(graph.keys.length, equals(1));
+      expect(graph.keys.first, contains('app/main.dart'));
+    });
+
+    test('should fail with readable error for invalid .fcheck', () async {
+      File('${tempDir.path}/main.dart').writeAsStringSync('void main() {}');
+      File('${tempDir.path}/.fcheck').writeAsStringSync('''
+analyzers:
+  disabled:
+    - unknown_analyzer
+''');
+
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', '--input', tempDir.path],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(1));
+      expect(result.stdout, contains('Invalid .fcheck configuration'));
+      expect(result.stdout, contains('unknown analyzer'));
+    });
   });
 }

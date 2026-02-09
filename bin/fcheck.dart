@@ -4,6 +4,7 @@ import 'package:fcheck/src/graphs/export_plantuml.dart';
 import 'package:fcheck/src/graphs/export_svg.dart';
 import 'package:fcheck/src/graphs/export_svg_folders.dart';
 import 'package:fcheck/fcheck.dart';
+import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/version.dart';
 import 'package:path/path.dart' as p;
 import 'console_input.dart';
@@ -48,9 +49,26 @@ void main(List<String> arguments) {
     exit(0);
   }
 
-  final directory = Directory(input.path);
-  if (!directory.existsSync()) {
+  final inputDirectory = Directory(input.path);
+  if (!inputDirectory.existsSync()) {
     printMissingDirectoryError(input.path);
+    exit(1);
+  }
+
+  late final FcheckConfig fcheckConfig;
+  late final Directory directory;
+  late final List<String> effectiveExcludePatterns;
+  try {
+    fcheckConfig = FcheckConfig.loadForInputDirectory(inputDirectory);
+    directory = fcheckConfig.resolveAnalysisDirectory();
+    if (!directory.existsSync()) {
+      printMissingDirectoryError(directory.path);
+      exit(1);
+    }
+    effectiveExcludePatterns =
+        fcheckConfig.mergeExcludePatterns(input.excludePatterns);
+  } on FormatException catch (error) {
+    printConfigurationError(error.message.toString());
     exit(1);
   }
 
@@ -64,7 +82,8 @@ void main(List<String> arguments) {
     final engine = AnalyzeFolder(
       directory,
       fix: input.fix,
-      excludePatterns: input.excludePatterns,
+      excludePatterns: effectiveExcludePatterns,
+      enabledAnalyzers: fcheckConfig.effectiveEnabledAnalyzers,
     );
 
     // Handle excluded files listing

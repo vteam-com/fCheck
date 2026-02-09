@@ -77,6 +77,27 @@ class ProjectMetrics {
   /// The name of the analyzed project as defined in its pubspec.yaml.
   final String projectName;
 
+  /// Whether the one-class-per-file analyzer was enabled for this run.
+  final bool oneClassPerFileAnalyzerEnabled;
+
+  /// Whether the hardcoded-strings analyzer was enabled for this run.
+  final bool hardcodedStringsAnalyzerEnabled;
+
+  /// Whether the magic-numbers analyzer was enabled for this run.
+  final bool magicNumbersAnalyzerEnabled;
+
+  /// Whether the source-sorting analyzer was enabled for this run.
+  final bool sourceSortingAnalyzerEnabled;
+
+  /// Whether the layers analyzer was enabled for this run.
+  final bool layersAnalyzerEnabled;
+
+  /// Whether the secrets analyzer was enabled for this run.
+  final bool secretsAnalyzerEnabled;
+
+  /// Whether the dead-code analyzer was enabled for this run.
+  final bool deadCodeAnalyzerEnabled;
+
   /// Creates a new ProjectMetrics instance.
   ///
   /// [totalFolders] Total number of folders in the project.
@@ -120,6 +141,13 @@ class ProjectMetrics {
     required this.projectType,
     this.usesLocalization = false,
     this.excludedFilesCount = 0,
+    this.oneClassPerFileAnalyzerEnabled = true,
+    this.hardcodedStringsAnalyzerEnabled = true,
+    this.magicNumbersAnalyzerEnabled = true,
+    this.sourceSortingAnalyzerEnabled = true,
+    this.layersAnalyzerEnabled = true,
+    this.secretsAnalyzerEnabled = true,
+    this.deadCodeAnalyzerEnabled = true,
   });
 
   /// Converts these metrics to a JSON-compatible map.

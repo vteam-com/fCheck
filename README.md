@@ -282,6 +282,7 @@ Excluded directories (15):
 - Hidden directories (starting with `.`), including nested hidden folders
 - Common project directories: `test/`, `example/`, `tool/`, `.dart_tool/`, `build/`, `.git/`, `ios/`, `android/`, `web/`, `macos/`, `windows/`, `linux/`
 - Generated localization files (`app_localizations_*.dart`, `app_localization_*.dart`), while keeping `app_localizations.dart`
+- Files matching `.fcheck` `input.exclude` glob patterns
 - Files matching `--exclude` glob patterns
 - Files in directories that match exclude patterns
 
@@ -304,9 +305,55 @@ Excluded directories (15):
 
 ## 🔧 Configuration
 
-### Global Ignore (`.fcheck` file)
+### Project Configuration (`.fcheck`)
 
-Create a `.fcheck` file in your project root:
+Create `.fcheck` in the directory passed to `--input` (or the current directory if `--input` is not set).
+
+```yaml
+input:
+  root: app
+  exclude:
+    - "**/generated/**"
+    - "**/*.g.dart"
+
+analyzers:
+  default: on
+  disabled:
+    - hardcoded_strings
+    - source_sorting
+```
+
+`input.root` is resolved relative to the `.fcheck` file directory.
+
+To run in opt-in mode (everything off by default):
+
+```yaml
+analyzers:
+  default: off
+  enabled:
+    - magic_numbers
+    - secrets
+```
+
+Supported analyzer names:
+
+- `one_class_per_file`
+- `hardcoded_strings`
+- `magic_numbers`
+- `source_sorting`
+- `layers`
+- `secrets`
+- `dead_code`
+
+Configuration precedence:
+
+- Built-in defaults
+- `.fcheck`
+- CLI flags
+
+For excludes, `--exclude` adds extra patterns on top of `.fcheck` `input.exclude`.
+
+Legacy compatibility is still supported:
 
 ```yaml
 ignores:

@@ -112,6 +112,17 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
 
 ## Configuration
 
+- Project-level config is defined in `.fcheck` and parsed by `lib/src/models/fcheck_config.dart`.
+- `.fcheck` is loaded from the CLI input directory (`--input`, or current directory by default).
+- `input.root` (if set) is resolved relative to the `.fcheck` directory and becomes the effective analysis root.
+- `input.exclude` contributes glob exclusions, and CLI `--exclude` adds additional patterns on top.
+- Analyzer toggles support:
+  - `analyzers.default`: `on`/`off` (`true`/`false` also accepted)
+  - `analyzers.enabled`: explicit opt-in list
+  - `analyzers.disabled`: explicit opt-out list
+- Supported analyzer keys: `one_class_per_file`, `hardcoded_strings`, `magic_numbers`, `source_sorting`, `layers`, `secrets`, `dead_code`.
+- Legacy `ignores.<analyzer>: true` remains supported as a compatibility alias for disabling analyzers.
+- Precedence: built-in defaults < `.fcheck` < CLI flags.
 - File-level ignore: `// ignore: fcheck_<domain>` at the top of a Dart file.
 - Node-level ignore: `// ignore: fcheck_<domain>` on the same line as a literal for AST-based rules.
 - Default excluded directories and hidden folders are defined in `FileUtils.defaultExcludedDirs`.

@@ -265,7 +265,8 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
 
     // Node Text (Filename) - Drawn LAST
     final fileName = file.split('/').last;
-    final labelMaxWidth = nodeWidth - (nodeLabelHorizontalPadding * 2);
+    final labelMaxWidth =
+        nodeWidth - (nodeLabelHorizontalPadding * halfDivisor0);
     final textClass = fittedTextClass(
       fileName,
       maxWidth: labelMaxWidth,

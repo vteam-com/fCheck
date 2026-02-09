@@ -474,5 +474,44 @@ void main() {
       expect(joined, contains('lib/num_11.dart'));
       expect(joined, isNot(contains('... and')));
     });
+
+    test('should show skipped status for disabled analyzers', () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 0,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/sample.dart',
+            linesOfCode: 10,
+            commentLines: 0,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        hardcodedStringsAnalyzerEnabled: false,
+      );
+
+      final output = buildReportLines(projectMetrics);
+      final joined = output.join('\n');
+
+      expect(joined, contains('Hardcoded Strings: disabled'));
+      expect(joined, contains('Hardcoded strings check skipped (disabled).'));
+      expect(joined, isNot(contains('Hardcoded strings check passed.')));
+    });
   });
 }

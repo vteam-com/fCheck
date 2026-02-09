@@ -30,6 +30,7 @@ import 'package:fcheck/src/analyzer_runner/analyzer_runner.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_analyzer.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
+import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart';
 import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
@@ -41,6 +42,7 @@ import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:fcheck/src/metrics/file_metrics.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/metrics/project_metrics.dart';
+import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 import 'package:path/path.dart' as p;
@@ -73,13 +75,25 @@ class AnalyzeFolder {
     this.fix = false,
     this.excludePatterns = const [],
     this.ignoreConfig = const {},
+    this.enabledAnalyzers,
   });
 
   /// Global ignore configuration from .fcheck file and constructor.
   final Map<String, bool> ignoreConfig;
 
+  /// Explicit analyzer allowlist. When provided, it takes precedence.
+  final Set<AnalyzerDomain>? enabledAnalyzers;
+
   /// Cached pubspec.yaml metadata for this analysis session.
   late final _PubspecInfo _pubspecInfo = _PubspecInfo.load(projectDir);
+
+  bool _isAnalyzerEnabled(AnalyzerDomain analyzer) {
+    final enabled = enabledAnalyzers;
+    if (enabled != null) {
+      return enabled.contains(analyzer);
+    }
+    return !(ignoreConfig[analyzer.configName] ?? false);
+  }
 
   /// Analyzes the layers architecture and returns the result.
   ///
@@ -88,6 +102,14 @@ class AnalyzeFolder {
   ///
   /// Returns a [LayersAnalysisResult] containing issues and layer assignments.
   LayersAnalysisResult analyzeLayers() {
+    if (!_isAnalyzerEnabled(AnalyzerDomain.layers)) {
+      return LayersAnalysisResult(
+        issues: [],
+        layers: {},
+        dependencyGraph: {},
+      );
+    }
+
     final pubspecInfo = _pubspecInfo;
     final projectRoot = pubspecInfo.projectRoot ?? projectDir;
     final unifiedAnalyzer = AnalyzerRunner(
@@ -164,6 +186,16 @@ class AnalyzeFolder {
     final projectVersion = pubspecInfo.version;
     final projectName = pubspecInfo.name;
     final projectType = pubspecInfo.projectType;
+    final oneClassPerFileEnabled =
+        _isAnalyzerEnabled(AnalyzerDomain.oneClassPerFile);
+    final hardcodedStringsEnabled =
+        _isAnalyzerEnabled(AnalyzerDomain.hardcodedStrings);
+    final magicNumbersEnabled = _isAnalyzerEnabled(AnalyzerDomain.magicNumbers);
+    final sourceSortingEnabled =
+        _isAnalyzerEnabled(AnalyzerDomain.sourceSorting);
+    final layersEnabled = _isAnalyzerEnabled(AnalyzerDomain.layers);
+    final secretsEnabled = _isAnalyzerEnabled(AnalyzerDomain.secrets);
+    final deadCodeEnabled = _isAnalyzerEnabled(AnalyzerDomain.deadCode);
     final hardcodedStringsFocus = projectType == ProjectType.flutter
         ? HardcodedStringFocus.flutterWidgets
         : projectType == ProjectType.dart
@@ -172,15 +204,17 @@ class AnalyzeFolder {
 
     // Build delegates for unified analysis
     final delegates = <AnalyzerDelegate>[
-      HardcodedStringDelegate(focus: hardcodedStringsFocus),
-      MagicNumberDelegate(),
-      SourceSortDelegate(fix: fix),
-      LayersDelegate(projectRoot, pubspecInfo.packageName),
-      SecretDelegate(),
-      DeadCodeDelegate(
-        projectRoot: projectRoot,
-        packageName: pubspecInfo.packageName,
-      ),
+      if (hardcodedStringsEnabled)
+        HardcodedStringDelegate(focus: hardcodedStringsFocus),
+      if (magicNumbersEnabled) MagicNumberDelegate(),
+      if (sourceSortingEnabled) SourceSortDelegate(fix: fix),
+      if (layersEnabled) LayersDelegate(projectRoot, pubspecInfo.packageName),
+      if (secretsEnabled) SecretDelegate(),
+      if (deadCodeEnabled)
+        DeadCodeDelegate(
+          projectRoot: projectRoot,
+          packageName: pubspecInfo.packageName,
+        ),
     ];
 
     // Perform unified analysis
@@ -205,29 +239,31 @@ class AnalyzeFolder {
         allListResults.whereType<SourceSortIssue>().toList();
     final secretIssues = allListResults.whereType<SecretIssue>().toList();
 
-    final deadCodeFileDataRaw =
-        unifiedResult.resultsByType[DeadCodeFileData] ?? <dynamic>[];
-    final deadCodeFileData =
-        deadCodeFileDataRaw.whereType<DeadCodeFileData>().toList();
-    final deadCodeAnalyzer = DeadCodeAnalyzer(
-      projectRoot: projectRoot,
-      packageName: pubspecInfo.packageName,
-      projectType: projectType,
-    );
-    final deadCodeIssues = deadCodeAnalyzer.analyze(deadCodeFileData);
+    final deadCodeFileDataRaw = deadCodeEnabled
+        ? (unifiedResult.resultsByType[DeadCodeFileData] ?? <dynamic>[])
+        : <dynamic>[];
+    final deadCodeIssues = deadCodeEnabled
+        ? DeadCodeAnalyzer(
+            projectRoot: projectRoot,
+            packageName: pubspecInfo.packageName,
+            projectType: projectType,
+          ).analyze(deadCodeFileDataRaw.whereType<DeadCodeFileData>().toList())
+        : <DeadCodeIssue>[];
 
-    final layersFileData = _extractLayersFileData(unifiedResult);
-
-    // Layers analysis from unified per-file delegate output.
-    final layersAnalyzer = LayersAnalyzer(
-      projectDir,
-      projectRoot: projectRoot,
-      packageName: pubspecInfo.packageName,
-    );
-    final layersResult = layersAnalyzer.analyzeFromFileData(
-      layersFileData,
-      analyzedFilePaths: dartFiles.map((file) => file.path).toSet(),
-    );
+    final layersResult = layersEnabled
+        ? LayersAnalyzer(
+            projectDir,
+            projectRoot: projectRoot,
+            packageName: pubspecInfo.packageName,
+          ).analyzeFromFileData(
+            _extractLayersFileData(unifiedResult),
+            analyzedFilePaths: dartFiles.map((file) => file.path).toSet(),
+          )
+        : LayersAnalysisResult(
+            issues: [],
+            layers: {},
+            dependencyGraph: {},
+          );
 
     // File metrics analysis (still needed for LOC and comment analysis)
     final fileMetricsList = <FileMetrics>[];
@@ -235,7 +271,10 @@ class AnalyzeFolder {
     int totalComments = 0;
 
     for (var file in dartFiles) {
-      final metrics = analyzeFile(file);
+      final metrics = analyzeFile(
+        file,
+        globallyIgnoreOneClassPerFile: !oneClassPerFileEnabled,
+      );
       fileMetricsList.add(metrics);
       totalLoc += metrics.linesOfCode;
       totalComments += metrics.commentLines;
@@ -264,6 +303,13 @@ class AnalyzeFolder {
       excludedFilesCount: excludedDartFilesCount,
       secretIssues: secretIssues,
       deadCodeIssues: deadCodeIssues,
+      oneClassPerFileAnalyzerEnabled: oneClassPerFileEnabled,
+      hardcodedStringsAnalyzerEnabled: hardcodedStringsEnabled,
+      magicNumbersAnalyzerEnabled: magicNumbersEnabled,
+      sourceSortingAnalyzerEnabled: sourceSortingEnabled,
+      layersAnalyzerEnabled: layersEnabled,
+      secretsAnalyzerEnabled: secretsEnabled,
+      deadCodeAnalyzerEnabled: deadCodeEnabled,
     );
   }
 
@@ -302,7 +348,10 @@ class AnalyzeFolder {
   /// [file] The Dart file to analyze.
   ///
   /// Returns a [FileMetrics] object containing quality metrics for the file.
-  FileMetrics analyzeFile(File file) {
+  FileMetrics analyzeFile(
+    File file, {
+    bool globallyIgnoreOneClassPerFile = false,
+  }) {
     final content = file.readAsStringSync();
     final ParseStringResult result = parseString(
       content: content,
@@ -310,6 +359,8 @@ class AnalyzeFolder {
     );
 
     final hasIgnoreDirective = hasIgnoreOneClassPerFileDirective(content);
+    final ignoreOneClassPerFile =
+        hasIgnoreDirective || globallyIgnoreOneClassPerFile;
 
     // Skip files with parse errors
     if (result.errors.isNotEmpty) {
@@ -319,7 +370,7 @@ class AnalyzeFolder {
         commentLines: 0,
         classCount: 0,
         isStatefulWidget: false,
-        ignoreOneClassPerFile: hasIgnoreDirective,
+        ignoreOneClassPerFile: ignoreOneClassPerFile,
       );
     }
 
@@ -335,7 +386,7 @@ class AnalyzeFolder {
       commentLines: commentLines,
       classCount: visitor.classCount,
       isStatefulWidget: visitor.hasStatefulWidget,
-      ignoreOneClassPerFile: hasIgnoreDirective,
+      ignoreOneClassPerFile: ignoreOneClassPerFile,
     );
   }
 

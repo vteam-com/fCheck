@@ -2,6 +2,51 @@ import 'dart:math' as math;
 
 import 'badge_model.dart';
 
+/// Default fitted label font size used by SVG text helpers.
+const double _defaultFittedTextBaseFontSize = 14.0;
+
+/// Minimum fitted label font size used by SVG text helpers.
+const double _defaultFittedTextMinFontSize = 6.0;
+
+/// Estimated width unit for whitespace characters.
+const double _svgTextUnitForWhitespace = 0.35;
+
+/// Estimated width unit for visually narrow glyphs.
+const double _svgTextUnitForNarrowGlyph = 0.35;
+
+/// Estimated width unit for visually wide glyphs.
+const double _svgTextUnitForWideGlyph = 0.95;
+
+/// ASCII code point range start for digits (`0`).
+const int _asciiDigitStartRune = 48;
+
+/// ASCII code point range end for digits (`9`).
+const int _asciiDigitEndRune = 57;
+
+/// Estimated width unit for digits.
+const double _svgTextUnitForDigit = 0.60;
+
+/// ASCII code point range start for uppercase letters (`A`).
+const int _asciiUppercaseStartRune = 65;
+
+/// ASCII code point range end for uppercase letters (`Z`).
+const int _asciiUppercaseEndRune = 90;
+
+/// Estimated width unit for uppercase letters.
+const double _svgTextUnitForUppercase = 0.67;
+
+/// ASCII code point range start for lowercase letters (`a`).
+const int _asciiLowercaseStartRune = 97;
+
+/// ASCII code point range end for lowercase letters (`z`).
+const int _asciiLowercaseEndRune = 122;
+
+/// Estimated width unit for lowercase letters.
+const double _svgTextUnitForLowercase = 0.56;
+
+/// Estimated width unit fallback for other glyph types.
+const double _svgTextUnitForOtherGlyph = 0.70;
+
 /// Renders a triangular directional badge using BadgeModel
 void renderTriangularBadge(
   StringBuffer buffer,
@@ -73,14 +118,15 @@ String generateEmptySvg(String message) {
 double fitTextFontSize(
   String text, {
   required double maxWidth,
-  double baseFontSize = 14.0,
-  double minFontSize = 6.0,
+  double baseFontSize = _defaultFittedTextBaseFontSize,
+  double minFontSize = _defaultFittedTextMinFontSize,
 }) {
   if (text.isEmpty || maxWidth <= 0) {
     return minFontSize;
   }
 
-  final safeBase = baseFontSize > 0 ? baseFontSize : 14.0;
+  final safeBase =
+      baseFontSize > 0 ? baseFontSize : _defaultFittedTextBaseFontSize;
   final safeMin = math.max(1.0, math.min(minFontSize, safeBase));
   final estimatedUnits = _estimateSvgTextUnits(text);
   if (estimatedUnits <= 0) {
@@ -96,8 +142,8 @@ double fitTextFontSize(
 String fittedTextClass(
   String text, {
   required double maxWidth,
-  double baseFontSize = 14.0,
-  double minFontSize = 6.0,
+  double baseFontSize = _defaultFittedTextBaseFontSize,
+  double minFontSize = _defaultFittedTextMinFontSize,
   String normalClass = 'textNormal',
   String smallClass = 'textSmall',
 }) {
@@ -119,36 +165,36 @@ double _estimateSvgTextUnits(String text) {
     final char = String.fromCharCode(rune);
 
     if (char == ' ' || char == '\t') {
-      units += 0.35;
+      units += _svgTextUnitForWhitespace;
       continue;
     }
 
     if ("ilI1|.,:;!'`".contains(char)) {
-      units += 0.35;
+      units += _svgTextUnitForNarrowGlyph;
       continue;
     }
 
     if ('MW@#%&'.contains(char)) {
-      units += 0.95;
+      units += _svgTextUnitForWideGlyph;
       continue;
     }
 
-    if (rune >= 48 && rune <= 57) {
-      units += 0.60;
+    if (rune >= _asciiDigitStartRune && rune <= _asciiDigitEndRune) {
+      units += _svgTextUnitForDigit;
       continue;
     }
 
-    if (rune >= 65 && rune <= 90) {
-      units += 0.67;
+    if (rune >= _asciiUppercaseStartRune && rune <= _asciiUppercaseEndRune) {
+      units += _svgTextUnitForUppercase;
       continue;
     }
 
-    if (rune >= 97 && rune <= 122) {
-      units += 0.56;
+    if (rune >= _asciiLowercaseStartRune && rune <= _asciiLowercaseEndRune) {
+      units += _svgTextUnitForLowercase;
       continue;
     }
 
-    units += 0.70;
+    units += _svgTextUnitForOtherGlyph;
   }
 
   return units;

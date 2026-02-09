@@ -58,6 +58,14 @@ List<String> buildReportLines(
   final deadClassIssues = metrics.deadClassIssues;
   final deadFunctionIssues = metrics.deadFunctionIssues;
   final unusedVariableIssues = metrics.unusedVariableIssues;
+  final oneClassPerFileAnalyzerEnabled = metrics.oneClassPerFileAnalyzerEnabled;
+  final hardcodedStringsAnalyzerEnabled =
+      metrics.hardcodedStringsAnalyzerEnabled;
+  final magicNumbersAnalyzerEnabled = metrics.magicNumbersAnalyzerEnabled;
+  final sourceSortingAnalyzerEnabled = metrics.sourceSortingAnalyzerEnabled;
+  final secretsAnalyzerEnabled = metrics.secretsAnalyzerEnabled;
+  final deadCodeAnalyzerEnabled = metrics.deadCodeAnalyzerEnabled;
+  final layersAnalyzerEnabled = metrics.layersAnalyzerEnabled;
   final layersCount = metrics.layersCount;
   final layersEdgeCount = metrics.layersEdgeCount;
   final fileMetrics = metrics.fileMetrics;
@@ -79,19 +87,25 @@ List<String> buildReportLines(
   addLine('Comment Lines    : ${formatCount(totalCommentLines)}');
   addLine(
       'Comment Ratio    : ${(commentRatio * _percentageMultiplier).toStringAsFixed(_commentRatioDecimalPlaces)}%');
-  final hardcodedCount = formatCount(hardcodedStringIssues.length);
-  final hardcodedSummary = usesLocalization
-      ? hardcodedCount
-      : (hardcodedStringIssues.isEmpty
-          ? hardcodedCount
-          : '$hardcodedCount (warning)');
+  final hardcodedSummary = hardcodedStringsAnalyzerEnabled
+      ? (usesLocalization
+          ? formatCount(hardcodedStringIssues.length)
+          : (hardcodedStringIssues.isEmpty
+              ? formatCount(hardcodedStringIssues.length)
+              : '${formatCount(hardcodedStringIssues.length)} (warning)'))
+      : 'disabled';
   addLine('Localization     : ${usesLocalization ? 'Yes' : 'No'}');
   addLine('Hardcoded Strings: $hardcodedSummary');
-  addLine('Magic Numbers    : ${formatCount(magicNumberIssues.length)}');
-  addLine('Secrets          : ${formatCount(secretIssues.length)}');
-  addLine('Dead Code        : ${formatCount(deadCodeIssues.length)}');
-  addLine('Layers           : ${formatCount(layersCount)}');
-  addLine('Dependencies     : ${formatCount(layersEdgeCount)}');
+  addLine(
+      'Magic Numbers    : ${magicNumbersAnalyzerEnabled ? formatCount(magicNumberIssues.length) : 'disabled'}');
+  addLine(
+      'Secrets          : ${secretsAnalyzerEnabled ? formatCount(secretIssues.length) : 'disabled'}');
+  addLine(
+      'Dead Code        : ${deadCodeAnalyzerEnabled ? formatCount(deadCodeIssues.length) : 'disabled'}');
+  addLine(
+      'Layers           : ${layersAnalyzerEnabled ? formatCount(layersCount) : 'disabled'}');
+  addLine(
+      'Dependencies     : ${layersAnalyzerEnabled ? formatCount(layersEdgeCount) : 'disabled'}');
 
   if (listMode == ReportListMode.none) {
     return lines;
@@ -101,7 +115,9 @@ List<String> buildReportLines(
 
   final nonCompliant =
       fileMetrics.where((m) => !m.isOneClassPerFileCompliant).toList();
-  if (nonCompliant.isEmpty) {
+  if (!oneClassPerFileAnalyzerEnabled) {
+    addLine('${skipTag()} One class per file check skipped (disabled).');
+  } else if (nonCompliant.isEmpty) {
     addLine('${okTag()} One class per file check passed.');
   } else {
     addLine(
@@ -120,7 +136,9 @@ List<String> buildReportLines(
     addLine('');
   }
 
-  if (hardcodedStringIssues.isEmpty) {
+  if (!hardcodedStringsAnalyzerEnabled) {
+    addLine('${skipTag()} Hardcoded strings check skipped (disabled).');
+  } else if (hardcodedStringIssues.isEmpty) {
     addLine('${okTag()} Hardcoded strings check passed.');
   } else if (usesLocalization) {
     addLine(
@@ -162,7 +180,9 @@ List<String> buildReportLines(
     }
   }
 
-  if (magicNumberIssues.isEmpty) {
+  if (!magicNumbersAnalyzerEnabled) {
+    addLine('${skipTag()} Magic numbers check skipped (disabled).');
+  } else if (magicNumberIssues.isEmpty) {
     addLine('${okTag()} Magic numbers check passed.');
   } else {
     addLine(
@@ -187,7 +207,9 @@ List<String> buildReportLines(
     addLine('');
   }
 
-  if (sourceSortIssues.isEmpty) {
+  if (!sourceSortingAnalyzerEnabled) {
+    addLine('${skipTag()} Flutter class member sorting skipped (disabled).');
+  } else if (sourceSortIssues.isEmpty) {
     addLine('${okTag()} Flutter class member sorting passed.');
   } else {
     addLine(
@@ -212,7 +234,9 @@ List<String> buildReportLines(
     addLine('');
   }
 
-  if (secretIssues.isEmpty) {
+  if (!secretsAnalyzerEnabled) {
+    addLine('${skipTag()} Secrets scan skipped (disabled).');
+  } else if (secretIssues.isEmpty) {
     addLine('${okTag()} Secrets scan passed.');
   } else {
     addLine(
@@ -235,7 +259,9 @@ List<String> buildReportLines(
     addLine('');
   }
 
-  if (deadCodeIssues.isEmpty) {
+  if (!deadCodeAnalyzerEnabled) {
+    addLine('${skipTag()} Dead code check skipped (disabled).');
+  } else if (deadCodeIssues.isEmpty) {
     addLine('${okTag()} Dead code check passed.');
   } else {
     addLine(
@@ -337,7 +363,9 @@ List<String> buildReportLines(
     addLine('');
   }
 
-  if (layersIssues.isEmpty) {
+  if (!layersAnalyzerEnabled) {
+    addLine('${skipTag()} Layers architecture check skipped (disabled).');
+  } else if (layersIssues.isEmpty) {
     addLine('${okTag()} Layers architecture check passed.');
   } else {
     addLine(
@@ -395,6 +423,11 @@ void printVersionLine(String version) {
 /// Prints a missing-directory error message.
 void printMissingDirectoryError(String path) {
   print('Error: Directory "$path" does not exist.');
+}
+
+/// Prints a configuration error message for invalid `.fcheck` files.
+void printConfigurationError(String message) {
+  print('Error: Invalid .fcheck configuration. $message');
 }
 
 /// Prints the run header before analysis starts.
@@ -487,6 +520,7 @@ bool get _supportsAnsiEscapes => stdout.supportsAnsiEscapes;
 const int _ansiGreen = 32;
 const int _ansiYellow = 33;
 const int _ansiRed = 31;
+const int _ansiGray = 90;
 
 String _colorize(String text, int colorCode) =>
     _supportsAnsiEscapes ? '\x1B[${colorCode}m$text\x1B[0m' : text;
@@ -505,6 +539,9 @@ String warnTag() => _colorize('[!]', _ansiYellow);
 ///
 /// The label uses a single-width glyph for alignment.
 String failTag() => _colorize('[✗]', _ansiRed);
+
+/// Informational marker for skipped checks.
+String skipTag() => _colorize('[-]', _ansiGray);
 
 /// Builds a formatted divider line for console headers/footers.
 String dividerLine(String title, {bool downPointer = true, bool dot = false}) {

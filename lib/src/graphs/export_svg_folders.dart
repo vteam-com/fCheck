@@ -1403,7 +1403,7 @@ void _drawHierarchicalFolders(
     /// Horizontal padding reserved for folder title labels.
     const double folderTitleHorizontalPadding = 24.0;
     final titleMaxWidth =
-        max(1.0, dim.width - (folderTitleHorizontalPadding * 2));
+        max(1.0, dim.width - (folderTitleHorizontalPadding * halfDivisor));
     titleVisuals.add(_TitleVisual(pos.x + dim.width / halfDivisor,
         pos.y + titleVerticalOffset, titleText, titleMaxWidth));
     buffer.writeln('</g>');
@@ -1606,7 +1606,7 @@ void _drawFileVisuals(StringBuffer buffer, List<_FileVisual> visuals) {
     );
     renderTriangularBadge(buffer, outgoingBadge);
     final labelMaxWidth =
-        max(1.0, v.panelWidth - (fileLabelHorizontalPadding * 2));
+        max(1.0, v.panelWidth - (fileLabelHorizontalPadding * halfDivisor));
     final textClass = fittedTextClass(
       v.name,
       maxWidth: labelMaxWidth,
