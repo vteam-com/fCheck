@@ -64,12 +64,20 @@
     transition: all 0.1s ease-in-out; 
   }
   
-  .layerTitle { 
+  .layerTitle,
+  .layerTitleSmall { 
     fill: black; 
-    font-size: 16px; 
     font-weight: bold; 
     text-anchor: middle; 
     filter: url(#outlineWhite); 
+  }
+
+  .layerTitle { 
+    font-size: 16px; 
+  }
+
+  .layerTitleSmall { 
+    font-size: 12px; 
   }
   
   /* File node styles */
@@ -86,13 +94,21 @@
     transition: all 0.1s ease-in-out; 
   }
 
-  .nodeText { 
+  .textNormal,
+  .textSmall { 
     fill: #212529; 
-    font-size: 14px; 
     font-weight: 900; 
     text-anchor: middle; 
     dominant-baseline: middle; 
     filter: url(#outlineWhite); 
+  }
+
+  .textNormal { 
+    font-size: 14px; 
+  }
+
+  .textSmall { 
+    font-size: 12px; 
   }
 
   /* Unified edge styles */
@@ -803,7 +819,7 @@
 6. ../lib/src/models/version.dart
 7. console_common.dart
 8. console_input.dart
-9. console_output.dart</title></g><text x="558.0" y="184.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">fcheck.dart</text>
+9. console_output.dart</title></g><text x="558.0" y="184.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">fcheck.dart</text>
 <g class="incomingBadge">
   <path d="M 850.0,211.0 L 862.0,204.0 Q 865.0,204.0 865.0,207.0 L 865.0,215.0 Q 865.0,218.0 862.0,218.0 Z" fill="#3b82f6"/>
   <text x="861.0" y="214.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="outgoingBadge">
@@ -811,17 +827,17 @@
   <text x="855.0" y="225.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. ../lib/src/input_output/number_format_utils.dart
 2. ../lib/src/metrics/project_metrics.dart
 3. ../lib/src/models/project_type.dart
-4. console_common.dart</title></g><text x="558.0" y="216.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">console_output.dart</text>
+4. console_common.dart</title></g><text x="558.0" y="216.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">console_output.dart</text>
 <g class="incomingBadge">
   <path d="M 850.0,243.0 L 862.0,236.0 Q 865.0,236.0 865.0,239.0 L 865.0,247.0 Q 865.0,250.0 862.0,250.0 Z" fill="#3b82f6"/>
   <text x="861.0" y="246.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="outgoingBadge">
   <path d="M 866.0,254.0 L 854.0,247.0 Q 851.0,247.0 851.0,250.0 L 851.0,258.0 Q 851.0,261.0 854.0,261.0 Z" fill="#10b981"/>
-  <text x="855.0" y="257.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. console_common.dart</title></g><text x="558.0" y="248.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">console_input.dart</text>
+  <text x="855.0" y="257.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. console_common.dart</title></g><text x="558.0" y="248.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">console_input.dart</text>
 <g class="incomingBadge">
   <path d="M 850.0,275.0 L 862.0,268.0 Q 865.0,268.0 865.0,271.0 L 865.0,279.0 Q 865.0,282.0 862.0,282.0 Z" fill="#3b82f6"/>
   <text x="861.0" y="278.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. console_input.dart
 2. console_output.dart
-3. fcheck.dart</title></g><text x="558.0" y="280.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">console_common.dart</text>
+3. fcheck.dart</title></g><text x="558.0" y="280.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">console_common.dart</text>
 <g class="incomingBadge">
   <path d="M 802.0,501.0 L 814.0,494.0 Q 817.0,494.0 817.0,497.0 L 817.0,505.0 Q 817.0,508.0 814.0,508.0 Z" fill="#3b82f6"/>
   <text x="813.0" y="504.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="outgoingBadge">
@@ -843,15 +859,15 @@
 15. ../lib/src/metrics/file_metrics.dart
 16. ../lib/src/metrics/project_metrics.dart
 17. ../lib/src/models/ignore_config.dart
-18. ../lib/src/models/project_type.dart</title></g><text x="598.0" y="506.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">fcheck.dart</text>
+18. ../lib/src/models/project_type.dart</title></g><text x="598.0" y="506.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">fcheck.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,2609.0 L 790.0,2602.0 Q 793.0,2602.0 793.0,2605.0 L 793.0,2613.0 Q 793.0,2616.0 790.0,2616.0 Z" fill="#3b82f6"/>
-  <text x="789.0" y="2612.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. console_output.dart</title></g><text x="618.0" y="2614.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">number_format_utils.dart</text>
+  <text x="789.0" y="2612.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. console_output.dart</title></g><text x="618.0" y="2614.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">number_format_utils.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,2641.0 L 790.0,2634.0 Q 793.0,2634.0 793.0,2637.0 L 793.0,2645.0 Q 793.0,2648.0 790.0,2648.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="2644.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. ../lib/fcheck.dart
 2. ../lib/src/analyzer_runner/analyzer_runner.dart
-3. ../lib/src/analyzers/layers/layers_analyzer.dart</title></g><text x="618.0" y="2646.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">file_utils.dart</text>
+3. ../lib/src/analyzers/layers/layers_analyzer.dart</title></g><text x="618.0" y="2646.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">file_utils.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,675.0 L 790.0,668.0 Q 793.0,668.0 793.0,671.0 L 793.0,679.0 Q 793.0,682.0 790.0,682.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="678.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/fcheck.dart
@@ -864,26 +880,26 @@
 5. ../lib/src/analyzers/secrets/secret_issue.dart
 6. ../lib/src/analyzers/sorted/sort_issue.dart
 7. ../lib/src/metrics/file_metrics.dart
-8. ../lib/src/models/project_type.dart</title></g><text x="618.0" y="680.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">project_metrics.dart</text>
+8. ../lib/src/models/project_type.dart</title></g><text x="618.0" y="680.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">project_metrics.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,707.0 L 790.0,700.0 Q 793.0,700.0 793.0,703.0 L 793.0,711.0 Q 793.0,714.0 790.0,714.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="710.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/fcheck.dart
-2. ../lib/src/metrics/project_metrics.dart</title></g><text x="618.0" y="712.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">file_metrics.dart</text>
+2. ../lib/src/metrics/project_metrics.dart</title></g><text x="618.0" y="712.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">file_metrics.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,2763.0 L 790.0,2756.0 Q 793.0,2756.0 793.0,2759.0 L 793.0,2767.0 Q 793.0,2770.0 790.0,2770.0 Z" fill="#3b82f6"/>
-  <text x="789.0" y="2766.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzer_runner/analyzer_delegates.dart</title></g><text x="618.0" y="2768.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">class_visitor.dart</text>
+  <text x="789.0" y="2766.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzer_runner/analyzer_delegates.dart</title></g><text x="618.0" y="2768.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">class_visitor.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,2795.0 L 790.0,2788.0 Q 793.0,2788.0 793.0,2791.0 L 793.0,2799.0 Q 793.0,2802.0 790.0,2802.0 Z" fill="#3b82f6"/>
-  <text x="789.0" y="2798.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/graphs/export_svg_folders.dart</title></g><text x="618.0" y="2800.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">rect.dart</text>
+  <text x="789.0" y="2798.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/graphs/export_svg_folders.dart</title></g><text x="618.0" y="2800.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">rect.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,2827.0 L 790.0,2820.0 Q 793.0,2820.0 793.0,2823.0 L 793.0,2831.0 Q 793.0,2834.0 790.0,2834.0 Z" fill="#3b82f6"/>
-  <text x="789.0" y="2830.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><text x="618.0" y="2832.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">version.dart</text>
+  <text x="789.0" y="2830.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><text x="618.0" y="2832.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">version.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,2859.0 L 790.0,2852.0 Q 793.0,2852.0 793.0,2855.0 L 793.0,2863.0 Q 793.0,2866.0 790.0,2866.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="2862.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. ../lib/fcheck.dart
 2. ../lib/src/analyzers/dead_code/dead_code_analyzer.dart
 3. ../lib/src/metrics/project_metrics.dart
-4. console_output.dart</title></g><text x="618.0" y="2864.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">project_type.dart</text>
+4. console_output.dart</title></g><text x="618.0" y="2864.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">project_type.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,2891.0 L 790.0,2884.0 Q 793.0,2884.0 793.0,2887.0 L 793.0,2895.0 Q 793.0,2898.0 790.0,2898.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="2894.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">8</text><title>1. ../lib/fcheck.dart
@@ -893,7 +909,7 @@
 5. ../lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart
 6. ../lib/src/analyzers/layers/layers_analyzer.dart
 7. ../lib/src/analyzers/magic_numbers/magic_number_visitor.dart
-8. ../lib/src/analyzers/secrets/secret_scanner.dart</title></g><text x="618.0" y="2896.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">ignore_config.dart</text>
+8. ../lib/src/analyzers/secrets/secret_scanner.dart</title></g><text x="618.0" y="2896.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">ignore_config.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,829.0 L 790.0,822.0 Q 793.0,822.0 793.0,825.0 L 793.0,833.0 Q 793.0,836.0 790.0,836.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="832.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="outgoingBadge">
@@ -902,7 +918,7 @@
 2. ../lib/src/graphs/badge_model.dart
 3. ../lib/src/graphs/svg_common.dart
 4. ../lib/src/graphs/svg_styles.dart
-5. ../lib/src/models/rect.dart</title></g><text x="618.0" y="834.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">export_svg_folders.dart</text>
+5. ../lib/src/models/rect.dart</title></g><text x="618.0" y="834.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">export_svg_folders.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,861.0 L 790.0,854.0 Q 793.0,854.0 793.0,857.0 L 793.0,865.0 Q 793.0,868.0 790.0,868.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="864.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="outgoingBadge">
@@ -910,40 +926,40 @@
   <text x="783.0" y="875.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. ../lib/src/analyzers/layers/layers_results.dart
 2. ../lib/src/graphs/badge_model.dart
 3. ../lib/src/graphs/svg_common.dart
-4. ../lib/src/graphs/svg_styles.dart</title></g><text x="618.0" y="866.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">export_svg.dart</text>
+4. ../lib/src/graphs/svg_styles.dart</title></g><text x="618.0" y="866.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">export_svg.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,893.0 L 790.0,886.0 Q 793.0,886.0 793.0,889.0 L 793.0,897.0 Q 793.0,900.0 790.0,900.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="896.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="outgoingBadge">
   <path d="M 794.0,904.0 L 782.0,897.0 Q 779.0,897.0 779.0,900.0 L 779.0,908.0 Q 779.0,911.0 782.0,911.0 Z" fill="#10b981"/>
   <text x="783.0" y="907.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/src/analyzers/layers/layers_results.dart
-2. ../lib/src/graphs/graph_format_utils.dart</title></g><text x="618.0" y="898.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">export_mermaid.dart</text>
+2. ../lib/src/graphs/graph_format_utils.dart</title></g><text x="618.0" y="898.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">export_mermaid.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,925.0 L 790.0,918.0 Q 793.0,918.0 793.0,921.0 L 793.0,929.0 Q 793.0,932.0 790.0,932.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="928.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="outgoingBadge">
   <path d="M 794.0,936.0 L 782.0,929.0 Q 779.0,929.0 779.0,932.0 L 779.0,940.0 Q 779.0,943.0 782.0,943.0 Z" fill="#10b981"/>
   <text x="783.0" y="939.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/src/analyzers/layers/layers_results.dart
-2. ../lib/src/graphs/graph_format_utils.dart</title></g><text x="618.0" y="930.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">export_plantuml.dart</text>
+2. ../lib/src/graphs/graph_format_utils.dart</title></g><text x="618.0" y="930.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">export_plantuml.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,957.0 L 790.0,950.0 Q 793.0,950.0 793.0,953.0 L 793.0,961.0 Q 793.0,964.0 790.0,964.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="960.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/src/graphs/export_mermaid.dart
 2. ../lib/src/graphs/export_plantuml.dart</title></g><g class="outgoingBadge">
   <path d="M 794.0,968.0 L 782.0,961.0 Q 779.0,961.0 779.0,964.0 L 779.0,972.0 Q 779.0,975.0 782.0,975.0 Z" fill="#10b981"/>
-  <text x="783.0" y="971.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzers/layers/layers_results.dart</title></g><text x="618.0" y="962.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">graph_format_utils.dart</text>
+  <text x="783.0" y="971.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzers/layers/layers_results.dart</title></g><text x="618.0" y="962.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">graph_format_utils.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,989.0 L 790.0,982.0 Q 793.0,982.0 793.0,985.0 L 793.0,993.0 Q 793.0,996.0 790.0,996.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="992.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/src/graphs/export_svg.dart
 2. ../lib/src/graphs/export_svg_folders.dart</title></g><g class="outgoingBadge">
   <path d="M 794.0,1000.0 L 782.0,993.0 Q 779.0,993.0 779.0,996.0 L 779.0,1004.0 Q 779.0,1007.0 782.0,1007.0 Z" fill="#10b981"/>
-  <text x="783.0" y="1003.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/graphs/badge_model.dart</title></g><text x="618.0" y="994.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">svg_common.dart</text>
+  <text x="783.0" y="1003.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/graphs/badge_model.dart</title></g><text x="618.0" y="994.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">svg_common.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,1021.0 L 790.0,1014.0 Q 793.0,1014.0 793.0,1017.0 L 793.0,1025.0 Q 793.0,1028.0 790.0,1028.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="1024.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/src/graphs/export_svg.dart
-2. ../lib/src/graphs/export_svg_folders.dart</title></g><text x="618.0" y="1026.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">svg_styles.dart</text>
+2. ../lib/src/graphs/export_svg_folders.dart</title></g><text x="618.0" y="1026.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">svg_styles.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,1053.0 L 790.0,1046.0 Q 793.0,1046.0 793.0,1049.0 L 793.0,1057.0 Q 793.0,1060.0 790.0,1060.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="1056.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. ../lib/src/graphs/export_svg.dart
 2. ../lib/src/graphs/export_svg_folders.dart
-3. ../lib/src/graphs/svg_common.dart</title></g><text x="618.0" y="1058.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">badge_model.dart</text>
+3. ../lib/src/graphs/svg_common.dart</title></g><text x="618.0" y="1058.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">badge_model.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,1175.0 L 790.0,1168.0 Q 793.0,1168.0 793.0,1171.0 L 793.0,1179.0 Q 793.0,1182.0 790.0,1182.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="1178.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/fcheck.dart</title></g><g class="outgoingBadge">
@@ -963,39 +979,39 @@
 13. ../lib/src/analyzers/sorted/sort_members.dart
 14. ../lib/src/analyzers/sorted/sort_utils.dart
 15. ../lib/src/models/class_visitor.dart
-16. ../lib/src/models/ignore_config.dart</title></g><text x="618.0" y="1180.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">analyzer_delegates.dart</text>
+16. ../lib/src/models/ignore_config.dart</title></g><text x="618.0" y="1180.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">analyzer_delegates.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,1207.0 L 790.0,1200.0 Q 793.0,1200.0 793.0,1203.0 L 793.0,1211.0 Q 793.0,1214.0 790.0,1214.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="1210.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/fcheck.dart</title></g><g class="outgoingBadge">
   <path d="M 794.0,1218.0 L 782.0,1211.0 Q 779.0,1211.0 779.0,1214.0 L 779.0,1222.0 Q 779.0,1225.0 782.0,1225.0 Z" fill="#10b981"/>
   <text x="783.0" y="1221.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. ../lib/src/analyzer_runner/analysis_file_context.dart
 2. ../lib/src/analyzer_runner/analyzer_runner_result.dart
-3. ../lib/src/input_output/file_utils.dart</title></g><text x="618.0" y="1212.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">analyzer_runner.dart</text>
+3. ../lib/src/input_output/file_utils.dart</title></g><text x="618.0" y="1212.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">analyzer_runner.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,1239.0 L 790.0,1232.0 Q 793.0,1232.0 793.0,1235.0 L 793.0,1243.0 Q 793.0,1246.0 790.0,1246.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="1242.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. ../lib/fcheck.dart
 2. ../lib/src/analyzer_runner/analyzer_delegates.dart
 3. ../lib/src/analyzer_runner/analyzer_runner.dart</title></g><g class="outgoingBadge">
   <path d="M 794.0,1250.0 L 782.0,1243.0 Q 779.0,1243.0 779.0,1246.0 L 779.0,1254.0 Q 779.0,1257.0 782.0,1257.0 Z" fill="#10b981"/>
-  <text x="783.0" y="1253.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/models/ignore_config.dart</title></g><text x="618.0" y="1244.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">analysis_file_context.dart</text>
+  <text x="783.0" y="1253.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/models/ignore_config.dart</title></g><text x="618.0" y="1244.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">analysis_file_context.dart</text>
 <g class="incomingBadge">
   <path d="M 778.0,1271.0 L 790.0,1264.0 Q 793.0,1264.0 793.0,1267.0 L 793.0,1275.0 Q 793.0,1278.0 790.0,1278.0 Z" fill="#3b82f6"/>
   <text x="789.0" y="1274.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/fcheck.dart
-2. ../lib/src/analyzer_runner/analyzer_runner.dart</title></g><text x="618.0" y="1276.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">analyzer_runner_result.dart</text>
+2. ../lib/src/analyzer_runner/analyzer_runner.dart</title></g><text x="618.0" y="1276.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">analyzer_runner_result.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,1445.0 L 766.0,1438.0 Q 769.0,1438.0 769.0,1441.0 L 769.0,1449.0 Q 769.0,1452.0 766.0,1452.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="1448.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/fcheck.dart</title></g><g class="outgoingBadge">
   <path d="M 770.0,1456.0 L 758.0,1449.0 Q 755.0,1449.0 755.0,1452.0 L 755.0,1460.0 Q 755.0,1463.0 758.0,1463.0 Z" fill="#10b981"/>
   <text x="759.0" y="1459.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. ../lib/src/analyzers/dead_code/dead_code_file_data.dart
 2. ../lib/src/analyzers/dead_code/dead_code_issue.dart
-3. ../lib/src/models/project_type.dart</title></g><text x="638.0" y="1450.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">dead_code_analyzer.dart</text>
+3. ../lib/src/models/project_type.dart</title></g><text x="638.0" y="1450.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">dead_code_analyzer.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,1477.0 L 766.0,1470.0 Q 769.0,1470.0 769.0,1473.0 L 769.0,1481.0 Q 769.0,1484.0 766.0,1484.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="1480.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzer_runner/analyzer_delegates.dart</title></g><g class="outgoingBadge">
   <path d="M 770.0,1488.0 L 758.0,1481.0 Q 755.0,1481.0 755.0,1484.0 L 755.0,1492.0 Q 755.0,1495.0 758.0,1495.0 Z" fill="#10b981"/>
   <text x="759.0" y="1491.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. ../lib/src/analyzers/dead_code/dead_code_file_data.dart
 2. ../lib/src/analyzers/dead_code/dead_code_issue.dart
-3. ../lib/src/models/ignore_config.dart</title></g><text x="638.0" y="1482.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">dead_code_visitor.dart</text>
+3. ../lib/src/models/ignore_config.dart</title></g><text x="638.0" y="1482.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">dead_code_visitor.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,1509.0 L 766.0,1502.0 Q 769.0,1502.0 769.0,1505.0 L 769.0,1513.0 Q 769.0,1516.0 766.0,1516.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="1512.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. ../lib/fcheck.dart
@@ -1003,13 +1019,13 @@
 3. ../lib/src/analyzers/dead_code/dead_code_analyzer.dart
 4. ../lib/src/analyzers/dead_code/dead_code_visitor.dart</title></g><g class="outgoingBadge">
   <path d="M 770.0,1520.0 L 758.0,1513.0 Q 755.0,1513.0 755.0,1516.0 L 755.0,1524.0 Q 755.0,1527.0 758.0,1527.0 Z" fill="#10b981"/>
-  <text x="759.0" y="1523.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzers/dead_code/dead_code_issue.dart</title></g><text x="638.0" y="1514.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">dead_code_file_data.dart</text>
+  <text x="759.0" y="1523.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzers/dead_code/dead_code_issue.dart</title></g><text x="638.0" y="1514.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">dead_code_file_data.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,1541.0 L 766.0,1534.0 Q 769.0,1534.0 769.0,1537.0 L 769.0,1545.0 Q 769.0,1548.0 766.0,1548.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="1544.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. ../lib/src/analyzers/dead_code/dead_code_analyzer.dart
 2. ../lib/src/analyzers/dead_code/dead_code_file_data.dart
 3. ../lib/src/analyzers/dead_code/dead_code_visitor.dart
-4. ../lib/src/metrics/project_metrics.dart</title></g><text x="638.0" y="1546.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">dead_code_issue.dart</text>
+4. ../lib/src/metrics/project_metrics.dart</title></g><text x="638.0" y="1546.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">dead_code_issue.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,1663.0 L 766.0,1656.0 Q 769.0,1656.0 769.0,1659.0 L 769.0,1667.0 Q 769.0,1670.0 766.0,1670.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="1666.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/fcheck.dart
@@ -1017,17 +1033,17 @@
   <path d="M 770.0,1674.0 L 758.0,1667.0 Q 755.0,1667.0 755.0,1670.0 L 755.0,1678.0 Q 755.0,1681.0 758.0,1681.0 Z" fill="#10b981"/>
   <text x="759.0" y="1677.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. ../lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart
 2. ../lib/src/analyzers/hardcoded_strings/hardcoded_string_utils.dart
-3. ../lib/src/models/ignore_config.dart</title></g><text x="638.0" y="1668.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">hardcoded_string_visitor.dart</text>
+3. ../lib/src/models/ignore_config.dart</title></g><text x="638.0" y="1668.0" text-anchor="middle" dominant-baseline="middle" class="textSmall">hardcoded_string_visitor.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,1695.0 L 766.0,1688.0 Q 769.0,1688.0 769.0,1691.0 L 769.0,1699.0 Q 769.0,1702.0 766.0,1702.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="1698.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/src/analyzer_runner/analyzer_delegates.dart
-2. ../lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart</title></g><text x="638.0" y="1700.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">hardcoded_string_utils.dart</text>
+2. ../lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart</title></g><text x="638.0" y="1700.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">hardcoded_string_utils.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,1727.0 L 766.0,1720.0 Q 769.0,1720.0 769.0,1723.0 L 769.0,1731.0 Q 769.0,1734.0 766.0,1734.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="1730.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. ../lib/fcheck.dart
 2. ../lib/src/analyzer_runner/analyzer_delegates.dart
 3. ../lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart
-4. ../lib/src/metrics/project_metrics.dart</title></g><text x="638.0" y="1732.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">hardcoded_string_issue.dart</text>
+4. ../lib/src/metrics/project_metrics.dart</title></g><text x="638.0" y="1732.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">hardcoded_string_issue.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,1849.0 L 766.0,1842.0 Q 769.0,1842.0 769.0,1845.0 L 769.0,1853.0 Q 769.0,1856.0 766.0,1856.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="1852.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/fcheck.dart</title></g><g class="outgoingBadge">
@@ -1036,7 +1052,7 @@
 2. ../lib/src/analyzers/layers/layers_results.dart
 3. ../lib/src/analyzers/layers/layers_visitor.dart
 4. ../lib/src/input_output/file_utils.dart
-5. ../lib/src/models/ignore_config.dart</title></g><text x="638.0" y="1854.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">layers_analyzer.dart</text>
+5. ../lib/src/models/ignore_config.dart</title></g><text x="638.0" y="1854.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">layers_analyzer.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,1881.0 L 766.0,1874.0 Q 769.0,1874.0 769.0,1877.0 L 769.0,1885.0 Q 769.0,1888.0 766.0,1888.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="1884.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">7</text><title>1. ../lib/fcheck.dart
@@ -1047,51 +1063,51 @@
 6. ../lib/src/graphs/export_svg_folders.dart
 7. ../lib/src/graphs/graph_format_utils.dart</title></g><g class="outgoingBadge">
   <path d="M 770.0,1892.0 L 758.0,1885.0 Q 755.0,1885.0 755.0,1888.0 L 755.0,1896.0 Q 755.0,1899.0 758.0,1899.0 Z" fill="#10b981"/>
-  <text x="759.0" y="1895.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzers/layers/layers_issue.dart</title></g><text x="638.0" y="1886.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">layers_results.dart</text>
+  <text x="759.0" y="1895.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzers/layers/layers_issue.dart</title></g><text x="638.0" y="1886.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">layers_results.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,1913.0 L 766.0,1906.0 Q 769.0,1906.0 769.0,1909.0 L 769.0,1917.0 Q 769.0,1920.0 766.0,1920.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="1916.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/src/analyzer_runner/analyzer_delegates.dart
-2. ../lib/src/analyzers/layers/layers_analyzer.dart</title></g><text x="638.0" y="1918.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">layers_visitor.dart</text>
+2. ../lib/src/analyzers/layers/layers_analyzer.dart</title></g><text x="638.0" y="1918.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">layers_visitor.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,1945.0 L 766.0,1938.0 Q 769.0,1938.0 769.0,1941.0 L 769.0,1949.0 Q 769.0,1952.0 766.0,1952.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="1948.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. ../lib/src/analyzers/layers/layers_analyzer.dart
 2. ../lib/src/analyzers/layers/layers_results.dart
-3. ../lib/src/metrics/project_metrics.dart</title></g><text x="638.0" y="1950.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">layers_issue.dart</text>
+3. ../lib/src/metrics/project_metrics.dart</title></g><text x="638.0" y="1950.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">layers_issue.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,2067.0 L 766.0,2060.0 Q 769.0,2060.0 769.0,2063.0 L 769.0,2071.0 Q 769.0,2074.0 766.0,2074.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="2070.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzer_runner/analyzer_delegates.dart</title></g><g class="outgoingBadge">
   <path d="M 770.0,2078.0 L 758.0,2071.0 Q 755.0,2071.0 755.0,2074.0 L 755.0,2082.0 Q 755.0,2085.0 758.0,2085.0 Z" fill="#10b981"/>
   <text x="759.0" y="2081.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/src/analyzers/magic_numbers/magic_number_issue.dart
-2. ../lib/src/models/ignore_config.dart</title></g><text x="638.0" y="2072.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">magic_number_visitor.dart</text>
+2. ../lib/src/models/ignore_config.dart</title></g><text x="638.0" y="2072.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">magic_number_visitor.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,2099.0 L 766.0,2092.0 Q 769.0,2092.0 769.0,2095.0 L 769.0,2103.0 Q 769.0,2106.0 766.0,2106.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="2102.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. ../lib/fcheck.dart
 2. ../lib/src/analyzer_runner/analyzer_delegates.dart
 3. ../lib/src/analyzers/magic_numbers/magic_number_visitor.dart
-4. ../lib/src/metrics/project_metrics.dart</title></g><text x="638.0" y="2104.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">magic_number_issue.dart</text>
+4. ../lib/src/metrics/project_metrics.dart</title></g><text x="638.0" y="2104.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">magic_number_issue.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,2221.0 L 766.0,2214.0 Q 769.0,2214.0 769.0,2217.0 L 769.0,2225.0 Q 769.0,2228.0 766.0,2228.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="2224.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzer_runner/analyzer_delegates.dart</title></g><g class="outgoingBadge">
   <path d="M 770.0,2232.0 L 758.0,2225.0 Q 755.0,2225.0 755.0,2228.0 L 755.0,2236.0 Q 755.0,2239.0 758.0,2239.0 Z" fill="#10b981"/>
   <text x="759.0" y="2235.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. ../lib/src/analyzers/secrets/secret_issue.dart
-2. ../lib/src/models/ignore_config.dart</title></g><text x="638.0" y="2226.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">secret_scanner.dart</text>
+2. ../lib/src/models/ignore_config.dart</title></g><text x="638.0" y="2226.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">secret_scanner.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,2253.0 L 766.0,2246.0 Q 769.0,2246.0 769.0,2249.0 L 769.0,2257.0 Q 769.0,2260.0 766.0,2260.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="2256.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. ../lib/fcheck.dart
 2. ../lib/src/analyzer_runner/analyzer_delegates.dart
 3. ../lib/src/analyzers/secrets/secret_scanner.dart
-4. ../lib/src/metrics/project_metrics.dart</title></g><text x="638.0" y="2258.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">secret_issue.dart</text>
+4. ../lib/src/metrics/project_metrics.dart</title></g><text x="638.0" y="2258.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">secret_issue.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,2375.0 L 766.0,2368.0 Q 769.0,2368.0 769.0,2371.0 L 769.0,2379.0 Q 769.0,2382.0 766.0,2382.0 Z" fill="#3b82f6"/>
-  <text x="765.0" y="2378.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzer_runner/analyzer_delegates.dart</title></g><text x="638.0" y="2380.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">sort_members.dart</text>
+  <text x="765.0" y="2378.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzer_runner/analyzer_delegates.dart</title></g><text x="638.0" y="2380.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">sort_members.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,2407.0 L 766.0,2400.0 Q 769.0,2400.0 769.0,2403.0 L 769.0,2411.0 Q 769.0,2414.0 766.0,2414.0 Z" fill="#3b82f6"/>
-  <text x="765.0" y="2410.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzer_runner/analyzer_delegates.dart</title></g><text x="638.0" y="2412.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">sort_utils.dart</text>
+  <text x="765.0" y="2410.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ../lib/src/analyzer_runner/analyzer_delegates.dart</title></g><text x="638.0" y="2412.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">sort_utils.dart</text>
 <g class="incomingBadge">
   <path d="M 754.0,2439.0 L 766.0,2432.0 Q 769.0,2432.0 769.0,2435.0 L 769.0,2443.0 Q 769.0,2446.0 766.0,2446.0 Z" fill="#3b82f6"/>
   <text x="765.0" y="2442.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. ../lib/fcheck.dart
 2. ../lib/src/analyzer_runner/analyzer_delegates.dart
-3. ../lib/src/metrics/project_metrics.dart</title></g><text x="638.0" y="2444.0" text-anchor="middle" dominant-baseline="middle" class="nodeText">sort_issue.dart</text>
+3. ../lib/src/metrics/project_metrics.dart</title></g><text x="638.0" y="2444.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">sort_issue.dart</text>
 <g class="folderTitleLayer">
 <text x="546.0" y="105.0" class="layerTitle">fcheck v0.9.3</text>
 <text x="566.0" y="157.0" class="layerTitle">  ...</text>

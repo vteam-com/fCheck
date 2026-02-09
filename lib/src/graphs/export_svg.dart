@@ -90,6 +90,9 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
   const columnSpacing = 100; // Space between layer columns
   const margin = 50;
   const layerHeaderHeight = 40;
+  const nodeLabelBaseFontSize = 14.0;
+  const nodeLabelMinFontSize = 6.0;
+  const nodeLabelHorizontalPadding = 16.0;
 
   // Badge constants
   const badgeOffset = 12;
@@ -262,20 +265,16 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
 
     // Node Text (Filename) - Drawn LAST
     final fileName = file.split('/').last;
-
-    /// Maximum length of the filename before truncation.
-    const int maxLabelLength = 25;
-
-    /// Length to truncate the filename to.
-    const int truncateLength = 22;
-
-    // Truncate if too long
-    final displayText = fileName.length > maxLabelLength
-        ? '${fileName.substring(0, truncateLength)}...'
-        : fileName;
+    final labelMaxWidth = nodeWidth - (nodeLabelHorizontalPadding * 2);
+    final textClass = fittedTextClass(
+      fileName,
+      maxWidth: labelMaxWidth,
+      baseFontSize: nodeLabelBaseFontSize,
+      minFontSize: nodeLabelMinFontSize,
+    );
 
     buffer.writeln(
-        '<text x="${pos.x + nodeWidth / halfDivisor0}" y="${pos.y + nodeHeight / halfDivisor0}" class="nodeText">$displayText</text>');
+        '<text x="${pos.x + nodeWidth / halfDivisor0}" y="${pos.y + nodeHeight / halfDivisor0}" class="$textClass">$fileName</text>');
   }
 
   buffer.writeln('</svg>');

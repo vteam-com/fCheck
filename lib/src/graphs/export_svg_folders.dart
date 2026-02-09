@@ -74,7 +74,8 @@ class _TitleVisual {
   final double x;
   final double y;
   final String text;
-  _TitleVisual(this.x, this.y, this.text);
+  final double maxWidth;
+  _TitleVisual(this.x, this.y, this.text, this.maxWidth);
 }
 
 const double _titleLineHeight = 16.0;
@@ -1398,8 +1399,13 @@ void _drawHierarchicalFolders(
     } else {
       titleText = '$indent${folder.name}';
     }
+
+    /// Horizontal padding reserved for folder title labels.
+    const double folderTitleHorizontalPadding = 24.0;
+    final titleMaxWidth =
+        max(1.0, dim.width - (folderTitleHorizontalPadding * 2));
     titleVisuals.add(_TitleVisual(pos.x + dim.width / halfDivisor,
-        pos.y + titleVerticalOffset, titleText));
+        pos.y + titleVerticalOffset, titleText, titleMaxWidth));
     buffer.writeln('</g>');
 
     /// Horizontal offset for the target (incoming) badge.
@@ -1555,6 +1561,10 @@ String _buildStackedEdgePath(
 
 /// Render file badges and labels (after edges).
 void _drawFileVisuals(StringBuffer buffer, List<_FileVisual> visuals) {
+  const double fileLabelBaseFontSize = 14.0;
+  const double fileLabelMinFontSize = 6.0;
+  const double fileLabelHorizontalPadding = 16.0;
+
   for (final v in visuals) {
     /// Half-height offset of the file panel.
     const double filePanelHalfHeight = 14.0;
@@ -1595,9 +1605,17 @@ void _drawFileVisuals(StringBuffer buffer, List<_FileVisual> visuals) {
       direction: BadgeDirection.east,
     );
     renderTriangularBadge(buffer, outgoingBadge);
+    final labelMaxWidth =
+        max(1.0, v.panelWidth - (fileLabelHorizontalPadding * 2));
+    final textClass = fittedTextClass(
+      v.name,
+      maxWidth: labelMaxWidth,
+      baseFontSize: fileLabelBaseFontSize,
+      minFontSize: fileLabelMinFontSize,
+    );
 
     buffer.writeln(
-        '<text x="${v.textX}" y="${top + filePanelHeight / halfDivisor}" text-anchor="middle" dominant-baseline="middle" class="nodeText">${v.name}</text>');
+        '<text x="${v.textX}" y="${top + filePanelHeight / halfDivisor}" text-anchor="middle" dominant-baseline="middle" class="$textClass">${v.name}</text>');
   }
 }
 
@@ -1624,13 +1642,27 @@ void _drawFilePanels(StringBuffer buffer, List<_FileVisual> visuals) {
 
 /// Render folder titles above all edges/items.
 void _drawTitleVisuals(StringBuffer buffer, List<_TitleVisual> visuals) {
+  const double titleBaseFontSize = 16.0;
+  const double titleMinFontSize = 8.0;
+
   buffer.writeln('<g class="folderTitleLayer">');
   for (final v in visuals) {
     if (v.text.contains('|')) {
       // Multi-line text for root folder (legacy format)
       final parts = v.text.split('|');
+      final longestLine = parts.reduce(
+        (current, line) => line.length > current.length ? line : current,
+      );
+      final titleClass = fittedTextClass(
+        longestLine,
+        maxWidth: v.maxWidth,
+        baseFontSize: titleBaseFontSize,
+        minFontSize: titleMinFontSize,
+        normalClass: 'layerTitle',
+        smallClass: 'layerTitleSmall',
+      );
       buffer.writeln(
-          '<text x="${v.x}" y="${v.y}" class="layerTitle" text-anchor="middle">');
+          '<text x="${v.x}" y="${v.y}" class="$titleClass" text-anchor="middle">');
       for (int i = 0; i < parts.length; i++) {
         final yOffset = i * _titleLineHeight; // Line height spacing
         buffer.writeln(
@@ -1643,17 +1675,35 @@ void _drawTitleVisuals(StringBuffer buffer, List<_TitleVisual> visuals) {
       final closeParen = v.text.indexOf(')');
       final firstLine = v.text.substring(0, openParen).trim();
       final secondLine = v.text.substring(openParen + 1, closeParen).trim();
+      final longestLine =
+          firstLine.length >= secondLine.length ? firstLine : secondLine;
+      final titleClass = fittedTextClass(
+        longestLine,
+        maxWidth: v.maxWidth,
+        baseFontSize: titleBaseFontSize,
+        minFontSize: titleMinFontSize,
+        normalClass: 'layerTitle',
+        smallClass: 'layerTitleSmall',
+      );
 
       buffer.writeln(
-          '<text x="${v.x}" y="${v.y}" class="layerTitle" text-anchor="middle">');
+          '<text x="${v.x}" y="${v.y}" class="$titleClass" text-anchor="middle">');
       buffer.writeln('  <tspan x="${v.x}" dy="0">$firstLine</tspan>');
       buffer.writeln(
           '  <tspan x="${v.x}" dy="$_titleLineHeight">$secondLine</tspan>');
       buffer.writeln('</text>');
     } else {
       // Single line text for regular folders or when folder name matches project name
+      final titleClass = fittedTextClass(
+        v.text,
+        maxWidth: v.maxWidth,
+        baseFontSize: titleBaseFontSize,
+        minFontSize: titleMinFontSize,
+        normalClass: 'layerTitle',
+        smallClass: 'layerTitleSmall',
+      );
       buffer.writeln(
-          '<text x="${v.x}" y="${v.y}" class="layerTitle">${v.text}</text>');
+          '<text x="${v.x}" y="${v.y}" class="$titleClass">${v.text}</text>');
     }
   }
   buffer.writeln('</g>');

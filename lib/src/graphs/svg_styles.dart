@@ -131,12 +131,20 @@ $verticalGradient
     transition: all 0.1s ease-in-out; 
   }
   
-  .layerTitle { 
+  .layerTitle,
+  .layerTitleSmall { 
     fill: black; 
-    font-size: 16px; 
     font-weight: bold; 
     text-anchor: middle; 
     filter: url(#outlineWhite); 
+  }
+
+  .layerTitle { 
+    font-size: 16px; 
+  }
+
+  .layerTitleSmall { 
+    font-size: 12px; 
   }
   
   /* File node styles */
@@ -153,13 +161,21 @@ $verticalGradient
     transition: all 0.1s ease-in-out; 
   }
 
-  .nodeText { 
+  .textNormal,
+  .textSmall { 
     fill: #212529; 
-    font-size: 14px; 
     font-weight: 900; 
     text-anchor: middle; 
     dominant-baseline: middle; 
     filter: url(#outlineWhite); 
+  }
+
+  .textNormal { 
+    font-size: 14px; 
+  }
+
+  .textSmall { 
+    font-size: 12px; 
   }
 
   /* Unified edge styles */

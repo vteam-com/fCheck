@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'badge_model.dart';
 
 /// Renders a triangular directional badge using BadgeModel
@@ -62,4 +64,92 @@ String generateEmptySvg(String message) {
   <text x="200" y="100" text-anchor="middle" fill="#6c757d"
         font-family="Arial, sans-serif" font-size="16">$message</text>
 </svg>''';
+}
+
+/// Computes a font size that keeps [text] within [maxWidth] in SVG labels.
+///
+/// The estimate is intentionally lightweight (character class weighted) so
+/// exporters can quickly downscale text before rendering.
+double fitTextFontSize(
+  String text, {
+  required double maxWidth,
+  double baseFontSize = 14.0,
+  double minFontSize = 6.0,
+}) {
+  if (text.isEmpty || maxWidth <= 0) {
+    return minFontSize;
+  }
+
+  final safeBase = baseFontSize > 0 ? baseFontSize : 14.0;
+  final safeMin = math.max(1.0, math.min(minFontSize, safeBase));
+  final estimatedUnits = _estimateSvgTextUnits(text);
+  if (estimatedUnits <= 0) {
+    return safeBase;
+  }
+
+  final requiredFontSize = maxWidth / estimatedUnits;
+  final fitted = math.min(safeBase, requiredFontSize);
+  return fitted.clamp(safeMin, safeBase).toDouble();
+}
+
+/// Returns [smallClass] when [text] needs downsizing to fit [maxWidth].
+String fittedTextClass(
+  String text, {
+  required double maxWidth,
+  double baseFontSize = 14.0,
+  double minFontSize = 6.0,
+  String normalClass = 'textNormal',
+  String smallClass = 'textSmall',
+}) {
+  final fitted = fitTextFontSize(
+    text,
+    maxWidth: maxWidth,
+    baseFontSize: baseFontSize,
+    minFontSize: minFontSize,
+  );
+
+  /// Tolerance for floating-point comparison.
+  const double epsilon = 0.01;
+  return fitted < (baseFontSize - epsilon) ? smallClass : normalClass;
+}
+
+double _estimateSvgTextUnits(String text) {
+  var units = 0.0;
+  for (final rune in text.runes) {
+    final char = String.fromCharCode(rune);
+
+    if (char == ' ' || char == '\t') {
+      units += 0.35;
+      continue;
+    }
+
+    if ("ilI1|.,:;!'`".contains(char)) {
+      units += 0.35;
+      continue;
+    }
+
+    if ('MW@#%&'.contains(char)) {
+      units += 0.95;
+      continue;
+    }
+
+    if (rune >= 48 && rune <= 57) {
+      units += 0.60;
+      continue;
+    }
+
+    if (rune >= 65 && rune <= 90) {
+      units += 0.67;
+      continue;
+    }
+
+    if (rune >= 97 && rune <= 122) {
+      units += 0.56;
+      continue;
+    }
+
+    units += 0.70;
+  }
+
+  return units;
 }
