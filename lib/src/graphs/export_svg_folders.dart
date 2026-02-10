@@ -1166,7 +1166,7 @@ void _drawEdgeVerticalsFiles(
 
       // Determine the appropriate CSS class based on edge properties
       // Use the actual file top y-coordinate (fileY) for upward detection to avoid badge-offset bias
-      final cssClass = _getFileEdgeCssClass(
+      final cssClass = _getEdgeCssClass(
         source,
         target,
         startY - fileYOffsetUp, // fileY
@@ -1183,26 +1183,6 @@ void _drawEdgeVerticalsFiles(
       );
       edgeCounter++;
     }
-  }
-}
-
-/// Determine the CSS class for a file-to-file edge based on its properties.
-String _getFileEdgeCssClass(
-  String sourceFile,
-  String targetFile,
-  double startY,
-  double endY,
-  Set<String> cycleEdges,
-) {
-  final edgeKey = '$sourceFile->$targetFile';
-
-  // Priority rule: Red (cycle) > Orange (upward) > Default (gradient)
-  if (cycleEdges.contains(edgeKey)) {
-    return 'cycleEdge';
-  } else if (startY > endY) {
-    return 'warningEdge';
-  } else {
-    return 'edgeVertical';
   }
 }
 

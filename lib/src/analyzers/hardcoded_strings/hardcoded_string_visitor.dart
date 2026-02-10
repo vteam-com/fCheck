@@ -373,29 +373,39 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   bool _isInsideBuildMethod(final AstNode node) {
     final MethodDeclaration? method =
         node.thisOrAncestorOfType<MethodDeclaration>();
-    if (method == null) {
-      return false;
-    }
-
-    if (method.name.lexeme == 'build') {
-      return true;
-    }
-
-    return _isWidgetReturnType(method.returnType);
+    return _matchesBuildOrWidgetReturningDeclaration(method);
   }
 
   bool _isInsideWidgetReturnFunction(final AstNode node) {
     final FunctionDeclaration? function =
         node.thisOrAncestorOfType<FunctionDeclaration>();
-    if (function == null) {
-      return false;
-    }
+    return _matchesBuildOrWidgetReturningDeclaration(function);
+  }
 
-    if (function.name.lexeme == 'build') {
+  bool _matchesBuildOrWidgetReturningDeclaration(AstNode? declaration) {
+    if (declaration is MethodDeclaration) {
+      return _isBuildOrWidgetReturning(
+        declaration.name.lexeme,
+        declaration.returnType,
+      );
+    }
+    if (declaration is FunctionDeclaration) {
+      return _isBuildOrWidgetReturning(
+        declaration.name.lexeme,
+        declaration.returnType,
+      );
+    }
+    return false;
+  }
+
+  bool _isBuildOrWidgetReturning(
+    String declarationName,
+    TypeAnnotation? returnType,
+  ) {
+    if (declarationName == 'build') {
       return true;
     }
-
-    return _isWidgetReturnType(function.returnType);
+    return _isWidgetReturnType(returnType);
   }
 
   bool _isWidgetReturnType(final TypeAnnotation? type) {

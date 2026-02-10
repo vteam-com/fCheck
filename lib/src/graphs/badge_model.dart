@@ -175,16 +175,8 @@ class BadgeModel {
     required int count,
     required BadgeDirection direction,
     List<String> peers = const [],
-  }) {
-    return BadgeModel(
-      cx: cx,
-      cy: cy,
-      count: count,
-      direction: direction,
-      isIncoming: true,
-      peers: peers,
-    );
-  }
+  }) =>
+      _createDirectional(cx, cy, count, direction, true, peers);
 
   /// Creates an outgoing badge pointing in the specified direction.
   ///
@@ -201,14 +193,23 @@ class BadgeModel {
     required int count,
     required BadgeDirection direction,
     List<String> peers = const [],
-  }) {
-    return BadgeModel(
-      cx: cx,
-      cy: cy,
-      count: count,
-      direction: direction,
-      isIncoming: false,
-      peers: peers,
-    );
-  }
+  }) =>
+      _createDirectional(cx, cy, count, direction, false, peers);
+
+  static BadgeModel _createDirectional(
+    double cx,
+    double cy,
+    int count,
+    BadgeDirection direction,
+    bool isIncoming,
+    List<String> peers,
+  ) =>
+      BadgeModel(
+        cx: cx,
+        cy: cy,
+        count: count,
+        direction: direction,
+        isIncoming: isIncoming,
+        peers: peers,
+      );
 }

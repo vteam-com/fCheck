@@ -149,16 +149,13 @@ class SecretScanner {
   }
 
   bool _detectAwsAccessKey(String line) {
-    final regex = RegExp(r'AKIA[0-9A-Z]{16}');
-    final matches = regex.allMatches(line);
-    for (final match in matches) {
-      final candidate = match.group(0) ?? '';
-      if (candidate.length == awsAccessKeyLength &&
-          _calculateEntropy(candidate) > awsEntropyThreshold) {
-        return true;
-      }
-    }
-    return false;
+    return _hasMatchingCandidate(
+      line,
+      RegExp(r'AKIA[0-9A-Z]{16}'),
+      (candidate) =>
+          candidate.length == awsAccessKeyLength &&
+          _calculateEntropy(candidate) > awsEntropyThreshold,
+    );
   }
 
   bool _detectGenericSecret(String line) {
@@ -207,18 +204,14 @@ class SecretScanner {
   }
 
   bool _detectBearerToken(String line) {
-    final regex = RegExp(
-      'Bearer\\s+[a-zA-Z0-9_\\-]{${SecretScanner.bearerTokenMinLength},}',
-      caseSensitive: false,
+    return _hasMatchingCandidate(
+      line,
+      RegExp(
+        'Bearer\\s+[a-zA-Z0-9_\\-]{${SecretScanner.bearerTokenMinLength},}',
+        caseSensitive: false,
+      ),
+      (candidate) => _calculateEntropy(candidate) > bearerTokenEntropyThreshold,
     );
-    final matches = regex.allMatches(line);
-    for (final match in matches) {
-      final candidate = match.group(0) ?? '';
-      if (_calculateEntropy(candidate) > bearerTokenEntropyThreshold) {
-        return true;
-      }
-    }
-    return false;
   }
 
   bool _detectPrivateKey(String line) {
@@ -240,23 +233,29 @@ class SecretScanner {
   }
 
   bool _detectGitHubPAT(String line) {
-    final regex = RegExp(r'gh[p|s|o|u|l]_[0-9a-zA-Z]{36}|[gG]ithub_pat_');
-    final matches = regex.allMatches(line);
-    for (final match in matches) {
-      final candidate = match.group(0) ?? '';
-      if (candidate.length >= githubPatMinLength) {
-        return true;
-      }
-    }
-    return false;
+    return _hasMatchingCandidate(
+      line,
+      RegExp(r'gh[p|s|o|u|l]_[0-9a-zA-Z]{36}|[gG]ithub_pat_'),
+      (candidate) => candidate.length >= githubPatMinLength,
+    );
   }
 
   bool _detectHighEntropyString(String line) {
-    final regex = RegExp(r'[a-zA-Z0-9+/]{32,}');
-    final matches = regex.allMatches(line);
-    for (final match in matches) {
+    return _hasMatchingCandidate(
+      line,
+      RegExp(r'[a-zA-Z0-9+/]{32,}'),
+      (candidate) => _calculateEntropy(candidate) > highEntropyThreshold,
+    );
+  }
+
+  bool _hasMatchingCandidate(
+    String line,
+    RegExp regex,
+    bool Function(String) isMatch,
+  ) {
+    for (final match in regex.allMatches(line)) {
       final candidate = match.group(0) ?? '';
-      if (_calculateEntropy(candidate) > highEntropyThreshold) {
+      if (isMatch(candidate)) {
         return true;
       }
     }

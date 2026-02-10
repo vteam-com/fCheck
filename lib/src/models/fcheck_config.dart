@@ -267,14 +267,13 @@ class FcheckConfig {
     String key, {
     required String filePath,
   }) {
-    final value = source[key];
-    if (value == null) {
-      return null;
-    }
-    if (value is YamlMap) {
-      return value;
-    }
-    throw FormatException('`$filePath` field `$key` must be a map.');
+    return _readOptionalValueOfType<YamlMap>(
+      source,
+      key,
+      filePath: filePath,
+      contextPath: key,
+      expectedTypeDescription: 'a map',
+    );
   }
 
   static String? _readOptionalString(
@@ -283,17 +282,14 @@ class FcheckConfig {
     required String filePath,
     required String contextPath,
   }) {
-    if (source == null) {
-      return null;
-    }
-    final value = source[key];
-    if (value == null) {
-      return null;
-    }
-    if (value is String) {
-      return value.trim();
-    }
-    throw FormatException('`$filePath` field `$contextPath` must be a string.');
+    final value = _readOptionalValueOfType<String>(
+      source,
+      key,
+      filePath: filePath,
+      contextPath: contextPath,
+      expectedTypeDescription: 'a string',
+    );
+    return value?.trim();
   }
 
   static List<String> _readStringList(
@@ -439,6 +435,22 @@ class FcheckConfig {
     required String filePath,
     required String contextPath,
   }) {
+    return _readOptionalValueOfType<YamlMap>(
+      source,
+      key,
+      filePath: filePath,
+      contextPath: contextPath,
+      expectedTypeDescription: 'a map',
+    );
+  }
+
+  static T? _readOptionalValueOfType<T>(
+    YamlMap? source,
+    String key, {
+    required String filePath,
+    required String contextPath,
+    required String expectedTypeDescription,
+  }) {
     if (source == null) {
       return null;
     }
@@ -446,10 +458,12 @@ class FcheckConfig {
     if (value == null) {
       return null;
     }
-    if (value is YamlMap) {
+    if (value is T) {
       return value;
     }
-    throw FormatException('`$filePath` field `$contextPath` must be a map.');
+    throw FormatException(
+      '`$filePath` field `$contextPath` must be $expectedTypeDescription.',
+    );
   }
 
   static double _readDoubleInRange(

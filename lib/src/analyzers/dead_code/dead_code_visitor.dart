@@ -2,8 +2,8 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+import 'package:fcheck/src/analyzers/shared/dependency_uri_utils.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
-import 'package:path/path.dart' as p;
 
 /// Collects dead code inputs and unused variable issues for a single file.
 class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
@@ -405,64 +405,19 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     return name.substring(0, typeStart).trimRight();
   }
 
-  bool _isDartFile(String uri) {
-    if (uri.startsWith('dart:')) {
-      return false;
-    }
-    if (uri.startsWith('package:') &&
-        !uri.startsWith('package:$packageName/')) {
-      return false;
-    }
-    if (uri.startsWith('package:$packageName/')) {
-      return uri.endsWith('.dart');
-    }
-    return uri.endsWith('.dart');
-  }
-
   void _addDirectiveDependencies(
     String? uri,
     List<Configuration> configurations,
   ) {
-    _addDependencyIfDart(uri);
-    if (configurations.isEmpty) {
-      return;
-    }
-    for (final configuration in configurations) {
-      _addDependencyIfDart(configuration.uri.stringValue);
-    }
+    addDirectiveDartDependencies(
+      uri: uri,
+      configurations: configurations,
+      packageName: packageName,
+      filePath: filePath,
+      rootPath: rootPath,
+      dependencies: dependencies,
+    );
   }
-
-  void _addDependencyIfDart(String? uri) {
-    if (uri == null || !_isDartFile(uri)) {
-      return;
-    }
-    dependencies.add(_resolveDependency(uri, filePath));
-  }
-
-  String _resolveDependency(String uri, String currentFile) {
-    if (uri.startsWith('package:$packageName/')) {
-      final packagePath = uri.substring('package:$packageName/'.length);
-      return p.join(rootPath, 'lib', packagePath);
-    }
-
-    final currentDir = currentFile.substring(0, currentFile.lastIndexOf('/'));
-    if (uri.startsWith('./')) {
-      return '$currentDir/${uri.substring(_relativeCurrentDirPrefixLength)}';
-    } else if (uri.startsWith('../')) {
-      var resolvedPath = currentDir;
-      var remainingUri = uri;
-      while (remainingUri.startsWith('../')) {
-        resolvedPath = resolvedPath.substring(0, resolvedPath.lastIndexOf('/'));
-        remainingUri = remainingUri.substring(_relativeParentDirPrefixLength);
-      }
-      return '$resolvedPath/$remainingUri';
-    } else {
-      return '$currentDir/$uri';
-    }
-  }
-
-  static const int _relativeCurrentDirPrefixLength = 2;
-  static const int _relativeParentDirPrefixLength = 3;
 }
 
 class _VariableScope {
