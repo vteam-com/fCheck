@@ -7,6 +7,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.8] - 2026-02-10
+
+### Added
+
+- 🆘 Added `--help-ignore` CLI flag to show per-analyzer ignore directives and `.fcheck` ignore setup guidance.
+
+### Changed
+
+- ♻️ Reused layers analysis results from the main analysis pass when generating graph outputs, instead of running a second layers-analysis traversal.
+
+### Fixed
+
+- ⚡ Removed redundant CLI layers-analysis work during regular runs, reducing unnecessary overhead while preserving output behavior.
+
 ## [0.9.7] - 2026-02-10
 
 ### Added
