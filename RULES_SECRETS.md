@@ -1,12 +1,10 @@
-# Rule for Secrets Analysis
+# Rule: Secrets
 
 ## Overview
 
 Scans Dart source for potential secrets and PII using regex and entropy heuristics.
 
-## Entry-Point Contract
-
-See `RULES.md` for the project metadata contract.
+Shared analysis/exclusion conventions are defined in `RULES.md`.
 
 ## What It Flags
 

@@ -1,6 +1,6 @@
 # RULES.md
 
-This file provides guidance on the expectation for contributing to the `fcheck` project and the this repository.
+This file defines baseline contributor expectations for the `fcheck` project and this repository.
 
 ## Project Overview
 
@@ -24,6 +24,9 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
 - `RULES_SORTING.md` for Flutter widget member ordering rules.
 - `RULES_LAYERS.md` for dependency graph and layer analysis rules.
 
+These `RULES_*.md` files are the source of truth for rule behavior. Keep
+`README.md` high-level and avoid duplicating detailed rule internals there.
+
 ## Analyzer Architecture
 
 - `AnalyzeFolder` in `lib/fcheck.dart` wires the CLI analysis pipeline.
@@ -34,6 +37,13 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
 - **Project metadata contract:** `AnalyzeFolder` is the single entry point for analysis and is the only component that reads `pubspec.yaml`.
 - `AnalyzeFolder` reads `pubspec.yaml` once, derives `projectType`, `projectName`, `version`, and `packageName`, and passes these values into delegates/analyzers.
 - Domain analyzers must **not** read `pubspec.yaml` or rescan for project roots; they should rely on values provided by `AnalyzeFolder`.
+
+## Shared Rule Conventions
+
+- File discovery comes from `FileUtils.listDartFiles` (including default excludes and CLI/project excludes).
+- Full-project analysis should run in the unified `AnalyzerRunner` pass.
+- File-level ignore directives are read from leading comments via `IgnoreConfig.hasIgnoreForFileDirective`.
+- Node-level ignores use `// ignore: fcheck_<domain>` on the relevant line for AST-based analyzers.
 
 ## Repository Structure
 

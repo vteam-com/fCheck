@@ -4,9 +4,13 @@ import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_file_data.dar
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 
 /// Analyzer for duplicate code across normalized executable snippets.
+///
+/// This standalone analyzer defaults to a 0.90 similarity threshold. The CLI
+/// path (`AnalyzeFolder`) normally supplies a threshold from `.fcheck`
+/// configuration (default 0.90).
 class DuplicateCodeAnalyzer {
-  /// Default similarity threshold used by the analyzer.
-  static const double defaultSimilarityThreshold = 0.95;
+  /// Default similarity threshold when this analyzer is instantiated directly.
+  static const double defaultSimilarityThreshold = 0.90;
   static const int _minimumSnippetsToCompare = 2;
 
   /// Creates a duplicate-code analyzer.
@@ -17,7 +21,7 @@ class DuplicateCodeAnalyzer {
   /// Minimum required similarity ratio (0.0 to 1.0).
   final double similarityThreshold;
 
-  /// Returns duplicate-code issues for snippets that match above threshold.
+  /// Returns duplicate-code issues for snippets at or above the threshold.
   List<DuplicateCodeIssue> analyze(List<DuplicateCodeFileData> fileData) {
     if (fileData.isEmpty) {
       return <DuplicateCodeIssue>[];

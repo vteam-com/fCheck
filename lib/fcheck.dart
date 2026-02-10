@@ -68,6 +68,9 @@ class AnalyzeFolder {
   final List<String> excludePatterns;
 
   /// Similarity threshold used by duplicate-code analysis.
+  ///
+  /// This value typically comes from `.fcheck` configuration (default `0.90`)
+  /// when invoked through the CLI.
   final double duplicateCodeSimilarityThreshold;
 
   /// Minimum normalized token count for duplicate-code snippets.
@@ -83,6 +86,7 @@ class AnalyzeFolder {
   /// [excludePatterns] optional list of glob patterns to exclude files/folders.
   /// [ignoreConfig] optional configuration for global ignores.
   /// [duplicateCodeSimilarityThreshold] minimum similarity ratio for duplicates.
+  /// CLI usage typically provides this from `.fcheck` (default `0.90`).
   /// [duplicateCodeMinTokenCount] minimum normalized tokens for snippets.
   /// [duplicateCodeMinNonEmptyLineCount] minimum non-empty lines for snippets.
   AnalyzeFolder(

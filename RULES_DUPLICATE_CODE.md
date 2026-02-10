@@ -1,18 +1,16 @@
-# Rule for Duplicate Code Analysis
+# Rule: Duplicate Code
 
 ## Overview
 
 Detects duplicated executable code blocks by comparing normalized token streams
 for functions, methods, and constructors.
 
-## Entry-Point Contract
-
-See `RULES.md` for the project metadata contract.
+Shared analysis/exclusion conventions are defined in `RULES.md`.
 
 ## What It Flags
 
 - **Duplicate blocks**: pairs of executable snippets with matching parameter
-  signatures and similarity >= 90%.
+  signatures and similarity >= the configured threshold.
 
 ## Skips
 
@@ -31,7 +29,7 @@ See `RULES.md` for the project metadata contract.
   - numbers -> `<num>`
   - string literals -> `<str>`
 - `DuplicateCodeAnalyzer` compares snippet pairs with a bounded Levenshtein
-  distance and reports matches at or above 90% similarity.
+  distance and reports matches at or above the configured threshold.
 
 ## Configuration
 
@@ -54,6 +52,9 @@ analyzers:
 ```
 
 If a field is omitted, fcheck falls back to the default for that field.
+
+For direct API usage, `DuplicateCodeAnalyzer()` defaults to `0.90` similarity
+unless a threshold is passed explicitly.
 
 ## Output
 

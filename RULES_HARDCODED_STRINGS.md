@@ -1,9 +1,11 @@
-# Rule for Hardcoded Strings Analysis
+# Rule: Hardcoded Strings
 
 ## Overview
 
 This repo includes the CLI hardcoded-strings analysis, implemented by
 `HardcodedStringDelegate` and `HardcodedStringVisitor`.
+
+Shared analysis/exclusion conventions are defined in `RULES.md`.
 
 ## Project-Type Focus
 
@@ -53,13 +55,6 @@ This repo includes the CLI hardcoded-strings analysis, implemented by
   - Flutter: only string literals used as constructor arguments inside widget/build contexts, and not inside print/logger calls.
   - Dart: only string literals passed to `print()`.
 - In Flutter focus, a fallback scan looks for `Text("...")` literals in the raw source to catch parse-error or AST edge cases.
-
-### Ignore and Exclusions
-
-- File-level ignore uses `IgnoreConfig.hasIgnoreForFileDirective` with `// ignore: fcheck_hardcoded_strings`.
-- File-level ignore also respects `// ignore_for_file: avoid_hardcoded_strings_in_widgets` (third-party custom_lint).
-- Node-level ignore uses `IgnoreConfig.isNodeIgnored` on the literal line.
-- CLI `--exclude` patterns and `FileUtils` default exclusions apply in the unified runner.
 
 ### CLI Output
 

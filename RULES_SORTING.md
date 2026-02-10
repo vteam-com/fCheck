@@ -1,12 +1,10 @@
-# Rule for Sorting Analysis
+# Rule: Sorting
 
 ## Overview
 
 This rule checks ordering of members inside Flutter widget classes and can optionally auto-fix the ordering.
 
-## Entry-Point Contract
-
-See `RULES.md` for the project metadata contract.
+Shared analysis/exclusion conventions are defined in `RULES.md`.
 
 ## Scope
 
@@ -32,8 +30,7 @@ See `RULES.md` for the project metadata contract.
 ## Ignores and Exclusions
 
 - There is no per-file ignore directive for sorting.
-- CLI `--exclude` patterns are honored.
-- Default excluded directories and hidden folders come from `FileUtils.defaultExcludedDirs`.
+- CLI/project excludes and default directory excludes follow `RULES.md`.
 
 ## Output
 

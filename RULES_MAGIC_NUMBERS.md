@@ -1,12 +1,10 @@
-# Rule for Magic Numbers Analysis
+# Rule: Magic Numbers
 
 ## Overview
 
 Detects numeric literals that should likely be expressed as named constants.
 
-## Entry-Point Contract
-
-See `RULES.md` for the project metadata contract.
+Shared analysis/exclusion conventions are defined in `RULES.md`.
 
 ## What It Flags
 

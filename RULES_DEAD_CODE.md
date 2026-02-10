@@ -1,13 +1,11 @@
-# Rule for Dead Code Analysis
+# Rule: Dead Code
 
 ## Overview
 
 Detects unused or unreachable Dart code by combining a dependency graph with
 symbol usage tracking.
 
-## Entry-Point Contract
-
-See `RULES.md` for the project metadata contract.
+Shared analysis/exclusion conventions are defined in `RULES.md`.
 
 ## What It Flags
 

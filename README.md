@@ -1,17 +1,22 @@
 # fcheck
 
-Fast quality checks for Flutter and Dart. Run one command to see architecture issues, risky strings, magic numbers, and high-level project metrics without replacing your existing lint setup.
+Fast quality checks for Flutter and Dart. Run one deterministic command to apply 8 core engineering checks (architecture, risky strings, magic numbers, dead code, duplicates, and more) without replacing your existing lint setup.
 
 ## ✨ Why fcheck
 
-fcheck exists to fill a gap today. The goal is to encourage good engineering practices in the Dart and Flutter ecosystem until these capabilities become first-class in the SDK.
+fcheck exists to fill a gap today. The goal is to encourage good engineering practices in the Dart and Flutter ecosystem until these capabilities become first-class in the Flutter SDK.
 
 - **Easy wins**: actionable checks in a single run
+- **8-in-1 quality guardrail**: vital engineering best-practice checks in one tool
 - **Architectural focus**: layers, one-class-per-file, sorting
 - **Risk detection**: secrets, hardcoded strings, magic numbers
 - **Code surface reduction**: dead code, duplicate code
-- **Fast**: optimized traversal, visible timing
+- **Fast by design**: all 8 checks run from a single parse and folder/file traversal, instead of 8 separate tools re-enumerating files and re-parsing code
+- **Saves time**: no third-party service latency; local runs are typically faster than remote calls
+- **Privacy-first**: your code is inspected locally, with no network calls required
 - **Nice output**: JSON and diagrams when you need them
+- **Deterministic and imperative**: predictable results for repeatable quality workflows
+- **Cost and energy conscious**: ideal for routine checks you do not need to offload to expensive AI agents
 
 ## 🛠️ Installation
 
@@ -47,6 +52,46 @@ fcheck --json
 # Generate all dependency graph outputs
 fcheck --svg --svgfolder --mermaid --plantuml
 ```
+
+## 🧪 Local and CI/CD Workflows
+
+Use the same tool in both places:
+
+- **Local development**: run before commit for quick feedback.
+- **CI/CD pipelines**: run on every PR/push for consistent enforcement.
+
+```bash
+# Local (global install)
+fcheck .
+
+# Local (project-local install)
+dart run fcheck .
+```
+
+Example GitHub Actions workflow:
+
+```yaml
+name: fcheck
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - run: dart pub global activate fcheck
+      - run: dart pub global run fcheck --json > fcheck-report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fcheck-report
+          path: fcheck-report.json
+```
+
+For day-to-day engineering guardrails, deterministic static checks are typically faster, cheaper, and lower-energy than repeatedly running AI-agent workflows for the same structural rules.
 
 ## 📈 Example Output
 
@@ -112,16 +157,9 @@ fcheck --list none       # summary only
 fcheck --list partial    # top 10 per list (default)
 fcheck --list full       # full lists
 fcheck --list filenames  # unique file names only
-
-# Exclude custom patterns
-fcheck --exclude "**/generated/**" --exclude "**/*.g.dart"
-
-# Show excluded files/directories
-fcheck --excluded
-
-# Excluded items as JSON
-fcheck --excluded --json
 ```
+
+For exclusion commands (`--exclude`, `--excluded`), see the Exclusions section below.
 
 ### Visualizations
 
@@ -178,51 +216,52 @@ Text('Title'); // ignore: hardcoded.string
 
 Need to silence a rule? See Ignore Warnings above.
 
+Detailed rule behavior and edge cases are documented in the `RULES*.md` files.
+
 ### One Class Per File Rule
 
-- ✅ **Compliant**: 1 public class per file (or 2 for StatefulWidget)
+- ✅ **Compliant**: 1 public class per file (or 2 for StatefulWidget + `State`)
 - ❌ **Violation**: Too many public classes in one file
+- 📚 **Details**: `RULES.md`
 
 ### Magic Numbers
 
-- 🔍 **Detects**: Numeric literals other than `0`, `1`, or `-1` when they appear inline in code (i.e., not part of an annotation, a `const` declaration, a `static const`, a descriptive `final` numeric, or a `const` expression like const lists/maps/sets/constructors).
-- ✅ **Allows**: Descriptive `const`/`static const`/`final` numerics (name length > 3), annotation values, and all const expressions. Example: `final int defaultRetryCount = 2;` is allowed because the name is descriptive.
-- 🔧 **How to fix**: Replace inline literals with a named `const`/`static const`/`final` value (e.g., `const defaultTimeoutMs = 5000;`) or move the literal into a const expression that already documents intent.
+- 🔍 **Detects**: Inline numeric literals that should usually be named constants.
+- 🔧 **How to fix**: Replace literals with descriptive named values.
+- 📚 **Details**: `RULES_MAGIC_NUMBERS.md`
 
 ### Hardcoded Strings
 
-- ⚠️ **Caution**: Potential user-facing strings (project not localized)
-- ❌ **Error**: Hardcoded strings when localization is enabled
+- ⚠️ **Caution/Error**: Potential user-facing strings that should be localized.
+- 📚 **Details**: `RULES_HARDCODED_STRINGS.md`
 
 ### Secrets Detection
 
-- 🔒 **Security**: Detects API keys, tokens, private keys, and other sensitive information
-- 🚨 **Critical**: AWS keys, GitHub PATs, Stripe keys, emails
-- 📊 **Advanced**: High entropy string detection for unknown secret patterns
+- 🔒 **Security**: Detects API keys, tokens, private keys, and other sensitive patterns.
+- 📚 **Details**: `RULES_SECRETS.md`
 
 ### Dead Code
 
-- 🧹 **Detects**: Dead files, dead classes, dead functions, and unused variables
-- 🎯 **Goal**: Reduce code surface area and improve maintainability
-- 🔍 **How it works**: Builds a dependency graph from imports/exports and tracks symbol usage
-- 🔧 **How to fix**: Remove unused code or reference it explicitly
+- 🧹 **Detects**: Unused files, classes, functions, and variables.
+- 📚 **Details**: `RULES_DEAD_CODE.md`
 
 ### Duplicate Code
 
-- 🧬 **Detects**: Similar executable blocks (functions/methods/constructors) with matching parameter signatures
-- 📏 **Threshold**: Reports pairs that are 85% similar or higher
-- 📦 **Size guard**: By default requires at least 20 normalized tokens and 10 non-empty body lines
-- 🔧 **How to fix**: Extract shared logic into reusable functions/classes
+- 🧬 **Detects**: Similar executable blocks (functions/methods/constructors) with matching parameter signatures.
+- 📏 **Threshold**: Uses the configured similarity threshold (CLI default: 90%).
+- 📦 **Size guard**: Default minimums are 20 normalized tokens and 10 non-empty body lines.
+- 📚 **Details**: `RULES_DUPLICATE_CODE.md`
 
 ### Member Sorting
 
-- 🔧 **Auto-fix**: Reorganizes Flutter class members automatically
-- ✅ **Validates**: Proper order of constructors, fields, methods, lifecycle methods
+- 🔧 **Auto-fix**: Reorganizes Flutter class members automatically.
+- 📚 **Details**: `RULES_SORTING.md`
 
 ### Layers
 
-- 🧭 **Detects**: Layering/cycle issues in file dependency graphs
-- 📈 **Outputs**: Layer count and dependency count in the report
+- 🧭 **Detects**: Layering and cycle issues in dependency graphs.
+- 📈 **Outputs**: Layer count and dependency count in the report.
+- 📚 **Details**: `RULES_LAYERS.md`
 
 ## 🌐 Visualizations
 

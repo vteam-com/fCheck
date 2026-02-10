@@ -1,8 +1,10 @@
-# Rule for Layers Analysis
+# Rule: Layers
 
 ## Overview
 
 Builds a dependency graph between Dart files in the project, reports cycles, and computes layer numbers for visualization.
+
+Shared analysis/exclusion conventions are defined in `RULES.md`.
 
 ## What It Collects
 
