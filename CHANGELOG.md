@@ -9,26 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.9.6] - 2026-02-10
 
+### Added
+
+- 🧬 **Code Duplication Detection**
+  - Duplicate-code analysis for similar executable blocks (functions/methods/constructors) using normalized token comparison.
+  - Added file-level ignore support with `// ignore: fcheck_duplicate_code`.
+  - Support for `.fcheck` options for `similarity_threshold`, `min_tokens`, and `min_non_empty_lines`.
+
 ### Changed
 
-- clarified README positioning for the 8-in-1 deterministic workflow, including local and CI/CD usage
-- reduced duplication and aligned rule documentation across `RULES.md` and all `RULES_*.md` files
-- clarified duplicate-code threshold documentation (`0.90` default via `.fcheck`/CLI, `0.95` default for standalone API instantiation)
+- README positioning as an 8-in-1 deterministic workflow.
 
 ### Fixed
 
 - removed remaining magic-number literals in duplicate-code analyzer utilities by introducing named constants
-- normalized duplicate-code threshold wording to avoid conflicting values in docs
 
 ## [0.9.5] - 2026-02-09
 
 ### Added
 
 - support for .fcheck config file
-- duplicate code analyzer with 85% similarity threshold
-- duplicate code size guard (minimum non-empty lines) and `.fcheck` tuning options
 
-### fixed
+### Fixed
 
 - normalize input path
 
