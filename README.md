@@ -96,7 +96,7 @@ For day-to-day engineering guardrails, deterministic static checks are typically
 ## 📈 Example Output
 
 ```text
-↓--------------------------------- fCheck 0.9.5 ---------------------------------↓
+↓--------------------------------- fCheck 0.9.6 ---------------------------------↓
 Input            : /Users/me/my_app
 Project          : my_app (version: 1.0.0)
 Project Type     : Dart

@@ -7,6 +7,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.6] - 2026-02-10
+
+### Changed
+
+- clarified README positioning for the 8-in-1 deterministic workflow, including local and CI/CD usage
+- reduced duplication and aligned rule documentation across `RULES.md` and all `RULES_*.md` files
+- clarified duplicate-code threshold documentation (`0.90` default via `.fcheck`/CLI, `0.95` default for standalone API instantiation)
+
+### Fixed
+
+- removed remaining magic-number literals in duplicate-code analyzer utilities by introducing named constants
+- normalized duplicate-code threshold wording to avoid conflicting values in docs
+
 ## [0.9.5] - 2026-02-09
 
 ### Added
