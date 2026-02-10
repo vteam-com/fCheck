@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:fcheck/fcheck.dart';
+import 'package:fcheck/src/models/project_type.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -68,6 +69,65 @@ void main() {
 
       expect(metrics.projectName, equals('test_project'));
       expect(metrics.version, equals('1.2.3'));
+    });
+
+    test(
+        'should infer metadata from a single nested pubspec when root has none',
+        () async {
+      final workspaceRoot = Directory('${tempDir.path}/workspace');
+      final nestedProjectRoot = Directory('${workspaceRoot.path}/treepad');
+      final nestedLibDir = Directory('${nestedProjectRoot.path}/lib');
+      await nestedLibDir.create(recursive: true);
+
+      final nestedPubspec = File('${nestedProjectRoot.path}/pubspec.yaml');
+      await nestedPubspec.writeAsString('''
+name: nested_treepad
+version: 2.0.1
+dependencies:
+  flutter:
+    sdk: flutter
+''');
+
+      final nestedDartFile = File('${nestedLibDir.path}/main.dart');
+      await nestedDartFile.writeAsString('void main() {}');
+
+      final analyzer = AnalyzeFolder(workspaceRoot);
+      final metrics = analyzer.analyze();
+
+      expect(metrics.projectName, equals('nested_treepad'));
+      expect(metrics.version, equals('2.0.1'));
+      expect(metrics.projectType, equals(ProjectType.flutter));
+    });
+
+    test('should return unknown when nested pubspec resolution is ambiguous',
+        () async {
+      final monorepoRoot = Directory('${tempDir.path}/monorepo');
+      final projectA = Directory('${monorepoRoot.path}/package_a/lib');
+      final projectB = Directory('${monorepoRoot.path}/package_b/lib');
+      await projectA.create(recursive: true);
+      await projectB.create(recursive: true);
+
+      await File('${monorepoRoot.path}/package_a/pubspec.yaml').writeAsString(
+        '''
+name: package_a
+version: 1.0.0
+''',
+      );
+      await File('${monorepoRoot.path}/package_b/pubspec.yaml').writeAsString(
+        '''
+name: package_b
+version: 1.0.0
+''',
+      );
+      await File('${projectA.path}/a.dart').writeAsString('void main() {}');
+      await File('${projectB.path}/b.dart').writeAsString('void main() {}');
+
+      final analyzer = AnalyzeFolder(monorepoRoot);
+      final metrics = analyzer.analyze();
+
+      expect(metrics.projectName, equals('unknown'));
+      expect(metrics.version, equals('unknown'));
+      expect(metrics.projectType, equals(ProjectType.unknown));
     });
 
     test('should return unknown when no pubspec.yaml exists', () async {

@@ -550,39 +550,28 @@ class _PubspecInfo {
 
   String get packageName => name;
 
+  /// Resolves project metadata from `pubspec.yaml` for [startDir].
+  ///
+  /// Resolution order:
+  /// 1. Normalize [startDir] to an absolute path.
+  /// 2. Walk upward from [startDir] to the filesystem root and use the first
+  ///    `pubspec.yaml` found.
+  /// 3. If no ancestor pubspec exists, inspect Dart files under [startDir] and
+  ///    resolve each file to its nearest ancestor `pubspec.yaml` inside
+  ///    [startDir].
+  /// 4. If all Dart files map to one unique descendant pubspec, use that
+  ///    metadata.
+  ///
+  /// Returns `unknown` metadata when no pubspec can be resolved or when
+  /// multiple descendant pubspecs are discovered (ambiguous/monorepo layout).
   static _PubspecInfo load(Directory startDir) {
-    Directory? currentDir = startDir;
+    final normalizedStartDir = Directory(p.normalize(startDir.absolute.path));
+    Directory? currentDir = normalizedStartDir;
 
     while (currentDir != null) {
       final pubspecFile = File(p.join(currentDir.path, 'pubspec.yaml'));
       if (pubspecFile.existsSync()) {
-        try {
-          final yaml = loadYaml(pubspecFile.readAsStringSync());
-          if (yaml is YamlMap) {
-            final name = _readStringField(yaml, 'name');
-            final version = _readStringField(yaml, 'version');
-            final projectType = _detectProjectType(yaml);
-            return _PubspecInfo(
-              projectRoot: currentDir,
-              name: name,
-              version: version,
-              projectType: projectType,
-            );
-          }
-          return _PubspecInfo(
-            projectRoot: currentDir,
-            name: 'unknown',
-            version: 'unknown',
-            projectType: ProjectType.dart,
-          );
-        } catch (_) {
-          return _PubspecInfo(
-            projectRoot: currentDir,
-            name: 'unknown',
-            version: 'unknown',
-            projectType: ProjectType.unknown,
-          );
-        }
+        return _loadFromPubspecFile(pubspecFile, currentDir);
       }
 
       final parent = currentDir.parent;
@@ -592,6 +581,117 @@ class _PubspecInfo {
       currentDir = parent;
     }
 
+    final descendantPubspecInfo =
+        _loadFromSingleDescendantPubspec(normalizedStartDir);
+    if (descendantPubspecInfo != null) {
+      return descendantPubspecInfo;
+    }
+
+    return _unknown();
+  }
+
+  static _PubspecInfo? _loadFromSingleDescendantPubspec(Directory startDir) {
+    final dartFiles = FileUtils.listDartFiles(startDir);
+    if (dartFiles.isEmpty) {
+      return null;
+    }
+
+    final Set<String> pubspecPaths = <String>{};
+    final Map<String, File> pubspecByPath = <String, File>{};
+    for (final dartFile in dartFiles) {
+      final pubspecFile = _findNearestPubspecForFile(
+        dartFile: dartFile,
+        rootDirectory: startDir,
+      );
+      if (pubspecFile == null) {
+        return null;
+      }
+
+      final pubspecPath = p.normalize(pubspecFile.absolute.path);
+      pubspecPaths.add(pubspecPath);
+      pubspecByPath[pubspecPath] = pubspecFile;
+
+      if (pubspecPaths.length > 1) {
+        return null;
+      }
+    }
+
+    if (pubspecPaths.length != 1) {
+      return null;
+    }
+
+    final pubspecFile = pubspecByPath[pubspecPaths.single];
+    if (pubspecFile == null) {
+      return null;
+    }
+
+    return _loadFromPubspecFile(pubspecFile, pubspecFile.parent);
+  }
+
+  static File? _findNearestPubspecForFile({
+    required File dartFile,
+    required Directory rootDirectory,
+  }) {
+    final normalizedRootPath = p.normalize(rootDirectory.absolute.path);
+    Directory currentDir = dartFile.parent;
+
+    while (_isSameOrWithin(normalizedRootPath, currentDir.absolute.path)) {
+      final pubspecFile = File(p.join(currentDir.path, 'pubspec.yaml'));
+      if (pubspecFile.existsSync()) {
+        return pubspecFile;
+      }
+
+      final parent = currentDir.parent;
+      if (parent.path == currentDir.path) {
+        break;
+      }
+      currentDir = parent;
+    }
+
+    return null;
+  }
+
+  static bool _isSameOrWithin(String rootPath, String candidatePath) {
+    final normalizedRootPath = p.normalize(rootPath);
+    final normalizedCandidatePath = p.normalize(candidatePath);
+    return normalizedRootPath == normalizedCandidatePath ||
+        p.isWithin(normalizedRootPath, normalizedCandidatePath);
+  }
+
+  static _PubspecInfo _loadFromPubspecFile(
+    File pubspecFile,
+    Directory projectRoot,
+  ) {
+    try {
+      final yaml = loadYaml(pubspecFile.readAsStringSync());
+      if (yaml is YamlMap) {
+        final name = _readStringField(yaml, 'name');
+        final version = _readStringField(yaml, 'version');
+        final projectType = _detectProjectType(yaml);
+        return _PubspecInfo(
+          projectRoot: projectRoot,
+          name: name,
+          version: version,
+          projectType: projectType,
+        );
+      }
+      return _PubspecInfo(
+        projectRoot: projectRoot,
+        name: 'unknown',
+        version: 'unknown',
+        projectType: ProjectType.dart,
+      );
+    } catch (_) {
+      return _PubspecInfo(
+        projectRoot: projectRoot,
+        name: 'unknown',
+        version: 'unknown',
+        projectType: ProjectType.unknown,
+      );
+    }
+  }
+
+  static _PubspecInfo _unknown() {
     return const _PubspecInfo(
       projectRoot: null,
       name: 'unknown',
