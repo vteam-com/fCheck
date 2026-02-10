@@ -32,9 +32,18 @@ class SecretIssue {
       };
 
   @override
-  String toString() {
-    final location = filePath != null && lineNumber != null
-        ? '$filePath:$lineNumber'
+  String toString() => format();
+
+  /// Returns a formatted issue line for CLI output.
+  String format({int? lineNumberWidth}) {
+    final hasLocationLine = filePath != null && lineNumber != null;
+    final lineNumberText = hasLocationLine
+        ? (lineNumberWidth == null
+            ? '$lineNumber'
+            : lineNumber!.toString().padLeft(lineNumberWidth))
+        : null;
+    final location = hasLocationLine
+        ? '$filePath:$lineNumberText'
         : filePath ?? 'unknown location';
     return 'Secret issue at $location: $secretType';
   }

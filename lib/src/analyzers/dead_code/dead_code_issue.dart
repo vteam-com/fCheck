@@ -58,10 +58,18 @@ class DeadCodeIssue {
   }
 
   @override
-  String toString() {
-    final location = lineNumber != null && lineNumber! > 0
-        ? '$filePath:$lineNumber'
-        : filePath;
+  String toString() => format();
+
+  /// Returns a formatted issue line for CLI output.
+  String format({int? lineNumberWidth}) {
+    final formattedLineNumber = lineNumber != null && lineNumber! > 0
+        ? (lineNumberWidth == null
+            ? '$lineNumber'
+            : lineNumber!.toString().padLeft(lineNumberWidth))
+        : null;
+    final location = formattedLineNumber == null
+        ? filePath
+        : '$filePath:$formattedLineNumber';
     final ownerSuffix = owner == null || owner!.isEmpty ? '' : ' in $owner';
     if (name.isEmpty) {
       return '$location: $typeLabel$ownerSuffix';

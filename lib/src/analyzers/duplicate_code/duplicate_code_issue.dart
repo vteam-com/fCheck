@@ -47,11 +47,25 @@ class DuplicateCodeIssue {
   int get similarityPercentRoundedDown => similarityPercent.floor();
 
   @override
-  String toString() {
+  String toString() => format();
+
+  /// Returns a formatted issue line for CLI output.
+  String format({
+    int? similarityPercentWidth,
+    int? lineCountWidth,
+  }) {
     final (displayFirstPath, displaySecondPath) =
         _stripCommonAbsolutePrefix(firstFilePath, secondFilePath);
     final lineLabel = lineCount == 1 ? 'line' : 'lines';
-    return '$similarityPercentRoundedDown% ($lineCount $lineLabel) '
+    final similarityText = similarityPercentWidth == null
+        ? '$similarityPercentRoundedDown'
+        : similarityPercentRoundedDown.toString().padLeft(
+              similarityPercentWidth,
+            );
+    final lineCountText = lineCountWidth == null
+        ? '$lineCount'
+        : lineCount.toString().padLeft(lineCountWidth);
+    return '$similarityText% ($lineCountText $lineLabel) '
         '$displayFirstPath:$firstLineNumber <-> '
         '$displaySecondPath:$secondLineNumber '
         '($firstSymbol, $secondSymbol)';

@@ -30,7 +30,15 @@ class HardcodedStringIssue {
   ///
   /// Returns a formatted string describing the issue.
   @override
-  String toString() => '$filePath:$lineNumber: "$value"';
+  String toString() => format();
+
+  /// Returns a formatted issue line for CLI output.
+  String format({int? lineNumberWidth}) {
+    final lineNumberText = lineNumberWidth == null
+        ? '$lineNumber'
+        : lineNumber.toString().padLeft(lineNumberWidth);
+    return '$filePath:$lineNumberText: "$value"';
+  }
 
   /// Converts this issue to a JSON-compatible map.
   Map<String, dynamic> toJson() => {

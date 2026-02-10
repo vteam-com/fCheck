@@ -25,6 +25,17 @@ class SourceSortIssue {
   /// A description of the sorting issue.
   final String description;
 
+  @override
+  String toString() => format();
+
+  /// Returns a formatted issue line for CLI output.
+  String format({int? lineNumberWidth}) {
+    final lineNumberText = lineNumberWidth == null
+        ? '$lineNumber'
+        : lineNumber.toString().padLeft(lineNumberWidth);
+    return '$filePath:$lineNumberText ($className)';
+  }
+
   /// Converts this issue to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
         'filePath': filePath,

@@ -34,6 +34,17 @@ List<String> _uniqueFilePaths(Iterable<String?> paths) {
   return result;
 }
 
+int _maxIntWidth(Iterable<int> values) {
+  var maxWidth = 0;
+  for (final value in values) {
+    final width = value.toString().length;
+    if (width > maxWidth) {
+      maxWidth = width;
+    }
+  }
+  return maxWidth;
+}
+
 /// Builds console report lines for [ProjectMetrics].
 List<String> buildReportLines(
   ProjectMetrics metrics, {
@@ -173,9 +184,12 @@ List<String> buildReportLines(
         addLine('  - $path');
       }
     } else {
+      final classCountWidth =
+          _maxIntWidth(nonCompliant.map((metric) => metric.classCount));
       for (final metric in nonCompliant) {
-        addLine(
-            '  - ${metric.path} (${formatCount(metric.classCount)} classes found)');
+        final classCountText =
+            metric.classCount.toString().padLeft(classCountWidth);
+        addLine('  - ${metric.path} ($classCountText classes found)');
       }
     }
     addLine('');
@@ -195,8 +209,10 @@ List<String> buildReportLines(
         addLine('  - $path');
       }
     } else {
-      for (final issue in _issuesForMode(hardcodedStringIssues, listMode)) {
-        addLine('  - $issue');
+      final visibleHardcodedIssues =
+          _issuesForMode(hardcodedStringIssues, listMode).toList();
+      for (final issue in visibleHardcodedIssues) {
+        addLine('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
           hardcodedStringIssues.length > _maxIssuesToShow) {
@@ -217,8 +233,10 @@ List<String> buildReportLines(
           addLine('  - $path');
         }
       } else {
-        for (final issue in _issuesForMode(hardcodedStringIssues, listMode)) {
-          addLine('  - $issue');
+        final visibleHardcodedIssues =
+            _issuesForMode(hardcodedStringIssues, listMode).toList();
+        for (final issue in visibleHardcodedIssues) {
+          addLine('  - ${issue.format()}');
         }
       }
       addLine('');
@@ -239,8 +257,10 @@ List<String> buildReportLines(
         addLine('  - $path');
       }
     } else {
-      for (final issue in _issuesForMode(magicNumberIssues, listMode)) {
-        addLine('  - $issue');
+      final visibleMagicNumberIssues =
+          _issuesForMode(magicNumberIssues, listMode).toList();
+      for (final issue in visibleMagicNumberIssues) {
+        addLine('  - ${issue.format()}');
       }
       addLine('');
       if (listMode == ReportListMode.partial &&
@@ -266,9 +286,10 @@ List<String> buildReportLines(
         addLine('  - $path');
       }
     } else {
-      for (final issue in _issuesForMode(sourceSortIssues, listMode)) {
-        addLine(
-            '  - ${issue.filePath}:${formatCount(issue.lineNumber)} (${issue.className})');
+      final visibleSourceSortIssues =
+          _issuesForMode(sourceSortIssues, listMode).toList();
+      for (final issue in visibleSourceSortIssues) {
+        addLine('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
           sourceSortIssues.length > _maxIssuesToShow) {
@@ -292,8 +313,10 @@ List<String> buildReportLines(
         addLine('  - $path');
       }
     } else {
-      for (final issue in _issuesForMode(secretIssues, listMode)) {
-        addLine('  - $issue');
+      final visibleSecretIssues =
+          _issuesForMode(secretIssues, listMode).toList();
+      for (final issue in visibleSecretIssues) {
+        addLine('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
           secretIssues.length > _maxIssuesToShow) {
@@ -324,8 +347,10 @@ List<String> buildReportLines(
           addLine('    - $path');
         }
       } else {
-        for (final issue in _issuesForMode(deadFileIssues, listMode)) {
-          addLine('    - $issue');
+        final visibleDeadFileIssues =
+            _issuesForMode(deadFileIssues, listMode).toList();
+        for (final issue in visibleDeadFileIssues) {
+          addLine('    - ${issue.format()}');
         }
         if (listMode == ReportListMode.partial &&
             deadFileIssues.length > _maxIssuesToShow) {
@@ -347,8 +372,10 @@ List<String> buildReportLines(
           addLine('    - $path');
         }
       } else {
-        for (final issue in _issuesForMode(deadClassIssues, listMode)) {
-          addLine('    - $issue');
+        final visibleDeadClassIssues =
+            _issuesForMode(deadClassIssues, listMode).toList();
+        for (final issue in visibleDeadClassIssues) {
+          addLine('    - ${issue.format()}');
         }
         if (listMode == ReportListMode.partial &&
             deadClassIssues.length > _maxIssuesToShow) {
@@ -370,8 +397,10 @@ List<String> buildReportLines(
           addLine('    - $path');
         }
       } else {
-        for (final issue in _issuesForMode(deadFunctionIssues, listMode)) {
-          addLine('    - $issue');
+        final visibleDeadFunctionIssues =
+            _issuesForMode(deadFunctionIssues, listMode).toList();
+        for (final issue in visibleDeadFunctionIssues) {
+          addLine('    - ${issue.format()}');
         }
         if (listMode == ReportListMode.partial &&
             deadFunctionIssues.length > _maxIssuesToShow) {
@@ -394,8 +423,10 @@ List<String> buildReportLines(
           addLine('    - $path');
         }
       } else {
-        for (final issue in _issuesForMode(unusedVariableIssues, listMode)) {
-          addLine('    - $issue');
+        final visibleUnusedVariableIssues =
+            _issuesForMode(unusedVariableIssues, listMode).toList();
+        for (final issue in visibleUnusedVariableIssues) {
+          addLine('    - ${issue.format()}');
         }
         if (listMode == ReportListMode.partial &&
             unusedVariableIssues.length > _maxIssuesToShow) {
@@ -426,8 +457,19 @@ List<String> buildReportLines(
         addLine('  - $path');
       }
     } else {
-      for (final issue in _issuesForMode(duplicateCodeIssues, listMode)) {
-        addLine('  - $issue');
+      final visibleDuplicateCodeIssues =
+          _issuesForMode(duplicateCodeIssues, listMode).toList();
+      final duplicateSimilarityWidth = _maxIntWidth(
+        visibleDuplicateCodeIssues
+            .map((issue) => issue.similarityPercentRoundedDown),
+      );
+      final duplicateLineCountWidth = _maxIntWidth(
+        visibleDuplicateCodeIssues.map((issue) => issue.lineCount),
+      );
+      for (final issue in visibleDuplicateCodeIssues) {
+        addLine(
+          '  - ${issue.format(similarityPercentWidth: duplicateSimilarityWidth, lineCountWidth: duplicateLineCountWidth)}',
+        );
       }
       if (listMode == ReportListMode.partial &&
           duplicateCodeIssues.length > _maxIssuesToShow) {
