@@ -565,7 +565,7 @@ void main() {
 
       expect(duplicateLines, hasLength(3));
       expect(duplicateLines[0], contains('100% (16 lines)'));
-      expect(duplicateLines[1], contains('100% (9 lines)'));
+      expect(duplicateLines[1], contains('100% ( 9 lines)'));
       expect(duplicateLines[2], contains('95% (30 lines)'));
     });
 
