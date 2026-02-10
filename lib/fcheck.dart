@@ -341,6 +341,7 @@ class AnalyzeFolder {
       layersEdgeCount: layersResult.edgeCount,
       layersCount: layersResult.layerCount,
       dependencyGraph: layersResult.dependencyGraph,
+      layersByFile: layersResult.layers,
       projectName: projectName,
       projectType: projectType,
       version: projectVersion,

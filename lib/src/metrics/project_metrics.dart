@@ -66,6 +66,11 @@ class ProjectMetrics {
   /// The dependency graph used for analysis (filePath -> list of dependencies).
   final Map<String, List<String>> dependencyGraph;
 
+  /// Per-file layer assignments computed during layers analysis.
+  ///
+  /// This is used by CLI graph exporters to avoid re-running layers analysis.
+  final Map<String, int> layersByFile;
+
   /// Number of files successfully skipped based on exclusion glob patterns.
   final int excludedFilesCount;
 
@@ -145,6 +150,7 @@ class ProjectMetrics {
     required this.layersEdgeCount,
     required this.layersCount,
     required this.dependencyGraph,
+    this.layersByFile = const {},
     required this.projectName,
     required this.version,
     required this.projectType,

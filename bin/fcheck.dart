@@ -3,6 +3,7 @@ import 'package:fcheck/src/graphs/export_mermaid.dart';
 import 'package:fcheck/src/graphs/export_plantuml.dart';
 import 'package:fcheck/src/graphs/export_svg.dart';
 import 'package:fcheck/src/graphs/export_svg_folders.dart';
+import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/version.dart';
@@ -130,13 +131,17 @@ void main(List<String> arguments) {
       printReportLines(buildReportLines(metrics, listMode: input.listMode));
     }
 
-    // Generate layer analysis result for visualization
-    final layersResult = engine.analyzeLayers();
-
     if (input.generateSvg ||
         input.generateMermaid ||
         input.generatePlantUML ||
         input.generateFolderSvg) {
+      // Generate layer analysis result for visualization
+      final layersResult = LayersAnalysisResult(
+        issues: metrics.layersIssues,
+        layers: metrics.layersByFile,
+        dependencyGraph: metrics.dependencyGraph,
+      );
+
       if (!input.outputJson) {
         printOutputFilesHeader();
       }
