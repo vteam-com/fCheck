@@ -278,6 +278,7 @@ void main() {
       expect(json['project'], isNotNull);
       expect(json['stats'], isNotNull);
       expect(json['stats']['excludedFiles'], isNotNull);
+      expect(json['stats']['duplicateCodeIssues'], isNotNull);
       expect(json['layers']['dependencies'], isNotNull);
       final graph = json['layers']['graph'] as Map<String, dynamic>;
       expect(graph.keys.any((k) => k.endsWith('a.dart')), isTrue);
@@ -415,6 +416,42 @@ analyzers:
       final graph = json['layers']['graph'] as Map<String, dynamic>;
       expect(graph.keys.length, equals(1));
       expect(graph.keys.first, contains('app/main.dart'));
+    });
+
+    test('should apply duplicate code options from .fcheck', () async {
+      File('${tempDir.path}/a.dart').writeAsStringSync('''
+int a(int x) {
+  return x + 1;
+}
+''');
+      File('${tempDir.path}/b.dart').writeAsStringSync('''
+int b(int x) {
+  return x + 1;
+}
+''');
+      File('${tempDir.path}/.fcheck').writeAsStringSync('''
+analyzers:
+  default: off
+  enabled:
+    - duplicate_code
+  options:
+    duplicate_code:
+      similarity_threshold: 0.85
+      min_tokens: 1
+      min_non_empty_lines: 1
+''');
+
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', '--input', tempDir.path, '--json'],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      final json = jsonDecode(result.stdout as String) as Map<String, dynamic>;
+      final stats = json['stats'] as Map<String, dynamic>;
+      expect(stats['duplicateCodeIssues'], equals(1));
     });
 
     test('should fail with readable error for invalid .fcheck', () async {

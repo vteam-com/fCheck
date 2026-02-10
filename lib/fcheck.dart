@@ -31,6 +31,9 @@ import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_analyzer.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_analyzer.dart';
+import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_file_data.dart';
+import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart';
 import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
@@ -64,18 +67,36 @@ class AnalyzeFolder {
   /// List of glob patterns to exclude from analysis.
   final List<String> excludePatterns;
 
+  /// Similarity threshold used by duplicate-code analysis.
+  final double duplicateCodeSimilarityThreshold;
+
+  /// Minimum normalized token count for duplicate-code snippets.
+  final int duplicateCodeMinTokenCount;
+
+  /// Minimum non-empty lines for duplicate-code snippets.
+  final int duplicateCodeMinNonEmptyLineCount;
+
   /// Creates a new analyzer engine for the specified project directory.
   ///
   /// [projectDir] should point to the root of a Flutter/Dart project.
   /// [fix] if true, automatically fixes sorting issues by writing sorted code back to files.
   /// [excludePatterns] optional list of glob patterns to exclude files/folders.
   /// [ignoreConfig] optional configuration for global ignores.
+  /// [duplicateCodeSimilarityThreshold] minimum similarity ratio for duplicates.
+  /// [duplicateCodeMinTokenCount] minimum normalized tokens for snippets.
+  /// [duplicateCodeMinNonEmptyLineCount] minimum non-empty lines for snippets.
   AnalyzeFolder(
     this.projectDir, {
     this.fix = false,
     this.excludePatterns = const [],
     this.ignoreConfig = const {},
     this.enabledAnalyzers,
+    this.duplicateCodeSimilarityThreshold =
+        DuplicateCodeAnalyzer.defaultSimilarityThreshold,
+    this.duplicateCodeMinTokenCount =
+        DuplicateCodeDelegate.defaultMinTokenCount,
+    this.duplicateCodeMinNonEmptyLineCount =
+        DuplicateCodeDelegate.defaultMinNonEmptyLineCount,
   });
 
   /// Global ignore configuration from .fcheck file and constructor.
@@ -196,6 +217,8 @@ class AnalyzeFolder {
     final layersEnabled = _isAnalyzerEnabled(AnalyzerDomain.layers);
     final secretsEnabled = _isAnalyzerEnabled(AnalyzerDomain.secrets);
     final deadCodeEnabled = _isAnalyzerEnabled(AnalyzerDomain.deadCode);
+    final duplicateCodeEnabled =
+        _isAnalyzerEnabled(AnalyzerDomain.duplicateCode);
     final hardcodedStringsFocus = projectType == ProjectType.flutter
         ? HardcodedStringFocus.flutterWidgets
         : projectType == ProjectType.dart
@@ -210,6 +233,11 @@ class AnalyzeFolder {
       if (sourceSortingEnabled) SourceSortDelegate(fix: fix),
       if (layersEnabled) LayersDelegate(projectRoot, pubspecInfo.packageName),
       if (secretsEnabled) SecretDelegate(),
+      if (duplicateCodeEnabled)
+        DuplicateCodeDelegate(
+          minTokenCount: duplicateCodeMinTokenCount,
+          minNonEmptyLineCount: duplicateCodeMinNonEmptyLineCount,
+        ),
       if (deadCodeEnabled)
         DeadCodeDelegate(
           projectRoot: projectRoot,
@@ -238,6 +266,19 @@ class AnalyzeFolder {
     final sourceSortIssues =
         allListResults.whereType<SourceSortIssue>().toList();
     final secretIssues = allListResults.whereType<SecretIssue>().toList();
+    final duplicateCodeFileDataRaw = duplicateCodeEnabled
+        ? (unifiedResult.resultsByType[DuplicateCodeFileData] ?? <dynamic>[])
+        : <dynamic>[];
+
+    final duplicateCodeIssues = duplicateCodeEnabled
+        ? DuplicateCodeAnalyzer(
+            similarityThreshold: duplicateCodeSimilarityThreshold,
+          ).analyze(
+            duplicateCodeFileDataRaw
+                .whereType<DuplicateCodeFileData>()
+                .toList(),
+          )
+        : <DuplicateCodeIssue>[];
 
     final deadCodeFileDataRaw = deadCodeEnabled
         ? (unifiedResult.resultsByType[DeadCodeFileData] ?? <dynamic>[])
@@ -302,6 +343,7 @@ class AnalyzeFolder {
       usesLocalization: usesLocalization,
       excludedFilesCount: excludedDartFilesCount,
       secretIssues: secretIssues,
+      duplicateCodeIssues: duplicateCodeIssues,
       deadCodeIssues: deadCodeIssues,
       oneClassPerFileAnalyzerEnabled: oneClassPerFileEnabled,
       hardcodedStringsAnalyzerEnabled: hardcodedStringsEnabled,
@@ -310,6 +352,7 @@ class AnalyzeFolder {
       layersAnalyzerEnabled: layersEnabled,
       secretsAnalyzerEnabled: secretsEnabled,
       deadCodeAnalyzerEnabled: deadCodeEnabled,
+      duplicateCodeAnalyzerEnabled: duplicateCodeEnabled,
     );
   }
 

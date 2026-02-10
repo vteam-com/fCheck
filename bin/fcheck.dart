@@ -86,6 +86,11 @@ void main(List<String> arguments) {
       fix: input.fix,
       excludePatterns: effectiveExcludePatterns,
       enabledAnalyzers: fcheckConfig.effectiveEnabledAnalyzers,
+      duplicateCodeSimilarityThreshold:
+          fcheckConfig.duplicateCodeSimilarityThreshold,
+      duplicateCodeMinTokenCount: fcheckConfig.duplicateCodeMinTokens,
+      duplicateCodeMinNonEmptyLineCount:
+          fcheckConfig.duplicateCodeMinNonEmptyLines,
     );
 
     // Handle excluded files listing

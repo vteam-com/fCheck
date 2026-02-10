@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - support for .fcheck config file
+- duplicate code analyzer with 85% similarity threshold
+- duplicate code size guard (minimum non-empty lines) and `.fcheck` tuning options
 
 ### fixed
 

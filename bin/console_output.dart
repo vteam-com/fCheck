@@ -54,6 +54,48 @@ List<String> buildReportLines(
   final magicNumberIssues = metrics.magicNumberIssues;
   final secretIssues = metrics.secretIssues;
   final deadCodeIssues = metrics.deadCodeIssues;
+  final duplicateCodeIssues = [...metrics.duplicateCodeIssues];
+  duplicateCodeIssues.sort((left, right) {
+    final similarityCompare = right.similarity.compareTo(left.similarity);
+    if (similarityCompare != 0) {
+      return similarityCompare;
+    }
+
+    final lineCountCompare = right.lineCount.compareTo(left.lineCount);
+    if (lineCountCompare != 0) {
+      return lineCountCompare;
+    }
+
+    final firstPathCompare = left.firstFilePath.compareTo(right.firstFilePath);
+    if (firstPathCompare != 0) {
+      return firstPathCompare;
+    }
+
+    final secondPathCompare =
+        left.secondFilePath.compareTo(right.secondFilePath);
+    if (secondPathCompare != 0) {
+      return secondPathCompare;
+    }
+
+    final firstLineCompare =
+        left.firstLineNumber.compareTo(right.firstLineNumber);
+    if (firstLineCompare != 0) {
+      return firstLineCompare;
+    }
+
+    final secondLineCompare =
+        left.secondLineNumber.compareTo(right.secondLineNumber);
+    if (secondLineCompare != 0) {
+      return secondLineCompare;
+    }
+
+    final firstSymbolCompare = left.firstSymbol.compareTo(right.firstSymbol);
+    if (firstSymbolCompare != 0) {
+      return firstSymbolCompare;
+    }
+
+    return left.secondSymbol.compareTo(right.secondSymbol);
+  });
   final deadFileIssues = metrics.deadFileIssues;
   final deadClassIssues = metrics.deadClassIssues;
   final deadFunctionIssues = metrics.deadFunctionIssues;
@@ -65,6 +107,7 @@ List<String> buildReportLines(
   final sourceSortingAnalyzerEnabled = metrics.sourceSortingAnalyzerEnabled;
   final secretsAnalyzerEnabled = metrics.secretsAnalyzerEnabled;
   final deadCodeAnalyzerEnabled = metrics.deadCodeAnalyzerEnabled;
+  final duplicateCodeAnalyzerEnabled = metrics.duplicateCodeAnalyzerEnabled;
   final layersAnalyzerEnabled = metrics.layersAnalyzerEnabled;
   final layersCount = metrics.layersCount;
   final layersEdgeCount = metrics.layersEdgeCount;
@@ -102,6 +145,8 @@ List<String> buildReportLines(
       'Secrets          : ${secretsAnalyzerEnabled ? formatCount(secretIssues.length) : 'disabled'}');
   addLine(
       'Dead Code        : ${deadCodeAnalyzerEnabled ? formatCount(deadCodeIssues.length) : 'disabled'}');
+  addLine(
+      'Duplicate Code   : ${duplicateCodeAnalyzerEnabled ? formatCount(duplicateCodeIssues.length) : 'disabled'}');
   addLine(
       'Layers           : ${layersAnalyzerEnabled ? formatCount(layersCount) : 'disabled'}');
   addLine(
@@ -360,6 +405,36 @@ List<String> buildReportLines(
       }
     }
 
+    addLine('');
+  }
+
+  if (!duplicateCodeAnalyzerEnabled) {
+    addLine('${skipTag()} Duplicate code check skipped (disabled).');
+  } else if (duplicateCodeIssues.isEmpty) {
+    addLine('${okTag()} Duplicate code check passed.');
+  } else {
+    addLine(
+        '${warnTag()} ${formatCount(duplicateCodeIssues.length)} duplicate code blocks detected:');
+    if (filenamesOnly) {
+      final filePaths = _uniqueFilePaths(
+        duplicateCodeIssues.expand((issue) => [
+              issue.firstFilePath,
+              issue.secondFilePath,
+            ]),
+      );
+      for (final path in filePaths) {
+        addLine('  - $path');
+      }
+    } else {
+      for (final issue in _issuesForMode(duplicateCodeIssues, listMode)) {
+        addLine('  - $issue');
+      }
+      if (listMode == ReportListMode.partial &&
+          duplicateCodeIssues.length > _maxIssuesToShow) {
+        addLine(
+            '  ... and ${formatCount(duplicateCodeIssues.length - _maxIssuesToShow)} more');
+      }
+    }
     addLine('');
   }
 

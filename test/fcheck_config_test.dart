@@ -23,6 +23,20 @@ void main() {
       expect(config.excludePatterns, isEmpty);
       expect(config.resolveAnalysisDirectory().path, equals(tempDir.path));
       expect(
+        config.duplicateCodeSimilarityThreshold,
+        equals(FcheckConfig.defaultDuplicateCodeSimilarityThreshold),
+      );
+      expect(
+        config.duplicateCodeMinTokens,
+        equals(20),
+      );
+      expect(
+        config.duplicateCodeMinNonEmptyLines,
+        equals(10),
+      );
+      expect(FcheckConfig.defaultDuplicateCodeMinTokens, equals(20));
+      expect(FcheckConfig.defaultDuplicateCodeMinNonEmptyLines, equals(10));
+      expect(
         config.effectiveEnabledAnalyzers,
         equals(AnalyzerDomain.values.toSet()),
       );
@@ -57,6 +71,7 @@ analyzers:
   enabled:
     - magic_numbers
     - secrets
+    - duplicate_code
 ''');
 
       final config = FcheckConfig.loadForInputDirectory(tempDir);
@@ -65,6 +80,7 @@ analyzers:
         equals({
           AnalyzerDomain.magicNumbers,
           AnalyzerDomain.secrets,
+          AnalyzerDomain.duplicateCode,
         }),
       );
     });
@@ -104,6 +120,23 @@ analyzers:
         () => FcheckConfig.loadForInputDirectory(tempDir),
         throwsA(isA<FormatException>()),
       );
+    });
+
+    test('reads duplicate code options', () {
+      File(p.join(tempDir.path, '.fcheck')).writeAsStringSync('''
+analyzers:
+  options:
+    duplicate_code:
+      similarity_threshold: 0.9
+      min_tokens: 35
+      min_non_empty_lines: 12
+''');
+
+      final config = FcheckConfig.loadForInputDirectory(tempDir);
+
+      expect(config.duplicateCodeSimilarityThreshold, equals(0.9));
+      expect(config.duplicateCodeMinTokens, equals(35));
+      expect(config.duplicateCodeMinNonEmptyLines, equals(12));
     });
   });
 }

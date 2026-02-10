@@ -9,7 +9,7 @@ fcheck exists to fill a gap today. The goal is to encourage good engineering pra
 - **Easy wins**: actionable checks in a single run
 - **Architectural focus**: layers, one-class-per-file, sorting
 - **Risk detection**: secrets, hardcoded strings, magic numbers
-- **Code surface reduction**: dead code
+- **Code surface reduction**: dead code, duplicate code
 - **Fast**: optimized traversal, visible timing
 - **Nice output**: JSON and diagrams when you need them
 
@@ -67,6 +67,7 @@ Hardcoded Strings: 7 (warning)
 Magic Numbers    : 0
 Secrets          : 0
 Dead Code        : 0
+Duplicate Code   : 0
 Layers           : 6
 Dependencies     : 73
 ↓····································· Lists ·····································↓
@@ -76,6 +77,7 @@ Dependencies     : 73
 [✓] Flutter class member sorting passed.
 [✓] Secrets scan passed.
 [✓] Dead code check passed.
+[✓] Duplicate code check passed.
 [✓] Layers architecture check passed.
 ↓································· Output files ·································↓
 SVG layers         : /Users/me/my_app/layers.svg
@@ -156,6 +158,7 @@ or ignore an entire file by placing a directive at the top (before any code).
 // ignore: fcheck_magic_numbers
 // ignore: fcheck_secrets
 // ignore: fcheck_dead_code
+// ignore: fcheck_duplicate_code
 // ignore: fcheck_layers
 // ignore: fcheck_one_class_per_file
 ```
@@ -203,6 +206,13 @@ Need to silence a rule? See Ignore Warnings above.
 - 🎯 **Goal**: Reduce code surface area and improve maintainability
 - 🔍 **How it works**: Builds a dependency graph from imports/exports and tracks symbol usage
 - 🔧 **How to fix**: Remove unused code or reference it explicitly
+
+### Duplicate Code
+
+- 🧬 **Detects**: Similar executable blocks (functions/methods/constructors) with matching parameter signatures
+- 📏 **Threshold**: Reports pairs that are 85% similar or higher
+- 📦 **Size guard**: By default requires at least 20 normalized tokens and 10 non-empty body lines
+- 🔧 **How to fix**: Extract shared logic into reusable functions/classes
 
 ### Member Sorting
 
@@ -355,6 +365,18 @@ Supported analyzer names:
 - `layers`
 - `secrets`
 - `dead_code`
+- `duplicate_code`
+
+Duplicate code options can be tuned in `.fcheck`:
+
+```yaml
+analyzers:
+  options:
+    duplicate_code:
+      similarity_threshold: 0.85 # 0.0..1.0
+      min_tokens: 20
+      min_non_empty_lines: 10
+```
 
 Configuration precedence:
 

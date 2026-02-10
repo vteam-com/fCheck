@@ -9,6 +9,7 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
 - Hardcoded string detection
 - Magic number detection
 - Dead code detection
+- Duplicate code detection
 - Secret/PII scanning
 - Flutter widget member sorting
 - Layer dependency analysis and visualization
@@ -19,6 +20,7 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
 - `RULES_HARDCODED_STRINGS.md` for string literal detection rules.
 - `RULES_MAGIC_NUMBERS.md` for numeric literal detection rules.
 - `RULES_SECRETS.md` for secret/PII detection rules.
+- `RULES_DUPLICATE_CODE.md` for duplicate code detection rules.
 - `RULES_SORTING.md` for Flutter widget member ordering rules.
 - `RULES_LAYERS.md` for dependency graph and layer analysis rules.
 
@@ -68,6 +70,9 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
 - `lib/src/analyzers/magic_numbers/magic_number_issue.dart`
 - `lib/src/analyzers/secrets/secret_scanner.dart`
 - `lib/src/analyzers/secrets/secret_issue.dart`
+- `lib/src/analyzers/duplicate_code/duplicate_code_analyzer.dart`
+- `lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart`
+- `lib/src/analyzers/duplicate_code/duplicate_code_issue.dart`
 - `lib/src/analyzers/sorted/sort_members.dart`
 - `lib/src/analyzers/sorted/sort_issue.dart`
 - `lib/src/analyzers/layers/layers_analyzer.dart`
@@ -120,7 +125,8 @@ This file provides guidance on the expectation for contributing to the `fcheck` 
   - `analyzers.default`: `on`/`off` (`true`/`false` also accepted)
   - `analyzers.enabled`: explicit opt-in list
   - `analyzers.disabled`: explicit opt-out list
-- Supported analyzer keys: `one_class_per_file`, `hardcoded_strings`, `magic_numbers`, `source_sorting`, `layers`, `secrets`, `dead_code`.
+  - `analyzers.options.duplicate_code`: threshold/size tuning for duplicate-code analysis
+- Supported analyzer keys: `one_class_per_file`, `hardcoded_strings`, `magic_numbers`, `source_sorting`, `layers`, `secrets`, `dead_code`, `duplicate_code`.
 - Legacy `ignores.<analyzer>: true` remains supported as a compatibility alias for disabling analyzers.
 - Precedence: built-in defaults < `.fcheck` < CLI flags.
 - File-level ignore: `// ignore: fcheck_<domain>` at the top of a Dart file.

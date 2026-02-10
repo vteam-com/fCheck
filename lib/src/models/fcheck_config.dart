@@ -25,6 +25,9 @@ enum AnalyzerDomain {
 
   /// Dead code analysis.
   deadCode,
+
+  /// Duplicate code analysis.
+  duplicateCode,
 }
 
 /// Helpers for mapping analyzer domains to configuration keys.
@@ -46,6 +49,8 @@ extension AnalyzerDomainName on AnalyzerDomain {
         return 'secrets';
       case AnalyzerDomain.deadCode:
         return 'dead_code';
+      case AnalyzerDomain.duplicateCode:
+        return 'duplicate_code';
     }
   }
 }
@@ -54,6 +59,15 @@ extension AnalyzerDomainName on AnalyzerDomain {
 class FcheckConfig {
   /// The default config file name expected in a project directory.
   static const String fileName = '.fcheck';
+
+  /// Default duplicate-code similarity threshold.
+  static const double defaultDuplicateCodeSimilarityThreshold = 0.90;
+
+  /// Default duplicate-code minimum token count.
+  static const int defaultDuplicateCodeMinTokens = 20;
+
+  /// Default duplicate-code minimum non-empty line count.
+  static const int defaultDuplicateCodeMinNonEmptyLines = 10;
 
   /// Original input directory passed to the CLI.
   final Directory inputDirectory;
@@ -79,6 +93,15 @@ class FcheckConfig {
   /// Explicitly disabled analyzers from `analyzers.disabled` and legacy ignores.
   final Set<AnalyzerDomain> disabledAnalyzers;
 
+  /// Duplicate-code similarity threshold.
+  final double duplicateCodeSimilarityThreshold;
+
+  /// Duplicate-code minimum normalized token count.
+  final int duplicateCodeMinTokens;
+
+  /// Duplicate-code minimum non-empty line count.
+  final int duplicateCodeMinNonEmptyLines;
+
   /// Creates a parsed `.fcheck` config object.
   FcheckConfig({
     required this.inputDirectory,
@@ -89,6 +112,9 @@ class FcheckConfig {
     required this.analyzerDefaultEnabled,
     required this.enabledAnalyzers,
     required this.disabledAnalyzers,
+    required this.duplicateCodeSimilarityThreshold,
+    required this.duplicateCodeMinTokens,
+    required this.duplicateCodeMinNonEmptyLines,
   });
 
   /// Loads `.fcheck` from [inputDirectory], or returns defaults when absent.
@@ -104,6 +130,10 @@ class FcheckConfig {
         analyzerDefaultEnabled: true,
         enabledAnalyzers: {},
         disabledAnalyzers: {},
+        duplicateCodeSimilarityThreshold:
+            defaultDuplicateCodeSimilarityThreshold,
+        duplicateCodeMinTokens: defaultDuplicateCodeMinTokens,
+        duplicateCodeMinNonEmptyLines: defaultDuplicateCodeMinNonEmptyLines,
       );
     }
 
@@ -124,6 +154,10 @@ class FcheckConfig {
         analyzerDefaultEnabled: true,
         enabledAnalyzers: {},
         disabledAnalyzers: {},
+        duplicateCodeSimilarityThreshold:
+            defaultDuplicateCodeSimilarityThreshold,
+        duplicateCodeMinTokens: defaultDuplicateCodeMinTokens,
+        duplicateCodeMinNonEmptyLines: defaultDuplicateCodeMinNonEmptyLines,
       );
     }
 
@@ -163,6 +197,10 @@ class FcheckConfig {
       'disabled',
       filePath: configFile.path,
     );
+    final duplicateCodeOptions = _readDuplicateCodeOptions(
+      analyzersSection,
+      filePath: configFile.path,
+    );
     disabled
         .addAll(_readLegacyIgnores(ignoresSection, filePath: configFile.path));
 
@@ -175,6 +213,10 @@ class FcheckConfig {
       analyzerDefaultEnabled: defaultEnabled,
       enabledAnalyzers: Set.unmodifiable(enabled),
       disabledAnalyzers: Set.unmodifiable(disabled),
+      duplicateCodeSimilarityThreshold:
+          duplicateCodeOptions.similarityThreshold,
+      duplicateCodeMinTokens: duplicateCodeOptions.minTokens,
+      duplicateCodeMinNonEmptyLines: duplicateCodeOptions.minNonEmptyLines,
     );
   }
 
@@ -343,6 +385,124 @@ class FcheckConfig {
     return analyzers;
   }
 
+  static _DuplicateCodeOptions _readDuplicateCodeOptions(
+    YamlMap? analyzersSection, {
+    required String filePath,
+  }) {
+    final optionsSection = _readNestedMap(
+      analyzersSection,
+      'options',
+      filePath: filePath,
+      contextPath: 'analyzers.options',
+    );
+    final duplicateCodeSection = _readNestedMap(
+      optionsSection,
+      'duplicate_code',
+      filePath: filePath,
+      contextPath: 'analyzers.options.duplicate_code',
+    );
+
+    final similarityThreshold = _readDoubleInRange(
+      duplicateCodeSection,
+      'similarity_threshold',
+      filePath: filePath,
+      contextPath: 'analyzers.options.duplicate_code.similarity_threshold',
+      defaultValue: defaultDuplicateCodeSimilarityThreshold,
+      min: 0,
+      max: 1,
+    );
+    final minTokens = _readPositiveInt(
+      duplicateCodeSection,
+      'min_tokens',
+      filePath: filePath,
+      contextPath: 'analyzers.options.duplicate_code.min_tokens',
+      defaultValue: defaultDuplicateCodeMinTokens,
+    );
+    final minNonEmptyLines = _readPositiveInt(
+      duplicateCodeSection,
+      'min_non_empty_lines',
+      filePath: filePath,
+      contextPath: 'analyzers.options.duplicate_code.min_non_empty_lines',
+      defaultValue: defaultDuplicateCodeMinNonEmptyLines,
+    );
+
+    return _DuplicateCodeOptions(
+      similarityThreshold: similarityThreshold,
+      minTokens: minTokens,
+      minNonEmptyLines: minNonEmptyLines,
+    );
+  }
+
+  static YamlMap? _readNestedMap(
+    YamlMap? source,
+    String key, {
+    required String filePath,
+    required String contextPath,
+  }) {
+    if (source == null) {
+      return null;
+    }
+    final value = source[key];
+    if (value == null) {
+      return null;
+    }
+    if (value is YamlMap) {
+      return value;
+    }
+    throw FormatException('`$filePath` field `$contextPath` must be a map.');
+  }
+
+  static double _readDoubleInRange(
+    YamlMap? source,
+    String key, {
+    required String filePath,
+    required String contextPath,
+    required double defaultValue,
+    required double min,
+    required double max,
+  }) {
+    if (source == null) {
+      return defaultValue;
+    }
+    final value = source[key];
+    if (value == null) {
+      return defaultValue;
+    }
+    if (value is! num) {
+      throw FormatException(
+          '`$filePath` field `$contextPath` must be a number.');
+    }
+    final parsed = value.toDouble();
+    if (parsed < min || parsed > max) {
+      throw FormatException(
+        '`$filePath` field `$contextPath` must be between $min and $max.',
+      );
+    }
+    return parsed;
+  }
+
+  static int _readPositiveInt(
+    YamlMap? source,
+    String key, {
+    required String filePath,
+    required String contextPath,
+    required int defaultValue,
+  }) {
+    if (source == null) {
+      return defaultValue;
+    }
+    final value = source[key];
+    if (value == null) {
+      return defaultValue;
+    }
+    if (value is! int || value <= 0) {
+      throw FormatException(
+        '`$filePath` field `$contextPath` must be a positive integer.',
+      );
+    }
+    return value;
+  }
+
   static Set<AnalyzerDomain> _readLegacyIgnores(
     YamlMap? ignoresSection, {
     required String filePath,
@@ -404,5 +564,18 @@ class FcheckConfig {
     'layers': AnalyzerDomain.layers,
     'secrets': AnalyzerDomain.secrets,
     'dead_code': AnalyzerDomain.deadCode,
+    'duplicate_code': AnalyzerDomain.duplicateCode,
   };
+}
+
+class _DuplicateCodeOptions {
+  final double similarityThreshold;
+  final int minTokens;
+  final int minNonEmptyLines;
+
+  const _DuplicateCodeOptions({
+    required this.similarityThreshold,
+    required this.minTokens,
+    required this.minNonEmptyLines,
+  });
 }

@@ -1,5 +1,6 @@
 // ignore: fcheck_secrets
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
@@ -53,6 +54,9 @@ class ProjectMetrics {
   /// List of dead code issues found in the project.
   final List<DeadCodeIssue> deadCodeIssues;
 
+  /// List of duplicate code issues found in the project.
+  final List<DuplicateCodeIssue> duplicateCodeIssues;
+
   /// Total number of dependency edges in the layers graph.
   final int layersEdgeCount;
 
@@ -98,6 +102,9 @@ class ProjectMetrics {
   /// Whether the dead-code analyzer was enabled for this run.
   final bool deadCodeAnalyzerEnabled;
 
+  /// Whether the duplicate-code analyzer was enabled for this run.
+  final bool duplicateCodeAnalyzerEnabled;
+
   /// Creates a new ProjectMetrics instance.
   ///
   /// [totalFolders] Total number of folders in the project.
@@ -112,6 +119,7 @@ class ProjectMetrics {
   /// [sourceSortIssues] List of source sorting issues found in the project.
   /// [layersIssues] List of layers architecture issues found in the project.
   /// [deadCodeIssues] List of dead code issues found in the project.
+  /// [duplicateCodeIssues] List of duplicate code issues found in the project.
   /// [layersEdgeCount] Total number of dependency edges in the layers graph.
   /// [layersCount] Number of layers in the project.
   /// [dependencyGraph] The dependency graph used for analysis.
@@ -133,6 +141,7 @@ class ProjectMetrics {
     required this.sourceSortIssues,
     required this.layersIssues,
     required this.deadCodeIssues,
+    this.duplicateCodeIssues = const [],
     required this.layersEdgeCount,
     required this.layersCount,
     required this.dependencyGraph,
@@ -148,6 +157,7 @@ class ProjectMetrics {
     this.layersAnalyzerEnabled = true,
     this.secretsAnalyzerEnabled = true,
     this.deadCodeAnalyzerEnabled = true,
+    this.duplicateCodeAnalyzerEnabled = true,
   });
 
   /// Converts these metrics to a JSON-compatible map.
@@ -169,6 +179,7 @@ class ProjectMetrics {
           'magicNumbers': magicNumberIssues.length,
           'secretIssues': secretIssues.length,
           'deadCodeIssues': deadCodeIssues.length,
+          'duplicateCodeIssues': duplicateCodeIssues.length,
         },
         'layers': {
           'count': layersCount,
@@ -183,6 +194,8 @@ class ProjectMetrics {
         'sourceSorting': sourceSortIssues.map((i) => i.toJson()).toList(),
         'secretIssues': secretIssues.map((i) => i.toJson()).toList(),
         'deadCodeIssues': deadCodeIssues.map((i) => i.toJson()).toList(),
+        'duplicateCodeIssues':
+            duplicateCodeIssues.map((i) => i.toJson()).toList(),
         'localization': {'usesLocalization': usesLocalization},
       };
 

@@ -28,6 +28,7 @@ void main() {
       expect(metrics.hardcodedStringIssues, isEmpty);
       expect(metrics.magicNumberIssues, isEmpty);
       expect(metrics.sourceSortIssues, isEmpty);
+      expect(metrics.duplicateCodeIssues, isEmpty);
     });
 
     test('should analyze directory with Dart files', () {

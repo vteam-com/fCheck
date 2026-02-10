@@ -1,12 +1,14 @@
 # fCheck Configuration File
 # This file allows you to configure global ignore settings for fCheck analysis
 
-ignores:
-  # Set to true to ignore magic numbers globally
-  magic_numbers: false
+input:
+  exclude:
+    - "**/example/**"
 
-  # Set to true to ignore hardcoded strings globally
-  hardcoded_strings: false
-
-  # Set to true to ignore layers architecture violations globally
-  layers: false
+analyzers:
+  default: on
+  options:
+    duplicate_code:
+      similarity_threshold: 0.90 # Percentage of similarity (0.0 to 1.0)
+      min_tokens: 20 # Minimum number of tokens to consider for duplication
+      min_non_empty_lines: 8 # Minimum number of non-empty lines to consider for duplication

@@ -20,6 +20,10 @@ class IgnoreConfig {
   static const String ignoreDirectiveForDeadCode =
       '// ignore: fcheck_dead_code';
 
+  /// `// ignore: fcheck_duplicate_code` directive used to skip checks.
+  static const String ignoreDirectiveForDuplicateCode =
+      '// ignore: fcheck_duplicate_code';
+
   /// `// ignore: fcheck_one_class_per_file` directive used to skip checks.
   static const String ignoreDirectiveForOneClassPerFile =
       '// ignore: fcheck_one_class_per_file';

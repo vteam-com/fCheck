@@ -1,4 +1,5 @@
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
@@ -174,6 +175,18 @@ void main() {
             owner: 'Utils',
           ),
         ],
+        duplicateCodeIssues: [
+          DuplicateCodeIssue(
+            firstFilePath: 'lib/one.dart',
+            firstLineNumber: 10,
+            firstSymbol: 'render',
+            secondFilePath: 'lib/two.dart',
+            secondLineNumber: 15,
+            secondSymbol: 'buildView',
+            similarity: 0.9,
+            lineCount: 12,
+          ),
+        ],
         layersEdgeCount: 6,
         layersCount: 4,
         dependencyGraph: {
@@ -206,6 +219,7 @@ void main() {
             'magicNumbers': 1,
             'secretIssues': 1,
             'deadCodeIssues': 1,
+            'duplicateCodeIssues': 1,
           },
           'layers': {
             'count': 4,
@@ -269,6 +283,18 @@ void main() {
               'lineNumber': 21,
               'name': 'unusedHelper',
               'owner': 'Utils',
+            },
+          ],
+          'duplicateCodeIssues': [
+            {
+              'firstFilePath': 'lib/one.dart',
+              'firstLineNumber': 10,
+              'firstSymbol': 'render',
+              'secondFilePath': 'lib/two.dart',
+              'secondLineNumber': 15,
+              'secondSymbol': 'buildView',
+              'similarity': 0.9,
+              'lineCount': 12,
             },
           ],
           'localization': {'usesLocalization': true},
@@ -475,6 +501,74 @@ void main() {
       expect(joined, isNot(contains('... and')));
     });
 
+    test(
+        'should sort duplicate code output by similarity then line count descending',
+        () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 0,
+        fileMetrics: [],
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [
+          DuplicateCodeIssue(
+            firstFilePath: 'lib/short_a.dart',
+            firstLineNumber: 10,
+            firstSymbol: 'a',
+            secondFilePath: 'lib/short_b.dart',
+            secondLineNumber: 20,
+            secondSymbol: 'b',
+            similarity: 1.0,
+            lineCount: 9,
+          ),
+          DuplicateCodeIssue(
+            firstFilePath: 'lib/long_a.dart',
+            firstLineNumber: 10,
+            firstSymbol: 'a',
+            secondFilePath: 'lib/long_b.dart',
+            secondLineNumber: 20,
+            secondSymbol: 'b',
+            similarity: 1.0,
+            lineCount: 16,
+          ),
+          DuplicateCodeIssue(
+            firstFilePath: 'lib/lower_similarity_a.dart',
+            firstLineNumber: 10,
+            firstSymbol: 'a',
+            secondFilePath: 'lib/lower_similarity_b.dart',
+            secondLineNumber: 20,
+            secondSymbol: 'b',
+            similarity: 0.95,
+            lineCount: 30,
+          ),
+        ],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+      );
+
+      final output =
+          buildReportLines(projectMetrics, listMode: ReportListMode.full);
+      final duplicateLines = output
+          .where((line) => line.startsWith('  - ') && line.contains(' <-> '))
+          .toList();
+
+      expect(duplicateLines, hasLength(3));
+      expect(duplicateLines[0], contains('100% (16 lines)'));
+      expect(duplicateLines[1], contains('100% (9 lines)'));
+      expect(duplicateLines[2], contains('95% (30 lines)'));
+    });
+
     test('should show skipped status for disabled analyzers', () {
       final projectMetrics = ProjectMetrics(
         totalFolders: 1,
@@ -504,6 +598,7 @@ void main() {
         version: '1.0.0',
         projectType: ProjectType.dart,
         hardcodedStringsAnalyzerEnabled: false,
+        duplicateCodeAnalyzerEnabled: false,
       );
 
       final output = buildReportLines(projectMetrics);
@@ -512,6 +607,8 @@ void main() {
       expect(joined, contains('Hardcoded Strings: disabled'));
       expect(joined, contains('Hardcoded strings check skipped (disabled).'));
       expect(joined, isNot(contains('Hardcoded strings check passed.')));
+      expect(joined, contains('Duplicate Code   : disabled'));
+      expect(joined, contains('Duplicate code check skipped (disabled).'));
     });
   });
 }
