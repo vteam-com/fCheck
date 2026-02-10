@@ -179,6 +179,9 @@ fcheck --help
 # Show version
 fcheck --version
 
+# Show ignore setup for each analyzer and .fcheck options
+fcheck --help-ignore
+
 # Auto-fix sorting issues
 # (applies to Flutter member sorting)
 fcheck --fix
@@ -188,6 +191,7 @@ fcheck --fix
 
 You can silence a specific warning with a `// ignore:` comment on the same line,
 or ignore an entire file by placing a directive at the top (before any code).
+Need a quick reminder from CLI? Run `fcheck --help-ignore`.
 
 ### File-Level Ignore (entire file)
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1404.0" height="3486.0" viewBox="0 0 1404.0 3486.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+<svg width="1412.0" height="3486.0" viewBox="0 0 1412.0 3486.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
 <defs>
   <filter id="whiteShadow" x="-20%" y="-20%" width="140%" height="140%">
     <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
@@ -466,431 +466,439 @@
   <title>bin/console_output.dart ▶ lib/src/metrics/project_metrics.dart</title>
 </g>
 <g>
-  <path d="M 780.0 222.0 H 846.0 Q 852.0 222.0 852.0 228.0 V 3173.0 Q 852.0 3179.0 846.0 3179.0 H 728.0" class="edgeVertical"/>
+  <path d="M 780.0 222.0 H 846.0 Q 852.0 222.0 852.0 228.0 V 3141.0 Q 852.0 3147.0 846.0 3147.0 H 728.0" class="edgeVertical"/>
+  <title>bin/console_output.dart ▶ lib/src/models/fcheck_config.dart</title>
+</g>
+<g>
+  <path d="M 780.0 222.0 H 850.0 Q 856.0 222.0 856.0 228.0 V 3205.0 Q 856.0 3211.0 850.0 3211.0 H 728.0" class="edgeVertical"/>
+  <title>bin/console_output.dart ▶ lib/src/models/ignore_config.dart</title>
+</g>
+<g>
+  <path d="M 780.0 222.0 H 854.0 Q 860.0 222.0 860.0 228.0 V 3173.0 Q 860.0 3179.0 854.0 3179.0 H 728.0" class="edgeVertical"/>
   <title>bin/console_output.dart ▶ lib/src/models/project_type.dart</title>
 </g>
 <g>
-  <path d="M 780.0 222.0 H 850.0 Q 856.0 222.0 856.0 228.0 V 269.0 Q 856.0 275.0 850.0 275.0 H 776.0" class="edgeVertical"/>
+  <path d="M 780.0 222.0 H 858.0 Q 864.0 222.0 864.0 228.0 V 269.0 Q 864.0 275.0 858.0 275.0 H 776.0" class="edgeVertical"/>
   <title>bin/console_output.dart ▶ bin/console_common.dart</title>
 </g>
 <g>
-  <path d="M 780.0 254.0 H 854.0 Q 860.0 254.0 860.0 260.0 V 269.0 Q 860.0 275.0 854.0 275.0 H 776.0" class="edgeVertical"/>
+  <path d="M 780.0 254.0 H 862.0 Q 868.0 254.0 868.0 260.0 V 269.0 Q 868.0 275.0 862.0 275.0 H 776.0" class="edgeVertical"/>
   <title>bin/console_input.dart ▶ bin/console_common.dart</title>
 </g>
 <g>
-  <path d="M 780.0 190.0 H 858.0 Q 864.0 190.0 864.0 196.0 V 835.0 Q 864.0 841.0 858.0 841.0 H 728.0" class="edgeVertical"/>
+  <path d="M 780.0 190.0 H 866.0 Q 872.0 190.0 872.0 196.0 V 835.0 Q 872.0 841.0 866.0 841.0 H 728.0" class="edgeVertical"/>
   <title>bin/fcheck.dart ▶ lib/src/graphs/export_mermaid.dart</title>
 </g>
 <g>
-  <path d="M 780.0 190.0 H 862.0 Q 868.0 190.0 868.0 196.0 V 867.0 Q 868.0 873.0 862.0 873.0 H 728.0" class="edgeVertical"/>
+  <path d="M 780.0 190.0 H 870.0 Q 876.0 190.0 876.0 196.0 V 867.0 Q 876.0 873.0 870.0 873.0 H 728.0" class="edgeVertical"/>
   <title>bin/fcheck.dart ▶ lib/src/graphs/export_plantuml.dart</title>
 </g>
 <g>
-  <path d="M 780.0 190.0 H 866.0 Q 872.0 190.0 872.0 196.0 V 803.0 Q 872.0 809.0 866.0 809.0 H 728.0" class="edgeVertical"/>
+  <path d="M 780.0 190.0 H 874.0 Q 880.0 190.0 880.0 196.0 V 803.0 Q 880.0 809.0 874.0 809.0 H 728.0" class="edgeVertical"/>
   <title>bin/fcheck.dart ▶ lib/src/graphs/export_svg.dart</title>
 </g>
 <g>
-  <path d="M 780.0 190.0 H 870.0 Q 876.0 190.0 876.0 196.0 V 771.0 Q 876.0 777.0 870.0 777.0 H 728.0" class="edgeVertical"/>
+  <path d="M 780.0 190.0 H 878.0 Q 884.0 190.0 884.0 196.0 V 771.0 Q 884.0 777.0 878.0 777.0 H 728.0" class="edgeVertical"/>
   <title>bin/fcheck.dart ▶ lib/src/graphs/export_svg_folders.dart</title>
 </g>
 <g>
-  <path d="M 780.0 190.0 H 874.0 Q 880.0 190.0 880.0 196.0 V 443.0 Q 880.0 449.0 874.0 449.0 H 752.0" class="edgeVertical"/>
+  <path d="M 780.0 190.0 H 882.0 Q 888.0 190.0 888.0 196.0 V 443.0 Q 888.0 449.0 882.0 449.0 H 752.0" class="edgeVertical"/>
   <title>bin/fcheck.dart ▶ lib/fcheck.dart</title>
 </g>
 <g>
-  <path d="M 780.0 190.0 H 878.0 Q 884.0 190.0 884.0 196.0 V 3141.0 Q 884.0 3147.0 878.0 3147.0 H 728.0" class="edgeVertical"/>
+  <path d="M 780.0 190.0 H 886.0 Q 892.0 190.0 892.0 196.0 V 3141.0 Q 892.0 3147.0 886.0 3147.0 H 728.0" class="edgeVertical"/>
   <title>bin/fcheck.dart ▶ lib/src/models/fcheck_config.dart</title>
 </g>
 <g>
-  <path d="M 780.0 190.0 H 882.0 Q 888.0 190.0 888.0 196.0 V 3109.0 Q 888.0 3115.0 882.0 3115.0 H 728.0" class="edgeVertical"/>
+  <path d="M 780.0 190.0 H 890.0 Q 896.0 190.0 896.0 196.0 V 3109.0 Q 896.0 3115.0 890.0 3115.0 H 728.0" class="edgeVertical"/>
   <title>bin/fcheck.dart ▶ lib/src/models/version.dart</title>
 </g>
 <g>
-  <path d="M 780.0 190.0 H 886.0 Q 892.0 190.0 892.0 196.0 V 237.0 Q 892.0 243.0 886.0 243.0 H 776.0" class="edgeVertical"/>
+  <path d="M 780.0 190.0 H 894.0 Q 900.0 190.0 900.0 196.0 V 237.0 Q 900.0 243.0 894.0 243.0 H 776.0" class="edgeVertical"/>
   <title>bin/fcheck.dart ▶ bin/console_input.dart</title>
 </g>
 <g>
-  <path d="M 780.0 190.0 H 890.0 Q 896.0 190.0 896.0 196.0 V 205.0 Q 896.0 211.0 890.0 211.0 H 776.0" class="edgeVertical"/>
+  <path d="M 780.0 190.0 H 898.0 Q 904.0 190.0 904.0 196.0 V 205.0 Q 904.0 211.0 898.0 211.0 H 776.0" class="edgeVertical"/>
   <title>bin/fcheck.dart ▶ bin/console_output.dart</title>
 </g>
 <g>
-  <path d="M 780.0 190.0 H 894.0 Q 900.0 190.0 900.0 196.0 V 269.0 Q 900.0 275.0 894.0 275.0 H 776.0" class="edgeVertical"/>
+  <path d="M 780.0 190.0 H 902.0 Q 908.0 190.0 908.0 196.0 V 269.0 Q 908.0 275.0 902.0 275.0 H 776.0" class="edgeVertical"/>
   <title>bin/fcheck.dart ▶ bin/console_common.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 898.0 Q 904.0 460.0 904.0 466.0 V 1117.0 Q 904.0 1123.0 898.0 1123.0 H 728.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 906.0 Q 912.0 460.0 912.0 466.0 V 1117.0 Q 912.0 1123.0 906.0 1123.0 H 728.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzer_runner/analyzer_delegates.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 902.0 Q 908.0 460.0 908.0 466.0 V 1149.0 Q 908.0 1155.0 902.0 1155.0 H 728.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 910.0 Q 916.0 460.0 916.0 466.0 V 1149.0 Q 916.0 1155.0 910.0 1155.0 H 728.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzer_runner/analyzer_runner.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 906.0 Q 912.0 460.0 912.0 466.0 V 1213.0 Q 912.0 1219.0 906.0 1219.0 H 728.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 914.0 Q 920.0 460.0 920.0 466.0 V 1213.0 Q 920.0 1219.0 914.0 1219.0 H 728.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzer_runner/analyzer_runner_result.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 910.0 Q 916.0 460.0 916.0 466.0 V 1419.0 Q 916.0 1425.0 910.0 1425.0 H 704.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 918.0 Q 924.0 460.0 924.0 466.0 V 1419.0 Q 924.0 1425.0 918.0 1425.0 H 704.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/dead_code/dead_code_analyzer.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 914.0 Q 920.0 460.0 920.0 466.0 V 1451.0 Q 920.0 1457.0 914.0 1457.0 H 704.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 922.0 Q 928.0 460.0 928.0 466.0 V 1451.0 Q 928.0 1457.0 922.0 1457.0 H 704.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/dead_code/dead_code_file_data.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 918.0 Q 924.0 460.0 924.0 466.0 V 1483.0 Q 924.0 1489.0 918.0 1489.0 H 704.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 926.0 Q 932.0 460.0 932.0 466.0 V 1483.0 Q 932.0 1489.0 926.0 1489.0 H 704.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/dead_code/dead_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 922.0 Q 928.0 460.0 928.0 466.0 V 1605.0 Q 928.0 1611.0 922.0 1611.0 H 704.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 930.0 Q 936.0 460.0 936.0 466.0 V 1605.0 Q 936.0 1611.0 930.0 1611.0 H 704.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/duplicate_code/duplicate_code_analyzer.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 926.0 Q 932.0 460.0 932.0 466.0 V 1701.0 Q 932.0 1707.0 926.0 1707.0 H 704.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 934.0 Q 940.0 460.0 940.0 466.0 V 1701.0 Q 940.0 1707.0 934.0 1707.0 H 704.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/duplicate_code/duplicate_code_file_data.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 930.0 Q 936.0 460.0 936.0 466.0 V 1669.0 Q 936.0 1675.0 930.0 1675.0 H 704.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 938.0 Q 944.0 460.0 944.0 466.0 V 1669.0 Q 944.0 1675.0 938.0 1675.0 H 704.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/duplicate_code/duplicate_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 934.0 Q 940.0 460.0 940.0 466.0 V 1887.0 Q 940.0 1893.0 934.0 1893.0 H 704.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 942.0 Q 948.0 460.0 948.0 466.0 V 1887.0 Q 948.0 1893.0 942.0 1893.0 H 704.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 938.0 Q 944.0 460.0 944.0 466.0 V 1823.0 Q 944.0 1829.0 938.0 1829.0 H 704.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 946.0 Q 952.0 460.0 952.0 466.0 V 1823.0 Q 952.0 1829.0 946.0 1829.0 H 704.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 942.0 Q 948.0 460.0 948.0 466.0 V 2009.0 Q 948.0 2015.0 942.0 2015.0 H 704.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 950.0 Q 956.0 460.0 956.0 466.0 V 2009.0 Q 956.0 2015.0 950.0 2015.0 H 704.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/layers/layers_analyzer.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 946.0 Q 952.0 460.0 952.0 466.0 V 2073.0 Q 952.0 2079.0 946.0 2079.0 H 704.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 954.0 Q 960.0 460.0 960.0 466.0 V 2073.0 Q 960.0 2079.0 954.0 2079.0 H 704.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 950.0 Q 956.0 460.0 956.0 466.0 V 2259.0 Q 956.0 2265.0 950.0 2265.0 H 704.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 958.0 Q 964.0 460.0 964.0 466.0 V 2259.0 Q 964.0 2265.0 958.0 2265.0 H 704.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/magic_numbers/magic_number_issue.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 954.0 Q 960.0 460.0 960.0 466.0 V 2413.0 Q 960.0 2419.0 954.0 2419.0 H 704.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 962.0 Q 968.0 460.0 968.0 466.0 V 2413.0 Q 968.0 2419.0 962.0 2419.0 H 704.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/secrets/secret_issue.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 958.0 Q 964.0 460.0 964.0 466.0 V 2599.0 Q 964.0 2605.0 958.0 2605.0 H 704.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 966.0 Q 972.0 460.0 972.0 466.0 V 2599.0 Q 972.0 2605.0 966.0 2605.0 H 704.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/sorted/sort_issue.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 962.0 Q 968.0 460.0 968.0 466.0 V 2923.0 Q 968.0 2929.0 962.0 2929.0 H 728.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 970.0 Q 976.0 460.0 976.0 466.0 V 2923.0 Q 976.0 2929.0 970.0 2929.0 H 728.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/input_output/file_utils.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 966.0 Q 972.0 460.0 972.0 466.0 V 649.0 Q 972.0 655.0 966.0 655.0 H 728.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 974.0 Q 980.0 460.0 980.0 466.0 V 649.0 Q 980.0 655.0 974.0 655.0 H 728.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/metrics/file_metrics.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 970.0 Q 976.0 460.0 976.0 466.0 V 1181.0 Q 976.0 1187.0 970.0 1187.0 H 728.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 978.0 Q 984.0 460.0 984.0 466.0 V 1181.0 Q 984.0 1187.0 978.0 1187.0 H 728.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 974.0 Q 980.0 460.0 980.0 466.0 V 617.0 Q 980.0 623.0 974.0 623.0 H 728.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 982.0 Q 988.0 460.0 988.0 466.0 V 617.0 Q 988.0 623.0 982.0 623.0 H 728.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/metrics/project_metrics.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 978.0 Q 984.0 460.0 984.0 466.0 V 3141.0 Q 984.0 3147.0 978.0 3147.0 H 728.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 986.0 Q 992.0 460.0 992.0 466.0 V 3141.0 Q 992.0 3147.0 986.0 3147.0 H 728.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/models/fcheck_config.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 982.0 Q 988.0 460.0 988.0 466.0 V 3173.0 Q 988.0 3179.0 982.0 3179.0 H 728.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 990.0 Q 996.0 460.0 996.0 466.0 V 3173.0 Q 996.0 3179.0 990.0 3179.0 H 728.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/models/project_type.dart</title>
 </g>
 <g>
-  <path d="M 756.0 460.0 H 986.0 Q 992.0 460.0 992.0 466.0 V 3205.0 Q 992.0 3211.0 986.0 3211.0 H 728.0" class="edgeVertical"/>
+  <path d="M 756.0 460.0 H 994.0 Q 1000.0 460.0 1000.0 466.0 V 3205.0 Q 1000.0 3211.0 994.0 3211.0 H 728.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 732.0 634.0 H 990.0 Q 996.0 634.0 996.0 640.0 V 1483.0 Q 996.0 1489.0 990.0 1489.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 634.0 H 998.0 Q 1004.0 634.0 1004.0 640.0 V 1483.0 Q 1004.0 1489.0 998.0 1489.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/metrics/project_metrics.dart ▶ lib/src/analyzers/dead_code/dead_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 732.0 634.0 H 994.0 Q 1000.0 634.0 1000.0 640.0 V 1669.0 Q 1000.0 1675.0 994.0 1675.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 634.0 H 1002.0 Q 1008.0 634.0 1008.0 640.0 V 1669.0 Q 1008.0 1675.0 1002.0 1675.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/metrics/project_metrics.dart ▶ lib/src/analyzers/duplicate_code/duplicate_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 732.0 634.0 H 998.0 Q 1004.0 634.0 1004.0 640.0 V 1887.0 Q 1004.0 1893.0 998.0 1893.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 634.0 H 1006.0 Q 1012.0 634.0 1012.0 640.0 V 1887.0 Q 1012.0 1893.0 1006.0 1893.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/metrics/project_metrics.dart ▶ lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart</title>
 </g>
 <g>
-  <path d="M 732.0 634.0 H 1002.0 Q 1008.0 634.0 1008.0 640.0 V 2105.0 Q 1008.0 2111.0 1002.0 2111.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 634.0 H 1010.0 Q 1016.0 634.0 1016.0 640.0 V 2105.0 Q 1016.0 2111.0 1010.0 2111.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/metrics/project_metrics.dart ▶ lib/src/analyzers/layers/layers_issue.dart</title>
 </g>
 <g>
-  <path d="M 732.0 634.0 H 1006.0 Q 1012.0 634.0 1012.0 640.0 V 2259.0 Q 1012.0 2265.0 1006.0 2265.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 634.0 H 1014.0 Q 1020.0 634.0 1020.0 640.0 V 2259.0 Q 1020.0 2265.0 1014.0 2265.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/metrics/project_metrics.dart ▶ lib/src/analyzers/magic_numbers/magic_number_issue.dart</title>
 </g>
 <g>
-  <path d="M 732.0 634.0 H 1010.0 Q 1016.0 634.0 1016.0 640.0 V 2413.0 Q 1016.0 2419.0 1010.0 2419.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 634.0 H 1018.0 Q 1024.0 634.0 1024.0 640.0 V 2413.0 Q 1024.0 2419.0 1018.0 2419.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/metrics/project_metrics.dart ▶ lib/src/analyzers/secrets/secret_issue.dart</title>
 </g>
 <g>
-  <path d="M 732.0 634.0 H 1014.0 Q 1020.0 634.0 1020.0 640.0 V 2599.0 Q 1020.0 2605.0 1014.0 2605.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 634.0 H 1022.0 Q 1028.0 634.0 1028.0 640.0 V 2599.0 Q 1028.0 2605.0 1022.0 2605.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/metrics/project_metrics.dart ▶ lib/src/analyzers/sorted/sort_issue.dart</title>
 </g>
 <g>
-  <path d="M 732.0 634.0 H 1018.0 Q 1024.0 634.0 1024.0 640.0 V 649.0 Q 1024.0 655.0 1018.0 655.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 634.0 H 1026.0 Q 1032.0 634.0 1032.0 640.0 V 649.0 Q 1032.0 655.0 1026.0 655.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/metrics/project_metrics.dart ▶ lib/src/metrics/file_metrics.dart</title>
 </g>
 <g>
-  <path d="M 732.0 634.0 H 1022.0 Q 1028.0 634.0 1028.0 640.0 V 3173.0 Q 1028.0 3179.0 1022.0 3179.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 634.0 H 1030.0 Q 1036.0 634.0 1036.0 640.0 V 3173.0 Q 1036.0 3179.0 1030.0 3179.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/metrics/project_metrics.dart ▶ lib/src/models/project_type.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1840.0 H 1026.0 Q 1032.0 1840.0 1032.0 1846.0 V 3205.0 Q 1032.0 3211.0 1026.0 3211.0 H 728.0" class="edgeVertical"/>
+  <path d="M 708.0 1840.0 H 1034.0 Q 1040.0 1840.0 1040.0 1846.0 V 3205.0 Q 1040.0 3211.0 1034.0 3211.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart ▶ lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1840.0 H 1030.0 Q 1036.0 1840.0 1036.0 1846.0 V 1887.0 Q 1036.0 1893.0 1030.0 1893.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 1840.0 H 1038.0 Q 1044.0 1840.0 1044.0 1846.0 V 1887.0 Q 1044.0 1893.0 1038.0 1893.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart ▶ lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1840.0 H 1034.0 Q 1040.0 1840.0 1040.0 1846.0 V 1855.0 Q 1040.0 1861.0 1034.0 1861.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 1840.0 H 1042.0 Q 1048.0 1840.0 1048.0 1846.0 V 1855.0 Q 1048.0 1861.0 1042.0 1861.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart ▶ lib/src/analyzers/hardcoded_strings/hardcoded_string_utils.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1404.0 H 1038.0 Q 1044.0 1404.0 1044.0 1410.0 V 1451.0 Q 1044.0 1457.0 1038.0 1457.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 1404.0 H 1046.0 Q 1052.0 1404.0 1052.0 1410.0 V 1451.0 Q 1052.0 1457.0 1046.0 1457.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/dead_code/dead_code_visitor.dart ▶ lib/src/analyzers/dead_code/dead_code_file_data.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1404.0 H 1042.0 Q 1048.0 1404.0 1048.0 1410.0 V 1483.0 Q 1048.0 1489.0 1042.0 1489.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 1404.0 H 1050.0 Q 1056.0 1404.0 1056.0 1410.0 V 1483.0 Q 1056.0 1489.0 1050.0 1489.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/dead_code/dead_code_visitor.dart ▶ lib/src/analyzers/dead_code/dead_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1404.0 H 1046.0 Q 1052.0 1404.0 1052.0 1410.0 V 2721.0 Q 1052.0 2727.0 1046.0 2727.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 1404.0 H 1054.0 Q 1060.0 1404.0 1060.0 1410.0 V 2721.0 Q 1060.0 2727.0 1054.0 2727.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/dead_code/dead_code_visitor.dart ▶ lib/src/analyzers/shared/dependency_uri_utils.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1404.0 H 1050.0 Q 1056.0 1404.0 1056.0 1410.0 V 3205.0 Q 1056.0 3211.0 1050.0 3211.0 H 728.0" class="edgeVertical"/>
+  <path d="M 708.0 1404.0 H 1058.0 Q 1064.0 1404.0 1064.0 1410.0 V 3205.0 Q 1064.0 3211.0 1058.0 3211.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzers/dead_code/dead_code_visitor.dart ▶ lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1468.0 H 1054.0 Q 1060.0 1468.0 1060.0 1474.0 V 1483.0 Q 1060.0 1489.0 1054.0 1489.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 1468.0 H 1062.0 Q 1068.0 1468.0 1068.0 1474.0 V 1483.0 Q 1068.0 1489.0 1062.0 1489.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/dead_code/dead_code_file_data.dart ▶ lib/src/analyzers/dead_code/dead_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1436.0 H 1058.0 Q 1064.0 1436.0 1064.0 1442.0 V 1451.0 Q 1064.0 1457.0 1058.0 1457.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 1436.0 H 1066.0 Q 1072.0 1436.0 1072.0 1442.0 V 1451.0 Q 1072.0 1457.0 1066.0 1457.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/dead_code/dead_code_analyzer.dart ▶ lib/src/analyzers/dead_code/dead_code_file_data.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1436.0 H 1062.0 Q 1068.0 1436.0 1068.0 1442.0 V 1483.0 Q 1068.0 1489.0 1062.0 1489.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 1436.0 H 1070.0 Q 1076.0 1436.0 1076.0 1442.0 V 1483.0 Q 1076.0 1489.0 1070.0 1489.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/dead_code/dead_code_analyzer.dart ▶ lib/src/analyzers/dead_code/dead_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1436.0 H 1066.0 Q 1072.0 1436.0 1072.0 1442.0 V 3173.0 Q 1072.0 3179.0 1066.0 3179.0 H 728.0" class="edgeVertical"/>
+  <path d="M 708.0 1436.0 H 1074.0 Q 1080.0 1436.0 1080.0 1442.0 V 3173.0 Q 1080.0 3179.0 1074.0 3179.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzers/dead_code/dead_code_analyzer.dart ▶ lib/src/models/project_type.dart</title>
 </g>
 <g>
-  <path d="M 708.0 2058.0 H 1070.0 Q 1076.0 2058.0 1076.0 2064.0 V 2721.0 Q 1076.0 2727.0 1070.0 2727.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 2058.0 H 1078.0 Q 1084.0 2058.0 1084.0 2064.0 V 2721.0 Q 1084.0 2727.0 1078.0 2727.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/layers/layers_visitor.dart ▶ lib/src/analyzers/shared/dependency_uri_utils.dart</title>
 </g>
 <g>
-  <path d="M 708.0 2090.0 H 1074.0 Q 1080.0 2090.0 1080.0 2096.0 V 2105.0 Q 1080.0 2111.0 1074.0 2111.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 2090.0 H 1082.0 Q 1088.0 2090.0 1088.0 2096.0 V 2105.0 Q 1088.0 2111.0 1082.0 2111.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/layers/layers_results.dart ▶ lib/src/analyzers/layers/layers_issue.dart</title>
 </g>
 <g>
-  <path d="M 708.0 2026.0 H 1078.0 Q 1084.0 2026.0 1084.0 2032.0 V 2105.0 Q 1084.0 2111.0 1078.0 2111.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 2026.0 H 1086.0 Q 1092.0 2026.0 1092.0 2032.0 V 2105.0 Q 1092.0 2111.0 1086.0 2111.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/layers/layers_analyzer.dart ▶ lib/src/analyzers/layers/layers_issue.dart</title>
 </g>
 <g>
-  <path d="M 708.0 2026.0 H 1082.0 Q 1088.0 2026.0 1088.0 2032.0 V 2073.0 Q 1088.0 2079.0 1082.0 2079.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 2026.0 H 1090.0 Q 1096.0 2026.0 1096.0 2032.0 V 2073.0 Q 1096.0 2079.0 1090.0 2079.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/layers/layers_analyzer.dart ▶ lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 708.0 2026.0 H 1086.0 Q 1092.0 2026.0 1092.0 2032.0 V 2041.0 Q 1092.0 2047.0 1086.0 2047.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 2026.0 H 1094.0 Q 1100.0 2026.0 1100.0 2032.0 V 2041.0 Q 1100.0 2047.0 1094.0 2047.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/layers/layers_analyzer.dart ▶ lib/src/analyzers/layers/layers_visitor.dart</title>
 </g>
 <g>
-  <path d="M 708.0 2026.0 H 1090.0 Q 1096.0 2026.0 1096.0 2032.0 V 2923.0 Q 1096.0 2929.0 1090.0 2929.0 H 728.0" class="edgeVertical"/>
+  <path d="M 708.0 2026.0 H 1098.0 Q 1104.0 2026.0 1104.0 2032.0 V 2923.0 Q 1104.0 2929.0 1098.0 2929.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzers/layers/layers_analyzer.dart ▶ lib/src/input_output/file_utils.dart</title>
 </g>
 <g>
-  <path d="M 708.0 2026.0 H 1094.0 Q 1100.0 2026.0 1100.0 2032.0 V 3205.0 Q 1100.0 3211.0 1094.0 3211.0 H 728.0" class="edgeVertical"/>
+  <path d="M 708.0 2026.0 H 1102.0 Q 1108.0 2026.0 1108.0 2032.0 V 3205.0 Q 1108.0 3211.0 1102.0 3211.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzers/layers/layers_analyzer.dart ▶ lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 708.0 2398.0 H 1098.0 Q 1104.0 2398.0 1104.0 2404.0 V 2413.0 Q 1104.0 2419.0 1098.0 2419.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 2398.0 H 1106.0 Q 1112.0 2398.0 1112.0 2404.0 V 2413.0 Q 1112.0 2419.0 1106.0 2419.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/secrets/secret_scanner.dart ▶ lib/src/analyzers/secrets/secret_issue.dart</title>
 </g>
 <g>
-  <path d="M 708.0 2398.0 H 1102.0 Q 1108.0 2398.0 1108.0 2404.0 V 3205.0 Q 1108.0 3211.0 1102.0 3211.0 H 728.0" class="edgeVertical"/>
+  <path d="M 708.0 2398.0 H 1110.0 Q 1116.0 2398.0 1116.0 2404.0 V 3205.0 Q 1116.0 3211.0 1110.0 3211.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzers/secrets/secret_scanner.dart ▶ lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1622.0 H 1106.0 Q 1112.0 1622.0 1112.0 1628.0 V 1701.0 Q 1112.0 1707.0 1106.0 1707.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 1622.0 H 1114.0 Q 1120.0 1622.0 1120.0 1628.0 V 1701.0 Q 1120.0 1707.0 1114.0 1707.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/duplicate_code/duplicate_code_analyzer.dart ▶ lib/src/analyzers/duplicate_code/duplicate_code_file_data.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1622.0 H 1110.0 Q 1116.0 1622.0 1116.0 1628.0 V 1669.0 Q 1116.0 1675.0 1110.0 1675.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 1622.0 H 1118.0 Q 1124.0 1622.0 1124.0 1628.0 V 1669.0 Q 1124.0 1675.0 1118.0 1675.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/duplicate_code/duplicate_code_analyzer.dart ▶ lib/src/analyzers/duplicate_code/duplicate_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 708.0 1654.0 H 1114.0 Q 1120.0 1654.0 1120.0 1660.0 V 1701.0 Q 1120.0 1707.0 1114.0 1707.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 1654.0 H 1122.0 Q 1128.0 1654.0 1128.0 1660.0 V 1701.0 Q 1128.0 1707.0 1122.0 1707.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart ▶ lib/src/analyzers/duplicate_code/duplicate_code_file_data.dart</title>
 </g>
 <g>
-  <path d="M 708.0 2244.0 H 1118.0 Q 1124.0 2244.0 1124.0 2250.0 V 2259.0 Q 1124.0 2265.0 1118.0 2265.0 H 704.0" class="edgeVertical"/>
+  <path d="M 708.0 2244.0 H 1126.0 Q 1132.0 2244.0 1132.0 2250.0 V 2259.0 Q 1132.0 2265.0 1126.0 2265.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzers/magic_numbers/magic_number_visitor.dart ▶ lib/src/analyzers/magic_numbers/magic_number_issue.dart</title>
 </g>
 <g>
-  <path d="M 708.0 2244.0 H 1122.0 Q 1128.0 2244.0 1128.0 2250.0 V 3205.0 Q 1128.0 3211.0 1122.0 3211.0 H 728.0" class="edgeVertical"/>
+  <path d="M 708.0 2244.0 H 1130.0 Q 1136.0 2244.0 1136.0 2250.0 V 3205.0 Q 1136.0 3211.0 1130.0 3211.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzers/magic_numbers/magic_number_visitor.dart ▶ lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1198.0 H 1126.0 Q 1132.0 1198.0 1132.0 1204.0 V 3205.0 Q 1132.0 3211.0 1126.0 3211.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 1198.0 H 1134.0 Q 1140.0 1198.0 1140.0 1204.0 V 3205.0 Q 1140.0 3211.0 1134.0 3211.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analysis_file_context.dart ▶ lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1166.0 H 1130.0 Q 1136.0 1166.0 1136.0 1172.0 V 2923.0 Q 1136.0 2929.0 1130.0 2929.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 1166.0 H 1138.0 Q 1144.0 1166.0 1144.0 1172.0 V 2923.0 Q 1144.0 2929.0 1138.0 2929.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_runner.dart ▶ lib/src/input_output/file_utils.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1166.0 H 1134.0 Q 1140.0 1166.0 1140.0 1172.0 V 1213.0 Q 1140.0 1219.0 1134.0 1219.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 1166.0 H 1142.0 Q 1148.0 1166.0 1148.0 1172.0 V 1213.0 Q 1148.0 1219.0 1142.0 1219.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_runner.dart ▶ lib/src/analyzer_runner/analyzer_runner_result.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1166.0 H 1138.0 Q 1144.0 1166.0 1144.0 1172.0 V 1181.0 Q 1144.0 1187.0 1138.0 1187.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 1166.0 H 1146.0 Q 1152.0 1166.0 1152.0 1172.0 V 1181.0 Q 1152.0 1187.0 1146.0 1187.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_runner.dart ▶ lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1142.0 Q 1148.0 1134.0 1148.0 1140.0 V 1181.0 Q 1148.0 1187.0 1142.0 1187.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1150.0 Q 1156.0 1134.0 1156.0 1140.0 V 1181.0 Q 1156.0 1187.0 1150.0 1187.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1146.0 Q 1152.0 1134.0 1152.0 1140.0 V 1451.0 Q 1152.0 1457.0 1146.0 1457.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1154.0 Q 1160.0 1134.0 1160.0 1140.0 V 1451.0 Q 1160.0 1457.0 1154.0 1457.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/dead_code/dead_code_file_data.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1150.0 Q 1156.0 1134.0 1156.0 1140.0 V 1387.0 Q 1156.0 1393.0 1150.0 1393.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1158.0 Q 1164.0 1134.0 1164.0 1140.0 V 1387.0 Q 1164.0 1393.0 1158.0 1393.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/dead_code/dead_code_visitor.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1154.0 Q 1160.0 1134.0 1160.0 1140.0 V 1701.0 Q 1160.0 1707.0 1154.0 1707.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1162.0 Q 1168.0 1134.0 1168.0 1140.0 V 1701.0 Q 1168.0 1707.0 1162.0 1707.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/duplicate_code/duplicate_code_file_data.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1158.0 Q 1164.0 1134.0 1164.0 1140.0 V 1637.0 Q 1164.0 1643.0 1158.0 1643.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1166.0 Q 1172.0 1134.0 1172.0 1140.0 V 1637.0 Q 1172.0 1643.0 1166.0 1643.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1162.0 Q 1168.0 1134.0 1168.0 1140.0 V 1823.0 Q 1168.0 1829.0 1162.0 1829.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1170.0 Q 1176.0 1134.0 1176.0 1140.0 V 1823.0 Q 1176.0 1829.0 1170.0 1829.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1166.0 Q 1172.0 1134.0 1172.0 1140.0 V 1887.0 Q 1172.0 1893.0 1166.0 1893.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1174.0 Q 1180.0 1134.0 1180.0 1140.0 V 1887.0 Q 1180.0 1893.0 1174.0 1893.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1170.0 Q 1176.0 1134.0 1176.0 1140.0 V 1855.0 Q 1176.0 1861.0 1170.0 1861.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1178.0 Q 1184.0 1134.0 1184.0 1140.0 V 1855.0 Q 1184.0 1861.0 1178.0 1861.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/hardcoded_strings/hardcoded_string_utils.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1174.0 Q 1180.0 1134.0 1180.0 1140.0 V 2227.0 Q 1180.0 2233.0 1174.0 2233.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1182.0 Q 1188.0 1134.0 1188.0 1140.0 V 2227.0 Q 1188.0 2233.0 1182.0 2233.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/magic_numbers/magic_number_visitor.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1178.0 Q 1184.0 1134.0 1184.0 1140.0 V 2259.0 Q 1184.0 2265.0 1178.0 2265.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1186.0 Q 1192.0 1134.0 1192.0 1140.0 V 2259.0 Q 1192.0 2265.0 1186.0 2265.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/magic_numbers/magic_number_issue.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1182.0 Q 1188.0 1134.0 1188.0 1140.0 V 2599.0 Q 1188.0 2605.0 1182.0 2605.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1190.0 Q 1196.0 1134.0 1196.0 1140.0 V 2599.0 Q 1196.0 2605.0 1190.0 2605.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/sorted/sort_issue.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1186.0 Q 1192.0 1134.0 1192.0 1140.0 V 2535.0 Q 1192.0 2541.0 1186.0 2541.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1194.0 Q 1200.0 1134.0 1200.0 1140.0 V 2535.0 Q 1200.0 2541.0 1194.0 2541.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/sorted/sort_members.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1190.0 Q 1196.0 1134.0 1196.0 1140.0 V 2567.0 Q 1196.0 2573.0 1190.0 2573.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1198.0 Q 1204.0 1134.0 1204.0 1140.0 V 2567.0 Q 1204.0 2573.0 1198.0 2573.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/sorted/sort_utils.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1194.0 Q 1200.0 1134.0 1200.0 1140.0 V 3045.0 Q 1200.0 3051.0 1194.0 3051.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1202.0 Q 1208.0 1134.0 1208.0 1140.0 V 3045.0 Q 1208.0 3051.0 1202.0 3051.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/models/class_visitor.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1198.0 Q 1204.0 1134.0 1204.0 1140.0 V 3205.0 Q 1204.0 3211.0 1198.0 3211.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1206.0 Q 1212.0 1134.0 1212.0 1140.0 V 3205.0 Q 1212.0 3211.0 1206.0 3211.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1202.0 Q 1208.0 1134.0 1208.0 1140.0 V 2041.0 Q 1208.0 2047.0 1202.0 2047.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1210.0 Q 1216.0 1134.0 1216.0 1140.0 V 2041.0 Q 1216.0 2047.0 1210.0 2047.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/layers/layers_visitor.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1206.0 Q 1212.0 1134.0 1212.0 1140.0 V 2413.0 Q 1212.0 2419.0 1206.0 2419.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1214.0 Q 1220.0 1134.0 1220.0 1140.0 V 2413.0 Q 1220.0 2419.0 1214.0 2419.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/secrets/secret_issue.dart</title>
 </g>
 <g>
-  <path d="M 732.0 1134.0 H 1210.0 Q 1216.0 1134.0 1216.0 1140.0 V 2381.0 Q 1216.0 2387.0 1210.0 2387.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 1134.0 H 1218.0 Q 1224.0 1134.0 1224.0 1140.0 V 2381.0 Q 1224.0 2387.0 1218.0 2387.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/analyzer_runner/analyzer_delegates.dart ▶ lib/src/analyzers/secrets/secret_scanner.dart</title>
 </g>
 <g>
-  <path d="M 732.0 916.0 H 1214.0 Q 1220.0 916.0 1220.0 922.0 V 2073.0 Q 1220.0 2079.0 1214.0 2079.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 916.0 H 1222.0 Q 1228.0 916.0 1228.0 922.0 V 2073.0 Q 1228.0 2079.0 1222.0 2079.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/graphs/graph_format_utils.dart ▶ lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 732.0 948.0 H 1218.0 Q 1224.0 948.0 1224.0 954.0 V 995.0 Q 1224.0 1001.0 1218.0 1001.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 948.0 H 1226.0 Q 1232.0 948.0 1232.0 954.0 V 995.0 Q 1232.0 1001.0 1226.0 1001.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/graphs/svg_common.dart ▶ lib/src/graphs/badge_model.dart</title>
 </g>
 <g>
-  <path d="M 732.0 884.0 H 1222.0 Q 1228.0 884.0 1228.0 890.0 V 899.0 Q 1228.0 905.0 1222.0 905.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 884.0 H 1230.0 Q 1236.0 884.0 1236.0 890.0 V 899.0 Q 1236.0 905.0 1230.0 905.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_plantuml.dart ▶ lib/src/graphs/graph_format_utils.dart</title>
 </g>
 <g>
-  <path d="M 732.0 884.0 H 1226.0 Q 1232.0 884.0 1232.0 890.0 V 2073.0 Q 1232.0 2079.0 1226.0 2079.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 884.0 H 1234.0 Q 1240.0 884.0 1240.0 890.0 V 2073.0 Q 1240.0 2079.0 1234.0 2079.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_plantuml.dart ▶ lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 732.0 788.0 H 1230.0 Q 1236.0 788.0 1236.0 794.0 V 2073.0 Q 1236.0 2079.0 1230.0 2079.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 788.0 H 1238.0 Q 1244.0 788.0 1244.0 794.0 V 2073.0 Q 1244.0 2079.0 1238.0 2079.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg_folders.dart ▶ lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 732.0 788.0 H 1234.0 Q 1240.0 788.0 1240.0 794.0 V 3077.0 Q 1240.0 3083.0 1234.0 3083.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 788.0 H 1242.0 Q 1248.0 788.0 1248.0 794.0 V 3077.0 Q 1248.0 3083.0 1242.0 3083.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg_folders.dart ▶ lib/src/models/rect.dart</title>
 </g>
 <g>
-  <path d="M 732.0 788.0 H 1238.0 Q 1244.0 788.0 1244.0 794.0 V 931.0 Q 1244.0 937.0 1238.0 937.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 788.0 H 1246.0 Q 1252.0 788.0 1252.0 794.0 V 931.0 Q 1252.0 937.0 1246.0 937.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg_folders.dart ▶ lib/src/graphs/svg_common.dart</title>
 </g>
 <g>
-  <path d="M 732.0 788.0 H 1242.0 Q 1248.0 788.0 1248.0 794.0 V 963.0 Q 1248.0 969.0 1242.0 969.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 788.0 H 1250.0 Q 1256.0 788.0 1256.0 794.0 V 963.0 Q 1256.0 969.0 1250.0 969.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg_folders.dart ▶ lib/src/graphs/svg_styles.dart</title>
 </g>
 <g>
-  <path d="M 732.0 788.0 H 1246.0 Q 1252.0 788.0 1252.0 794.0 V 995.0 Q 1252.0 1001.0 1246.0 1001.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 788.0 H 1254.0 Q 1260.0 788.0 1260.0 794.0 V 995.0 Q 1260.0 1001.0 1254.0 1001.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg_folders.dart ▶ lib/src/graphs/badge_model.dart</title>
 </g>
 <g>
-  <path d="M 732.0 820.0 H 1250.0 Q 1256.0 820.0 1256.0 826.0 V 2073.0 Q 1256.0 2079.0 1250.0 2079.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 820.0 H 1258.0 Q 1264.0 820.0 1264.0 826.0 V 2073.0 Q 1264.0 2079.0 1258.0 2079.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg.dart ▶ lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 732.0 820.0 H 1254.0 Q 1260.0 820.0 1260.0 826.0 V 931.0 Q 1260.0 937.0 1254.0 937.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 820.0 H 1262.0 Q 1268.0 820.0 1268.0 826.0 V 931.0 Q 1268.0 937.0 1262.0 937.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg.dart ▶ lib/src/graphs/svg_common.dart</title>
 </g>
 <g>
-  <path d="M 732.0 820.0 H 1258.0 Q 1264.0 820.0 1264.0 826.0 V 963.0 Q 1264.0 969.0 1258.0 969.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 820.0 H 1266.0 Q 1272.0 820.0 1272.0 826.0 V 963.0 Q 1272.0 969.0 1266.0 969.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg.dart ▶ lib/src/graphs/svg_styles.dart</title>
 </g>
 <g>
-  <path d="M 732.0 820.0 H 1262.0 Q 1268.0 820.0 1268.0 826.0 V 995.0 Q 1268.0 1001.0 1262.0 1001.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 820.0 H 1270.0 Q 1276.0 820.0 1276.0 826.0 V 995.0 Q 1276.0 1001.0 1270.0 1001.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg.dart ▶ lib/src/graphs/badge_model.dart</title>
 </g>
 <g>
-  <path d="M 732.0 852.0 H 1266.0 Q 1272.0 852.0 1272.0 858.0 V 899.0 Q 1272.0 905.0 1266.0 905.0 H 728.0" class="edgeVertical"/>
+  <path d="M 732.0 852.0 H 1274.0 Q 1280.0 852.0 1280.0 858.0 V 899.0 Q 1280.0 905.0 1274.0 905.0 H 728.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_mermaid.dart ▶ lib/src/graphs/graph_format_utils.dart</title>
 </g>
 <g>
-  <path d="M 732.0 852.0 H 1270.0 Q 1276.0 852.0 1276.0 858.0 V 2073.0 Q 1276.0 2079.0 1270.0 2079.0 H 704.0" class="edgeVertical"/>
+  <path d="M 732.0 852.0 H 1278.0 Q 1284.0 852.0 1284.0 858.0 V 2073.0 Q 1284.0 2079.0 1278.0 2079.0 H 704.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_mermaid.dart ▶ lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g class="outgoingBadge">
@@ -909,10 +917,12 @@
   <path d="M 770.0,211.0 L 782.0,204.0 Q 785.0,204.0 785.0,207.0 L 785.0,215.0 Q 785.0,218.0 782.0,218.0 Z" fill="#3b82f6"/>
   <text x="781.0" y="214.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. bin/fcheck.dart</title></g><g class="outgoingBadge">
   <path d="M 786.0,222.0 L 774.0,215.0 Q 771.0,215.0 771.0,218.0 L 771.0,226.0 Q 771.0,229.0 774.0,229.0 Z" fill="#10b981"/>
-  <text x="775.0" y="225.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. bin/console_common.dart
+  <text x="775.0" y="225.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">6</text><title>1. bin/console_common.dart
 2. lib/src/input_output/number_format_utils.dart
 3. lib/src/metrics/project_metrics.dart
-4. lib/src/models/project_type.dart</title></g><text x="522.0" y="216.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">console_output.dart</text>
+4. lib/src/models/fcheck_config.dart
+5. lib/src/models/ignore_config.dart
+6. lib/src/models/project_type.dart</title></g><text x="522.0" y="216.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">console_output.dart</text>
 <g class="incomingBadge">
   <path d="M 770.0,243.0 L 782.0,236.0 Q 785.0,236.0 785.0,239.0 L 785.0,247.0 Q 785.0,250.0 782.0,250.0 Z" fill="#3b82f6"/>
   <text x="781.0" y="246.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. bin/fcheck.dart</title></g><g class="outgoingBadge">
@@ -987,8 +997,9 @@
   <text x="733.0" y="3118.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. bin/fcheck.dart</title></g><text x="562.0" y="3120.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">version.dart</text>
 <g class="incomingBadge">
   <path d="M 722.0,3147.0 L 734.0,3140.0 Q 737.0,3140.0 737.0,3143.0 L 737.0,3151.0 Q 737.0,3154.0 734.0,3154.0 Z" fill="#3b82f6"/>
-  <text x="733.0" y="3150.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. bin/fcheck.dart
-2. lib/fcheck.dart</title></g><text x="562.0" y="3152.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">fcheck_config.dart</text>
+  <text x="733.0" y="3150.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. bin/console_output.dart
+2. bin/fcheck.dart
+3. lib/fcheck.dart</title></g><text x="562.0" y="3152.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">fcheck_config.dart</text>
 <g class="incomingBadge">
   <path d="M 722.0,3179.0 L 734.0,3172.0 Q 737.0,3172.0 737.0,3175.0 L 737.0,3183.0 Q 737.0,3186.0 734.0,3186.0 Z" fill="#3b82f6"/>
   <text x="733.0" y="3182.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. bin/console_output.dart
@@ -997,14 +1008,15 @@
 4. lib/src/metrics/project_metrics.dart</title></g><text x="562.0" y="3184.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">project_type.dart</text>
 <g class="incomingBadge">
   <path d="M 722.0,3211.0 L 734.0,3204.0 Q 737.0,3204.0 737.0,3207.0 L 737.0,3215.0 Q 737.0,3218.0 734.0,3218.0 Z" fill="#3b82f6"/>
-  <text x="733.0" y="3214.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">8</text><title>1. lib/fcheck.dart
-2. lib/src/analyzer_runner/analysis_file_context.dart
-3. lib/src/analyzer_runner/analyzer_delegates.dart
-4. lib/src/analyzers/dead_code/dead_code_visitor.dart
-5. lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart
-6. lib/src/analyzers/layers/layers_analyzer.dart
-7. lib/src/analyzers/magic_numbers/magic_number_visitor.dart
-8. lib/src/analyzers/secrets/secret_scanner.dart</title></g><text x="562.0" y="3216.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">ignore_config.dart</text>
+  <text x="733.0" y="3214.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">9</text><title>1. bin/console_output.dart
+2. lib/fcheck.dart
+3. lib/src/analyzer_runner/analysis_file_context.dart
+4. lib/src/analyzer_runner/analyzer_delegates.dart
+5. lib/src/analyzers/dead_code/dead_code_visitor.dart
+6. lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart
+7. lib/src/analyzers/layers/layers_analyzer.dart
+8. lib/src/analyzers/magic_numbers/magic_number_visitor.dart
+9. lib/src/analyzers/secrets/secret_scanner.dart</title></g><text x="562.0" y="3216.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">ignore_config.dart</text>
 <g class="incomingBadge">
   <path d="M 722.0,777.0 L 734.0,770.0 Q 737.0,770.0 737.0,773.0 L 737.0,781.0 Q 737.0,784.0 734.0,784.0 Z" fill="#3b82f6"/>
   <text x="733.0" y="780.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. bin/fcheck.dart</title></g><g class="outgoingBadge">

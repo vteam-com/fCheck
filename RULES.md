@@ -109,6 +109,22 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - When validating coverage locally, generate coverage data with:
   - `dart test --coverage=coverage`
 
+## CLI Help Sync Rule
+
+- Any user-facing behavior change must update CLI help output in the same PR.
+- This includes changes to:
+  - CLI flags/options
+  - analyzer names or availability
+  - ignore directive support
+  - `.fcheck` schema or supported config keys
+  - default values shown in examples (for example duplicate-code options)
+- Required update points:
+  - `--help` option descriptions in `bin/console_input.dart`
+  - `--help-ignore` guidance in `bin/console_output.dart`
+  - related examples in `README.md`
+  - CLI expectations in `test/cli_test.dart`
+- Do not ship new behavior where help text still describes old behavior.
+
 ## Usage Patterns
 
 - `fcheck` analyze current directory

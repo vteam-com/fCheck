@@ -127,6 +127,68 @@ class TestClass {
       expect(result.stdout, contains('--input'));
     });
 
+    test('should show ignore setup with --help-ignore flag', () async {
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', '--help-ignore'],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains('Setup ignores directly in Dart file'));
+      expect(
+        result.stdout,
+        contains('1. dead_code'),
+      );
+      expect(
+        result.stdout,
+        contains(
+            '6. one_class_per_file | // ignore: fcheck_one_class_per_file'),
+      );
+      expect(
+        result.stdout,
+        contains('8. source_sorting'),
+      );
+      expect(
+        result.stdout,
+        contains('| (no comment ignore support)'),
+      );
+      expect(result.stdout, contains('Setup using the .fcheck file'));
+      expect(result.stdout, contains('input:'));
+      expect(result.stdout, contains('exclude:'));
+      expect(result.stdout, contains('default: on|off'));
+      expect(result.stdout, contains('disabled: # or enabled'));
+      expect(result.stdout, contains('options:'));
+      expect(result.stdout, contains('duplicate_code:'));
+      expect(result.stdout, contains('similarity_threshold: 0.90'));
+      expect(result.stdout, contains('min_tokens: 20'));
+      expect(result.stdout, contains('min_non_empty_lines: 8'));
+      expect(result.stdout, isNot(contains('enable:')));
+    });
+
+    test('should show ignore setup before validating input directory',
+        () async {
+      final nonExistentPath = '${tempDir.path}/does_not_exist_for_ignores';
+
+      final result = await Process.run(
+        'dart',
+        [
+          'run',
+          'bin/fcheck.dart',
+          '--help-ignore',
+          '--input',
+          nonExistentPath,
+        ],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains('Setup ignores directly in Dart file'));
+      expect(result.stdout, isNot(contains('does not exist')));
+    });
+
     test('should respect --list none flag', () async {
       File('${tempDir.path}/list_none.dart')
           .writeAsStringSync('void main() => print("list none");');

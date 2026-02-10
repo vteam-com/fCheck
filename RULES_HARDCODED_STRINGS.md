@@ -42,7 +42,7 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 - Files with a top-of-file `// ignore_for_file: avoid_hardcoded_strings_in_widgets` directive (third-party custom_lint).
 - Parse errors do not prevent scanning; the AST may be partial.
 - Flutter focus only: strings with length <= 2.
-- Flutter focus only: strings on lines with `avoid_hardcoded_strings_in_widgets`, `hardcoded.string`, or `hardcoded.ok` ignore comments.
+- Flutter focus only: strings on lines with any of these comment forms: `// ignore: avoid_hardcoded_strings_in_widgets`, `// ignore_for_file: avoid_hardcoded_strings_in_widgets`, `// ignore: hardcoded.string`, or `// hardcoded.ok`.
 - Flutter focus only: strings passed to acceptable widget properties (e.g., `key`, `asset`, `fontFamily`, `semanticsLabel`).
 - Flutter focus only: strings that look technical/config-like (URLs, emails, hex colors, file paths, identifiers).
 - Flutter focus only: interpolation-only strings with no literal text (e.g., `"$secondsRemaining"` or `"${date.day}"`).

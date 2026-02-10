@@ -1,8 +1,11 @@
+// ignore: fcheck_hardcoded_strings
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:fcheck/src/input_output/number_format_utils.dart';
 import 'package:fcheck/src/metrics/project_metrics.dart';
+import 'package:fcheck/src/models/fcheck_config.dart';
+import 'package:fcheck/src/models/ignore_config.dart';
 import 'package:fcheck/src/models/project_type.dart';
 
 import 'console_common.dart';
@@ -505,6 +508,82 @@ List<String> buildReportLines(
   }
 
   return lines;
+}
+
+String? _ignoreDirectiveForAnalyzer(AnalyzerDomain analyzer) {
+  switch (analyzer) {
+    case AnalyzerDomain.oneClassPerFile:
+      return IgnoreConfig.ignoreDirectiveForOneClassPerFile;
+    case AnalyzerDomain.hardcodedStrings:
+      return IgnoreConfig.ignoreDirectiveForHardcodedStrings;
+    case AnalyzerDomain.magicNumbers:
+      return IgnoreConfig.ignoreDirectiveForMagicNumbers;
+    case AnalyzerDomain.sourceSorting:
+      return null;
+    case AnalyzerDomain.layers:
+      return IgnoreConfig.ignoreDirectiveForLayers;
+    case AnalyzerDomain.secrets:
+      return IgnoreConfig.ignoreDirectiveForSecrets;
+    case AnalyzerDomain.deadCode:
+      return IgnoreConfig.ignoreDirectiveForDeadCode;
+    case AnalyzerDomain.duplicateCode:
+      return IgnoreConfig.ignoreDirectiveForDuplicateCode;
+  }
+}
+
+/// Prints ignore setup guidance for analyzer directives and `.fcheck`.
+void printIgnoreSetupGuide() {
+  final sortedAnalyzers = List<AnalyzerDomain>.from(AnalyzerDomain.values)
+    ..sort((left, right) => left.configName.compareTo(right.configName));
+
+  var maxAnalyzerNameLength = 0;
+  for (final analyzer in sortedAnalyzers) {
+    if (analyzer.configName.length > maxAnalyzerNameLength) {
+      maxAnalyzerNameLength = analyzer.configName.length;
+    }
+  }
+
+  print('--------------------------------------------');
+  print('Setup ignores directly in Dart file');
+  print(
+      'Top-of-file directives must be placed before any Dart code in the file.');
+  print('');
+
+  var index = 1;
+  for (final analyzer in sortedAnalyzers) {
+    final directive = _ignoreDirectiveForAnalyzer(analyzer);
+    final directiveText = directive ?? '(no comment ignore support)';
+    final analyzerName = analyzer.configName.padRight(maxAnalyzerNameLength);
+    print('  $index. $analyzerName | $directiveText');
+    index++;
+  }
+
+  print('');
+  print('Hardcoded strings also support Flutter-style ignore comments:');
+  print('  - // ignore_for_file: avoid_hardcoded_strings_in_widgets');
+
+  print('--------------------------------------------');
+  print('Setup using the .fcheck file');
+  print('Create .fcheck in the --input directory (or current directory).');
+  print('Supported example:');
+  print('  input:');
+  print('    exclude:');
+  print('      - "**/example/**"');
+  print('');
+  print('  analyzers:');
+  print('    default: on|off');
+  print('    disabled: # or enabled');
+  print('      - hardcoded_strings');
+  print('    options:');
+  print('      duplicate_code:');
+  print('        similarity_threshold: 0.90 # 0.0 to 1.0');
+  print('        min_tokens: 20');
+  print('        min_non_empty_lines: 8');
+  print('');
+  print('Available analyzer names:');
+  for (final analyzer in sortedAnalyzers) {
+    print('      - ${analyzer.configName}');
+  }
 }
 
 /// Prints a help screen with usage, description, and parser usage details.

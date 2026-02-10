@@ -49,6 +49,11 @@ void main(List<String> arguments) {
     exit(0);
   }
 
+  if (input.showIgnoresInstructions) {
+    printIgnoreSetupGuide();
+    exit(0);
+  }
+
   final inputDirectory = Directory(input.path);
   if (!inputDirectory.existsSync()) {
     printMissingDirectoryError(input.path);

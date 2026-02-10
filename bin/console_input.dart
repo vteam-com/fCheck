@@ -40,6 +40,9 @@ class ConsoleInput {
   /// Whether `--version` is set.
   final bool showVersion;
 
+  /// Whether `--help-ignore` is set.
+  final bool showIgnoresInstructions;
+
   /// Creates a parsed CLI input object.
   const ConsoleInput({
     required this.path,
@@ -54,6 +57,7 @@ class ConsoleInput {
     required this.excludePatterns,
     required this.showHelp,
     required this.showVersion,
+    required this.showIgnoresInstructions,
   });
 }
 
@@ -129,6 +133,11 @@ ArgParser createConsoleArgParser() => ArgParser()
     abbr: 'h',
     help: 'Show usage information',
     negatable: false,
+  )
+  ..addFlag(
+    'help-ignore',
+    help: 'Show ignore setup for each analyzer and .fcheck options',
+    negatable: false,
   );
 
 /// Parses command-line input into a [ConsoleInput] value.
@@ -161,5 +170,6 @@ ConsoleInput parseConsoleInput(
     excludePatterns: argResults['exclude'] as List<String>,
     showHelp: argResults['help'] as bool,
     showVersion: argResults['version'] as bool,
+    showIgnoresInstructions: argResults['help-ignore'] as bool,
   );
 }
