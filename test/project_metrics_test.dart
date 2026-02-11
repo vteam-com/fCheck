@@ -113,6 +113,143 @@ void main() {
       expect(projectMetrics.commentRatio, equals(0.0));
     });
 
+    test('should not report 100 compliance score when there are open issues',
+        () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 17,
+        totalFiles: 73,
+        totalDartFiles: 50,
+        totalLinesOfCode: 11603,
+        totalCommentLines: 1684,
+        fileMetrics: List.generate(
+          50,
+          (index) => FileMetrics(
+            path: 'lib/file_$index.dart',
+            linesOfCode: 10,
+            commentLines: 1,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ),
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [
+          MagicNumberIssue(
+            filePath: 'lib/src/metrics/project_metrics.dart',
+            lineNumber: 274,
+            value: '95',
+          ),
+          MagicNumberIssue(
+            filePath: 'lib/src/metrics/project_metrics.dart',
+            lineNumber: 277,
+            value: '85',
+          ),
+          MagicNumberIssue(
+            filePath: 'lib/src/metrics/project_metrics.dart',
+            lineNumber: 280,
+            value: '70',
+          ),
+          MagicNumberIssue(
+            filePath: 'lib/src/metrics/project_metrics.dart',
+            lineNumber: 283,
+            value: '55',
+          ),
+        ],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [],
+        layersEdgeCount: 112,
+        layersCount: 7,
+        dependencyGraph: {},
+        projectName: 'fcheck',
+        version: '0.9.8',
+        projectType: ProjectType.dart,
+      );
+
+      expect(projectMetrics.complianceScore, equals(99));
+      expect(projectMetrics.complianceFocusAreaLabel, equals('Magic numbers'));
+    });
+
+    test('should report 100 compliance score for a fully clean run', () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 2,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/main.dart',
+            linesOfCode: 10,
+            commentLines: 2,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'clean_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+      );
+
+      expect(projectMetrics.complianceScore, equals(100));
+      expect(projectMetrics.complianceFocusAreaLabel, equals('None'));
+    });
+
+    test('should cap maximum loss from one analyzer to its equal-share slice',
+        () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 8,
+        totalDartFiles: 8,
+        totalLinesOfCode: 800,
+        totalCommentLines: 80,
+        fileMetrics: List.generate(
+          8,
+          (index) => FileMetrics(
+            path: 'lib/file_$index.dart',
+            linesOfCode: 100,
+            commentLines: 10,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ),
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: List.generate(
+          1000,
+          (index) => MagicNumberIssue(
+            filePath: 'lib/file_0.dart',
+            lineNumber: index + 1,
+            value: '${index + 1}',
+          ),
+        ),
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'equal_share_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+      );
+
+      expect(projectMetrics.complianceScore, equals(88));
+      expect(projectMetrics.complianceFocusAreaLabel, equals('Magic numbers'));
+    });
+
     test('should serialize toJson with all sections and issue details', () {
       final projectMetrics = ProjectMetrics(
         totalFolders: 3,
@@ -220,6 +357,7 @@ void main() {
             'secretIssues': 1,
             'deadCodeIssues': 1,
             'duplicateCodeIssues': 1,
+            'complianceScore': 43,
           },
           'layers': {
             'count': 4,
@@ -298,6 +436,14 @@ void main() {
             },
           ],
           'localization': {'usesLocalization': true},
+          'compliance': {
+            'score': 43,
+            'focusArea': 'one_class_per_file',
+            'focusAreaLabel': 'One class per file',
+            'focusAreaIssues': 1,
+            'nextInvestment':
+                'Split files with multiple classes into focused files.',
+          },
         }),
       );
     });
@@ -344,6 +490,10 @@ void main() {
       final output = buildReportLines(projectMetrics);
 
       expect(output, isNotEmpty);
+      final joined = output.join('\n');
+      expect(joined, contains('Scorecard'));
+      expect(joined, contains(RegExp(r'Compliance Score\s+:\s*')));
+      expect(joined, contains(RegExp(r'Invest Next\s+:\s*')));
     });
 
     test('should omit Lists section when listMode is none', () {
@@ -604,10 +754,12 @@ void main() {
       final output = buildReportLines(projectMetrics);
       final joined = output.join('\n');
 
-      expect(joined, contains('Hardcoded Strings: disabled'));
+      expect(joined, contains('Localization'));
+      expect(joined, contains('HardCoded'));
+      expect(joined, contains('disabled'));
       expect(joined, contains('Hardcoded strings check skipped (disabled).'));
       expect(joined, isNot(contains('Hardcoded strings check passed.')));
-      expect(joined, contains('Duplicate Code   : disabled'));
+      expect(joined, contains(RegExp(r'Duplicate Code\s*:\s*disabled')));
       expect(joined, contains('Duplicate code check skipped (disabled).'));
     });
   });

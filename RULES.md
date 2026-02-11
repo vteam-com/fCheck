@@ -23,6 +23,7 @@ This file defines baseline contributor expectations for the `fcheck` project and
 - `RULES_DUPLICATE_CODE.md` for duplicate code detection rules.
 - `RULES_SORTING.md` for Flutter widget member ordering rules.
 - `RULES_LAYERS.md` for dependency graph and layer analysis rules.
+- `RULE_SCORE.md` for overall compliance scoring rules.
 
 These `RULES_*.md` files are the source of truth for rule behavior. Keep
 `README.md` high-level and avoid duplicating detailed rule internals there.

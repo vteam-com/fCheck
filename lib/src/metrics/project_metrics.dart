@@ -1,4 +1,5 @@
 // ignore: fcheck_secrets
+import 'dart:math' as math;
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
@@ -15,6 +16,23 @@ import 'package:fcheck/src/models/project_type.dart';
 /// providing insights into code quality, size, and compliance with
 /// coding standards.
 class ProjectMetrics {
+  static const double _minHardcodedBudget = 3.0;
+  static const double _localizedHardcodedBudgetPerFile = 0.8;
+  static const double _nonLocalizedHardcodedBudgetPerFile = 2.0;
+  static const double _minMagicNumberBudget = 4.0;
+  static const double _magicNumberBudgetPerFile = 2.5;
+  static const double _magicNumberBudgetPerLoc = 1 / 450;
+  static const double _minSourceSortBudget = 2.0;
+  static const double _sourceSortBudgetPerFile = 0.75;
+  static const double _minLayersBudget = 2.0;
+  static const double _layersBudgetPerEdge = 0.20;
+  static const double _secretsBudget = 1.5;
+  static const double _minDeadCodeBudget = 3.0;
+  static const double _deadCodeBudgetPerFile = 0.8;
+  static const double _duplicateRatioPenaltyMultiplier = 2.5;
+
+  static const int _maxPercent = 100;
+
   /// The detected type of the analyzed project.
   final ProjectType projectType;
 
@@ -186,6 +204,7 @@ class ProjectMetrics {
           'secretIssues': secretIssues.length,
           'deadCodeIssues': deadCodeIssues.length,
           'duplicateCodeIssues': duplicateCodeIssues.length,
+          'complianceScore': complianceScore,
         },
         'layers': {
           'count': layersCount,
@@ -203,6 +222,13 @@ class ProjectMetrics {
         'duplicateCodeIssues':
             duplicateCodeIssues.map((i) => i.toJson()).toList(),
         'localization': {'usesLocalization': usesLocalization},
+        'compliance': {
+          'score': complianceScore,
+          'focusArea': complianceFocusAreaKey,
+          'focusAreaLabel': complianceFocusAreaLabel,
+          'focusAreaIssues': complianceFocusAreaIssueCount,
+          'nextInvestment': complianceNextInvestment,
+        },
       };
 
   /// The ratio of comment lines to total lines of code, as a value between 0.0 and 1.0.
@@ -210,6 +236,240 @@ class ProjectMetrics {
   /// Returns 0.0 if there are no lines of code.
   double get commentRatio =>
       totalLinesOfCode == 0 ? 0 : totalCommentLines / totalLinesOfCode;
+
+  /// Equal-share quality score across enabled analyzers from 0 to 100.
+  ///
+  /// Higher is better. A score of 100 means no detected compliance penalties
+  /// across all enabled analyzers.
+  ///
+  /// Formula:
+  /// - `domainAverage = sum(enabledDomainScores) / enabledDomainCount`
+  /// - `score = round(clamp(domainAverage * 100, 0, 100))`
+  ///
+  /// Special rule:
+  /// - If rounding yields `100` while any enabled domain is `< 1.0`,
+  ///   result is forced to `99` so perfect score remains strict.
+  int get complianceScore {
+    final enabledAreas = _enabledComplianceAreas;
+    if (enabledAreas.isEmpty) {
+      return _maxPercent;
+    }
+
+    final averageAreaScore =
+        enabledAreas.fold<double>(0, (sum, area) => sum + area.score) /
+            enabledAreas.length;
+    final normalizedScore = averageAreaScore * _maxPercent;
+    var complianceScore =
+        normalizedScore.clamp(0, _maxPercent.toDouble()).round();
+
+    // Reserve 100% for truly clean runs with zero penalties in enabled domains.
+    if (complianceScore == _maxPercent &&
+        enabledAreas.any((area) => area.score < 1)) {
+      complianceScore = _maxPercent - 1;
+    }
+
+    return complianceScore;
+  }
+
+  /// Machine-readable key for the area with highest score impact.
+  ///
+  /// Returns `none` when all enabled analyzers are fully compliant.
+  ///
+  /// Highest impact is selected by `penaltyImpact = (1 - score)`.
+  /// Tie-breaker is higher issue count.
+  String get complianceFocusAreaKey => _primaryFocusArea?.key ?? 'none';
+
+  /// Human-readable label for [complianceFocusAreaKey].
+  ///
+  /// Returns `None` when all enabled analyzers are fully compliant.
+  String get complianceFocusAreaLabel => _primaryFocusArea?.label ?? 'None';
+
+  /// Number of detected issues for [complianceFocusAreaKey].
+  ///
+  /// Returns `0` when focus area is `none`.
+  int get complianceFocusAreaIssueCount => _primaryFocusArea?.issueCount ?? 0;
+
+  /// Suggested investment area to improve score in the next iteration.
+  ///
+  /// Message text is deterministic and mapped by focus-area key.
+  String get complianceNextInvestment {
+    final focusArea = _primaryFocusArea;
+    if (focusArea == null) {
+      return 'Maintain this level by enforcing fcheck in CI on every pull request.';
+    }
+
+    switch (focusArea.key) {
+      case 'one_class_per_file':
+        return 'Split files with multiple classes into focused files.';
+      case 'hardcoded_strings':
+        return usesLocalization
+            ? 'Move user-facing literals into localization resources (.arb).'
+            : 'Adopt localization and replace user-facing literals with keys.';
+      case 'magic_numbers':
+        return 'Replace magic numbers with named constants near domain logic.';
+      case 'source_sorting':
+        return 'Run with --fix to auto-sort Flutter members, then review remaining classes.';
+      case 'layers':
+        return 'Remove cross-layer imports and enforce dependency direction in core modules.';
+      case 'secrets':
+        return 'Remove secrets from source and load them from secure config or environment.';
+      case 'dead_code':
+        return 'Delete unused files, classes, and functions to reduce maintenance cost.';
+      case 'duplicate_code':
+        return 'Extract repeated code paths into shared helpers or reusable widgets.';
+    }
+
+    return 'Invest in the lowest-scoring quality area to raise overall compliance.';
+  }
+
+  List<_ComplianceAreaScore> get _enabledComplianceAreas =>
+      _complianceAreas.where((area) => area.enabled).toList(growable: false);
+
+  _ComplianceAreaScore? get _primaryFocusArea {
+    final candidates = _enabledComplianceAreas
+        .where((area) => area.score < 1 || area.issueCount > 0)
+        .toList(growable: false);
+    if (candidates.isEmpty) {
+      return null;
+    }
+
+    var best = candidates.first;
+    var bestImpact = best.penaltyImpact;
+    for (final candidate in candidates.skip(1)) {
+      final candidateImpact = candidate.penaltyImpact;
+      if (candidateImpact > bestImpact) {
+        best = candidate;
+        bestImpact = candidateImpact;
+        continue;
+      }
+      if (candidateImpact == bestImpact &&
+          candidate.issueCount > best.issueCount) {
+        best = candidate;
+      }
+    }
+    return best;
+  }
+
+  List<_ComplianceAreaScore> get _complianceAreas {
+    final safeDartFileCount = math.max(1, totalDartFiles);
+    final safeLoc = math.max(1, totalLinesOfCode);
+
+    final oneClassPerFileViolations = fileMetrics
+        .where((metric) => !metric.isOneClassPerFileCompliant)
+        .length;
+
+    final hardcodedBudget = math.max(
+      _minHardcodedBudget,
+      safeDartFileCount *
+          (usesLocalization
+              ? _localizedHardcodedBudgetPerFile
+              : _nonLocalizedHardcodedBudgetPerFile),
+    );
+    final magicNumbersBudget = math.max(
+      _minMagicNumberBudget,
+      safeDartFileCount * _magicNumberBudgetPerFile +
+          safeLoc * _magicNumberBudgetPerLoc,
+    );
+    final sourceSortingBudget = math.max(
+      _minSourceSortBudget,
+      safeDartFileCount * _sourceSortBudgetPerFile,
+    );
+    final layersBaseline = math.max(1, layersEdgeCount);
+    final layersBudget = math.max(
+      _minLayersBudget,
+      layersBaseline * _layersBudgetPerEdge,
+    );
+    final deadCodeBudget = math.max(
+      _minDeadCodeBudget,
+      safeDartFileCount * _deadCodeBudgetPerFile,
+    );
+    final duplicateImpactLines = duplicateCodeIssues.fold<double>(
+      0,
+      (sum, issue) => sum + (issue.lineCount * issue.similarity),
+    );
+    final duplicateRatio = duplicateImpactLines / safeLoc;
+
+    return [
+      _ComplianceAreaScore(
+        key: 'one_class_per_file',
+        label: 'One class per file',
+        enabled: oneClassPerFileAnalyzerEnabled,
+        issueCount: oneClassPerFileViolations,
+        score: _fractionScore(
+          issues: oneClassPerFileViolations,
+          total: safeDartFileCount,
+        ),
+      ),
+      _ComplianceAreaScore(
+        key: 'hardcoded_strings',
+        label: 'Hardcoded strings',
+        enabled: hardcodedStringsAnalyzerEnabled,
+        issueCount: hardcodedStringIssues.length,
+        score: _budgetScore(
+          issues: hardcodedStringIssues.length,
+          budget: hardcodedBudget,
+        ),
+      ),
+      _ComplianceAreaScore(
+        key: 'magic_numbers',
+        label: 'Magic numbers',
+        enabled: magicNumbersAnalyzerEnabled,
+        issueCount: magicNumberIssues.length,
+        score: _budgetScore(
+          issues: magicNumberIssues.length,
+          budget: magicNumbersBudget,
+        ),
+      ),
+      _ComplianceAreaScore(
+        key: 'source_sorting',
+        label: 'Source sorting',
+        enabled: sourceSortingAnalyzerEnabled,
+        issueCount: sourceSortIssues.length,
+        score: _budgetScore(
+          issues: sourceSortIssues.length,
+          budget: sourceSortingBudget,
+        ),
+      ),
+      _ComplianceAreaScore(
+        key: 'layers',
+        label: 'Layers architecture',
+        enabled: layersAnalyzerEnabled,
+        issueCount: layersIssues.length,
+        score: _budgetScore(
+          issues: layersIssues.length,
+          budget: layersBudget,
+        ),
+      ),
+      _ComplianceAreaScore(
+        key: 'secrets',
+        label: 'Secrets',
+        enabled: secretsAnalyzerEnabled,
+        issueCount: secretIssues.length,
+        score: _budgetScore(
+          issues: secretIssues.length,
+          budget: _secretsBudget,
+        ),
+      ),
+      _ComplianceAreaScore(
+        key: 'dead_code',
+        label: 'Dead code',
+        enabled: deadCodeAnalyzerEnabled,
+        issueCount: deadCodeIssues.length,
+        score: _budgetScore(
+          issues: deadCodeIssues.length,
+          budget: deadCodeBudget,
+        ),
+      ),
+      _ComplianceAreaScore(
+        key: 'duplicate_code',
+        label: 'Duplicate code',
+        enabled: duplicateCodeAnalyzerEnabled,
+        issueCount: duplicateCodeIssues.length,
+        score: _clampToUnitRange(
+            1 - (duplicateRatio * _duplicateRatioPenaltyMultiplier)),
+      ),
+    ];
+  }
 
   /// Dead code issues classified as dead files.
   List<DeadCodeIssue> get deadFileIssues => deadCodeIssues
@@ -240,4 +500,46 @@ class ProjectMetrics {
             'value': issue.value,
           })
       .toList();
+}
+
+double _fractionScore({required int issues, required int total}) {
+  if (total <= 0) {
+    return 1;
+  }
+  return _clampToUnitRange(1 - (issues / total));
+}
+
+double _budgetScore({required int issues, required double budget}) {
+  if (budget <= 0) {
+    return 1;
+  }
+  return _clampToUnitRange(1 - (issues / budget));
+}
+
+double _clampToUnitRange(double value) {
+  if (value < 0) {
+    return 0;
+  }
+  if (value > 1) {
+    return 1;
+  }
+  return value;
+}
+
+class _ComplianceAreaScore {
+  final String key;
+  final String label;
+  final bool enabled;
+  final int issueCount;
+  final double score;
+
+  const _ComplianceAreaScore({
+    required this.key,
+    required this.label,
+    required this.enabled,
+    required this.issueCount,
+    required this.score,
+  });
+
+  double get penaltyImpact => (1 - score);
 }

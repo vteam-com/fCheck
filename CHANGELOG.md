@@ -7,6 +7,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.9] - 2026-02-12
+
+### Added
+
+- 🎯 Added a deterministic compliance scorecard with overall score, focus area, and suggested next investment area.
+- 📊 Included compliance score details in JSON output (`summary.complianceScore` and `compliance` block).
+- 🆘 Added `--help-score` CLI flag to show compliance scoring guidance.
+
+### Changed
+
+- 🖥️ Refined CLI console output layout to include a scorecard section and a denser dashboard summary.
+- ✅ Expanded scoring-focused CLI and metrics test coverage.
+
+### Fixed
+
+- 📝 Corrected the dashboard label from `Coments` to `Comments`.
+
 ## [0.9.8] - 2026-02-10
 
 ### Added

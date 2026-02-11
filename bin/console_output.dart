@@ -12,7 +12,18 @@ import 'console_common.dart';
 
 const int _maxIssuesToShow = 10;
 const int _percentageMultiplier = 100;
-const int _commentRatioDecimalPlaces = 0;
+const int _gridLabelWidth = 18;
+const int _gridValueWidth = 18;
+const int _domainValueWidth = 18;
+const int _perfectScoreThreshold = 95;
+const int _goodScoreThreshold = 85;
+const int _fairScoreThreshold = 70;
+const int _perfectCommentRatioPercent = 20;
+const int _goodCommentRatioPercent = 12;
+const int _fairCommentRatioPercent = 6;
+const int _minorIssueCountUpperBound = 3;
+const int _compactDecimalPlaces = 2;
+const int _hardcodedValueWidth = 3;
 const String _noneIndicator = '  (none)';
 
 Iterable<T> _issuesForMode<T>(
@@ -48,7 +59,127 @@ int _maxIntWidth(Iterable<int> values) {
   return maxWidth;
 }
 
+String _separatorColon() => _colorize(':', _ansiGray);
+String _separatorPipe() => _colorize('|', _ansiGray);
+
+String _labelValueLine({
+  required String label,
+  required String value,
+  int labelWidth = _gridLabelWidth,
+}) =>
+    '${label.padRight(labelWidth)} ${_separatorColon()} $value';
+
+String _gridRow(List<String> cells) => cells.join('  ${_separatorPipe()}  ');
+
+String _gridCell({
+  required String label,
+  required String value,
+  int valueWidth = _gridValueWidth,
+  bool alignRight = true,
+  bool valuePreAligned = false,
+}) {
+  final alignedValue = valuePreAligned
+      ? value
+      : (alignRight ? value.padLeft(valueWidth) : value.padRight(valueWidth));
+  return _labelValueLine(
+    label: label,
+    value: alignedValue,
+    labelWidth: _gridLabelWidth,
+  );
+}
+
+String _scoreValue(int score) {
+  final text = '${formatCount(score)}%';
+  if (score >= _perfectScoreThreshold) {
+    return _colorizeBold(text, _ansiGreenBright);
+  }
+  if (score >= _goodScoreThreshold) {
+    return _colorizeBold(text, _ansiYellowBright);
+  }
+  if (score >= _fairScoreThreshold) {
+    return _colorizeBold(text, _ansiOrange);
+  }
+  return _colorizeBold(text, _ansiRedBright);
+}
+
+String _domainValue({
+  required bool enabled,
+  required int issueCount,
+  bool anyIssueIsBad = false,
+  int width = _domainValueWidth,
+}) {
+  if (!enabled) {
+    if (width <= 0) {
+      return 'disabled';
+    }
+    return 'disabled'.padLeft(width);
+  }
+
+  if (issueCount == 0) {
+    final rawText = '✓';
+    final text = width <= 0 ? rawText : rawText.padLeft(width);
+    return _colorize(text, _ansiGreen);
+  }
+
+  final rawText = formatCount(issueCount);
+  final text = width <= 0 ? rawText : rawText.padLeft(width);
+
+  if (anyIssueIsBad) {
+    return _colorize(text, _ansiRed);
+  }
+
+  if (issueCount == 1) {
+    return _colorize(text, _ansiYellowBright);
+  }
+
+  if (issueCount <= _minorIssueCountUpperBound) {
+    return _colorize(text, _ansiOrange);
+  }
+
+  return _colorize(text, _ansiRed);
+}
+
+String _commentSummary({
+  required int totalCommentLines,
+  required double commentRatio,
+  int width = 0,
+}) {
+  final ratioPercent = (commentRatio * _percentageMultiplier).round();
+  final summary =
+      '${formatCount(totalCommentLines)} (${formatCount(ratioPercent)}%)';
+  final text = width <= 0 ? summary : summary.padLeft(width);
+  if (ratioPercent >= _perfectCommentRatioPercent) {
+    return _colorize(text, _ansiGreen);
+  }
+  if (ratioPercent >= _goodCommentRatioPercent) {
+    return _colorize(text, _ansiYellowBright);
+  }
+  if (ratioPercent >= _fairCommentRatioPercent) {
+    return _colorize(text, _ansiOrange);
+  }
+  return _colorize(text, _ansiRed);
+}
+
+String _formatCompactDecimal(double value) {
+  var text = value.toStringAsFixed(_compactDecimalPlaces);
+  while (text.endsWith('0')) {
+    text = text.substring(0, text.length - 1);
+  }
+  if (text.endsWith('.')) {
+    text = text.substring(0, text.length - 1);
+  }
+  return text;
+}
+
 /// Builds console report lines for [ProjectMetrics].
+///
+/// The output is grouped into:
+/// - Scorecard (overall compliance + next investment)
+/// - Dashboard (compact project and analyzer snapshot)
+/// - Lists (detailed issues), unless [listMode] is `none`
+///
+/// [listMode] controls detail level for issue sections and can render
+/// filenames-only output for easier triage.
 List<String> buildReportLines(
   ProjectMetrics metrics, {
   ReportListMode listMode = ReportListMode.partial,
@@ -123,57 +254,191 @@ List<String> buildReportLines(
   final deadCodeAnalyzerEnabled = metrics.deadCodeAnalyzerEnabled;
   final duplicateCodeAnalyzerEnabled = metrics.duplicateCodeAnalyzerEnabled;
   final layersAnalyzerEnabled = metrics.layersAnalyzerEnabled;
-  final layersCount = metrics.layersCount;
   final layersEdgeCount = metrics.layersEdgeCount;
   final fileMetrics = metrics.fileMetrics;
   final sourceSortIssues = metrics.sourceSortIssues;
   final layersIssues = metrics.layersIssues;
+  final complianceScore = metrics.complianceScore;
+  final complianceFocusAreaLabel = metrics.complianceFocusAreaLabel;
+  final complianceFocusAreaIssueCount = metrics.complianceFocusAreaIssueCount;
+  final complianceNextInvestment = metrics.complianceNextInvestment;
+  final commentSummary = _commentSummary(
+    totalCommentLines: totalCommentLines,
+    commentRatio: commentRatio,
+    width: _gridValueWidth,
+  );
+  final nonCompliant = fileMetrics
+      .where((metric) => !metric.isOneClassPerFileCompliant)
+      .toList();
 
   final lines = <String>[];
   void addLine(String line) => lines.add(line);
 
   final filenamesOnly = listMode == ReportListMode.filenames;
 
-  addLine('Project          : $projectName (version: $version)');
-  addLine('Project Type     : ${projectType.label}');
-  addLine('Folders          : ${formatCount(totalFolders)}');
-  addLine('Files            : ${formatCount(totalFiles)}');
-  addLine('Dart Files       : ${formatCount(totalDartFiles)}');
-  addLine('Excluded Files   : ${formatCount(excludedFilesCount)}');
-  addLine('Lines of Code    : ${formatCount(totalLinesOfCode)}');
-  addLine('Comment Lines    : ${formatCount(totalCommentLines)}');
   addLine(
-      'Comment Ratio    : ${(commentRatio * _percentageMultiplier).toStringAsFixed(_commentRatioDecimalPlaces)}%');
-  final hardcodedSummary = hardcodedStringsAnalyzerEnabled
-      ? (usesLocalization
-          ? formatCount(hardcodedStringIssues.length)
-          : (hardcodedStringIssues.isEmpty
-              ? formatCount(hardcodedStringIssues.length)
-              : '${formatCount(hardcodedStringIssues.length)} (warning)'))
+    _labelValueLine(
+      label: 'Project',
+      value: '$projectName (version: $version)',
+    ),
+  );
+  addLine(dividerLine('Scorecard'));
+  addLine(
+    _labelValueLine(
+      label: 'Compliance Score',
+      value: _scoreValue(complianceScore),
+    ),
+  );
+  if (complianceFocusAreaLabel == 'None') {
+    addLine(
+      _labelValueLine(
+        label: 'Invest Next',
+        value: complianceNextInvestment,
+      ),
+    );
+  } else {
+    addLine(
+      _labelValueLine(
+        label: 'Focus Area',
+        value:
+            '$complianceFocusAreaLabel (${formatCount(complianceFocusAreaIssueCount)} issues)',
+      ),
+    );
+    addLine(
+      _labelValueLine(
+        label: 'Invest Next',
+        value: complianceNextInvestment,
+      ),
+    );
+  }
+
+  final oneClassSummary = _domainValue(
+    enabled: oneClassPerFileAnalyzerEnabled,
+    issueCount: nonCompliant.length,
+  );
+  final hardcodedSummary = _domainValue(
+    enabled: hardcodedStringsAnalyzerEnabled,
+    issueCount: hardcodedStringIssues.length,
+    width: _hardcodedValueWidth,
+  );
+  final magicNumbersSummary = _domainValue(
+    enabled: magicNumbersAnalyzerEnabled,
+    issueCount: magicNumberIssues.length,
+  );
+  final sourceSortingSummary = _domainValue(
+    enabled: sourceSortingAnalyzerEnabled,
+    issueCount: sourceSortIssues.length,
+  );
+  final layersSummary = _domainValue(
+    enabled: layersAnalyzerEnabled,
+    issueCount: layersIssues.length,
+  );
+  final secretsSummary = _domainValue(
+    enabled: secretsAnalyzerEnabled,
+    issueCount: secretIssues.length,
+    anyIssueIsBad: true,
+  );
+  final deadCodeSummary = _domainValue(
+    enabled: deadCodeAnalyzerEnabled,
+    issueCount: deadCodeIssues.length,
+  );
+  final duplicateCodeSummary = _domainValue(
+    enabled: duplicateCodeAnalyzerEnabled,
+    issueCount: duplicateCodeIssues.length,
+  );
+  final localizationLabel = 'Localization (${usesLocalization ? 'ON' : 'OFF'})';
+  final hardcodedCountText = hardcodedStringsAnalyzerEnabled
+      ? formatCount(hardcodedStringIssues.length).padLeft(_hardcodedValueWidth)
       : 'disabled';
-  addLine('Localization     : ${usesLocalization ? 'Yes' : 'No'}');
-  addLine('Hardcoded Strings: $hardcodedSummary');
-  addLine(
-      'Magic Numbers    : ${magicNumbersAnalyzerEnabled ? formatCount(magicNumberIssues.length) : 'disabled'}');
-  addLine(
-      'Secrets          : ${secretsAnalyzerEnabled ? formatCount(secretIssues.length) : 'disabled'}');
-  addLine(
-      'Dead Code        : ${deadCodeAnalyzerEnabled ? formatCount(deadCodeIssues.length) : 'disabled'}');
-  addLine(
-      'Duplicate Code   : ${duplicateCodeAnalyzerEnabled ? formatCount(duplicateCodeIssues.length) : 'disabled'}');
-  addLine(
-      'Layers           : ${layersAnalyzerEnabled ? formatCount(layersCount) : 'disabled'}');
-  addLine(
-      'Dependencies     : ${layersAnalyzerEnabled ? formatCount(layersEdgeCount) : 'disabled'}');
+  final localizationHardcodedPlain =
+      'HardCoded $hardcodedCountText'.padLeft(_gridValueWidth);
+  final localizationHardcodedSummary = localizationHardcodedPlain.replaceRange(
+    localizationHardcodedPlain.length - hardcodedCountText.length,
+    localizationHardcodedPlain.length,
+    hardcodedSummary,
+  );
+  final localizationCell = _labelValueLine(
+    label: localizationLabel,
+    value: localizationHardcodedSummary,
+  );
+  addLine(dividerLine('Dashboard'));
+  addLine(_gridRow([
+    _gridCell(
+      label: 'Project Type',
+      value: projectType.label,
+      alignRight: false,
+    ),
+    _gridCell(label: 'Folders', value: formatCount(totalFolders)),
+  ]));
+  addLine(_gridRow([
+    _gridCell(label: 'Files', value: formatCount(totalFiles)),
+    _gridCell(label: 'Dart Files', value: formatCount(totalDartFiles)),
+  ]));
+  addLine(_gridRow([
+    _gridCell(label: 'Excluded Files', value: formatCount(excludedFilesCount)),
+    localizationCell,
+  ]));
+  addLine(_gridRow([
+    _gridCell(label: 'Lines of Code', value: formatCount(totalLinesOfCode)),
+    _gridCell(
+      label: 'Comments',
+      value: commentSummary,
+      valuePreAligned: true,
+    ),
+  ]));
+  addLine(_gridRow([
+    _gridCell(
+      label: 'One Class/File',
+      value: oneClassSummary,
+      valuePreAligned: true,
+    ),
+    _gridCell(
+      label: 'Magic Numbers',
+      value: magicNumbersSummary,
+      valuePreAligned: true,
+    ),
+  ]));
+  addLine(_gridRow([
+    _gridCell(
+      label: 'Secrets',
+      value: secretsSummary,
+      valuePreAligned: true,
+    ),
+    _gridCell(
+      label: 'Dead Code',
+      value: deadCodeSummary,
+      valuePreAligned: true,
+    ),
+  ]));
+  addLine(_gridRow([
+    _gridCell(
+      label: 'Layers',
+      value: layersSummary,
+      valuePreAligned: true,
+    ),
+    _gridCell(
+      label: 'Source Sorting',
+      value: sourceSortingSummary,
+      valuePreAligned: true,
+    ),
+  ]));
+  addLine(_gridRow([
+    _gridCell(
+      label: 'Duplicate Code',
+      value: duplicateCodeSummary,
+      valuePreAligned: true,
+    ),
+    _gridCell(
+      label: 'Dependencies',
+      value: layersAnalyzerEnabled ? formatCount(layersEdgeCount) : 'disabled',
+    ),
+  ]));
 
   if (listMode == ReportListMode.none) {
     return lines;
   }
 
-  addLine(dividerLine('Lists', dot: true));
-
-  final nonCompliant =
-      fileMetrics.where((m) => !m.isOneClassPerFileCompliant).toList();
+  addLine(dividerLine('Lists'));
   if (!oneClassPerFileAnalyzerEnabled) {
     addLine('${skipTag()} One class per file check skipped (disabled).');
   } else if (nonCompliant.isEmpty) {
@@ -532,6 +797,9 @@ String? _ignoreDirectiveForAnalyzer(AnalyzerDomain analyzer) {
 }
 
 /// Prints ignore setup guidance for analyzer directives and `.fcheck`.
+///
+/// This help screen explains both in-file ignore comments and equivalent
+/// `.fcheck` configuration options, including analyzer-specific directives.
 void printIgnoreSetupGuide() {
   final sortedAnalyzers = List<AnalyzerDomain>.from(AnalyzerDomain.values)
     ..sort((left, right) => left.configName.compareTo(right.configName));
@@ -586,7 +854,66 @@ void printIgnoreSetupGuide() {
   }
 }
 
-/// Prints a help screen with usage, description, and parser usage details.
+/// Prints scoring model guidance for compliance score calculation.
+///
+/// The formulas mirror the implementation in `ProjectMetrics` so users can
+/// understand how issue counts map to a 0-100 compliance score.
+void printScoreSystemGuide() {
+  final analyzers = List<AnalyzerDomain>.from(AnalyzerDomain.values);
+  final analyzerCount = analyzers.length;
+  final sharePerAnalyzer = analyzerCount == 0
+      ? _percentageMultiplier.toDouble()
+      : _percentageMultiplier / analyzerCount;
+
+  print('--------------------------------------------');
+  print('Compliance score model from 0% to 100%');
+  print('Only enabled analyzers contribute to the score.');
+  print('');
+  print('Enabled analyzers (current model: $analyzerCount):');
+  for (final analyzer in analyzers) {
+    print('  - ${analyzer.configName}');
+  }
+  print('');
+  print('How is the 100% distributed:');
+  print('  N = number of enabled analyzers');
+  print('  each analyzer share = 100 / N');
+  print(
+      '  Current: $analyzerCount analyzers -> ${_formatCompactDecimal(sharePerAnalyzer)}% each');
+  print('');
+  print('Per-analyzer domain score is clamped to [0.0, 1.0].');
+  print('One domain can only consume its own share, never more.');
+  print('');
+  print('Domain formulas used:');
+  print('  - one_class_per_file: 1 - (violations / max(1, dartFiles))');
+  print(
+      '  - hardcoded_strings: 1 - (issues / max(3.0, dartFiles * (l10n ? 0.8 : 2.0)))');
+  print(
+      '  - magic_numbers: 1 - (issues / max(4.0, dartFiles * 2.5 + loc / 450))');
+  print('  - source_sorting: 1 - (issues / max(2.0, dartFiles * 0.75))');
+  print('  - layers: 1 - (issues / max(2.0, max(1, edges) * 0.20))');
+  print('  - secrets: 1 - (issues / 1.5)');
+  print('  - dead_code: 1 - (issues / max(3.0, dartFiles * 0.8))');
+  print('  - duplicate_code: 1 - ((impactLines / max(1, loc)) * 2.5)');
+  print('    impactLines = sum(issue.lineCount * issue.similarity)');
+  print('');
+  print('Final score:');
+  print('  average = sum(enabledDomainScores) / N');
+  print('  complianceScore = round(clamp(average * 100, 0, 100))');
+  print('  Special rule: if rounded score is 100 but any enabled domain');
+  print('  score is below 1.0, final score is forced to 99.');
+  print('');
+  print('Focus Area and Invest Next:');
+  print(
+      '  - Focus Area is the enabled domain with the highest penalty impact.');
+  print('  - Tie-breaker: domain with more issues.');
+  print(
+      '  - Invest Next recommendation is mapped from the selected focus area.');
+}
+
+/// Prints the main CLI help screen.
+///
+/// [usageLine], [descriptionLine], and [parserUsage] are composed by
+/// `console_common.dart` and the argument parser.
 void printHelpScreen({
   required String usageLine,
   required String descriptionLine,
@@ -600,6 +927,8 @@ void printHelpScreen({
 }
 
 /// Prints invalid-argument diagnostics and usage details.
+///
+/// Used when argument parsing fails before runtime execution starts.
 void printInvalidArgumentsScreen({
   required String invalidArgumentsLine,
   required String usageLine,
@@ -611,36 +940,42 @@ void printInvalidArgumentsScreen({
   print(parserUsage);
 }
 
-/// Prints the current CLI tool version.
+/// Prints the current CLI tool version string.
 void printVersionLine(String version) {
   print(version);
 }
 
-/// Prints a missing-directory error message.
+/// Prints an error when a requested input directory does not exist.
 void printMissingDirectoryError(String path) {
   print('Error: Directory "$path" does not exist.');
 }
 
-/// Prints a configuration error message for invalid `.fcheck` files.
+/// Prints a configuration error for invalid `.fcheck` content.
 void printConfigurationError(String message) {
   print('Error: Invalid .fcheck configuration. $message');
 }
 
 /// Prints the run header before analysis starts.
+///
+/// Includes tool version and normalized input directory path.
 void printRunHeader({
   required String version,
   required Directory directory,
 }) {
   print(dividerLine('fCheck $version', downPointer: true));
-  print('Input            : ${directory.absolute.path}');
+  print(_labelValueLine(label: 'Input', value: directory.absolute.path));
 }
 
 /// Prints structured JSON with two-space indentation.
+///
+/// This is used for machine-readable output (`--json`) only.
 void printJsonOutput(Object? data) {
   print(const JsonEncoder.withIndent('  ').convert(data));
 }
 
 /// Prints excluded files and directories in CLI text format.
+///
+/// Groups output by Dart files, non-Dart files, and directories.
 void printExcludedItems({
   required List<File> excludedDartFiles,
   required List<File> excludedNonDartFiles,
@@ -675,7 +1010,7 @@ void printExcludedItems({
   }
 }
 
-/// Prints each report line in order.
+/// Prints each prebuilt report line in order.
 void printReportLines(Iterable<String> lines) {
   for (final line in lines) {
     print(line);
@@ -684,24 +1019,28 @@ void printReportLines(Iterable<String> lines) {
 
 /// Prints a divider for generated output files.
 void printOutputFilesHeader() {
-  print(dividerLine('Output files', dot: true));
+  print(dividerLine('Output files'));
 }
 
 /// Prints one generated output file line using a label and path.
+///
+/// [label] is expected to be pre-padded by the caller for visual alignment.
 void printOutputFileLine({
   required String label,
   required String path,
 }) {
-  print('$label: $path');
+  print('$label ${_separatorColon()} $path');
 }
 
-/// Prints run completion footer with elapsed seconds.
+/// Prints run completion footer with elapsed time in seconds.
 void printRunCompleted(String elapsedSeconds) {
-  print(
-      dividerLine('fCheck completed (${elapsedSeconds}s)', downPointer: false));
+  print(dividerLine('fCheck completed (${elapsedSeconds}s)',
+      dot: false, downPointer: false));
 }
 
 /// Prints fatal analysis error and stack trace details.
+///
+/// This keeps CLI failures transparent for local debugging and CI logs.
 void printAnalysisError(Object error, StackTrace stack) {
   print('Error during analysis: $error');
   print(stack);
@@ -711,15 +1050,23 @@ void printAnalysisError(Object error, StackTrace stack) {
 final int dividerLength = 40;
 const int _halfTitleLengthDivisor = 2;
 
-bool get _supportsAnsiEscapes => stdout.supportsAnsiEscapes;
+bool get _supportsAnsiEscapes =>
+    stdout.hasTerminal && stdout.supportsAnsiEscapes;
 
 const int _ansiGreen = 32;
+const int _ansiGreenBright = 92;
 const int _ansiYellow = 33;
+const int _ansiYellowBright = 93;
+const int _ansiOrange = 33;
 const int _ansiRed = 31;
+const int _ansiRedBright = 91;
 const int _ansiGray = 90;
 
 String _colorize(String text, int colorCode) =>
     _supportsAnsiEscapes ? '\x1B[${colorCode}m$text\x1B[0m' : text;
+
+String _colorizeBold(String text, int colorCode) =>
+    _supportsAnsiEscapes ? '\x1B[1;${colorCode}m$text\x1B[0m' : text;
 
 /// Status markers styled like `flutter doctor`.
 ///
@@ -740,11 +1087,26 @@ String failTag() => _colorize('[✗]', _ansiRed);
 String skipTag() => _colorize('[-]', _ansiGray);
 
 /// Builds a formatted divider line for console headers/footers.
-String dividerLine(String title, {bool downPointer = true, bool dot = false}) {
+///
+/// [title] is centered between repeated side characters.
+/// [downPointer] controls arrow direction (`↓` vs `↑`).
+/// [dot] switches from `-` to `·` style separators.
+String dividerLine(String title, {bool? downPointer, bool dot = false}) {
   title = ' $title ';
-  final directionChar = downPointer ? '↓' : '↑';
-  final sideLines = (dot ? '·' : '-') *
-      (dividerLength - (title.length ~/ _halfTitleLengthDivisor));
+  final lineType = dot ? '·' : '-';
+  final directionChar = downPointer == null
+      ? lineType
+      : downPointer == true
+          ? '↓'
+          : '↑';
+  final sideLines =
+      lineType * (dividerLength - (title.length ~/ _halfTitleLengthDivisor));
 
-  return '$directionChar$sideLines$title$sideLines$directionChar';
+  String lineAndTitle = '$sideLines$title$sideLines';
+
+  if (lineAndTitle.length % 2 == 0) {
+    lineAndTitle += lineType;
+  }
+
+  return '$directionChar$lineAndTitle$directionChar';
 }

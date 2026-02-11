@@ -96,38 +96,32 @@ For day-to-day engineering guardrails, deterministic static checks are typically
 ## 📈 Example Output
 
 ```text
-↓--------------------------------- fCheck 0.9.8 ---------------------------------↓
-Input            : /Users/me/my_app
-Project          : my_app (version: 1.0.0)
-Project Type     : Dart
-Folders          : 14
-Files            : 57
-Dart Files       : 36
-Excluded Files   : 19
-Lines of Code    : 7,550
-Comment Lines    : 1,452
-Comment Ratio    : 19%
-Localization     : No
-Hardcoded Strings: 7 (warning)
-Magic Numbers    : 0
-Secrets          : 0
-Dead Code        : 0
-Duplicate Code   : 0
-Layers           : 6
-Dependencies     : 73
-↓····································· Lists ·····································↓
+↓----------------------------------- fCheck 0.9.9 ------------------------------------↓
+Input              : /Users/me/my_app
+Project            : my_app (version: 1.0.0)
+-------------------------------------- Scorecard --------------------------------------
+Compliance Score   : 91%
+Focus Area         : Hardcoded strings (7 issues)
+Invest Next        : Adopt localization and replace user-facing literals with keys.
+-------------------------------------- Dashboard --------------------------------------
+Project Type       : Dart                 |  Folders            :                  14
+Files              :                   57  |  Dart Files         :                  36
+Excluded Files     :                   19  |  Localization (OFF) :       HardCoded   7
+Lines of Code      :                7,550  |  Comments           :         1,452 (19%)
+One Class/File     :                    ✓  |  Magic Numbers      :                   ✓
+Secrets            :                    ✓  |  Dead Code          :                   ✓
+Layers             :                    6  |  Source Sorting     :                   ✓
+Duplicate Code     :                    ✓  |  Dependencies       :                  73
+---------------------------------------- Lists ----------------------------------------
 [✓] One class per file check passed.
-[!] Hardcoded strings check: 7 found (localization off). Example: fcheck.dart
+[!] Hardcoded strings check: 7 found (localization off). Example: lib/main.dart
 [✓] Magic numbers check passed.
 [✓] Flutter class member sorting passed.
 [✓] Secrets scan passed.
 [✓] Dead code check passed.
 [✓] Duplicate code check passed.
 [✓] Layers architecture check passed.
-↓································· Output files ·································↓
-SVG layers         : /Users/me/my_app/layers.svg
-SVG layers (folder): /Users/me/my_app/layers_folders.svg
-↑--------------------------- fCheck completed (0.43s) ---------------------------↑
+↑----------------------------- fCheck completed (0.43s) ------------------------------↑
 ```
 
 ## 📋 Usage

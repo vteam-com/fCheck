@@ -1254,7 +1254,7 @@
   <text x="733.0" y="1222.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. lib/fcheck.dart
 2. lib/src/analyzer_runner/analyzer_runner.dart</title></g><text x="562.0" y="1224.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">analyzer_runner_result.dart</text>
 <g class="folderTitleLayer">
-<text x="510.0" y="105.0" class="layerTitle">fcheck v0.9.8</text>
+<text x="510.0" y="105.0" class="layerTitle">fcheck v0.9.9</text>
 <text x="530.0" y="157.0" class="layerTitle">  bin</text>
 <text x="530.0" y="375.0" class="layerTitle">  lib</text>
 <text x="550.0" y="427.0" class="layerTitle">    ...</text>

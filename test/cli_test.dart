@@ -59,7 +59,8 @@ class TestClass {
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('fCheck $packageVersion'));
       expect(result.stdout, contains(tempDir.path));
-      expect(result.stdout, contains('Dart Files       : 1'));
+      expect(result.stdout, contains('Dart Files'));
+      expect(result.stdout, contains(RegExp(r'Compliance Score\s+:\s*')));
       expect(result.stdout, contains(tempDir.path));
     });
 
@@ -111,6 +112,7 @@ class TestClass {
       expect(result.stdout, contains('--input'));
       expect(result.stdout, contains('--fix'));
       expect(result.stdout, contains('--help'));
+      expect(result.stdout, contains('--help-score'));
     });
 
     test('should show help with -h flag', () async {
@@ -186,6 +188,42 @@ class TestClass {
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('Setup ignores directly in Dart file'));
+      expect(result.stdout, isNot(contains('does not exist')));
+    });
+
+    test('should show score help with --help-score flag', () async {
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/fcheck.dart', '--help-score'],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains('Compliance score model from 0% to 100%'));
+      expect(result.stdout, contains('Only enabled analyzers contribute'));
+      expect(result.stdout, contains('each analyzer share = 100 / N'));
+      expect(result.stdout, contains('Special rule: if rounded score is 100'));
+    });
+
+    test('should show score help before validating input directory', () async {
+      final nonExistentPath = '${tempDir.path}/does_not_exist_for_score_help';
+
+      final result = await Process.run(
+        'dart',
+        [
+          'run',
+          'bin/fcheck.dart',
+          '--help-score',
+          '--input',
+          nonExistentPath,
+        ],
+        workingDirectory: Directory.current.path,
+        runInShell: true,
+      );
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains('Compliance score model from 0% to 100%'));
       expect(result.stdout, isNot(contains('does not exist')));
     });
 
@@ -341,7 +379,10 @@ void main() {
       expect(json['stats'], isNotNull);
       expect(json['stats']['excludedFiles'], isNotNull);
       expect(json['stats']['duplicateCodeIssues'], isNotNull);
+      expect(json['stats']['complianceScore'], isNotNull);
       expect(json['layers']['dependencies'], isNotNull);
+      expect(json['compliance'], isNotNull);
+      expect(json['compliance']['score'], isNotNull);
       final graph = json['layers']['graph'] as Map<String, dynamic>;
       expect(graph.keys.any((k) => k.endsWith('a.dart')), isTrue);
       final aKey = graph.keys.firstWhere((k) => k.endsWith('a.dart'));
@@ -395,7 +436,9 @@ analyzers:
       );
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('Hardcoded Strings: disabled'));
+      expect(result.stdout, contains('Localization'));
+      expect(result.stdout, contains('HardCoded'));
+      expect(result.stdout, contains('disabled'));
       expect(
         result.stdout,
         contains('Hardcoded strings check skipped (disabled).'),

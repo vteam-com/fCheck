@@ -3,6 +3,13 @@ import 'package:args/args.dart';
 import 'console_common.dart';
 
 /// Parsed CLI input for the `fcheck` command.
+///
+/// This object is intentionally flat so downstream execution can make
+/// straightforward, deterministic decisions without re-reading raw args.
+/// Path resolution precedence is:
+/// 1. Explicit `--input`
+/// 2. First positional argument
+/// 3. Current directory (`.`)
 class ConsoleInput {
   /// Parsed target path from `--input` or positional arg.
   final String path;
@@ -43,6 +50,9 @@ class ConsoleInput {
   /// Whether `--help-ignore` is set.
   final bool showIgnoresInstructions;
 
+  /// Whether `--help-score` is set.
+  final bool showScoreInstructions;
+
   /// Creates a parsed CLI input object.
   const ConsoleInput({
     required this.path,
@@ -58,10 +68,14 @@ class ConsoleInput {
     required this.showHelp,
     required this.showVersion,
     required this.showIgnoresInstructions,
+    required this.showScoreInstructions,
   });
 }
 
-/// Builds the argument parser for the `fcheck` command.
+/// Builds the canonical argument parser for the `fcheck` command.
+///
+/// The parser definition is the single source of truth for CLI options shown
+/// in `--help` and used by [parseConsoleInput].
 ArgParser createConsoleArgParser() => ArgParser()
   ..addOption(
     'input',
@@ -138,11 +152,18 @@ ArgParser createConsoleArgParser() => ArgParser()
     'help-ignore',
     help: 'Show ignore setup for each analyzer and .fcheck options',
     negatable: false,
+  )
+  ..addFlag(
+    'help-score',
+    help: 'Show scoring model used for compliance score (0-100)',
+    negatable: false,
   );
 
 /// Parses command-line input into a [ConsoleInput] value.
 ///
 /// Throws [FormatException] when arguments are invalid.
+///
+/// If both `--input` and a positional path are provided, `--input` wins.
 ConsoleInput parseConsoleInput(
   List<String> arguments,
   ArgParser parser,
@@ -171,5 +192,6 @@ ConsoleInput parseConsoleInput(
     showHelp: argResults['help'] as bool,
     showVersion: argResults['version'] as bool,
     showIgnoresInstructions: argResults['help-ignore'] as bool,
+    showScoreInstructions: argResults['help-score'] as bool,
   );
 }
