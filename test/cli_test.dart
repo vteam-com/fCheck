@@ -6,6 +6,61 @@ import 'package:test/test.dart';
 void main() {
   group('CLI Integration', () {
     late Directory tempDir;
+    late Directory compiledCliDir;
+    late String compiledCliPath;
+    late String cliScriptPath;
+    late String projectRootPath;
+    late bool useCompiledCli;
+
+    Future<ProcessResult> runCli(
+      List<String> args, {
+      String? workingDirectory,
+      bool useDirectInvocation = false,
+    }) {
+      if (useDirectInvocation || !useCompiledCli) {
+        return Process.run(
+          'dart',
+          ['run', cliScriptPath, ...args],
+          workingDirectory: workingDirectory ?? projectRootPath,
+          runInShell: true,
+        );
+      }
+
+      return Process.run(
+        compiledCliPath,
+        args,
+        workingDirectory: workingDirectory ?? projectRootPath,
+        runInShell: true,
+      );
+    }
+
+    setUpAll(() async {
+      projectRootPath = Directory.current.path;
+      cliScriptPath = '$projectRootPath/bin/fcheck.dart';
+      compiledCliDir = await Directory.systemTemp.createTemp('fcheck_cli_bin_');
+      final executableName =
+          Platform.isWindows ? 'fcheck_cli_test.exe' : 'fcheck_cli_test';
+      compiledCliPath = '${compiledCliDir.path}/$executableName';
+      useCompiledCli = false;
+
+      final compileResult = await Process.run(
+        'dart',
+        ['compile', 'exe', cliScriptPath, '-o', compiledCliPath],
+        workingDirectory: projectRootPath,
+        runInShell: true,
+      );
+
+      if (compileResult.exitCode == 0) {
+        useCompiledCli = true;
+      } else {
+        stderr.writeln(
+          'Warning: Failed to precompile fcheck CLI for tests. '
+          'Falling back to direct dart run invocation.\n'
+          'stdout: ${compileResult.stdout}\n'
+          'stderr: ${compileResult.stderr}',
+        );
+      }
+    });
 
     setUp(() {
       tempDir = Directory.systemTemp.createTempSync('fcheck_cli_test_');
@@ -13,6 +68,12 @@ void main() {
 
     tearDown(() {
       tempDir.deleteSync(recursive: true);
+    });
+
+    tearDownAll(() {
+      if (compiledCliDir.existsSync()) {
+        compiledCliDir.deleteSync(recursive: true);
+      }
     });
 
     test('should run without arguments (current directory)', () async {
@@ -24,12 +85,11 @@ void main() {
 }
 ''');
 
-      // Change to temp directory and run fcheck
-      final result = await Process.run(
-        'dart',
-        ['run', '${Directory.current.path}/bin/fcheck.dart'],
+      // Keep one true dart run invocation for end-to-end process coverage.
+      final result = await runCli(
+        const [],
         workingDirectory: tempDir.path,
-        runInShell: true,
+        useDirectInvocation: true,
       );
 
       // CLI may exit with non-zero code in test environment, but should produce output
@@ -49,12 +109,7 @@ class TestClass {
 ''');
 
       // Run fcheck with input argument
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', tempDir.path],
-        workingDirectory: Directory.current.path, // Run from project root
-        runInShell: true,
-      );
+      final result = await runCli(['--input', tempDir.path]);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('fCheck $packageVersion'));
@@ -70,12 +125,7 @@ class TestClass {
           .writeAsStringSync('void main() => print("test");');
 
       // Run fcheck with short option
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '-i', tempDir.path],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['-i', tempDir.path]);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('fCheck $packageVersion'));
@@ -85,12 +135,7 @@ class TestClass {
     test('should handle non-existent directory', () async {
       final nonExistentPath = '${tempDir.path}/does_not_exist';
 
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', nonExistentPath],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--input', nonExistentPath]);
 
       expect(result.exitCode, equals(1));
       expect(result.stdout, contains('Error: Directory'));
@@ -98,12 +143,7 @@ class TestClass {
     });
 
     test('should show help with --help flag', () async {
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--help'],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--help']);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout,
@@ -116,12 +156,7 @@ class TestClass {
     });
 
     test('should show help with -h flag', () async {
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '-h'],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['-h']);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout,
@@ -130,12 +165,7 @@ class TestClass {
     });
 
     test('should show ignore setup with --help-ignore flag', () async {
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--help-ignore'],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--help-ignore']);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('Setup ignores directly in Dart file'));
@@ -173,18 +203,11 @@ class TestClass {
         () async {
       final nonExistentPath = '${tempDir.path}/does_not_exist_for_ignores';
 
-      final result = await Process.run(
-        'dart',
-        [
-          'run',
-          'bin/fcheck.dart',
-          '--help-ignore',
-          '--input',
-          nonExistentPath,
-        ],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli([
+        '--help-ignore',
+        '--input',
+        nonExistentPath,
+      ]);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('Setup ignores directly in Dart file'));
@@ -192,12 +215,7 @@ class TestClass {
     });
 
     test('should show score help with --help-score flag', () async {
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--help-score'],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--help-score']);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('Compliance score model from 0% to 100%'));
@@ -209,18 +227,11 @@ class TestClass {
     test('should show score help before validating input directory', () async {
       final nonExistentPath = '${tempDir.path}/does_not_exist_for_score_help';
 
-      final result = await Process.run(
-        'dart',
-        [
-          'run',
-          'bin/fcheck.dart',
-          '--help-score',
-          '--input',
-          nonExistentPath,
-        ],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli([
+        '--help-score',
+        '--input',
+        nonExistentPath,
+      ]);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('Compliance score model from 0% to 100%'));
@@ -231,12 +242,7 @@ class TestClass {
       File('${tempDir.path}/list_none.dart')
           .writeAsStringSync('void main() => print("list none");');
 
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', tempDir.path, '--list', 'none'],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--input', tempDir.path, '--list', 'none']);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('fCheck $packageVersion'));
@@ -256,12 +262,7 @@ class SecondClass {
 }
 ''');
 
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', tempDir.path],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--input', tempDir.path]);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('[✗]'));
@@ -280,12 +281,7 @@ class SecondClass {
 }
 ''');
 
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', tempDir.path],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--input', tempDir.path]);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('[✓] One class per file check passed.'));
@@ -302,12 +298,7 @@ void main() {
 }
 ''');
 
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', tempDir.path],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--input', tempDir.path]);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('[!]'));
@@ -330,12 +321,7 @@ void main() {
           .writeAsStringSync('void main() => print("dir2");');
 
       // Run with both explicit option and positional argument - explicit should win
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', dir1.path, dir2.path],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--input', dir1.path, dir2.path]);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('fCheck $packageVersion'));
@@ -349,12 +335,7 @@ void main() {
           .writeAsStringSync('void main() => print("positional test");');
 
       // Run fcheck with positional argument
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', tempDir.path],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli([tempDir.path]);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('fCheck $packageVersion'));
@@ -365,12 +346,7 @@ void main() {
       File('${tempDir.path}/a.dart').writeAsStringSync('import "b.dart";');
       File('${tempDir.path}/b.dart').writeAsStringSync('class B {}');
 
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', tempDir.path, '--json'],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--input', tempDir.path, '--json']);
 
       expect(result.exitCode, equals(0));
 
@@ -404,12 +380,7 @@ analyzers:
     - hardcoded_strings
 ''');
 
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', tempDir.path, '--json'],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--input', tempDir.path, '--json']);
 
       expect(result.exitCode, equals(0));
       final json = jsonDecode(result.stdout as String) as Map<String, dynamic>;
@@ -430,12 +401,7 @@ analyzers:
     - hardcoded_strings
 ''');
 
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', tempDir.path],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--input', tempDir.path]);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('Localization'));
@@ -462,12 +428,7 @@ analyzers:
     - magic_numbers
 ''');
 
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', tempDir.path, '--json'],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--input', tempDir.path, '--json']);
 
       expect(result.exitCode, equals(0));
       final json = jsonDecode(result.stdout as String) as Map<String, dynamic>;
@@ -507,12 +468,7 @@ analyzers:
     - layers
 ''');
 
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', tempDir.path, '--json'],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--input', tempDir.path, '--json']);
 
       expect(result.exitCode, equals(0));
       final json = jsonDecode(result.stdout as String) as Map<String, dynamic>;
@@ -548,12 +504,7 @@ analyzers:
       min_non_empty_lines: 1
 ''');
 
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', tempDir.path, '--json'],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--input', tempDir.path, '--json']);
 
       expect(result.exitCode, equals(0));
       final json = jsonDecode(result.stdout as String) as Map<String, dynamic>;
@@ -569,12 +520,7 @@ analyzers:
     - unknown_analyzer
 ''');
 
-      final result = await Process.run(
-        'dart',
-        ['run', 'bin/fcheck.dart', '--input', tempDir.path],
-        workingDirectory: Directory.current.path,
-        runInShell: true,
-      );
+      final result = await runCli(['--input', tempDir.path]);
 
       expect(result.exitCode, equals(1));
       expect(result.stdout, contains('Invalid .fcheck configuration'));
