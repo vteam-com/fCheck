@@ -1,4 +1,7 @@
+import 'package:analyzer/dart/analysis/features.dart';
+import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/token.dart';
 
 /// Utility for detecting ignore directives in Dart files.
 class IgnoreConfig {
@@ -72,16 +75,15 @@ class IgnoreConfig {
   /// This includes both top-of-file and inline ignore comments.
   /// If a single ignore line contains multiple `fcheck_*` tokens, each token
   /// contributes to the count.
-  static int countFcheckIgnoreDirectives(String content) {
+  static int countFcheckIgnoreDirectives(
+    String content, {
+    CompilationUnit? compilationUnit,
+  }) {
     var count = 0;
-    final lines = content.split('\n');
-    for (final line in lines) {
-      final commentStart = line.indexOf('//');
-      if (commentStart < 0) {
-        continue;
-      }
-
-      final comment = line.substring(commentStart + _lineCommentPrefixLength);
+    for (final comment in _lineCommentBodies(
+      content,
+      compilationUnit: compilationUnit,
+    )) {
       final match = _lineIgnorePattern.firstMatch(comment);
       if (match == null) {
         continue;
@@ -91,6 +93,40 @@ class IgnoreConfig {
       count += _fcheckDirectiveTokenPattern.allMatches(directives).length;
     }
     return count;
+  }
+
+  static Iterable<String> _lineCommentBodies(
+    String content, {
+    CompilationUnit? compilationUnit,
+  }) sync* {
+    final unit = compilationUnit ??
+        parseString(
+          content: content,
+          featureSet: FeatureSet.latestLanguageVersion(),
+        ).unit;
+
+    for (final commentToken in _commentTokens(unit.beginToken)) {
+      final lexeme = commentToken.lexeme;
+      if (!lexeme.startsWith('//')) {
+        continue;
+      }
+      yield lexeme.substring(_lineCommentPrefixLength);
+    }
+  }
+
+  static Iterable<Token> _commentTokens(Token beginToken) sync* {
+    Token token = beginToken;
+    while (true) {
+      Token? comment = token.precedingComments;
+      while (comment != null) {
+        yield comment;
+        comment = comment.next;
+      }
+      if (token.type == TokenType.EOF) {
+        break;
+      }
+      token = token.next!;
+    }
   }
 
   static String _buildExpectedCommentPattern(String expectedComment) {

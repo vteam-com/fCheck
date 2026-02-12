@@ -1,4 +1,3 @@
-// ignore: fcheck_secrets
 import 'dart:math' as math;
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';

@@ -1,5 +1,3 @@
-// ignore: fcheck_secrets
-
 // A Flutter/Dart code quality analysis tool.
 //
 // This library provides functionality to analyze Flutter and Dart projects
@@ -453,8 +451,10 @@ class AnalyzeFolder {
           isStatefulWidget: false,
           ignoreOneClassPerFile: ignoreOneClassPerFile,
         ),
-        fcheckIgnoreDirectiveCount:
-            IgnoreConfig.countFcheckIgnoreDirectives(content),
+        fcheckIgnoreDirectiveCount: IgnoreConfig.countFcheckIgnoreDirectives(
+          content,
+          compilationUnit: result.unit,
+        ),
       );
     }
 
@@ -473,8 +473,10 @@ class AnalyzeFolder {
         isStatefulWidget: visitor.hasStatefulWidget,
         ignoreOneClassPerFile: ignoreOneClassPerFile,
       ),
-      fcheckIgnoreDirectiveCount:
-          IgnoreConfig.countFcheckIgnoreDirectives(content),
+      fcheckIgnoreDirectiveCount: IgnoreConfig.countFcheckIgnoreDirectives(
+        content,
+        compilationUnit: result.unit,
+      ),
     );
   }
 

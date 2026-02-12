@@ -1,5 +1,4 @@
 // ignore: fcheck_one_class_per_file
-// ignore: fcheck_secrets
 import 'dart:io';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
