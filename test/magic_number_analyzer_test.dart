@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
-import 'package:fcheck/src/analyzer_runner/analyzer_delegates.dart';
+import 'package:fcheck/src/analyzers/magic_numbers/magic_number_delegate.dart';
+
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:test/test.dart';

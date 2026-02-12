@@ -2,7 +2,8 @@ import 'dart:io';
 import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
-import 'package:fcheck/src/analyzer_runner/analyzer_delegates.dart';
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_delegate.dart';
+
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart';
 import 'package:fcheck/src/input_output/file_utils.dart';

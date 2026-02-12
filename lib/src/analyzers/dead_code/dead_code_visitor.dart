@@ -1,7 +1,7 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
-import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+import 'package:fcheck/src/analyzers/dead_code/dead_code_symbol.dart';
 import 'package:fcheck/src/analyzers/shared/dependency_uri_utils.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 

@@ -1,6 +1,6 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
-import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_file_data.dart';
+import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_file_snippet.dart';
 
 /// Collects normalized executable snippets for duplicate-code analysis.
 class DuplicateCodeVisitor extends RecursiveAstVisitor<void> {

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_file_data.dart';
+import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_file_snippet.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 
 /// Analyzer for duplicate code across normalized executable snippets.

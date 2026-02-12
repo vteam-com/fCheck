@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
-import 'package:fcheck/src/analyzer_runner/analyzer_delegates.dart';
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_delegate.dart';
+import 'package:fcheck/src/analyzers/magic_numbers/magic_number_delegate.dart';
+
 import 'package:test/test.dart';
 import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
 import 'package:path/path.dart' as p;
