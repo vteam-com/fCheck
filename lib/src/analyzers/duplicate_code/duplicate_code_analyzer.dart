@@ -143,6 +143,7 @@ class DuplicateCodeAnalyzer {
     return issues;
   }
 
+  /// Computes normalized similarity for two token streams.
   double _calculateSimilarity(
     List<String> leftTokens,
     List<String> rightTokens,
@@ -168,6 +169,7 @@ class DuplicateCodeAnalyzer {
     return 1 - (distance / maxLength);
   }
 
+  /// Computes Levenshtein distance with an early-exit max-distance bound.
   int _boundedLevenshtein(
     List<String> left,
     List<String> right,

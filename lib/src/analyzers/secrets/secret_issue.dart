@@ -1,3 +1,5 @@
+import 'package:fcheck/src/input_output/issue_location_utils.dart';
+
 /// Represents a secret issue found in the code.
 ///
 /// This class contains information about a potential secret or sensitive
@@ -36,15 +38,16 @@ class SecretIssue {
 
   /// Returns a formatted issue line for CLI output.
   String format({int? lineNumberWidth}) {
-    final hasLocationLine = filePath != null && lineNumber != null;
-    final lineNumberText = hasLocationLine
-        ? (lineNumberWidth == null
-            ? '$lineNumber'
-            : lineNumber!.toString().padLeft(lineNumberWidth))
-        : null;
-    final location = hasLocationLine
-        ? '$filePath:$lineNumberText'
-        : filePath ?? 'unknown location';
+    assertValidLineNumberWidth(lineNumberWidth);
+    final location = _formatLocation();
     return 'Secret issue at $location: $secretType';
+  }
+
+  /// Internal helper used by fcheck analysis and reporting.
+  String _formatLocation() {
+    if (filePath == null) {
+      return 'unknown location';
+    }
+    return resolveIssueLocation(rawPath: filePath!, lineNumber: lineNumber);
   }
 }

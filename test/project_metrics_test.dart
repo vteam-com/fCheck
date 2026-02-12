@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
@@ -450,6 +453,7 @@ void main() {
             'secretIssues': 1,
             'deadCodeIssues': 1,
             'duplicateCodeIssues': 1,
+            'documentationIssues': 0,
             'complianceScore': 43,
           },
           'layers': {
@@ -528,6 +532,7 @@ void main() {
               'lineCount': 12,
             },
           ],
+          'documentationIssues': [],
           'localization': {'usesLocalization': true},
           'compliance': {
             'score': 43,
@@ -901,6 +906,141 @@ void main() {
       expect(joined, contains('Duplicate code check skipped (disabled).'));
     });
 
+    test('should show documentation check passed when enabled with no issues',
+        () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 1,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/sample.dart',
+            linesOfCode: 10,
+            commentLines: 1,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [],
+        documentationIssues: const [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: true,
+      );
+
+      final output = buildReportLines(projectMetrics);
+      final joined = output.join('\n');
+
+      expect(joined, contains('Documentation check passed.'));
+    });
+
+    test('should show documentation issues in list section', () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 1,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/main.dart',
+            linesOfCode: 10,
+            commentLines: 1,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [],
+        documentationIssues: const [
+          DocumentationIssue(
+            type: DocumentationIssueType.undocumentedPublicFunction,
+            filePath: 'lib/a.dart',
+            lineNumber: 12,
+            subject: 'runApp',
+          ),
+        ],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: true,
+      );
+
+      final output =
+          buildReportLines(projectMetrics, listMode: ReportListMode.full);
+      final joined = output.join('\n');
+
+      expect(joined, contains('[!] 1 documentation issues detected:'));
+      expect(
+        joined,
+        contains('lib/a.dart:12: public function is missing documentation'),
+      );
+    });
+
+    test(
+        'should show documentation skipped status and include it in disabled analyzers',
+        () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 1,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/main.dart',
+            linesOfCode: 10,
+            commentLines: 1,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [],
+        documentationIssues: const [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: true,
+        documentationAnalyzerEnabled: false,
+      );
+
+      final output = buildReportLines(projectMetrics);
+      final joined = output.join('\n');
+
+      expect(joined, contains('Documentation check skipped (disabled).'));
+      expect(joined, contains('Disabled analyzers: 1 analyzer'));
+      expect(joined, contains('documentation'));
+    });
+
     test('should show suppressions summary in Lists when suppressions exist',
         () {
       final projectMetrics = ProjectMetrics(
@@ -1099,6 +1239,283 @@ void main() {
 
       expect(layersFailIdx, greaterThan(suppressionsWarnIdx));
       expect(oneClassFailIdx, greaterThan(layersFailIdx));
+    });
+
+    test('should normalize duplicated path prefixes in issue lines', () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 1,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/main.dart',
+            linesOfCode: 10,
+            commentLines: 1,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: [],
+        hardcodedStringIssues: [
+          HardcodedStringIssue(
+            filePath: 'lib/a.dart:lib/a.dart',
+            lineNumber: 1,
+            value: 'x',
+          ),
+        ],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: true,
+      );
+
+      final output =
+          buildReportLines(projectMetrics, listMode: ReportListMode.full);
+      final joined = output.join('\n');
+
+      expect(joined, isNot(contains('lib/a.dart:lib/a.dart:')));
+      expect(joined, contains('lib/a.dart:1: "x"'));
+    });
+
+    test('should normalize duplicated absolute path prefixes in issue lines',
+        () {
+      const absolute =
+          '/Users/jp/src/github/vteam/fcheck/bin/console_output.dart';
+
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 1,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/main.dart',
+            linesOfCode: 10,
+            commentLines: 1,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [
+          MagicNumberIssue(
+            filePath: '$absolute:$absolute',
+            lineNumber: 2,
+            value: '2',
+          ),
+        ],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: true,
+      );
+
+      final output =
+          buildReportLines(projectMetrics, listMode: ReportListMode.full);
+      final joined = output.join('\n');
+
+      expect(joined, isNot(contains('$absolute:$absolute:')));
+      expect(joined, contains('$absolute:2: 2'));
+    });
+
+    test('should normalize duplicated path prefixes in output file lines', () {
+      final printedLines = <String>[];
+      const path = '/tmp/layers.svg';
+      const duplicatedPath = '$path:$path';
+
+      runZoned(
+        () => printOutputFileLine(
+          label: 'SVG layers         ',
+          path: duplicatedPath,
+        ),
+        zoneSpecification: ZoneSpecification(
+          print: (_, __, ___, line) => printedLines.add(line),
+        ),
+      );
+
+      expect(printedLines, hasLength(1));
+      expect(printedLines.single, contains(path));
+      expect(printedLines.single, isNot(contains(duplicatedPath)));
+    });
+
+    test('dead code grouped output should not repeat issue type label', () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 20,
+        totalCommentLines: 2,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/main.dart',
+            linesOfCode: 20,
+            commentLines: 2,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [
+          DeadCodeIssue(
+            type: DeadCodeIssueType.unusedVariable,
+            filePath: 'lib/a.dart',
+            lineNumber: 12,
+            name: 'tempValue',
+            owner: 'build',
+          ),
+        ],
+        duplicateCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: true,
+      );
+
+      final output =
+          buildReportLines(projectMetrics, listMode: ReportListMode.full);
+      final joined = output.join('\n');
+
+      expect(joined, contains('Unused variables (1):'));
+      expect(joined, contains('lib/a.dart:12: "tempValue" in build'));
+      expect(joined, isNot(contains('unused variable "tempValue"')));
+    });
+
+    test('dead code grouped output should normalize duplicated path prefixes',
+        () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 20,
+        totalCommentLines: 2,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/main.dart',
+            linesOfCode: 20,
+            commentLines: 2,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [
+          DeadCodeIssue(
+            type: DeadCodeIssueType.unusedVariable,
+            filePath: 'bin/console_output.dart:bin/console_output.dart',
+            name: 'status',
+            owner: 'anonymous',
+          ),
+        ],
+        duplicateCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: true,
+      );
+
+      final output =
+          buildReportLines(projectMetrics, listMode: ReportListMode.full);
+      final joined = output.join('\n');
+
+      expect(
+        joined,
+        contains('bin/console_output.dart: "status" in anonymous'),
+      );
+      expect(
+        joined,
+        isNot(
+          contains('bin/console_output.dart:bin/console_output.dart:'),
+        ),
+      );
+    });
+
+    test(
+        'dead code grouped output should preserve line numbers with duplicated paths',
+        () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 20,
+        totalCommentLines: 2,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/main.dart',
+            linesOfCode: 20,
+            commentLines: 2,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [
+          DeadCodeIssue(
+            type: DeadCodeIssueType.unusedVariable,
+            filePath: 'bin/console_output.dart:bin/console_output.dart',
+            lineNumber: 428,
+            name: 'status',
+            owner: 'anonymous',
+          ),
+        ],
+        duplicateCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: true,
+      );
+
+      final output =
+          buildReportLines(projectMetrics, listMode: ReportListMode.full);
+      final joined = output.join('\n');
+
+      expect(joined,
+          contains('bin/console_output.dart:428: "status" in anonymous'));
+      expect(
+        joined,
+        isNot(
+          contains('bin/console_output.dart:bin/console_output.dart:'),
+        ),
+      );
     });
   });
 }

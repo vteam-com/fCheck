@@ -159,6 +159,7 @@ String fittedTextClass(
   return fitted < (baseFontSize - epsilon) ? smallClass : normalClass;
 }
 
+/// Estimates SVG width units for [text] based on coarse glyph categories.
 double _estimateSvgTextUnits(String text) {
   var units = 0.0;
   for (final rune in text.runes) {

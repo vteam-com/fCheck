@@ -21,6 +21,7 @@ This file defines baseline contributor expectations for the `fcheck` project and
 - `RULES_MAGIC_NUMBERS.md` for numeric literal detection rules.
 - `RULES_SECRETS.md` for secret/PII detection rules.
 - `RULES_DUPLICATE_CODE.md` for duplicate code detection rules.
+- `RULES_DOCUMENTATION.md` for README/API documentation quality rules.
 - `RULES_SORTING.md` for Flutter widget member ordering rules.
 - `RULES_LAYERS.md` for dependency graph and layer analysis rules.
 - `RULE_SCORE.md` for overall compliance scoring rules.
@@ -84,6 +85,9 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - `lib/src/analyzers/duplicate_code/duplicate_code_analyzer.dart`
 - `lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart`
 - `lib/src/analyzers/duplicate_code/duplicate_code_issue.dart`
+- `lib/src/analyzers/documentation/documentation_analyzer.dart`
+- `lib/src/analyzers/documentation/documentation_visitor.dart`
+- `lib/src/analyzers/documentation/documentation_issue.dart`
 - `lib/src/analyzers/sorted/sort_members.dart`
 - `lib/src/analyzers/sorted/sort_issue.dart`
 - `lib/src/analyzers/layers/layers_analyzer.dart`
@@ -141,6 +145,10 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 ## Output Formatting
 
 - When displaying counts or other numbers `>= 1,000` in CLI output or documentation examples, use comma separators (e.g., `1,234`, `12,345`, `1,234,567`).
+- When displaying file paths in CLI output, reports, or examples, always use paths relative to the effective analysis root (the input folder after applying `input.root`).
+- When displaying source locations, always format as `relative_file_path:line_number` with no space after `:`.
+- In ANSI-capable terminals, colorize the `filename:line_number` segment in blue while keeping directory prefixes uncolored.
+- In ANSI-capable terminals, colorize right-side symbol names in orange (for example `"MyClass.myMethod"` or `"myVariable"` in issue details).
 - Hardcoded strings list entries are shown only when localization is `ON`; when localization is `OFF`, print summary-only warning text (no per-item list in Lists section).
 - Lists section blocks must be ordered by status group, then alphabetically by check name:
   - success (ascending)
@@ -159,7 +167,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
   - `analyzers.enabled`: explicit opt-in list
   - `analyzers.disabled`: explicit opt-out list
   - `analyzers.options.duplicate_code`: threshold/size tuning for duplicate-code analysis
-- Supported analyzer keys: `one_class_per_file`, `hardcoded_strings`, `magic_numbers`, `source_sorting`, `layers`, `secrets`, `dead_code`, `duplicate_code`.
+- Supported analyzer keys: `one_class_per_file`, `hardcoded_strings`, `magic_numbers`, `source_sorting`, `layers`, `secrets`, `dead_code`, `duplicate_code`, `documentation`.
 - Legacy `ignores.<analyzer>: true` remains supported as a compatibility alias for disabling analyzers.
 - Precedence: built-in defaults < `.fcheck` < CLI flags.
 - File-level ignore: `// ignore: fcheck_<domain>` at the top of a Dart file.

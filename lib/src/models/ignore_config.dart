@@ -27,6 +27,10 @@ class IgnoreConfig {
   static const String ignoreDirectiveForDuplicateCode =
       '// ignore: fcheck_duplicate_code';
 
+  /// `// ignore: fcheck_documentation` directive used to skip checks.
+  static const String ignoreDirectiveForDocumentation =
+      '// ignore: fcheck_documentation';
+
   /// `// ignore: fcheck_one_class_per_file` directive used to skip checks.
   static const String ignoreDirectiveForOneClassPerFile =
       '// ignore: fcheck_one_class_per_file';
@@ -95,6 +99,10 @@ class IgnoreConfig {
     return count;
   }
 
+  /// Yields raw bodies for `//` comments found in [content].
+  ///
+  /// If [compilationUnit] is not provided, this parses [content] once and
+  /// reuses analyzer tokens to avoid manual line scanning.
   static Iterable<String> _lineCommentBodies(
     String content, {
     CompilationUnit? compilationUnit,
@@ -114,6 +122,7 @@ class IgnoreConfig {
     }
   }
 
+  /// Iterates all comment tokens attached to the token stream.
   static Iterable<Token> _commentTokens(Token beginToken) sync* {
     Token token = beginToken;
     while (true) {
@@ -129,6 +138,10 @@ class IgnoreConfig {
     }
   }
 
+  /// Builds a regex that matches [expectedComment] with flexible whitespace.
+  ///
+  /// This allows callers to match forms such as `//ignore:fcheck_x` and
+  /// `// ignore : fcheck_x` as equivalent.
   static String _buildExpectedCommentPattern(String expectedComment) {
     var working = expectedComment;
     if (working.startsWith('//')) {
@@ -153,6 +166,9 @@ class IgnoreConfig {
     return buffer.toString();
   }
 
+  /// Collects the contiguous comment block at the start of a file.
+  ///
+  /// Scanning stops at the first non-comment, non-empty line.
   static String _collectLeadingCommentBlock(String content) {
     final lines = content.split('\n');
     final buffer = StringBuffer();

@@ -1,5 +1,8 @@
 import 'dart:io';
 import 'package:fcheck/fcheck.dart';
+import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
+import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 void main() {
@@ -109,6 +112,48 @@ class MyClass {
       expect(fileMetrics.commentLines, greaterThan(0));
       expect(fileMetrics.classCount, equals(1));
       expect(fileMetrics.isStatefulWidget, isFalse);
+    });
+
+    test('should report documentation issue paths relative to analysis root',
+        () {
+      final file = File('${tempDir.path}/lib/feature/service.dart')
+        ..createSync(recursive: true);
+      file.writeAsStringSync('''
+class Service {}
+''');
+
+      final metrics = analyzer.analyze();
+      final readmeIssue = metrics.documentationIssues.firstWhere(
+        (issue) => issue.type == DocumentationIssueType.missingReadme,
+      );
+      final classIssue = metrics.documentationIssues.firstWhere(
+        (issue) => issue.type == DocumentationIssueType.undocumentedPublicClass,
+      );
+
+      expect(readmeIssue.filePath, equals('README.md'));
+      expect(classIssue.filePath,
+          equals(p.join('lib', 'feature', 'service.dart')));
+    });
+
+    test('should report dead code issue paths relative to analysis root', () {
+      final file = File('${tempDir.path}/lib/feature/dead.dart')
+        ..createSync(recursive: true);
+      file.writeAsStringSync('''
+void main() {
+  final unused = 42;
+  print('ok');
+}
+''');
+
+      final metrics = analyzer.analyze();
+      final unusedVariableIssue = metrics.deadCodeIssues.firstWhere(
+        (issue) => issue.type == DeadCodeIssueType.unusedVariable,
+      );
+
+      expect(
+        unusedVariableIssue.filePath,
+        equals(p.join('lib', 'feature', 'dead.dart')),
+      );
     });
   });
 }

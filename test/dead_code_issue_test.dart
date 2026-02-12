@@ -141,5 +141,18 @@ void main() {
         }),
       );
     });
+
+    test('format normalizes duplicated path prefixes', () {
+      final issue = DeadCodeIssue(
+        type: DeadCodeIssueType.unusedVariable,
+        filePath: 'lib/a.dart:lib/a.dart',
+        name: 'value',
+      );
+
+      expect(
+        _normalizeAnsi(issue.format()),
+        equals('lib/a.dart: unused variable "value"'),
+      );
+    });
   });
 }

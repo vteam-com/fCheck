@@ -71,6 +71,7 @@ class LayersVisitor extends GeneralizingAstVisitor<void> {
     super.visitFunctionDeclaration(node);
   }
 
+  /// Resolves directive URIs and records in-project Dart dependencies.
   void _addDirectiveDependencies(
     String? uri,
     List<Configuration> configurations,
@@ -84,6 +85,7 @@ class LayersVisitor extends GeneralizingAstVisitor<void> {
     }
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   void _addDependencyIfDart(String? uri) {
     addResolvedProjectDartDependency(
       uri: uri,

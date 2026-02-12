@@ -117,6 +117,7 @@ class DeadCodeAnalyzer {
     return issues;
   }
 
+  /// Resolves dead-code graph entry points based on runtime entry conventions.
   Set<String> _resolveEntryPoints(
     Map<String, DeadCodeFileData> fileDataByPath,
   ) {
@@ -148,6 +149,7 @@ class DeadCodeAnalyzer {
     return entryPoints;
   }
 
+  /// Traverses dependencies from entry points and returns reachable file paths.
   Set<String> _findReachableFiles(
     Map<String, List<String>> dependencyGraph,
     Set<String> entryPoints,

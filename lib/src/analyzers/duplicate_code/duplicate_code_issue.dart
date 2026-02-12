@@ -71,6 +71,7 @@ class DuplicateCodeIssue {
         '($firstSymbol, $secondSymbol)';
   }
 
+  /// Strips a shared absolute root prefix for shorter issue display paths.
   (String firstPath, String secondPath) _stripCommonAbsolutePrefix(
     String firstPath,
     String secondPath,
@@ -111,6 +112,7 @@ class DuplicateCodeIssue {
     );
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   String? _rootPrefix(String normalizedPath) {
     if (normalizedPath.startsWith('/')) {
       return '/';
@@ -124,6 +126,7 @@ class DuplicateCodeIssue {
     return null;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   String _fallbackPath(String normalizedPath) {
     final parts = normalizedPath.split('/');
     for (var i = parts.length - 1; i >= 0; i--) {

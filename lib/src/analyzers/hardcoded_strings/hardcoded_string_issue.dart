@@ -1,3 +1,5 @@
+import 'package:fcheck/src/input_output/issue_location_utils.dart';
+
 /// Represents a hardcoded string finding.
 ///
 /// This class encapsulates information about a potentially hardcoded string
@@ -34,10 +36,12 @@ class HardcodedStringIssue {
 
   /// Returns a formatted issue line for CLI output.
   String format({int? lineNumberWidth}) {
-    final lineNumberText = lineNumberWidth == null
-        ? '$lineNumber'
-        : lineNumber.toString().padLeft(lineNumberWidth);
-    return '$filePath:$lineNumberText: "$value"';
+    assertValidLineNumberWidth(lineNumberWidth);
+    final location = resolveIssueLocationWithLine(
+      rawPath: filePath,
+      lineNumber: lineNumber,
+    );
+    return '$location: "$value"';
   }
 
   /// Converts this issue to a JSON-compatible map.

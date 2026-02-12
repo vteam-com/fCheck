@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:fcheck/src/input_output/number_format_utils.dart';
 import 'package:fcheck/src/metrics/project_metrics.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
@@ -17,9 +18,7 @@ const int _domainValueWidth = 18;
 const int _perfectScoreThreshold = 95;
 const int _goodScoreThreshold = 85;
 const int _fairScoreThreshold = 70;
-const int _perfectCommentRatioPercent = 20;
-const int _goodCommentRatioPercent = 12;
-const int _fairCommentRatioPercent = 6;
+const int _minHealthyCommentRatioPercent = 10;
 const int _minorIssueCountUpperBound = 3;
 const int _compactDecimalPlaces = 2;
 const int _hardcodedValueWidth = 3;
@@ -28,6 +27,9 @@ const int _moderateSuppressionPenaltyUpperBound = 7;
 const int _unknownListBlockOrder = 99;
 const String _noneIndicator = '  (none)';
 
+/// Returns all issues or a top slice depending on [listMode].
+///
+/// Partial mode limits output to a stable preview size for readability.
 Iterable<T> _issuesForMode<T>(
   List<T> issues,
   ReportListMode listMode,
@@ -38,11 +40,15 @@ Iterable<T> _issuesForMode<T>(
   return issues;
 }
 
+/// Deduplicates and normalizes file paths for filenames-only sections.
+///
+/// Null entries are represented as `unknown location` to keep output explicit.
 List<String> _uniqueFilePaths(Iterable<String?> paths) {
   final unique = <String>{};
   final result = <String>[];
   for (final path in paths) {
-    final value = path ?? 'unknown location';
+    final value =
+        path == null ? 'unknown location' : normalizeIssueLocation(path).path;
     if (unique.add(value)) {
       result.add(value);
     }
@@ -50,6 +56,9 @@ List<String> _uniqueFilePaths(Iterable<String?> paths) {
   return result;
 }
 
+/// Computes the widest decimal width among [values].
+///
+/// Used to align numeric columns in list output blocks.
 int _maxIntWidth(Iterable<int> values) {
   var maxWidth = 0;
   for (final value in values) {
@@ -73,6 +82,7 @@ String _labelValueLine({
 
 String _gridRow(List<String> cells) => cells.join('  ${_separatorPipe()}  ');
 
+/// Builds one dashboard cell with consistent label/value alignment.
 String _gridCell({
   required String label,
   required String value,
@@ -90,6 +100,7 @@ String _gridCell({
   );
 }
 
+/// Colors the compliance score text according to threshold bands.
 String _scoreValue(int score) {
   final text = '${formatCount(score)}%';
   if (score >= _perfectScoreThreshold) {
@@ -104,6 +115,7 @@ String _scoreValue(int score) {
   return _colorizeBold(text, _ansiRedBright);
 }
 
+/// Formats a domain dashboard value including disabled/issue severity states.
 String _domainValue({
   required bool enabled,
   required int issueCount,
@@ -141,6 +153,7 @@ String _domainValue({
   return _colorize(text, _ansiRed);
 }
 
+/// Formats comments as raw count and percent of LOC.
 String _commentSummary({
   required int totalCommentLines,
   required double commentRatio,
@@ -150,18 +163,16 @@ String _commentSummary({
   final summary =
       '${formatCount(totalCommentLines)} (${formatCount(ratioPercent)}%)';
   final text = width <= 0 ? summary : summary.padLeft(width);
-  if (ratioPercent >= _perfectCommentRatioPercent) {
-    return _colorize(text, _ansiGreen);
+  if (ratioPercent < _minHealthyCommentRatioPercent) {
+    return _colorize(text, _ansiRed);
   }
-  if (ratioPercent >= _goodCommentRatioPercent) {
-    return _colorize(text, _ansiYellowBright);
-  }
-  if (ratioPercent >= _fairCommentRatioPercent) {
-    return _colorize(text, _ansiOrange);
-  }
-  return _colorize(text, _ansiRed);
+  return text;
 }
 
+/// Formats suppression penalty points with sign, alignment, and severity color.
+///
+/// Zero penalty is green; larger penalties are highlighted to make score
+/// deductions obvious in the scorecard.
 String _suppressionPenaltyValue({
   required int penaltyPoints,
   int width = 0,
@@ -182,6 +193,9 @@ String _suppressionPenaltyValue({
   return _colorize(text, _ansiRed);
 }
 
+/// Formats suppression-related counts with optional width alignment.
+///
+/// A zero count is shown as green to indicate healthy suppression hygiene.
 String _suppressionCountValue({
   required int count,
   int width = 0,
@@ -194,6 +208,9 @@ String _suppressionCountValue({
   return _colorize(text, _ansiOrange);
 }
 
+/// Formats a decimal value for compact CLI display.
+///
+/// Keeps up to two fractional digits and removes trailing zeros and separators.
 String _formatCompactDecimal(double value) {
   var text = value.toStringAsFixed(_compactDecimalPlaces);
   while (text.endsWith('0')) {
@@ -245,6 +262,7 @@ List<String> buildReportLines(
   final magicNumberIssues = metrics.magicNumberIssues;
   final secretIssues = metrics.secretIssues;
   final deadCodeIssues = metrics.deadCodeIssues;
+  final documentationIssues = metrics.documentationIssues;
   final duplicateCodeIssues = [...metrics.duplicateCodeIssues];
   duplicateCodeIssues.sort((left, right) {
     final similarityCompare = right.similarity.compareTo(left.similarity);
@@ -299,6 +317,7 @@ List<String> buildReportLines(
   final secretsAnalyzerEnabled = metrics.secretsAnalyzerEnabled;
   final deadCodeAnalyzerEnabled = metrics.deadCodeAnalyzerEnabled;
   final duplicateCodeAnalyzerEnabled = metrics.duplicateCodeAnalyzerEnabled;
+  final documentationAnalyzerEnabled = metrics.documentationAnalyzerEnabled;
   final layersAnalyzerEnabled = metrics.layersAnalyzerEnabled;
   final layersEdgeCount = metrics.layersEdgeCount;
   final fileMetrics = metrics.fileMetrics;
@@ -315,6 +334,7 @@ List<String> buildReportLines(
     if (!secretsAnalyzerEnabled) AnalyzerDomain.secrets.configName,
     if (!deadCodeAnalyzerEnabled) AnalyzerDomain.deadCode.configName,
     if (!duplicateCodeAnalyzerEnabled) AnalyzerDomain.duplicateCode.configName,
+    if (!documentationAnalyzerEnabled) AnalyzerDomain.documentation.configName,
   ]..sort();
   final complianceScore = metrics.complianceScore;
   final suppressionPenaltyPoints = metrics.suppressionPenaltyPoints;
@@ -521,13 +541,13 @@ List<String> buildReportLines(
   ]));
   addLine(_gridRow([
     _gridCell(
+      label: 'Dependencies',
+      value: layersAnalyzerEnabled ? formatCount(layersEdgeCount) : 'disabled',
+    ),
+    _gridCell(
       label: 'Duplicate Code',
       value: duplicateCodeSummary,
       valuePreAligned: true,
-    ),
-    _gridCell(
-      label: 'Dependencies',
-      value: layersAnalyzerEnabled ? formatCount(layersEdgeCount) : 'disabled',
     ),
   ]));
 
@@ -876,7 +896,7 @@ List<String> buildReportLines(
         final visibleDeadFileIssues =
             _issuesForMode(deadFileIssues, listMode).toList();
         for (final issue in visibleDeadFileIssues) {
-          blockLines.add('    - ${issue.format()}');
+          blockLines.add('    - ${issue.formatGrouped()}');
         }
         if (listMode == ReportListMode.partial &&
             deadFileIssues.length > _maxIssuesToShow) {
@@ -901,7 +921,7 @@ List<String> buildReportLines(
         final visibleDeadClassIssues =
             _issuesForMode(deadClassIssues, listMode).toList();
         for (final issue in visibleDeadClassIssues) {
-          blockLines.add('    - ${issue.format()}');
+          blockLines.add('    - ${issue.formatGrouped()}');
         }
         if (listMode == ReportListMode.partial &&
             deadClassIssues.length > _maxIssuesToShow) {
@@ -926,7 +946,7 @@ List<String> buildReportLines(
         final visibleDeadFunctionIssues =
             _issuesForMode(deadFunctionIssues, listMode).toList();
         for (final issue in visibleDeadFunctionIssues) {
-          blockLines.add('    - ${issue.format()}');
+          blockLines.add('    - ${issue.formatGrouped()}');
         }
         if (listMode == ReportListMode.partial &&
             deadFunctionIssues.length > _maxIssuesToShow) {
@@ -953,7 +973,7 @@ List<String> buildReportLines(
         final visibleUnusedVariableIssues =
             _issuesForMode(unusedVariableIssues, listMode).toList();
         for (final issue in visibleUnusedVariableIssues) {
-          blockLines.add('    - ${issue.format()}');
+          blockLines.add('    - ${issue.formatGrouped()}');
         }
         if (listMode == ReportListMode.partial &&
             unusedVariableIssues.length > _maxIssuesToShow) {
@@ -1021,6 +1041,49 @@ List<String> buildReportLines(
     addListBlock(
       status: _ListBlockStatus.warning,
       sortKey: 'duplicate code',
+      blockLines: blockLines,
+    );
+  }
+
+  if (!documentationAnalyzerEnabled) {
+    addListBlock(
+      status: _ListBlockStatus.disabled,
+      sortKey: 'documentation',
+      blockLines: ['${skipTag()} Documentation check skipped (disabled).'],
+    );
+  } else if (documentationIssues.isEmpty) {
+    addListBlock(
+      status: _ListBlockStatus.success,
+      sortKey: 'documentation',
+      blockLines: ['${okTag()} Documentation check passed.'],
+    );
+  } else {
+    final blockLines = <String>[
+      '${warnTag()} ${formatCount(documentationIssues.length)} documentation issues detected:',
+    ];
+    if (filenamesOnly) {
+      final filePaths =
+          _uniqueFilePaths(documentationIssues.map((i) => i.filePath));
+      for (final path in filePaths) {
+        blockLines.add('  - $path');
+      }
+    } else {
+      final visibleDocumentationIssues =
+          _issuesForMode(documentationIssues, listMode).toList();
+      for (final issue in visibleDocumentationIssues) {
+        blockLines.add('  - ${issue.format()}');
+      }
+      if (listMode == ReportListMode.partial &&
+          documentationIssues.length > _maxIssuesToShow) {
+        blockLines.add(
+          '  ... and ${formatCount(documentationIssues.length - _maxIssuesToShow)} more',
+        );
+      }
+    }
+    blockLines.add('');
+    addListBlock(
+      status: _ListBlockStatus.warning,
+      sortKey: 'documentation',
       blockLines: blockLines,
     );
   }
@@ -1104,8 +1167,14 @@ class _ListBlock {
   });
 }
 
+/// Returns the in-file ignore directive for an analyzer, when supported.
+///
+/// Some analyzers intentionally do not support per-file ignore comments and
+/// return `null`.
 String? _ignoreDirectiveForAnalyzer(AnalyzerDomain analyzer) {
   switch (analyzer) {
+    case AnalyzerDomain.documentation:
+      return IgnoreConfig.ignoreDirectiveForDocumentation;
     case AnalyzerDomain.oneClassPerFile:
       return IgnoreConfig.ignoreDirectiveForOneClassPerFile;
     case AnalyzerDomain.hardcodedStrings:
@@ -1373,7 +1442,8 @@ void printOutputFileLine({
   required String label,
   required String path,
 }) {
-  print('$label ${_separatorColon()} $path');
+  final normalizedPath = normalizeIssueLocation(path).path;
+  print('$label ${_separatorColon()} $normalizedPath');
 }
 
 /// Prints run completion footer with elapsed time in seconds.

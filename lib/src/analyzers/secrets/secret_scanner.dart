@@ -61,6 +61,7 @@ class SecretScanner {
     return issues;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   List<SecretIssue> _scanLine(String line, String filePath, int lineNumber) {
     final findings = <SecretIssue>[];
 
@@ -147,6 +148,7 @@ class SecretScanner {
     return findings;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _detectAwsAccessKey(String line) {
     return _hasMatchingCandidate(
       line,
@@ -157,6 +159,7 @@ class SecretScanner {
     );
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _detectGenericSecret(String line) {
     final keywordRegex = RegExp(
       r'api[_-]?key|token|secret|password|private_key',
@@ -195,6 +198,8 @@ class SecretScanner {
 
     for (final candidate in candidates) {
       if (candidate.length >= genericSecretValueMinLength &&
+
+          /// Internal helper used by fcheck analysis and reporting.
           _calculateEntropy(candidate) > genericSecretEntropyThreshold) {
         return true;
       }
@@ -202,6 +207,7 @@ class SecretScanner {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _detectBearerToken(String line) {
     return _hasMatchingCandidate(
       line,
@@ -213,6 +219,7 @@ class SecretScanner {
     );
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _detectPrivateKey(String line) {
     final regex = RegExp(
         r'-----BEGIN\s+(RSA|EC|DSA|OPENSSH)\s+PRIVATE\s+KEY-----',
@@ -220,17 +227,20 @@ class SecretScanner {
     return regex.hasMatch(line);
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _detectEmail(String line) {
     final regex = RegExp(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}',
         caseSensitive: false);
     return regex.hasMatch(line);
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _detectStripeKey(String line) {
     final regex = RegExp(r'(sk_live_|pk_live_)[0-9a-zA-Z]{24}');
     return regex.hasMatch(line);
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _detectGitHubPAT(String line) {
     return _hasMatchingCandidate(
       line,
@@ -239,6 +249,7 @@ class SecretScanner {
     );
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _detectHighEntropyString(String line) {
     return _hasMatchingCandidate(
       line,
@@ -247,6 +258,7 @@ class SecretScanner {
     );
   }
 
+  /// Evaluates regex candidates and returns true when any passes [isMatch].
   bool _hasMatchingCandidate(
     String line,
     RegExp regex,
@@ -261,6 +273,7 @@ class SecretScanner {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   double _calculateEntropy(String str) {
     if (str.isEmpty) return 0.0;
 

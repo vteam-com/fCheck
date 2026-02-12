@@ -249,6 +249,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     super.visitNamedType(node);
   }
 
+  /// Pushes a variable scope for function/class-local dead-code tracking.
   void _pushScope(
     String? ownerName, {
     bool treatParametersAsUsed = false,
@@ -261,6 +262,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     );
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   String? _currentOwnerName() {
     for (var i = _scopes.length - 1; i >= 0; i--) {
       final ownerName = _scopes[i].ownerName;
@@ -271,6 +273,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     return null;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   void _popScope() {
     if (_scopes.isEmpty) {
       return;
@@ -292,6 +295,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     }
   }
 
+  /// Registers a newly declared local variable or parameter in current scope.
   void _declareVariable(
     String name,
     AstNode node, {
@@ -319,6 +323,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     }
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   void _markUsed(String name) {
     for (var i = _scopes.length - 1; i >= 0; i--) {
       final scope = _scopes[i];
@@ -329,6 +334,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     }
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isLocalVariable(VariableDeclaration node) {
     AstNode? current = node.parent;
     while (current != null) {
@@ -344,6 +350,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     return true;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isVariableUsage(SimpleIdentifier node) {
     final parent = node.parent;
     if (parent is Label) {
@@ -366,6 +373,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     return true;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isTypeIdentifier(SimpleIdentifier node) {
     final parent = node.parent;
     if (parent is NamedType) {
@@ -374,6 +382,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _shouldIgnoreVariableName(String name) {
     if (name.isEmpty) {
       return true;
@@ -384,6 +393,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _hasOverrideAnnotation(List<Annotation> metadata) {
     for (final annotation in metadata) {
       final name = annotation.name;
@@ -397,6 +407,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   String _stripTypeParameters(String name) {
     final typeStart = name.indexOf('<');
     if (typeStart == -1) {
@@ -405,6 +416,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     return name.substring(0, typeStart).trimRight();
   }
 
+  /// Adds dependencies declared through import/export/part directives.
   void _addDirectiveDependencies(
     String? uri,
     List<Configuration> configurations,

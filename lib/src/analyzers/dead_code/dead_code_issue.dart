@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:fcheck/src/input_output/issue_location_utils.dart';
+
 /// The type of dead code issue detected.
 enum DeadCodeIssueType {
   /// A file that is not reachable from any entry point.
@@ -18,6 +20,12 @@ enum DeadCodeIssueType {
 /// Represents a dead code finding.
 class DeadCodeIssue {
   static const int _ansiOrange = 208;
+  static const Map<DeadCodeIssueType, String> _typeLabelsByIssueType = {
+    DeadCodeIssueType.deadFile: 'dead file',
+    DeadCodeIssueType.deadClass: 'dead class',
+    DeadCodeIssueType.deadFunction: 'dead function',
+    DeadCodeIssueType.unusedVariable: 'unused variable',
+  };
 
   /// The type of dead code detected.
   final DeadCodeIssueType type;
@@ -44,40 +52,55 @@ class DeadCodeIssue {
   });
 
   /// Human-readable label for the issue type.
-  String get typeLabel {
-    switch (type) {
-      case DeadCodeIssueType.deadFile:
-        return 'dead file';
-      case DeadCodeIssueType.deadClass:
-        return 'dead class';
-      case DeadCodeIssueType.deadFunction:
-        return 'dead function';
-      case DeadCodeIssueType.unusedVariable:
-        return 'unused variable';
-    }
-  }
+  String get typeLabel => _typeLabelsByIssueType[type]!;
 
   @override
   String toString() => format();
 
   /// Returns a formatted issue line for CLI output.
-  String format({int? lineNumberWidth}) {
-    final formattedLineNumber = lineNumber != null && lineNumber! > 0
-        ? (lineNumberWidth == null
-            ? '$lineNumber'
-            : lineNumber!.toString().padLeft(lineNumberWidth))
-        : null;
-    final location = formattedLineNumber == null
-        ? filePath
-        : '$filePath:$formattedLineNumber';
+  String format({int? lineNumberWidth}) =>
+      _formatDetails(includeTypeLabel: true, lineNumberWidth: lineNumberWidth);
+
+  /// Returns issue text for grouped dead-code sections.
+  ///
+  /// Group headings already describe the category, so this variant omits
+  /// the repeated type label for each item.
+  String formatGrouped({int? lineNumberWidth}) =>
+      _formatDetails(includeTypeLabel: false, lineNumberWidth: lineNumberWidth);
+
+  /// Formats dead-code issue details with or without the type label prefix.
+  String _formatDetails({
+    required bool includeTypeLabel,
+    int? lineNumberWidth,
+  }) {
+    assertValidLineNumberWidth(lineNumberWidth);
+
+    final location = _formatLocation();
     final ownerSuffix = owner == null || owner!.isEmpty ? '' : ' in $owner';
     if (name.isEmpty) {
-      return '$location: $typeLabel$ownerSuffix';
+      if (includeTypeLabel) {
+        return '$location: $typeLabel$ownerSuffix';
+      }
+      return ownerSuffix.isEmpty ? location : '$location:$ownerSuffix';
     }
+
     final displayName = _formatName();
-    return '$location: $typeLabel $displayName$ownerSuffix';
+    if (includeTypeLabel) {
+      return '$location: $typeLabel $displayName$ownerSuffix';
+    }
+    return '$location: $displayName$ownerSuffix';
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
+  String _formatLocation() {
+    return resolveIssueLocation(
+      rawPath: filePath,
+      lineNumber: lineNumber,
+      strictPositiveLineNumber: true,
+    );
+  }
+
+  /// Internal helper used by fcheck analysis and reporting.
   String _formatName() {
     if (name.isEmpty) {
       return name;
@@ -95,6 +118,7 @@ class DeadCodeIssue {
 
   String _formatSymbol(String value) => _colorize('"$value"');
 
+  /// Internal helper used by fcheck analysis and reporting.
   String _colorize(String text) {
     if (!stdout.supportsAnsiEscapes) {
       return text;

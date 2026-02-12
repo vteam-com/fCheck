@@ -28,6 +28,9 @@ enum AnalyzerDomain {
 
   /// Duplicate code analysis.
   duplicateCode,
+
+  /// Documentation coverage and policy checks.
+  documentation,
 }
 
 /// Helpers for mapping analyzer domains to configuration keys.
@@ -51,6 +54,8 @@ extension AnalyzerDomainName on AnalyzerDomain {
         return 'dead_code';
       case AnalyzerDomain.duplicateCode:
         return 'duplicate_code';
+      case AnalyzerDomain.documentation:
+        return 'documentation';
     }
   }
 }
@@ -262,6 +267,7 @@ class FcheckConfig {
     return effective;
   }
 
+  /// Reads an optional map at [key] and validates that the value is a map.
   static YamlMap? _readMap(
     YamlMap source,
     String key, {
@@ -276,6 +282,7 @@ class FcheckConfig {
     );
   }
 
+  /// Reads an optional string at [key], returning the trimmed value when set.
   static String? _readOptionalString(
     YamlMap? source,
     String key, {
@@ -292,6 +299,10 @@ class FcheckConfig {
     return value?.trim();
   }
 
+  /// Reads a list of strings at [key], trimming entries and dropping empties.
+  ///
+  /// Throws a [FormatException] when the field is present but not a list of
+  /// strings.
   static List<String> _readStringList(
     YamlMap? source,
     String key, {
@@ -323,6 +334,9 @@ class FcheckConfig {
     return values;
   }
 
+  /// Reads `analyzers.default` and normalizes supported on/off values.
+  ///
+  /// Accepts bool values and string aliases (`on`/`off`, `true`/`false`).
   static bool _readAnalyzerDefault(
     YamlMap? analyzersSection, {
     required String filePath,
@@ -350,6 +364,7 @@ class FcheckConfig {
         '`$filePath` field `analyzers.default` must be `on`, `off`, true, or false.');
   }
 
+  /// Reads an analyzer name list from `analyzers.[key]` and resolves domains.
   static Set<AnalyzerDomain> _readAnalyzerSet(
     YamlMap? analyzersSection,
     String key, {
@@ -381,6 +396,7 @@ class FcheckConfig {
     return analyzers;
   }
 
+  /// Reads duplicate-code analyzer options with defaults and range checks.
   static _DuplicateCodeOptions _readDuplicateCodeOptions(
     YamlMap? analyzersSection, {
     required String filePath,
@@ -429,6 +445,7 @@ class FcheckConfig {
     );
   }
 
+  /// Reads an optional nested map at [key] from [source].
   static YamlMap? _readNestedMap(
     YamlMap? source,
     String key, {
@@ -444,6 +461,9 @@ class FcheckConfig {
     );
   }
 
+  /// Reads an optional value and validates that it matches [T] when present.
+  ///
+  /// Returns `null` when the source map or key is missing.
   static T? _readOptionalValueOfType<T>(
     YamlMap? source,
     String key, {
@@ -466,6 +486,9 @@ class FcheckConfig {
     );
   }
 
+  /// Reads an optional numeric value in the inclusive range `[min, max]`.
+  ///
+  /// Returns [defaultValue] when the field is missing.
   static double _readDoubleInRange(
     YamlMap? source,
     String key, {
@@ -495,6 +518,7 @@ class FcheckConfig {
     return parsed;
   }
 
+  /// Reads an optional positive integer, falling back to [defaultValue].
   static int _readPositiveInt(
     YamlMap? source,
     String key, {
@@ -517,6 +541,9 @@ class FcheckConfig {
     return value;
   }
 
+  /// Reads legacy `ignores` booleans and converts enabled flags to domains.
+  ///
+  /// A `true` value means the corresponding analyzer is disabled.
   static Set<AnalyzerDomain> _readLegacyIgnores(
     YamlMap? ignoresSection, {
     required String filePath,
@@ -546,6 +573,9 @@ class FcheckConfig {
     return disabled;
   }
 
+  /// Resolves an analyzer name or alias into an [AnalyzerDomain].
+  ///
+  /// Normalization trims, lowercases, and converts dashes/spaces to `_`.
   static AnalyzerDomain _parseAnalyzer(
     String rawName, {
     required String filePath,
@@ -579,6 +609,7 @@ class FcheckConfig {
     'secrets': AnalyzerDomain.secrets,
     'dead_code': AnalyzerDomain.deadCode,
     'duplicate_code': AnalyzerDomain.duplicateCode,
+    'documentation': AnalyzerDomain.documentation,
   };
 }
 

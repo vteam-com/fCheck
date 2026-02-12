@@ -22,6 +22,7 @@ import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/token.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner.dart';
@@ -30,6 +31,9 @@ import 'package:fcheck/src/analyzers/dead_code/dead_code_analyzer.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_delegate.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+import 'package:fcheck/src/analyzers/documentation/documentation_analyzer.dart';
+import 'package:fcheck/src/analyzers/documentation/documentation_delegate.dart';
+import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_analyzer.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_delegate.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_file_data.dart';
@@ -116,6 +120,10 @@ class AnalyzeFolder {
   /// Cached pubspec.yaml metadata for this analysis session.
   late final _PubspecInfo _pubspecInfo = _PubspecInfo.load(projectDir);
 
+  /// Resolves whether [analyzer] should run for this analysis pass.
+  ///
+  /// When [enabledAnalyzers] is provided it acts as an explicit allowlist.
+  /// Otherwise the legacy `ignoreConfig` disabled flags are applied.
   bool _isAnalyzerEnabled(AnalyzerDomain analyzer) {
     final enabled = enabledAnalyzers;
     if (enabled != null) {
@@ -225,6 +233,8 @@ class AnalyzeFolder {
     final deadCodeEnabled = _isAnalyzerEnabled(AnalyzerDomain.deadCode);
     final duplicateCodeEnabled =
         _isAnalyzerEnabled(AnalyzerDomain.duplicateCode);
+    final documentationEnabled =
+        _isAnalyzerEnabled(AnalyzerDomain.documentation);
     final hardcodedStringsFocus = projectType == ProjectType.flutter
         ? HardcodedStringFocus.flutterWidgets
         : projectType == ProjectType.dart
@@ -249,6 +259,7 @@ class AnalyzeFolder {
           projectRoot: projectRoot,
           packageName: pubspecInfo.packageName,
         ),
+      if (documentationEnabled) DocumentationDelegate(),
     ];
 
     // Perform unified analysis
@@ -272,6 +283,8 @@ class AnalyzeFolder {
     final sourceSortIssues =
         allListResults.whereType<SourceSortIssue>().toList();
     final secretIssues = allListResults.whereType<SecretIssue>().toList();
+    final documentationIssuesRaw =
+        allListResults.whereType<DocumentationIssue>().toList();
     final duplicateCodeFileDataRaw = duplicateCodeEnabled
         ? (unifiedResult.resultsByType[DuplicateCodeFileData] ?? <dynamic>[])
         : <dynamic>[];
@@ -290,12 +303,27 @@ class AnalyzeFolder {
         ? (unifiedResult.resultsByType[DeadCodeFileData] ?? <dynamic>[])
         : <dynamic>[];
     final deadCodeIssues = deadCodeEnabled
-        ? DeadCodeAnalyzer(
-            projectRoot: projectRoot,
-            packageName: pubspecInfo.packageName,
-            projectType: projectType,
-          ).analyze(deadCodeFileDataRaw.whereType<DeadCodeFileData>().toList())
+        ? _toRelativeDeadCodeIssues(
+            DeadCodeAnalyzer(
+              projectRoot: projectRoot,
+              packageName: pubspecInfo.packageName,
+              projectType: projectType,
+            ).analyze(
+              deadCodeFileDataRaw.whereType<DeadCodeFileData>().toList(),
+            ),
+            analysisRootPath: projectDir.path,
+          )
         : <DeadCodeIssue>[];
+    final documentationIssues = documentationEnabled
+        ? _toRelativeDocumentationIssues(
+            DocumentationAnalyzer(
+              projectRoot: projectRoot,
+            ).analyze(
+              documentationIssuesRaw,
+            ),
+            analysisRootPath: projectDir.path,
+          )
+        : <DocumentationIssue>[];
 
     final layersResult = layersEnabled
         ? LayersAnalyzer(
@@ -371,6 +399,7 @@ class AnalyzeFolder {
       ignoreDirectiveFiles: sortedIgnoreDirectiveFiles,
       ignoreDirectiveCountsByFile: sortedIgnoreDirectiveCountsByFile,
       secretIssues: secretIssues,
+      documentationIssues: documentationIssues,
       duplicateCodeIssues: duplicateCodeIssues,
       deadCodeIssues: deadCodeIssues,
       oneClassPerFileAnalyzerEnabled: oneClassPerFileEnabled,
@@ -381,9 +410,14 @@ class AnalyzeFolder {
       secretsAnalyzerEnabled: secretsEnabled,
       deadCodeAnalyzerEnabled: deadCodeEnabled,
       duplicateCodeAnalyzerEnabled: duplicateCodeEnabled,
+      documentationAnalyzerEnabled: documentationEnabled,
     );
   }
 
+  /// Extracts validated layer input maps from unified analyzer results.
+  ///
+  /// Only entries containing `filePath`, `dependencies`, and `isEntryPoint`
+  /// with expected runtime types are preserved.
   List<Map<String, dynamic>> _extractLayersFileData(
     AnalysisRunnerResult unifiedResult,
   ) {
@@ -404,6 +438,70 @@ class AnalyzeFolder {
       }
     }
     return layersFileData;
+  }
+
+  /// Converts documentation issue paths to be relative to [analysisRootPath].
+  List<DocumentationIssue> _toRelativeDocumentationIssues(
+    List<DocumentationIssue> issues, {
+    required String analysisRootPath,
+  }) {
+    if (issues.isEmpty) {
+      return const <DocumentationIssue>[];
+    }
+
+    final normalizedRoot =
+        p.normalize(Directory(analysisRootPath).absolute.path);
+    return issues
+        .map(
+          (issue) => DocumentationIssue(
+            type: issue.type,
+            filePath: _toRelativePathForDisplay(issue.filePath,
+                normalizedRootPath: normalizedRoot),
+            lineNumber: issue.lineNumber,
+            subject: issue.subject,
+          ),
+        )
+        .toList(growable: false);
+  }
+
+  /// Converts dead-code issue paths to be relative to [analysisRootPath].
+  List<DeadCodeIssue> _toRelativeDeadCodeIssues(
+    List<DeadCodeIssue> issues, {
+    required String analysisRootPath,
+  }) {
+    if (issues.isEmpty) {
+      return const <DeadCodeIssue>[];
+    }
+
+    final normalizedRoot =
+        p.normalize(Directory(analysisRootPath).absolute.path);
+    return issues
+        .map(
+          (issue) => DeadCodeIssue(
+            type: issue.type,
+            filePath: _toRelativePathForDisplay(issue.filePath,
+                normalizedRootPath: normalizedRoot),
+            lineNumber: issue.lineNumber,
+            name: issue.name,
+            owner: issue.owner,
+          ),
+        )
+        .toList(growable: false);
+  }
+
+  /// Returns [path] rebased to [normalizedRootPath] for user-facing output.
+  String _toRelativePathForDisplay(
+    String path, {
+    required String normalizedRootPath,
+  }) {
+    if (path.isEmpty) {
+      return path;
+    }
+
+    final absolutePath = p.isAbsolute(path)
+        ? p.normalize(path)
+        : p.normalize(p.join(normalizedRootPath, path));
+    return p.relative(absolutePath, from: normalizedRootPath);
   }
 
   /// Analyzes a single Dart file and returns its metrics.
@@ -432,6 +530,10 @@ class AnalyzeFolder {
     return analysis.metrics;
   }
 
+  /// Parses one Dart file and computes metrics plus ignore-directive counts.
+  ///
+  /// Parse-error files are treated as skipped and return zeroed metrics so
+  /// project-level aggregation can continue safely.
   _FileAnalysisResult _analyzeFileContent(
     File file,
     String content, {
@@ -466,6 +568,8 @@ class AnalyzeFolder {
 
     final CompilationUnit unit = result.unit;
     final List<String> lines = content.split('\n');
+    final int nonEmptyLineCount =
+        lines.where((line) => line.trim().isNotEmpty).length;
     final int commentLines = countCommentLines(unit, lines);
     final _QualityVisitor visitor = _QualityVisitor();
     unit.accept(visitor);
@@ -473,7 +577,7 @@ class AnalyzeFolder {
     return _FileAnalysisResult(
       metrics: FileMetrics(
         path: file.path,
-        linesOfCode: lines.length,
+        linesOfCode: nonEmptyLineCount,
         commentLines: commentLines,
         classCount: visitor.classCount,
         isStatefulWidget: visitor.hasStatefulWidget,
@@ -493,30 +597,80 @@ class AnalyzeFolder {
   /// - `/*` (start of block comment)
   /// - `*/` (end of block comment)
   ///
-  /// It counts a line as a comment line if it starts with a marker or
-  /// contains a marker (even if preceded by code).
+  /// It uses analyzer comment tokens so multi-line block comments are counted
+  /// across their full span.
   ///
-  /// [unit] The parsed compilation unit (currently unused in this implementation).
+  /// [unit] The parsed compilation unit containing tokenized comments.
   /// [lines] The raw lines of the file.
   ///
   /// Returns the number of lines that contain comments.
-  int countCommentLines(CompilationUnit _, List<String> lines) {
-    // This is a simplified comment counter.
-    // The analyzer's beginToken/endToken are useful for more complex scenarios.
-    // We'll count lines that contain comments.
-    int count = 0;
-    for (var line in lines) {
-      final trimmed = line.trim();
-      if (trimmed.startsWith('//') ||
-          trimmed.startsWith('/*') ||
-          trimmed.endsWith('*/')) {
-        count++;
-      } else if (trimmed.contains('//') || trimmed.contains('/*')) {
-        // Part of the line is a comment
-        count++;
+  int countCommentLines(CompilationUnit unit, List<String> lines) {
+    if (lines.isEmpty) {
+      return 0;
+    }
+
+    final lineStarts = _buildLineStartOffsets(lines);
+    final commentedLines = <int>{};
+
+    var token = unit.beginToken;
+    while (true) {
+      Token? comment = token.precedingComments;
+      while (comment != null) {
+        final startLine = _lineForOffset(lineStarts, comment.offset);
+        final endLine = _lineForOffset(
+          lineStarts,
+          comment.end > 0 ? comment.end - 1 : comment.offset,
+        );
+        for (var line = startLine; line <= endLine; line++) {
+          commentedLines.add(line);
+        }
+        comment = comment.next;
+      }
+
+      final nextToken = token.next;
+      if (nextToken == null || identical(nextToken, token)) {
+        break;
+      }
+      token = nextToken;
+    }
+
+    return commentedLines.length;
+  }
+
+  /// Builds zero-based absolute start offsets for each line in [lines].
+  ///
+  /// Offsets assume newline separators in the original source.
+  List<int> _buildLineStartOffsets(List<String> lines) {
+    final starts = List<int>.filled(lines.length, 0);
+    var offset = 0;
+    for (var i = 0; i < lines.length; i++) {
+      starts[i] = offset;
+      offset += lines[i].length + 1;
+    }
+    return starts;
+  }
+
+  /// Converts a source [offset] into a 1-based line number using [lineStarts].
+  ///
+  /// Uses binary search for efficient lookup across large files.
+  int _lineForOffset(List<int> lineStarts, int offset) {
+    if (offset <= 0) {
+      return 1;
+    }
+
+    var low = 0;
+    var high = lineStarts.length - 1;
+    while (low <= high) {
+      final mid = low + ((high - low) >> 1);
+      if (lineStarts[mid] <= offset) {
+        low = mid + 1;
+      } else {
+        high = mid - 1;
       }
     }
-    return count;
+
+    final lineIndex = high.clamp(0, lineStarts.length - 1);
+    return lineIndex + 1;
   }
 
   /// Checks for a top-of-file directive to ignore the "one class per file" rule.
@@ -597,6 +751,10 @@ class _PubspecInfo {
     required this.projectType,
   });
 
+  /// Package identifier resolved from `pubspec.yaml`.
+  ///
+  /// This alias keeps call sites explicit when they need a package-style name
+  /// instead of the generic project [name] field.
   String get packageName => name;
 
   /// Resolves project metadata from `pubspec.yaml` for [startDir].
@@ -639,6 +797,10 @@ class _PubspecInfo {
     return _unknown();
   }
 
+  /// Attempts to resolve pubspec metadata from a single descendant package.
+  ///
+  /// Returns `null` when no Dart files exist, any Dart file cannot be mapped
+  /// to a pubspec under [startDir], or multiple pubspec roots are discovered.
   static _PubspecInfo? _loadFromSingleDescendantPubspec(Directory startDir) {
     final dartFiles = FileUtils.listDartFiles(startDir);
     if (dartFiles.isEmpty) {
@@ -677,6 +839,7 @@ class _PubspecInfo {
     return _loadFromPubspecFile(pubspecFile, pubspecFile.parent);
   }
 
+  /// Finds the closest ancestor `pubspec.yaml` for a Dart file inside root.
   static File? _findNearestPubspecForFile({
     required File dartFile,
     required Directory rootDirectory,
@@ -700,6 +863,7 @@ class _PubspecInfo {
     return null;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   static bool _isSameOrWithin(String rootPath, String candidatePath) {
     final normalizedRootPath = p.normalize(rootPath);
     final normalizedCandidatePath = p.normalize(candidatePath);
@@ -707,6 +871,7 @@ class _PubspecInfo {
         p.isWithin(normalizedRootPath, normalizedCandidatePath);
   }
 
+  /// Parses project metadata from a concrete `pubspec.yaml` file.
   static _PubspecInfo _loadFromPubspecFile(
     File pubspecFile,
     Directory projectRoot,
@@ -740,6 +905,7 @@ class _PubspecInfo {
     }
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   static _PubspecInfo _unknown() {
     return const _PubspecInfo(
       projectRoot: null,
@@ -749,6 +915,7 @@ class _PubspecInfo {
     );
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   static String _readStringField(YamlMap yaml, String field) {
     final value = yaml[field];
     if (value == null) {
@@ -760,6 +927,7 @@ class _PubspecInfo {
     return value.toString();
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   static ProjectType _detectProjectType(YamlMap yaml) {
     final dependencies = yaml['dependencies'];
     if (dependencies is YamlMap && dependencies.containsKey('flutter')) {

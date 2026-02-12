@@ -70,14 +70,13 @@ class GameWidget extends WidgetBase {
       final metrics = AnalyzeFolder(tempDir).analyze();
       final issues = metrics.deadCodeIssues;
 
-      final libDir = p.join(tempDir.path, 'lib');
       final deadFiles = issues
           .where((i) => i.type == DeadCodeIssueType.deadFile)
           .map((i) => i.filePath)
           .toList();
 
-      expect(deadFiles, contains(p.join(libDir, 'b.dart')));
-      expect(deadFiles, contains(p.join(libDir, 'vars.dart')));
+      expect(deadFiles, contains(p.join('lib', 'b.dart')));
+      expect(deadFiles, contains(p.join('lib', 'vars.dart')));
 
       expect(
         issues.where(

@@ -1,3 +1,5 @@
+import 'package:fcheck/src/input_output/issue_location_utils.dart';
+
 /// Represents an issue found with source code sorting
 class SourceSortIssue {
   /// Creates a new SourceSortIssue.
@@ -30,10 +32,12 @@ class SourceSortIssue {
 
   /// Returns a formatted issue line for CLI output.
   String format({int? lineNumberWidth}) {
-    final lineNumberText = lineNumberWidth == null
-        ? '$lineNumber'
-        : lineNumber.toString().padLeft(lineNumberWidth);
-    return '$filePath:$lineNumberText ($className)';
+    assertValidLineNumberWidth(lineNumberWidth);
+    final location = resolveIssueLocationWithLine(
+      rawPath: filePath,
+      lineNumber: lineNumber,
+    );
+    return '$location ($className)';
   }
 
   /// Converts this issue to a JSON-compatible map.

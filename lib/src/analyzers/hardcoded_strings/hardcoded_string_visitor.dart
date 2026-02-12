@@ -148,6 +148,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     ));
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _matchesFocus(final StringLiteral node) {
     switch (focus) {
       case HardcodedStringFocus.general:
@@ -178,6 +179,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isWidgetOutputString(final StringLiteral node) {
     final ArgumentList? argumentList =
         node.thisOrAncestorOfType<ArgumentList>();
@@ -209,6 +211,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return _isInsideWidgetReturnFunction(node);
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _hasWidgetLintIgnoreComment(final StringLiteral node) {
     final int lineNumber = _getLineNumber(node.offset);
     final List<String> lines = content.split('\n');
@@ -230,6 +233,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isInterpolationOnlyLiteral(final StringLiteral node) {
     final String source = node.toSource();
     final (content, isRaw) = _stripLiteralDelimiters(source);
@@ -242,6 +246,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return !HardcodedStringUtils.containsMeaningfulText(withoutInterpolations);
   }
 
+  /// Strips Dart string delimiters and reports whether the literal is raw.
   (String content, bool isRaw) _stripLiteralDelimiters(String source) {
     var working = source;
     var isRaw = false;
@@ -272,6 +277,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return ('', isRaw);
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _containsWidgetLintIgnoreComment(final String line) {
     final ignorePatterns = [
       RegExp(r'//\s*ignore:\s*avoid_hardcoded_strings_in_widgets'),
@@ -283,6 +289,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return ignorePatterns.any((pattern) => pattern.hasMatch(line));
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isAcceptableWidgetProperty(final StringLiteral node) {
     final AstNode? parent = node.parent;
     if (parent is! NamedExpression) {
@@ -319,10 +326,12 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return acceptableProperties.contains(propertyName);
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isTechnicalString(final String value) {
     return HardcodedStringUtils.isTechnicalString(value);
   }
 
+  /// Returns true when [node] is passed directly in [argumentList].
   bool _isDirectArgument(
     final StringLiteral node,
     final ArgumentList argumentList,
@@ -338,6 +347,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Detects nested function boundaries between a literal and argument list.
   bool _hasFunctionBoundary(
     final StringLiteral node,
     final ArgumentList argumentList,
@@ -352,6 +362,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isInsideWidgetClass(final AstNode node) {
     final ClassDeclaration? classDecl =
         node.thisOrAncestorOfType<ClassDeclaration>();
@@ -370,18 +381,21 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
         superName.startsWith('State<');
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isInsideBuildMethod(final AstNode node) {
     final MethodDeclaration? method =
         node.thisOrAncestorOfType<MethodDeclaration>();
     return _matchesBuildOrWidgetReturningDeclaration(method);
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isInsideWidgetReturnFunction(final AstNode node) {
     final FunctionDeclaration? function =
         node.thisOrAncestorOfType<FunctionDeclaration>();
     return _matchesBuildOrWidgetReturningDeclaration(function);
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _matchesBuildOrWidgetReturningDeclaration(AstNode? declaration) {
     if (declaration is MethodDeclaration) {
       return _isBuildOrWidgetReturning(
@@ -398,6 +412,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Matches build methods or declarations returning a Widget type.
   bool _isBuildOrWidgetReturning(
     String declarationName,
     TypeAnnotation? returnType,
@@ -408,6 +423,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return _isWidgetReturnType(returnType);
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isWidgetReturnType(final TypeAnnotation? type) {
     if (type == null) {
       return false;
@@ -527,6 +543,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isInPrintCall(final StringLiteral node) {
     final MethodInvocation? invocation = _getOwningMethodInvocation(node);
     if (invocation == null) {
@@ -536,6 +553,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return invocation.methodName.name == 'print' && invocation.target == null;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isInPrintOrLoggerCall(final StringLiteral node) {
     final MethodInvocation? invocation = _getOwningMethodInvocation(node);
     if (invocation == null) {
@@ -580,6 +598,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return targetLower.contains('logger') || targetLower.contains('log');
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   MethodInvocation? _getOwningMethodInvocation(final StringLiteral node) {
     final ArgumentList? argumentList =
         node.thisOrAncestorOfType<ArgumentList>();
@@ -599,6 +618,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return owner is MethodInvocation ? owner : null;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   String _getInvocationTargetName(final MethodInvocation invocation) {
     final Expression? target = invocation.target;
     if (target == null) {

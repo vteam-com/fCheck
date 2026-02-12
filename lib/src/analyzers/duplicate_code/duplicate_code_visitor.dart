@@ -167,6 +167,7 @@ class DuplicateCodeVisitor extends RecursiveAstVisitor<void> {
     super.visitConstructorDeclaration(node);
   }
 
+  /// Collects a normalized snippet candidate for duplicate-code matching.
   void _addSnippet({
     required String symbol,
     required String kind,
@@ -201,6 +202,7 @@ class DuplicateCodeVisitor extends RecursiveAstVisitor<void> {
     );
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   List<String> _normalizeTokens(String source) {
     final tokens = <String>[];
 
@@ -231,6 +233,7 @@ class DuplicateCodeVisitor extends RecursiveAstVisitor<void> {
     return tokens;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   String _buildParameterSignature(FormalParameterList? parameterList) {
     if (parameterList == null) {
       return '';
@@ -239,6 +242,7 @@ class DuplicateCodeVisitor extends RecursiveAstVisitor<void> {
     return parameterList.parameters.map(_buildParameterDescriptor).join('|');
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   String _buildParameterDescriptor(FormalParameter parameter) {
     final kind = _parameterKindLabel(parameter);
     var current = parameter;
@@ -253,6 +257,7 @@ class DuplicateCodeVisitor extends RecursiveAstVisitor<void> {
     return '$kind:${_describeParameter(current)}$defaultMarker';
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   String _parameterKindLabel(FormalParameter parameter) {
     if (parameter.isRequiredNamed) {
       return 'required_named';
@@ -266,6 +271,7 @@ class DuplicateCodeVisitor extends RecursiveAstVisitor<void> {
     return 'required_positional';
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   String _describeParameter(FormalParameter parameter) {
     if (parameter is SimpleFormalParameter) {
       return 'simple:${parameter.keyword?.lexeme ?? ''}:${_compactSource(parameter.type)}';
@@ -292,6 +298,7 @@ class DuplicateCodeVisitor extends RecursiveAstVisitor<void> {
     return parameter.runtimeType.toString();
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   String _compactSource(AstNode? node) {
     if (node == null) {
       return '';
@@ -299,6 +306,7 @@ class DuplicateCodeVisitor extends RecursiveAstVisitor<void> {
     return node.toSource().replaceAll(RegExp(r'\s+'), '');
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   int _countNonEmptyBodyLines(FunctionBody body) {
     final startLine = lineNumberForOffset(body.offset);
     final endLine = lineNumberForOffset(body.end);

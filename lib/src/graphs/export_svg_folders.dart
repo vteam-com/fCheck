@@ -1715,6 +1715,13 @@ List<Point<double>> _calculateFilePositions(
   return filePositions;
 }
 
+/// Sorts [files] for folder rendering using dependencies and metrics.
+///
+/// Order preference:
+/// 1. topological order based on in-folder dependencies (consumers first)
+/// 2. higher outgoing count
+/// 3. lower incoming count
+/// 4. lexical path as final tie-breaker
 List<String> _sortFiles(
   List<String> files,
   String _, //folderPath,

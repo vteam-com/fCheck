@@ -79,6 +79,7 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
     return issues;
   }
 
+  /// Scans fallback widget text literals when AST-based detection finds none.
   List<HardcodedStringIssue> _scanWidgetTextLiterals(
     AnalysisFileContext context,
   ) {
@@ -141,6 +142,7 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
     return issues;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _hasWidgetLintIgnoreComment(String line) {
     final ignorePatterns = [
       RegExp(r'//\s*ignore:\s*avoid_hardcoded_strings_in_widgets'),
@@ -152,12 +154,14 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
     return ignorePatterns.any((pattern) => pattern.hasMatch(line));
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isInterpolationOnlyString(String value) {
     final String withoutInterpolations =
         HardcodedStringUtils.removeInterpolations(value);
     return !HardcodedStringUtils.containsMeaningfulText(withoutInterpolations);
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isTechnicalString(String value) {
     return HardcodedStringUtils.isTechnicalString(value);
   }

@@ -1,17 +1,17 @@
 # fcheck
 
-Fast quality checks for Flutter and Dart. Run one deterministic command to apply 8 core engineering checks (architecture, risky strings, magic numbers, dead code, duplicates, and more) without replacing your existing lint setup.
+Fast quality checks for Flutter and Dart. Run one deterministic command to apply 9 core engineering checks (architecture, risky strings, magic numbers, dead code, duplicates, documentation, and more) without replacing your existing lint setup.
 
 ## ✨ Why fcheck
 
 fcheck exists to fill a gap today. The goal is to encourage good engineering practices in the Dart and Flutter ecosystem until these capabilities become first-class in the Flutter SDK.
 
 - **Easy wins**: actionable checks in a single run
-- **8-in-1 quality guardrail**: vital engineering best-practice checks in one tool
+- **9-in-1 quality guardrail**: vital engineering best-practice checks in one tool
 - **Architectural focus**: layers, one-class-per-file, sorting
 - **Risk detection**: secrets, hardcoded strings, magic numbers
 - **Code surface reduction**: dead code, duplicate code
-- **Fast by design**: all 8 checks run from a single parse and folder/file traversal, instead of 8 separate tools re-enumerating files and re-parsing code
+- **Fast by design**: all 9 checks run from a single parse and folder/file traversal, instead of 9 separate tools re-enumerating files and re-parsing code
 - **Saves time**: no third-party service latency; local runs are typically faster than remote calls
 - **Privacy-first**: your code is inspected locally, with no network calls required
 - **Nice output**: JSON and diagrams when you need them
@@ -197,6 +197,7 @@ Need a quick reminder from CLI? Run `fcheck --help-ignore`.
 // ignore: fcheck_secrets
 // ignore: fcheck_dead_code
 // ignore: fcheck_duplicate_code
+// ignore: fcheck_documentation
 // ignore: fcheck_layers
 // ignore: fcheck_one_class_per_file
 ```
@@ -410,6 +411,7 @@ Supported analyzer names:
 - `secrets`
 - `dead_code`
 - `duplicate_code`
+- `documentation`
 
 Duplicate code options can be tuned in `.fcheck`:
 

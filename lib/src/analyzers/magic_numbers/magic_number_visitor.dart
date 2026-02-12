@@ -32,6 +32,7 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
     super.visitIntegerLiteral(node);
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   void _inspectLiteral(num? value, String literalText, AstNode node) {
     if (value == null) {
       return;
@@ -59,6 +60,7 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
     ));
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isInAnnotation(AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
@@ -70,6 +72,7 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isInConstDeclaration(AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
@@ -88,11 +91,13 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _hasDescriptiveName(VariableDeclaration declaration) {
     final name = declaration.name.toString();
     return name.length > _minDescriptiveNameLength;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isInsideConstExpression(AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
@@ -110,6 +115,7 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isInStaticConstDeclaration(AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
@@ -123,6 +129,7 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   bool _isInFinalIntDeclaration(AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
@@ -142,6 +149,7 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
+  /// Internal helper used by fcheck analysis and reporting.
   int _getLineNumber(int offset) {
     final lines = content.substring(0, offset).split('\n');
     return lines.length;

@@ -23,6 +23,7 @@ Only enabled analyzers contribute to the score.
 - `secrets`
 - `dead_code`
 - `duplicate_code`
+- `documentation`
 
 Additional suppression inputs are tracked and can deduct points:
 
@@ -41,7 +42,7 @@ sharePerAnalyzer = 100 / N
 
 Examples:
 
-- 8 enabled analyzers -> each analyzer owns `12.5%`.
+- 9 enabled analyzers -> each analyzer owns `11.11%`.
 - 10 enabled analyzers -> each analyzer owns `10%`.
 
 This means even if one analyzer has extreme failures, the maximum loss from that
@@ -111,6 +112,13 @@ score = 1 - (deadCodeIssues / budget)
 duplicateImpactLines = sum(issue.lineCount * issue.similarity)
 duplicateRatio = duplicateImpactLines / max(1, linesOfCode)
 score = 1 - (duplicateRatio * 2.5)
+```
+
+### 9) Documentation
+
+```text
+budget = max(2.0, dartFiles * 0.6)
+score = 1 - (documentationIssues / budget)
 ```
 
 ## Suppression Penalty

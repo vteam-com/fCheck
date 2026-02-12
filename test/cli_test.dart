@@ -175,12 +175,17 @@ class TestClass {
       );
       expect(
         result.stdout,
-        contains(
-            '6. one_class_per_file | // ignore: fcheck_one_class_per_file'),
+        contains(RegExp(
+            r'2\.\s+documentation\s+\|\s+// ignore: fcheck_documentation')),
       );
       expect(
         result.stdout,
-        contains('8. source_sorting'),
+        contains(
+            '7. one_class_per_file | // ignore: fcheck_one_class_per_file'),
+      );
+      expect(
+        result.stdout,
+        contains('9. source_sorting'),
       );
       expect(
         result.stdout,

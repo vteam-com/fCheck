@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
@@ -28,6 +29,8 @@ class ProjectMetrics {
   static const double _secretsBudget = 1.5;
   static const double _minDeadCodeBudget = 3.0;
   static const double _deadCodeBudgetPerFile = 0.8;
+  static const double _minDocumentationBudget = 2.0;
+  static const double _documentationBudgetPerFile = 0.6;
   static const double _duplicateRatioPenaltyMultiplier = 2.5;
   static const double _minIgnoreDirectiveBudget = 3.0;
   static const double _ignoreDirectiveBudgetPerFile = 0.12;
@@ -83,6 +86,9 @@ class ProjectMetrics {
 
   /// List of duplicate code issues found in the project.
   final List<DuplicateCodeIssue> duplicateCodeIssues;
+
+  /// List of documentation issues found in the project.
+  final List<DocumentationIssue> documentationIssues;
 
   /// Total number of dependency edges in the layers graph.
   final int layersEdgeCount;
@@ -149,6 +155,9 @@ class ProjectMetrics {
   /// Whether the duplicate-code analyzer was enabled for this run.
   final bool duplicateCodeAnalyzerEnabled;
 
+  /// Whether the documentation analyzer was enabled for this run.
+  final bool documentationAnalyzerEnabled;
+
   /// Creates a new ProjectMetrics instance.
   ///
   /// [totalFolders] Total number of folders in the project.
@@ -190,6 +199,7 @@ class ProjectMetrics {
     required this.layersIssues,
     required this.deadCodeIssues,
     this.duplicateCodeIssues = const [],
+    this.documentationIssues = const [],
     required this.layersEdgeCount,
     required this.layersCount,
     required this.dependencyGraph,
@@ -211,6 +221,7 @@ class ProjectMetrics {
     this.secretsAnalyzerEnabled = true,
     this.deadCodeAnalyzerEnabled = true,
     this.duplicateCodeAnalyzerEnabled = true,
+    this.documentationAnalyzerEnabled = true,
   });
 
   /// Converts these metrics to a JSON-compatible map.
@@ -237,6 +248,7 @@ class ProjectMetrics {
           'secretIssues': secretIssues.length,
           'deadCodeIssues': deadCodeIssues.length,
           'duplicateCodeIssues': duplicateCodeIssues.length,
+          'documentationIssues': documentationIssues.length,
           'complianceScore': complianceScore,
         },
         'layers': {
@@ -254,6 +266,8 @@ class ProjectMetrics {
         'deadCodeIssues': deadCodeIssues.map((i) => i.toJson()).toList(),
         'duplicateCodeIssues':
             duplicateCodeIssues.map((i) => i.toJson()).toList(),
+        'documentationIssues':
+            documentationIssues.map((i) => i.toJson()).toList(),
         'localization': {'usesLocalization': usesLocalization},
         'compliance': {
           'score': complianceScore,
@@ -281,6 +295,7 @@ class ProjectMetrics {
         secretsAnalyzerEnabled,
         deadCodeAnalyzerEnabled,
         duplicateCodeAnalyzerEnabled,
+        documentationAnalyzerEnabled,
       ].where((enabled) => !enabled).length;
 
   /// Equal-share quality score across enabled analyzers from 0 to 100.
@@ -388,6 +403,8 @@ class ProjectMetrics {
         return 'Delete unused files, classes, and functions to reduce maintenance cost.';
       case 'duplicate_code':
         return 'Extract repeated code paths into shared helpers or reusable widgets.';
+      case 'documentation':
+        return 'Document public APIs and add context comments to complex private logic.';
       case 'suppression_hygiene':
         return 'Reduce custom excludes, restore disabled analyzers, and remove stale fcheck ignore directives.';
     }
@@ -395,9 +412,14 @@ class ProjectMetrics {
     return 'Invest in the lowest-scoring quality area to raise overall compliance.';
   }
 
-  List<_ComplianceAreaScore> get _enabledComplianceAreas =>
-      _complianceAreas.where((area) => area.enabled).toList(growable: false);
+  List<_ComplianceAreaScore> get _enabledComplianceAreas => _complianceAreas
+      .where((area) => area.enabled)
+      .where(
+        (area) => area.key != 'documentation' || documentationIssues.isNotEmpty,
+      )
+      .toList(growable: false);
 
+  /// Returns the highest-impact compliance area for focused guidance text.
   _ComplianceAreaScore? get _primaryFocusArea {
     final candidates = _enabledComplianceAreas
         .where((area) => area.score < 1 || area.issueCount > 0)
@@ -427,6 +449,7 @@ class ProjectMetrics {
     return best;
   }
 
+  /// Creates a synthetic compliance area for suppression hygiene penalties.
   _ComplianceAreaScore? get _suppressionFocusArea {
     final penalty = suppressionPenaltyPoints;
     if (penalty <= 0) {
@@ -444,6 +467,7 @@ class ProjectMetrics {
     );
   }
 
+  /// Computes the dynamic budget for ignore-directive usage.
   double get _ignoreDirectiveBudget {
     final safeDartFileCount = math.max(1, totalDartFiles);
     final safeLoc = math.max(1, totalLinesOfCode);
@@ -454,6 +478,7 @@ class ProjectMetrics {
     );
   }
 
+  /// Computes the dynamic budget for custom excluded Dart files.
   double get _customExcludedFilesBudget {
     final scopeDartFiles =
         math.max(1, totalDartFiles + customExcludedFilesCount);
@@ -463,6 +488,7 @@ class ProjectMetrics {
     );
   }
 
+  /// Computes per-domain compliance scores before equal-share averaging.
   List<_ComplianceAreaScore> get _complianceAreas {
     final safeDartFileCount = math.max(1, totalDartFiles);
     final safeLoc = math.max(1, totalLinesOfCode);
@@ -495,6 +521,10 @@ class ProjectMetrics {
     final deadCodeBudget = math.max(
       _minDeadCodeBudget,
       safeDartFileCount * _deadCodeBudgetPerFile,
+    );
+    final documentationBudget = math.max(
+      _minDocumentationBudget,
+      safeDartFileCount * _documentationBudgetPerFile,
     );
     final duplicateImpactLines = duplicateCodeIssues.fold<double>(
       0,
@@ -581,6 +611,16 @@ class ProjectMetrics {
         score: _clampToUnitRange(
             1 - (duplicateRatio * _duplicateRatioPenaltyMultiplier)),
       ),
+      _ComplianceAreaScore(
+        key: 'documentation',
+        label: 'Documentation',
+        enabled: documentationAnalyzerEnabled,
+        issueCount: documentationIssues.length,
+        score: _budgetScore(
+          issues: documentationIssues.length,
+          budget: documentationBudget,
+        ),
+      ),
     ];
   }
 
@@ -615,6 +655,7 @@ class ProjectMetrics {
       .toList();
 }
 
+/// Converts raw issue count against total scope into a [0, 1] score.
 double _fractionScore({required int issues, required int total}) {
   if (total <= 0) {
     return 1;
@@ -622,6 +663,7 @@ double _fractionScore({required int issues, required int total}) {
   return _clampToUnitRange(1 - (issues / total));
 }
 
+/// Converts raw issue count against a budget into a [0, 1] score.
 double _budgetScore({required int issues, required double budget}) {
   if (budget <= 0) {
     return 1;
@@ -629,6 +671,7 @@ double _budgetScore({required int issues, required double budget}) {
   return _clampToUnitRange(1 - (issues / budget));
 }
 
+/// Returns ratio of usage above budget, or `0` when within budget.
 double _overBudgetRatio({required double used, required double budget}) {
   if (budget <= 0) {
     return 0;
@@ -640,6 +683,7 @@ double _overBudgetRatio({required double used, required double budget}) {
   return overBudget / budget;
 }
 
+/// Clamps [value] into the inclusive unit interval `[0, 1]`.
 double _clampToUnitRange(double value) {
   if (value < 0) {
     return 0;
@@ -665,5 +709,8 @@ class _ComplianceAreaScore {
     required this.score,
   });
 
+  /// Penalty contribution used when choosing the primary focus area.
+  ///
+  /// Higher values indicate larger score loss for this compliance domain.
   double get penaltyImpact => (1 - score);
 }

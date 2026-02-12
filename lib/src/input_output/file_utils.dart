@@ -43,6 +43,7 @@ class FileUtils {
     return expandedPatterns;
   }
 
+  /// Builds compiled [Glob] matchers for all expanded exclude patterns.
   static List<Glob> _buildExcludeGlobs(List<String> excludePatterns) {
     final expandedPatterns = <String>[];
     for (final pattern in excludePatterns) {
@@ -57,6 +58,7 @@ class FileUtils {
   static bool _isDefaultExcludedPath(List<String> pathParts) =>
       pathParts.any((part) => defaultExcludedDirs.contains(part));
 
+  /// Returns true when [relativePath] matches at least one exclude glob.
   static bool _matchesAnyGlob(List<Glob> globs, String relativePath) {
     for (final glob in globs) {
       if (glob.matches(relativePath)) {
@@ -73,6 +75,7 @@ class FileUtils {
         fileName.endsWith('.dart');
   }
 
+  /// Adds [entity] to the appropriate excluded collection by type.
   static void _addExcludedEntity(
     FileSystemEntity entity,
     List<File> excludedDartFiles,
@@ -356,6 +359,11 @@ class _ScanCounts {
   int excludedFilesCount = 0;
   int excludedDartFilesCount = 0;
 
+  /// Records one excluded entity and updates per-kind counters.
+  ///
+  /// Directories increase [excludedFoldersCount]. Files increase
+  /// [excludedFilesCount], and Dart files additionally increase
+  /// [excludedDartFilesCount].
   void addExcludedEntity(FileSystemEntity entity) {
     if (entity is Directory) {
       excludedFoldersCount++;
