@@ -206,6 +206,95 @@ void main() {
       expect(projectMetrics.complianceFocusAreaLabel, equals('None'));
     });
 
+    test('should apply suppression penalty when ignores/excludes are overused',
+        () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 20,
+        totalDartFiles: 10,
+        totalLinesOfCode: 1000,
+        totalCommentLines: 120,
+        fileMetrics: List.generate(
+          10,
+          (index) => FileMetrics(
+            path: 'lib/file_$index.dart',
+            linesOfCode: 100,
+            commentLines: 12,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ),
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'suppressed_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        ignoreDirectivesCount: 20,
+        customExcludedFilesCount: 8,
+        hardcodedStringsAnalyzerEnabled: false,
+        layersAnalyzerEnabled: false,
+      );
+
+      expect(projectMetrics.suppressionPenaltyPoints, equals(25));
+      expect(projectMetrics.complianceScore, equals(75));
+      expect(
+          projectMetrics.complianceFocusAreaKey, equals('suppression_hygiene'));
+      expect(projectMetrics.complianceFocusAreaLabel,
+          equals('Suppression hygiene'));
+      expect(projectMetrics.complianceFocusAreaIssueCount, equals(30));
+      expect(
+        projectMetrics.complianceNextInvestment,
+        contains('Reduce custom excludes'),
+      );
+    });
+
+    test('should allow limited suppressions within budget', () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 10,
+        totalDartFiles: 6,
+        totalLinesOfCode: 600,
+        totalCommentLines: 50,
+        fileMetrics: List.generate(
+          6,
+          (index) => FileMetrics(
+            path: 'lib/file_$index.dart',
+            linesOfCode: 100,
+            commentLines: 8,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ),
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'limited_suppression_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        ignoreDirectivesCount: 2,
+        customExcludedFilesCount: 1,
+        duplicateCodeAnalyzerEnabled: false,
+      );
+
+      expect(projectMetrics.suppressionPenaltyPoints, equals(0));
+      expect(projectMetrics.complianceScore, equals(100));
+    });
+
     test('should cap maximum loss from one analyzer to its equal-share slice',
         () {
       final projectMetrics = ProjectMetrics(
@@ -349,6 +438,10 @@ void main() {
             'files': 8,
             'dartFiles': 1,
             'excludedFiles': 5,
+            'customExcludedFiles': 0,
+            'ignoreDirectives': 0,
+            'disabledAnalyzers': 0,
+            'suppressionPenalty': 0,
             'linesOfCode': 10,
             'commentLines': 2,
             'commentRatio': 0.2,
@@ -438,6 +531,7 @@ void main() {
           'localization': {'usesLocalization': true},
           'compliance': {
             'score': 43,
+            'suppressionPenalty': 0,
             'focusArea': 'one_class_per_file',
             'focusAreaLabel': 'One class per file',
             'focusAreaIssues': 1,
@@ -598,6 +692,7 @@ void main() {
         projectName: 'example_project',
         version: '1.0.0',
         projectType: ProjectType.dart,
+        usesLocalization: true,
       );
 
       final output =
@@ -608,6 +703,49 @@ void main() {
       expect(joined, contains('lib/strings.dart'));
       expect(joined, contains('lib/secret.dart'));
       expect(joined, isNot(contains(':2:')));
+      expect(joined, isNot(contains('"hello"')));
+    });
+
+    test(
+        'should not list hardcoded string entries when localization is off even in full mode',
+        () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 0,
+        fileMetrics: const [],
+        secretIssues: const [],
+        hardcodedStringIssues: [
+          HardcodedStringIssue(
+            filePath: 'lib/strings.dart',
+            lineNumber: 2,
+            value: 'hello',
+          ),
+        ],
+        magicNumberIssues: const [],
+        sourceSortIssues: const [],
+        layersIssues: const [],
+        deadCodeIssues: const [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: const {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: false,
+      );
+
+      final output =
+          buildReportLines(projectMetrics, listMode: ReportListMode.full);
+      final joined = output.join('\n');
+
+      expect(
+        joined,
+        contains('Hardcoded strings check skipped (localization off).'),
+      );
+      expect(joined, isNot(contains('lib/strings.dart:2')));
       expect(joined, isNot(contains('"hello"')));
     });
 
@@ -761,6 +899,206 @@ void main() {
       expect(joined, isNot(contains('Hardcoded strings check passed.')));
       expect(joined, contains(RegExp(r'Duplicate Code\s*:\s*disabled')));
       expect(joined, contains('Duplicate code check skipped (disabled).'));
+    });
+
+    test('should show suppressions summary in Lists when suppressions exist',
+        () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 12,
+        totalDartFiles: 8,
+        totalLinesOfCode: 800,
+        totalCommentLines: 80,
+        fileMetrics: List.generate(
+          8,
+          (index) => FileMetrics(
+            path: 'lib/file_$index.dart',
+            linesOfCode: 100,
+            commentLines: 10,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ),
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        ignoreDirectivesCount: 12,
+        ignoreDirectiveFiles: [
+          'lib/a.dart',
+          'lib/b.dart',
+        ],
+        ignoreDirectiveCountsByFile: {
+          'lib/a.dart': 7,
+          'lib/b.dart': 5,
+        },
+        customExcludedFilesCount: 4,
+        hardcodedStringsAnalyzerEnabled: false,
+      );
+
+      final output = buildReportLines(projectMetrics);
+      final joined = output.join('\n');
+
+      expect(joined, contains('Suppressions summary'));
+      expect(joined, contains('Ignore directives: 12 across 2 files'));
+      expect(joined, contains('Custom excludes: 4'));
+      expect(
+        joined,
+        contains(
+          '4 Dart files excluded (file count; from .fcheck input.exclude or --exclude)',
+        ),
+      );
+      expect(joined, contains('Disabled analyzers: 1 analyzer'));
+      expect(joined, contains('lib/a.dart (7)'));
+      expect(joined, contains('lib/b.dart (5)'));
+      expect(joined, contains('hardcoded_strings'));
+    });
+
+    test('should show suppressions check passed when no suppressions exist',
+        () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 0,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/sample.dart',
+            linesOfCode: 10,
+            commentLines: 0,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+      );
+
+      final output = buildReportLines(projectMetrics);
+      final joined = output.join('\n');
+      expect(joined, contains('Suppressions check passed.'));
+    });
+
+    test('should order list blocks by status then alphabetically', () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 3,
+        totalDartFiles: 3,
+        totalLinesOfCode: 30,
+        totalCommentLines: 3,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/non_compliant.dart',
+            linesOfCode: 10,
+            commentLines: 1,
+            classCount: 2,
+            isStatefulWidget: false,
+          ),
+          FileMetrics(
+            path: 'lib/clean1.dart',
+            linesOfCode: 10,
+            commentLines: 1,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+          FileMetrics(
+            path: 'lib/clean2.dart',
+            linesOfCode: 10,
+            commentLines: 1,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: [],
+        hardcodedStringIssues: [
+          HardcodedStringIssue(
+            filePath: 'lib/strings.dart',
+            lineNumber: 2,
+            value: 'hello',
+          ),
+        ],
+        magicNumberIssues: [
+          MagicNumberIssue(
+            filePath: 'lib/num.dart',
+            lineNumber: 3,
+            value: '42',
+          ),
+        ],
+        sourceSortIssues: [],
+        layersIssues: [
+          LayersIssue(
+            type: LayersIssueType.cyclicDependency,
+            filePath: 'lib/layers.dart',
+            message: 'cycle',
+          ),
+        ],
+        deadCodeIssues: [],
+        duplicateCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: false,
+        ignoreDirectivesCount: 1,
+        ignoreDirectiveCountsByFile: {'lib/ignored.dart': 1},
+        deadCodeAnalyzerEnabled: false,
+      );
+
+      final output = buildReportLines(projectMetrics);
+      final joined = output.join('\n');
+
+      final duplicateIdx = joined.indexOf('[✓] Duplicate code check passed.');
+      final secretsIdx = joined.indexOf('[✓] Secrets scan passed.');
+      final sortingIdx =
+          joined.indexOf('[✓] Flutter class member sorting passed.');
+      final deadCodeDisabledIdx =
+          joined.indexOf('[-] Dead code check skipped (disabled).');
+      final hardcodedDisabledIdx = joined.indexOf(
+        '[-] Hardcoded strings check skipped (localization off).',
+      );
+      final magicWarnIdx = joined.indexOf('[!] 1 magic numbers detected:');
+      final suppressionsWarnIdx = joined.indexOf(
+          '[!] Suppressions summary (within budget, no score deduction):');
+      final layersFailIdx =
+          joined.indexOf('[✗] 1 layers architecture violations detected:');
+      final oneClassFailIdx =
+          joined.indexOf('[✗] 1 files violate the "one class per file" rule:');
+
+      expect(duplicateIdx, isNonNegative);
+      expect(secretsIdx, greaterThan(duplicateIdx));
+      expect(sortingIdx, greaterThan(secretsIdx));
+
+      expect(deadCodeDisabledIdx, greaterThan(sortingIdx));
+
+      expect(hardcodedDisabledIdx, greaterThan(deadCodeDisabledIdx));
+      expect(magicWarnIdx, greaterThan(hardcodedDisabledIdx));
+      expect(suppressionsWarnIdx, greaterThan(magicWarnIdx));
+
+      expect(layersFailIdx, greaterThan(suppressionsWarnIdx));
+      expect(oneClassFailIdx, greaterThan(layersFailIdx));
     });
   });
 }

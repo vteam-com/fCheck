@@ -311,7 +311,10 @@ void main() {
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('[!]'));
-      expect(result.stdout, contains('Hardcoded strings check:'));
+      expect(
+        result.stdout,
+        contains('Hardcoded strings check skipped (localization off).'),
+      );
       expect(result.stdout, contains('localization off'));
       expect(result.stdout, contains('magic numbers detected'));
     });
@@ -337,8 +340,7 @@ void main() {
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('fCheck $packageVersion'));
       expect(result.stdout, contains(dir1.path));
-      expect(result.stdout, contains('test1.dart'));
-      expect(result.stdout, isNot(contains('test2.dart')));
+      expect(result.stdout, isNot(contains(dir2.path)));
     });
 
     test('should accept positional path argument', () async {

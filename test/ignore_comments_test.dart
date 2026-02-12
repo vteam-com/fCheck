@@ -109,12 +109,11 @@ void main() {
       tempDir.deleteSync(recursive: true);
     });
 
-    test(
-        'should ignore hardcoded strings when directive is present (// ignore: fcheck_hardcoded_strings)',
-        () {
+    test('should ignore hardcoded strings when directive is present ()', () {
       final file = File(p.join(tempDir.path, 'ignored.dart'));
       file.writeAsStringSync('''
 // ignore: fcheck_hardcoded_strings
+
 void main() {
   var message = "Hello World";
 }
@@ -125,11 +124,12 @@ void main() {
     });
 
     test(
-        'should ignore hardcoded strings when directive is present (// ignore: fcheck_hardcoded_strings with multiple lines)',
+        'should ignore hardcoded strings when directive is present ( with multiple lines)',
         () {
       final file = File(p.join(tempDir.path, 'ignored_multiline.dart'));
       file.writeAsStringSync('''
 // ignore: fcheck_hardcoded_strings
+
 // This is a multi-line comment
 // with additional information
 void main() {

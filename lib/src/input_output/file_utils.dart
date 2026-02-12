@@ -308,6 +308,47 @@ class FileUtils {
       excludedCounts.excludedFilesCount
     );
   }
+
+  /// Counts Dart files excluded specifically by user-provided glob patterns.
+  ///
+  /// Unlike [scanDirectory], this excludes only files matched by
+  /// [excludePatterns] after default hidden/system exclusions are removed.
+  /// This is intended for suppression scoring and reflects user-configured
+  /// skip behavior only.
+  static int countCustomExcludedDartFiles(
+    Directory dir, {
+    List<String> excludePatterns = const [],
+  }) {
+    if (excludePatterns.isEmpty) {
+      return 0;
+    }
+
+    final globs = _buildExcludeGlobs(excludePatterns);
+    var count = 0;
+
+    dir.listSync(recursive: true).forEach((entity) {
+      if (entity is! File || p.extension(entity.path) != '.dart') {
+        return;
+      }
+
+      final relativePath = p.relative(entity.path, from: dir.path);
+      final pathParts = p.split(relativePath);
+
+      if (_isHiddenPath(pathParts) || _isDefaultExcludedPath(pathParts)) {
+        return;
+      }
+
+      if (_isGeneratedLocalizationDartFile(entity)) {
+        return;
+      }
+
+      if (_matchesAnyGlob(globs, relativePath)) {
+        count++;
+      }
+    });
+
+    return count;
+  }
 }
 
 class _ScanCounts {

@@ -263,7 +263,7 @@ class MyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
+      children: [
         Text(""),
         Text(''),
         Text("Hello"),

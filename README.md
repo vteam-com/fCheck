@@ -98,15 +98,17 @@ For day-to-day engineering guardrails, deterministic static checks are typically
 ```text
 ↓----------------------------------- fCheck 0.9.9 ------------------------------------↓
 Input              : /Users/me/my_app
-Project            : my_app (version: 1.0.0)
+Dart Project       : my_app (version: 1.0.0)
 -------------------------------------- Scorecard --------------------------------------
 Compliance Score   : 91%
+Suppressions      : -4 pts
 Focus Area         : Hardcoded strings (7 issues)
 Invest Next        : Adopt localization and replace user-facing literals with keys.
 -------------------------------------- Dashboard --------------------------------------
-Project Type       : Dart                 |  Folders            :                  14
 Files              :                   57  |  Dart Files         :                  36
 Excluded Files     :                   19  |  Localization (OFF) :       HardCoded   7
+Custom Excludes    :                    3  |  Ignore Directives  :                   6
+Disabled Rules     :                    1  |  Folders            :                  14
 Lines of Code      :                7,550  |  Comments           :         1,452 (19%)
 One Class/File     :                    ✓  |  Magic Numbers      :                   ✓
 Secrets            :                    ✓  |  Dead Code          :                   ✓
@@ -114,7 +116,7 @@ Layers             :                    6  |  Source Sorting     :              
 Duplicate Code     :                    ✓  |  Dependencies       :                  73
 ---------------------------------------- Lists ----------------------------------------
 [✓] One class per file check passed.
-[!] Hardcoded strings check: 7 found (localization off). Example: lib/main.dart
+[-] Hardcoded strings check skipped (localization off).
 [✓] Magic numbers check passed.
 [✓] Flutter class member sorting passed.
 [✓] Secrets scan passed.
@@ -190,7 +192,7 @@ Need a quick reminder from CLI? Run `fcheck --help-ignore`.
 ### File-Level Ignore (entire file)
 
 ```dart
-// ignore: fcheck_hardcoded_strings
+
 // ignore: fcheck_magic_numbers
 // ignore: fcheck_secrets
 // ignore: fcheck_dead_code
@@ -349,6 +351,11 @@ Excluded directories (15):
 - **Folders**: Number of directories
 - **Files**: Total files in project
 - **Dart Files**: `.dart` files analyzed
+- **Excluded Files**: Dart files skipped by defaults and custom patterns
+- **Custom Excludes**: Dart file count skipped by user exclude globs (`.fcheck` `input.exclude` and/or `--exclude`)
+- **Ignore Directives**: Count of `// ignore: fcheck_*` directives
+- **Disabled Rules**: Number of disabled analyzers
+- **Suppression Penalty**: Score deduction from overusing excludes/ignores/disabled rules
 - **Lines of Code**: Total lines in Dart files
 - **Comment Ratio**: Documentation percentage
 

@@ -30,6 +30,16 @@ class ProjectMetrics {
   static const double _minDeadCodeBudget = 3.0;
   static const double _deadCodeBudgetPerFile = 0.8;
   static const double _duplicateRatioPenaltyMultiplier = 2.5;
+  static const double _minIgnoreDirectiveBudget = 3.0;
+  static const double _ignoreDirectiveBudgetPerFile = 0.12;
+  static const double _ignoreDirectiveBudgetPerLoc = 1 / 2500;
+  static const double _minCustomExcludedFileBudget = 2.0;
+  static const double _customExcludedFileBudgetRatio = 0.08;
+  static const double _disabledAnalyzerBudget = 1.0;
+  static const double _ignorePenaltyWeight = 0.45;
+  static const double _customExcludedPenaltyWeight = 0.35;
+  static const double _disabledAnalyzerPenaltyWeight = 0.20;
+  static const int _maxSuppressionPenaltyPoints = 25;
 
   static const int _maxPercent = 100;
 
@@ -92,6 +102,18 @@ class ProjectMetrics {
   /// Number of files successfully skipped based on exclusion glob patterns.
   final int excludedFilesCount;
 
+  /// Number of Dart files excluded by user-provided glob patterns.
+  final int customExcludedFilesCount;
+
+  /// Count of `// ignore: fcheck_*` directives found in analyzed Dart files.
+  final int ignoreDirectivesCount;
+
+  /// Unique file paths containing at least one `// ignore: fcheck_*` directive.
+  final List<String> ignoreDirectiveFiles;
+
+  /// Per-file count of `// ignore: fcheck_*` directives.
+  final Map<String, int> ignoreDirectiveCountsByFile;
+
   /// Whether the project appears to be using Flutter localization (l10n).
   ///
   /// Detection is based on the presence of `l10n.yaml`, `.arb` files,
@@ -151,6 +173,10 @@ class ProjectMetrics {
   /// [projectType] The detected project type (Flutter, Dart, or Unknown).
   /// [usesLocalization] Whether the project appears to be using Flutter localization.
   /// [excludedFilesCount] Number of files successfully skipped based on exclusion glob patterns.
+  /// [customExcludedFilesCount] Number of Dart files excluded by custom glob patterns.
+  /// [ignoreDirectivesCount] Number of `// ignore: fcheck_*` directives found.
+  /// [ignoreDirectiveFiles] Unique file paths containing `// ignore: fcheck_*`.
+  /// [ignoreDirectiveCountsByFile] Per-file counts for `// ignore: fcheck_*`.
   ProjectMetrics({
     required this.totalFolders,
     required this.totalFiles,
@@ -174,6 +200,10 @@ class ProjectMetrics {
     required this.projectType,
     this.usesLocalization = false,
     this.excludedFilesCount = 0,
+    this.customExcludedFilesCount = 0,
+    this.ignoreDirectivesCount = 0,
+    this.ignoreDirectiveFiles = const [],
+    this.ignoreDirectiveCountsByFile = const {},
     this.oneClassPerFileAnalyzerEnabled = true,
     this.hardcodedStringsAnalyzerEnabled = true,
     this.magicNumbersAnalyzerEnabled = true,
@@ -196,6 +226,10 @@ class ProjectMetrics {
           'files': totalFiles,
           'dartFiles': totalDartFiles,
           'excludedFiles': excludedFilesCount,
+          'customExcludedFiles': customExcludedFilesCount,
+          'ignoreDirectives': ignoreDirectivesCount,
+          'disabledAnalyzers': disabledAnalyzersCount,
+          'suppressionPenalty': suppressionPenaltyPoints,
           'linesOfCode': totalLinesOfCode,
           'commentLines': totalCommentLines,
           'commentRatio': commentRatio,
@@ -224,6 +258,7 @@ class ProjectMetrics {
         'localization': {'usesLocalization': usesLocalization},
         'compliance': {
           'score': complianceScore,
+          'suppressionPenalty': suppressionPenaltyPoints,
           'focusArea': complianceFocusAreaKey,
           'focusAreaLabel': complianceFocusAreaLabel,
           'focusAreaIssues': complianceFocusAreaIssueCount,
@@ -237,6 +272,18 @@ class ProjectMetrics {
   double get commentRatio =>
       totalLinesOfCode == 0 ? 0 : totalCommentLines / totalLinesOfCode;
 
+  /// Number of analyzers disabled for this run.
+  int get disabledAnalyzersCount => [
+        oneClassPerFileAnalyzerEnabled,
+        hardcodedStringsAnalyzerEnabled,
+        magicNumbersAnalyzerEnabled,
+        sourceSortingAnalyzerEnabled,
+        layersAnalyzerEnabled,
+        secretsAnalyzerEnabled,
+        deadCodeAnalyzerEnabled,
+        duplicateCodeAnalyzerEnabled,
+      ].where((enabled) => !enabled).length;
+
   /// Equal-share quality score across enabled analyzers from 0 to 100.
   ///
   /// Higher is better. A score of 100 means no detected compliance penalties
@@ -244,31 +291,56 @@ class ProjectMetrics {
   ///
   /// Formula:
   /// - `domainAverage = sum(enabledDomainScores) / enabledDomainCount`
-  /// - `score = round(clamp(domainAverage * 100, 0, 100))`
+  /// - `baseScore = clamp(domainAverage * 100, 0, 100)`
+  /// - `score = round(clamp(baseScore - suppressionPenaltyPoints, 0, 100))`
   ///
   /// Special rule:
   /// - If rounding yields `100` while any enabled domain is `< 1.0`,
   ///   result is forced to `99` so perfect score remains strict.
   int get complianceScore {
     final enabledAreas = _enabledComplianceAreas;
-    if (enabledAreas.isEmpty) {
-      return _maxPercent;
-    }
-
-    final averageAreaScore =
-        enabledAreas.fold<double>(0, (sum, area) => sum + area.score) /
+    final averageAreaScore = enabledAreas.isEmpty
+        ? 1.0
+        : enabledAreas.fold<double>(0, (sum, area) => sum + area.score) /
             enabledAreas.length;
-    final normalizedScore = averageAreaScore * _maxPercent;
+    final baseScore = averageAreaScore * _maxPercent;
+    final scoreAfterSuppression = baseScore - suppressionPenaltyPoints;
     var complianceScore =
-        normalizedScore.clamp(0, _maxPercent.toDouble()).round();
+        scoreAfterSuppression.clamp(0, _maxPercent.toDouble()).round();
 
-    // Reserve 100% for truly clean runs with zero penalties in enabled domains.
+    // Reserve 100% for truly clean runs with zero penalties.
     if (complianceScore == _maxPercent &&
-        enabledAreas.any((area) => area.score < 1)) {
+        (enabledAreas.any((area) => area.score < 1) ||
+            suppressionPenaltyPoints > 0)) {
       complianceScore = _maxPercent - 1;
     }
 
     return complianceScore;
+  }
+
+  /// Budget-adjusted score penalty from suppressions (`ignore`, excludes, disabled analyzers).
+  ///
+  /// The penalty is capped to keep suppressions impactful but not dominant.
+  int get suppressionPenaltyPoints {
+    final ignoreOverBudgetRatio = _overBudgetRatio(
+      used: ignoreDirectivesCount.toDouble(),
+      budget: _ignoreDirectiveBudget,
+    );
+    final customExcludedOverBudgetRatio = _overBudgetRatio(
+      used: customExcludedFilesCount.toDouble(),
+      budget: _customExcludedFilesBudget,
+    );
+    final disabledAnalyzersOverBudgetRatio = _overBudgetRatio(
+      used: disabledAnalyzersCount.toDouble(),
+      budget: _disabledAnalyzerBudget,
+    );
+
+    final weightedOveruse = ignoreOverBudgetRatio * _ignorePenaltyWeight +
+        customExcludedOverBudgetRatio * _customExcludedPenaltyWeight +
+        disabledAnalyzersOverBudgetRatio * _disabledAnalyzerPenaltyWeight;
+
+    final penalty = weightedOveruse * _maxSuppressionPenaltyPoints;
+    return penalty.clamp(0, _maxSuppressionPenaltyPoints.toDouble()).round();
   }
 
   /// Machine-readable key for the area with highest score impact.
@@ -317,6 +389,8 @@ class ProjectMetrics {
         return 'Delete unused files, classes, and functions to reduce maintenance cost.';
       case 'duplicate_code':
         return 'Extract repeated code paths into shared helpers or reusable widgets.';
+      case 'suppression_hygiene':
+        return 'Reduce custom excludes, restore disabled analyzers, and remove stale fcheck ignore directives.';
     }
 
     return 'Invest in the lowest-scoring quality area to raise overall compliance.';
@@ -328,7 +402,11 @@ class ProjectMetrics {
   _ComplianceAreaScore? get _primaryFocusArea {
     final candidates = _enabledComplianceAreas
         .where((area) => area.score < 1 || area.issueCount > 0)
-        .toList(growable: false);
+        .toList();
+    final suppressionFocusArea = _suppressionFocusArea;
+    if (suppressionFocusArea != null) {
+      candidates.add(suppressionFocusArea);
+    }
     if (candidates.isEmpty) {
       return null;
     }
@@ -348,6 +426,42 @@ class ProjectMetrics {
       }
     }
     return best;
+  }
+
+  _ComplianceAreaScore? get _suppressionFocusArea {
+    final penalty = suppressionPenaltyPoints;
+    if (penalty <= 0) {
+      return null;
+    }
+    final suppressionEntries = ignoreDirectivesCount +
+        customExcludedFilesCount +
+        disabledAnalyzersCount;
+    return _ComplianceAreaScore(
+      key: 'suppression_hygiene',
+      label: 'Suppression hygiene',
+      enabled: true,
+      issueCount: suppressionEntries,
+      score: _clampToUnitRange(1 - (penalty / _maxSuppressionPenaltyPoints)),
+    );
+  }
+
+  double get _ignoreDirectiveBudget {
+    final safeDartFileCount = math.max(1, totalDartFiles);
+    final safeLoc = math.max(1, totalLinesOfCode);
+    return math.max(
+      _minIgnoreDirectiveBudget,
+      safeDartFileCount * _ignoreDirectiveBudgetPerFile +
+          safeLoc * _ignoreDirectiveBudgetPerLoc,
+    );
+  }
+
+  double get _customExcludedFilesBudget {
+    final scopeDartFiles =
+        math.max(1, totalDartFiles + customExcludedFilesCount);
+    return math.max(
+      _minCustomExcludedFileBudget,
+      scopeDartFiles * _customExcludedFileBudgetRatio,
+    );
   }
 
   List<_ComplianceAreaScore> get _complianceAreas {
@@ -514,6 +628,17 @@ double _budgetScore({required int issues, required double budget}) {
     return 1;
   }
   return _clampToUnitRange(1 - (issues / budget));
+}
+
+double _overBudgetRatio({required double used, required double budget}) {
+  if (budget <= 0) {
+    return 0;
+  }
+  final overBudget = used - budget;
+  if (overBudget <= 0) {
+    return 0;
+  }
+  return overBudget / budget;
 }
 
 double _clampToUnitRange(double value) {

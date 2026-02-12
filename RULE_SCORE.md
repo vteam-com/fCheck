@@ -9,6 +9,7 @@ This file defines how the overall compliance score is calculated and displayed.
 - Make `100%` strictly mean "no detected compliance penalties".
 - Highlight where to invest next for the fastest score improvement.
 - Cap each analyzer impact so one analyzer can never consume more than its own score slice.
+- Discourage score gaming via excessive `ignore`, custom excludes, or disabled analyzers.
 
 ## Score Inputs
 
@@ -22,6 +23,12 @@ Only enabled analyzers contribute to the score.
 - `secrets`
 - `dead_code`
 - `duplicate_code`
+
+Additional suppression inputs are tracked and can deduct points:
+
+- `// ignore: fcheck_*` directives in analyzed Dart files
+- Custom-excluded Dart files (from `.fcheck`/CLI exclude glob patterns)
+- Disabled analyzers
 
 ## Analyzer Share
 
@@ -106,22 +113,44 @@ duplicateRatio = duplicateImpactLines / max(1, linesOfCode)
 score = 1 - (duplicateRatio * 2.5)
 ```
 
+## Suppression Penalty
+
+The score includes a budget-based suppression penalty so occasional suppressions
+are tolerated, but sustained overuse is penalized.
+
+```text
+ignoreBudget = max(3.0, dartFiles * 0.12 + linesOfCode / 2500)
+customExcludeBudget = max(2.0, (dartFiles + customExcludedFiles) * 0.08)
+disabledBudget = 1.0
+
+over(used, budget) = max(0, (used - budget) / budget)
+
+weightedOveruse =
+  over(ignoreDirectives, ignoreBudget) * 0.45 +
+  over(customExcludedFiles, customExcludeBudget) * 0.35 +
+  over(disabledAnalyzers, disabledBudget) * 0.20
+
+suppressionPenaltyPoints = round(clamp(weightedOveruse * 25, 0, 25))
+```
+
 ## Overall Score
 
 ```text
 averageDomainScore = sum(domainScore) / N
-rawPercent = averageDomainScore * 100
-score = round(clamp(rawPercent, 0, 100))
+basePercent = averageDomainScore * 100
+score = round(clamp(basePercent - suppressionPenaltyPoints, 0, 100))
 ```
 
 Special rule:
 
 - If rounded score is `100` but any enabled domain score is `< 1.0`, final score is forced to `99`.
+- If suppression penalty is greater than `0`, final score cannot remain `100` (it is forced to `99` when rounded to `100`).
 - This guarantees `100%` is only shown when all enabled domains are fully compliant.
 
 ## Focus Area Selection
 
-The "Focus Area" is the enabled domain with the highest score impact:
+The "Focus Area" is the highest-impact enabled domain, plus suppression hygiene
+when suppression penalty is active:
 
 ```text
 penaltyImpact = (1 - domainScore)

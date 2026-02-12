@@ -32,6 +32,16 @@ class IgnoreConfig {
   static const String ignoreForFileDirectiveForHardcodedStrings =
       '// ignore_for_file: avoid_hardcoded_strings_in_widgets';
 
+  static final RegExp _lineIgnorePattern = RegExp(
+    r'^\s*ignore\s*:\s*(.+)$',
+    caseSensitive: false,
+  );
+  static const int _lineCommentPrefixLength = 2;
+  static final RegExp _fcheckDirectiveTokenPattern = RegExp(
+    r'\bfcheck_[a-z_]+\b',
+    caseSensitive: false,
+  );
+
   /// Checks for a top-of-file ignore directive matching [expectedComment].
   ///
   /// The directive must appear in the leading comment block(s) at the top of
@@ -57,13 +67,36 @@ class IgnoreConfig {
     return directivePattern.hasMatch(commentBlock);
   }
 
-  static String _buildExpectedCommentPattern(String expectedComment) {
-    /// Length of the line comment prefix "//".
-    const int lineCommentPrefixLength = 2;
+  /// Counts `// ignore: fcheck_*` directives in [content].
+  ///
+  /// This includes both top-of-file and inline ignore comments.
+  /// If a single ignore line contains multiple `fcheck_*` tokens, each token
+  /// contributes to the count.
+  static int countFcheckIgnoreDirectives(String content) {
+    var count = 0;
+    final lines = content.split('\n');
+    for (final line in lines) {
+      final commentStart = line.indexOf('//');
+      if (commentStart < 0) {
+        continue;
+      }
 
+      final comment = line.substring(commentStart + _lineCommentPrefixLength);
+      final match = _lineIgnorePattern.firstMatch(comment);
+      if (match == null) {
+        continue;
+      }
+
+      final directives = match.group(1) ?? '';
+      count += _fcheckDirectiveTokenPattern.allMatches(directives).length;
+    }
+    return count;
+  }
+
+  static String _buildExpectedCommentPattern(String expectedComment) {
     var working = expectedComment;
     if (working.startsWith('//')) {
-      working = working.substring(lineCommentPrefixLength);
+      working = working.substring(_lineCommentPrefixLength);
     }
     working = working.trimLeft();
 

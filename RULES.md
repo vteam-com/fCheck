@@ -141,6 +141,12 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 ## Output Formatting
 
 - When displaying counts or other numbers `>= 1,000` in CLI output or documentation examples, use comma separators (e.g., `1,234`, `12,345`, `1,234,567`).
+- Hardcoded strings list entries are shown only when localization is `ON`; when localization is `OFF`, print summary-only warning text (no per-item list in Lists section).
+- Lists section blocks must be ordered by status group, then alphabetically by check name:
+  - success (ascending)
+  - disabled (ascending)
+  - warnings (ascending)
+  - failures (ascending)
 
 ## Configuration
 

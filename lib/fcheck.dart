@@ -197,14 +197,12 @@ class AnalyzeFolder {
     final projectRoot = pubspecInfo.projectRoot ?? projectDir;
 
     // Perform unified directory scan to get all file system metrics in one pass
-    final (
-      dartFiles,
-      totalFolders,
-      totalFiles,
-      excludedDartFilesCount,
-      excludedFoldersCount,
-      excludedFilesCount
-    ) = FileUtils.scanDirectory(
+    final (dartFiles, totalFolders, totalFiles, excludedDartFilesCount, _, _) =
+        FileUtils.scanDirectory(
+      projectDir,
+      excludePatterns: excludePatterns,
+    );
+    final customExcludedDartFilesCount = FileUtils.countCustomExcludedDartFiles(
       projectDir,
       excludePatterns: excludePatterns,
     );
@@ -314,16 +312,33 @@ class AnalyzeFolder {
     final fileMetricsList = <FileMetrics>[];
     int totalLoc = 0;
     int totalComments = 0;
+    int ignoreDirectivesCount = 0;
+    final ignoreDirectiveCountsByFile = <String, int>{};
 
     for (var file in dartFiles) {
-      final metrics = analyzeFile(
+      final content = file.readAsStringSync();
+      final fileAnalysis = _analyzeFileContent(
         file,
+        content,
         globallyIgnoreOneClassPerFile: !oneClassPerFileEnabled,
       );
+      final metrics = fileAnalysis.metrics;
       fileMetricsList.add(metrics);
       totalLoc += metrics.linesOfCode;
       totalComments += metrics.commentLines;
+      ignoreDirectivesCount += fileAnalysis.fcheckIgnoreDirectiveCount;
+      if (fileAnalysis.fcheckIgnoreDirectiveCount > 0) {
+        ignoreDirectiveCountsByFile[file.path] =
+            fileAnalysis.fcheckIgnoreDirectiveCount;
+      }
     }
+
+    final sortedIgnoreDirectiveFiles = ignoreDirectiveCountsByFile.keys.toList()
+      ..sort();
+    final sortedIgnoreDirectiveCountsByFile = <String, int>{
+      for (final path in sortedIgnoreDirectiveFiles)
+        path: ignoreDirectiveCountsByFile[path]!,
+    };
 
     final usesLocalization = detectLocalization(dartFiles);
 
@@ -347,6 +362,10 @@ class AnalyzeFolder {
       version: projectVersion,
       usesLocalization: usesLocalization,
       excludedFilesCount: excludedDartFilesCount,
+      customExcludedFilesCount: customExcludedDartFilesCount,
+      ignoreDirectivesCount: ignoreDirectivesCount,
+      ignoreDirectiveFiles: sortedIgnoreDirectiveFiles,
+      ignoreDirectiveCountsByFile: sortedIgnoreDirectiveCountsByFile,
       secretIssues: secretIssues,
       duplicateCodeIssues: duplicateCodeIssues,
       deadCodeIssues: deadCodeIssues,
@@ -401,6 +420,19 @@ class AnalyzeFolder {
     bool globallyIgnoreOneClassPerFile = false,
   }) {
     final content = file.readAsStringSync();
+    final analysis = _analyzeFileContent(
+      file,
+      content,
+      globallyIgnoreOneClassPerFile: globallyIgnoreOneClassPerFile,
+    );
+    return analysis.metrics;
+  }
+
+  _FileAnalysisResult _analyzeFileContent(
+    File file,
+    String content, {
+    required bool globallyIgnoreOneClassPerFile,
+  }) {
     final ParseStringResult result = parseString(
       content: content,
       featureSet: FeatureSet.latestLanguageVersion(),
@@ -412,13 +444,17 @@ class AnalyzeFolder {
 
     // Skip files with parse errors
     if (result.errors.isNotEmpty) {
-      return FileMetrics(
-        path: file.path,
-        linesOfCode: 0,
-        commentLines: 0,
-        classCount: 0,
-        isStatefulWidget: false,
-        ignoreOneClassPerFile: ignoreOneClassPerFile,
+      return _FileAnalysisResult(
+        metrics: FileMetrics(
+          path: file.path,
+          linesOfCode: 0,
+          commentLines: 0,
+          classCount: 0,
+          isStatefulWidget: false,
+          ignoreOneClassPerFile: ignoreOneClassPerFile,
+        ),
+        fcheckIgnoreDirectiveCount:
+            IgnoreConfig.countFcheckIgnoreDirectives(content),
       );
     }
 
@@ -428,13 +464,17 @@ class AnalyzeFolder {
     final _QualityVisitor visitor = _QualityVisitor();
     unit.accept(visitor);
 
-    return FileMetrics(
-      path: file.path,
-      linesOfCode: lines.length,
-      commentLines: commentLines,
-      classCount: visitor.classCount,
-      isStatefulWidget: visitor.hasStatefulWidget,
-      ignoreOneClassPerFile: ignoreOneClassPerFile,
+    return _FileAnalysisResult(
+      metrics: FileMetrics(
+        path: file.path,
+        linesOfCode: lines.length,
+        commentLines: commentLines,
+        classCount: visitor.classCount,
+        isStatefulWidget: visitor.hasStatefulWidget,
+        ignoreOneClassPerFile: ignoreOneClassPerFile,
+      ),
+      fcheckIgnoreDirectiveCount:
+          IgnoreConfig.countFcheckIgnoreDirectives(content),
     );
   }
 
@@ -767,4 +807,14 @@ class _QualityVisitor extends RecursiveAstVisitor<void> {
 
     super.visitClassDeclaration(node);
   }
+}
+
+class _FileAnalysisResult {
+  final FileMetrics metrics;
+  final int fcheckIgnoreDirectiveCount;
+
+  const _FileAnalysisResult({
+    required this.metrics,
+    required this.fcheckIgnoreDirectiveCount,
+  });
 }

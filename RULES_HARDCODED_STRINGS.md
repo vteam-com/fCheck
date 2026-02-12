@@ -36,9 +36,9 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 - Strings used to build `RegExp`.
 - Strings in `Key`, `ValueKey`, or `ObjectKey` constructors.
 - Strings used as index expressions.
-- Nodes with `// ignore: fcheck_hardcoded_strings`.
+- Nodes with ``.
 - Files in `lib/l10n/` and generated `.g.dart` files.
-- Files with a top-of-file `// ignore: fcheck_hardcoded_strings` directive.
+- Files with a top-of-file `` directive.
 - Files with a top-of-file `// ignore_for_file: avoid_hardcoded_strings_in_widgets` directive (third-party custom_lint).
 - Parse errors do not prevent scanning; the AST may be partial.
 - Flutter focus only: strings with length <= 2.

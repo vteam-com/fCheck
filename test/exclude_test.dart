@@ -562,5 +562,31 @@ void main() {
         expect(dartFiles.any((f) => f.path.contains('.hidden')), isFalse);
       });
     });
+
+    group('Custom exclusion counting', () {
+      test('counts only glob-excluded Dart files beyond defaults', () {
+        final helpersDir = Directory('${tempDir.path}/helpers')..createSync();
+        final hiddenDir = Directory('${tempDir.path}/.hidden')..createSync();
+        final testDir = Directory('${tempDir.path}/test')..createSync();
+
+        File('${tempDir.path}/main.dart').writeAsStringSync('void main() {}');
+        File('${helpersDir.path}/helper.dart').writeAsStringSync('class H {}');
+        File('${hiddenDir.path}/hidden.dart').writeAsStringSync('class X {}');
+        File('${testDir.path}/test_file.dart').writeAsStringSync('class T {}');
+
+        final count = FileUtils.countCustomExcludedDartFiles(
+          tempDir,
+          excludePatterns: ['helpers/*'],
+        );
+
+        expect(count, equals(1));
+      });
+
+      test('returns zero when no custom patterns are provided', () {
+        File('${tempDir.path}/main.dart').writeAsStringSync('void main() {}');
+        final count = FileUtils.countCustomExcludedDartFiles(tempDir);
+        expect(count, equals(0));
+      });
+    });
   });
 }

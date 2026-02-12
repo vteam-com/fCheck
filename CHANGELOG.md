@@ -282,7 +282,7 @@ fcheck --list filenames  # unique file names only
 - 🎯 **Generic Ignore Pattern**: New standardized format `// ignore: fcheck_<domain>` for all ignore directives
 - 🔧 **One Class Per File Ignore**: Support for `// ignore: fcheck_one_class_per_file` to skip one-class-per-file rule for individual files
 - 🧮 **Magic Number Ignore**: Enhanced support for `// ignore: fcheck_magic_numbers` with consistent pattern matching
-- 📝 **Hardcoded String Ignore**: Improved `// ignore: fcheck_hardcoded_strings` directive handling
+- 📝 **Hardcoded String Ignore**: Improved `` directive handling
 - 🏗️ **Layers Ignore**: Added `// ignore: fcheck_layers` for layer architecture violations
 - 📚 **Comprehensive Documentation**: Updated all ignore directive examples and documentation
 
