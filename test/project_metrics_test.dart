@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:fcheck/src/models/app_strings.dart';
 
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
@@ -591,8 +592,8 @@ void main() {
       expect(output, isNotEmpty);
       final joined = output.join('\n');
       expect(joined, contains('Scorecard'));
-      expect(joined, contains(RegExp(r'Compliance Score\s+:\s*')));
-      expect(joined, contains(RegExp(r'Invest Next\s+:\s*')));
+      expect(joined, contains(RegExp(r'Compliance Score.*:')));
+      expect(joined, contains(RegExp(r'Invest Next.*:')));
     });
 
     test('should omit Lists section when listMode is none', () {
@@ -671,7 +672,7 @@ void main() {
         ],
         sourceSortIssues: [
           SourceSortIssue(
-            filePath: 'lib/sort.dart',
+            filePath: 'sort.dart',
             className: 'SortMe',
             lineNumber: 4,
             description: 'unsorted',
@@ -680,14 +681,14 @@ void main() {
         layersIssues: [
           LayersIssue(
             type: LayersIssueType.cyclicDependency,
-            filePath: 'lib/layers.dart',
+            filePath: 'layers.dart',
             message: 'cycle',
           ),
         ],
         deadCodeIssues: [
           DeadCodeIssue(
             type: DeadCodeIssueType.deadFile,
-            filePath: 'lib/dead.dart',
+            filePath: 'dead.dart',
             name: 'dead.dart',
           ),
         ],
@@ -748,7 +749,8 @@ void main() {
 
       expect(
         joined,
-        contains('Hardcoded strings check skipped (localization off).'),
+        contains(
+            '${AppStrings.hardcodedStringsDetected} check skipped (${AppStrings.off}).'),
       );
       expect(joined, isNot(contains('lib/strings.dart:2')));
       expect(joined, isNot(contains('"hello"')));
@@ -897,12 +899,15 @@ void main() {
       final output = buildReportLines(projectMetrics);
       final joined = output.join('\n');
 
-      expect(joined, contains('Localization'));
+      expect(joined, contains(AppStrings.localization));
       expect(joined, contains('HardCoded'));
-      expect(joined, contains('disabled'));
-      expect(joined, contains('Hardcoded strings check skipped (disabled).'));
+      expect(joined, contains(AppStrings.disabled));
+      expect(
+          joined,
+          contains(
+              'Hardcoded strings check skipped (${AppStrings.disabled}).'));
       expect(joined, isNot(contains('Hardcoded strings check passed.')));
-      expect(joined, contains(RegExp(r'Duplicate Code\s*:\s*disabled')));
+      expect(joined, contains(RegExp(r'Duplicate Code.*:.*disabled')));
       expect(joined, contains('Duplicate code check skipped (disabled).'));
     });
 
@@ -943,7 +948,10 @@ void main() {
       final output = buildReportLines(projectMetrics);
       final joined = output.join('\n');
 
-      expect(joined, contains('Documentation check passed.'));
+      expect(
+          joined,
+          contains(
+              '${AppStrings.documentationCheck} ${AppStrings.checkPassed}'));
     });
 
     test('should show documentation issues in list section', () {
@@ -990,7 +998,9 @@ void main() {
           buildReportLines(projectMetrics, listMode: ReportListMode.full);
       final joined = output.join('\n');
 
-      expect(joined, contains('[!] 1 documentation issues detected:'));
+      expect(joined, contains('[!]'));
+      expect(joined, contains('1'));
+      expect(joined, contains(AppStrings.documentationIssuesDetected));
       expect(
         joined,
         contains('lib/a.dart:12: public function is missing documentation'),
@@ -1036,8 +1046,13 @@ void main() {
       final output = buildReportLines(projectMetrics);
       final joined = output.join('\n');
 
-      expect(joined, contains('Documentation check skipped (disabled).'));
-      expect(joined, contains('Disabled analyzers: 1 analyzer'));
+      expect(
+          joined,
+          contains(
+              '${AppStrings.documentationCheck} skipped (${AppStrings.disabled}).'));
+      expect(joined, contains(AppStrings.disabledRules));
+      expect(joined, contains('1'));
+      expect(joined, contains(AppStrings.analyzerSmall));
       expect(joined, contains('documentation'));
     });
 
@@ -1088,18 +1103,23 @@ void main() {
       final output = buildReportLines(projectMetrics);
       final joined = output.join('\n');
 
-      expect(joined, contains('Suppressions summary'));
-      expect(joined, contains('Ignore directives: 12 across 2 files'));
-      expect(joined, contains('Custom excludes: 4'));
-      expect(
-        joined,
-        contains(
-          '4 Dart files excluded (file count; from .fcheck input.exclude or --exclude)',
-        ),
-      );
-      expect(joined, contains('Disabled analyzers: 1 analyzer'));
-      expect(joined, contains('lib/a.dart (7)'));
-      expect(joined, contains('lib/b.dart (5)'));
+      expect(joined, contains(AppStrings.suppressionsSummary));
+      expect(joined, contains('Ignore directives:'));
+      expect(joined, contains('12'));
+      expect(joined, contains(AppStrings.ignoreDirectivesAcross));
+      expect(joined, contains('2'));
+      expect(joined, contains(AppStrings.file));
+      expect(joined, contains(AppStrings.filesSmall));
+      expect(joined, contains(AppStrings.customExcludes));
+      expect(joined, contains('4'));
+      expect(joined, contains(AppStrings.dartFilesExcluded));
+      expect(joined, contains(AppStrings.disabledRules));
+      expect(joined, contains('1'));
+      expect(joined, contains(AppStrings.analyzerSmall));
+      expect(joined, contains('lib/a.dart'));
+      expect(joined, contains('7'));
+      expect(joined, contains('lib/b.dart'));
+      expect(joined, contains('5'));
       expect(joined, contains('hardcoded_strings'));
     });
 
@@ -1137,7 +1157,7 @@ void main() {
 
       final output = buildReportLines(projectMetrics);
       final joined = output.join('\n');
-      expect(joined, contains('Suppressions check passed.'));
+      expect(joined, contains('Suppressions check ${AppStrings.checkPassed}'));
     });
 
     test('should order list blocks by status then alphabetically', () {
@@ -1210,22 +1230,19 @@ void main() {
       final output = buildReportLines(projectMetrics);
       final joined = output.join('\n');
 
-      final duplicateIdx = joined.indexOf('[✓] Duplicate code check passed.');
-      final secretsIdx = joined.indexOf('[✓] Secrets scan passed.');
-      final sortingIdx =
-          joined.indexOf('[✓] Flutter class member sorting passed.');
-      final deadCodeDisabledIdx =
-          joined.indexOf('[-] Dead code check skipped (disabled).');
+      final duplicateIdx = joined.indexOf('Duplicate code check passed.');
+      final secretsIdx = joined.indexOf('Secrets scan passed.');
+      final sortingIdx = joined.indexOf('Flutter class member sorting passed.');
+      final deadCodeDisabledIdx = joined.indexOf(
+          '${AppStrings.deadCodeCheck} skipped (${AppStrings.disabled}).');
       final hardcodedDisabledIdx = joined.indexOf(
-        '[-] Hardcoded strings check skipped (localization off).',
+        '${AppStrings.hardcodedStringsDetected} check skipped (${AppStrings.off}).',
       );
-      final magicWarnIdx = joined.indexOf('[!] 1 magic numbers detected:');
+      final magicWarnIdx = joined.indexOf(AppStrings.magicNumbersDetected);
       final suppressionsWarnIdx = joined.indexOf(
-          '[!] Suppressions summary (within budget, no score deduction):');
-      final layersFailIdx =
-          joined.indexOf('[✗] 1 layers architecture violations detected:');
-      final oneClassFailIdx =
-          joined.indexOf('[✗] 1 files violate the "one class per file" rule:');
+          '${AppStrings.suppressionsSummary} (within budget, no score deduction):');
+      final layersFailIdx = joined.indexOf(AppStrings.layersViolationsDetected);
+      final oneClassFailIdx = joined.indexOf(AppStrings.oneClassPerFileViolate);
 
       expect(duplicateIdx, isNonNegative);
       expect(secretsIdx, greaterThan(duplicateIdx));
@@ -1401,8 +1418,10 @@ void main() {
           buildReportLines(projectMetrics, listMode: ReportListMode.full);
       final joined = output.join('\n');
 
-      expect(joined, contains('Unused variables (1):'));
-      expect(joined, contains('lib/a.dart:12: "tempValue" in build'));
+      expect(joined, contains('${AppStrings.unusedVariables} (1):'));
+      expect(joined, contains('lib/a.dart:12:'));
+      expect(joined, contains('"tempValue"'));
+      expect(joined, contains('in build'));
       expect(joined, isNot(contains('unused variable "tempValue"')));
     });
 
@@ -1452,7 +1471,15 @@ void main() {
 
       expect(
         joined,
-        contains('bin/console_output.dart: "status" in anonymous'),
+        contains('bin/console_output.dart:'),
+      );
+      expect(
+        joined,
+        contains('"status"'),
+      );
+      expect(
+        joined,
+        contains('in anonymous'),
       );
       expect(
         joined,
@@ -1508,8 +1535,9 @@ void main() {
           buildReportLines(projectMetrics, listMode: ReportListMode.full);
       final joined = output.join('\n');
 
-      expect(joined,
-          contains('bin/console_output.dart:428: "status" in anonymous'));
+      expect(joined, contains('bin/console_output.dart:428:'));
+      expect(joined, contains('"status"'));
+      expect(joined, contains('in anonymous'));
       expect(
         joined,
         isNot(

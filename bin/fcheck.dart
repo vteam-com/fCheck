@@ -11,6 +11,7 @@ import 'package:path/path.dart' as p;
 import 'console_input.dart';
 import 'console_output.dart';
 import 'console_common.dart';
+import 'package:fcheck/src/models/app_strings.dart';
 
 /// Main entry point for the fcheck command-line tool.
 ///
@@ -160,7 +161,7 @@ void main(List<String> arguments) {
         svgFile.writeAsStringSync(svgContent);
         if (!input.outputJson) {
           printOutputFileLine(
-            label: 'SVG layers         ',
+            label: '${AppStrings.svgLayers}         ',
             path: svgFile.path,
           );
         }
@@ -185,7 +186,7 @@ void main(List<String> arguments) {
         folderSvgFile.writeAsStringSync(folderSvgContent);
         if (!input.outputJson) {
           printOutputFileLine(
-            label: 'SVG layers (folder)',
+            label: AppStrings.svgLayersFolder,
             path: folderSvgFile.path,
           );
         }
@@ -198,7 +199,7 @@ void main(List<String> arguments) {
         mermaidFile.writeAsStringSync(mermaidContent);
         if (!input.outputJson) {
           printOutputFileLine(
-            label: 'Mermaid layers.    ',
+            label: '${AppStrings.mermaidLayers}.    ',
             path: mermaidFile.path,
           );
         }
@@ -211,7 +212,7 @@ void main(List<String> arguments) {
         plantUMLFile.writeAsStringSync(plantUMLContent);
         if (!input.outputJson) {
           printOutputFileLine(
-            label: 'PlantUML layers.   ',
+            label: '${AppStrings.plantUmlLayers}.   ',
             path: plantUMLFile.path,
           );
         }

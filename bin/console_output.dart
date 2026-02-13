@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:fcheck/src/input_output/number_format_utils.dart';
 import 'package:fcheck/src/metrics/project_metrics.dart';
@@ -25,7 +26,7 @@ const int _hardcodedValueWidth = 3;
 const int _minorSuppressionPenaltyUpperBound = 3;
 const int _moderateSuppressionPenaltyUpperBound = 7;
 const int _unknownListBlockOrder = 99;
-const String _noneIndicator = '  (none)';
+const String _noneIndicator = AppStrings.noneIndicator;
 
 /// Returns all issues or a top slice depending on [listMode].
 ///
@@ -47,8 +48,9 @@ List<String> _uniqueFilePaths(Iterable<String?> paths) {
   final unique = <String>{};
   final result = <String>[];
   for (final path in paths) {
-    final value =
-        path == null ? 'unknown location' : normalizeIssueLocation(path).path;
+    final value = path == null
+        ? AppStrings.unknownLocation
+        : normalizeIssueLocation(path).path;
     if (unique.add(value)) {
       result.add(value);
     }
@@ -124,9 +126,9 @@ String _domainValue({
 }) {
   if (!enabled) {
     if (width <= 0) {
-      return 'disabled';
+      return AppStrings.disabled;
     }
-    return 'disabled'.padLeft(width);
+    return AppStrings.disabled.padLeft(width);
   }
 
   if (issueCount == 0) {
@@ -357,21 +359,21 @@ List<String> buildReportLines(
 
   addLine(
     _labelValueLine(
-      label: '${metrics.projectType.label} Project',
-      value: '$projectName (version: $version)',
+      label: '${metrics.projectType.label} ${AppStrings.project}',
+      value: '$projectName (${AppStrings.version} $version)',
     ),
   );
-  addLine(dividerLine('Scorecard'));
+  addLine(dividerLine(AppStrings.scorecardDivider));
   addLine(
     _labelValueLine(
-      label: 'Compliance Score',
+      label: AppStrings.complianceScore,
       value: _scoreValue(complianceScore),
     ),
   );
   if (suppressionPenaltyPoints > 0) {
     addLine(
       _labelValueLine(
-        label: 'Suppressions',
+        label: AppStrings.suppressions,
         value: _suppressionPenaltyValue(
           penaltyPoints: suppressionPenaltyPoints,
         ),
@@ -381,21 +383,21 @@ List<String> buildReportLines(
   if (complianceFocusAreaLabel == 'None') {
     addLine(
       _labelValueLine(
-        label: 'Invest Next',
+        label: AppStrings.investNext,
         value: complianceNextInvestment,
       ),
     );
   } else {
     addLine(
       _labelValueLine(
-        label: 'Focus Area',
+        label: AppStrings.focusArea,
         value:
-            '$complianceFocusAreaLabel (${formatCount(complianceFocusAreaIssueCount)} issues)',
+            '$complianceFocusAreaLabel (${formatCount(complianceFocusAreaIssueCount)} ${AppStrings.issues})',
       ),
     );
     addLine(
       _labelValueLine(
-        label: 'Invest Next',
+        label: AppStrings.investNext,
         value: complianceNextInvestment,
       ),
     );
@@ -435,10 +437,11 @@ List<String> buildReportLines(
     enabled: duplicateCodeAnalyzerEnabled,
     issueCount: duplicateCodeIssues.length,
   );
-  final localizationLabel = 'Localization (${usesLocalization ? 'ON' : 'OFF'})';
+  final localizationLabel =
+      '${AppStrings.localization} (${usesLocalization ? AppStrings.on : AppStrings.off})';
   final hardcodedCountText = hardcodedStringsAnalyzerEnabled
       ? formatCount(hardcodedStringIssues.length).padLeft(_hardcodedValueWidth)
-      : 'disabled';
+      : AppStrings.disabled;
   final localizationHardcodedValue =
       !usesLocalization && hardcodedStringsAnalyzerEnabled
           ? _colorize(hardcodedCountText, _ansiGray)
@@ -454,18 +457,20 @@ List<String> buildReportLines(
     label: localizationLabel,
     value: localizationHardcodedSummary,
   );
-  addLine(dividerLine('Dashboard'));
+  addLine(dividerLine(AppStrings.dashboardDivider));
   addLine(_gridRow([
-    _gridCell(label: 'Files', value: formatCount(totalFiles)),
-    _gridCell(label: 'Dart Files', value: formatCount(totalDartFiles)),
+    _gridCell(label: AppStrings.files, value: formatCount(totalFiles)),
+    _gridCell(label: AppStrings.dartFiles, value: formatCount(totalDartFiles)),
   ]));
   addLine(_gridRow([
-    _gridCell(label: 'Excluded Files', value: formatCount(excludedFilesCount)),
+    _gridCell(
+        label: AppStrings.excludedFiles,
+        value: formatCount(excludedFilesCount)),
     localizationCell,
   ]));
   addLine(_gridRow([
     _gridCell(
-      label: 'Custom Excludes',
+      label: AppStrings.customExcludes,
       value: _suppressionCountValue(
         count: customExcludedFilesCount,
         width: _gridValueWidth,
@@ -473,7 +478,7 @@ List<String> buildReportLines(
       valuePreAligned: true,
     ),
     _gridCell(
-      label: 'Ignore Directives',
+      label: AppStrings.ignoreDirectives,
       value: _suppressionCountValue(
         count: ignoreDirectivesCount,
         width: _gridValueWidth,
@@ -483,7 +488,7 @@ List<String> buildReportLines(
   ]));
   addLine(_gridRow([
     _gridCell(
-      label: 'Disabled Rules',
+      label: AppStrings.disabledRules,
       value: _suppressionCountValue(
         count: disabledAnalyzersCount,
         width: _gridValueWidth,
@@ -491,61 +496,63 @@ List<String> buildReportLines(
       valuePreAligned: true,
     ),
     _gridCell(
-      label: 'Folders',
+      label: AppStrings.folders,
       value: formatCount(totalFolders),
     ),
   ]));
   addLine(_gridRow([
-    _gridCell(label: 'Lines of Code', value: formatCount(totalLinesOfCode)),
+    _gridCell(label: AppStrings.loc, value: formatCount(totalLinesOfCode)),
     _gridCell(
-      label: 'Comments',
+      label: AppStrings.comments,
       value: commentSummary,
       valuePreAligned: true,
     ),
   ]));
   addLine(_gridRow([
     _gridCell(
-      label: 'One Class/File',
+      label: AppStrings.oneClassPerFile,
       value: oneClassSummary,
       valuePreAligned: true,
     ),
     _gridCell(
-      label: 'Magic Numbers',
+      label: AppStrings.magicNumbers,
       value: magicNumbersSummary,
       valuePreAligned: true,
     ),
   ]));
   addLine(_gridRow([
     _gridCell(
-      label: 'Secrets',
+      label: AppStrings.secrets,
       value: secretsSummary,
       valuePreAligned: true,
     ),
     _gridCell(
-      label: 'Dead Code',
+      label: AppStrings.deadCode,
       value: deadCodeSummary,
       valuePreAligned: true,
     ),
   ]));
   addLine(_gridRow([
     _gridCell(
-      label: 'Layers',
+      label: AppStrings.layers,
       value: layersSummary,
       valuePreAligned: true,
     ),
     _gridCell(
-      label: 'Source Sorting',
+      label: AppStrings.sourceSorting,
       value: sourceSortingSummary,
       valuePreAligned: true,
     ),
   ]));
   addLine(_gridRow([
     _gridCell(
-      label: 'Dependencies',
-      value: layersAnalyzerEnabled ? formatCount(layersEdgeCount) : 'disabled',
+      label: AppStrings.dependencies,
+      value: layersAnalyzerEnabled
+          ? formatCount(layersEdgeCount)
+          : AppStrings.disabled,
     ),
     _gridCell(
-      label: 'Duplicate Code',
+      label: AppStrings.duplicateCode,
       value: duplicateCodeSummary,
       valuePreAligned: true,
     ),
@@ -581,7 +588,7 @@ List<String> buildReportLines(
     addListBlock(
       status: _ListBlockStatus.success,
       sortKey: 'suppressions',
-      blockLines: ['${okTag()} Suppressions check passed.'],
+      blockLines: ['${okTag()} Suppressions check ${AppStrings.checkPassed}'],
     );
   } else {
     final suppressionTag = suppressionPenaltyPoints > 0 ? failTag() : warnTag();
@@ -589,12 +596,14 @@ List<String> buildReportLines(
         ? '(score deduction applied: ${_suppressionPenaltyValue(penaltyPoints: suppressionPenaltyPoints)})'
         : '(within budget, no score deduction)';
     final blockLines = <String>[
-      '$suppressionTag Suppressions summary $suffix:',
+      '$suppressionTag ${AppStrings.suppressionsSummary} $suffix:',
     ];
     if (ignoreDirectivesCount > 0) {
-      final fileLabel = ignoreDirectiveFileCount == 1 ? 'file' : 'files';
+      final fileLabel = ignoreDirectiveFileCount == 1
+          ? AppStrings.file
+          : AppStrings.filesSmall;
       blockLines.add(
-        '  - Ignore directives: ${_suppressionCountValue(count: ignoreDirectivesCount)} across ${_suppressionCountValue(count: ignoreDirectiveFileCount)} $fileLabel',
+        '  - Ignore directives: ${_suppressionCountValue(count: ignoreDirectivesCount)} ${AppStrings.ignoreDirectivesAcross} ${_suppressionCountValue(count: ignoreDirectiveFileCount)} $fileLabel',
       );
       if (ignoreDirectiveEntries.isNotEmpty) {
         final visibleIgnoreDirectiveEntries = _issuesForMode(
@@ -613,7 +622,7 @@ List<String> buildReportLines(
         if (listMode == ReportListMode.partial &&
             ignoreDirectiveEntries.length > _maxIssuesToShow) {
           blockLines.add(
-            '    ... and ${formatCount(ignoreDirectiveEntries.length - _maxIssuesToShow)} more',
+            '    ... ${AppStrings.and} ${formatCount(ignoreDirectiveEntries.length - _maxIssuesToShow)} ${AppStrings.more}',
           );
         }
       }
@@ -624,17 +633,18 @@ List<String> buildReportLines(
     }
     if (customExcludedFilesCount > 0) {
       final customExcludeFileLabel = customExcludedFilesCount == 1
-          ? 'Dart file excluded'
-          : 'Dart files excluded';
+          ? AppStrings.dartFileExcluded
+          : AppStrings.dartFilesExcluded;
       blockLines.add(
-        '  - Custom excludes: ${_suppressionCountValue(count: customExcludedFilesCount)} $customExcludeFileLabel (file count; from .fcheck input.exclude or --exclude)',
+        '  - ${AppStrings.customExcludes}: ${_suppressionCountValue(count: customExcludedFilesCount)} $customExcludeFileLabel (file count; from .fcheck input.exclude or --exclude)',
       );
     }
     if (disabledAnalyzersCount > 0) {
-      final analyzerLabel =
-          disabledAnalyzersCount == 1 ? 'analyzer' : 'analyzers';
+      final analyzerLabel = disabledAnalyzersCount == 1
+          ? AppStrings.analyzerSmall
+          : AppStrings.analyzersSmall;
       blockLines.add(
-        '  ${skipTag()} Disabled analyzers: ${_suppressionCountValue(count: disabledAnalyzersCount)} $analyzerLabel:',
+        '  ${skipTag()} ${AppStrings.disabledRules}: ${_suppressionCountValue(count: disabledAnalyzersCount)} $analyzerLabel:',
       );
       for (final analyzerKey in disabledAnalyzerKeys) {
         blockLines.add('    ${skipTag()} $analyzerKey');
@@ -654,17 +664,21 @@ List<String> buildReportLines(
     addListBlock(
       status: _ListBlockStatus.disabled,
       sortKey: 'one class per file',
-      blockLines: ['${skipTag()} One class per file check skipped (disabled).'],
+      blockLines: [
+        '${skipTag()} One class per file check skipped (${AppStrings.disabled}).'
+      ],
     );
   } else if (nonCompliant.isEmpty) {
     addListBlock(
       status: _ListBlockStatus.success,
       sortKey: 'one class per file',
-      blockLines: ['${okTag()} One class per file check passed.'],
+      blockLines: [
+        '${okTag()} One class per file check ${AppStrings.checkPassed}'
+      ],
     );
   } else {
     final blockLines = <String>[
-      '${failTag()} ${formatCount(nonCompliant.length)} files violate the "one class per file" rule:',
+      '${failTag()} ${formatCount(nonCompliant.length)} ${AppStrings.oneClassPerFileViolate}',
     ];
     if (filenamesOnly) {
       final filePaths = _uniqueFilePaths(nonCompliant.map((m) => m.path));
@@ -692,17 +706,21 @@ List<String> buildReportLines(
     addListBlock(
       status: _ListBlockStatus.disabled,
       sortKey: 'hardcoded strings',
-      blockLines: ['${skipTag()} Hardcoded strings check skipped (disabled).'],
+      blockLines: [
+        '${skipTag()} Hardcoded strings check skipped (${AppStrings.disabled}).'
+      ],
     );
   } else if (hardcodedStringIssues.isEmpty) {
     addListBlock(
       status: _ListBlockStatus.success,
       sortKey: 'hardcoded strings',
-      blockLines: ['${okTag()} Hardcoded strings check passed.'],
+      blockLines: [
+        '${okTag()} Hardcoded strings check ${AppStrings.checkPassed}'
+      ],
     );
   } else if (usesLocalization) {
     final blockLines = <String>[
-      '${failTag()} ${formatCount(hardcodedStringIssues.length)} hardcoded strings detected (localization enabled):',
+      '${failTag()} ${formatCount(hardcodedStringIssues.length)} ${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.enabled}):',
     ];
     if (filenamesOnly) {
       final filePaths =
@@ -719,7 +737,7 @@ List<String> buildReportLines(
       if (listMode == ReportListMode.partial &&
           hardcodedStringIssues.length > _maxIssuesToShow) {
         blockLines.add(
-            '  ... and ${formatCount(hardcodedStringIssues.length - _maxIssuesToShow)} more');
+            '  ... ${AppStrings.and} ${formatCount(hardcodedStringIssues.length - _maxIssuesToShow)} ${AppStrings.more}');
       }
     }
     blockLines.add('');
@@ -733,7 +751,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.disabled,
       sortKey: 'hardcoded strings',
       blockLines: [
-        '${skipTag()} Hardcoded strings check skipped (localization off).',
+        '${skipTag()} ${AppStrings.hardcodedStringsDetected} check skipped (${AppStrings.off}).',
       ],
     );
   }
@@ -742,17 +760,19 @@ List<String> buildReportLines(
     addListBlock(
       status: _ListBlockStatus.disabled,
       sortKey: 'magic numbers',
-      blockLines: ['${skipTag()} Magic numbers check skipped (disabled).'],
+      blockLines: [
+        '${skipTag()} Magic numbers check skipped (${AppStrings.disabled}).'
+      ],
     );
   } else if (magicNumberIssues.isEmpty) {
     addListBlock(
       status: _ListBlockStatus.success,
       sortKey: 'magic numbers',
-      blockLines: ['${okTag()} Magic numbers check passed.'],
+      blockLines: ['${okTag()} Magic numbers check ${AppStrings.checkPassed}'],
     );
   } else {
     final blockLines = <String>[
-      '${warnTag()} ${formatCount(magicNumberIssues.length)} magic numbers detected:',
+      '${warnTag()} ${formatCount(magicNumberIssues.length)} ${AppStrings.magicNumbersDetected}',
     ];
     if (filenamesOnly) {
       final filePaths =
@@ -769,7 +789,7 @@ List<String> buildReportLines(
       if (listMode == ReportListMode.partial &&
           magicNumberIssues.length > _maxIssuesToShow) {
         blockLines.add(
-            '  ... and ${formatCount(magicNumberIssues.length - _maxIssuesToShow)} more');
+            '  ... ${AppStrings.and} ${formatCount(magicNumberIssues.length - _maxIssuesToShow)} ${AppStrings.more}');
       }
     }
     blockLines.add('');
@@ -785,18 +805,20 @@ List<String> buildReportLines(
       status: _ListBlockStatus.disabled,
       sortKey: 'source sorting',
       blockLines: [
-        '${skipTag()} Flutter class member sorting skipped (disabled).'
+        '${skipTag()} Flutter class member sorting skipped (${AppStrings.disabled}).'
       ],
     );
   } else if (sourceSortIssues.isEmpty) {
     addListBlock(
       status: _ListBlockStatus.success,
       sortKey: 'source sorting',
-      blockLines: ['${okTag()} Flutter class member sorting passed.'],
+      blockLines: [
+        '${okTag()} Flutter class member sorting ${AppStrings.checkPassed}'
+      ],
     );
   } else {
     final blockLines = <String>[
-      '${warnTag()} ${formatCount(sourceSortIssues.length)} Flutter classes have unsorted members:',
+      '${warnTag()} ${formatCount(sourceSortIssues.length)} ${AppStrings.unsortedMembers}',
     ];
     if (filenamesOnly) {
       final filePaths =
@@ -828,17 +850,21 @@ List<String> buildReportLines(
     addListBlock(
       status: _ListBlockStatus.disabled,
       sortKey: 'secrets',
-      blockLines: ['${skipTag()} Secrets scan skipped (disabled).'],
+      blockLines: [
+        '${skipTag()} ${AppStrings.secretsScan} skipped (${AppStrings.disabled}).'
+      ],
     );
   } else if (secretIssues.isEmpty) {
     addListBlock(
       status: _ListBlockStatus.success,
       sortKey: 'secrets',
-      blockLines: ['${okTag()} Secrets scan passed.'],
+      blockLines: [
+        '${okTag()} ${AppStrings.secretsScan} ${AppStrings.checkPassed}'
+      ],
     );
   } else {
     final blockLines = <String>[
-      '${warnTag()} ${formatCount(secretIssues.length)} potential secrets detected:',
+      '${warnTag()} ${formatCount(secretIssues.length)} ${AppStrings.potentialSecretsDetected}',
     ];
     if (filenamesOnly) {
       final filePaths = _uniqueFilePaths(secretIssues.map((i) => i.filePath));
@@ -869,17 +895,21 @@ List<String> buildReportLines(
     addListBlock(
       status: _ListBlockStatus.disabled,
       sortKey: 'dead code',
-      blockLines: ['${skipTag()} Dead code check skipped (disabled).'],
+      blockLines: [
+        '${skipTag()} ${AppStrings.deadCodeCheck} skipped (${AppStrings.disabled}).'
+      ],
     );
   } else if (deadCodeIssues.isEmpty) {
     addListBlock(
       status: _ListBlockStatus.success,
       sortKey: 'dead code',
-      blockLines: ['${okTag()} Dead code check passed.'],
+      blockLines: [
+        '${okTag()} ${AppStrings.deadCodeCheck} ${AppStrings.checkPassed}'
+      ],
     );
   } else {
     final blockLines = <String>[
-      '${warnTag()} ${formatCount(deadCodeIssues.length)} dead code issues detected:',
+      '${warnTag()} ${formatCount(deadCodeIssues.length)} ${AppStrings.deadCodeIssuesDetected}',
     ];
     if (deadFileIssues.isNotEmpty) {
       final deadFilePaths = filenamesOnly
@@ -887,7 +917,8 @@ List<String> buildReportLines(
           : const <String>[];
       final deadFileCount =
           filenamesOnly ? deadFilePaths.length : deadFileIssues.length;
-      blockLines.add('  Dead files (${formatCount(deadFileCount)}):');
+      blockLines
+          .add('  ${AppStrings.deadFiles} (${formatCount(deadFileCount)}):');
       if (filenamesOnly) {
         for (final path in deadFilePaths) {
           blockLines.add('    - $path');
@@ -912,7 +943,8 @@ List<String> buildReportLines(
           : const <String>[];
       final deadClassCount =
           filenamesOnly ? deadClassPaths.length : deadClassIssues.length;
-      blockLines.add('  Dead classes (${formatCount(deadClassCount)}):');
+      blockLines
+          .add('  ${AppStrings.deadClasses} (${formatCount(deadClassCount)}):');
       if (filenamesOnly) {
         for (final path in deadClassPaths) {
           blockLines.add('    - $path');
@@ -937,7 +969,8 @@ List<String> buildReportLines(
           : const <String>[];
       final deadFunctionCount =
           filenamesOnly ? deadFunctionPaths.length : deadFunctionIssues.length;
-      blockLines.add('  Dead functions (${formatCount(deadFunctionCount)}):');
+      blockLines.add(
+          '  ${AppStrings.deadFunctions} (${formatCount(deadFunctionCount)}):');
       if (filenamesOnly) {
         for (final path in deadFunctionPaths) {
           blockLines.add('    - $path');
@@ -963,8 +996,8 @@ List<String> buildReportLines(
       final unusedVariableCount = filenamesOnly
           ? unusedVariablePaths.length
           : unusedVariableIssues.length;
-      blockLines
-          .add('  Unused variables (${formatCount(unusedVariableCount)}):');
+      blockLines.add(
+          '  ${AppStrings.unusedVariables} (${formatCount(unusedVariableCount)}):');
       if (filenamesOnly) {
         for (final path in unusedVariablePaths) {
           blockLines.add('    - $path');
@@ -994,17 +1027,21 @@ List<String> buildReportLines(
     addListBlock(
       status: _ListBlockStatus.disabled,
       sortKey: 'duplicate code',
-      blockLines: ['${skipTag()} Duplicate code check skipped (disabled).'],
+      blockLines: [
+        '${skipTag()} ${AppStrings.duplicateCodeCheck} skipped (${AppStrings.disabled}).'
+      ],
     );
   } else if (duplicateCodeIssues.isEmpty) {
     addListBlock(
       status: _ListBlockStatus.success,
       sortKey: 'duplicate code',
-      blockLines: ['${okTag()} Duplicate code check passed.'],
+      blockLines: [
+        '${okTag()} ${AppStrings.duplicateCodeCheck} ${AppStrings.checkPassed}'
+      ],
     );
   } else {
     final blockLines = <String>[
-      '${warnTag()} ${formatCount(duplicateCodeIssues.length)} duplicate code blocks detected:',
+      '${warnTag()} ${formatCount(duplicateCodeIssues.length)} ${AppStrings.duplicateBlocksDetected}',
     ];
     if (filenamesOnly) {
       final filePaths = _uniqueFilePaths(
@@ -1049,17 +1086,21 @@ List<String> buildReportLines(
     addListBlock(
       status: _ListBlockStatus.disabled,
       sortKey: 'documentation',
-      blockLines: ['${skipTag()} Documentation check skipped (disabled).'],
+      blockLines: [
+        '${skipTag()} ${AppStrings.documentationCheck} skipped (${AppStrings.disabled}).'
+      ],
     );
   } else if (documentationIssues.isEmpty) {
     addListBlock(
       status: _ListBlockStatus.success,
       sortKey: 'documentation',
-      blockLines: ['${okTag()} Documentation check passed.'],
+      blockLines: [
+        '${okTag()} ${AppStrings.documentationCheck} ${AppStrings.checkPassed}'
+      ],
     );
   } else {
     final blockLines = <String>[
-      '${warnTag()} ${formatCount(documentationIssues.length)} documentation issues detected:',
+      '${warnTag()} ${formatCount(documentationIssues.length)} ${AppStrings.documentationIssuesDetected}',
     ];
     if (filenamesOnly) {
       final filePaths =
@@ -1093,18 +1134,20 @@ List<String> buildReportLines(
       status: _ListBlockStatus.disabled,
       sortKey: 'layers architecture',
       blockLines: [
-        '${skipTag()} Layers architecture check skipped (disabled).'
+        '${skipTag()} ${AppStrings.layersCheck} skipped (${AppStrings.disabled}).'
       ],
     );
   } else if (layersIssues.isEmpty) {
     addListBlock(
       status: _ListBlockStatus.success,
       sortKey: 'layers architecture',
-      blockLines: ['${okTag()} Layers architecture check passed.'],
+      blockLines: [
+        '${okTag()} ${AppStrings.layersCheck} ${AppStrings.checkPassed}'
+      ],
     );
   } else {
     final blockLines = <String>[
-      '${failTag()} ${formatCount(layersIssues.length)} layers architecture violations detected:',
+      '${failTag()} ${formatCount(layersIssues.length)} ${AppStrings.layersViolationsDetected}',
     ];
     if (filenamesOnly) {
       final filePaths = _uniqueFilePaths(layersIssues.map((i) => i.filePath));
@@ -1376,7 +1419,8 @@ void printRunHeader({
   required Directory directory,
 }) {
   print(dividerLine('fCheck $version', downPointer: true));
-  print(_labelValueLine(label: 'Input', value: directory.absolute.path));
+  print(
+      _labelValueLine(label: AppStrings.input, value: directory.absolute.path));
 }
 
 /// Prints structured JSON with two-space indentation.

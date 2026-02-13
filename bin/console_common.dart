@@ -1,37 +1,38 @@
+import 'package:fcheck/src/models/app_strings.dart';
+
 /// Usage banner shown in `--help` and argument errors.
-const String usageLine = 'Usage: dart run fcheck [options] [<folder>]';
+const String usageLine = AppStrings.usageLine;
 
 /// Short description shown in `--help`.
-const String descriptionLine =
-    'Analyze Flutter/Dart code quality and provide metrics.';
+const String descriptionLine = AppStrings.descriptionLine;
 
 /// Error message shown when arguments fail parsing.
-const String invalidArgumentsLine = 'Error: Invalid arguments provided.';
+const String invalidArgumentsLine = AppStrings.invalidArgumentsLine;
 
 /// Controls how detailed issue lists are printed in console reports.
 enum ReportListMode {
   /// Do not print the Lists section (summary only).
   none(
     cliName: 'none',
-    help: 'Summary only (no Lists section)',
+    help: AppStrings.summaryOnly,
   ),
 
   /// Print a partial list (default).
   partial(
     cliName: 'partial',
-    help: 'Top 10 items per list (default)',
+    help: '10 ${AppStrings.itemsPerList} (${AppStrings.disabled} by default)',
   ),
 
   /// Print the full list.
   full(
     cliName: 'full',
-    help: 'Show all list entries',
+    help: AppStrings.showAllEntries,
   ),
 
   /// Print unique file names only.
   filenames(
     cliName: 'filenames',
-    help: 'Show unique file names only',
+    help: AppStrings.uniqueFileNamesOnly,
   );
 
   const ReportListMode({

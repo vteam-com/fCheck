@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/models/version.dart';
 import 'package:test/test.dart';
 
@@ -146,9 +147,8 @@ class TestClass {
       final result = await runCli(['--help']);
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout,
-          contains('Usage: dart run fcheck [options] [<folder>]'));
-      expect(result.stdout, contains('Analyze Flutter/Dart code quality'));
+      expect(result.stdout, contains(AppStrings.usageLine));
+      expect(result.stdout, contains(AppStrings.descriptionLine));
       expect(result.stdout, contains('--input'));
       expect(result.stdout, contains('--fix'));
       expect(result.stdout, contains('--help'));
@@ -159,8 +159,7 @@ class TestClass {
       final result = await runCli(['-h']);
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout,
-          contains('Usage: dart run fcheck [options] [<folder>]'));
+      expect(result.stdout, contains(AppStrings.usageLine));
       expect(result.stdout, contains('--input'));
     });
 
@@ -271,7 +270,7 @@ class SecondClass {
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('[✗]'));
-      expect(result.stdout, contains('violate the "one class per file" rule'));
+      expect(result.stdout, contains(AppStrings.oneClassPerFileViolate));
     });
 
     test('should ignore class violations with directive', () async {
@@ -309,10 +308,12 @@ void main() {
       expect(result.stdout, contains('[!]'));
       expect(
         result.stdout,
-        contains('Hardcoded strings check skipped (localization off).'),
+        contains(
+            '${AppStrings.hardcodedStringsDetected} check skipped (${AppStrings.off}).'),
       );
-      expect(result.stdout, contains('localization off'));
-      expect(result.stdout, contains('magic numbers detected'));
+      expect(result.stdout,
+          contains('${AppStrings.localization} (${AppStrings.off})'));
+      expect(result.stdout, contains(AppStrings.magicNumbersDetected));
     });
 
     test('explicit input option should win over positional argument', () async {
@@ -414,7 +415,7 @@ analyzers:
       expect(result.stdout, contains('disabled'));
       expect(
         result.stdout,
-        contains('Hardcoded strings check skipped (disabled).'),
+        contains('Hardcoded strings check skipped (${AppStrings.disabled}).'),
       );
       expect(result.stdout, isNot(contains('Hardcoded strings check passed.')));
     });
