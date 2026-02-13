@@ -7,6 +7,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.10] - 2026-02-12
+
+### Added
+
+- 📚 Added a documentation analyzer to detect missing docs for public APIs and complex private functions.
+
+### Changed
+
+- 🎨 Updated dashboard ordering and styling, including swapped duplicate-code/dependencies columns and red rendering for comment ratios below 10%.
+
 ## [0.9.9] - 2026-02-12
 
 ### Added
