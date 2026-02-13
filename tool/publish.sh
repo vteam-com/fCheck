@@ -58,7 +58,7 @@ VERSION=$(grep "^version:" pubspec.yaml | sed 's/version: //')
 print_status "Package version: $VERSION"
 
 print_status "Running tests..."
-if ! dart test; then
+if ! flutter test; then
     print_error "Tests failed. Please fix the issues before publishing."
     exit 1
 fi
