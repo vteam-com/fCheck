@@ -104,4 +104,134 @@ class AppStrings {
   static const String analysisError = 'Error during analysis:';
   static const String pubspecYaml = 'pubspec.yaml';
   static const String fcheckConfig = '.fcheck';
+
+  // Ignore Guide
+  static const String setupIgnoresInDartFile =
+      'Setup ignores directly in Dart file';
+  static const String topOfFileDirectivesPosition =
+      'Top-of-file directives must be placed before any Dart code in the file.';
+  static const String hardcodedStringsFlutterStyles =
+      'Hardcoded strings also support Flutter-style ignore comments:';
+  static const String ignoreForFileHardcoded =
+      '  - // ignore_for_file: avoid_hardcoded_strings_in_widgets';
+  static const String setupUsingFcheckFile = 'Setup using the .fcheck file';
+  static const String createFcheckInInput =
+      'Create .fcheck in the --input directory (or current directory).';
+  static const String supportedExample = 'Supported example:';
+  static const String exampleInput = '  input:';
+  static const String exampleExclude = '    exclude:';
+  static const String exampleExcludePattern = '      - "**/example/**"';
+  static const String exampleAnalyzers = '  analyzers:';
+  static const String exampleDefault = '    default: on|off';
+  static const String exampleDisabled = '    disabled: # or enabled';
+  static const String exampleHardcodedStrings = '      - hardcoded_strings';
+  static const String exampleOptions = '    options:';
+  static const String exampleDuplicateCode = '      duplicate_code:';
+  static const String exampleSimilarityThreshold =
+      '        similarity_threshold: 0.90 # 0.0 to 1.0';
+  static const String exampleMinTokens = '        min_tokens: 20';
+  static const String exampleMinNonEmptyLines =
+      '        min_non_empty_lines: 8';
+  static const String availableAnalyzerNames = 'Available analyzer names:';
+
+  // Scoring Guide
+  static const String complianceScoreModel =
+      'Compliance score model from 0% to 100%';
+  static const String onlyEnabledAnalyzersContribute =
+      'Only enabled analyzers contribute to the score.';
+  static const String enabledAnalyzersCurrentModel =
+      'Enabled analyzers (current model: ';
+  static const String howIs100Distributed = 'How is the 100% distributed:';
+  static const String nAsNumberOfEnabled = '  N = number of enabled analyzers';
+  static const String eachAnalyzerShare = '  each analyzer share = 100 / N';
+  static const String currentAnalyzerCountPrefix = '  Current: ';
+  static const String eachSmall = ' each';
+  static const String perAnalyzerDomainScoreClamped =
+      'Per-analyzer domain score is clamped to [0.0, 1.0].';
+  static const String oneDomainCanOnlyConsumeShare =
+      'One domain can only consume its own share, never more.';
+  static const String domainFormulasUsed = 'Domain formulas used:';
+  static const String formulaOneClassPerFile =
+      '  - one_class_per_file: 1 - (violations / max(1, dartFiles))';
+  static const String formulaHardcodedStrings =
+      '  - hardcoded_strings: 1 - (issues / max(3.0, dartFiles * (l10n ? 0.8 : 2.0)))';
+  static const String formulaMagicNumbers =
+      '  - magic_numbers: 1 - (issues / max(4.0, dartFiles * 2.5 + loc / 450))';
+  static const String formulaSourceSorting =
+      '  - source_sorting: 1 - (issues / max(2.0, dartFiles * 0.75))';
+  static const String formulaLayers =
+      '  - layers: 1 - (issues / max(2.0, max(1, edges) * 0.20))';
+  static const String formulaSecrets = '  - secrets: 1 - (issues / 1.5)';
+  static const String formulaDeadCode =
+      '  - dead_code: 1 - (issues / max(3.0, dartFiles * 0.8))';
+  static const String formulaDuplicateCode =
+      '  - duplicate_code: 1 - ((impactLines / max(1, loc)) * 2.5)';
+  static const String impactLinesSum =
+      '    impactLines = sum(issue.lineCount * issue.similarity)';
+  static const String suppressionPenaltyBudget =
+      'Suppression penalty (budget-based):';
+  static const String formulaIgnoreBudget =
+      '  - ignore directives budget: max(3.0, dartFiles * 0.12 + loc / 2500)';
+  static const String formulaCustomExcludedBudget =
+      '  - custom excludes budget: max(2.0, (dartFiles + customExcluded) * 0.08)';
+  static const String formulaDisabledAnalyzersBudget =
+      '  - disabled analyzers budget: 1.0';
+  static const String weightedOverusePrefix = '  - weightedOveruse =';
+  static const String weightedOveruseFormulaLine1 =
+      '      over(ignore) * 0.45 + over(customExcluded) * 0.35 +';
+  static const String weightedOveruseFormulaLine2 =
+      '      over(disabledAnalyzers) * 0.20';
+  static const String suppressionPenaltyPointsPrefix =
+      '  - suppressionPenaltyPoints =';
+  static const String suppressionPenaltyPointsFormula =
+      '      round(clamp(weightedOveruse * 25, 0, 25))';
+  static const String overXFormula =
+      '    over(x) = max(0, (used - budget) / budget)';
+  static const String finalScoreLabel = 'Final score:';
+  static const String formulaAverage =
+      '  average = sum(enabledDomainScores) / N';
+  static const String formulaBaseScore =
+      '  baseScore = clamp(average * 100, 0, 100)';
+  static const String formulaComplianceScore =
+      '  complianceScore = round(clamp(baseScore - suppressionPenalty, 0, 100))';
+  static const String specialRulePrefix =
+      '  Special rule: if rounded score is 100 but any enabled domain';
+  static const String specialRuleSuffix =
+      '  score is below 1.0, or suppression penalty > 0, final score is 99.';
+  static const String focusAreaAndInvestNextLabel =
+      'Focus Area and Invest Next:';
+  static const String focusAreaExplanation =
+      '  - Focus Area is the enabled domain with the highest penalty impact.';
+  static const String tieBreakerExplanation =
+      '  - Tie-breaker: domain with more issues.';
+  static const String investNextExplanation =
+      '  - Invest Next recommendation is mapped from the selected focus area.';
+
+  // Dynamic messages
+  /// Formats the current enabled analyzer count and percentage share line.
+  static String currentAnalyzerCountLine(int analyzerCount, String share) =>
+      '  Current: $analyzerCount analyzers -> $share% each';
+
+  /// Builds the missing-directory error shown for an invalid input path.
+  static String missingDirectoryError(String path) =>
+      'Error: Directory "$path" does not exist.';
+
+  /// Builds the invalid `.fcheck` configuration error message.
+  static String invalidFcheckConfigurationError(String message) =>
+      'Error: Invalid .fcheck configuration. $message';
+
+  /// Builds the header for excluded Dart files in `--excluded` output.
+  static String excludedDartFilesHeader(String count) =>
+      'Excluded Dart files ($count):';
+
+  /// Builds the header for excluded non-Dart files in `--excluded` output.
+  static String excludedNonDartFilesHeader(String count) =>
+      '\nExcluded non-Dart files ($count):';
+
+  /// Builds the header for excluded directories in `--excluded` output.
+  static String excludedDirectoriesHeader(String count) =>
+      '\nExcluded directories ($count):';
+
+  /// Builds the analysis failure prefix line with the caught [error].
+  static String analysisErrorLine(Object error) => '$analysisError $error';
 }

@@ -65,7 +65,7 @@ class Utils {
     });
 
     test('should detect hardcoded strings in analyzed files', () {
-      File('${tempDir.path}/strings.dart').writeAsStringSync('''
+      File('${tempDir.path}/hardcoded.dart').writeAsStringSync('''
 void main() {
   print("This is a hardcoded string");
   const String key = "safe"; // This should not be detected

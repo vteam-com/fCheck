@@ -91,6 +91,32 @@ void main() {
       expect(issues[0].lineNumber, equals(2));
     });
 
+    test('should detect interpolated strings with static text', () {
+      final file = File('${tempDir.path}/interpolated_with_text.dart')
+        ..writeAsStringSync('''
+void main(String path) {
+  print('Error: Directory "\$path" does not exist.');
+}
+''');
+
+      final issues = _analyzeFile(delegate, file);
+      expect(issues.length, equals(1));
+      expect(issues[0].value, contains('Error: Directory'));
+      expect(issues[0].lineNumber, equals(2));
+    });
+
+    test('should skip interpolation-only strings', () {
+      final file = File('${tempDir.path}/interpolation_only.dart')
+        ..writeAsStringSync('''
+void main(String path) {
+  print('\$path');
+}
+''');
+
+      final issues = _analyzeFile(delegate, file);
+      expect(issues, isEmpty);
+    });
+
     test('should skip strings in imports', () {
       final file = File('${tempDir.path}/import.dart')..writeAsStringSync('''
 import 'package:flutter/material.dart';
@@ -277,6 +303,36 @@ class MyWidget extends StatelessWidget {
       final issues = _analyzeFile(delegate, file);
       expect(issues.length, equals(1));
       expect(issues[0].value, equals('Hello'));
+    });
+  });
+
+  group('HardcodedStringDelegate dart print focus', () {
+    late Directory tempDir;
+
+    setUp(() {
+      tempDir = Directory.systemTemp.createTempSync('fcheck_test_');
+    });
+
+    tearDown(() {
+      tempDir.deleteSync(recursive: true);
+    });
+
+    test('should detect interpolated print strings', () {
+      final delegate =
+          HardcodedStringDelegate(focus: HardcodedStringFocus.dartPrint);
+      final file = File('${tempDir.path}/dart_print_interpolation.dart')
+        ..writeAsStringSync('''
+String label(String name) => 'Hello \$name';
+
+void main(String name) {
+  print('Error: Invalid input "\$name"');
+}
+''');
+
+      final issues = _analyzeFile(delegate, file);
+      expect(issues.length, equals(1));
+      expect(issues[0].value, contains('Error: Invalid input'));
+      expect(issues[0].lineNumber, equals(4));
     });
   });
 }

@@ -35,6 +35,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     this.filePath,
     this.content, {
     this.focus = HardcodedStringFocus.general,
+    this.usesLocalization = false,
   });
 
   /// The file path being analyzed.
@@ -49,6 +50,9 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   /// Which focus mode is applied for hardcoded string detection.
   final HardcodedStringFocus focus;
 
+  /// Whether the project uses localization.
+  final bool usesLocalization;
+
   /// Visits a simple string literal node in the AST.
   ///
   /// This method is called for each simple string literal encountered during
@@ -60,27 +64,36 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   /// [node] The simple string literal node being visited.
   @override
   void visitSimpleStringLiteral(final SimpleStringLiteral node) {
+    _analyzeStringLiteral(node, node.value);
+  }
+
+  /// Visits an interpolated string literal node in the AST.
+  @override
+  void visitStringInterpolation(final StringInterpolation node) {
+    _analyzeStringLiteral(node, _extractLiteralTextWithoutInterpolations(node));
+  }
+
+  /// Applies hardcoded-string rules to a string literal node.
+  void _analyzeStringLiteral(
+      final StringLiteral node, final String issueValue) {
     // Focus filter (Flutter widgets vs Dart print).
     if (!_matchesFocus(node)) {
       return;
     }
 
-    // Skip empty strings
-    if (node.value.isEmpty) {
+    // Skip empty or non-meaningful strings (like dividers)
+    if (issueValue.isEmpty ||
+        !HardcodedStringUtils.containsMeaningfulText(issueValue)) {
       return;
     }
 
     // Flutter-only additional filters.
     if (focus == HardcodedStringFocus.flutterWidgets) {
-      if (_isInterpolationOnlyLiteral(node)) {
-        return;
-      }
-
       if (_hasWidgetLintIgnoreComment(node)) {
         return;
       }
 
-      if (node.value.length <= _maxShortWidgetStringLength) {
+      if (issueValue.length <= _maxShortWidgetStringLength) {
         return;
       }
 
@@ -88,7 +101,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
         return;
       }
 
-      if (_isTechnicalString(node.value)) {
+      if (_isTechnicalString(issueValue)) {
         return;
       }
     }
@@ -110,6 +123,12 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
 
     // Skip strings in const declarations
     if (_isInConstDeclaration(node)) {
+      return;
+    }
+
+    // Skip all strings in "dedicated string files" when localization is off.
+    // These files are intended to be a replacement for localization keys.
+    if (!usesLocalization && _isDedicatedStringFile(filePath)) {
       return;
     }
 
@@ -144,7 +163,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     foundIssues.add(HardcodedStringIssue(
       filePath: filePath,
       lineNumber: lineNumber,
-      value: node.value,
+      value: issueValue,
     ));
   }
 
@@ -233,17 +252,15 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
-  /// Internal helper used by fcheck analysis and reporting.
-  bool _isInterpolationOnlyLiteral(final StringLiteral node) {
+  /// Returns literal text with interpolation segments removed.
+  String _extractLiteralTextWithoutInterpolations(final StringLiteral node) {
     final String source = node.toSource();
-    final (content, isRaw) = _stripLiteralDelimiters(source);
-    if (isRaw) {
-      return false;
+    final (literalContent, isRaw) = _stripLiteralDelimiters(source);
+    if (literalContent.isEmpty || isRaw) {
+      return literalContent;
     }
 
-    final String withoutInterpolations =
-        HardcodedStringUtils.removeInterpolations(content);
-    return !HardcodedStringUtils.containsMeaningfulText(withoutInterpolations);
+    return HardcodedStringUtils.removeInterpolations(literalContent);
   }
 
   /// Strips Dart string delimiters and reports whether the literal is raw.
@@ -454,6 +471,9 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Checks if a string literal is within a const declaration.
+  ///
+  /// This also considers `static final` fields in dedicated string files
+  /// when localization is not enabled.
   bool _isInConstDeclaration(final AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
@@ -465,6 +485,16 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
           if (varList.isConst) {
             return true;
           }
+
+          // Also allow static final in dedicated string files
+          if (!usesLocalization &&
+              varList.isFinal &&
+              _isDedicatedStringFile(filePath)) {
+            final parent = varList.parent;
+            if (parent is FieldDeclaration && parent.isStatic) {
+              return true;
+            }
+          }
         }
       } else if (current is FieldDeclaration && current.fields.isConst) {
         return true;
@@ -472,6 +502,14 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
       current = current.parent;
     }
     return false;
+  }
+
+  /// Returns true if the file path suggests it's a dedicated string/constant file.
+  bool _isDedicatedStringFile(String path) {
+    final lowerPath = path.toLowerCase();
+    return lowerPath.endsWith('strings.dart') ||
+        lowerPath.endsWith('constants.dart') ||
+        lowerPath.endsWith('keys.dart');
   }
 
   /// Checks if a string literal is within an AppLocalizations call.

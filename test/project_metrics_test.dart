@@ -713,7 +713,7 @@ void main() {
     });
 
     test(
-        'should not list hardcoded string entries when localization is off even in full mode',
+        'should list hardcoded string entries as warnings for Dart projects when localization is off',
         () {
       final projectMetrics = ProjectMetrics(
         totalFolders: 1,
@@ -750,10 +750,56 @@ void main() {
       expect(
         joined,
         contains(
-            '${AppStrings.hardcodedStringsDetected} check skipped (${AppStrings.off}).'),
+          '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
+        ),
       );
-      expect(joined, isNot(contains('lib/strings.dart:2')));
-      expect(joined, isNot(contains('"hello"')));
+      expect(joined, contains('lib/strings.dart:2'));
+      expect(joined, contains('"hello"'));
+    });
+
+    test(
+        'should list hardcoded string entries as warnings for non-Dart projects when localization is off',
+        () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 0,
+        fileMetrics: const [],
+        secretIssues: const [],
+        hardcodedStringIssues: [
+          HardcodedStringIssue(
+            filePath: 'lib/strings.dart',
+            lineNumber: 2,
+            value: 'hello',
+          ),
+        ],
+        magicNumberIssues: const [],
+        sourceSortIssues: const [],
+        layersIssues: const [],
+        deadCodeIssues: const [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: const {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.flutter,
+        usesLocalization: false,
+      );
+
+      final output =
+          buildReportLines(projectMetrics, listMode: ReportListMode.full);
+      final joined = output.join('\n');
+
+      expect(
+        joined,
+        contains(
+          '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
+        ),
+      );
+      expect(joined, contains('lib/strings.dart:2'));
+      expect(joined, contains('"hello"'));
     });
 
     test('should not truncate lists when listMode is full', () {
@@ -1235,8 +1281,8 @@ void main() {
       final sortingIdx = joined.indexOf('Flutter class member sorting passed.');
       final deadCodeDisabledIdx = joined.indexOf(
           '${AppStrings.deadCodeCheck} skipped (${AppStrings.disabled}).');
-      final hardcodedDisabledIdx = joined.indexOf(
-        '${AppStrings.hardcodedStringsDetected} check skipped (${AppStrings.off}).',
+      final hardcodedWarnIdx = joined.indexOf(
+        '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
       );
       final magicWarnIdx = joined.indexOf(AppStrings.magicNumbersDetected);
       final suppressionsWarnIdx = joined.indexOf(
@@ -1250,8 +1296,8 @@ void main() {
 
       expect(deadCodeDisabledIdx, greaterThan(sortingIdx));
 
-      expect(hardcodedDisabledIdx, greaterThan(deadCodeDisabledIdx));
-      expect(magicWarnIdx, greaterThan(hardcodedDisabledIdx));
+      expect(hardcodedWarnIdx, greaterThan(deadCodeDisabledIdx));
+      expect(magicWarnIdx, greaterThan(hardcodedWarnIdx));
       expect(suppressionsWarnIdx, greaterThan(magicWarnIdx));
 
       expect(layersFailIdx, greaterThan(suppressionsWarnIdx));

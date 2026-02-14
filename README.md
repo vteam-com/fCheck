@@ -116,7 +116,7 @@ Layers             :                    6  |  Source Sorting     :              
 Duplicate Code     :                    ✓  |  Dependencies       :                  73
 ---------------------------------------- Lists ----------------------------------------
 [✓] One class per file check passed.
-[-] Hardcoded strings check skipped (localization off).
+[!] 7 hardcoded strings detected (localization OFF):
 [✓] Magic numbers check passed.
 [✓] Flutter class member sorting passed.
 [✓] Secrets scan passed.
@@ -194,6 +194,7 @@ Need a quick reminder from CLI? Run `fcheck --help-ignore`.
 ```dart
 
 // ignore: fcheck_magic_numbers
+// ignore: fcheck_hardcoded_strings
 // ignore: fcheck_secrets
 // ignore: fcheck_dead_code
 // ignore: fcheck_duplicate_code
@@ -234,6 +235,8 @@ Detailed rule behavior and edge cases are documented in the `RULES*.md` files.
 ### Hardcoded Strings
 
 - ⚠️ **Caution/Error**: Potential user-facing strings that should be localized.
+- 🧾 **Reporting behavior**: Detected hardcoded strings are listed in the report regardless of project type and localization mode.
+- 📴 **Disable options**: Global via `.fcheck` (`analyzers.disabled: [hardcoded_strings]`) or source-level with `// ignore: fcheck_hardcoded_strings`.
 - 📚 **Details**: `RULES_HARDCODED_STRINGS.md`
 
 ### Secrets Detection

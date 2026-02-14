@@ -241,10 +241,15 @@ class AnalyzeFolder {
             ? HardcodedStringFocus.dartPrint
             : HardcodedStringFocus.general;
 
+    final usesLocalization = detectLocalization(dartFiles);
+
     // Build delegates for unified analysis
     final delegates = <AnalyzerDelegate>[
       if (hardcodedStringsEnabled)
-        HardcodedStringDelegate(focus: hardcodedStringsFocus),
+        HardcodedStringDelegate(
+          focus: hardcodedStringsFocus,
+          usesLocalization: usesLocalization,
+        ),
       if (magicNumbersEnabled) MagicNumberDelegate(),
       if (sourceSortingEnabled) SourceSortDelegate(fix: fix),
       if (layersEnabled) LayersDelegate(projectRoot, pubspecInfo.packageName),
@@ -371,8 +376,6 @@ class AnalyzeFolder {
       for (final path in sortedIgnoreDirectiveFiles)
         path: ignoreDirectiveCountsByFile[path]!,
     };
-
-    final usesLocalization = detectLocalization(dartFiles);
 
     return ProjectMetrics(
       totalFolders: totalFolders,

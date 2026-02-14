@@ -293,7 +293,7 @@ class SecondClass {
 
     test('should detect hardcoded strings', () async {
       // Create a file with hardcoded strings
-      File('${tempDir.path}/strings.dart').writeAsStringSync('''
+      File('${tempDir.path}/logic.dart').writeAsStringSync('''
 // File with hardcoded strings
 void main() {
   print("This is hardcoded");
@@ -309,11 +309,40 @@ void main() {
       expect(
         result.stdout,
         contains(
-            '${AppStrings.hardcodedStringsDetected} check skipped (${AppStrings.off}).'),
+            '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):'),
       );
+      expect(result.stdout, contains('logic.dart:'));
       expect(result.stdout,
           contains('${AppStrings.localization} (${AppStrings.off})'));
       expect(result.stdout, contains(AppStrings.magicNumbersDetected));
+    });
+
+    test(
+        'should show hardcoded strings as warnings for Dart projects when localization is off',
+        () async {
+      File('${tempDir.path}/pubspec.yaml').writeAsStringSync('''
+name: cli_sample
+version: 1.0.0
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+''');
+      File('${tempDir.path}/main.dart').writeAsStringSync('''
+void main() {
+  print("This is hardcoded");
+}
+''');
+
+      final result = await runCli(['--input', tempDir.path]);
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains('[!]'));
+      expect(
+        result.stdout,
+        contains(
+          '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
+        ),
+      );
+      expect(result.stdout, contains('main.dart:2: "This is hardcoded"'));
     });
 
     test('explicit input option should win over positional argument', () async {

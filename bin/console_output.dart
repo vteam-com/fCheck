@@ -442,10 +442,7 @@ List<String> buildReportLines(
   final hardcodedCountText = hardcodedStringsAnalyzerEnabled
       ? formatCount(hardcodedStringIssues.length).padLeft(_hardcodedValueWidth)
       : AppStrings.disabled;
-  final localizationHardcodedValue =
-      !usesLocalization && hardcodedStringsAnalyzerEnabled
-          ? _colorize(hardcodedCountText, _ansiGray)
-          : hardcodedSummary;
+  final localizationHardcodedValue = hardcodedSummary;
   final localizationHardcodedPlain =
       'HardCoded $hardcodedCountText'.padLeft(_gridValueWidth);
   final localizationHardcodedSummary = localizationHardcodedPlain.replaceRange(
@@ -747,12 +744,32 @@ List<String> buildReportLines(
       blockLines: blockLines,
     );
   } else {
+    final blockLines = <String>[
+      '${warnTag()} ${formatCount(hardcodedStringIssues.length)} ${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
+    ];
+    if (filenamesOnly) {
+      final filePaths =
+          _uniqueFilePaths(hardcodedStringIssues.map((i) => i.filePath));
+      for (final path in filePaths) {
+        blockLines.add('  - $path');
+      }
+    } else {
+      final visibleHardcodedIssues =
+          _issuesForMode(hardcodedStringIssues, listMode).toList();
+      for (final issue in visibleHardcodedIssues) {
+        blockLines.add('  - ${issue.format()}');
+      }
+      if (listMode == ReportListMode.partial &&
+          hardcodedStringIssues.length > _maxIssuesToShow) {
+        blockLines.add(
+            '  ... ${AppStrings.and} ${formatCount(hardcodedStringIssues.length - _maxIssuesToShow)} ${AppStrings.more}');
+      }
+    }
+    blockLines.add('');
     addListBlock(
-      status: _ListBlockStatus.disabled,
+      status: _ListBlockStatus.warning,
       sortKey: 'hardcoded strings',
-      blockLines: [
-        '${skipTag()} ${AppStrings.hardcodedStringsDetected} check skipped (${AppStrings.off}).',
-      ],
+      blockLines: blockLines,
     );
   }
 
@@ -1253,9 +1270,8 @@ void printIgnoreSetupGuide() {
   }
 
   print('--------------------------------------------');
-  print('Setup ignores directly in Dart file');
-  print(
-      'Top-of-file directives must be placed before any Dart code in the file.');
+  print(AppStrings.setupIgnoresInDartFile);
+  print(AppStrings.topOfFileDirectivesPosition);
   print('');
 
   var index = 1;
@@ -1268,28 +1284,28 @@ void printIgnoreSetupGuide() {
   }
 
   print('');
-  print('Hardcoded strings also support Flutter-style ignore comments:');
-  print('  - // ignore_for_file: avoid_hardcoded_strings_in_widgets');
+  print(AppStrings.hardcodedStringsFlutterStyles);
+  print(AppStrings.ignoreForFileHardcoded);
 
   print('--------------------------------------------');
-  print('Setup using the .fcheck file');
-  print('Create .fcheck in the --input directory (or current directory).');
-  print('Supported example:');
-  print('  input:');
-  print('    exclude:');
-  print('      - "**/example/**"');
+  print(AppStrings.setupUsingFcheckFile);
+  print(AppStrings.createFcheckInInput);
+  print(AppStrings.supportedExample);
+  print(AppStrings.exampleInput);
+  print(AppStrings.exampleExclude);
+  print(AppStrings.exampleExcludePattern);
   print('');
-  print('  analyzers:');
-  print('    default: on|off');
-  print('    disabled: # or enabled');
-  print('      - hardcoded_strings');
-  print('    options:');
-  print('      duplicate_code:');
-  print('        similarity_threshold: 0.90 # 0.0 to 1.0');
-  print('        min_tokens: 20');
-  print('        min_non_empty_lines: 8');
+  print(AppStrings.exampleAnalyzers);
+  print(AppStrings.exampleDefault);
+  print(AppStrings.exampleDisabled);
+  print(AppStrings.exampleHardcodedStrings);
+  print(AppStrings.exampleOptions);
+  print(AppStrings.exampleDuplicateCode);
+  print(AppStrings.exampleSimilarityThreshold);
+  print(AppStrings.exampleMinTokens);
+  print(AppStrings.exampleMinNonEmptyLines);
   print('');
-  print('Available analyzer names:');
+  print(AppStrings.availableAnalyzerNames);
   for (final analyzer in sortedAnalyzers) {
     print('      - ${analyzer.configName}');
   }
@@ -1307,63 +1323,60 @@ void printScoreSystemGuide() {
       : _percentageMultiplier / analyzerCount;
 
   print('--------------------------------------------');
-  print('Compliance score model from 0% to 100%');
-  print('Only enabled analyzers contribute to the score.');
+  print(AppStrings.complianceScoreModel);
+  print(AppStrings.onlyEnabledAnalyzersContribute);
   print('');
-  print('Enabled analyzers (current model: $analyzerCount):');
+  print('${AppStrings.enabledAnalyzersCurrentModel}$analyzerCount):');
   for (final analyzer in analyzers) {
     print('  - ${analyzer.configName}');
   }
   print('');
-  print('How is the 100% distributed:');
-  print('  N = number of enabled analyzers');
-  print('  each analyzer share = 100 / N');
+  print(AppStrings.howIs100Distributed);
+  print(AppStrings.nAsNumberOfEnabled);
+  print(AppStrings.eachAnalyzerShare);
   print(
-      '  Current: $analyzerCount analyzers -> ${_formatCompactDecimal(sharePerAnalyzer)}% each');
+    AppStrings.currentAnalyzerCountLine(
+      analyzerCount,
+      _formatCompactDecimal(sharePerAnalyzer),
+    ),
+  );
   print('');
-  print('Per-analyzer domain score is clamped to [0.0, 1.0].');
-  print('One domain can only consume its own share, never more.');
+  print(AppStrings.perAnalyzerDomainScoreClamped);
+  print(AppStrings.oneDomainCanOnlyConsumeShare);
   print('');
-  print('Domain formulas used:');
-  print('  - one_class_per_file: 1 - (violations / max(1, dartFiles))');
-  print(
-      '  - hardcoded_strings: 1 - (issues / max(3.0, dartFiles * (l10n ? 0.8 : 2.0)))');
-  print(
-      '  - magic_numbers: 1 - (issues / max(4.0, dartFiles * 2.5 + loc / 450))');
-  print('  - source_sorting: 1 - (issues / max(2.0, dartFiles * 0.75))');
-  print('  - layers: 1 - (issues / max(2.0, max(1, edges) * 0.20))');
-  print('  - secrets: 1 - (issues / 1.5)');
-  print('  - dead_code: 1 - (issues / max(3.0, dartFiles * 0.8))');
-  print('  - duplicate_code: 1 - ((impactLines / max(1, loc)) * 2.5)');
-  print('    impactLines = sum(issue.lineCount * issue.similarity)');
+  print(AppStrings.domainFormulasUsed);
+  print(AppStrings.formulaOneClassPerFile);
+  print(AppStrings.formulaHardcodedStrings);
+  print(AppStrings.formulaMagicNumbers);
+  print(AppStrings.formulaSourceSorting);
+  print(AppStrings.formulaLayers);
+  print(AppStrings.formulaSecrets);
+  print(AppStrings.formulaDeadCode);
+  print(AppStrings.formulaDuplicateCode);
+  print(AppStrings.impactLinesSum);
   print('');
-  print('Suppression penalty (budget-based):');
-  print(
-      '  - ignore directives budget: max(3.0, dartFiles * 0.12 + loc / 2500)');
-  print(
-      '  - custom excludes budget: max(2.0, (dartFiles + customExcluded) * 0.08)');
-  print('  - disabled analyzers budget: 1.0');
-  print('  - weightedOveruse =');
-  print('      over(ignore) * 0.45 + over(customExcluded) * 0.35 +');
-  print('      over(disabledAnalyzers) * 0.20');
-  print('  - suppressionPenaltyPoints =');
-  print('      round(clamp(weightedOveruse * 25, 0, 25))');
-  print('    over(x) = max(0, (used - budget) / budget)');
+  print(AppStrings.suppressionPenaltyBudget);
+  print(AppStrings.formulaIgnoreBudget);
+  print(AppStrings.formulaCustomExcludedBudget);
+  print(AppStrings.formulaDisabledAnalyzersBudget);
+  print(AppStrings.weightedOverusePrefix);
+  print(AppStrings.weightedOveruseFormulaLine1);
+  print(AppStrings.weightedOveruseFormulaLine2);
+  print(AppStrings.suppressionPenaltyPointsPrefix);
+  print(AppStrings.suppressionPenaltyPointsFormula);
+  print(AppStrings.overXFormula);
   print('');
-  print('Final score:');
-  print('  average = sum(enabledDomainScores) / N');
-  print('  baseScore = clamp(average * 100, 0, 100)');
-  print(
-      '  complianceScore = round(clamp(baseScore - suppressionPenalty, 0, 100))');
-  print('  Special rule: if rounded score is 100 but any enabled domain');
-  print('  score is below 1.0, or suppression penalty > 0, final score is 99.');
+  print(AppStrings.finalScoreLabel);
+  print(AppStrings.formulaAverage);
+  print(AppStrings.formulaBaseScore);
+  print(AppStrings.formulaComplianceScore);
+  print(AppStrings.specialRulePrefix);
+  print(AppStrings.specialRuleSuffix);
   print('');
-  print('Focus Area and Invest Next:');
-  print(
-      '  - Focus Area is the enabled domain with the highest penalty impact.');
-  print('  - Tie-breaker: domain with more issues.');
-  print(
-      '  - Invest Next recommendation is mapped from the selected focus area.');
+  print(AppStrings.focusAreaAndInvestNextLabel);
+  print(AppStrings.focusAreaExplanation);
+  print(AppStrings.tieBreakerExplanation);
+  print(AppStrings.investNextExplanation);
 }
 
 /// Prints the main CLI help screen.
@@ -1403,12 +1416,12 @@ void printVersionLine(String version) {
 
 /// Prints an error when a requested input directory does not exist.
 void printMissingDirectoryError(String path) {
-  print('Error: Directory "$path" does not exist.');
+  print(AppStrings.missingDirectoryError(path));
 }
 
 /// Prints a configuration error for invalid `.fcheck` content.
 void printConfigurationError(String message) {
-  print('Error: Invalid .fcheck configuration. $message');
+  print(AppStrings.invalidFcheckConfigurationError(message));
 }
 
 /// Prints the run header before analysis starts.
@@ -1438,7 +1451,11 @@ void printExcludedItems({
   required List<File> excludedNonDartFiles,
   required List<Directory> excludedDirectories,
 }) {
-  print('Excluded Dart files (${formatCount(excludedDartFiles.length)}):');
+  print(
+    AppStrings.excludedDartFilesHeader(
+      formatCount(excludedDartFiles.length),
+    ),
+  );
   if (excludedDartFiles.isEmpty) {
     print(_noneIndicator);
   } else {
@@ -1448,7 +1465,10 @@ void printExcludedItems({
   }
 
   print(
-      '\nExcluded non-Dart files (${formatCount(excludedNonDartFiles.length)}):');
+    AppStrings.excludedNonDartFilesHeader(
+      formatCount(excludedNonDartFiles.length),
+    ),
+  );
   if (excludedNonDartFiles.isEmpty) {
     print(_noneIndicator);
   } else {
@@ -1457,7 +1477,11 @@ void printExcludedItems({
     }
   }
 
-  print('\nExcluded directories (${formatCount(excludedDirectories.length)}):');
+  print(
+    AppStrings.excludedDirectoriesHeader(
+      formatCount(excludedDirectories.length),
+    ),
+  );
   if (excludedDirectories.isEmpty) {
     print(_noneIndicator);
   } else {
@@ -1500,7 +1524,7 @@ void printRunCompleted(String elapsedSeconds) {
 ///
 /// This keeps CLI failures transparent for local debugging and CI logs.
 void printAnalysisError(Object error, StackTrace stack) {
-  print('Error during analysis: $error');
+  print(AppStrings.analysisErrorLine(error));
   print(stack);
 }
 

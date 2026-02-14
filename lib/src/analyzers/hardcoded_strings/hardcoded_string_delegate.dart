@@ -11,10 +11,17 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
   ///
   /// [focus] controls which string literals are considered (Flutter widgets,
   /// Dart print output, or general).
-  HardcodedStringDelegate({this.focus = HardcodedStringFocus.general});
+  /// [usesLocalization] whether the project uses localization.
+  HardcodedStringDelegate({
+    this.focus = HardcodedStringFocus.general,
+    this.usesLocalization = false,
+  });
 
   /// Focus mode used by the hardcoded string visitor.
   final HardcodedStringFocus focus;
+
+  /// Whether the project uses localization.
+  final bool usesLocalization;
 
   static const int _maxShortWidgetStringLength = 2;
 
@@ -59,6 +66,7 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
       filePath,
       context.content,
       focus: focus,
+      usesLocalization: usesLocalization,
     );
     context.compilationUnit!.accept(visitor);
 
