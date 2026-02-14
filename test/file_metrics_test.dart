@@ -1,4 +1,4 @@
-import 'package:fcheck/src/metrics/file_metrics.dart';
+import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:test/test.dart';
 
 void main() {

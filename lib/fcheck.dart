@@ -18,15 +18,10 @@
 // ```
 
 import 'dart:io';
-import 'package:analyzer/dart/analysis/features.dart';
-import 'package:analyzer/dart/analysis/results.dart';
-import 'package:analyzer/dart/analysis/utilities.dart';
-import 'package:analyzer/dart/ast/ast.dart';
-import 'package:analyzer/dart/ast/token.dart';
-import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
+import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_analyzer.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_delegate.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
@@ -51,13 +46,18 @@ import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/source_sort_delegate.dart';
 import 'package:fcheck/src/input_output/file_utils.dart';
-import 'package:fcheck/src/metrics/file_metrics.dart';
-import 'package:fcheck/src/metrics/project_metrics.dart';
+import 'package:fcheck/src/models/file_metrics.dart';
+import 'package:fcheck/src/analyzers/metrics/metrics_delegate.dart';
+import 'package:fcheck/src/analyzers/metrics/metrics_file_data.dart';
+import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
+import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
+import 'package:analyzer/dart/analysis/utilities.dart';
+import 'package:analyzer/dart/analysis/features.dart';
 
 /// The main engine for analyzing Flutter/Dart project quality.
 ///
@@ -245,6 +245,7 @@ class AnalyzeFolder {
 
     // Build delegates for unified analysis
     final delegates = <AnalyzerDelegate>[
+      MetricsDelegate(globallyIgnoreOneClassPerFile: !oneClassPerFileEnabled),
       if (hardcodedStringsEnabled)
         HardcodedStringDelegate(
           focus: hardcodedStringsFocus,
@@ -345,45 +346,24 @@ class AnalyzeFolder {
             dependencyGraph: {},
           );
 
-    // File metrics analysis (still needed for LOC and comment analysis)
-    final fileMetricsList = <FileMetrics>[];
-    int totalLoc = 0;
-    int totalComments = 0;
-    int ignoreDirectivesCount = 0;
-    final ignoreDirectiveCountsByFile = <String, int>{};
-
-    for (var file in dartFiles) {
-      final content = file.readAsStringSync();
-      final fileAnalysis = _analyzeFileContent(
-        file,
-        content,
-        globallyIgnoreOneClassPerFile: !oneClassPerFileEnabled,
-      );
-      final metrics = fileAnalysis.metrics;
-      fileMetricsList.add(metrics);
-      totalLoc += metrics.linesOfCode;
-      totalComments += metrics.commentLines;
-      ignoreDirectivesCount += fileAnalysis.fcheckIgnoreDirectiveCount;
-      if (fileAnalysis.fcheckIgnoreDirectiveCount > 0) {
-        ignoreDirectiveCountsByFile[file.path] =
-            fileAnalysis.fcheckIgnoreDirectiveCount;
-      }
-    }
-
-    final sortedIgnoreDirectiveFiles = ignoreDirectiveCountsByFile.keys.toList()
-      ..sort();
-    final sortedIgnoreDirectiveCountsByFile = <String, int>{
-      for (final path in sortedIgnoreDirectiveFiles)
-        path: ignoreDirectiveCountsByFile[path]!,
-    };
+    // Extract file metrics from unified results using metrics analyzer
+    final metricsAggregation = MetricsAnalyzer().aggregate(
+      unifiedResult.resultsByType[MetricsFileData]
+              ?.cast<MetricsFileData>()
+              .toList() ??
+          [],
+    );
 
     return ProjectMetrics(
       totalFolders: totalFolders,
       totalFiles: totalFiles,
       totalDartFiles: dartFiles.length,
-      totalLinesOfCode: totalLoc,
-      totalCommentLines: totalComments,
-      fileMetrics: fileMetricsList,
+      totalLinesOfCode: metricsAggregation.totalLinesOfCode,
+      totalCommentLines: metricsAggregation.totalCommentLines,
+      totalFunctionCount: metricsAggregation.totalFunctionCount,
+      totalStringLiteralCount: metricsAggregation.totalStringLiteralCount,
+      totalNumberLiteralCount: metricsAggregation.totalNumberLiteralCount,
+      fileMetrics: metricsAggregation.fileMetrics,
       hardcodedStringIssues: hardcodedStringIssues,
       magicNumberIssues: magicNumberIssues,
       sourceSortIssues: sourceSortIssues,
@@ -398,9 +378,11 @@ class AnalyzeFolder {
       usesLocalization: usesLocalization,
       excludedFilesCount: excludedDartFilesCount,
       customExcludedFilesCount: customExcludedDartFilesCount,
-      ignoreDirectivesCount: ignoreDirectivesCount,
-      ignoreDirectiveFiles: sortedIgnoreDirectiveFiles,
-      ignoreDirectiveCountsByFile: sortedIgnoreDirectiveCountsByFile,
+      ignoreDirectivesCount: metricsAggregation.ignoreDirectivesCount,
+      ignoreDirectiveFiles:
+          metricsAggregation.ignoreDirectiveCountsByFile.keys.toList(),
+      ignoreDirectiveCountsByFile:
+          metricsAggregation.ignoreDirectiveCountsByFile,
       secretIssues: secretIssues,
       documentationIssues: documentationIssues,
       duplicateCodeIssues: duplicateCodeIssues,
@@ -510,12 +492,7 @@ class AnalyzeFolder {
   /// Analyzes a single Dart file and returns its metrics.
   ///
   /// This method parses a single Dart file using the Dart analyzer and
-  /// extracts quality metrics including:
-  /// - Lines of code
-  /// - Comment lines
-  /// - Class count
-  /// - StatefulWidget detection
-  /// - One class per file compliance
+  /// extracts quality metrics.
   ///
   /// [file] The Dart file to analyze.
   ///
@@ -525,155 +502,23 @@ class AnalyzeFolder {
     bool globallyIgnoreOneClassPerFile = false,
   }) {
     final content = file.readAsStringSync();
-    final analysis = _analyzeFileContent(
-      file,
-      content,
-      globallyIgnoreOneClassPerFile: globallyIgnoreOneClassPerFile,
-    );
-    return analysis.metrics;
-  }
-
-  /// Parses one Dart file and computes metrics plus ignore-directive counts.
-  ///
-  /// Parse-error files are treated as skipped and return zeroed metrics so
-  /// project-level aggregation can continue safely.
-  _FileAnalysisResult _analyzeFileContent(
-    File file,
-    String content, {
-    required bool globallyIgnoreOneClassPerFile,
-  }) {
-    final ParseStringResult result = parseString(
+    final lines = content.split('\n');
+    final parseResult = parseString(
       content: content,
       featureSet: FeatureSet.latestLanguageVersion(),
     );
-
-    final hasIgnoreDirective = hasIgnoreOneClassPerFileDirective(content);
-    final ignoreOneClassPerFile =
-        hasIgnoreDirective || globallyIgnoreOneClassPerFile;
-
-    // Skip files with parse errors
-    if (result.errors.isNotEmpty) {
-      return _FileAnalysisResult(
-        metrics: FileMetrics(
-          path: file.path,
-          linesOfCode: 0,
-          commentLines: 0,
-          classCount: 0,
-          isStatefulWidget: false,
-          ignoreOneClassPerFile: ignoreOneClassPerFile,
-        ),
-        fcheckIgnoreDirectiveCount: IgnoreConfig.countFcheckIgnoreDirectives(
-          content,
-          compilationUnit: result.unit,
-        ),
-      );
-    }
-
-    final CompilationUnit unit = result.unit;
-    final List<String> lines = content.split('\n');
-    final int nonEmptyLineCount =
-        lines.where((line) => line.trim().isNotEmpty).length;
-    final int commentLines = countCommentLines(unit, lines);
-    final _QualityVisitor visitor = _QualityVisitor();
-    unit.accept(visitor);
-
-    return _FileAnalysisResult(
-      metrics: FileMetrics(
-        path: file.path,
-        linesOfCode: nonEmptyLineCount,
-        commentLines: commentLines,
-        classCount: visitor.classCount,
-        isStatefulWidget: visitor.hasStatefulWidget,
-        ignoreOneClassPerFile: ignoreOneClassPerFile,
-      ),
-      fcheckIgnoreDirectiveCount: IgnoreConfig.countFcheckIgnoreDirectives(
-        content,
-        compilationUnit: result.unit,
-      ),
+    final context = AnalysisFileContext(
+      file: file,
+      content: content,
+      parseResult: parseResult,
+      lines: lines,
+      compilationUnit: parseResult.unit,
+      hasParseErrors: parseResult.errors.isNotEmpty,
     );
-  }
-
-  /// Counts the number of comment lines in a Dart file.
-  ///
-  /// This method counts lines that contain Dart comment markers:
-  /// - `//` (single-line or documentation comments)
-  /// - `/*` (start of block comment)
-  /// - `*/` (end of block comment)
-  ///
-  /// It uses analyzer comment tokens so multi-line block comments are counted
-  /// across their full span.
-  ///
-  /// [unit] The parsed compilation unit containing tokenized comments.
-  /// [lines] The raw lines of the file.
-  ///
-  /// Returns the number of lines that contain comments.
-  int countCommentLines(CompilationUnit unit, List<String> lines) {
-    if (lines.isEmpty) {
-      return 0;
-    }
-
-    final lineStarts = _buildLineStartOffsets(lines);
-    final commentedLines = <int>{};
-
-    var token = unit.beginToken;
-    while (true) {
-      Token? comment = token.precedingComments;
-      while (comment != null) {
-        final startLine = _lineForOffset(lineStarts, comment.offset);
-        final endLine = _lineForOffset(
-          lineStarts,
-          comment.end > 0 ? comment.end - 1 : comment.offset,
-        );
-        for (var line = startLine; line <= endLine; line++) {
-          commentedLines.add(line);
-        }
-        comment = comment.next;
-      }
-
-      final nextToken = token.next;
-      if (nextToken == null || identical(nextToken, token)) {
-        break;
-      }
-      token = nextToken;
-    }
-
-    return commentedLines.length;
-  }
-
-  /// Builds zero-based absolute start offsets for each line in [lines].
-  ///
-  /// Offsets assume newline separators in the original source.
-  List<int> _buildLineStartOffsets(List<String> lines) {
-    final starts = List<int>.filled(lines.length, 0);
-    var offset = 0;
-    for (var i = 0; i < lines.length; i++) {
-      starts[i] = offset;
-      offset += lines[i].length + 1;
-    }
-    return starts;
-  }
-
-  /// Converts a source [offset] into a 1-based line number using [lineStarts].
-  ///
-  /// Uses binary search for efficient lookup across large files.
-  int _lineForOffset(List<int> lineStarts, int offset) {
-    if (offset <= 0) {
-      return 1;
-    }
-
-    var low = 0;
-    var high = lineStarts.length - 1;
-    while (low <= high) {
-      final mid = low + ((high - low) >> 1);
-      if (lineStarts[mid] <= offset) {
-        low = mid + 1;
-      } else {
-        high = mid - 1;
-      }
-    }
-
-    final lineIndex = high.clamp(0, lineStarts.length - 1);
-    return lineIndex + 1;
+    final delegate = MetricsDelegate(
+      globallyIgnoreOneClassPerFile: globallyIgnoreOneClassPerFile,
+    );
+    return delegate.analyzeFileWithContext(context).metrics;
   }
 
   /// Checks for a top-of-file directive to ignore the "one class per file" rule.
@@ -942,58 +787,4 @@ class _PubspecInfo {
     }
     return ProjectType.dart;
   }
-}
-
-/// A visitor that traverses the AST to collect quality metrics.
-///
-/// This internal visitor class extends the analyzer's AST visitor to
-/// count class declarations and detect StatefulWidget usage in Dart files.
-/// It accumulates metrics during the AST traversal process.
-///
-/// Only public classes (not starting with `_`) are counted for the
-/// "one class per file" rule checks.
-class _QualityVisitor extends RecursiveAstVisitor<void> {
-  /// The total number of public class declarations found in the visited file.
-  int classCount = 0;
-
-  /// Whether any of the classes in the file extend StatefulWidget.
-  ///
-  /// This affects the "one class per file" rule compliance, as StatefulWidget
-  /// files are allowed to have up to 2 classes (widget + state).
-  bool hasStatefulWidget = false;
-
-  /// Visits a class declaration node in the AST.
-  ///
-  /// This method is called for each class declaration encountered during
-  /// AST traversal. It increments the class count (if the class is public)
-  /// and checks if the class extends StatefulWidget.
-  ///
-  /// [node] The class declaration node being visited.
-  @override
-  void visitClassDeclaration(ClassDeclaration node) {
-    final className = node.namePart.toString();
-
-    // Only count public classes for the "one class per file" rule
-    // Private classes (starting with _) are implementation details
-    if (!className.startsWith('_')) {
-      classCount++;
-    }
-
-    final superclass = node.extendsClause?.superclass.toString();
-    if (superclass == 'StatefulWidget') {
-      hasStatefulWidget = true;
-    }
-
-    super.visitClassDeclaration(node);
-  }
-}
-
-class _FileAnalysisResult {
-  final FileMetrics metrics;
-  final int fcheckIgnoreDirectiveCount;
-
-  const _FileAnalysisResult({
-    required this.metrics,
-    required this.fcheckIgnoreDirectiveCount,
-  });
 }

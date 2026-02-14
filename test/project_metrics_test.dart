@@ -9,8 +9,8 @@ import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
-import 'package:fcheck/src/metrics/file_metrics.dart';
-import 'package:fcheck/src/metrics/project_metrics.dart';
+import 'package:fcheck/src/models/file_metrics.dart';
+import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:test/test.dart';
 
@@ -449,6 +449,9 @@ void main() {
             'linesOfCode': 10,
             'commentLines': 2,
             'commentRatio': 0.2,
+            'functions': 0,
+            'stringLiterals': 0,
+            'numberLiterals': 0,
             'hardcodedStrings': 1,
             'magicNumbers': 1,
             'secretIssues': 1,
@@ -477,6 +480,9 @@ void main() {
               'linesOfCode': 10,
               'commentLines': 2,
               'classCount': 3,
+              'functionCount': 0,
+              'stringLiteralCount': 0,
+              'numberLiteralCount': 0,
               'isStatefulWidget': false,
               'isOneClassPerFileCompliant': false,
               'ignoreOneClassPerFile': false,

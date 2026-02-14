@@ -1,6 +1,6 @@
 import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
-import 'package:fcheck/src/metrics/file_metrics.dart';
-import 'package:fcheck/src/metrics/project_metrics.dart';
+import 'package:fcheck/src/models/file_metrics.dart';
+import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:test/test.dart';
 

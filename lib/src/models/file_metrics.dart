@@ -12,6 +12,15 @@ class FileMetrics {
   /// Number of lines that contain comments.
   final int commentLines;
 
+  /// Total number of functions and methods in the file.
+  final int functionCount;
+
+  /// Total number of string literals in the file.
+  final int stringLiteralCount;
+
+  /// Total number of numeric literals (ints and doubles) in the file.
+  final int numberLiteralCount;
+
   /// Number of class declarations in the file.
   final int classCount;
 
@@ -35,6 +44,9 @@ class FileMetrics {
     required this.linesOfCode,
     required this.commentLines,
     required this.classCount,
+    this.functionCount = 0,
+    this.stringLiteralCount = 0,
+    this.numberLiteralCount = 0,
     required this.isStatefulWidget,
     this.ignoreOneClassPerFile = false,
   });
@@ -68,6 +80,9 @@ class FileMetrics {
         'linesOfCode': linesOfCode,
         'commentLines': commentLines,
         'classCount': classCount,
+        'functionCount': functionCount,
+        'stringLiteralCount': stringLiteralCount,
+        'numberLiteralCount': numberLiteralCount,
         'isStatefulWidget': isStatefulWidget,
         'isOneClassPerFileCompliant': isOneClassPerFileCompliant,
         'ignoreOneClassPerFile': ignoreOneClassPerFile,

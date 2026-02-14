@@ -1,13 +1,15 @@
-import 'dart:math' as math;
+import 'package:fcheck/src/analyzers/metrics/metrics_input.dart';
+import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
+import 'package:fcheck/src/models/project_results.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
-import 'package:fcheck/src/metrics/file_metrics.dart';
+import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:fcheck/src/models/project_type.dart';
 
 /// Represents the overall quality metrics for a Flutter/Dart project.
@@ -16,34 +18,7 @@ import 'package:fcheck/src/models/project_type.dart';
 /// providing insights into code quality, size, and compliance with
 /// coding standards.
 class ProjectMetrics {
-  static const double _minHardcodedBudget = 3.0;
-  static const double _localizedHardcodedBudgetPerFile = 0.8;
-  static const double _nonLocalizedHardcodedBudgetPerFile = 2.0;
-  static const double _minMagicNumberBudget = 4.0;
-  static const double _magicNumberBudgetPerFile = 2.5;
-  static const double _magicNumberBudgetPerLoc = 1 / 450;
-  static const double _minSourceSortBudget = 2.0;
-  static const double _sourceSortBudgetPerFile = 0.75;
-  static const double _minLayersBudget = 2.0;
-  static const double _layersBudgetPerEdge = 0.20;
-  static const double _secretsBudget = 1.5;
-  static const double _minDeadCodeBudget = 3.0;
-  static const double _deadCodeBudgetPerFile = 0.8;
-  static const double _minDocumentationBudget = 2.0;
-  static const double _documentationBudgetPerFile = 0.6;
-  static const double _duplicateRatioPenaltyMultiplier = 2.5;
-  static const double _minIgnoreDirectiveBudget = 3.0;
-  static const double _ignoreDirectiveBudgetPerFile = 0.12;
-  static const double _ignoreDirectiveBudgetPerLoc = 1 / 2500;
-  static const double _minCustomExcludedFileBudget = 2.0;
-  static const double _customExcludedFileBudgetRatio = 0.08;
-  static const double _disabledAnalyzerBudget = 1.0;
-  static const double _ignorePenaltyWeight = 0.45;
-  static const double _customExcludedPenaltyWeight = 0.35;
-  static const double _disabledAnalyzerPenaltyWeight = 0.20;
-  static const int _maxSuppressionPenaltyPoints = 25;
-
-  static const int _maxPercent = 100;
+  static const MetricsAnalyzer _metricsAnalyzer = MetricsAnalyzer();
 
   /// The detected type of the analyzed project.
   final ProjectType projectType;
@@ -103,6 +78,15 @@ class ProjectMetrics {
   ///
   /// This is used by CLI graph exporters to avoid re-running layers analysis.
   final Map<String, int> layersByFile;
+
+  /// Total number of functions and methods in the project.
+  final int totalFunctionCount;
+
+  /// Total number of string literals in the project.
+  final int totalStringLiteralCount;
+
+  /// Total number of numeric literals in the project.
+  final int totalNumberLiteralCount;
 
   /// Number of files successfully skipped based on exclusion glob patterns.
   final int excludedFilesCount;
@@ -165,6 +149,9 @@ class ProjectMetrics {
   /// [totalDartFiles] Total number of Dart files in the project.
   /// [totalLinesOfCode] Total lines of code across all Dart files.
   /// [totalCommentLines] Total comment lines across all Dart files.
+  /// [totalFunctionCount] Total number of functions and methods in the project.
+  /// [totalStringLiteralCount] Total number of string literals in the project.
+  /// [totalNumberLiteralCount] Total number of numeric literals in the project.
   /// [fileMetrics] Metrics for each individual Dart file.
   /// [secretIssues] List of secret issues found in the project.
   /// [hardcodedStringIssues] List of hardcoded string issues found in the project.
@@ -191,6 +178,9 @@ class ProjectMetrics {
     required this.totalDartFiles,
     required this.totalLinesOfCode,
     required this.totalCommentLines,
+    this.totalFunctionCount = 0,
+    this.totalStringLiteralCount = 0,
+    this.totalNumberLiteralCount = 0,
     required this.fileMetrics,
     required this.secretIssues,
     required this.hardcodedStringIssues,
@@ -224,6 +214,37 @@ class ProjectMetrics {
     this.documentationAnalyzerEnabled = true,
   });
 
+  late final ProjectMetricsAnalysisResult _analysisResult =
+      _metricsAnalyzer.analyze(
+    ProjectMetricsAnalysisInput(
+      totalDartFiles: totalDartFiles,
+      totalLinesOfCode: totalLinesOfCode,
+      fileMetrics: fileMetrics,
+      hardcodedStringIssues: hardcodedStringIssues,
+      magicNumberIssues: magicNumberIssues,
+      sourceSortIssues: sourceSortIssues,
+      layersIssues: layersIssues,
+      secretIssues: secretIssues,
+      deadCodeIssues: deadCodeIssues,
+      duplicateCodeIssues: duplicateCodeIssues,
+      documentationIssues: documentationIssues,
+      layersEdgeCount: layersEdgeCount,
+      usesLocalization: usesLocalization,
+      ignoreDirectivesCount: ignoreDirectivesCount,
+      customExcludedFilesCount: customExcludedFilesCount,
+      disabledAnalyzersCount: disabledAnalyzersCount,
+      oneClassPerFileAnalyzerEnabled: oneClassPerFileAnalyzerEnabled,
+      hardcodedStringsAnalyzerEnabled: hardcodedStringsAnalyzerEnabled,
+      magicNumbersAnalyzerEnabled: magicNumbersAnalyzerEnabled,
+      sourceSortingAnalyzerEnabled: sourceSortingAnalyzerEnabled,
+      layersAnalyzerEnabled: layersAnalyzerEnabled,
+      secretsAnalyzerEnabled: secretsAnalyzerEnabled,
+      deadCodeAnalyzerEnabled: deadCodeAnalyzerEnabled,
+      duplicateCodeAnalyzerEnabled: duplicateCodeAnalyzerEnabled,
+      documentationAnalyzerEnabled: documentationAnalyzerEnabled,
+    ),
+  );
+
   /// Converts these metrics to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
         'project': {
@@ -243,6 +264,9 @@ class ProjectMetrics {
           'linesOfCode': totalLinesOfCode,
           'commentLines': totalCommentLines,
           'commentRatio': commentRatio,
+          'functions': totalFunctionCount,
+          'stringLiterals': totalStringLiteralCount,
+          'numberLiterals': totalNumberLiteralCount,
           'hardcodedStrings': hardcodedStringIssues.length,
           'magicNumbers': magicNumberIssues.length,
           'secretIssues': secretIssues.length,
@@ -311,51 +335,12 @@ class ProjectMetrics {
   /// Special rule:
   /// - If rounding yields `100` while any enabled domain is `< 1.0`,
   ///   result is forced to `99` so perfect score remains strict.
-  int get complianceScore {
-    final enabledAreas = _enabledComplianceAreas;
-    final averageAreaScore = enabledAreas.isEmpty
-        ? 1.0
-        : enabledAreas.fold<double>(0, (sum, area) => sum + area.score) /
-            enabledAreas.length;
-    final baseScore = averageAreaScore * _maxPercent;
-    final scoreAfterSuppression = baseScore - suppressionPenaltyPoints;
-    var complianceScore =
-        scoreAfterSuppression.clamp(0, _maxPercent.toDouble()).round();
-
-    // Reserve 100% for truly clean runs with zero penalties.
-    if (complianceScore == _maxPercent &&
-        (enabledAreas.any((area) => area.score < 1) ||
-            suppressionPenaltyPoints > 0)) {
-      complianceScore = _maxPercent - 1;
-    }
-
-    return complianceScore;
-  }
+  int get complianceScore => _analysisResult.complianceScore;
 
   /// Budget-adjusted score penalty from suppressions (`ignore`, excludes, disabled analyzers).
   ///
   /// The penalty is capped to keep suppressions impactful but not dominant.
-  int get suppressionPenaltyPoints {
-    final ignoreOverBudgetRatio = _overBudgetRatio(
-      used: ignoreDirectivesCount.toDouble(),
-      budget: _ignoreDirectiveBudget,
-    );
-    final customExcludedOverBudgetRatio = _overBudgetRatio(
-      used: customExcludedFilesCount.toDouble(),
-      budget: _customExcludedFilesBudget,
-    );
-    final disabledAnalyzersOverBudgetRatio = _overBudgetRatio(
-      used: disabledAnalyzersCount.toDouble(),
-      budget: _disabledAnalyzerBudget,
-    );
-
-    final weightedOveruse = ignoreOverBudgetRatio * _ignorePenaltyWeight +
-        customExcludedOverBudgetRatio * _customExcludedPenaltyWeight +
-        disabledAnalyzersOverBudgetRatio * _disabledAnalyzerPenaltyWeight;
-
-    final penalty = weightedOveruse * _maxSuppressionPenaltyPoints;
-    return penalty.clamp(0, _maxSuppressionPenaltyPoints.toDouble()).round();
-  }
+  int get suppressionPenaltyPoints => _analysisResult.suppressionPenaltyPoints;
 
   /// Machine-readable key for the area with highest score impact.
   ///
@@ -363,266 +348,25 @@ class ProjectMetrics {
   ///
   /// Highest impact is selected by `penaltyImpact = (1 - score)`.
   /// Tie-breaker is higher issue count.
-  String get complianceFocusAreaKey => _primaryFocusArea?.key ?? 'none';
+  String get complianceFocusAreaKey => _analysisResult.complianceFocusAreaKey;
 
   /// Human-readable label for [complianceFocusAreaKey].
   ///
   /// Returns `None` when all enabled analyzers are fully compliant.
-  String get complianceFocusAreaLabel => _primaryFocusArea?.label ?? 'None';
+  String get complianceFocusAreaLabel =>
+      _analysisResult.complianceFocusAreaLabel;
 
   /// Number of detected issues for [complianceFocusAreaKey].
   ///
   /// Returns `0` when focus area is `none`.
-  int get complianceFocusAreaIssueCount => _primaryFocusArea?.issueCount ?? 0;
+  int get complianceFocusAreaIssueCount =>
+      _analysisResult.complianceFocusAreaIssueCount;
 
   /// Suggested investment area to improve score in the next iteration.
   ///
   /// Message text is deterministic and mapped by focus-area key.
-  String get complianceNextInvestment {
-    final focusArea = _primaryFocusArea;
-    if (focusArea == null) {
-      return 'Maintain this level by enforcing fcheck in CI on every pull request.';
-    }
-
-    switch (focusArea.key) {
-      case 'one_class_per_file':
-        return 'Split files with multiple classes into focused files.';
-      case 'hardcoded_strings':
-        return usesLocalization
-            ? 'Move user-facing literals into localization resources (.arb).'
-            : 'Adopt localization and replace user-facing literals with keys.';
-      case 'magic_numbers':
-        return 'Replace magic numbers with named constants near domain logic.';
-      case 'source_sorting':
-        return 'Run with --fix to auto-sort Flutter members, then review remaining classes.';
-      case 'layers':
-        return 'Remove cross-layer imports and enforce dependency direction in core modules.';
-      case 'secrets':
-        return 'Remove secrets from source and load them from secure config or environment.';
-      case 'dead_code':
-        return 'Delete unused files, classes, and functions to reduce maintenance cost.';
-      case 'duplicate_code':
-        return 'Extract repeated code paths into shared helpers or reusable widgets.';
-      case 'documentation':
-        return 'Document public APIs and add context comments to complex private logic.';
-      case 'suppression_hygiene':
-        return 'Reduce custom excludes, restore disabled analyzers, and remove stale fcheck ignore directives.';
-    }
-
-    return 'Invest in the lowest-scoring quality area to raise overall compliance.';
-  }
-
-  List<_ComplianceAreaScore> get _enabledComplianceAreas => _complianceAreas
-      .where((area) => area.enabled)
-      .where(
-        (area) => area.key != 'documentation' || documentationIssues.isNotEmpty,
-      )
-      .toList(growable: false);
-
-  /// Returns the highest-impact compliance area for focused guidance text.
-  _ComplianceAreaScore? get _primaryFocusArea {
-    final candidates = _enabledComplianceAreas
-        .where((area) => area.score < 1 || area.issueCount > 0)
-        .toList();
-    final suppressionFocusArea = _suppressionFocusArea;
-    if (suppressionFocusArea != null) {
-      candidates.add(suppressionFocusArea);
-    }
-    if (candidates.isEmpty) {
-      return null;
-    }
-
-    var best = candidates.first;
-    var bestImpact = best.penaltyImpact;
-    for (final candidate in candidates.skip(1)) {
-      final candidateImpact = candidate.penaltyImpact;
-      if (candidateImpact > bestImpact) {
-        best = candidate;
-        bestImpact = candidateImpact;
-        continue;
-      }
-      if (candidateImpact == bestImpact &&
-          candidate.issueCount > best.issueCount) {
-        best = candidate;
-      }
-    }
-    return best;
-  }
-
-  /// Creates a synthetic compliance area for suppression hygiene penalties.
-  _ComplianceAreaScore? get _suppressionFocusArea {
-    final penalty = suppressionPenaltyPoints;
-    if (penalty <= 0) {
-      return null;
-    }
-    final suppressionEntries = ignoreDirectivesCount +
-        customExcludedFilesCount +
-        disabledAnalyzersCount;
-    return _ComplianceAreaScore(
-      key: 'suppression_hygiene',
-      label: 'Suppression hygiene',
-      enabled: true,
-      issueCount: suppressionEntries,
-      score: _clampToUnitRange(1 - (penalty / _maxSuppressionPenaltyPoints)),
-    );
-  }
-
-  /// Computes the dynamic budget for ignore-directive usage.
-  double get _ignoreDirectiveBudget {
-    final safeDartFileCount = math.max(1, totalDartFiles);
-    final safeLoc = math.max(1, totalLinesOfCode);
-    return math.max(
-      _minIgnoreDirectiveBudget,
-      safeDartFileCount * _ignoreDirectiveBudgetPerFile +
-          safeLoc * _ignoreDirectiveBudgetPerLoc,
-    );
-  }
-
-  /// Computes the dynamic budget for custom excluded Dart files.
-  double get _customExcludedFilesBudget {
-    final scopeDartFiles =
-        math.max(1, totalDartFiles + customExcludedFilesCount);
-    return math.max(
-      _minCustomExcludedFileBudget,
-      scopeDartFiles * _customExcludedFileBudgetRatio,
-    );
-  }
-
-  /// Computes per-domain compliance scores before equal-share averaging.
-  List<_ComplianceAreaScore> get _complianceAreas {
-    final safeDartFileCount = math.max(1, totalDartFiles);
-    final safeLoc = math.max(1, totalLinesOfCode);
-
-    final oneClassPerFileViolations = fileMetrics
-        .where((metric) => !metric.isOneClassPerFileCompliant)
-        .length;
-
-    final hardcodedBudget = math.max(
-      _minHardcodedBudget,
-      safeDartFileCount *
-          (usesLocalization
-              ? _localizedHardcodedBudgetPerFile
-              : _nonLocalizedHardcodedBudgetPerFile),
-    );
-    final magicNumbersBudget = math.max(
-      _minMagicNumberBudget,
-      safeDartFileCount * _magicNumberBudgetPerFile +
-          safeLoc * _magicNumberBudgetPerLoc,
-    );
-    final sourceSortingBudget = math.max(
-      _minSourceSortBudget,
-      safeDartFileCount * _sourceSortBudgetPerFile,
-    );
-    final layersBaseline = math.max(1, layersEdgeCount);
-    final layersBudget = math.max(
-      _minLayersBudget,
-      layersBaseline * _layersBudgetPerEdge,
-    );
-    final deadCodeBudget = math.max(
-      _minDeadCodeBudget,
-      safeDartFileCount * _deadCodeBudgetPerFile,
-    );
-    final documentationBudget = math.max(
-      _minDocumentationBudget,
-      safeDartFileCount * _documentationBudgetPerFile,
-    );
-    final duplicateImpactLines = duplicateCodeIssues.fold<double>(
-      0,
-      (sum, issue) => sum + (issue.lineCount * issue.similarity),
-    );
-    final duplicateRatio = duplicateImpactLines / safeLoc;
-
-    return [
-      _ComplianceAreaScore(
-        key: 'one_class_per_file',
-        label: 'One class per file',
-        enabled: oneClassPerFileAnalyzerEnabled,
-        issueCount: oneClassPerFileViolations,
-        score: _fractionScore(
-          issues: oneClassPerFileViolations,
-          total: safeDartFileCount,
-        ),
-      ),
-      _ComplianceAreaScore(
-        key: 'hardcoded_strings',
-        label: 'Hardcoded strings',
-        enabled: hardcodedStringsAnalyzerEnabled,
-        issueCount: hardcodedStringIssues.length,
-        score: _budgetScore(
-          issues: hardcodedStringIssues.length,
-          budget: hardcodedBudget,
-        ),
-      ),
-      _ComplianceAreaScore(
-        key: 'magic_numbers',
-        label: 'Magic numbers',
-        enabled: magicNumbersAnalyzerEnabled,
-        issueCount: magicNumberIssues.length,
-        score: _budgetScore(
-          issues: magicNumberIssues.length,
-          budget: magicNumbersBudget,
-        ),
-      ),
-      _ComplianceAreaScore(
-        key: 'source_sorting',
-        label: 'Source sorting',
-        enabled: sourceSortingAnalyzerEnabled,
-        issueCount: sourceSortIssues.length,
-        score: _budgetScore(
-          issues: sourceSortIssues.length,
-          budget: sourceSortingBudget,
-        ),
-      ),
-      _ComplianceAreaScore(
-        key: 'layers',
-        label: 'Layers architecture',
-        enabled: layersAnalyzerEnabled,
-        issueCount: layersIssues.length,
-        score: _budgetScore(
-          issues: layersIssues.length,
-          budget: layersBudget,
-        ),
-      ),
-      _ComplianceAreaScore(
-        key: 'secrets',
-        label: 'Secrets',
-        enabled: secretsAnalyzerEnabled,
-        issueCount: secretIssues.length,
-        score: _budgetScore(
-          issues: secretIssues.length,
-          budget: _secretsBudget,
-        ),
-      ),
-      _ComplianceAreaScore(
-        key: 'dead_code',
-        label: 'Dead code',
-        enabled: deadCodeAnalyzerEnabled,
-        issueCount: deadCodeIssues.length,
-        score: _budgetScore(
-          issues: deadCodeIssues.length,
-          budget: deadCodeBudget,
-        ),
-      ),
-      _ComplianceAreaScore(
-        key: 'duplicate_code',
-        label: 'Duplicate code',
-        enabled: duplicateCodeAnalyzerEnabled,
-        issueCount: duplicateCodeIssues.length,
-        score: _clampToUnitRange(
-            1 - (duplicateRatio * _duplicateRatioPenaltyMultiplier)),
-      ),
-      _ComplianceAreaScore(
-        key: 'documentation',
-        label: 'Documentation',
-        enabled: documentationAnalyzerEnabled,
-        issueCount: documentationIssues.length,
-        score: _budgetScore(
-          issues: documentationIssues.length,
-          budget: documentationBudget,
-        ),
-      ),
-    ];
-  }
+  String get complianceNextInvestment =>
+      _analysisResult.complianceNextInvestment;
 
   /// Dead code issues classified as dead files.
   List<DeadCodeIssue> get deadFileIssues => deadCodeIssues
@@ -653,64 +397,4 @@ class ProjectMetrics {
             'value': issue.value,
           })
       .toList();
-}
-
-/// Converts raw issue count against total scope into a [0, 1] score.
-double _fractionScore({required int issues, required int total}) {
-  if (total <= 0) {
-    return 1;
-  }
-  return _clampToUnitRange(1 - (issues / total));
-}
-
-/// Converts raw issue count against a budget into a [0, 1] score.
-double _budgetScore({required int issues, required double budget}) {
-  if (budget <= 0) {
-    return 1;
-  }
-  return _clampToUnitRange(1 - (issues / budget));
-}
-
-/// Returns ratio of usage above budget, or `0` when within budget.
-double _overBudgetRatio({required double used, required double budget}) {
-  if (budget <= 0) {
-    return 0;
-  }
-  final overBudget = used - budget;
-  if (overBudget <= 0) {
-    return 0;
-  }
-  return overBudget / budget;
-}
-
-/// Clamps [value] into the inclusive unit interval `[0, 1]`.
-double _clampToUnitRange(double value) {
-  if (value < 0) {
-    return 0;
-  }
-  if (value > 1) {
-    return 1;
-  }
-  return value;
-}
-
-class _ComplianceAreaScore {
-  final String key;
-  final String label;
-  final bool enabled;
-  final int issueCount;
-  final double score;
-
-  const _ComplianceAreaScore({
-    required this.key,
-    required this.label,
-    required this.enabled,
-    required this.issueCount,
-    required this.score,
-  });
-
-  /// Penalty contribution used when choosing the primary focus area.
-  ///
-  /// Higher values indicate larger score loss for this compliance domain.
-  double get penaltyImpact => (1 - score);
 }

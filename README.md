@@ -267,6 +267,12 @@ Detailed rule behavior and edge cases are documented in the `RULES*.md` files.
 - 📈 **Outputs**: Layer count and dependency count in the report.
 - 📚 **Details**: `RULES_LAYERS.md`
 
+### Project Metrics
+
+- 📊 **Reports**: Files, folders, Dart files, LOC, comment ratio, and suppression usage.
+- 🧠 **Scoring**: Compliance score and focus area are computed by a dedicated metrics analyzer.
+- 📚 **Details**: `RULE_METRICS.md`, `RULE_SCORE.md`
+
 ## 🌐 Visualizations
 
 ### SVG Dependency Graph

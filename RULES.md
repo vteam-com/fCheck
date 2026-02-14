@@ -24,6 +24,7 @@ This file defines baseline contributor expectations for the `fcheck` project and
 - `RULES_DOCUMENTATION.md` for README/API documentation quality rules.
 - `RULES_SORTING.md` for Flutter widget member ordering rules.
 - `RULES_LAYERS.md` for dependency graph and layer analysis rules.
+- `RULE_METRICS.md` for project metrics analyzer architecture.
 - `RULE_SCORE.md` for overall compliance scoring rules.
 
 These `RULES_*.md` files are the source of truth for rule behavior. Keep
@@ -33,7 +34,8 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 
 - `AnalyzeFolder` in `lib/fcheck.dart` wires the CLI analysis pipeline.
 - `AnalyzerRunner` in `lib/src/analyzer_runner/analyzer_runner.dart` parses each Dart file once and runs delegates.
-- Per-domain delegates live in `lib/src/analyzer_runner/analyzer_delegates.dart`.
+- Per-domain delegates live under `lib/src/analyzers/**/**_delegate.dart`.
+- Project-level compliance scoring is computed by `ProjectMetricsAnalyzer` after unified analysis aggregation.
 - File discovery and default exclusions are centralized in `lib/src/input_output/file_utils.dart`.
 - Ignore directives are implemented in `lib/src/models/ignore_config.dart`.
 - **Project metadata contract:** `AnalyzeFolder` is the single entry point for analysis and is the only component that reads `pubspec.yaml`.
@@ -91,6 +93,8 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - `lib/src/analyzers/sorted/sort_members.dart`
 - `lib/src/analyzers/sorted/sort_issue.dart`
 - `lib/src/analyzers/layers/layers_analyzer.dart`
+- `lib/src/analyzers/metrics/project_metrics_analyzer.dart`
+- `lib/src/metrics/project_metrics.dart`
 
 ## Test Structure
 

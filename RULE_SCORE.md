@@ -191,5 +191,6 @@ This text is deterministic and mapped by domain key.
 
 ## Source of Truth
 
-- Implementation: `lib/src/metrics/project_metrics.dart`
+- Implementation: `lib/src/analyzers/metrics/project_metrics_analyzer.dart`
+- Output model: `lib/src/metrics/project_metrics.dart`
 - Console rendering: `bin/console_output.dart`
