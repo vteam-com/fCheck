@@ -106,7 +106,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 
 ## Test Coverage Rules
 
-- Maintain overall project code coverage at `>= 80%`.
+- Maintain overall project code coverage at `>= 85%`.
 - Do not merge changes that reduce overall coverage.
 - Add or update tests for every behavior change (new feature, bug fix, or rule change).
 - For new/modified files in `lib/src/analyzers/` and `lib/src/analyzer_runner/`, add direct unit tests that cover:

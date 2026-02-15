@@ -97,7 +97,10 @@ void main() {
       final result = analyzer.analyzeDirectory(tempDir);
       expect(result.issues, isEmpty);
       expect(result.dependencyGraph[fileA.path], contains(fileB.path));
+      final json = result.toJson();
+      expect(json['issues'], []);
     });
+
     test('should assign correct layers in a chain', () {
       // Create chain: a.dart (entry) -> b.dart -> c.dart
       final fileA = File('${tempDir.path}/a.dart');

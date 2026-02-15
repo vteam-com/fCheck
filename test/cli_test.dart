@@ -167,7 +167,7 @@ class TestClass {
       final result = await runCli(['--help-ignore']);
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('Setup ignores directly in Dart file'));
+      expect(result.stdout, contains(AppStrings.setupIgnoresInDartFile));
       expect(
         result.stdout,
         contains('1. dead_code'),
