@@ -1,17 +1,11 @@
 import 'package:args/args.dart';
-import '../bin/console_input.dart';
-import '../bin/console_common.dart';
 import 'package:test/test.dart';
 
-/// Unit tests for the main() function in bin/fcheck.dart
-///
-/// These tests verify the behavior of the main() entry point including:
-/// - Argument parsing errors
-/// - Help/version display
-/// - Directory validation
-/// - Configuration loading
+import '../bin/console_input.dart';
+import '../bin/console_common.dart';
+
 void main() {
-  group('main() function', () {
+  group('ConsoleInput parsing', () {
     late ArgParser parser;
 
     setUp(() {
@@ -110,18 +104,13 @@ void main() {
       expect(input.excludePatterns, equals(['**/generated/**', '**/test/**']));
     });
 
-    test('should handle invalid arguments gracefully', () {
-      expect(
-        () => parseConsoleInput(['--invalid-flag'], parser),
-        throwsA(isA<FormatException>()),
-      );
-    });
-
-    test('should handle invalid --list values gracefully', () {
-      expect(
-        () => parseConsoleInput(['--list', 'invalid'], parser),
-        throwsA(isA<FormatException>()),
-      );
+    test('should parse multiple flags together', () {
+      final input =
+          parseConsoleInput(['--help', '--fix', '--svg', '--json'], parser);
+      expect(input.showHelp, isTrue);
+      expect(input.fix, isTrue);
+      expect(input.generateSvg, isTrue);
+      expect(input.outputJson, isTrue);
     });
 
     test('should have correct default values', () {
@@ -140,6 +129,70 @@ void main() {
       expect(input.showVersion, isFalse);
       expect(input.showIgnoresInstructions, isFalse);
       expect(input.showScoreInstructions, isFalse);
+    });
+  });
+
+  group('ConsoleInput validation', () {
+    late ArgParser parser;
+
+    setUp(() {
+      parser = createConsoleArgParser();
+    });
+
+    test('should handle invalid arguments gracefully', () {
+      expect(
+        () => parseConsoleInput(['--invalid-flag'], parser),
+        throwsA(isA<FormatException>()),
+      );
+    });
+
+    test('should handle invalid --list values gracefully', () {
+      expect(
+        () => parseConsoleInput(['--list', 'invalid'], parser),
+        throwsA(isA<FormatException>()),
+      );
+    });
+  });
+
+  group('ArgParser creation', () {
+    test('should create parser with correct options', () {
+      final parser = createConsoleArgParser();
+
+      // Test that all expected flags are present
+      expect(parser.options, contains('input'));
+      expect(parser.options, contains('fix'));
+      expect(parser.options, contains('svg'));
+      expect(parser.options, contains('mermaid'));
+      expect(parser.options, contains('plantuml'));
+      expect(parser.options, contains('svgfolder'));
+      expect(parser.options, contains('json'));
+      expect(parser.options, contains('list'));
+      expect(parser.options, contains('version'));
+      expect(parser.options, contains('exclude'));
+      expect(parser.options, contains('excluded'));
+      expect(parser.options, contains('help'));
+      expect(parser.options, contains('help-ignore'));
+      expect(parser.options, contains('help-score'));
+    });
+
+    test('should have correct default values for options', () {
+      final parser = createConsoleArgParser();
+      final argResults = parser.parse([]);
+
+      expect(argResults['input'], equals('.'));
+      expect(argResults['fix'], isFalse);
+      expect(argResults['svg'], isFalse);
+      expect(argResults['mermaid'], isFalse);
+      expect(argResults['plantuml'], isFalse);
+      expect(argResults['svgfolder'], isFalse);
+      expect(argResults['json'], isFalse);
+      expect(argResults['list'], equals('partial'));
+      expect(argResults['version'], isFalse);
+      expect(argResults['exclude'], equals([]));
+      expect(argResults['excluded'], isFalse);
+      expect(argResults['help'], isFalse);
+      expect(argResults['help-ignore'], isFalse);
+      expect(argResults['help-score'], isFalse);
     });
   });
 }
