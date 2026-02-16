@@ -120,5 +120,63 @@ void main() {
       final match = pattern.firstMatch(folderSvg);
       expect(match, isNotNull);
     });
+
+    test(
+        'creates virtual folder for loose files when folder has both files and subfolders',
+        () {
+      // This test triggers _applyLooseFilesRule:
+      // - lib/ contains both a file (utils.dart) AND a subfolder (src/)
+      // - The rule should create a virtual "..." folder for the loose file
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/utils.dart': 0,
+          'lib/src/main.dart': 1,
+        },
+        dependencyGraph: const {
+          'lib/src/main.dart': ['lib/utils.dart'],
+          'lib/utils.dart': [],
+        },
+      );
+
+      final folderSvg = exportGraphSvgFolders(
+        result,
+        projectName: 'TestProject',
+        projectVersion: '1.0.0',
+        inputFolderName: 'lib',
+      );
+
+      // The virtual "..." folder should be created for the loose file
+      expect(folderSvg, contains('...'));
+      // Should have both the virtual folder and the src subfolder
+      expect(folderSvg, contains('src'));
+    });
+
+    test('handles deeply nested folders with mixed files and subfolders', () {
+      // More complex scenario: nested folders with files at multiple levels
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/main.dart': 0,
+          'lib/src/models/user.dart': 1,
+          'lib/src/utils.dart': 1,
+        },
+        dependencyGraph: const {
+          'lib/main.dart': ['lib/src/models/user.dart'],
+          'lib/src/models/user.dart': [],
+          'lib/src/utils.dart': [],
+        },
+      );
+
+      final folderSvg = exportGraphSvgFolders(
+        result,
+        projectName: 'DeepProject',
+        projectVersion: '2.0.0',
+        inputFolderName: 'lib',
+      );
+
+      expect(folderSvg, contains('DeepProject'));
+      expect(folderSvg, contains('<svg'));
+    });
   });
 }

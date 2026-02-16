@@ -1,10 +1,125 @@
 import 'dart:io';
 
 import 'package:fcheck/fcheck.dart';
+import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_file_data.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
+import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_file_snippet.dart';
+import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 import 'package:test/test.dart';
 
 void main() {
+  group('DuplicateCodeIssue', () {
+    test('toJson returns all fields', () {
+      final issue = DuplicateCodeIssue(
+        firstFilePath: 'lib/a.dart',
+        firstLineNumber: 10,
+        firstSymbol: 'firstFn',
+        secondFilePath: 'lib/b.dart',
+        secondLineNumber: 20,
+        secondSymbol: 'secondFn',
+        similarity: 0.9,
+        lineCount: 12,
+      );
+
+      expect(
+        issue.toJson(),
+        equals({
+          'firstFilePath': 'lib/a.dart',
+          'firstLineNumber': 10,
+          'firstSymbol': 'firstFn',
+          'secondFilePath': 'lib/b.dart',
+          'secondLineNumber': 20,
+          'secondSymbol': 'secondFn',
+          'similarity': 0.9,
+          'lineCount': 12,
+        }),
+      );
+    });
+
+    test('toString includes floored percent, line count, paths, and symbols',
+        () {
+      final issue = DuplicateCodeIssue(
+        firstFilePath: 'lib/a.dart',
+        firstLineNumber: 10,
+        firstSymbol: 'firstFn',
+        secondFilePath: 'lib/b.dart',
+        secondLineNumber: 20,
+        secondSymbol: 'secondFn',
+        similarity: 0.875,
+        lineCount: 9,
+      );
+
+      expect(
+        issue.toString(),
+        equals(
+          '87% (9 lines) lib/a.dart:10 <-> lib/b.dart:20 (firstFn, secondFn)',
+        ),
+      );
+    });
+
+    test('toString strips shared absolute path prefix', () {
+      final issue = DuplicateCodeIssue(
+        firstFilePath: '/Users/me/workspace/project/lib/a.dart',
+        firstLineNumber: 10,
+        firstSymbol: 'firstFn',
+        secondFilePath: '/Users/me/workspace/project/bin/b.dart',
+        secondLineNumber: 20,
+        secondSymbol: 'secondFn',
+        similarity: 0.9,
+        lineCount: 30,
+      );
+
+      expect(
+        issue.toString(),
+        equals(
+          '90% (30 lines) lib/a.dart:10 <-> bin/b.dart:20 (firstFn, secondFn)',
+        ),
+      );
+    });
+  });
+
+  group('DuplicateCodeFileData', () {
+    test('creates instance with file path and snippets', () {
+      final snippet = DuplicateCodeSnippet(
+        filePath: 'lib/utils.dart',
+        lineNumber: 10,
+        symbol: 'helper',
+        kind: 'function',
+        parameterSignature: '()',
+        nonEmptyLineCount: 5,
+        normalizedTokens: ['void', 'helper', 'print'],
+      );
+      final data = DuplicateCodeFileData(
+        filePath: 'lib/utils.dart',
+        snippets: [snippet],
+      );
+      expect(data.filePath, equals('lib/utils.dart'));
+      expect(data.snippets, hasLength(1));
+      expect(data.snippets.first.symbol, equals('helper'));
+    });
+  });
+
+  group('DuplicateCodeSnippet', () {
+    test('creates instance with required fields', () {
+      final snippet = DuplicateCodeSnippet(
+        filePath: 'lib/utils.dart',
+        lineNumber: 10,
+        symbol: 'helper',
+        kind: 'function',
+        parameterSignature: '()',
+        nonEmptyLineCount: 5,
+        normalizedTokens: ['void', 'helper', 'print'],
+      );
+      expect(snippet.filePath, equals('lib/utils.dart'));
+      expect(snippet.lineNumber, equals(10));
+      expect(snippet.symbol, equals('helper'));
+      expect(snippet.kind, equals('function'));
+      expect(snippet.parameterSignature, equals('()'));
+      expect(snippet.nonEmptyLineCount, equals(5));
+      expect(snippet.tokenCount, equals(3));
+    });
+  });
+
   group('Duplicate code analysis', () {
     late Directory tempDir;
 

@@ -1,8 +1,8 @@
 import 'package:args/args.dart';
-
-import '../bin/console_input.dart';
-import '../bin/console_common.dart';
 import 'package:test/test.dart';
+
+import '../../bin/console_input.dart';
+import '../../bin/console_common.dart';
 
 void main() {
   group('ConsoleInput parsing', () {
