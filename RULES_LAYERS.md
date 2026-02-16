@@ -33,7 +33,7 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 
 - `LayersAnalyzer.analyzeFile` is a simplified check.
 - If a file has any `import` or `export` and is not an entry point, it emits `LayersIssueType.wrongLayer`.
-
+ 
 ## Output
 
 - `LayersAnalysisResult` contains `issues`, `layers`, and `dependencyGraph`.
@@ -52,3 +52,21 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 - Only project-local Dart imports are considered. `dart:` and external `package:` imports are ignored.
 - The current layer assignment algorithm does not explicitly use entry points beyond dependency flow.
 - When used outside `AnalyzeFolder`, callers must supply `projectRoot` and `packageName` explicitly to avoid any metadata lookup.
+
+## Layer Hierarchy Rules
+
+The layer system follows a "higher layers can depend on lower layers" rule:
+
+- **Layer 1** is the highest/outermost layer (closest to entry points)
+- **Layer 2, 3, 4, 5...** are progressively lower/inner layers
+
+**Valid dependencies:**
+- Layer 1 can depend on Layer 2, 3, 4, 5...
+- Layer 2 can depend on Layer 3, 4, 5...
+- Layer N can depend on Layer N+1, N+2...
+
+**Invalid dependencies (violations):**
+- Layer 2 depending on Layer 1 is WRONG
+- Layer 3 depending on Layer 1 or 2 is WRONG
+
+For example: If folder A is at Layer 1 and folder B is at Layer 2, A depending on B is valid, but B depending on A is a violation.

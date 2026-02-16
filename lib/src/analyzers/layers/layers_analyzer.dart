@@ -204,7 +204,7 @@ class LayersAnalyzer {
   ///
   /// This method performs topological sorting to detect cycles and
   /// assign layers to components. It generates issues for cyclic
-  /// dependencies.
+  /// dependencies at both file and folder levels.
   ///
   /// [dependencyGraph] A map from file paths to their dependencies.
   ///
@@ -214,7 +214,7 @@ class LayersAnalyzer {
   ) {
     final List<LayersIssue> issues = <LayersIssue>[];
 
-    // Detect cycles using DFS
+    // Detect cycles using DFS at file level
     final Set<String> visited = <String>{};
     final Set<String> recursionStack = <String>{};
 
@@ -224,8 +224,25 @@ class LayersAnalyzer {
       }
     }
 
+    // Build folder-to-folder dependency graph
+    final Map<String, List<String>> folderGraph =
+        _buildFolderGraph(dependencyGraph);
+
+    // Detect folder-level cycles
+    final Set<String> folderVisited = <String>{};
+    final Set<String> folderRecursionStack = <String>{};
+
+    for (final String folder in folderGraph.keys) {
+      if (!folderVisited.contains(folder)) {
+        _detectFolderCycles(
+            folder, folderGraph, folderVisited, folderRecursionStack, issues);
+      }
+    }
+
     // If there are cycles, we can't reliably assign layers
-    if (issues.isNotEmpty) {
+    if (issues.any((i) =>
+        i.type == LayersIssueType.cyclicDependency ||
+        i.type == LayersIssueType.folderCycle)) {
       return LayersAnalysisResult(
         issues: issues,
         layers: <String, int>{},
@@ -236,15 +253,231 @@ class LayersAnalyzer {
     // Perform topological sort to assign layers
     final Map<String, int> layers = _assignLayers(dependencyGraph);
 
-    // Validate layer assignments (for future use - currently no wrong layer issues)
-    // In a more complete implementation, we could define layer boundaries
-    // and check if components are in the correct layers
+    // Detect folder layer violations
+    _detectFolderLayerViolations(folderGraph, layers, issues);
 
     return LayersAnalysisResult(
       issues: issues,
       layers: layers,
       dependencyGraph: dependencyGraph,
     );
+  }
+
+  /// Builds a folder-to-folder dependency graph from file dependencies.
+  ///
+  /// [fileGraph] A map from file paths to their dependencies.
+  ///
+  /// Returns a map from folder paths to their folder dependencies.
+  Map<String, List<String>> _buildFolderGraph(
+    Map<String, List<String>> fileGraph,
+  ) {
+    final Map<String, Set<String>> folderDeps = <String, Set<String>>{};
+
+    for (final entry in fileGraph.entries) {
+      final String sourceFile = entry.key;
+      final List<String> dependencies = entry.value;
+
+      final String sourceFolder = _getFolder(sourceFile);
+      if (sourceFolder.isEmpty) continue;
+
+      folderDeps.putIfAbsent(sourceFolder, () => <String>{});
+
+      for (final dep in dependencies) {
+        final String targetFolder = _getFolder(dep);
+        if (targetFolder.isEmpty || targetFolder == sourceFolder) continue;
+
+        folderDeps[sourceFolder]!.add(targetFolder);
+      }
+    }
+
+    // Convert Sets to Lists
+    final Map<String, List<String>> result = <String, List<String>>{};
+    for (final entry in folderDeps.entries) {
+      result[entry.key] = entry.value.toList();
+    }
+
+    return result;
+  }
+
+  /// Extracts the folder path from a file path.
+  ///
+  /// Returns the parent directory path, or empty string if file is at root.
+  String _getFolder(String filePath) {
+    final lastSlash = filePath.lastIndexOf('/');
+    if (lastSlash <= 0) return '';
+    return filePath.substring(0, lastSlash);
+  }
+
+  /// Checks if source folder is "higher" in the folder hierarchy than target.
+  ///
+  /// A folder is considered "higher" if it's in a branch that comes before
+  /// the target's branch when sorted alphabetically.
+  /// For example: /lib/src/analyzers is "higher" than /lib/src/models
+  /// because "analyzers" comes before "models" alphabetically.
+  bool _isFolderHigherInHierarchy(String sourceFolder, String targetFolder) {
+    // Find the common ancestor
+    final sourceParts = sourceFolder.split('/');
+    final targetParts = targetFolder.split('/');
+
+    // Find first different segment
+    int commonLength = 0;
+    for (int i = 0; i < sourceParts.length && i < targetParts.length; i++) {
+      if (sourceParts[i] == targetParts[i]) {
+        commonLength++;
+      } else {
+        break;
+      }
+    }
+
+    // If one is a prefix of the other, they're in the same branch (not higher/lower)
+    if (commonLength == sourceParts.length ||
+        commonLength == targetParts.length) {
+      return false;
+    }
+
+    // Compare the first differing segment
+    if (commonLength < sourceParts.length &&
+        commonLength < targetParts.length) {
+      final sourceSegment = sourceParts[commonLength];
+      final targetSegment = targetParts[commonLength];
+      return sourceSegment.compareTo(targetSegment) < 0;
+    }
+
+    return false;
+  }
+
+  /// Detects cycles in a graph using DFS.
+  ///
+  /// This is a generic method that can detect cycles in any directed graph.
+  /// [node] - current node being visited
+  /// [graph] - the dependency graph
+  /// [visited] - set of nodes that have been fully processed
+  /// [recursionStack] - set of nodes currently in the recursion stack
+  /// [issues] - list to add detected issues to
+  /// [issueType] - the type of issue to create (file or folder cycle)
+  /// [getMessage] - function to generate the error message
+  void _detectCyclesGeneric<T>(
+    T node,
+    Map<T, List<T>> graph,
+    Set<T> visited,
+    Set<T> recursionStack,
+    List<LayersIssue> issues,
+    LayersIssueType issueType,
+    String Function(T node) getMessage,
+  ) {
+    visited.add(node);
+    recursionStack.add(node);
+
+    final List<T> dependencies = graph[node] ?? <T>[];
+
+    for (final T dependency in dependencies) {
+      if (!visited.contains(dependency)) {
+        _detectCyclesGeneric(dependency, graph, visited, recursionStack, issues,
+            issueType, getMessage);
+      } else if (recursionStack.contains(dependency)) {
+        // Found a cycle
+        issues.add(
+          LayersIssue(
+            type: issueType,
+            filePath: node.toString(),
+            message: getMessage(node),
+          ),
+        );
+      }
+    }
+
+    recursionStack.remove(node);
+  }
+
+  /// Detects cycles in the folder dependency graph.
+  void _detectFolderCycles(
+    String folder,
+    Map<String, List<String>> folderGraph,
+    Set<String> visited,
+    Set<String> recursionStack,
+    List<LayersIssue> issues,
+  ) {
+    _detectCyclesGeneric<String>(
+      folder,
+      folderGraph,
+      visited,
+      recursionStack,
+      issues,
+      LayersIssueType.folderCycle,
+      (node) => 'Cyclic folder dependency detected involving $node',
+    );
+  }
+
+  /// Detects folder layer ordering violations.
+  ///
+  /// A folder is in the wrong layer if it depends on a folder that should
+  /// be in a higher layer (closer to entry points).
+  void _detectFolderLayerViolations(
+    Map<String, List<String>> folderGraph,
+    Map<String, int> fileLayers,
+    List<LayersIssue> issues,
+  ) {
+    // Compute folder layers from file layers
+    final Map<String, int> folderLayers = <String, int>{};
+
+    for (final entry in fileLayers.entries) {
+      final String folder = _getFolder(entry.key);
+      final int layer = entry.value;
+
+      if (folder.isEmpty) continue;
+
+      // Folder layer is the minimum (highest) layer of any file in it
+      if (!folderLayers.containsKey(folder) || folderLayers[folder]! > layer) {
+        folderLayers[folder] = layer;
+      }
+    }
+
+    // Check for wrong folder layer ordering
+    for (final entry in folderGraph.entries) {
+      final String sourceFolder = entry.key;
+      final List<String> targetFolders = entry.value;
+
+      final sourceLayer = folderLayers[sourceFolder];
+      if (sourceLayer == null) continue;
+
+      for (final targetFolder in targetFolders) {
+        final targetLayer = folderLayers[targetFolder];
+        if (targetLayer == null) continue;
+
+        // Skip violations where source folder is empty (root-level files)
+        // or where target folder is empty (files directly in project root)
+        // The root folder should not be considered for layer violations
+        if (sourceFolder.isEmpty || targetFolder.isEmpty) continue;
+
+        // Skip violations where the source is a subfolder of target
+        // (i.e., when source is like "/a/b" and target is "/a")
+        // This handles cases where a subfolder depends on root-level files
+        if (sourceFolder.startsWith('$targetFolder/')) continue;
+
+        // Skip violations where source and target share a common ancestor and
+        // source is in a "higher" branch of the folder hierarchy.
+        // For example: /lib/src/analyzers/metrics depending on /lib/src/models
+        // should be allowed because "analyzers" is visually higher than "models"
+        // in the folder tree (comes before alphabetically).
+        if (_isFolderHigherInHierarchy(sourceFolder, targetFolder)) continue;
+
+        // If source folder is in a LOWER layer (higher number) than target,
+        // that's a violation. Higher layers (lower numbers like 1) can depend
+        // on lower layers (higher numbers like 2, 3, 4, 5), but NOT reverse.
+        // For example: layer 2 (lower) depending on layer 1 (higher) is WRONG.
+        // But layer 1 (higher) depending on layer 2 (lower) is CORRECT.
+        if (sourceLayer > targetLayer) {
+          issues.add(
+            LayersIssue(
+              type: LayersIssueType.wrongFolderLayer,
+              filePath: sourceFolder,
+              message:
+                  'Folder at layer $sourceLayer depends on folder "$targetFolder" at higher layer $targetLayer',
+            ),
+          );
+        }
+      }
+    }
   }
 
   /// Detects cycles in the dependency graph using DFS.

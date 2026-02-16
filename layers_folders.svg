@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1792.0" height="4370.0" viewBox="0 0 1792.0 4370.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+<svg width="1796.0" height="4370.0" viewBox="0 0 1796.0 4370.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
 <defs>
   <filter id="whiteShadow" x="-20%" y="-20%" width="140%" height="140%">
     <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
@@ -1315,47 +1315,51 @@
   <title>lib/src/graphs/export_plantuml.dart ▶ lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 792.0 634.0 H 1618.0 Q 1624.0 634.0 1624.0 640.0 V 1515.0 Q 1624.0 1521.0 1618.0 1521.0 H 764.0" class="edgeVertical"/>
+  <path d="M 792.0 634.0 H 1618.0 Q 1624.0 634.0 1624.0 640.0 V 1547.0 Q 1624.0 1553.0 1618.0 1553.0 H 764.0" class="edgeVertical"/>
+  <title>lib/src/graphs/export_svg_folders.dart ▶ lib/src/analyzers/layers/layers_issue.dart</title>
+</g>
+<g>
+  <path d="M 792.0 634.0 H 1622.0 Q 1628.0 634.0 1628.0 640.0 V 1515.0 Q 1628.0 1521.0 1622.0 1521.0 H 764.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg_folders.dart ▶ lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 792.0 634.0 H 1622.0 Q 1628.0 634.0 1628.0 640.0 V 3679.0 Q 1628.0 3685.0 1622.0 3685.0 H 788.0" class="edgeVertical"/>
+  <path d="M 792.0 634.0 H 1626.0 Q 1632.0 634.0 1632.0 640.0 V 3679.0 Q 1632.0 3685.0 1626.0 3685.0 H 788.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg_folders.dart ▶ lib/src/models/rect.dart</title>
 </g>
 <g>
-  <path d="M 792.0 634.0 H 1626.0 Q 1632.0 634.0 1632.0 640.0 V 777.0 Q 1632.0 783.0 1626.0 783.0 H 788.0" class="edgeVertical"/>
+  <path d="M 792.0 634.0 H 1630.0 Q 1636.0 634.0 1636.0 640.0 V 777.0 Q 1636.0 783.0 1630.0 783.0 H 788.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg_folders.dart ▶ lib/src/graphs/svg_common.dart</title>
 </g>
 <g>
-  <path d="M 792.0 634.0 H 1630.0 Q 1636.0 634.0 1636.0 640.0 V 809.0 Q 1636.0 815.0 1630.0 815.0 H 788.0" class="edgeVertical"/>
+  <path d="M 792.0 634.0 H 1634.0 Q 1640.0 634.0 1640.0 640.0 V 809.0 Q 1640.0 815.0 1634.0 815.0 H 788.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg_folders.dart ▶ lib/src/graphs/svg_styles.dart</title>
 </g>
 <g>
-  <path d="M 792.0 634.0 H 1634.0 Q 1640.0 634.0 1640.0 640.0 V 841.0 Q 1640.0 847.0 1634.0 847.0 H 788.0" class="edgeVertical"/>
+  <path d="M 792.0 634.0 H 1638.0 Q 1644.0 634.0 1644.0 640.0 V 841.0 Q 1644.0 847.0 1638.0 847.0 H 788.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg_folders.dart ▶ lib/src/graphs/badge_model.dart</title>
 </g>
 <g>
-  <path d="M 792.0 666.0 H 1638.0 Q 1644.0 666.0 1644.0 672.0 V 1515.0 Q 1644.0 1521.0 1638.0 1521.0 H 764.0" class="edgeVertical"/>
+  <path d="M 792.0 666.0 H 1642.0 Q 1648.0 666.0 1648.0 672.0 V 1515.0 Q 1648.0 1521.0 1642.0 1521.0 H 764.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg.dart ▶ lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 792.0 666.0 H 1642.0 Q 1648.0 666.0 1648.0 672.0 V 777.0 Q 1648.0 783.0 1642.0 783.0 H 788.0" class="edgeVertical"/>
+  <path d="M 792.0 666.0 H 1646.0 Q 1652.0 666.0 1652.0 672.0 V 777.0 Q 1652.0 783.0 1646.0 783.0 H 788.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg.dart ▶ lib/src/graphs/svg_common.dart</title>
 </g>
 <g>
-  <path d="M 792.0 666.0 H 1646.0 Q 1652.0 666.0 1652.0 672.0 V 809.0 Q 1652.0 815.0 1646.0 815.0 H 788.0" class="edgeVertical"/>
+  <path d="M 792.0 666.0 H 1650.0 Q 1656.0 666.0 1656.0 672.0 V 809.0 Q 1656.0 815.0 1650.0 815.0 H 788.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg.dart ▶ lib/src/graphs/svg_styles.dart</title>
 </g>
 <g>
-  <path d="M 792.0 666.0 H 1650.0 Q 1656.0 666.0 1656.0 672.0 V 841.0 Q 1656.0 847.0 1650.0 847.0 H 788.0" class="edgeVertical"/>
+  <path d="M 792.0 666.0 H 1654.0 Q 1660.0 666.0 1660.0 672.0 V 841.0 Q 1660.0 847.0 1654.0 847.0 H 788.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_svg.dart ▶ lib/src/graphs/badge_model.dart</title>
 </g>
 <g>
-  <path d="M 792.0 698.0 H 1654.0 Q 1660.0 698.0 1660.0 704.0 V 745.0 Q 1660.0 751.0 1654.0 751.0 H 788.0" class="edgeVertical"/>
+  <path d="M 792.0 698.0 H 1658.0 Q 1664.0 698.0 1664.0 704.0 V 745.0 Q 1664.0 751.0 1658.0 751.0 H 788.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_mermaid.dart ▶ lib/src/graphs/graph_format_utils.dart</title>
 </g>
 <g>
-  <path d="M 792.0 698.0 H 1658.0 Q 1664.0 698.0 1664.0 704.0 V 1515.0 Q 1664.0 1521.0 1658.0 1521.0 H 764.0" class="edgeVertical"/>
+  <path d="M 792.0 698.0 H 1662.0 Q 1668.0 698.0 1668.0 704.0 V 1515.0 Q 1668.0 1521.0 1662.0 1521.0 H 764.0" class="edgeVertical"/>
   <title>lib/src/graphs/export_mermaid.dart ▶ lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g class="outgoingBadge">
@@ -1564,10 +1568,11 @@
   <text x="763.0" y="1535.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. lib/src/analyzers/layers/layers_issue.dart</title></g><text x="642.0" y="1526.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">layers_results.dart</text>
 <g class="incomingBadge">
   <path d="M 758.0,1553.0 L 770.0,1546.0 Q 773.0,1546.0 773.0,1549.0 L 773.0,1557.0 Q 773.0,1560.0 770.0,1560.0 Z" fill="#3b82f6"/>
-  <text x="769.0" y="1556.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. lib/src/analyzers/layers/layers_analyzer.dart
+  <text x="769.0" y="1556.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">5</text><title>1. lib/src/analyzers/layers/layers_analyzer.dart
 2. lib/src/analyzers/layers/layers_results.dart
 3. lib/src/analyzers/metrics/metrics_input.dart
-4. lib/src/analyzers/project_metrics.dart</title></g><text x="642.0" y="1558.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">layers_issue.dart</text>
+4. lib/src/analyzers/project_metrics.dart
+5. lib/src/graphs/export_svg_folders.dart</title></g><text x="642.0" y="1558.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">layers_issue.dart</text>
 <g class="incomingBadge">
   <path d="M 758.0,1675.0 L 770.0,1668.0 Q 773.0,1668.0 773.0,1671.0 L 773.0,1679.0 Q 773.0,1682.0 770.0,1682.0 Z" fill="#3b82f6"/>
   <text x="769.0" y="1678.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. lib/fcheck.dart</title></g><g class="outgoingBadge">
@@ -1842,11 +1847,12 @@
   <path d="M 782.0,623.0 L 794.0,616.0 Q 797.0,616.0 797.0,619.0 L 797.0,627.0 Q 797.0,630.0 794.0,630.0 Z" fill="#3b82f6"/>
   <text x="793.0" y="626.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. bin/fcheck.dart</title></g><g class="outgoingBadge">
   <path d="M 798.0,634.0 L 786.0,627.0 Q 783.0,627.0 783.0,630.0 L 783.0,638.0 Q 783.0,641.0 786.0,641.0 Z" fill="#10b981"/>
-  <text x="787.0" y="637.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">5</text><title>1. lib/src/analyzers/layers/layers_results.dart
-2. lib/src/graphs/badge_model.dart
-3. lib/src/graphs/svg_common.dart
-4. lib/src/graphs/svg_styles.dart
-5. lib/src/models/rect.dart</title></g><text x="622.0" y="628.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">export_svg_folders.dart</text>
+  <text x="787.0" y="637.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">6</text><title>1. lib/src/analyzers/layers/layers_issue.dart
+2. lib/src/analyzers/layers/layers_results.dart
+3. lib/src/graphs/badge_model.dart
+4. lib/src/graphs/svg_common.dart
+5. lib/src/graphs/svg_styles.dart
+6. lib/src/models/rect.dart</title></g><text x="622.0" y="628.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">export_svg_folders.dart</text>
 <g class="incomingBadge">
   <path d="M 782.0,655.0 L 794.0,648.0 Q 797.0,648.0 797.0,651.0 L 797.0,659.0 Q 797.0,662.0 794.0,662.0 Z" fill="#3b82f6"/>
   <text x="793.0" y="658.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. bin/fcheck.dart</title></g><g class="outgoingBadge">

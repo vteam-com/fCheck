@@ -48,4 +48,10 @@ enum LayersIssueType {
 
   /// A component is in the wrong layer based on its dependencies.
   wrongLayer,
+
+  /// A cyclic dependency was detected at the folder level.
+  folderCycle,
+
+  /// A folder is in the wrong layer based on its dependencies.
+  wrongFolderLayer,
 }

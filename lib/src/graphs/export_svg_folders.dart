@@ -3,6 +3,7 @@
 library;
 
 import 'dart:math';
+import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/models/rect.dart';
 import 'package:fcheck/src/graphs/svg_common.dart';
@@ -364,15 +365,23 @@ String exportGraphSvgFolders(
   final leftLaneGutterX = margin + folderEdgeExtraWidth;
   final rightLaneGutterX = margin + folderEdgeExtraWidth + rootSize.width;
 
+  // Extract folder cycles and layer violations from issues (with dependencyGraph for path normalization)
+  final folderIssues =
+      _extractFolderIssuesFromIssues(layersResult.issues, dependencyGraph);
+  final folderCycles = folderIssues['cycles'] as Set<String>;
+  final layerViolationEdges =
+      folderIssues['layerViolationEdges'] as Map<String, Set<String>>? ?? {};
+
   // Draw inter-folder dependency edges between backgrounds and badges
   _drawEdgeVerticalFolders(
     buffer,
     folderDependencies,
     folderPositions,
     folderDimensions,
-    folderDepGraph,
     globalGutterX: leftLaneGutterX,
     rootPath: rootNode.fullPath,
+    folderCycles: folderCycles,
+    layerViolationEdges: layerViolationEdges,
   );
 
   // Draw folder badges above dependency edges
@@ -1049,6 +1058,59 @@ Set<String> _detectCyclesInGraph(Map<String, List<String>> graph) {
   return cycleEdges;
 }
 
+/// Extract folder paths involved in folder cycles or layer violations from layers issues.
+/// This normalizes paths to match the SVG's folder hierarchy.
+Map<String, Object> _extractFolderIssuesFromIssues(
+  List<LayersIssue> issues,
+  Map<String, List<String>> dependencyGraph,
+) {
+  // For folder cycles: set of folder paths that are in a cycle
+  final Set<String> folderCycles = <String>{};
+  // For layer violations: map of sourceFolder -> Set<targetFolder> that are violating
+  final Map<String, Set<String>> layerViolationEdges = <String, Set<String>>{};
+
+  // Find common root to normalize paths
+  final allPaths = <String>{};
+  for (final entry in dependencyGraph.entries) {
+    allPaths.add(entry.key);
+    allPaths.addAll(entry.value);
+  }
+  final commonRoot = _findCommonRoot(allPaths);
+
+  for (final issue in issues) {
+    if (issue.type == LayersIssueType.folderCycle) {
+      // Normalize the path the same way the SVG does
+      final normalizedPath = p.relative(issue.filePath, from: commonRoot);
+      folderCycles.add(normalizedPath);
+    } else if (issue.type == LayersIssueType.wrongFolderLayer) {
+      // Extract target folder from message: 'Folder at layer X depends on folder "Y" at higher layer Z'
+      final message = issue.message;
+      final targetMatch = RegExp(r'folder "([^"]+)"').firstMatch(message);
+      if (targetMatch != null) {
+        final targetPath = targetMatch.group(1)!;
+        // Normalize the target path
+        final normalizedTarget = p.relative(targetPath, from: commonRoot);
+
+        // Also normalize source path
+        final normalizedSource = p.relative(issue.filePath, from: commonRoot);
+
+        // Add this specific violating edge
+        layerViolationEdges.putIfAbsent(normalizedSource, () => <String>{});
+        layerViolationEdges[normalizedSource]!.add(normalizedTarget);
+      }
+    }
+  }
+
+  // Also extract just the source folders for backward compatibility if needed
+  final folderLayerViolations = layerViolationEdges.keys.toSet();
+
+  return {
+    'cycles': folderCycles,
+    'layerViolations': folderLayerViolations,
+    'layerViolationEdges': layerViolationEdges,
+  };
+}
+
 /// Find Strongly Connected Components using Tarjan's algorithm.
 List<List<String>> _findSCCs(Map<String, List<String>> graph) {
   final List<List<String>> sccs = [];
@@ -1191,15 +1253,32 @@ void _drawEdgeVerticalFolders(
   StringBuffer buffer,
   List<_FolderEdge> edges,
   Map<String, Point<double>> positions,
-  Map<String, Rect> dimensions,
-  Map<String, List<String>> dependencyGraph, {
+  Map<String, Rect> dimensions, {
   required double globalGutterX,
   required String rootPath,
+  Set<String> folderCycles = const {},
+  Map<String, Set<String>> layerViolationEdges = const {},
 }) {
   if (edges.isEmpty) return;
 
-  // Detect cycles in the folder dependency graph
-  final cycleEdges = _detectCyclesInGraph(dependencyGraph);
+  // Only use analyzer-reported issues to determine cycles and violations
+  // Don't do our own cycle detection which may differ from analyzer logic
+  final Set<String> cycleEdges = <String>{};
+  final Set<String> violationEdges = <String>{};
+  for (final edge in edges) {
+    final edgeKey = '${edge.sourceFolder}->${edge.targetFolder}';
+    // Mark as cycle edge only if analyzer reported a folderCycle for this folder
+    if (folderCycles.contains(edge.sourceFolder) ||
+        folderCycles.contains(edge.targetFolder)) {
+      cycleEdges.add(edgeKey);
+    }
+    // Mark as violation edge ONLY if this specific edge is in the layerViolationEdges map
+    final violatingTargets = layerViolationEdges[edge.sourceFolder];
+    if (violatingTargets != null &&
+        violatingTargets.contains(edge.targetFolder)) {
+      violationEdges.add(edgeKey);
+    }
+  }
 
   // Group edges by their common parent path to create local gutters
   final edgesByParent = <String, List<_FolderEdge>>{};
@@ -1280,13 +1359,19 @@ void _drawEdgeVerticalFolders(
       final pathData = _buildStackedEdgePath(startX, startY, endX, endY, i,
           isLeft: true, fixedColumnX: fixedColumnX);
 
-      final cssClass = _getEdgeCssClass(
-        edge.sourceFolder,
-        edge.targetFolder,
-        sourcePos.y,
-        targetPos.y,
-        cycleEdges,
-      );
+      // Determine CSS class: cycle (red) > violation (orange) > default (gradient)
+      String cssClass;
+      final edgeKey = '${edge.sourceFolder}->${edge.targetFolder}';
+      if (cycleEdges.contains(edgeKey)) {
+        cssClass = 'cycleEdge';
+      } else if (violationEdges.contains(edgeKey)) {
+        cssClass = 'warningEdge';
+      } else if (sourcePos.y > targetPos.y) {
+        // Upward edge (going up in the hierarchy)
+        cssClass = 'warningEdge';
+      } else {
+        cssClass = 'edgeVertical';
+      }
 
       renderEdgeWithTooltip(
         buffer,
