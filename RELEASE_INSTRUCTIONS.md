@@ -81,6 +81,8 @@ Update the date to today's date in YYYY-MM-DD format.
 
 ## 5. Validate README Output Sample
 
+Always update the version displayed in the README.md bash sample output
+
 If recent changes affect CLI output, update the sample output in `README.md`.
 At minimum, make sure the version shown in the README `fcheck` output matches
 the version being released.

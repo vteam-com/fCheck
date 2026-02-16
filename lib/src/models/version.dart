@@ -2,4 +2,4 @@
 // ignore_for_file: type=lint
 
 /// Package version, generated from pubspec.yaml.
-const String packageVersion = '0.9.11';
+const String packageVersion = '0.9.12';
