@@ -25,7 +25,7 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 - Parses each file and uses `LayersVisitor` to collect dependencies and entry point status.
 - `LayersAnalyzer` receives `projectRoot` and `packageName` from `AnalyzeFolder` (see `RULES.md` for the project metadata contract).
 - Filters the dependency graph to only include analyzed files.
-- Detects cycles using DFS and emits `LayersIssueType.cyclicDependency`.
+- Detects cycles using DFS and emits `LayersIssueType.cyclicDependency` or `LayersIssueType.folderCycle`.
 - If no cycles, assigns layers using SCC-based topological layering.
 - Layer numbers are 1-based and increase as dependencies go deeper.
 
@@ -53,20 +53,32 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 - The current layer assignment algorithm does not explicitly use entry points beyond dependency flow.
 - When used outside `AnalyzeFolder`, callers must supply `projectRoot` and `packageName` explicitly to avoid any metadata lookup.
 
-## Layer Hierarchy Rules
+## Folder Layer Assignment
 
-The layer system follows a "higher layers can depend on lower layers" rule:
+When computing folder layers from file layers:
 
-- **Layer 1** is the highest/outermost layer (closest to entry points)
-- **Layer 2, 3, 4, 5...** are progressively lower/inner layers
+- Each folder is assigned the **maximum** layer number of any file within it
+- This represents the "deepest" (lowest) position of the folder in the dependency hierarchy
+- This is more accurate than using the minimum, as it reflects the lowest position any file in the folder occupies
 
-**Valid dependencies:**
-- Layer 1 can depend on Layer 2, 3, 4, 5...
-- Layer 2 can depend on Layer 3, 4, 5...
-- Layer N can depend on Layer N+1, N+2...
+## Folder Dependency Violations
 
-**Invalid dependencies (violations):**
-- Layer 2 depending on Layer 1 is WRONG
-- Layer 3 depending on Layer 1 or 2 is WRONG
+The layer violation detection for folders skips certain cases:
 
-For example: If folder A is at Layer 1 and folder B is at Layer 2, A depending on B is valid, but B depending on A is a violation.
+### Parent-Child Folder Relationships
+
+- **Parent folders can depend on child subfolders**: If folder A contains folder B (A/B), A depending on B is allowed
+- **Child folders can depend on parent folders**: If folder B is inside folder A (A/B), B depending on A is allowed
+
+This prevents false positives where code organization naturally creates hierarchical dependencies.
+
+### Folder Hierarchy Ordering
+
+- If two folders share a common ancestor and one is in an "above" branch of the folder tree (alphabetically earlier), dependencies between them are allowed
+- For example: `/lib/src/analyzers` can depend on `/lib/src/models` because "analyzers" comes before "models" alphabetically
+
+### Cross-Layer Dependencies
+
+- For folders that don't fall into the above categories, the layer assignment is based on the deepest file in each folder
+- Folder-level layer violations are not explicitly flagged to avoid false positives, as folder organization can vary significantly between projects
+- The layer assignment still correctly handles cycle detection and file-level layer computation

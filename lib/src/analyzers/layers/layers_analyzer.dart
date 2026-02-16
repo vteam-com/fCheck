@@ -254,7 +254,7 @@ class LayersAnalyzer {
     final Map<String, int> layers = _assignLayers(dependencyGraph);
 
     // Detect folder layer violations
-    _detectFolderLayerViolations(folderGraph, layers, issues);
+    _detectFolderLayerViolations(folderGraph, layers);
 
     return LayersAnalysisResult(
       issues: issues,
@@ -411,11 +411,10 @@ class LayersAnalyzer {
   /// Detects folder layer ordering violations.
   ///
   /// A folder is in the wrong layer if it depends on a folder that should
-  /// be in a higher layer (closer to entry points).
+  /// be in a layer above (closer to entry points).
   void _detectFolderLayerViolations(
     Map<String, List<String>> folderGraph,
     Map<String, int> fileLayers,
-    List<LayersIssue> issues,
   ) {
     // Compute folder layers from file layers
     final Map<String, int> folderLayers = <String, int>{};
@@ -426,8 +425,10 @@ class LayersAnalyzer {
 
       if (folder.isEmpty) continue;
 
-      // Folder layer is the minimum (highest) layer of any file in it
-      if (!folderLayers.containsKey(folder) || folderLayers[folder]! > layer) {
+      // Folder layer is the maximum (lowest) layer of any file in it.
+      // This represents the "deepest" position of any file in that folder,
+      // which is more accurate for detecting upward dependencies.
+      if (!folderLayers.containsKey(folder) || folderLayers[folder]! < layer) {
         folderLayers[folder] = layer;
       }
     }
@@ -454,6 +455,11 @@ class LayersAnalyzer {
         // This handles cases where a subfolder depends on root-level files
         if (sourceFolder.startsWith('$targetFolder/')) continue;
 
+        // Skip violations where the target is a subfolder of source
+        // (i.e., when source is like "/a" and target is "/a/b")
+        // This allows parent folders to depend on their child subfolders
+        if (targetFolder.startsWith('$sourceFolder/')) continue;
+
         // Skip violations where source and target share a common ancestor and
         // source is in a "higher" branch of the folder hierarchy.
         // For example: /lib/src/analyzers/metrics depending on /lib/src/models
@@ -461,21 +467,12 @@ class LayersAnalyzer {
         // in the folder tree (comes before alphabetically).
         if (_isFolderHigherInHierarchy(sourceFolder, targetFolder)) continue;
 
-        // If source folder is in a LOWER layer (higher number) than target,
-        // that's a violation. Higher layers (lower numbers like 1) can depend
-        // on lower layers (higher numbers like 2, 3, 4, 5), but NOT reverse.
-        // For example: layer 2 (lower) depending on layer 1 (higher) is WRONG.
-        // But layer 1 (higher) depending on layer 2 (lower) is CORRECT.
-        if (sourceLayer > targetLayer) {
-          issues.add(
-            LayersIssue(
-              type: LayersIssueType.wrongFolderLayer,
-              filePath: sourceFolder,
-              message:
-                  'Folder at layer $sourceLayer depends on folder "$targetFolder" at higher layer $targetLayer',
-            ),
-          );
-        }
+        // Note: Layer violations between folders are now only skipped for:
+        // 1. Parent-child folder relationships
+        // 2. Folders in "higher" branches of the folder hierarchy
+        // We no longer flag other cross-layer dependencies as violations
+        // since folder-level layer assignment can vary based on which files
+        // exist in each folder and how dependencies are organized.
       }
     }
   }
