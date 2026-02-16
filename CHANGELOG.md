@@ -7,6 +7,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.11] - 2026-02-16
+
+### Added
+
+- 📊 **Enhanced Metrics Analyzer**: New `MetricsAnalyzer` class with scoring logic, focus area detection, and compliance score calculation.
+- 📝 **App Strings Analysis**: New `AppStrings` class to extract and analyze application string constants for better code understanding.
+- 🧪 **Improved Test Performance**: Optimized test execution with faster test setup and teardown.
+
+### Changed
+
+- 🖥️ **Console Layer Violations**: Improved console reporting for layer folder violations with detailed violation information.
+- 🔧 **Hardcoded Strings Logic**: Improved hardcoded string detection to also work for Dart CLI applications (not just Flutter).
+- 🛠️ **Publish Script**: Updated `tool/publish.sh` to use Flutter test instead of Dart test for better compatibility.
+- ✅ **Code Coverage**: Increased test coverage to 87%.
+
 ## [0.9.10] - 2026-02-12
 
 ### Added
