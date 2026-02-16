@@ -330,116 +330,116 @@
 <rect x="456.0" y="3388.0" width="348.0" height="194.0" rx="12.0" ry="12.0" class="layerBackground"/>
 </g>
 <g>
-  <path d="M 334.0 156.0 H 314.0 Q 308.0 156.0 308.0 162.0 V 357.0 Q 308.0 363.0 314.0 363.0 H 338.0" class="edgeVertical"/>
-  <title>bin ▶ lib</title>
-</g>
-<g>
-  <path d="M 398.0 426.0 H 378.0 Q 372.0 426.0 372.0 432.0 V 531.0 Q 372.0 537.0 378.0 537.0 H 402.0" class="edgeVertical"/>
-  <title>lib/... ▶ lib/src</title>
-</g>
-<g>
-  <path d="M 462.0 946.0 H 430.0 Q 424.0 946.0 424.0 952.0 V 3613.0 Q 424.0 3619.0 430.0 3619.0 H 466.0" class="edgeVertical"/>
-  <title>lib/src/analyzers ▶ lib/src/models</title>
-</g>
-<g>
-  <path d="M 462.0 946.0 H 434.0 Q 428.0 946.0 428.0 952.0 V 3395.0 Q 428.0 3401.0 434.0 3401.0 H 466.0" class="edgeVertical"/>
-  <title>lib/src/analyzers ▶ lib/src/analyzer_runner</title>
-</g>
-<g>
-  <path d="M 462.0 946.0 H 438.0 Q 432.0 946.0 432.0 952.0 V 3991.0 Q 432.0 3997.0 438.0 3997.0 H 466.0" class="edgeVertical"/>
-  <title>lib/src/analyzers ▶ lib/src/input_output</title>
-</g>
-<g>
-  <path d="M 462.0 3412.0 H 442.0 Q 436.0 3412.0 436.0 3418.0 V 3613.0 Q 436.0 3619.0 442.0 3619.0 H 466.0" class="edgeVertical"/>
-  <title>lib/src/analyzer_runner ▶ lib/src/models</title>
-</g>
-<g>
-  <path d="M 462.0 3412.0 H 446.0 Q 440.0 3412.0 440.0 3418.0 V 3991.0 Q 440.0 3997.0 446.0 3997.0 H 466.0" class="edgeVertical"/>
-  <title>lib/src/analyzer_runner ▶ lib/src/input_output</title>
-</g>
-<g>
-  <path d="M 462.0 600.0 H 450.0 Q 444.0 600.0 444.0 606.0 V 929.0 Q 444.0 935.0 450.0 935.0 H 466.0" class="edgeVertical"/>
-  <title>lib/src/graphs ▶ lib/src/analyzers</title>
-</g>
-<g>
-  <path d="M 462.0 600.0 H 454.0 Q 448.0 600.0 448.0 606.0 V 3613.0 Q 448.0 3619.0 454.0 3619.0 H 466.0" class="edgeVertical"/>
-  <title>lib/src/graphs ▶ lib/src/models</title>
-</g>
-<g>
-  <path d="M 526.0 1120.0 H 470.0 Q 464.0 1120.0 464.0 1126.0 V 1635.0 Q 464.0 1641.0 470.0 1641.0 H 530.0" class="edgeVertical"/>
-  <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/dead_code</title>
-</g>
-<g>
-  <path d="M 526.0 1120.0 H 474.0 Q 468.0 1120.0 468.0 1126.0 V 1917.0 Q 468.0 1923.0 474.0 1923.0 H 530.0" class="edgeVertical"/>
-  <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/documentation</title>
-</g>
-<g>
-  <path d="M 526.0 1120.0 H 478.0 Q 472.0 1120.0 472.0 1126.0 V 2135.0 Q 472.0 2141.0 478.0 2141.0 H 530.0" class="edgeVertical"/>
-  <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/duplicate_code</title>
-</g>
-<g>
-  <path d="M 526.0 1120.0 H 482.0 Q 476.0 1120.0 476.0 1126.0 V 2417.0 Q 476.0 2423.0 482.0 2423.0 H 530.0" class="edgeVertical"/>
-  <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/hardcoded_strings</title>
-</g>
-<g>
-  <path d="M 526.0 1120.0 H 486.0 Q 480.0 1120.0 480.0 1126.0 V 1385.0 Q 480.0 1391.0 486.0 1391.0 H 530.0" class="edgeVertical"/>
+  <path d="M 526.0 1120.0 H 504.0 Q 498.0 1120.0 498.0 1126.0 V 1385.0 Q 498.0 1391.0 504.0 1391.0 H 530.0" class="edgeVertical"/>
   <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/layers</title>
 </g>
 <g>
-  <path d="M 526.0 1120.0 H 490.0 Q 484.0 1120.0 484.0 1126.0 V 2635.0 Q 484.0 2641.0 490.0 2641.0 H 530.0" class="edgeVertical"/>
+  <path d="M 526.0 1120.0 H 496.0 Q 490.0 1120.0 490.0 1126.0 V 1635.0 Q 490.0 1641.0 496.0 1641.0 H 530.0" class="edgeVertical"/>
+  <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/dead_code</title>
+</g>
+<g>
+  <path d="M 526.0 1120.0 H 488.0 Q 482.0 1120.0 482.0 1126.0 V 1917.0 Q 482.0 1923.0 488.0 1923.0 H 530.0" class="edgeVertical"/>
+  <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/documentation</title>
+</g>
+<g>
+  <path d="M 526.0 1120.0 H 480.0 Q 474.0 1120.0 474.0 1126.0 V 2135.0 Q 474.0 2141.0 480.0 2141.0 H 530.0" class="edgeVertical"/>
+  <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/duplicate_code</title>
+</g>
+<g>
+  <path d="M 526.0 1120.0 H 472.0 Q 466.0 1120.0 466.0 1126.0 V 2417.0 Q 466.0 2423.0 472.0 2423.0 H 530.0" class="edgeVertical"/>
+  <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/hardcoded_strings</title>
+</g>
+<g>
+  <path d="M 526.0 1120.0 H 464.0 Q 458.0 1120.0 458.0 1126.0 V 2635.0 Q 458.0 2641.0 464.0 2641.0 H 530.0" class="edgeVertical"/>
   <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/magic_numbers</title>
 </g>
 <g>
-  <path d="M 526.0 1120.0 H 494.0 Q 488.0 1120.0 488.0 1126.0 V 2821.0 Q 488.0 2827.0 494.0 2827.0 H 530.0" class="edgeVertical"/>
-  <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/secrets</title>
-</g>
-<g>
-  <path d="M 526.0 1120.0 H 498.0 Q 492.0 1120.0 492.0 1126.0 V 3007.0 Q 492.0 3013.0 498.0 3013.0 H 530.0" class="edgeVertical"/>
-  <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/sorted</title>
-</g>
-<g>
-  <path d="M 526.0 1652.0 H 502.0 Q 496.0 1652.0 496.0 1658.0 V 3225.0 Q 496.0 3231.0 502.0 3231.0 H 530.0" class="edgeVertical"/>
+  <path d="M 526.0 1652.0 H 460.0 Q 454.0 1652.0 454.0 1658.0 V 3225.0 Q 454.0 3231.0 460.0 3231.0 H 530.0" class="edgeVertical"/>
   <title>lib/src/analyzers/dead_code ▶ lib/src/analyzers/shared</title>
 </g>
 <g>
-  <path d="M 526.0 1402.0 H 506.0 Q 500.0 1402.0 500.0 1408.0 V 3225.0 Q 500.0 3231.0 506.0 3231.0 H 530.0" class="edgeVertical"/>
+  <path d="M 526.0 1120.0 H 452.0 Q 446.0 1120.0 446.0 1126.0 V 2821.0 Q 446.0 2827.0 452.0 2827.0 H 530.0" class="edgeVertical"/>
+  <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/secrets</title>
+</g>
+<g>
+  <path d="M 526.0 1402.0 H 448.0 Q 442.0 1402.0 442.0 1408.0 V 3225.0 Q 442.0 3231.0 448.0 3231.0 H 530.0" class="edgeVertical"/>
   <title>lib/src/analyzers/layers ▶ lib/src/analyzers/shared</title>
 </g>
 <g>
-  <path d="M 526.0 998.0 H 510.0 Q 504.0 998.0 504.0 1004.0 V 1103.0 Q 504.0 1109.0 510.0 1109.0 H 530.0" class="edgeVertical"/>
+  <path d="M 526.0 1120.0 H 440.0 Q 434.0 1120.0 434.0 1126.0 V 3007.0 Q 434.0 3013.0 440.0 3013.0 H 530.0" class="edgeVertical"/>
+  <title>lib/src/analyzers/metrics ▶ lib/src/analyzers/sorted</title>
+</g>
+<g>
+  <path d="M 526.0 998.0 H 508.0 Q 502.0 998.0 502.0 1004.0 V 1103.0 Q 502.0 1109.0 508.0 1109.0 H 530.0" class="edgeVertical"/>
   <title>lib/src/analyzers/... ▶ lib/src/analyzers/metrics</title>
 </g>
 <g>
-  <path d="M 526.0 998.0 H 514.0 Q 508.0 998.0 508.0 1004.0 V 1635.0 Q 508.0 1641.0 514.0 1641.0 H 530.0" class="edgeVertical"/>
-  <title>lib/src/analyzers/... ▶ lib/src/analyzers/dead_code</title>
-</g>
-<g>
-  <path d="M 526.0 998.0 H 518.0 Q 512.0 998.0 512.0 1004.0 V 1917.0 Q 512.0 1923.0 518.0 1923.0 H 530.0" class="edgeVertical"/>
-  <title>lib/src/analyzers/... ▶ lib/src/analyzers/documentation</title>
-</g>
-<g>
-  <path d="M 526.0 998.0 H 522.0 Q 516.0 998.0 516.0 1004.0 V 2135.0 Q 516.0 2141.0 522.0 2141.0 H 530.0" class="edgeVertical"/>
-  <title>lib/src/analyzers/... ▶ lib/src/analyzers/duplicate_code</title>
-</g>
-<g>
-  <path d="M 526.0 998.0 H 526.0 Q 520.0 998.0 520.0 1004.0 V 2417.0 Q 520.0 2423.0 526.0 2423.0 H 530.0" class="edgeVertical"/>
-  <title>lib/src/analyzers/... ▶ lib/src/analyzers/hardcoded_strings</title>
-</g>
-<g>
-  <path d="M 526.0 998.0 H 530.0 Q 524.0 998.0 524.0 1004.0 V 1385.0 Q 524.0 1391.0 530.0 1391.0 H 530.0" class="edgeVertical"/>
+  <path d="M 526.0 998.0 H 500.0 Q 494.0 998.0 494.0 1004.0 V 1385.0 Q 494.0 1391.0 500.0 1391.0 H 530.0" class="edgeVertical"/>
   <title>lib/src/analyzers/... ▶ lib/src/analyzers/layers</title>
 </g>
 <g>
-  <path d="M 526.0 998.0 H 534.0 Q 528.0 998.0 528.0 1004.0 V 2635.0 Q 528.0 2641.0 534.0 2641.0 H 530.0" class="edgeVertical"/>
+  <path d="M 526.0 998.0 H 492.0 Q 486.0 998.0 486.0 1004.0 V 1635.0 Q 486.0 1641.0 492.0 1641.0 H 530.0" class="edgeVertical"/>
+  <title>lib/src/analyzers/... ▶ lib/src/analyzers/dead_code</title>
+</g>
+<g>
+  <path d="M 526.0 998.0 H 484.0 Q 478.0 998.0 478.0 1004.0 V 1917.0 Q 478.0 1923.0 484.0 1923.0 H 530.0" class="edgeVertical"/>
+  <title>lib/src/analyzers/... ▶ lib/src/analyzers/documentation</title>
+</g>
+<g>
+  <path d="M 526.0 998.0 H 476.0 Q 470.0 998.0 470.0 1004.0 V 2135.0 Q 470.0 2141.0 476.0 2141.0 H 530.0" class="edgeVertical"/>
+  <title>lib/src/analyzers/... ▶ lib/src/analyzers/duplicate_code</title>
+</g>
+<g>
+  <path d="M 526.0 998.0 H 468.0 Q 462.0 998.0 462.0 1004.0 V 2417.0 Q 462.0 2423.0 468.0 2423.0 H 530.0" class="edgeVertical"/>
+  <title>lib/src/analyzers/... ▶ lib/src/analyzers/hardcoded_strings</title>
+</g>
+<g>
+  <path d="M 526.0 998.0 H 456.0 Q 450.0 998.0 450.0 1004.0 V 2635.0 Q 450.0 2641.0 456.0 2641.0 H 530.0" class="edgeVertical"/>
   <title>lib/src/analyzers/... ▶ lib/src/analyzers/magic_numbers</title>
 </g>
 <g>
-  <path d="M 526.0 998.0 H 538.0 Q 532.0 998.0 532.0 1004.0 V 2821.0 Q 532.0 2827.0 538.0 2827.0 H 530.0" class="edgeVertical"/>
+  <path d="M 526.0 998.0 H 444.0 Q 438.0 998.0 438.0 1004.0 V 2821.0 Q 438.0 2827.0 444.0 2827.0 H 530.0" class="edgeVertical"/>
   <title>lib/src/analyzers/... ▶ lib/src/analyzers/secrets</title>
 </g>
 <g>
-  <path d="M 526.0 998.0 H 542.0 Q 536.0 998.0 536.0 1004.0 V 3007.0 Q 536.0 3013.0 542.0 3013.0 H 530.0" class="edgeVertical"/>
+  <path d="M 526.0 998.0 H 436.0 Q 430.0 998.0 430.0 1004.0 V 3007.0 Q 430.0 3013.0 436.0 3013.0 H 530.0" class="edgeVertical"/>
   <title>lib/src/analyzers/... ▶ lib/src/analyzers/sorted</title>
+</g>
+<g>
+  <path d="M 462.0 3412.0 H 444.0 Q 438.0 3412.0 438.0 3418.0 V 3613.0 Q 438.0 3619.0 444.0 3619.0 H 466.0" class="edgeVertical"/>
+  <title>lib/src/analyzer_runner ▶ lib/src/models</title>
+</g>
+<g>
+  <path d="M 462.0 600.0 H 440.0 Q 434.0 600.0 434.0 606.0 V 929.0 Q 434.0 935.0 440.0 935.0 H 466.0" class="edgeVertical"/>
+  <title>lib/src/graphs ▶ lib/src/analyzers</title>
+</g>
+<g>
+  <path d="M 462.0 3412.0 H 436.0 Q 430.0 3412.0 430.0 3418.0 V 3991.0 Q 430.0 3997.0 436.0 3997.0 H 466.0" class="edgeVertical"/>
+  <title>lib/src/analyzer_runner ▶ lib/src/input_output</title>
+</g>
+<g>
+  <path d="M 462.0 946.0 H 432.0 Q 426.0 946.0 426.0 952.0 V 3395.0 Q 426.0 3401.0 432.0 3401.0 H 466.0" class="edgeVertical"/>
+  <title>lib/src/analyzers ▶ lib/src/analyzer_runner</title>
+</g>
+<g>
+  <path d="M 462.0 946.0 H 428.0 Q 422.0 946.0 422.0 952.0 V 3613.0 Q 422.0 3619.0 428.0 3619.0 H 466.0" class="edgeVertical"/>
+  <title>lib/src/analyzers ▶ lib/src/models</title>
+</g>
+<g>
+  <path d="M 462.0 600.0 H 424.0 Q 418.0 600.0 418.0 606.0 V 3613.0 Q 418.0 3619.0 424.0 3619.0 H 466.0" class="edgeVertical"/>
+  <title>lib/src/graphs ▶ lib/src/models</title>
+</g>
+<g>
+  <path d="M 462.0 946.0 H 420.0 Q 414.0 946.0 414.0 952.0 V 3991.0 Q 414.0 3997.0 420.0 3997.0 H 466.0" class="edgeVertical"/>
+  <title>lib/src/analyzers ▶ lib/src/input_output</title>
+</g>
+<g>
+  <path d="M 398.0 426.0 H 380.0 Q 374.0 426.0 374.0 432.0 V 531.0 Q 374.0 537.0 380.0 537.0 H 402.0" class="edgeVertical"/>
+  <title>lib/... ▶ lib/src</title>
+</g>
+<g>
+  <path d="M 334.0 156.0 H 316.0 Q 310.0 156.0 310.0 162.0 V 357.0 Q 310.0 363.0 316.0 363.0 H 338.0" class="edgeVertical"/>
+  <title>bin ▶ lib</title>
 </g>
 <g class="outgoingBadge">
   <path d="M 328.0,156.0 L 340.0,149.0 Q 343.0,149.0 343.0,152.0 L 343.0,160.0 Q 343.0,163.0 340.0,163.0 Z" fill="#10b981"/>

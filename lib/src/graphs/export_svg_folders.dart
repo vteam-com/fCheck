@@ -1288,13 +1288,47 @@ void _drawEdgeVerticalFolders(
     edgesByParent.putIfAbsent(parentPath, () => []).add(edge);
   }
 
-  for (final entry in edgesByParent.entries) {
-    final parentPath = entry.key;
-    final parentEdges = entry.value;
-    final parentPos = positions[parentPath];
+  final sortedParentPaths = edgesByParent.keys.toList()
+    ..sort((a, b) {
+      final depthCompare = _folderDepthFromRoot(b, rootPath)
+          .compareTo(_folderDepthFromRoot(a, rootPath));
+      if (depthCompare != 0) return depthCompare;
+      return a.compareTo(b);
+    });
 
-    for (var i = 0; i < parentEdges.length; i++) {
-      final edge = parentEdges[i];
+  for (final parentPath in sortedParentPaths) {
+    final parentEdges = List<_FolderEdge>.from(edgesByParent[parentPath]!)
+      ..sort((a, b) {
+        final virtualCompare =
+            _folderEdgeVirtualRank(a).compareTo(_folderEdgeVirtualRank(b));
+        if (virtualCompare != 0) return virtualCompare;
+
+        final aDepth = max(
+          _folderDepthFromRoot(a.sourceFolder, rootPath),
+          _folderDepthFromRoot(a.targetFolder, rootPath),
+        );
+        final bDepth = max(
+          _folderDepthFromRoot(b.sourceFolder, rootPath),
+          _folderDepthFromRoot(b.targetFolder, rootPath),
+        );
+        final depthCompare = bDepth.compareTo(aDepth);
+        if (depthCompare != 0) return depthCompare;
+
+        final spanCompare = _folderEdgeVerticalSpan(a, positions)
+            .compareTo(_folderEdgeVerticalSpan(b, positions));
+        if (spanCompare != 0) return spanCompare;
+
+        final aKey = '${a.sourceFolder}->${a.targetFolder}';
+        final bKey = '${b.sourceFolder}->${b.targetFolder}';
+        return aKey.compareTo(bKey);
+      });
+
+    final parentPos = positions[parentPath];
+    final laneIndexByEdgeKey = _buildLaneIndexByEdgeKey(parentEdges, positions);
+
+    for (final edge in parentEdges) {
+      final edgeKey = '${edge.sourceFolder}->${edge.targetFolder}';
+      final laneIndex = laneIndexByEdgeKey[edgeKey] ?? 0;
       final sourcePos = positions[edge.sourceFolder];
       final targetPos = positions[edge.targetFolder];
       final sourceDim = dimensions[edge.sourceFolder];
@@ -1326,23 +1360,19 @@ void _drawEdgeVerticalFolders(
         /// Width of each edge lane in the stack.
         const double stackStepWidth = 4.0;
 
-        /// Horizontal offset for the lane within the parent folder.
-        const double laneInternalOffset = 24.0;
+        /// Offset where child content begins inside a parent folder.
+        const double childStartOffset = 64.0;
 
-        /// Width of the indentation area.
-        const double indentWidth = 40.0;
+        /// Keep the innermost lane away from file panels/badges.
+        const double laneInnerPaddingFromChildStart = 18.0;
 
-        /// Divisor for halving dimensions.
-        const double halfDivisor = 2.0;
-
-        // Center the stack of edges within the 40px childIndent area for balanced padding.
-        // Gap starts at parentPos.x + 24.0 (border+padding) and ends at parentPos.x + 64.0 (start of children).
-        final stackWidth = (parentEdges.length - 1) * stackStepWidth;
-        final stackStartX = parentPos.x +
-            laneInternalOffset +
-            (indentWidth / halfDivisor) -
-            (stackWidth / halfDivisor);
-        fixedColumnX = stackStartX + (i * stackStepWidth);
+        // Anchor the innermost lane to a fixed boundary near children.
+        // Additional lanes extend leftward only, avoiding drift into components.
+        final laneRightmostX =
+            parentPos.x + childStartOffset - laneInnerPaddingFromChildStart;
+        final maxLaneIndex = parentEdges.length - 1;
+        final outwardOffset = (maxLaneIndex - laneIndex) * stackStepWidth;
+        fixedColumnX = laneRightmostX - outwardOffset;
       } else {
         /// Base margin for the global gutter.
         const double globalGutterMargin = 40.0;
@@ -1351,17 +1381,20 @@ void _drawEdgeVerticalFolders(
         const double globalStackStepWidth = 4.0;
 
         // Step LEFT from the global gutter with a comfortable 40px base margin.
-        fixedColumnX =
-            globalGutterX - globalGutterMargin - (i * globalStackStepWidth);
+        final maxLaneIndex = parentEdges.length - 1;
+        final inwardFirstLaneIndex = maxLaneIndex - laneIndex;
+        fixedColumnX = globalGutterX -
+            globalGutterMargin -
+            (inwardFirstLaneIndex * globalStackStepWidth);
       }
 
       // Folder edges use the LEFT lane (relative to the badges)
-      final pathData = _buildStackedEdgePath(startX, startY, endX, endY, i,
+      final pathData = _buildStackedEdgePath(
+          startX, startY, endX, endY, laneIndex,
           isLeft: true, fixedColumnX: fixedColumnX);
 
       // Determine CSS class: cycle (red) > violation (orange) > default (gradient)
       String cssClass;
-      final edgeKey = '${edge.sourceFolder}->${edge.targetFolder}';
       if (cycleEdges.contains(edgeKey)) {
         cssClass = 'cycleEdge';
       } else if (violationEdges.contains(edgeKey)) {
@@ -1382,6 +1415,66 @@ void _drawEdgeVerticalFolders(
       );
     }
   }
+}
+
+/// Computes depth relative to [rootPath] so deeper groups can be prioritized.
+int _folderDepthFromRoot(String folderPath, String rootPath) {
+  if (folderPath == rootPath) return 0;
+  if (folderPath == '.') return 0;
+
+  if (rootPath != '.' && folderPath.startsWith('$rootPath/')) {
+    final relative = folderPath.substring(rootPath.length + 1);
+    if (relative.isEmpty) return 0;
+    return relative.split('/').length;
+  }
+
+  return folderPath.split('/').where((segment) => segment.isNotEmpty).length;
+}
+
+/// Returns vertical span between edge endpoints to stabilize tie-breaking.
+double _folderEdgeVerticalSpan(
+  _FolderEdge edge,
+  Map<String, Point<double>> positions,
+) {
+  final sourceY = positions[edge.sourceFolder]?.y;
+  final targetY = positions[edge.targetFolder]?.y;
+  if (sourceY == null || targetY == null) return double.infinity;
+  return (sourceY - targetY).abs();
+}
+
+/// Ranks edges by virtual-folder involvement (fewer virtual endpoints first).
+int _folderEdgeVirtualRank(_FolderEdge edge) {
+  var rank = 0;
+  if (_isVirtualFolderPath(edge.sourceFolder)) rank++;
+  if (_isVirtualFolderPath(edge.targetFolder)) rank++;
+  return rank;
+}
+
+bool _isVirtualFolderPath(String folderPath) {
+  return p.basename(folderPath) == '...';
+}
+
+/// Assigns lane indices so longer edges use outer lanes and short edges stay close.
+Map<String, int> _buildLaneIndexByEdgeKey(
+  List<_FolderEdge> edges,
+  Map<String, Point<double>> positions,
+) {
+  final lanes = <String, int>{};
+  final bySpanDesc = List<_FolderEdge>.from(edges)
+    ..sort((a, b) {
+      final spanCompare = _folderEdgeVerticalSpan(b, positions)
+          .compareTo(_folderEdgeVerticalSpan(a, positions));
+      if (spanCompare != 0) return spanCompare;
+      final aKey = '${a.sourceFolder}->${a.targetFolder}';
+      final bKey = '${b.sourceFolder}->${b.targetFolder}';
+      return aKey.compareTo(bKey);
+    });
+
+  for (var i = 0; i < bySpanDesc.length; i++) {
+    final edge = bySpanDesc[i];
+    lanes['${edge.sourceFolder}->${edge.targetFolder}'] = i;
+  }
+  return lanes;
 }
 
 /// Render folder badges after edges so they sit on top.

@@ -178,5 +178,121 @@ void main() {
       expect(folderSvg, contains('DeepProject'));
       expect(folderSvg, contains('<svg'));
     });
+
+    test('renders innermost folder dependency edges before outer ones', () {
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/a/a.dart': 0,
+          'lib/a/b/b.dart': 1,
+          'lib/a/c/c.dart': 1,
+          'lib/d/d.dart': 1,
+        },
+        dependencyGraph: const {
+          'lib/a/b/b.dart': ['lib/a/c/c.dart'],
+          'lib/a/a.dart': ['lib/d/d.dart'],
+          'lib/a/c/c.dart': [],
+          'lib/d/d.dart': [],
+        },
+      );
+
+      final folderSvg = exportGraphSvgFolders(result);
+
+      final nestedEdgeIndex = folderSvg.indexOf('<title>a/b ▶ a/c</title>');
+      final outerEdgeIndex = folderSvg.indexOf('<title>a ▶ d</title>');
+
+      expect(nestedEdgeIndex, greaterThanOrEqualTo(0));
+      expect(outerEdgeIndex, greaterThanOrEqualTo(0));
+      expect(nestedEdgeIndex, lessThan(outerEdgeIndex));
+    });
+
+    test('renders real subfolder edges before virtual-folder edges', () {
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/a/root.dart': 0,
+          'lib/a/b/b.dart': 1,
+          'lib/a/c/c.dart': 1,
+        },
+        dependencyGraph: const {
+          'lib/a/b/b.dart': ['lib/a/c/c.dart'],
+          'lib/a/root.dart': ['lib/a/c/c.dart'],
+          'lib/a/c/c.dart': [],
+        },
+      );
+
+      final folderSvg = exportGraphSvgFolders(result);
+      final realEdgeIndex = folderSvg.indexOf('<title>b ▶ c</title>');
+      final virtualEdgeIndex = folderSvg.indexOf('<title>... ▶ c</title>');
+
+      expect(realEdgeIndex, greaterThanOrEqualTo(0));
+      expect(virtualEdgeIndex, greaterThanOrEqualTo(0));
+      expect(realEdgeIndex, lessThan(virtualEdgeIndex));
+    });
+
+    test('places shorter sibling folder edge in a more inner lane', () {
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/root.dart': 0,
+          'lib/a/a.dart': 1,
+          'lib/very/deep/down/down.dart': 1,
+        },
+        dependencyGraph: const {
+          'lib/root.dart': ['lib/a/a.dart', 'lib/very/deep/down/down.dart'],
+          'lib/a/a.dart': [],
+          'lib/very/deep/down/down.dart': [],
+        },
+      );
+
+      final folderSvg = exportGraphSvgFolders(result);
+      final shortLaneX = _extractFolderEdgeColumnX(folderSvg, '... ▶ a');
+      final longLaneX = _extractFolderEdgeColumnX(folderSvg, '... ▶ very');
+
+      expect(shortLaneX, isNotNull);
+      expect(longLaneX, isNotNull);
+      expect(shortLaneX!, greaterThan(longLaneX!));
+    });
+
+    test('places short graphs edge inside long graphs edge', () {
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/src/graphs/g.dart': 0,
+          'lib/src/analyzers/a.dart': 1,
+          'lib/src/models/m.dart': 1,
+        },
+        dependencyGraph: const {
+          'lib/src/graphs/g.dart': [
+            'lib/src/analyzers/a.dart',
+            'lib/src/models/m.dart',
+          ],
+          'lib/src/analyzers/a.dart': [],
+          'lib/src/models/m.dart': [],
+        },
+      );
+
+      final folderSvg = exportGraphSvgFolders(result);
+      final graphsToAnalyzersX = _extractFolderEdgeColumnX(
+        folderSvg,
+        'graphs ▶ analyzers',
+      );
+      final graphsToModelsX = _extractFolderEdgeColumnX(
+        folderSvg,
+        'graphs ▶ models',
+      );
+
+      expect(graphsToAnalyzersX, isNotNull);
+      expect(graphsToModelsX, isNotNull);
+      expect(graphsToAnalyzersX!, greaterThan(graphsToModelsX!));
+    });
   });
+}
+
+double? _extractFolderEdgeColumnX(String svg, String titlePayload) {
+  final pattern = RegExp(
+      '<path d=\"[^\"]*Q ([0-9]+(?:\\.[0-9]+)?) [^\"]*\" class=\"[^\"]*\"/>\\s*<title>${RegExp.escape(titlePayload)}</title>');
+  final match = pattern.firstMatch(svg);
+  if (match == null) return null;
+  return double.tryParse(match.group(1)!);
 }
