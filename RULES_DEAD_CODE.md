@@ -12,6 +12,7 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 - **Dead files**: files not reachable from any entry point.
 - **Dead classes**: top-level classes never referenced.
 - **Dead functions**: top-level functions never referenced.
+- **Dead methods**: class/mixin/enum/extension methods never referenced.
 - **Unused variables**: local variables or parameters never referenced.
 
 ## Skips
@@ -27,10 +28,17 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 - `DeadCodeDelegate` runs `DeadCodeVisitor` per file to collect:
   - dependencies (imports/exports/parts resolved to paths)
   - top-level classes and functions
+  - methods in classes/mixins/enums/extensions (except `@override` and abstract signatures)
   - identifiers used in the file (including type identifiers)
   - unused local variables/parameters (per-scope)
 - `DeadCodeAnalyzer` builds a dependency graph, resolves entry points, and
   determines reachability and unused symbols.
+
+## Reporting Contract
+
+- Dead code must be reported unless an explicit dead-code ignore directive applies:
+  - file-level: top-of-file `// ignore: fcheck_dead_code`
+  - node-level: `// ignore: fcheck_dead_code` on the declaration line (or ignored ancestor declaration line)
 
 ## Entry Points
 

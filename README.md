@@ -246,7 +246,7 @@ Detailed rule behavior and edge cases are documented in the `RULES*.md` files.
 
 ### Dead Code
 
-- 🧹 **Detects**: Unused files, classes, functions, and variables.
+- 🧹 **Detects**: Unused files, classes, functions/methods, and variables.
 - 📚 **Details**: `RULES_DEAD_CODE.md`
 
 ### Duplicate Code

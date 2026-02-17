@@ -6,7 +6,6 @@ import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_delegate
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_delegate.dart';
 
 import 'package:test/test.dart';
-import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
 import 'package:path/path.dart' as p;
 
 AnalysisFileContext _contextForFile(File file) {
@@ -166,101 +165,6 @@ void main() {
 ''');
 
       final issues = delegate.analyzeFileWithContext(_contextForFile(file));
-      expect(issues, isNotEmpty);
-    });
-  });
-
-  group('LayersAnalyzer Ignore Directive', () {
-    late Directory tempDir;
-    late LayersAnalyzer analyzer;
-
-    setUp(() {
-      tempDir = Directory.systemTemp.createTempSync('fcheck_ignore_test');
-      analyzer = LayersAnalyzer(
-        tempDir,
-        projectRoot: tempDir,
-        packageName: 'unknown',
-      );
-    });
-
-    tearDown(() {
-      tempDir.deleteSync(recursive: true);
-    });
-
-    test(
-        'should ignore layers violations when directive is present (// ignore: fcheck_layers)',
-        () {
-      final file = File(p.join(tempDir.path, 'ignored.dart'));
-      file.writeAsStringSync('''
-// ignore: fcheck_layers
-import 'package:flutter/material.dart';
-
-class MyWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-''');
-
-      final issues = analyzer.analyzeFile(file);
-      expect(issues, isEmpty);
-    });
-
-    test(
-        'should ignore layers violations when directive is present (// ignore: fcheck_layers with multiple lines)',
-        () {
-      final file = File(p.join(tempDir.path, 'ignored_multiline.dart'));
-      file.writeAsStringSync('''
-// ignore: fcheck_layers
-// This is a multi-line comment
-// with additional information
-import 'package:flutter/material.dart';
-
-class MyWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-''');
-
-      final issues = analyzer.analyzeFile(file);
-      expect(issues, isEmpty);
-    });
-
-    test('should NOT ignore layers violations when directive is absent', () {
-      final file = File(p.join(tempDir.path, 'not_ignored.dart'));
-      file.writeAsStringSync('''
-import 'package:flutter/material.dart';
-
-class MyWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-''');
-
-      final issues = analyzer.analyzeFile(file);
-      expect(issues, isNotEmpty);
-    });
-
-    test('should NOT ignore if directive is not at the top', () {
-      final file = File(p.join(tempDir.path, 'not_at_top.dart'));
-      file.writeAsStringSync('''
-import 'package:flutter/material.dart';
-
-class MyWidget extends StatelessWidget {
-  // ignore: fcheck_layers
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-''');
-
-      final issues = analyzer.analyzeFile(file);
       expect(issues, isNotEmpty);
     });
   });

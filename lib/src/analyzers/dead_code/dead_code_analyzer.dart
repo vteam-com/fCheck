@@ -111,6 +111,20 @@ class DeadCodeAnalyzer {
         }
       }
 
+      for (final symbol in data.methods) {
+        if (!usedIdentifiers.contains(symbol.name)) {
+          issues.add(
+            DeadCodeIssue(
+              type: DeadCodeIssueType.deadFunction,
+              filePath: data.filePath,
+              lineNumber: symbol.lineNumber,
+              name: symbol.name,
+              owner: symbol.owner,
+            ),
+          );
+        }
+      }
+
       issues.addAll(data.unusedVariableIssues);
     }
 

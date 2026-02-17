@@ -1,12 +1,6 @@
 import 'dart:io';
-import 'package:analyzer/dart/analysis/features.dart';
-import 'package:analyzer/dart/analysis/results.dart';
-import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
-import 'package:fcheck/src/analyzers/layers/layers_visitor.dart';
-import 'package:fcheck/src/input_output/file_utils.dart';
-import 'package:fcheck/src/models/ignore_config.dart';
 
 /// Analyzer for detecting layers architecture violations.
 ///
@@ -15,121 +9,16 @@ import 'package:fcheck/src/models/ignore_config.dart';
 /// It builds a dependency graph and uses topological sorting to
 /// assign layers to components.
 class LayersAnalyzer {
-  /// The root directory being analyzed.
-  final Directory _rootDirectory;
-
-  /// Project root directory (containing pubspec.yaml).
-  final Directory _projectRoot;
-
-  /// Package name from pubspec.yaml.
-  final String _packageName;
-
   /// Creates a new LayersAnalyzer instance.
   ///
   /// This constructor creates an analyzer that can be used to detect
   /// layers architecture violations in Dart projects.
   /// Project metadata must be supplied by the entry point (AnalyzeFolder).
   LayersAnalyzer(
-    this._rootDirectory, {
+    Directory rootDirectory, {
     required Directory projectRoot,
     required String packageName,
-  })  : _projectRoot = projectRoot,
-        _packageName = packageName;
-
-  /// Analyzes a single Dart file for layers violations.
-  ///
-  /// This method analyzes a single file for layers architecture violations,
-  /// including cyclic dependencies and incorrect layering. It returns a list
-  /// of issues found in the file.
-  ///
-  /// [file] The Dart file to analyze.
-  ///
-  /// Returns a list of [LayersIssue] objects representing violations found.
-  List<LayersIssue> analyzeFile(File file) {
-    final String content = file.readAsStringSync();
-
-    // Check for ignore directive
-    if (IgnoreConfig.hasIgnoreForFileDirective(
-      content,
-      IgnoreConfig.ignoreDirectiveForLayers,
-    )) {
-      return <LayersIssue>[];
-    }
-
-    final Map<String, dynamic> result = _analyzeFile(file);
-    final bool isEntryPoint = result['isEntryPoint'] as bool;
-
-    // For single file analysis, we can only detect if the file has dependencies
-    // that might lead to cycles, but we need the full graph to detect actual cycles
-    // However, we can detect if the file has dependencies that would be flagged
-    // in a full analysis (like importing Flutter in non-entry point files)
-    final List<LayersIssue> issues = <LayersIssue>[];
-
-    // Check if file has any dependencies (internal or external)
-    final bool hasAnyDependencies =
-        content.contains('import ') || content.contains('export ');
-
-    // If the file has dependencies but is not an entry point, it might be in wrong layer
-    // This is a simplified check for the test cases
-    if (hasAnyDependencies && !isEntryPoint) {
-      // For the test case, we'll create a generic issue
-      issues.add(LayersIssue(
-        type: LayersIssueType.wrongLayer,
-        filePath: file.path,
-        message: 'File has dependencies but is not an entry point',
-      ));
-    }
-
-    return issues;
-  }
-
-  /// Analyzes all Dart files in a directory for layers violations.
-  ///
-  /// This method recursively scans the directory tree starting from [directory]
-  /// (or the root directory supplied at construction if omitted).
-  /// and analyzes all `.dart` files found, excluding example/, test/, tool/,
-  /// and build directories. It builds a dependency graph and detects
-  /// cyclic dependencies and layering violations.
-  ///
-  /// [directory] The root directory to scan.
-  ///
-  /// Returns a [LayersAnalysisResult] containing issues and layer assignments.
-  LayersAnalysisResult analyzeDirectory([
-    final Directory? directory,
-    final List<String> excludePatterns = const [],
-  ]) {
-    final Directory targetDirectory = directory ?? _rootDirectory;
-    final List<File> dartFiles = FileUtils.listDartFiles(
-      targetDirectory,
-      excludePatterns: excludePatterns,
-    );
-
-    // Filter out files with ignore directives
-    final filteredFiles = dartFiles.where((file) {
-      final content = file.readAsStringSync();
-      return !IgnoreConfig.hasIgnoreForFileDirective(
-        content,
-        IgnoreConfig.ignoreDirectiveForLayers,
-      );
-    }).toList();
-
-    final List<Map<String, dynamic>> fileData = <Map<String, dynamic>>[];
-
-    // Collect dependencies and entry points for each file
-    for (final File file in filteredFiles) {
-      final Map<String, dynamic> result = _analyzeFile(file);
-      fileData.add({
-        'filePath': file.path,
-        'dependencies': result['dependencies'] as List<String>,
-        'isEntryPoint': result['isEntryPoint'] as bool,
-      });
-    }
-
-    return analyzeFromFileData(
-      fileData,
-      analyzedFilePaths: dartFiles.map((f) => f.path).toSet(),
-    );
-  }
+  });
 
   /// Analyzes pre-collected per-file dependency data for layers violations.
   ///
@@ -163,41 +52,6 @@ class LayersAnalyzer {
     }
 
     return _analyzeGraph(filteredGraph);
-  }
-
-  /// Analyzes a single Dart file for its dependencies and entry point status.
-  ///
-  /// This method parses the file using the Dart analyzer and collects
-  /// all import and export dependencies, and identifies entry points.
-  ///
-  /// [file] The Dart file to analyze.
-  ///
-  /// Returns a map containing 'dependencies' (list of file paths) and 'isEntryPoint' (boolean).
-  Map<String, dynamic> _analyzeFile(File file) {
-    final String filePath = file.path;
-    final String content = file.readAsStringSync();
-
-    final ParseStringResult result = parseString(
-      content: content,
-      featureSet: FeatureSet.latestLanguageVersion(),
-    );
-
-    // Skip files with parse errors
-    if (result.errors.isNotEmpty) {
-      return {'dependencies': <String>[], 'isEntryPoint': false};
-    }
-
-    final LayersVisitor visitor = LayersVisitor(
-      filePath,
-      _projectRoot.path,
-      _packageName,
-    );
-    result.unit.accept(visitor);
-
-    return {
-      'dependencies': visitor.dependencies,
-      'isEntryPoint': visitor.hasMainFunction,
-    };
   }
 
   /// Analyzes the dependency graph for layers violations.
@@ -306,44 +160,6 @@ class LayersAnalyzer {
     final lastSlash = filePath.lastIndexOf('/');
     if (lastSlash <= 0) return '';
     return filePath.substring(0, lastSlash);
-  }
-
-  /// Checks if source folder is "higher" in the folder hierarchy than target.
-  ///
-  /// A folder is considered "higher" if it's in a branch that comes before
-  /// the target's branch when sorted alphabetically.
-  /// For example: /lib/src/analyzers is "higher" than /lib/src/models
-  /// because "analyzers" comes before "models" alphabetically.
-  bool _isFolderHigherInHierarchy(String sourceFolder, String targetFolder) {
-    // Find the common ancestor
-    final sourceParts = sourceFolder.split('/');
-    final targetParts = targetFolder.split('/');
-
-    // Find first different segment
-    int commonLength = 0;
-    for (int i = 0; i < sourceParts.length && i < targetParts.length; i++) {
-      if (sourceParts[i] == targetParts[i]) {
-        commonLength++;
-      } else {
-        break;
-      }
-    }
-
-    // If one is a prefix of the other, they're in the same branch (not higher/lower)
-    if (commonLength == sourceParts.length ||
-        commonLength == targetParts.length) {
-      return false;
-    }
-
-    // Compare the first differing segment
-    if (commonLength < sourceParts.length &&
-        commonLength < targetParts.length) {
-      final sourceSegment = sourceParts[commonLength];
-      final targetSegment = targetParts[commonLength];
-      return sourceSegment.compareTo(targetSegment) < 0;
-    }
-
-    return false;
   }
 
   /// Detects cycles in a graph using DFS.

@@ -6,9 +6,13 @@ class DeadCodeSymbol {
   /// 1-based line number of the declaration.
   final int lineNumber;
 
+  /// Optional owner of the symbol (for example class name for methods).
+  final String? owner;
+
   /// Creates symbol metadata for dead code analysis.
   const DeadCodeSymbol({
     required this.name,
     required this.lineNumber,
+    this.owner,
   });
 }

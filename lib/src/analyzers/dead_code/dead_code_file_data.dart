@@ -18,6 +18,9 @@ class DeadCodeFileData {
   /// Top-level function declarations in the file.
   final List<DeadCodeSymbol> functions;
 
+  /// Method declarations in classes/mixins/enums/extensions.
+  final List<DeadCodeSymbol> methods;
+
   /// All identifiers used in the file (excluding declarations).
   final Set<String> usedIdentifiers;
 
@@ -31,6 +34,7 @@ class DeadCodeFileData {
     required this.dependencies,
     required this.classes,
     required this.functions,
+    required this.methods,
     required this.usedIdentifiers,
     required this.unusedVariableIssues,
   });

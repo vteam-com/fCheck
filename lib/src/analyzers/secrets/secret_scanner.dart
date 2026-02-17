@@ -34,15 +34,6 @@ class SecretScanner {
   /// Minimum entropy required to consider a high-entropy string valid.
   static const double highEntropyThreshold = 4.5;
 
-  /// Scans full file content for secrets and returns detected issues.
-  List<SecretIssue> analyzeContent({
-    required String filePath,
-    required String content,
-  }) {
-    final lines = content.split('\n');
-    return analyzeLines(filePath: filePath, lines: lines);
-  }
-
   /// Scans a list of lines for secrets and returns detected issues.
   List<SecretIssue> analyzeLines({
     required String filePath,

@@ -110,9 +110,4 @@ class AnalyzerRunner {
 
     return context;
   }
-
-  /// Clears the internal context cache.
-  void clearCache() {
-    _contextCache.clear();
-  }
 }

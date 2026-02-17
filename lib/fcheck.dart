@@ -21,7 +21,6 @@ import 'dart:io';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
-import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_analyzer.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_delegate.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
@@ -46,18 +45,14 @@ import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/source_sort_delegate.dart';
 import 'package:fcheck/src/input_output/file_utils.dart';
-import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_delegate.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_file_data.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
 import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/project_type.dart';
-import 'package:fcheck/src/models/ignore_config.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
-import 'package:analyzer/dart/analysis/utilities.dart';
-import 'package:analyzer/dart/analysis/features.dart';
 
 /// The main engine for analyzing Flutter/Dart project quality.
 ///
@@ -130,43 +125,6 @@ class AnalyzeFolder {
       return enabled.contains(analyzer);
     }
     return !(ignoreConfig[analyzer.configName] ?? false);
-  }
-
-  /// Analyzes the layers architecture and returns the result.
-  ///
-  /// This method performs dependency analysis and layer assignment
-  /// for the project.
-  ///
-  /// Returns a [LayersAnalysisResult] containing issues and layer assignments.
-  LayersAnalysisResult analyzeLayers() {
-    if (!_isAnalyzerEnabled(AnalyzerDomain.layers)) {
-      return LayersAnalysisResult(
-        issues: [],
-        layers: {},
-        dependencyGraph: {},
-      );
-    }
-
-    final pubspecInfo = _pubspecInfo;
-    final projectRoot = pubspecInfo.projectRoot ?? projectDir;
-    final unifiedAnalyzer = AnalyzerRunner(
-      projectDir: projectDir,
-      excludePatterns: excludePatterns,
-      delegates: [
-        LayersDelegate(projectRoot, pubspecInfo.packageName),
-      ],
-    );
-    final unifiedResult = unifiedAnalyzer.analyzeAll();
-    final layersFileData = _extractLayersFileData(unifiedResult);
-
-    final layersAnalyzer = LayersAnalyzer(
-      projectDir,
-      projectRoot: projectRoot,
-      packageName: pubspecInfo.packageName,
-    );
-    return layersAnalyzer.analyzeFromFileData(
-      layersFileData,
-    );
   }
 
   /// Lists all excluded files and directories in the project.
@@ -487,52 +445,6 @@ class AnalyzeFolder {
         ? p.normalize(path)
         : p.normalize(p.join(normalizedRootPath, path));
     return p.relative(absolutePath, from: normalizedRootPath);
-  }
-
-  /// Analyzes a single Dart file and returns its metrics.
-  ///
-  /// This method parses a single Dart file using the Dart analyzer and
-  /// extracts quality metrics.
-  ///
-  /// [file] The Dart file to analyze.
-  ///
-  /// Returns a [FileMetrics] object containing quality metrics for the file.
-  FileMetrics analyzeFile(
-    File file, {
-    bool globallyIgnoreOneClassPerFile = false,
-  }) {
-    final content = file.readAsStringSync();
-    final lines = content.split('\n');
-    final parseResult = parseString(
-      content: content,
-      featureSet: FeatureSet.latestLanguageVersion(),
-    );
-    final context = AnalysisFileContext(
-      file: file,
-      content: content,
-      parseResult: parseResult,
-      lines: lines,
-      compilationUnit: parseResult.unit,
-      hasParseErrors: parseResult.errors.isNotEmpty,
-    );
-    final delegate = MetricsDelegate(
-      globallyIgnoreOneClassPerFile: globallyIgnoreOneClassPerFile,
-    );
-    return delegate.analyzeFileWithContext(context).metrics;
-  }
-
-  /// Checks for a top-of-file directive to ignore the "one class per file" rule.
-  ///
-  /// The directive must appear in the leading comment block(s) at the top of
-  /// the file (before any code). Example:
-  /// ```dart
-  /// // ignore: fcheck_one_class_per_file
-  /// ```
-  bool hasIgnoreOneClassPerFileDirective(String content) {
-    return IgnoreConfig.hasIgnoreForFileDirective(
-      content,
-      IgnoreConfig.ignoreDirectiveForOneClassPerFile,
-    );
   }
 
   /// Heuristically detects whether the project uses Flutter localization.

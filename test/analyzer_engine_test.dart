@@ -94,26 +94,6 @@ void main() {
       expect(metrics.magicNumberIssues.first.value, equals('7'));
     });
 
-    test('should analyze single file correctly', () {
-      final dartFile = File('${tempDir.path}/single.dart')
-        ..writeAsStringSync('''
-// Single file test
-class MyClass {
-  void method() {
-    // Implementation
-  }
-}
-''');
-
-      final fileMetrics = analyzer.analyzeFile(dartFile);
-
-      expect(fileMetrics.path, equals(dartFile.path));
-      expect(fileMetrics.linesOfCode, greaterThan(0));
-      expect(fileMetrics.commentLines, greaterThan(0));
-      expect(fileMetrics.classCount, equals(1));
-      expect(fileMetrics.isStatefulWidget, isFalse);
-    });
-
     test('should report documentation issue paths relative to analysis root',
         () {
       final file = File('${tempDir.path}/lib/feature/service.dart')

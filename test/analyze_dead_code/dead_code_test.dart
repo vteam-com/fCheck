@@ -175,12 +175,15 @@ version: 0.0.1
 
       File(p.join(libDir.path, 'main.dart')).writeAsStringSync('''
 import 'a.dart';
+import 'methods.dart';
 
 void main() {
   final a = A();
   a.toString();
   final box = Box<int>();
   box.toString();
+  final util = Util();
+  util.usedMethod();
 }
 ''');
 
@@ -214,6 +217,16 @@ class GameWidget extends WidgetBase {
   void build(BuildContext context) {}
 }
 ''');
+
+      File(p.join(libDir.path, 'methods.dart')).writeAsStringSync('''
+class Util {
+  void usedMethod() {}
+
+  void unusedMethod() {}
+
+  void ignoredUnusedMethod() {} // ignore: fcheck_dead_code
+}
+''');
     });
 
     tearDown(() {
@@ -242,6 +255,22 @@ class GameWidget extends WidgetBase {
         issues.where((i) =>
             i.type == DeadCodeIssueType.deadFunction && i.name == 'unused'),
         isNotEmpty,
+      );
+
+      expect(
+        issues.where((i) =>
+            i.type == DeadCodeIssueType.deadFunction &&
+            i.name == 'unusedMethod' &&
+            i.owner == 'Util'),
+        isNotEmpty,
+      );
+
+      expect(
+        issues.where((i) =>
+            i.type == DeadCodeIssueType.deadFunction &&
+            i.name == 'ignoredUnusedMethod' &&
+            i.owner == 'Util'),
+        isEmpty,
       );
 
       expect(

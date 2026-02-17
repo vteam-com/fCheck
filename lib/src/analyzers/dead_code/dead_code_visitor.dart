@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
@@ -39,6 +41,9 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
 
   /// Top-level function declarations found in the file.
   final List<DeadCodeSymbol> functions = <DeadCodeSymbol>[];
+
+  /// Method declarations found in classes/mixins/enums/extensions.
+  final List<DeadCodeSymbol> methods = <DeadCodeSymbol>[];
 
   /// Unused local variable issues found in the file.
   final List<DeadCodeIssue> unusedVariableIssues = <DeadCodeIssue>[];
@@ -96,6 +101,18 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
 
   @override
   void visitMethodDeclaration(MethodDeclaration node) {
+    if (!IgnoreConfig.isNodeIgnored(node, content, 'dead_code') &&
+        !_hasOverrideAnnotation(node.metadata) &&
+        !_isAbstractMethod(node)) {
+      methods.add(
+        DeadCodeSymbol(
+          name: node.name.lexeme,
+          lineNumber: lineNumberForOffset(node.offset),
+          owner: _resolveMethodOwner(node),
+        ),
+      );
+    }
+
     final treatParametersAsUsed =
         _hasOverrideAnnotation(node.metadata) || node.body is EmptyFunctionBody;
     _pushScope(
@@ -405,6 +422,32 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
       }
     }
     return false;
+  }
+
+  /// Internal helper used by fcheck analysis and reporting.
+  bool _isAbstractMethod(MethodDeclaration node) {
+    return node.body is EmptyFunctionBody;
+  }
+
+  /// Internal helper used by fcheck analysis and reporting.
+  String? _resolveMethodOwner(MethodDeclaration node) {
+    AstNode? current = node.parent;
+    while (current != null) {
+      if (current is ClassDeclaration) {
+        return current.name.lexeme;
+      }
+      if (current is EnumDeclaration) {
+        return current.name.lexeme;
+      }
+      if (current is MixinDeclaration) {
+        return current.name.lexeme;
+      }
+      if (current is ExtensionDeclaration) {
+        return current.name?.lexeme ?? 'extension';
+      }
+      current = current.parent;
+    }
+    return null;
   }
 
   /// Internal helper used by fcheck analysis and reporting.

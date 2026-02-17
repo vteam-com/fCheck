@@ -19,6 +19,7 @@ This file defines baseline contributor expectations for the `fcheck` project and
 
 - `RULES_HARDCODED_STRINGS.md` for string literal detection rules.
 - `RULES_MAGIC_NUMBERS.md` for numeric literal detection rules.
+- `RULES_DEAD_CODE.md` for dead code detection rules.
 - `RULES_SECRETS.md` for secret/PII detection rules.
 - `RULES_DUPLICATE_CODE.md` for duplicate code detection rules.
 - `RULES_DOCUMENTATION.md` for README/API documentation quality rules.

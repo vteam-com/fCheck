@@ -24,9 +24,4 @@ class AnalysisRunnerResult {
     // For List types, we need to cast each element
     return typeResults as T;
   }
-
-  /// Gets count of results for specific analyzer type.
-  int getResultCount<T>() {
-    return analyzerStats[T] ?? 0;
-  }
 }

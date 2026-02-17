@@ -10,7 +10,7 @@ enum DeadCodeIssueType {
   /// A class declaration that is never referenced.
   deadClass,
 
-  /// A top-level function declaration that is never referenced.
+  /// A function or method declaration that is never referenced.
   deadFunction,
 
   /// A local variable or parameter that is never referenced.

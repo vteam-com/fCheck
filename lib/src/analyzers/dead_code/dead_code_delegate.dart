@@ -49,6 +49,7 @@ class DeadCodeDelegate implements AnalyzerDelegate {
       dependencies: visitor.dependencies,
       classes: visitor.classes,
       functions: visitor.functions,
+      methods: visitor.methods,
       usedIdentifiers: visitor.usedIdentifiers,
       unusedVariableIssues: visitor.unusedVariableIssues,
     );

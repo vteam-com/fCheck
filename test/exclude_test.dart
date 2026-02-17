@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:fcheck/src/input_output/file_utils.dart';
-import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
@@ -125,110 +124,6 @@ void main() {
         expect(
             files.any((f) => p.basename(f.path) == 'app_localizations_en.dart'),
             isFalse);
-      });
-    });
-
-    group('LayersAnalyzer with exclude patterns', () {
-      test('should exclude files from dependency graph', () {
-        // Create files where main.dart imports misc_helper.dart
-        File(
-          '${tempDir.path}/main.dart',
-        ).writeAsStringSync('import "misc_helper.dart"; class Main {}');
-        File(
-          '${tempDir.path}/misc_helper.dart',
-        ).writeAsStringSync('class MiscHelper {}');
-        File('${tempDir.path}/utils.dart').writeAsStringSync('class Utils {}');
-
-        final analyzer = LayersAnalyzer(
-          tempDir,
-          projectRoot: tempDir,
-          packageName: 'unknown',
-        );
-        final result = analyzer.analyzeDirectory(
-          tempDir,
-          ['*misc*'],
-        );
-
-        // misc_helper.dart should not appear in the dependency graph at all
-        expect(
-          result.dependencyGraph.keys.any((k) => k.contains('misc_helper')),
-          isFalse,
-        );
-
-        // main.dart shouldn't have misc_helper as a dependency (filtered out)
-        final mainDartPath = '${tempDir.path}/main.dart';
-        if (result.dependencyGraph.containsKey(mainDartPath)) {
-          expect(
-            result.dependencyGraph[mainDartPath]!.any(
-              (d) => d.contains('misc_helper'),
-            ),
-            isFalse,
-          );
-        }
-      });
-
-      test('should not assign layers to excluded files', () {
-        // Create chain: main -> misc_helper -> utils
-        File(
-          '${tempDir.path}/main.dart',
-        ).writeAsStringSync('import "misc_helper.dart"; void main() {}');
-        File(
-          '${tempDir.path}/misc_helper.dart',
-        ).writeAsStringSync('import "utils.dart"; class MiscHelper {}');
-        File('${tempDir.path}/utils.dart').writeAsStringSync('class Utils {}');
-
-        final analyzer = LayersAnalyzer(
-          tempDir,
-          projectRoot: tempDir,
-          packageName: 'unknown',
-        );
-        final result = analyzer.analyzeDirectory(
-          tempDir,
-          ['*misc*'],
-        );
-
-        // misc_helper.dart should not have a layer assignment
-        expect(
-          result.layers.keys.any((k) => k.contains('misc_helper')),
-          isFalse,
-        );
-
-        // Only main.dart and utils.dart should have layers
-        expect(result.layers.length, equals(2));
-      });
-
-      test('should handle exclusion of dependency targets', () {
-        // Create scenario where multiple files import excluded file
-        File(
-          '${tempDir.path}/a.dart',
-        ).writeAsStringSync('import "misc_helper.dart"; class A {}');
-        File(
-          '${tempDir.path}/b.dart',
-        ).writeAsStringSync('import "misc_helper.dart"; class B {}');
-        File(
-          '${tempDir.path}/misc_helper.dart',
-        ).writeAsStringSync('class MiscHelper {}');
-
-        final analyzer = LayersAnalyzer(
-          tempDir,
-          projectRoot: tempDir,
-          packageName: 'unknown',
-        );
-        final result = analyzer.analyzeDirectory(
-          tempDir,
-          ['*misc*'],
-        );
-
-        // Neither a.dart nor b.dart should have misc_helper in dependencies (filtered)
-        final aDartPath = '${tempDir.path}/a.dart';
-        final bDartPath = '${tempDir.path}/b.dart';
-
-        if (result.dependencyGraph.containsKey(aDartPath)) {
-          expect(result.dependencyGraph[aDartPath], isEmpty);
-        }
-        if (result.dependencyGraph.containsKey(bDartPath)) {
-          expect(result.dependencyGraph[bDartPath], isEmpty);
-        }
       });
     });
 

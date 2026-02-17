@@ -387,14 +387,4 @@ class ProjectMetrics {
   List<DeadCodeIssue> get unusedVariableIssues => deadCodeIssues
       .where((issue) => issue.type == DeadCodeIssueType.unusedVariable)
       .toList();
-
-  /// Converts all secret issues to a JSON-compatible map.
-  List<Map<String, dynamic>> get secretIssuesJson => secretIssues
-      .map((issue) => {
-            'filePath': issue.filePath,
-            'lineNumber': issue.lineNumber,
-            'secretType': issue.secretType,
-            'value': issue.value,
-          })
-      .toList();
 }
