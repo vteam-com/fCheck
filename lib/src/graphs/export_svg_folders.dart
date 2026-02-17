@@ -80,12 +80,22 @@ class _TitleVisual {
 }
 
 const double _titleLineHeight = 16.0;
+const double _edgeLaneStepWidth = 3.0;
+const double _fileLaneBaseOffset = -14.0;
+const double _folderLaneBaseOffset = 0.0;
 
 /// Represents a folder-to-folder dependency edge.
 class _FolderEdge {
   final String sourceFolder;
   final String targetFolder;
   _FolderEdge(this.sourceFolder, this.targetFolder);
+}
+
+/// Represents a file-to-file dependency edge.
+class _FileEdge {
+  final String sourceFile;
+  final String targetFile;
+  _FileEdge(this.sourceFile, this.targetFile);
 }
 
 /// Collects every file mentioned in the dependency graph (keys and targets).
@@ -219,15 +229,16 @@ String exportGraphSvgFolders(
   }
 
   // --- Extra canvas width to accommodate left/right-routed edges ---
-  const double edgeLanePadding = 40.0;
-  const double edgeLaneBaseWidth = 32.0;
-  const double edgeLanePerEdgeWidth = 4.0;
+  const double edgeLanePadding = 0.0;
+  const double edgeLaneBaseWidth = 0.0;
+  const double edgeLanePerEdgeWidth = _edgeLaneStepWidth;
 
   // Extra canvas width to accommodate left/right-routed edges
   final totalFileEdges =
       relativeGraph.values.fold<int>(0, (sum, list) => sum + list.length);
+  final fileLaneColumns = totalFileEdges;
   final fileEdgeExtraWidth = edgeLanePadding +
-      (edgeLaneBaseWidth + totalFileEdges * edgeLanePerEdgeWidth);
+      (edgeLaneBaseWidth + fileLaneColumns * edgeLanePerEdgeWidth);
   final folderEdgeExtraWidth = edgeLanePadding +
       (edgeLaneBaseWidth + folderDependencies.length * edgeLanePerEdgeWidth);
 
@@ -1186,66 +1197,173 @@ void _drawEdgeVerticalsFiles(
   {
   double? rightLaneGutterX,
 }) {
-  var edgeCounter = 0;
   final cycleEdges = _detectCyclesInGraph(graph);
+  final drawableEdges = <_FileEdge>[];
   for (final entry in graph.entries) {
     final source = entry.key;
-    final targets = entry.value;
     final sourceAnchor = anchors[source]?['out'];
     if (sourceAnchor == null) continue;
-
-    for (final target in targets) {
+    for (final target in entry.value) {
       final targetAnchor = anchors[target]?['in'];
       if (targetAnchor == null) continue;
-
-      final startX = sourceAnchor.x;
-      final startY = sourceAnchor.y;
-      final endX = targetAnchor.x;
-      final endY = targetAnchor.y;
-
-      /// Base offset for the gutter lane.
-      const double gutterBaseOffset = 28.0;
-
-      /// Step width for each subsequent edge in the gutter.
-      const double gutterStepWidth = 4.0;
-
-      // Calculate fixed vertical column X for the right lane gutter if reference is provided
-      final double? fixedColumnX = rightLaneGutterX != null
-          ? (rightLaneGutterX +
-              gutterBaseOffset +
-              edgeCounter * gutterStepWidth)
-          : null;
-
-      final path = _buildStackedEdgePath(
-          startX, startY, endX, endY, edgeCounter,
-          isLeft: false, fixedColumnX: fixedColumnX);
-
-      /// Vertical offset to recover the original file Y-coordinate (upward).
-      const double fileYOffsetUp = 6.0;
-
-      /// Vertical offset to recover the original file Y-coordinate (downward).
-      const double fileYOffsetDown = 5.0;
-
-      // Determine the appropriate CSS class based on edge properties
-      // Use the actual file top y-coordinate (fileY) for upward detection to avoid badge-offset bias
-      final cssClass = _getEdgeCssClass(
-        source,
-        target,
-        startY - fileYOffsetUp, // fileY
-        endY + fileYOffsetDown, // fileY
-        cycleEdges,
-      );
-
-      renderEdgeWithTooltip(
-        buffer,
-        pathData: path,
-        source: source,
-        target: target,
-        cssClass: cssClass,
-      );
-      edgeCounter++;
+      drawableEdges.add(_FileEdge(source, target));
     }
   }
+
+  final laneSlotByEdgeKey = _buildFileLaneSlotByEdgeKey(drawableEdges, anchors);
+  final fileLaneColumns =
+      laneSlotByEdgeKey.isEmpty ? 0 : laneSlotByEdgeKey.values.reduce(max) + 1;
+  final sortedDrawableEdges = List<_FileEdge>.from(drawableEdges)
+    ..sort((a, b) {
+      final aKey = '${a.sourceFile}->${a.targetFile}';
+      final bKey = '${b.sourceFile}->${b.targetFile}';
+      final aLaneSlot = laneSlotByEdgeKey[aKey] ?? 0;
+      final bLaneSlot = laneSlotByEdgeKey[bKey] ?? 0;
+
+      // Draw inner lanes first so local file edges are painted under outer lanes.
+      final laneCompare = bLaneSlot.compareTo(aLaneSlot);
+      if (laneCompare != 0) return laneCompare;
+
+      final aSourceY = anchors[a.sourceFile]?['out']?.y;
+      final aTargetY = anchors[a.targetFile]?['in']?.y;
+      final bSourceY = anchors[b.sourceFile]?['out']?.y;
+      final bTargetY = anchors[b.targetFile]?['in']?.y;
+      final aSpan = (aSourceY == null || aTargetY == null)
+          ? double.negativeInfinity
+          : (aSourceY - aTargetY).abs();
+      final bSpan = (bSourceY == null || bTargetY == null)
+          ? double.negativeInfinity
+          : (bSourceY - bTargetY).abs();
+      final spanCompare = bSpan.compareTo(aSpan);
+      if (spanCompare != 0) return spanCompare;
+
+      return aKey.compareTo(bKey);
+    });
+
+  for (final edge in sortedDrawableEdges) {
+    final source = edge.sourceFile;
+    final target = edge.targetFile;
+    final sourceAnchor = anchors[source]!['out']!;
+    final targetAnchor = anchors[target]!['in']!;
+    final startX = sourceAnchor.x;
+    final startY = sourceAnchor.y;
+    final endX = targetAnchor.x;
+    final endY = targetAnchor.y;
+    final edgeKey = '$source->$target';
+    final laneSlot = laneSlotByEdgeKey[edgeKey] ?? 0;
+
+    // Calculate fixed vertical column X for the right lane gutter if reference is provided.
+    final double? fixedColumnX = rightLaneGutterX != null
+        ? _computeLaneColumnX(
+            gutterX: rightLaneGutterX,
+            laneIndex: laneSlot,
+            laneCount: fileLaneColumns,
+            isLeft: false,
+            baseOffset: _fileLaneBaseOffset,
+          )
+        : null;
+
+    final path = _buildStackedEdgePath(startX, startY, endX, endY, laneSlot,
+        isLeft: false, fixedColumnX: fixedColumnX);
+
+    /// Vertical offset to recover the original file Y-coordinate (upward).
+    const double fileYOffsetUp = 6.0;
+
+    /// Vertical offset to recover the original file Y-coordinate (downward).
+    const double fileYOffsetDown = 5.0;
+
+    // Determine the appropriate CSS class based on edge properties.
+    // Use the actual file top y-coordinate (fileY) for upward detection to avoid badge-offset bias.
+    final cssClass = _getEdgeCssClass(
+      source,
+      target,
+      startY - fileYOffsetUp, // fileY
+      endY + fileYOffsetDown, // fileY
+      cycleEdges,
+    );
+
+    renderEdgeWithTooltip(
+      buffer,
+      pathData: path,
+      source: source,
+      target: target,
+      cssClass: cssClass,
+    );
+  }
+}
+
+/// Assigns right-lane slots so short file edges stay inner and long spans go outer.
+Map<String, int> _buildFileLaneSlotByEdgeKey(
+  List<_FileEdge> edges,
+  Map<String, Map<String, Point<double>>> anchors,
+) {
+  if (edges.isEmpty) return const {};
+
+  final innerLaneByEdgeKey = <String, int>{};
+  final laneIntervals = <List<Point<double>>>[];
+
+  final bySpanAsc = List<_FileEdge>.from(edges)
+    ..sort((a, b) {
+      final aSourceY = anchors[a.sourceFile]?['out']?.y;
+      final aTargetY = anchors[a.targetFile]?['in']?.y;
+      final bSourceY = anchors[b.sourceFile]?['out']?.y;
+      final bTargetY = anchors[b.targetFile]?['in']?.y;
+
+      final aSpan = (aSourceY == null || aTargetY == null)
+          ? double.infinity
+          : (aSourceY - aTargetY).abs();
+      final bSpan = (bSourceY == null || bTargetY == null)
+          ? double.infinity
+          : (bSourceY - bTargetY).abs();
+
+      final spanCompare = aSpan.compareTo(bSpan);
+      if (spanCompare != 0) return spanCompare;
+
+      final aKey = '${a.sourceFile}->${a.targetFile}';
+      final bKey = '${b.sourceFile}->${b.targetFile}';
+      return aKey.compareTo(bKey);
+    });
+
+  bool overlaps(Point<double> a, Point<double> b) {
+    return max(a.x, b.x) < min(a.y, b.y);
+  }
+
+  for (final edge in bySpanAsc) {
+    final sourceY = anchors[edge.sourceFile]?['out']?.y;
+    final targetY = anchors[edge.targetFile]?['in']?.y;
+    if (sourceY == null || targetY == null) continue;
+
+    final key = '${edge.sourceFile}->${edge.targetFile}';
+    final interval = Point(min(sourceY, targetY), max(sourceY, targetY));
+    var assignedLane = -1;
+
+    for (var lane = 0; lane < laneIntervals.length; lane++) {
+      final intersectsExisting =
+          laneIntervals[lane].any((other) => overlaps(interval, other));
+      if (!intersectsExisting) {
+        assignedLane = lane;
+        laneIntervals[lane].add(interval);
+        break;
+      }
+    }
+
+    if (assignedLane == -1) {
+      laneIntervals.add([interval]);
+      assignedLane = laneIntervals.length - 1;
+    }
+
+    innerLaneByEdgeKey[key] = assignedLane;
+  }
+
+  final laneCount = laneIntervals.length;
+  if (laneCount == 0) return const {};
+
+  // Preserve current convention: higher slot index = inner lane.
+  final laneSlotByEdgeKey = <String, int>{};
+  for (final entry in innerLaneByEdgeKey.entries) {
+    laneSlotByEdgeKey[entry.key] = (laneCount - 1) - entry.value;
+  }
+  return laneSlotByEdgeKey;
 }
 
 /// Draw folder-level dependency edges routed on the left side of folders.
@@ -1357,9 +1475,6 @@ void _drawEdgeVerticalFolders(
       // If root, use the global lane (outside root)
       double fixedColumnX;
       if (parentPos != null) {
-        /// Width of each edge lane in the stack.
-        const double stackStepWidth = 4.0;
-
         /// Offset where child content begins inside a parent folder.
         const double childStartOffset = 64.0;
 
@@ -1370,22 +1485,21 @@ void _drawEdgeVerticalFolders(
         // Additional lanes extend leftward only, avoiding drift into components.
         final laneRightmostX =
             parentPos.x + childStartOffset - laneInnerPaddingFromChildStart;
-        final maxLaneIndex = parentEdges.length - 1;
-        final outwardOffset = (maxLaneIndex - laneIndex) * stackStepWidth;
-        fixedColumnX = laneRightmostX - outwardOffset;
+        fixedColumnX = _computeLaneColumnX(
+          gutterX: laneRightmostX,
+          laneIndex: laneIndex,
+          laneCount: parentEdges.length,
+          isLeft: true,
+          baseOffset: _folderLaneBaseOffset,
+        );
       } else {
-        /// Base margin for the global gutter.
-        const double globalGutterMargin = 40.0;
-
-        /// Step width for global lane stacking.
-        const double globalStackStepWidth = 4.0;
-
-        // Step LEFT from the global gutter with a comfortable 40px base margin.
-        final maxLaneIndex = parentEdges.length - 1;
-        final inwardFirstLaneIndex = maxLaneIndex - laneIndex;
-        fixedColumnX = globalGutterX -
-            globalGutterMargin -
-            (inwardFirstLaneIndex * globalStackStepWidth);
+        fixedColumnX = _computeLaneColumnX(
+          gutterX: globalGutterX,
+          laneIndex: laneIndex,
+          laneCount: parentEdges.length,
+          isLeft: true,
+          baseOffset: _folderLaneBaseOffset,
+        );
       }
 
       // Folder edges use the LEFT lane (relative to the badges)
@@ -1695,11 +1809,8 @@ String _buildStackedEdgePath(
 
   // Each edge gets a slightly larger offset to avoid overlapping runs.
   // Folder edges (isLeft=true) route to the left lane, File edges to the right.
-  /// Step width for each subsequent edge in the gutter.
-  const double gutterStepWidth = 4.0;
-
   final columnX = fixedColumnX ??
-      (startX + (dirX * baseOffset) + (dirX * edgeIndex * gutterStepWidth));
+      (startX + (dirX * baseOffset) + (dirX * edgeIndex * _edgeLaneStepWidth));
 
   final preCurveX = columnX - (dirX * radius);
   final postCurveX = columnX - (dirX * radius);
@@ -1715,6 +1826,20 @@ String _buildStackedEdgePath(
       'V $secondVy '
       'Q $firstQx $secondQy $postCurveX $secondQy '
       'H $endX';
+}
+
+double _computeLaneColumnX({
+  required double gutterX,
+  required int laneIndex,
+  required int laneCount,
+  required bool isLeft,
+  required double baseOffset,
+}) {
+  final maxLaneIndex = laneCount - 1;
+  final inwardFirstLaneIndex = maxLaneIndex - laneIndex;
+  final laneDirection = isLeft ? -1.0 : 1.0;
+  return gutterX +
+      laneDirection * (baseOffset + inwardFirstLaneIndex * _edgeLaneStepWidth);
 }
 
 /// Render file badges and labels (after edges).

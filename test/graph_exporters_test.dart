@@ -286,12 +286,66 @@ void main() {
       expect(graphsToModelsX, isNotNull);
       expect(graphsToAnalyzersX!, greaterThan(graphsToModelsX!));
     });
+
+    test('places short file edge inside long file edge in right lane', () {
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/root.dart': 0,
+          'lib/a/a.dart': 1,
+          'lib/very/deep/down/down.dart': 1,
+        },
+        dependencyGraph: const {
+          'lib/root.dart': ['lib/a/a.dart', 'lib/very/deep/down/down.dart'],
+          'lib/a/a.dart': [],
+          'lib/very/deep/down/down.dart': [],
+        },
+      );
+
+      final folderSvg = exportGraphSvgFolders(result);
+      final shortFileEdgeX =
+          _extractFolderEdgeColumnX(folderSvg, 'root.dart ▶ a/a.dart');
+      final longFileEdgeX = _extractFolderEdgeColumnX(
+        folderSvg,
+        'root.dart ▶ very/deep/down/down.dart',
+      );
+
+      expect(shortFileEdgeX, isNotNull);
+      expect(longFileEdgeX, isNotNull);
+      expect(shortFileEdgeX!, lessThan(longFileEdgeX!));
+    });
+
+    test('draws inner file edge before outer file edge', () {
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/root.dart': 0,
+          'lib/a/a.dart': 1,
+          'lib/very/deep/down/down.dart': 1,
+        },
+        dependencyGraph: const {
+          'lib/root.dart': ['lib/a/a.dart', 'lib/very/deep/down/down.dart'],
+          'lib/a/a.dart': [],
+          'lib/very/deep/down/down.dart': [],
+        },
+      );
+
+      final folderSvg = exportGraphSvgFolders(result);
+      final innerIndex =
+          folderSvg.indexOf('<title>root.dart ▶ a/a.dart</title>');
+      final outerIndex = folderSvg
+          .indexOf('<title>root.dart ▶ very/deep/down/down.dart</title>');
+
+      expect(innerIndex, greaterThanOrEqualTo(0));
+      expect(outerIndex, greaterThanOrEqualTo(0));
+      expect(innerIndex, lessThan(outerIndex));
+    });
   });
 }
 
 double? _extractFolderEdgeColumnX(String svg, String titlePayload) {
   final pattern = RegExp(
-      '<path d=\"[^\"]*Q ([0-9]+(?:\\.[0-9]+)?) [^\"]*\" class=\"[^\"]*\"/>\\s*<title>${RegExp.escape(titlePayload)}</title>');
+      '<path d="[^"]*Q ([0-9]+(?:\\.[0-9]+)?) [^"]*" class="[^"]*"/>\\s*<title>${RegExp.escape(titlePayload)}</title>');
   final match = pattern.firstMatch(svg);
   if (match == null) return null;
   return double.tryParse(match.group(1)!);
