@@ -254,7 +254,7 @@ class LayersAnalyzer {
     final Map<String, int> layers = _assignLayers(dependencyGraph);
 
     // Detect folder layer violations
-    _detectFolderLayerViolations(folderGraph, layers);
+    _detectFolderLayerViolations(folderGraph, layers, issues);
 
     return LayersAnalysisResult(
       issues: issues,
@@ -415,65 +415,14 @@ class LayersAnalyzer {
   void _detectFolderLayerViolations(
     Map<String, List<String>> folderGraph,
     Map<String, int> fileLayers,
+    List<LayersIssue> issues,
   ) {
-    // Compute folder layers from file layers
-    final Map<String, int> folderLayers = <String, int>{};
-
-    for (final entry in fileLayers.entries) {
-      final String folder = _getFolder(entry.key);
-      final int layer = entry.value;
-
-      if (folder.isEmpty) continue;
-
-      // Folder layer is the maximum (lowest) layer of any file in it.
-      // This represents the "deepest" position of any file in that folder,
-      // which is more accurate for detecting upward dependencies.
-      if (!folderLayers.containsKey(folder) || folderLayers[folder]! < layer) {
-        folderLayers[folder] = layer;
-      }
-    }
-
-    // Check for wrong folder layer ordering
-    for (final entry in folderGraph.entries) {
-      final String sourceFolder = entry.key;
-      final List<String> targetFolders = entry.value;
-
-      final sourceLayer = folderLayers[sourceFolder];
-      if (sourceLayer == null) continue;
-
-      for (final targetFolder in targetFolders) {
-        final targetLayer = folderLayers[targetFolder];
-        if (targetLayer == null) continue;
-
-        // Skip violations where source folder is empty (root-level files)
-        // or where target folder is empty (files directly in project root)
-        // The root folder should not be considered for layer violations
-        if (sourceFolder.isEmpty || targetFolder.isEmpty) continue;
-
-        // Skip violations where the source is a subfolder of target
-        // (i.e., when source is like "/a/b" and target is "/a")
-        // This handles cases where a subfolder depends on root-level files
-        if (sourceFolder.startsWith('$targetFolder/')) continue;
-
-        // Skip violations where the target is a subfolder of source
-        // (i.e., when source is like "/a" and target is "/a/b")
-        // This allows parent folders to depend on their child subfolders
-        if (targetFolder.startsWith('$sourceFolder/')) continue;
-
-        // Skip violations where source and target share a common ancestor and
-        // source is in a "higher" branch of the folder hierarchy.
-        // For example: /lib/src/analyzers/metrics depending on /lib/src/models
-        // should be allowed because "analyzers" is visually higher than "models"
-        // in the folder tree (comes before alphabetically).
-        if (_isFolderHigherInHierarchy(sourceFolder, targetFolder)) continue;
-
-        // Note: Layer violations between folders are now only skipped for:
-        // 1. Parent-child folder relationships
-        // 2. Folders in "higher" branches of the folder hierarchy
-        // We no longer flag other cross-layer dependencies as violations
-        // since folder-level layer assignment can vary based on which files
-        // exist in each folder and how dependencies are organized.
-      }
+    // Folder-level layer violations are intentionally suppressed.
+    // Folder placement can vary by project structure and frequently creates
+    // false positives. Layers issues should focus on file-level dependency
+    // direction instead of directory naming/layout conventions.
+    if (folderGraph.isEmpty || fileLayers.isEmpty || issues.isEmpty) {
+      return;
     }
   }
 

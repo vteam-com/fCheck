@@ -184,6 +184,7 @@ $verticalGradient
     stroke: url(#horizontalGradient); 
     stroke-width: 1; 
     opacity: 0.5;
+    cursor: pointer;
     transition: all 0.1s ease-in-out; 
   }
 
@@ -199,6 +200,7 @@ $verticalGradient
     stroke: url(#verticalGradient); 
     stroke-width: 1; 
     opacity: 0.5; 
+    cursor: pointer;
     transition: all 0.1s ease-in-out; 
   }
   
@@ -214,6 +216,7 @@ $verticalGradient
     stroke: red; 
     stroke-width: 5; 
     opacity: 0.9; 
+    cursor: pointer;
   }
   
   .warningEdge { 
@@ -221,6 +224,7 @@ $verticalGradient
     stroke: orange; 
     stroke-width: 3; 
     opacity: 0.9; 
+    cursor: pointer;
     transition: all 0.1s ease-in-out; 
   }
   
@@ -231,14 +235,14 @@ $verticalGradient
     opacity: 1.0; 
   }
   
-  /* Unified badge styles with '?' cursor */
+  /* Unified badge styles with pointer cursor */
   .badge { 
     font-size: 10px; 
     font-weight: bold; 
     fill: white; 
     text-anchor: middle; 
     dominant-baseline: middle; 
-    cursor: help; 
+    cursor: pointer; 
     transition: all 0.1s ease-in-out; 
   }
   

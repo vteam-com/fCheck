@@ -118,6 +118,38 @@ void main() {
       expect(result.layers[fileB.path], equals(2));
       expect(result.layers[fileC.path], equals(3));
     });
+
+    test('should not report wrongFolderLayer for upward folder dependencies',
+        () {
+      final zsrcDir = Directory('${tempDir.path}/lib/zsrc')
+        ..createSync(recursive: true);
+      final asinkDir = Directory('${tempDir.path}/lib/asink')
+        ..createSync(recursive: true);
+      final x0Dir = Directory('${tempDir.path}/lib/x0')
+        ..createSync(recursive: true);
+      final x1Dir = Directory('${tempDir.path}/lib/x1')
+        ..createSync(recursive: true);
+      final x2Dir = Directory('${tempDir.path}/lib/x2')
+        ..createSync(recursive: true);
+
+      File('${zsrcDir.path}/source.dart')
+          .writeAsStringSync('import "../asink/target.dart";');
+      File('${asinkDir.path}/target.dart').writeAsStringSync('class Target {}');
+      File('${x0Dir.path}/root.dart')
+          .writeAsStringSync('import "../x1/one.dart";');
+      File('${x1Dir.path}/one.dart')
+          .writeAsStringSync('import "../x2/two.dart";');
+      File('${x2Dir.path}/two.dart')
+          .writeAsStringSync('import "../zsrc/high.dart";');
+      File('${zsrcDir.path}/high.dart').writeAsStringSync('class High {}');
+
+      final result = analyzer.analyzeDirectory(tempDir);
+      final violations = result.issues
+          .where((issue) => issue.type == LayersIssueType.wrongFolderLayer)
+          .toList();
+
+      expect(violations, isEmpty);
+    });
   });
   group('LayersIssue', () {
     test('toString includes type, file path, and message', () {

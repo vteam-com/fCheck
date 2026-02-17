@@ -1828,6 +1828,12 @@ String _buildStackedEdgePath(
       'H $endX';
 }
 
+/// Computes the shared fixed X column used by stacked edge lanes.
+///
+/// [gutterX] is the reference gutter boundary for the lane group. [laneIndex]
+/// and [laneCount] determine the inward-first ordering so shorter/local edges
+/// can remain closer to components. [isLeft] controls lane direction, and
+/// [baseOffset] applies per-lane-family nudging from the gutter.
 double _computeLaneColumnX({
   required double gutterX,
   required int laneIndex,

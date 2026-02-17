@@ -117,6 +117,7 @@
     stroke: url(#horizontalGradient); 
     stroke-width: 1; 
     opacity: 0.5;
+    cursor: pointer;
     transition: all 0.1s ease-in-out; 
   }
 
@@ -132,6 +133,7 @@
     stroke: url(#verticalGradient); 
     stroke-width: 1; 
     opacity: 0.5; 
+    cursor: pointer;
     transition: all 0.1s ease-in-out; 
   }
   
@@ -147,6 +149,7 @@
     stroke: red; 
     stroke-width: 5; 
     opacity: 0.9; 
+    cursor: pointer;
   }
   
   .warningEdge { 
@@ -154,6 +157,7 @@
     stroke: orange; 
     stroke-width: 3; 
     opacity: 0.9; 
+    cursor: pointer;
     transition: all 0.1s ease-in-out; 
   }
   
@@ -164,14 +168,14 @@
     opacity: 1.0; 
   }
   
-  /* Unified badge styles with '?' cursor */
+  /* Unified badge styles with pointer cursor */
   .badge { 
     font-size: 10px; 
     font-weight: bold; 
     fill: white; 
     text-anchor: middle; 
     dominant-baseline: middle; 
-    cursor: help; 
+    cursor: pointer; 
     transition: all 0.1s ease-in-out; 
   }
   
@@ -217,26 +221,26 @@
   <path d="M 590.0 128.0 C 640.0 128.0, 646.0 172.0, 696.0 172.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/example/lib/home_page.dart ▶ /Users/jp/src/github/vteam/fcheck/example/lib/models.dart</title>
 </g>
-<g class="outgoingBadge">
+<g class="badge outgoingBadge">
   <path d="M 276.0,128.0 L 264.0,121.0 Q 261.0,121.0 261.0,124.0 L 261.0,132.0 Q 261.0,135.0 264.0,135.0 Z" fill="#10b981"/>
-  <text x="265.0" y="131.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. home_page.dart</title></g><text x="160.0" y="115.0" class="textNormal">main.dart</text>
+  <text x="265.68" y="129.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. home_page.dart</title></g><text x="160.0" y="115.0" class="textNormal">main.dart</text>
 <text x="160.0" y="185.0" class="textNormal">comments_example.dart</text>
 <text x="160.0" y="255.0" class="textNormal">subclass.dart</text>
-<g class="incomingBadge">
+<g class="badge incomingBadge">
   <path d="M 382.0,102.0 L 370.0,95.0 Q 367.0,95.0 367.0,98.0 L 367.0,106.0 Q 367.0,109.0 370.0,109.0 Z" fill="#3b82f6"/>
-  <text x="371.0" y="105.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. main.dart</title></g><g class="outgoingBadge">
+  <text x="371.68" y="103.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. main.dart</title></g><g class="badge outgoingBadge">
   <path d="M 596.0,128.0 L 584.0,121.0 Q 581.0,121.0 581.0,124.0 L 581.0,132.0 Q 581.0,135.0 584.0,135.0 Z" fill="#10b981"/>
-  <text x="585.0" y="131.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. counter_widget.dart
+  <text x="585.68" y="129.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. counter_widget.dart
 2. models.dart</title></g><text x="480.0" y="115.0" class="textNormal">home_page.dart</text>
-<g class="incomingBadge">
+<g class="badge incomingBadge">
   <path d="M 702.0,102.0 L 690.0,95.0 Q 687.0,95.0 687.0,98.0 L 687.0,106.0 Q 687.0,109.0 690.0,109.0 Z" fill="#3b82f6"/>
-  <text x="691.0" y="105.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. home_page.dart</title></g><g class="outgoingBadge">
+  <text x="691.68" y="103.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. home_page.dart</title></g><g class="badge outgoingBadge">
   <path d="M 916.0,128.0 L 904.0,121.0 Q 901.0,121.0 901.0,124.0 L 901.0,132.0 Q 901.0,135.0 904.0,135.0 Z" fill="#10b981"/>
-  <text x="905.0" y="131.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. utils.dart</title></g><text x="800.0" y="115.0" class="textNormal">counter_widget.dart</text>
-<g class="incomingBadge">
+  <text x="905.68" y="129.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. utils.dart</title></g><text x="800.0" y="115.0" class="textNormal">counter_widget.dart</text>
+<g class="badge incomingBadge">
   <path d="M 702.0,172.0 L 690.0,165.0 Q 687.0,165.0 687.0,168.0 L 687.0,176.0 Q 687.0,179.0 690.0,179.0 Z" fill="#3b82f6"/>
-  <text x="691.0" y="175.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. home_page.dart</title></g><text x="800.0" y="185.0" class="textNormal">models.dart</text>
-<g class="incomingBadge">
+  <text x="691.68" y="173.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. home_page.dart</title></g><text x="800.0" y="185.0" class="textNormal">models.dart</text>
+<g class="badge incomingBadge">
   <path d="M 1022.0,102.0 L 1010.0,95.0 Q 1007.0,95.0 1007.0,98.0 L 1007.0,106.0 Q 1007.0,109.0 1010.0,109.0 Z" fill="#3b82f6"/>
-  <text x="1011.0" y="105.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. counter_widget.dart</title></g><text x="1120.0" y="115.0" class="textNormal">utils.dart</text>
+  <text x="1011.68" y="103.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. counter_widget.dart</title></g><text x="1120.0" y="115.0" class="textNormal">utils.dart</text>
 </svg>

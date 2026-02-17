@@ -10,6 +10,39 @@ enum BadgeDirection {
   east
 }
 
+/// Geometry values used to render a badge and fit text inside it.
+class _BadgeGeometry {
+  final double spanX;
+  final double spanY;
+  final double radius;
+  final double fontSize;
+  final double textOffsetX;
+  final double textLength;
+
+  const _BadgeGeometry({
+    required this.spanX,
+    required this.spanY,
+    required this.radius,
+    required this.fontSize,
+    required this.textOffsetX,
+    required this.textLength,
+  });
+}
+
+const int _badgeExtraCharsMax = 4;
+const double _badgeBaseSpanX = 18.0;
+const double _badgeSpanXPerExtraChar = 4.0;
+const double _badgeBaseSpanY = 14.0;
+const double _badgeSpanYPerExtraChar = 1.2;
+const double _badgeCornerRadius = 3.0;
+const int _badgeSmallFontThresholdDigits = 4;
+const int _badgeMediumFontThresholdDigits = 3;
+const double _badgeSmallFontSize = 6.2;
+const double _badgeMediumFontSize = 6.8;
+const double _badgeDefaultFontSize = 8.0;
+const double _badgeTextOffsetXRatio = 0.24;
+const double _badgeTextLengthRatio = 0.46;
+
 /// A model representing a directional triangular badge for dependency visualization.
 ///
 /// This class creates triangular badges that indicate the direction of dependencies:
@@ -85,28 +118,27 @@ class BadgeModel {
       return '';
     }
 
+    final countText = '$count';
+    final geometry = _resolveGeometry(countText);
+
     final tooltip = peers.isEmpty
         ? ''
         : List.generate(peers.length, (i) => '${i + 1}. ${peers[i]}')
             .join('\n');
 
-    /// Horizontal offset for text positioning within the triangular badge.
-    const double textHorizontalOffset = 5.0;
-
     /// Vertical offset for text positioning within the triangular badge.
-    const double textVerticalOffset = 3.0;
-
-    /// Font size for the dependency count text.
-    const double badgeFontSize = 8.0;
-
-    final pathData = _getTrianglePath();
+    const double textVerticalOffset = 1.0;
+    final pathData = _getTrianglePath(geometry);
     final textX = direction == BadgeDirection.west
-        ? cx + textHorizontalOffset
-        : cx - textHorizontalOffset;
+        ? cx + geometry.textOffsetX
+        : cx - geometry.textOffsetX;
+    final textLengthAttrs = countText.length > 1
+        ? ' textLength="${geometry.textLength}" lengthAdjust="spacingAndGlyphs"'
+        : '';
 
-    return '''<g class="$cssClass">
+    return '''<g class="badge $cssClass">
   <path d="$pathData" fill="$color"/>
-  <text x="$textX" y="${cy + textVerticalOffset}" text-anchor="middle" fill="white" font-size="$badgeFontSize" font-weight="bold">$count</text>${tooltip.isNotEmpty ? '<title>$tooltip</title>' : ''}</g>''';
+  <text x="$textX" y="${cy + textVerticalOffset}" text-anchor="middle" fill="white" font-size="${geometry.fontSize}" font-weight="bold"$textLengthAttrs>$countText</text>${tooltip.isNotEmpty ? '<title>$tooltip</title>' : ''}</g>''';
   }
 
   /// Generates the SVG path data for a triangle with rounded corners.
@@ -116,15 +148,40 @@ class BadgeModel {
   ///
   /// For west direction: Points left with the flat edge on the right
   /// For east direction: Points right with the flat edge on the left
-  String _getTrianglePath() {
-    /// Total width (base) of the triangular badge.
-    const double badgeSize = 14.0;
+  _BadgeGeometry _resolveGeometry(String label) {
+    final extraChars = (label.length - 1).clamp(0, _badgeExtraCharsMax);
+    final extra = extraChars.toDouble();
+    final spanX = _badgeBaseSpanX + (extra * _badgeSpanXPerExtraChar);
+    final spanY = _badgeBaseSpanY + (extra * _badgeSpanYPerExtraChar);
+    final radius = _badgeCornerRadius;
+    final fontSize = label.length >= _badgeSmallFontThresholdDigits
+        ? _badgeSmallFontSize
+        : (label.length >= _badgeMediumFontThresholdDigits
+            ? _badgeMediumFontSize
+            : _badgeDefaultFontSize);
+    final textOffsetX = spanX * _badgeTextOffsetXRatio;
+    final textLength = spanX * _badgeTextLengthRatio;
 
-    /// Total height (point to base) of the triangular badge.
-    const double badgeHeight = 18.0;
+    return _BadgeGeometry(
+      spanX: spanX,
+      spanY: spanY,
+      radius: radius,
+      fontSize: fontSize,
+      textOffsetX: textOffsetX,
+      textLength: textLength,
+    );
+  }
 
-    /// Corner radius for the rounded triangular points.
-    const double badgeRadius = 3.0;
+  /// Builds the directional rounded-triangle path for this badge instance.
+  ///
+  /// The shape uses [geometry] dimensions that are already adjusted to the
+  /// current label length so larger counts still fit inside the rendered badge.
+  /// The returned path points left for [BadgeDirection.west] and right for
+  /// [BadgeDirection.east], while preserving rounded outer corners.
+  String _getTrianglePath(_BadgeGeometry geometry) {
+    final badgeHeight = geometry.spanX;
+    final badgeSize = geometry.spanY;
+    final badgeRadius = geometry.radius;
 
     /// Divisor used to calculate half dimensions.
     const double halfDivisor = 2.0;
