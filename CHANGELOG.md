@@ -7,6 +7,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.13] - 2026-02-17
+
+### Added
+
+- 🧹 **Dead Code Method Detection**: Extended dead code analysis to detect unused methods in classes, mixins, enums, and extensions - not just top-level functions.
+- 📝 **Documentation**: Updated README.md and RULES_DEAD_CODE.md to reflect the new method detection capability.
+
+### Changed
+
+- 🖼️ **SVG Folder Improvements**: Enhanced folder dependency visualization with snug gutters and improved edge positioning for cleaner graphs.
+
 ## [0.9.12] - 2026-02-16
 
 ### Fixed
