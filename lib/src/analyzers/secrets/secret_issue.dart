@@ -40,7 +40,7 @@ class SecretIssue {
   String format({int? lineNumberWidth}) {
     assertValidLineNumberWidth(lineNumberWidth);
     final location = _formatLocation();
-    return 'Secret issue at $location: $secretType';
+    return 'Secret issue at $location: ${colorizeIssueArtifact('$secretType')}';
   }
 
   /// Internal helper used by fcheck analysis and reporting.

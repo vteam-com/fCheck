@@ -1664,7 +1664,7 @@ void printAnalysisError(Object error, StackTrace stack) {
 }
 
 /// Length of the header and footer lines
-final int dividerLength = 34;
+final int dividerLength = 37;
 const int _halfTitleLengthDivisor = 2;
 
 bool get _supportsAnsiEscapes =>

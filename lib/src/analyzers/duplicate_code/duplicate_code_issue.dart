@@ -70,7 +70,7 @@ class DuplicateCodeIssue {
     return '$similarityText% ($lineCountText $lineLabel) '
         '${colorizePathFilename('$displayFirstPath:$firstLineNumber')} <-> '
         '${colorizePathFilename('$displaySecondPath:$secondLineNumber')} '
-        '($firstSymbol, $secondSymbol)';
+        '(${colorizeIssueArtifact(firstSymbol)}, ${colorizeIssueArtifact(secondSymbol)})';
   }
 
   /// Strips a shared absolute root prefix for shorter issue display paths.

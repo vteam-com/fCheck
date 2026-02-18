@@ -31,6 +31,9 @@ bool get _supportsAnsiEscapes =>
 String _colorizeBlue(String text) =>
     _supportsAnsiEscapes ? '\x1B[${_ansiBlue}m$text\x1B[0m' : text;
 
+String _colorizeOrange(String text) =>
+    _supportsAnsiEscapes ? '\x1B[38;5;208m$text\x1B[0m' : text;
+
 /// Colors only the filename token (the last path segment) in blue.
 ///
 /// Examples:
@@ -59,6 +62,14 @@ String colorizePathFilename(String location) {
   final filename = location.substring(filenameStart, filenameEnd);
   final suffix = location.substring(filenameEnd);
   return '$prefix${_colorizeBlue(filename)}$suffix';
+}
+
+/// Colors the offending artifact text (symbol/value) in orange.
+String colorizeIssueArtifact(String text) {
+  if (!_supportsAnsiEscapes || text.isEmpty) {
+    return text;
+  }
+  return _colorizeOrange(text);
 }
 
 /// Converts absolute paths under the current working directory to relative.

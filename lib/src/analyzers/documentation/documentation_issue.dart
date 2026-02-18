@@ -58,7 +58,8 @@ class DocumentationIssue {
       rawPath: filePath,
       lineNumber: lineNumber,
     );
-    final subjectSuffix = subject.isEmpty ? '' : ' "$subject"';
+    final subjectSuffix =
+        subject.isEmpty ? '' : ' "${colorizeIssueArtifact(subject)}"';
     return '$location: $typeLabel$subjectSuffix';
   }
 

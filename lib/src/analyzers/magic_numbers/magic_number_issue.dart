@@ -32,7 +32,7 @@ class MagicNumberIssue {
       rawPath: filePath,
       lineNumber: lineNumber,
     );
-    return '$location: $value';
+    return '$location: ${colorizeIssueArtifact(value)}';
   }
 
   /// Converts this issue to a JSON-compatible map.

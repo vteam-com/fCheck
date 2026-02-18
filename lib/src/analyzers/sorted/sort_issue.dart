@@ -37,7 +37,7 @@ class SourceSortIssue {
       rawPath: filePath,
       lineNumber: lineNumber,
     );
-    return '$location ($className)';
+    return '$location (${colorizeIssueArtifact(className)})';
   }
 
   /// Converts this issue to a JSON-compatible map.
