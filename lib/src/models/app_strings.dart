@@ -43,6 +43,8 @@ class AppStrings {
   static const String deadCode = 'Dead Code';
   static const String layers = 'Layers';
   static const String sourceSorting = 'Source Sorting';
+  static const String dependency = 'Dependency';
+  static const String devDependency = 'DevDependency';
   static const String dependencies = 'Dependencies';
   static const String duplicateCode = 'Duplicate Code';
 

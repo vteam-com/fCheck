@@ -603,6 +603,40 @@ void main() {
       expect(RegExp(r'Total Score\s+:').allMatches(joined), hasLength(1));
     });
 
+    test('should show dependency and devDependency counts in the dashboard',
+        () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 0,
+        fileMetrics: const [],
+        secretIssues: const [],
+        hardcodedStringIssues: const [],
+        magicNumberIssues: const [],
+        sourceSortIssues: const [],
+        layersIssues: const [],
+        deadCodeIssues: const [],
+        layersEdgeCount: 9,
+        layersCount: 0,
+        dependencyGraph: const {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        dependencyCount: 3,
+        devDependencyCount: 2,
+      );
+
+      final output = buildReportLines(projectMetrics);
+      final joined = output.join('\n');
+
+      expect(joined, contains(AppStrings.dependency));
+      expect(joined, contains(AppStrings.devDependency));
+      expect(joined, contains(RegExp(r'Dependency\s+:.*3')));
+      expect(joined, contains(RegExp(r'DevDependency\s+:.*2')));
+    });
+
     test('should omit Lists section when listMode is none', () {
       final projectMetrics = ProjectMetrics(
         totalFolders: 1,

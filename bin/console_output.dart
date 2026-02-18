@@ -417,7 +417,8 @@ List<String> buildReportLines(
   final duplicateCodeAnalyzerEnabled = metrics.duplicateCodeAnalyzerEnabled;
   final documentationAnalyzerEnabled = metrics.documentationAnalyzerEnabled;
   final layersAnalyzerEnabled = metrics.layersAnalyzerEnabled;
-  final layersEdgeCount = metrics.layersEdgeCount;
+  final dependencyCount = metrics.dependencyCount;
+  final devDependencyCount = metrics.devDependencyCount;
   final fileMetrics = metrics.fileMetrics;
   final sourceSortIssues = metrics.sourceSortIssues;
   final layersIssues = metrics.layersIssues;
@@ -600,10 +601,12 @@ List<String> buildReportLines(
       valuePreAligned: true,
     ),
     _gridCell(
-      label: AppStrings.dependencies,
-      value: layersAnalyzerEnabled
-          ? formatCount(layersEdgeCount)
-          : AppStrings.disabled,
+      label: AppStrings.dependency,
+      value: formatCount(dependencyCount),
+    ),
+    _gridCell(
+      label: AppStrings.devDependency,
+      value: formatCount(devDependencyCount),
     ),
   ];
   for (var index = 0; index < leftDashboardRows.length; index++) {

@@ -116,6 +116,12 @@ class ProjectMetrics {
   /// The name of the analyzed project as defined in its pubspec.yaml.
   final String projectName;
 
+  /// Number of entries in `dependencies` from pubspec.yaml.
+  final int dependencyCount;
+
+  /// Number of entries in `dev_dependencies` from pubspec.yaml.
+  final int devDependencyCount;
+
   /// Whether the one-class-per-file analyzer was enabled for this run.
   final bool oneClassPerFileAnalyzerEnabled;
 
@@ -198,6 +204,8 @@ class ProjectMetrics {
     required this.projectName,
     required this.version,
     required this.projectType,
+    this.dependencyCount = 0,
+    this.devDependencyCount = 0,
     this.usesLocalization = false,
     this.excludedFilesCount = 0,
     this.customExcludedFilesCount = 0,

@@ -333,6 +333,8 @@ class AnalyzeFolder {
       projectName: projectName,
       projectType: projectType,
       version: projectVersion,
+      dependencyCount: pubspecInfo.dependencyCount,
+      devDependencyCount: pubspecInfo.devDependencyCount,
       usesLocalization: usesLocalization,
       excludedFilesCount: excludedDartFilesCount,
       customExcludedFilesCount: customExcludedDartFilesCount,
@@ -503,12 +505,16 @@ class _PubspecInfo {
   final String name;
   final String version;
   final ProjectType projectType;
+  final int dependencyCount;
+  final int devDependencyCount;
 
   const _PubspecInfo({
     required this.projectRoot,
     required this.name,
     required this.version,
     required this.projectType,
+    required this.dependencyCount,
+    required this.devDependencyCount,
   });
 
   /// Package identifier resolved from `pubspec.yaml`.
@@ -647,6 +653,8 @@ class _PubspecInfo {
           name: name,
           version: version,
           projectType: projectType,
+          dependencyCount: _readMapEntryCount(yaml, 'dependencies'),
+          devDependencyCount: _readMapEntryCount(yaml, 'dev_dependencies'),
         );
       }
       return _PubspecInfo(
@@ -654,6 +662,8 @@ class _PubspecInfo {
         name: 'unknown',
         version: 'unknown',
         projectType: ProjectType.dart,
+        dependencyCount: 0,
+        devDependencyCount: 0,
       );
     } catch (_) {
       return _PubspecInfo(
@@ -661,6 +671,8 @@ class _PubspecInfo {
         name: 'unknown',
         version: 'unknown',
         projectType: ProjectType.unknown,
+        dependencyCount: 0,
+        devDependencyCount: 0,
       );
     }
   }
@@ -672,6 +684,8 @@ class _PubspecInfo {
       name: 'unknown',
       version: 'unknown',
       projectType: ProjectType.unknown,
+      dependencyCount: 0,
+      devDependencyCount: 0,
     );
   }
 
@@ -685,6 +699,15 @@ class _PubspecInfo {
       return value;
     }
     return value.toString();
+  }
+
+  /// Internal helper used by fcheck analysis and reporting.
+  static int _readMapEntryCount(YamlMap yaml, String field) {
+    final value = yaml[field];
+    if (value is YamlMap) {
+      return value.length;
+    }
+    return 0;
   }
 
   /// Internal helper used by fcheck analysis and reporting.
