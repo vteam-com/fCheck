@@ -75,7 +75,7 @@ class AppStrings {
   static const String deadFunctions = 'Dead functions';
   static const String unusedVariables = 'Unused variables';
   static const String svgLayers = 'SVG layers';
-  static const String svgLayersFolder = 'SVG layers (folder)';
+  static const String svgLayersFolder = 'SVG layers Folder';
   static const String mermaidLayers = 'Mermaid layers';
   static const String plantUmlLayers = 'PlantUML layers';
   static const String input = 'Input';

@@ -14,7 +14,7 @@ import 'console_common.dart';
 const int _maxIssuesToShow = 10;
 const int _percentageMultiplier = 100;
 const int _gridLabelWidth = 18;
-const int _gridValueWidth = 18;
+const int _gridValueWidth = 15;
 const int _domainValueWidth = 18;
 const int _perfectScoreThreshold = 95;
 const int _goodScoreThreshold = 85;
@@ -25,7 +25,8 @@ const int _compactDecimalPlaces = 2;
 const int _hardcodedValueWidth = 3;
 const int _minorSuppressionPenaltyUpperBound = 3;
 const int _moderateSuppressionPenaltyUpperBound = 7;
-const int _unknownListBlockOrder = 99;
+const int _maxSuppressionPenaltyPoints = 25;
+const int _analyzerHeaderTitleWidth = 22;
 const String _noneIndicator = AppStrings.noneIndicator;
 
 /// Returns all issues or a top slice depending on [listMode].
@@ -80,7 +81,7 @@ String _labelValueLine({
   required String value,
   int labelWidth = _gridLabelWidth,
 }) =>
-    '${label.padRight(labelWidth)} ${_separatorColon()} $value';
+    '${_colorize(label.padRight(labelWidth), _ansiGray)} ${_separatorColon()} $value';
 
 String _gridRow(List<String> cells) => cells.join('  ${_separatorPipe()}  ');
 
@@ -115,6 +116,64 @@ String _scoreValue(int score) {
     return _colorizeBold(text, _ansiOrange);
   }
   return _colorizeBold(text, _ansiRedBright);
+}
+
+String _analyzerStatusIndicator({
+  required bool enabled,
+  required int scorePercent,
+  required int issueCount,
+}) {
+  if (!enabled) {
+    return _colorize('[-]', _ansiGray);
+  }
+  if (issueCount == 0 && scorePercent == _percentageMultiplier) {
+    return _colorize('[✓]', _ansiGreen);
+  }
+  if (scorePercent >= _fairScoreThreshold) {
+    return _colorize('[!]', _ansiYellowBright);
+  }
+  return _colorize('[x]', _ansiRedBright);
+}
+
+String _analyzerSectionHeader({
+  required String title,
+  required bool enabled,
+  required int issueCount,
+  required double deductionPercent,
+}) {
+  final headerTitle = _colorizeBold(
+    title.padRight(_analyzerHeaderTitleWidth),
+    _ansiWhiteBright,
+  );
+  final statusText = _analyzerStatusIndicator(
+    enabled: enabled,
+    scorePercent: _percentageMultiplier - deductionPercent.round(),
+    issueCount: issueCount,
+  );
+  final deductionText = _analyzerDeductionValue(
+    enabled: enabled,
+    issueCount: issueCount,
+    deductionPercent: deductionPercent,
+  );
+  if (deductionText.isEmpty) {
+    return '$statusText $headerTitle';
+  }
+  return '$statusText $headerTitle $deductionText';
+}
+
+String _analyzerDeductionValue({
+  required bool enabled,
+  required int issueCount,
+  required double deductionPercent,
+}) {
+  if (!enabled || issueCount == 0) {
+    return '';
+  }
+  final normalizedDeduction =
+      deductionPercent.clamp(0, _percentageMultiplier).toDouble();
+  final deductionText = '-${_formatCompactDecimal(normalizedDeduction)}%';
+  final issueText = formatCount(issueCount);
+  return _colorize('$deductionText ($issueText)', _ansiYellow);
 }
 
 /// Formats a domain dashboard value including disabled/issue severity states.
@@ -163,7 +222,7 @@ String _commentSummary({
 }) {
   final ratioPercent = (commentRatio * _percentageMultiplier).round();
   final summary =
-      '${formatCount(totalCommentLines)} (${formatCount(ratioPercent)}%)';
+      '(${formatCount(ratioPercent)}%) ${formatCount(totalCommentLines)}';
   final text = width <= 0 ? summary : summary.padLeft(width);
   if (ratioPercent < _minHealthyCommentRatioPercent) {
     return _colorize(text, _ansiRed);
@@ -229,7 +288,7 @@ String _formatCompactDecimal(double value) {
 /// The output is grouped into:
 /// - Scorecard (overall compliance + next investment)
 /// - Dashboard (compact project and analyzer snapshot)
-/// - Lists (detailed issues), unless [listMode] is `none`
+/// - Analyzers (grouped per analyzer with score, summary, and optional details)
 ///
 /// [listMode] controls detail level for issue sections and can render
 /// filenames-only output for easier triage.
@@ -251,7 +310,15 @@ List<String> buildReportLines(
               for (final path in _uniqueFilePaths(metrics.ignoreDirectiveFiles))
                 path: 1,
             }
-          : Map<String, int>.from(metrics.ignoreDirectiveCountsByFile);
+          : () {
+              final normalizedCounts = <String, int>{};
+              for (final entry in metrics.ignoreDirectiveCountsByFile.entries) {
+                final normalizedPath = normalizeIssueLocation(entry.key).path;
+                normalizedCounts[normalizedPath] =
+                    (normalizedCounts[normalizedPath] ?? 0) + entry.value;
+              }
+              return normalizedCounts;
+            }();
   final ignoreDirectiveEntries = ignoreDirectiveCountsByFile.entries.toList()
     ..sort((left, right) => left.key.compareTo(right.key));
   final ignoreDirectiveFileCount = ignoreDirectiveEntries.length;
@@ -343,6 +410,41 @@ List<String> buildReportLines(
   final complianceFocusAreaLabel = metrics.complianceFocusAreaLabel;
   final complianceFocusAreaIssueCount = metrics.complianceFocusAreaIssueCount;
   final complianceNextInvestment = metrics.complianceNextInvestment;
+  final analyzerScoresByKey = <String, int>{
+    for (final score in metrics.analyzerScores) score.key: score.scorePercent,
+    'suppression_hygiene': (_percentageMultiplier -
+            ((suppressionPenaltyPoints / _maxSuppressionPenaltyPoints) *
+                    _percentageMultiplier)
+                .round())
+        .clamp(0, _percentageMultiplier),
+  };
+  final analyzerIssueCountsByKey = <String, int>{
+    for (final score in metrics.analyzerScores) score.key: score.issueCount,
+    'suppression_hygiene': ignoreDirectivesCount +
+        customExcludedFilesCount +
+        disabledAnalyzersCount,
+  };
+  final analyzerEnabledByKey = <String, bool>{
+    for (final score in metrics.analyzerScores) score.key: score.enabled,
+    'suppression_hygiene': true,
+  };
+  final enabledScoredAnalyzerCount = metrics.analyzerScores
+      .where((score) => score.enabled)
+      .where(
+        (score) =>
+            score.key != 'documentation' || documentationIssues.isNotEmpty,
+      )
+      .length;
+  final safeEnabledScoredAnalyzerCount =
+      enabledScoredAnalyzerCount == 0 ? 1 : enabledScoredAnalyzerCount;
+  final analyzerDeductionPercentByKey = <String, double>{
+    for (final score in metrics.analyzerScores)
+      score.key: score.enabled
+          ? ((1 - score.score).clamp(0.0, 1.0) * _percentageMultiplier) /
+              safeEnabledScoredAnalyzerCount
+          : 0,
+    'suppression_hygiene': suppressionPenaltyPoints.toDouble(),
+  };
   final commentSummary = _commentSummary(
     totalCommentLines: totalCommentLines,
     commentRatio: commentRatio,
@@ -354,6 +456,47 @@ List<String> buildReportLines(
 
   final lines = <String>[];
   void addLine(String line) => lines.add(line);
+  void appendScorecardSection() {
+    addLine(dividerLine(AppStrings.scorecardDivider));
+    addLine(
+      _labelValueLine(
+        label: 'Total Score',
+        value: _scoreValue(complianceScore),
+      ),
+    );
+    if (suppressionPenaltyPoints > 0) {
+      addLine(
+        _labelValueLine(
+          label: AppStrings.suppressions,
+          value: _suppressionPenaltyValue(
+            penaltyPoints: suppressionPenaltyPoints,
+          ),
+        ),
+      );
+    }
+    if (complianceFocusAreaLabel == 'None') {
+      addLine(
+        _labelValueLine(
+          label: AppStrings.investNext,
+          value: complianceNextInvestment,
+        ),
+      );
+    } else {
+      addLine(
+        _labelValueLine(
+          label: AppStrings.focusArea,
+          value:
+              '$complianceFocusAreaLabel (${formatCount(complianceFocusAreaIssueCount)} ${AppStrings.issues})',
+        ),
+      );
+      addLine(
+        _labelValueLine(
+          label: AppStrings.investNext,
+          value: complianceNextInvestment,
+        ),
+      );
+    }
+  }
 
   final filenamesOnly = listMode == ReportListMode.filenames;
 
@@ -363,79 +506,10 @@ List<String> buildReportLines(
       value: '$projectName (${AppStrings.version} $version)',
     ),
   );
-  addLine(dividerLine(AppStrings.scorecardDivider));
-  addLine(
-    _labelValueLine(
-      label: AppStrings.complianceScore,
-      value: _scoreValue(complianceScore),
-    ),
-  );
-  if (suppressionPenaltyPoints > 0) {
-    addLine(
-      _labelValueLine(
-        label: AppStrings.suppressions,
-        value: _suppressionPenaltyValue(
-          penaltyPoints: suppressionPenaltyPoints,
-        ),
-      ),
-    );
-  }
-  if (complianceFocusAreaLabel == 'None') {
-    addLine(
-      _labelValueLine(
-        label: AppStrings.investNext,
-        value: complianceNextInvestment,
-      ),
-    );
-  } else {
-    addLine(
-      _labelValueLine(
-        label: AppStrings.focusArea,
-        value:
-            '$complianceFocusAreaLabel (${formatCount(complianceFocusAreaIssueCount)} ${AppStrings.issues})',
-      ),
-    );
-    addLine(
-      _labelValueLine(
-        label: AppStrings.investNext,
-        value: complianceNextInvestment,
-      ),
-    );
-  }
-
-  final oneClassSummary = _domainValue(
-    enabled: oneClassPerFileAnalyzerEnabled,
-    issueCount: nonCompliant.length,
-  );
   final hardcodedSummary = _domainValue(
     enabled: hardcodedStringsAnalyzerEnabled,
     issueCount: hardcodedStringIssues.length,
     width: _hardcodedValueWidth,
-  );
-  final magicNumbersSummary = _domainValue(
-    enabled: magicNumbersAnalyzerEnabled,
-    issueCount: magicNumberIssues.length,
-  );
-  final sourceSortingSummary = _domainValue(
-    enabled: sourceSortingAnalyzerEnabled,
-    issueCount: sourceSortIssues.length,
-  );
-  final layersSummary = _domainValue(
-    enabled: layersAnalyzerEnabled,
-    issueCount: layersIssues.length,
-  );
-  final secretsSummary = _domainValue(
-    enabled: secretsAnalyzerEnabled,
-    issueCount: secretIssues.length,
-    anyIssueIsBad: true,
-  );
-  final deadCodeSummary = _domainValue(
-    enabled: deadCodeAnalyzerEnabled,
-    issueCount: deadCodeIssues.length,
-  );
-  final duplicateCodeSummary = _domainValue(
-    enabled: duplicateCodeAnalyzerEnabled,
-    issueCount: duplicateCodeIssues.length,
   );
   final localizationLabel =
       '${AppStrings.localization} (${usesLocalization ? AppStrings.on : AppStrings.off})';
@@ -444,7 +518,7 @@ List<String> buildReportLines(
       : AppStrings.disabled;
   final localizationHardcodedValue = hardcodedSummary;
   final localizationHardcodedPlain =
-      'HardCoded $hardcodedCountText'.padLeft(_gridValueWidth);
+      'Hardcoded $hardcodedCountText'.padLeft(_gridValueWidth);
   final localizationHardcodedSummary = localizationHardcodedPlain.replaceRange(
     localizationHardcodedPlain.length - hardcodedCountText.length,
     localizationHardcodedPlain.length,
@@ -455,17 +529,23 @@ List<String> buildReportLines(
     value: localizationHardcodedSummary,
   );
   addLine(dividerLine(AppStrings.dashboardDivider));
-  addLine(_gridRow([
+  final leftDashboardRows = <String>[
+    _gridCell(label: AppStrings.folders, value: formatCount(totalFolders)),
     _gridCell(label: AppStrings.files, value: formatCount(totalFiles)),
-    _gridCell(label: AppStrings.dartFiles, value: formatCount(totalDartFiles)),
-  ]));
-  addLine(_gridRow([
     _gridCell(
-        label: AppStrings.excludedFiles,
-        value: formatCount(excludedFilesCount)),
+      label: AppStrings.excludedFiles,
+      value: formatCount(excludedFilesCount),
+    ),
+    _gridCell(label: AppStrings.dartFiles, value: formatCount(totalDartFiles)),
+    _gridCell(label: AppStrings.loc, value: formatCount(totalLinesOfCode)),
+    _gridCell(
+      label: AppStrings.comments,
+      value: commentSummary,
+      valuePreAligned: true,
+    ),
+  ];
+  final rightDashboardRows = <String>[
     localizationCell,
-  ]));
-  addLine(_gridRow([
     _gridCell(
       label: AppStrings.customExcludes,
       value: _suppressionCountValue(
@@ -482,8 +562,6 @@ List<String> buildReportLines(
       ),
       valuePreAligned: true,
     ),
-  ]));
-  addLine(_gridRow([
     _gridCell(
       label: AppStrings.disabledRules,
       value: _suppressionCountValue(
@@ -493,73 +571,20 @@ List<String> buildReportLines(
       valuePreAligned: true,
     ),
     _gridCell(
-      label: AppStrings.folders,
-      value: formatCount(totalFolders),
-    ),
-  ]));
-  addLine(_gridRow([
-    _gridCell(label: AppStrings.loc, value: formatCount(totalLinesOfCode)),
-    _gridCell(
-      label: AppStrings.comments,
-      value: commentSummary,
-      valuePreAligned: true,
-    ),
-  ]));
-  addLine(_gridRow([
-    _gridCell(
-      label: AppStrings.oneClassPerFile,
-      value: oneClassSummary,
-      valuePreAligned: true,
-    ),
-    _gridCell(
-      label: AppStrings.magicNumbers,
-      value: magicNumbersSummary,
-      valuePreAligned: true,
-    ),
-  ]));
-  addLine(_gridRow([
-    _gridCell(
-      label: AppStrings.secrets,
-      value: secretsSummary,
-      valuePreAligned: true,
-    ),
-    _gridCell(
-      label: AppStrings.deadCode,
-      value: deadCodeSummary,
-      valuePreAligned: true,
-    ),
-  ]));
-  addLine(_gridRow([
-    _gridCell(
-      label: AppStrings.layers,
-      value: layersSummary,
-      valuePreAligned: true,
-    ),
-    _gridCell(
-      label: AppStrings.sourceSorting,
-      value: sourceSortingSummary,
-      valuePreAligned: true,
-    ),
-  ]));
-  addLine(_gridRow([
-    _gridCell(
       label: AppStrings.dependencies,
       value: layersAnalyzerEnabled
           ? formatCount(layersEdgeCount)
           : AppStrings.disabled,
     ),
-    _gridCell(
-      label: AppStrings.duplicateCode,
-      value: duplicateCodeSummary,
-      valuePreAligned: true,
-    ),
-  ]));
-
-  if (listMode == ReportListMode.none) {
-    return lines;
+  ];
+  for (var index = 0; index < leftDashboardRows.length; index++) {
+    final rightCell = index < rightDashboardRows.length
+        ? rightDashboardRows[index]
+        : ''.padRight(_gridLabelWidth + _gridValueWidth + 3);
+    addLine(_gridRow([leftDashboardRows[index], rightCell]));
   }
 
-  addLine(dividerLine('Lists'));
+  addLine(dividerLine('Analyzers'));
   final listBlocks = <_ListBlock>[];
 
   void addListBlock({
@@ -570,10 +595,12 @@ List<String> buildReportLines(
     if (blockLines.isEmpty) {
       return;
     }
+    final analyzerKey = _analyzerKeyForSortKey(sortKey);
     listBlocks.add(
       _ListBlock(
         status: status,
-        sortKey: sortKey,
+        analyzerKey: analyzerKey,
+        analyzerTitle: _analyzerTitleForKey(analyzerKey),
         lines: blockLines,
       ),
     );
@@ -688,7 +715,8 @@ List<String> buildReportLines(
       for (final metric in nonCompliant) {
         final classCountText =
             metric.classCount.toString().padLeft(classCountWidth);
-        blockLines.add('  - ${metric.path} ($classCountText classes found)');
+        final normalizedPath = normalizeIssueLocation(metric.path).path;
+        blockLines.add('  - $normalizedPath ($classCountText classes found)');
       }
     }
     blockLines.add('');
@@ -1188,27 +1216,74 @@ List<String> buildReportLines(
     );
   }
 
-  const statusOrder = <_ListBlockStatus, int>{
-    _ListBlockStatus.success: 0,
-    _ListBlockStatus.disabled: 1,
-    _ListBlockStatus.warning: 2,
-    _ListBlockStatus.failure: 3,
-  };
-  listBlocks.sort((left, right) {
-    final leftOrder = statusOrder[left.status] ?? _unknownListBlockOrder;
-    final rightOrder = statusOrder[right.status] ?? _unknownListBlockOrder;
-    final statusCompare = leftOrder.compareTo(rightOrder);
-    if (statusCompare != 0) {
-      return statusCompare;
-    }
-    return left.sortKey.compareTo(right.sortKey);
-  });
+  final orderedBlocks = List<_ListBlock>.from(listBlocks)
+    ..sort((left, right) {
+      final leftEnabled = analyzerEnabledByKey[left.analyzerKey] ?? false;
+      final rightEnabled = analyzerEnabledByKey[right.analyzerKey] ?? false;
+      final leftScore = analyzerScoresByKey[left.analyzerKey] ?? 0;
+      final rightScore = analyzerScoresByKey[right.analyzerKey] ?? 0;
+      final leftIssueCount = analyzerIssueCountsByKey[left.analyzerKey] ?? 0;
+      final rightIssueCount = analyzerIssueCountsByKey[right.analyzerKey] ?? 0;
+      final leftGroup = !leftEnabled
+          ? 2
+          : (leftIssueCount == 0 && leftScore == _percentageMultiplier ? 0 : 1);
+      final rightGroup = !rightEnabled
+          ? 2
+          : (rightIssueCount == 0 && rightScore == _percentageMultiplier
+              ? 0
+              : 1);
+      final groupCompare = leftGroup.compareTo(rightGroup);
+      if (groupCompare != 0) {
+        return groupCompare;
+      }
 
-  for (final block in listBlocks) {
-    for (final blockLine in block.lines) {
-      addLine(blockLine);
+      if (leftGroup == 1) {
+        final scoreCompare = rightScore.compareTo(leftScore);
+        if (scoreCompare != 0) {
+          return scoreCompare;
+        }
+      }
+      return left.analyzerTitle.compareTo(right.analyzerTitle);
+    });
+
+  for (var index = 0; index < orderedBlocks.length; index++) {
+    final block = orderedBlocks[index];
+    final analyzerScore = analyzerScoresByKey[block.analyzerKey] ?? 0;
+    final analyzerIssueCount = analyzerIssueCountsByKey[block.analyzerKey] ?? 0;
+    final analyzerEnabled = analyzerEnabledByKey[block.analyzerKey] ?? false;
+    final analyzerDeductionPercent =
+        analyzerDeductionPercentByKey[block.analyzerKey] ?? 0;
+    final hidePassedSummaryLine = analyzerEnabled &&
+        analyzerScore == _percentageMultiplier &&
+        analyzerIssueCount == 0;
+    addLine(
+      _analyzerSectionHeader(
+        title: block.analyzerTitle,
+        enabled: analyzerEnabled,
+        issueCount: analyzerIssueCount,
+        deductionPercent: analyzerDeductionPercent,
+      ),
+    );
+    if (!hidePassedSummaryLine) {
+      addLine(_withoutLeadingStatusTag(block.lines.first).trimLeft());
+    }
+    if (listMode != ReportListMode.none) {
+      for (final blockLine in block.lines.skip(1)) {
+        if (blockLine.trim().isEmpty) {
+          continue;
+        }
+        addLine(_withoutLeadingStatusTag(blockLine));
+      }
+    }
+    final printedWarningDetails =
+        analyzerIssueCount > 0 && listMode != ReportListMode.none;
+    if (printedWarningDetails && index < orderedBlocks.length - 1) {
+      addLine('');
     }
   }
+
+  addLine('');
+  appendScorecardSection();
 
   return lines;
 }
@@ -1217,14 +1292,68 @@ enum _ListBlockStatus { success, disabled, warning, failure }
 
 class _ListBlock {
   final _ListBlockStatus status;
-  final String sortKey;
+  final String analyzerKey;
+  final String analyzerTitle;
   final List<String> lines;
 
   const _ListBlock({
     required this.status,
-    required this.sortKey,
+    required this.analyzerKey,
+    required this.analyzerTitle,
     required this.lines,
   });
+}
+
+String _analyzerKeyForSortKey(String sortKey) {
+  switch (sortKey) {
+    case 'one class per file':
+      return 'one_class_per_file';
+    case 'hardcoded strings':
+      return 'hardcoded_strings';
+    case 'magic numbers':
+      return 'magic_numbers';
+    case 'source sorting':
+      return 'source_sorting';
+    case 'layers architecture':
+      return 'layers';
+    case 'secrets':
+      return 'secrets';
+    case 'dead code':
+      return 'dead_code';
+    case 'duplicate code':
+      return 'duplicate_code';
+    case 'documentation':
+      return 'documentation';
+    case 'suppressions':
+      return 'suppression_hygiene';
+  }
+  return sortKey.replaceAll(' ', '_');
+}
+
+String _analyzerTitleForKey(String analyzerKey) {
+  switch (analyzerKey) {
+    case 'one_class_per_file':
+      return 'One class per file';
+    case 'hardcoded_strings':
+      return 'Hardcoded strings';
+    case 'magic_numbers':
+      return 'Magic numbers';
+    case 'source_sorting':
+      return 'Source sorting';
+    case 'layers':
+      return 'Layers architecture';
+    case 'secrets':
+      return 'Secrets';
+    case 'dead_code':
+      return 'Dead code';
+    case 'duplicate_code':
+      return 'Duplicate code';
+    case 'documentation':
+      return 'Documentation';
+    case 'suppression_hygiene':
+      return 'Suppression hygiene';
+  }
+  return analyzerKey;
 }
 
 /// Returns the in-file ignore directive for an analyzer, when supported.
@@ -1504,14 +1633,12 @@ void printOutputFilesHeader() {
 }
 
 /// Prints one generated output file line using a label and path.
-///
-/// [label] is expected to be pre-padded by the caller for visual alignment.
 void printOutputFileLine({
   required String label,
   required String path,
 }) {
   final normalizedPath = normalizeIssueLocation(path).path;
-  print('$label ${_separatorColon()} $normalizedPath');
+  print(_labelValueLine(label: label.trimRight(), value: normalizedPath));
 }
 
 /// Prints run completion footer with elapsed time in seconds.
@@ -1529,7 +1656,7 @@ void printAnalysisError(Object error, StackTrace stack) {
 }
 
 /// Length of the header and footer lines
-final int dividerLength = 40;
+final int dividerLength = 34;
 const int _halfTitleLengthDivisor = 2;
 
 bool get _supportsAnsiEscapes =>
@@ -1543,12 +1670,27 @@ const int _ansiOrange = 33;
 const int _ansiRed = 31;
 const int _ansiRedBright = 91;
 const int _ansiGray = 90;
+const int _ansiWhiteBright = 97;
+final RegExp _leadingStatusTagPattern = RegExp(
+  r'^(\s*)(?:\x1B\[[0-9;]*m)?\[(?:✓|!|✗|-)\](?:\x1B\[[0-9;]*m)?\s*',
+);
 
 String _colorize(String text, int colorCode) =>
     _supportsAnsiEscapes ? '\x1B[${colorCode}m$text\x1B[0m' : text;
 
 String _colorizeBold(String text, int colorCode) =>
     _supportsAnsiEscapes ? '\x1B[1;${colorCode}m$text\x1B[0m' : text;
+
+/// Removes leading status markers (e.g. `[✓]`, `[!]`, `[✗]`, `[-]`).
+String _withoutLeadingStatusTag(String line) {
+  final match = _leadingStatusTagPattern.firstMatch(line);
+  if (match == null) {
+    return line;
+  }
+  final leadingWhitespace = match.group(1) ?? '';
+  final rest = line.substring(match.end);
+  return '$leadingWhitespace$rest';
+}
 
 /// Status markers styled like `flutter doctor`.
 ///
@@ -1590,5 +1732,5 @@ String dividerLine(String title, {bool? downPointer, bool dot = false}) {
     lineAndTitle += lineType;
   }
 
-  return '$directionChar$lineAndTitle$directionChar';
+  return _colorize('$directionChar$lineAndTitle$directionChar', _ansiGray);
 }

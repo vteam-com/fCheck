@@ -598,8 +598,9 @@ void main() {
       expect(output, isNotEmpty);
       final joined = output.join('\n');
       expect(joined, contains('Scorecard'));
-      expect(joined, contains(RegExp(r'Compliance Score.*:')));
+      expect(joined, contains(RegExp(r'Total Score.*:')));
       expect(joined, contains(RegExp(r'Invest Next.*:')));
+      expect(RegExp(r'Total Score\s+:').allMatches(joined), hasLength(1));
     });
 
     test('should omit Lists section when listMode is none', () {
@@ -952,14 +953,13 @@ void main() {
       final joined = output.join('\n');
 
       expect(joined, contains(AppStrings.localization));
-      expect(joined, contains('HardCoded'));
+      expect(joined, contains('Hardcoded'));
       expect(joined, contains(AppStrings.disabled));
       expect(
           joined,
           contains(
               'Hardcoded strings check skipped (${AppStrings.disabled}).'));
       expect(joined, isNot(contains('Hardcoded strings check passed.')));
-      expect(joined, contains(RegExp(r'Duplicate Code.*:.*disabled')));
       expect(joined, contains('Duplicate code check skipped (disabled).'));
     });
 
@@ -1000,10 +1000,12 @@ void main() {
       final output = buildReportLines(projectMetrics);
       final joined = output.join('\n');
 
+      expect(joined, contains('[✓] Documentation'));
       expect(
-          joined,
-          contains(
-              '${AppStrings.documentationCheck} ${AppStrings.checkPassed}'));
+        joined,
+        isNot(contains(
+            '${AppStrings.documentationCheck} ${AppStrings.checkPassed}')),
+      );
     });
 
     test('should show documentation issues in list section', () {
@@ -1050,7 +1052,6 @@ void main() {
           buildReportLines(projectMetrics, listMode: ReportListMode.full);
       final joined = output.join('\n');
 
-      expect(joined, contains('[!]'));
       expect(joined, contains('1'));
       expect(joined, contains(AppStrings.documentationIssuesDetected));
       expect(
@@ -1209,10 +1210,14 @@ void main() {
 
       final output = buildReportLines(projectMetrics);
       final joined = output.join('\n');
-      expect(joined, contains('Suppressions check ${AppStrings.checkPassed}'));
+      expect(joined, contains('[✓] Suppression hygiene'));
+      expect(joined,
+          isNot(contains('Suppressions check ${AppStrings.checkPassed}')));
     });
 
-    test('should order list blocks by status then alphabetically', () {
+    test(
+        'should order analyzer blocks with clean first, then warning/failing by score and title',
+        () {
       final projectMetrics = ProjectMetrics(
         totalFolders: 1,
         totalFiles: 3,
@@ -1280,34 +1285,69 @@ void main() {
       );
 
       final output = buildReportLines(projectMetrics);
-      final joined = output.join('\n');
-
-      final duplicateIdx = joined.indexOf('Duplicate code check passed.');
-      final secretsIdx = joined.indexOf('Secrets scan passed.');
-      final sortingIdx = joined.indexOf('Flutter class member sorting passed.');
-      final deadCodeDisabledIdx = joined.indexOf(
-          '${AppStrings.deadCodeCheck} skipped (${AppStrings.disabled}).');
-      final hardcodedWarnIdx = joined.indexOf(
-        '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
+      final headerPattern = RegExp(
+        r'^\s*(\[[^\]]+\])\s+(.+?)(?:\s+-(\d+(?:\.\d+)?)%\s+\((\d+)\))?$',
       );
-      final magicWarnIdx = joined.indexOf(AppStrings.magicNumbersDetected);
-      final suppressionsWarnIdx = joined.indexOf(
-          '${AppStrings.suppressionsSummary} (within budget, no score deduction):');
-      final layersFailIdx = joined.indexOf(AppStrings.layersViolationsDetected);
-      final oneClassFailIdx = joined.indexOf(AppStrings.oneClassPerFileViolate);
+      final headerRows = output
+          .where((line) => RegExp(r'^\s*\[[^\]]+\]').hasMatch(line))
+          .map((line) => headerPattern.firstMatch(line))
+          .whereType<RegExpMatch>()
+          .map((match) => (
+                status: match.group(1)!,
+                title: match.group(2)!.trim(),
+                deduction: match.group(3) == null
+                    ? 0.0
+                    : double.parse(match.group(3)!),
+                issueCount:
+                    match.group(4) == null ? 0 : int.parse(match.group(4)!),
+              ))
+          .toList();
 
-      expect(duplicateIdx, isNonNegative);
-      expect(secretsIdx, greaterThan(duplicateIdx));
-      expect(sortingIdx, greaterThan(secretsIdx));
+      int groupForStatus(String status) {
+        if (status == '[✓]') {
+          return 0;
+        }
+        if (status == '[!]' || status == '[x]') {
+          return 1;
+        }
+        return 2;
+      }
 
-      expect(deadCodeDisabledIdx, greaterThan(sortingIdx));
-
-      expect(hardcodedWarnIdx, greaterThan(deadCodeDisabledIdx));
-      expect(magicWarnIdx, greaterThan(hardcodedWarnIdx));
-      expect(suppressionsWarnIdx, greaterThan(magicWarnIdx));
-
-      expect(layersFailIdx, greaterThan(suppressionsWarnIdx));
-      expect(oneClassFailIdx, greaterThan(layersFailIdx));
+      expect(headerRows, isNotEmpty);
+      for (var i = 1; i < headerRows.length; i++) {
+        final previous = headerRows[i - 1];
+        final current = headerRows[i];
+        final previousGroup = groupForStatus(previous.status);
+        final currentGroup = groupForStatus(current.status);
+        expect(
+          previousGroup <= currentGroup,
+          isTrue,
+          reason:
+              'Expected clean first, warnings/failures second, disabled last.',
+        );
+        if (previousGroup != currentGroup) {
+          continue;
+        }
+        if (currentGroup == 1 &&
+            previous.deduction != current.deduction &&
+            previous.issueCount > 0 &&
+            current.issueCount > 0) {
+          expect(
+            previous.deduction <= current.deduction,
+            isTrue,
+            reason:
+                'Expected lower global deduction first for warning/failing analyzers.',
+          );
+          continue;
+        }
+        if (previous.deduction == current.deduction || currentGroup != 1) {
+          expect(
+            current.title.compareTo(previous.title) >= 0,
+            isTrue,
+            reason: 'Expected title ascending within same ordering bucket.',
+          );
+        }
+      }
     });
 
     test('should normalize duplicated path prefixes in issue lines', () {
@@ -1403,7 +1443,7 @@ void main() {
       final joined = output.join('\n');
 
       expect(joined, isNot(contains('$absolute:$absolute:')));
-      expect(joined, contains('$absolute:2: 2'));
+      expect(joined, contains('bin/console_output.dart:2: 2'));
     });
 
     test('should normalize duplicated path prefixes in output file lines', () {

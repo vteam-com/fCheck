@@ -42,6 +42,17 @@ class MetricsAnalyzer {
   /// Computes compliance score, focus area, and investment guidance.
   ProjectMetricsAnalysisResult analyze(ProjectMetricsAnalysisInput input) {
     final complianceAreas = _buildComplianceAreas(input);
+    final analyzerScores = complianceAreas
+        .map(
+          (area) => AnalyzerScoreBreakdown(
+            key: area.key,
+            label: area.label,
+            enabled: area.enabled,
+            issueCount: area.issueCount,
+            score: area.score,
+          ),
+        )
+        .toList(growable: false);
     final enabledAreas = complianceAreas
         .where((area) => area.enabled)
         .where(
@@ -83,6 +94,7 @@ class MetricsAnalyzer {
         primaryFocusArea,
         usesLocalization: input.usesLocalization,
       ),
+      analyzerScores: analyzerScores,
     );
   }
 

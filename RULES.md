@@ -154,12 +154,15 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - When displaying source locations, always format as `relative_file_path:line_number` with no space after `:`.
 - In ANSI-capable terminals, colorize the `filename:line_number` segment in blue while keeping directory prefixes uncolored.
 - In ANSI-capable terminals, colorize right-side symbol names in orange (for example `"MyClass.myMethod"` or `"myVariable"` in issue details).
-- Hardcoded strings list entries are shown only when localization is `ON`; when localization is `OFF`, print summary-only warning text (no per-item list in Lists section).
-- Lists section blocks must be ordered by status group, then alphabetically by check name:
-  - success (ascending)
-  - disabled (ascending)
-  - warnings (ascending)
-  - failures (ascending)
+- Analyzer report output must be grouped by analyzer (not by status), and each analyzer block should include:
+  - status icon on the left (`[✓]`, `[!]`, `[x]`, or `[-]` when disabled)
+  - score percentage from `0%` to `100%` with threshold-based ANSI coloring on the right
+  - header percentage numeric field must be fixed-width (`3` chars) before `%` for vertical alignment
+  - one summary line
+  - details list (except when `--list none` is active)
+- Analyzer report block order must be:
+  - first group: no-warning analyzers (`[✓]`) sorted by analyzer title ascending
+  - second group: warning/failing analyzers (`[!]` and `[x]`) sorted by score descending, then analyzer title ascending
 
 ## Configuration
 

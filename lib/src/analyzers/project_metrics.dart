@@ -368,6 +368,10 @@ class ProjectMetrics {
   String get complianceNextInvestment =>
       _analysisResult.complianceNextInvestment;
 
+  /// Per-analyzer scoring breakdown from the project metrics analyzer.
+  List<AnalyzerScoreBreakdown> get analyzerScores =>
+      _analysisResult.analyzerScores;
+
   /// Dead code issues classified as dead files.
   List<DeadCodeIssue> get deadFileIssues => deadCodeIssues
       .where((issue) => issue.type == DeadCodeIssueType.deadFile)

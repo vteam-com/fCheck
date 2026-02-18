@@ -116,7 +116,7 @@ class TestClass {
       expect(result.stdout, contains('fCheck $packageVersion'));
       expect(result.stdout, contains(tempDir.path));
       expect(result.stdout, contains('Dart Files'));
-      expect(result.stdout, contains(RegExp(r'Compliance Score\s+:\s*')));
+      expect(result.stdout, contains(RegExp(r'Total Score\s+:\s*')));
       expect(result.stdout, contains(tempDir.path));
     });
 
@@ -269,7 +269,6 @@ class SecondClass {
       final result = await runCli(['--input', tempDir.path]);
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('[✗]'));
       expect(result.stdout, contains(AppStrings.oneClassPerFileViolate));
     });
 
@@ -288,7 +287,12 @@ class SecondClass {
       final result = await runCli(['--input', tempDir.path]);
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('[✓] One class per file check passed.'));
+      expect(
+        result.stdout,
+        contains(RegExp(r'\[✓\]\s+One class per file\s*$', multiLine: true)),
+      );
+      expect(
+          result.stdout, isNot(contains('One class per file check passed.')));
     });
 
     test('should detect hardcoded strings', () async {
@@ -305,7 +309,6 @@ void main() {
       final result = await runCli(['--input', tempDir.path]);
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('[!]'));
       expect(
         result.stdout,
         contains(
@@ -335,7 +338,6 @@ void main() {
       final result = await runCli(['--input', tempDir.path]);
 
       expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('[!]'));
       expect(
         result.stdout,
         contains(
@@ -440,7 +442,7 @@ analyzers:
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('Localization'));
-      expect(result.stdout, contains('HardCoded'));
+      expect(result.stdout, contains('Hardcoded'));
       expect(result.stdout, contains('disabled'));
       expect(
         result.stdout,

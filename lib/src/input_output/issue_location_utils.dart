@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:path/path.dart' as p;
+
 /// Parsed and normalized issue location details.
 class NormalizedIssueLocation {
   /// Normalized path with duplicated prefixes removed.
@@ -19,6 +23,24 @@ const int _pathCaptureGroupIndex = 1;
 const int _lineCaptureGroupIndex = 2;
 const String _lineNumberWidthAssertionMessage =
     'lineNumberWidth must be positive when provided.';
+
+/// Converts absolute paths under the current working directory to relative.
+String _relativizeToCurrentDirectory(String rawPath) {
+  final normalizedPath = p.normalize(rawPath);
+  if (!p.isAbsolute(normalizedPath)) {
+    return normalizedPath;
+  }
+
+  final currentDirectory = p.normalize(Directory.current.absolute.path);
+  if (normalizedPath == currentDirectory) {
+    return '.';
+  }
+  if (p.isWithin(currentDirectory, normalizedPath)) {
+    return p.relative(normalizedPath, from: currentDirectory);
+  }
+
+  return normalizedPath;
+}
 
 /// Normalizes a raw path/location by:
 /// - trimming whitespace
@@ -58,6 +80,8 @@ NormalizedIssueLocation normalizeIssueLocation(String rawPath) {
   if (normalized.endsWith(':')) {
     normalized = normalized.substring(0, normalized.length - 1);
   }
+
+  normalized = _relativizeToCurrentDirectory(normalized);
 
   return NormalizedIssueLocation(path: normalized, embeddedLine: embeddedLine);
 }

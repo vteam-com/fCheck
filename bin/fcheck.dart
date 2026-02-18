@@ -133,17 +133,31 @@ void main(List<String> arguments) {
     }
 
     final metrics = engine.analyze();
+    final shouldPrintOutputFilesSection = input.generateSvg ||
+        input.generateMermaid ||
+        input.generatePlantUML ||
+        input.generateFolderSvg;
+    var deferredScorecardLines = <String>[];
 
     if (input.outputJson) {
       printJsonOutput(metrics.toJson());
     } else {
-      printReportLines(buildReportLines(metrics, listMode: input.listMode));
+      final reportLines = buildReportLines(metrics, listMode: input.listMode);
+      if (shouldPrintOutputFilesSection) {
+        final scorecardDividerIndex =
+            reportLines.indexOf(dividerLine(AppStrings.scorecardDivider));
+        if (scorecardDividerIndex >= 0) {
+          printReportLines(reportLines.sublist(0, scorecardDividerIndex));
+          deferredScorecardLines = reportLines.sublist(scorecardDividerIndex);
+        } else {
+          printReportLines(reportLines);
+        }
+      } else {
+        printReportLines(reportLines);
+      }
     }
 
-    if (input.generateSvg ||
-        input.generateMermaid ||
-        input.generatePlantUML ||
-        input.generateFolderSvg) {
+    if (shouldPrintOutputFilesSection) {
       // Generate layer analysis result for visualization
       final layersResult = LayersAnalysisResult(
         issues: metrics.layersIssues,
@@ -161,7 +175,7 @@ void main(List<String> arguments) {
         svgFile.writeAsStringSync(svgContent);
         if (!input.outputJson) {
           printOutputFileLine(
-            label: '${AppStrings.svgLayers}         ',
+            label: AppStrings.svgLayers,
             path: svgFile.path,
           );
         }
@@ -199,7 +213,7 @@ void main(List<String> arguments) {
         mermaidFile.writeAsStringSync(mermaidContent);
         if (!input.outputJson) {
           printOutputFileLine(
-            label: '${AppStrings.mermaidLayers}.    ',
+            label: AppStrings.mermaidLayers,
             path: mermaidFile.path,
           );
         }
@@ -212,11 +226,14 @@ void main(List<String> arguments) {
         plantUMLFile.writeAsStringSync(plantUMLContent);
         if (!input.outputJson) {
           printOutputFileLine(
-            label: '${AppStrings.plantUmlLayers}.   ',
+            label: AppStrings.plantUmlLayers,
             path: plantUMLFile.path,
           );
         }
       }
+    }
+    if (!input.outputJson && deferredScorecardLines.isNotEmpty) {
+      printReportLines(deferredScorecardLines);
     }
     stopwatch.stop();
     final elapsedMs = stopwatch.elapsedMilliseconds;
