@@ -23,6 +23,43 @@ const int _pathCaptureGroupIndex = 1;
 const int _lineCaptureGroupIndex = 2;
 const String _lineNumberWidthAssertionMessage =
     'lineNumberWidth must be positive when provided.';
+const int _ansiBlue = 34;
+
+bool get _supportsAnsiEscapes =>
+    stdout.hasTerminal && stdout.supportsAnsiEscapes;
+
+String _colorizeBlue(String text) =>
+    _supportsAnsiEscapes ? '\x1B[${_ansiBlue}m$text\x1B[0m' : text;
+
+/// Colors only the filename token (the last path segment) in blue.
+///
+/// Examples:
+/// - `lib/src/file.dart:12` -> `lib/src/<blue>file.dart</blue>:12`
+/// - `/tmp/output.svg` -> `/tmp/<blue>output.svg</blue>`
+String colorizePathFilename(String location) {
+  if (!_supportsAnsiEscapes || location.isEmpty) {
+    return location;
+  }
+
+  final lastSlash = location.lastIndexOf('/');
+  final lastBackslash = location.lastIndexOf(r'\');
+  final separatorIndex = lastSlash > lastBackslash ? lastSlash : lastBackslash;
+  final filenameStart = separatorIndex + 1;
+  if (filenameStart >= location.length) {
+    return location;
+  }
+
+  final suffixStart = location.indexOf(':', filenameStart);
+  final filenameEnd = suffixStart == -1 ? location.length : suffixStart;
+  if (filenameEnd <= filenameStart) {
+    return location;
+  }
+
+  final prefix = location.substring(0, filenameStart);
+  final filename = location.substring(filenameStart, filenameEnd);
+  final suffix = location.substring(filenameEnd);
+  return '$prefix${_colorizeBlue(filename)}$suffix';
+}
 
 /// Converts absolute paths under the current working directory to relative.
 String _relativizeToCurrentDirectory(String rawPath) {
@@ -106,7 +143,9 @@ String resolveIssueLocationWithLine({
   final effectiveLineNumber = lineNumber > 0
       ? lineNumber
       : (normalizedLocation.embeddedLine ?? lineNumber);
-  return '${normalizedLocation.path}:$effectiveLineNumber';
+  return colorizePathFilename(
+    '${normalizedLocation.path}:$effectiveLineNumber',
+  );
 }
 
 /// Returns a normalized issue location with an optional line number.
@@ -125,7 +164,9 @@ String resolveIssueLocation({
   final effectiveLineNumber =
       explicitLineNumber ?? normalizedLocation.embeddedLine;
   if (effectiveLineNumber == null) {
-    return normalizedLocation.path;
+    return colorizePathFilename(normalizedLocation.path);
   }
-  return '${normalizedLocation.path}:$effectiveLineNumber';
+  return colorizePathFilename(
+    '${normalizedLocation.path}:$effectiveLineNumber',
+  );
 }

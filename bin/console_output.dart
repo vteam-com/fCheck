@@ -75,6 +75,7 @@ int _maxIntWidth(Iterable<int> values) {
 
 String _separatorColon() => _colorize(':', _ansiGray);
 String _separatorPipe() => _colorize('|', _ansiGray);
+String _pathText(String path) => colorizePathFilename(path);
 
 String _labelValueLine({
   required String label,
@@ -636,11 +637,11 @@ List<String> buildReportLines(
         ).toList();
         for (final entry in visibleIgnoreDirectiveEntries) {
           if (filenamesOnly) {
-            blockLines.add('    - ${entry.key}');
+            blockLines.add('    - ${_pathText(entry.key)}');
             continue;
           }
           blockLines.add(
-            '    - ${entry.key} (${_suppressionCountValue(count: entry.value)})',
+            '    - ${_pathText(entry.key)} (${_suppressionCountValue(count: entry.value)})',
           );
         }
         if (listMode == ReportListMode.partial &&
@@ -707,7 +708,7 @@ List<String> buildReportLines(
     if (filenamesOnly) {
       final filePaths = _uniqueFilePaths(nonCompliant.map((m) => m.path));
       for (final path in filePaths) {
-        blockLines.add('  - $path');
+        blockLines.add('  - ${_pathText(path)}');
       }
     } else {
       final classCountWidth =
@@ -716,7 +717,9 @@ List<String> buildReportLines(
         final classCountText =
             metric.classCount.toString().padLeft(classCountWidth);
         final normalizedPath = normalizeIssueLocation(metric.path).path;
-        blockLines.add('  - $normalizedPath ($classCountText classes found)');
+        blockLines.add(
+          '  - ${_pathText(normalizedPath)} ($classCountText classes found)',
+        );
       }
     }
     blockLines.add('');
@@ -751,7 +754,7 @@ List<String> buildReportLines(
       final filePaths =
           _uniqueFilePaths(hardcodedStringIssues.map((i) => i.filePath));
       for (final path in filePaths) {
-        blockLines.add('  - $path');
+        blockLines.add('  - ${_pathText(path)}');
       }
     } else {
       final visibleHardcodedIssues =
@@ -779,7 +782,7 @@ List<String> buildReportLines(
       final filePaths =
           _uniqueFilePaths(hardcodedStringIssues.map((i) => i.filePath));
       for (final path in filePaths) {
-        blockLines.add('  - $path');
+        blockLines.add('  - ${_pathText(path)}');
       }
     } else {
       final visibleHardcodedIssues =
@@ -823,7 +826,7 @@ List<String> buildReportLines(
       final filePaths =
           _uniqueFilePaths(magicNumberIssues.map((i) => i.filePath));
       for (final path in filePaths) {
-        blockLines.add('  - $path');
+        blockLines.add('  - ${_pathText(path)}');
       }
     } else {
       final visibleMagicNumberIssues =
@@ -869,7 +872,7 @@ List<String> buildReportLines(
       final filePaths =
           _uniqueFilePaths(sourceSortIssues.map((i) => i.filePath));
       for (final path in filePaths) {
-        blockLines.add('  - $path');
+        blockLines.add('  - ${_pathText(path)}');
       }
     } else {
       final visibleSourceSortIssues =
@@ -914,7 +917,7 @@ List<String> buildReportLines(
     if (filenamesOnly) {
       final filePaths = _uniqueFilePaths(secretIssues.map((i) => i.filePath));
       for (final path in filePaths) {
-        blockLines.add('  - $path');
+        blockLines.add('  - ${_pathText(path)}');
       }
     } else {
       final visibleSecretIssues =
@@ -966,7 +969,7 @@ List<String> buildReportLines(
           .add('  ${AppStrings.deadFiles} (${formatCount(deadFileCount)}):');
       if (filenamesOnly) {
         for (final path in deadFilePaths) {
-          blockLines.add('    - $path');
+          blockLines.add('    - ${_pathText(path)}');
         }
       } else {
         final visibleDeadFileIssues =
@@ -992,7 +995,7 @@ List<String> buildReportLines(
           .add('  ${AppStrings.deadClasses} (${formatCount(deadClassCount)}):');
       if (filenamesOnly) {
         for (final path in deadClassPaths) {
-          blockLines.add('    - $path');
+          blockLines.add('    - ${_pathText(path)}');
         }
       } else {
         final visibleDeadClassIssues =
@@ -1018,7 +1021,7 @@ List<String> buildReportLines(
           '  ${AppStrings.deadFunctions} (${formatCount(deadFunctionCount)}):');
       if (filenamesOnly) {
         for (final path in deadFunctionPaths) {
-          blockLines.add('    - $path');
+          blockLines.add('    - ${_pathText(path)}');
         }
       } else {
         final visibleDeadFunctionIssues =
@@ -1045,7 +1048,7 @@ List<String> buildReportLines(
           '  ${AppStrings.unusedVariables} (${formatCount(unusedVariableCount)}):');
       if (filenamesOnly) {
         for (final path in unusedVariablePaths) {
-          blockLines.add('    - $path');
+          blockLines.add('    - ${_pathText(path)}');
         }
       } else {
         final visibleUnusedVariableIssues =
@@ -1096,7 +1099,7 @@ List<String> buildReportLines(
             ]),
       );
       for (final path in filePaths) {
-        blockLines.add('  - $path');
+        blockLines.add('  - ${_pathText(path)}');
       }
     } else {
       final visibleDuplicateCodeIssues =
@@ -1151,7 +1154,7 @@ List<String> buildReportLines(
       final filePaths =
           _uniqueFilePaths(documentationIssues.map((i) => i.filePath));
       for (final path in filePaths) {
-        blockLines.add('  - $path');
+        blockLines.add('  - ${_pathText(path)}');
       }
     } else {
       final visibleDocumentationIssues =
@@ -1197,7 +1200,7 @@ List<String> buildReportLines(
     if (filenamesOnly) {
       final filePaths = _uniqueFilePaths(layersIssues.map((i) => i.filePath));
       for (final path in filePaths) {
-        blockLines.add('  - $path');
+        blockLines.add('  - ${_pathText(path)}');
       }
     } else {
       for (final issue in _issuesForMode(layersIssues, listMode)) {
@@ -1589,7 +1592,7 @@ void printExcludedItems({
     print(_noneIndicator);
   } else {
     for (final file in excludedDartFiles) {
-      print('  ${file.path}');
+      print('  ${_pathText(file.path)}');
     }
   }
 
@@ -1602,7 +1605,7 @@ void printExcludedItems({
     print(_noneIndicator);
   } else {
     for (final file in excludedNonDartFiles) {
-      print('  ${file.path}');
+      print('  ${_pathText(file.path)}');
     }
   }
 
@@ -1615,7 +1618,7 @@ void printExcludedItems({
     print(_noneIndicator);
   } else {
     for (final dir in excludedDirectories) {
-      print('  ${dir.path}');
+      print('  ${_pathText(dir.path)}');
     }
   }
 }
@@ -1638,7 +1641,12 @@ void printOutputFileLine({
   required String path,
 }) {
   final normalizedPath = normalizeIssueLocation(path).path;
-  print(_labelValueLine(label: label.trimRight(), value: normalizedPath));
+  print(
+    _labelValueLine(
+      label: label.trimRight(),
+      value: _pathText(normalizedPath),
+    ),
+  );
 }
 
 /// Prints run completion footer with elapsed time in seconds.

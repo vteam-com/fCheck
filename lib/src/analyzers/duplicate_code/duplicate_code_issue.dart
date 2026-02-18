@@ -1,3 +1,5 @@
+import 'package:fcheck/src/input_output/issue_location_utils.dart';
+
 /// Represents duplicated code detected between two code blocks.
 class DuplicateCodeIssue {
   static const int _percentageMultiplier = 100;
@@ -66,8 +68,8 @@ class DuplicateCodeIssue {
         ? '$lineCount'
         : lineCount.toString().padLeft(lineCountWidth);
     return '$similarityText% ($lineCountText $lineLabel) '
-        '$displayFirstPath:$firstLineNumber <-> '
-        '$displaySecondPath:$secondLineNumber '
+        '${colorizePathFilename('$displayFirstPath:$firstLineNumber')} <-> '
+        '${colorizePathFilename('$displaySecondPath:$secondLineNumber')} '
         '($firstSymbol, $secondSymbol)';
   }
 

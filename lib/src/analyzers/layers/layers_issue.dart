@@ -1,3 +1,5 @@
+import 'package:fcheck/src/input_output/issue_location_utils.dart';
+
 /// Represents a layers architecture violation.
 ///
 /// This class encapsulates information about a dependency violation
@@ -31,7 +33,8 @@ class LayersIssue {
   ///
   /// Returns a formatted string describing the issue.
   @override
-  String toString() => '[$type] $filePath: $message';
+  String toString() =>
+      '[$type] ${resolveIssueLocation(rawPath: filePath)}: $message';
 
   /// Converts this issue to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
