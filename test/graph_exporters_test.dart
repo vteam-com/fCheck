@@ -119,16 +119,18 @@ void main() {
 
       expect(svg, contains('<svg'));
       expect(svg, contains('Code Size Treemap Test'));
-      expect(svg, contains('Files'));
       expect(svg, contains('Folders'));
       expect(svg, contains('Classes'));
-      expect(svg, contains('Functions/Methods'));
+      expect(svg, isNot(contains('Functions/Methods')));
+      expect(svg, isNot(contains('>Files (')));
       expect(svg, contains('folder: lib'));
       expect(svg, contains('UserController'));
-      expect(svg, contains('AppView.render'));
+      expect(svg, contains('callable: render'));
+      expect(svg, contains('&lt;...&gt;'));
       expect(svg, contains('12,058 LOC'));
       expect(svg, contains('fill="#000"'));
       expect(svg, contains('filter="url(#outlineWhite)"'));
+      expect(svg, contains('text-anchor="start"'));
     });
 
     test('render empty code-size treemap when there are no artifacts', () {
@@ -149,7 +151,7 @@ void main() {
 
       final svg = exportSvgCodeSize([artifact], relativeTo: projectRoot);
 
-      expect(svg, contains('lib/a.dart:1'));
+      expect(svg, contains('lib/a.dart'));
       expect(svg, isNot(contains(projectRoot)));
     });
 

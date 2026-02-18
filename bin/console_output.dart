@@ -6,6 +6,7 @@ import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:fcheck/src/input_output/number_format_utils.dart';
 import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
+import 'package:fcheck/src/analyzers/code_size/code_size_outlier_utils.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 import 'package:fcheck/src/models/project_type.dart';
@@ -25,14 +26,12 @@ const int _minorSuppressionPenaltyUpperBound = 3;
 const int _moderateSuppressionPenaltyUpperBound = 7;
 const int _maxSuppressionPenaltyPoints = 25;
 const int _analyzerHeaderTitleWidth = 22;
-const int _codeSizeOutlierMinCount = 3;
-const int _codeSizeOutlierMaxCount = 10;
-const double _codeSizeOutlierRatio = 0.1;
 const int _cleanAnalyzerSortGroup = 0;
 const int _warningAnalyzerSortGroup = 1;
 const int _disabledAnalyzerSortGroup = 2;
 const String _noneIndicator = AppStrings.noneIndicator;
 const Map<String, String> _analyzerTitleByKey = {
+  'code_size': 'Code size',
   'one_class_per_file': 'One class per file',
   'hardcoded_strings': 'Hardcoded strings',
   'magic_numbers': 'Magic numbers',
@@ -88,19 +87,6 @@ int _maxIntWidth(Iterable<int> values) {
     }
   }
   return maxWidth;
-}
-
-/// Returns a stable top slice size for outlier views.
-int _codeSizeOutlierCount(int totalItems) {
-  if (totalItems <= 0) {
-    return 0;
-  }
-  final proportional = (totalItems * _codeSizeOutlierRatio).ceil();
-  final bounded = proportional.clamp(
-    _codeSizeOutlierMinCount,
-    _codeSizeOutlierMaxCount,
-  );
-  return bounded > totalItems ? totalItems : bounded;
 }
 
 String _separatorColon() => _colorize(':', _ansiGray);
@@ -575,51 +561,6 @@ List<String> buildReportLines(
     addLine(_gridRow([leftDashboardRows[index], rightCell]));
   }
 
-  void appendCodeSizeSection() {
-    final sections = <({String title, List<CodeSizeArtifact> artifacts})>[
-      (title: 'Files', artifacts: codeSizeFileArtifacts),
-      (title: 'Classes', artifacts: codeSizeClassArtifacts),
-      (title: 'Functions/Methods', artifacts: codeSizeCallableArtifacts),
-    ];
-    addLine(dividerLine('Code Size Outliers'));
-    for (final section in sections) {
-      if (section.artifacts.isEmpty) {
-        addLine(
-          '${skipTag()} ${section.title}: ${AppStrings.noneIndicator.trim()}',
-        );
-        continue;
-      }
-
-      final outlierCount = _codeSizeOutlierCount(section.artifacts.length);
-      final outliers = section.artifacts.take(outlierCount).toList();
-      final fullTotalLoc = section.artifacts.fold<int>(
-        0,
-        (sum, artifact) => sum + artifact.linesOfCode,
-      );
-      addLine(
-        '${warnTag()} ${section.title}: top ${formatCount(outlierCount)} of ${formatCount(section.artifacts.length)} (${formatCount(fullTotalLoc)} LOC total)',
-      );
-
-      final locWidth = _maxIntWidth(
-        outliers.map((artifact) => artifact.linesOfCode),
-      );
-      if (listMode == ReportListMode.none) {
-        continue;
-      }
-      for (final artifact in outliers) {
-        final path = normalizeIssueLocation(artifact.filePath).path;
-        final range = 'L${artifact.startLine}';
-        final line = listMode == ReportListMode.filenames
-            ? '  - ${_pathText(path)}'
-            : '  - ${artifact.linesOfCode.toString().padLeft(locWidth)} LOC  ${_colorize("[${artifact.kind.label}]", _ansiGray)} ${artifact.qualifiedName}  (${_pathText(path)}:$range)';
-        addLine(line);
-      }
-    }
-    addLine('');
-  }
-
-  appendCodeSizeSection();
-
   addLine(dividerLine('Analyzers'));
   final listBlocks = <_ListBlock>[];
 
@@ -641,6 +582,63 @@ List<String> buildReportLines(
       ),
     );
   }
+
+  final codeSizeSections = <({String title, List<CodeSizeArtifact> artifacts})>[
+    (title: 'Files', artifacts: codeSizeFileArtifacts),
+    (title: 'Classes', artifacts: codeSizeClassArtifacts),
+    (title: 'Functions/Methods', artifacts: codeSizeCallableArtifacts),
+  ];
+  final codeSizeIssueCount = analyzerIssueCountsByKey['code_size'] ?? 0;
+  final codeSizeStatus = codeSizeIssueCount == 0
+      ? _ListBlockStatus.success
+      : _ListBlockStatus.warning;
+  final codeSizeBlockLines = <String>[
+    if (codeSizeIssueCount == 0)
+      '${okTag()} Code size outlier concentration is within budget.'
+    else
+      '${warnTag()} ${formatCount(codeSizeIssueCount)} code-size outlier groups exceed concentration budget.',
+  ];
+  for (final section in codeSizeSections) {
+    if (section.artifacts.isEmpty) {
+      codeSizeBlockLines.add(
+        '  - ${section.title}: ${AppStrings.noneIndicator.trim()}',
+      );
+      continue;
+    }
+
+    final outlierCount = codeSizeOutlierCount(section.artifacts.length);
+    final outliers = section.artifacts.take(outlierCount).toList();
+    final fullTotalLoc = section.artifacts.fold<int>(
+      0,
+      (sum, artifact) => sum + artifact.linesOfCode,
+    );
+    codeSizeBlockLines.add(
+      '  - ${section.title}: top ${formatCount(outlierCount)} of ${formatCount(section.artifacts.length)} (${formatCount(fullTotalLoc)} LOC total)',
+    );
+
+    if (listMode == ReportListMode.none) {
+      continue;
+    }
+    for (final artifact in outliers) {
+      final path = normalizeIssueLocation(artifact.filePath).path;
+      final range = '${artifact.startLine}';
+      final detailedLabel = artifact.kind == CodeSizeArtifactKind.file
+          ? '${_pathText(path)} ${_colorize("(LOC ${formatCount(artifact.linesOfCode)})", _ansiYellow)}'
+          : artifact.kind == CodeSizeArtifactKind.classDeclaration
+          ? '${_pathText(path)}:$range ${_colorizeWithCode(artifact.qualifiedName, _ansiOrangeCode)} ${_colorize("(LOC ${formatCount(artifact.linesOfCode)})", _ansiYellow)}'
+          : '${_pathText(path)}:$range ${_colorizeWithCode(artifact.qualifiedName, _ansiOrangeCode)} ${_colorize("(LOC ${formatCount(artifact.linesOfCode)})", _ansiYellow)}';
+      final line = listMode == ReportListMode.filenames
+          ? '    - ${_pathText(path)}'
+          : '    - $detailedLabel';
+      codeSizeBlockLines.add(line);
+    }
+  }
+  codeSizeBlockLines.add('');
+  addListBlock(
+    status: codeSizeStatus,
+    sortKey: 'code size',
+    blockLines: codeSizeBlockLines,
+  );
 
   if (ignoreDirectivesCount == 0 &&
       customExcludedFilesCount == 0 &&
@@ -1748,6 +1746,7 @@ const int _ansiGreenBright = 92;
 const int _ansiYellow = 33;
 const int _ansiYellowBright = 93;
 const int _ansiOrange = 33;
+const String _ansiOrangeCode = '38;5;208';
 const int _ansiRed = 31;
 const int _ansiRedBright = 91;
 const int _ansiGray = 90;
@@ -1757,6 +1756,9 @@ final RegExp _leadingStatusTagPattern = RegExp(
 );
 
 String _colorize(String text, int colorCode) =>
+    supportsCliAnsiColors ? '\x1B[${colorCode}m$text\x1B[0m' : text;
+
+String _colorizeWithCode(String text, String colorCode) =>
     supportsCliAnsiColors ? '\x1B[${colorCode}m$text\x1B[0m' : text;
 
 String _colorizeBold(String text, int colorCode) =>

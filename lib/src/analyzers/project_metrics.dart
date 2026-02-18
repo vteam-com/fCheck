@@ -234,6 +234,7 @@ class ProjectMetrics {
           totalDartFiles: totalDartFiles,
           totalLinesOfCode: totalLinesOfCode,
           fileMetrics: fileMetrics,
+          codeSizeArtifacts: codeSizeArtifacts,
           hardcodedStringIssues: hardcodedStringIssues,
           magicNumberIssues: magicNumberIssues,
           sourceSortIssues: sourceSortIssues,

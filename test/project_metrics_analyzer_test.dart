@@ -111,6 +111,7 @@ ProjectMetricsAnalysisInput _buildInput({
     totalDartFiles: totalDartFiles,
     totalLinesOfCode: totalLinesOfCode,
     fileMetrics: effectiveFileMetrics,
+    codeSizeArtifacts: const [],
     hardcodedStringIssues: const [],
     magicNumberIssues: magicNumberIssues,
     sourceSortIssues: const [],

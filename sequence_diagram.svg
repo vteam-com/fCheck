@@ -259,8 +259,8 @@
 
   <rect x="1950" y="1305" width="460" height="35" rx="4" class="note-box" />
   <text x="1962" y="1328" class="note-text">Consistent post-processing for all complex domain analyzers.</text>
-  <rect x="1950" y="1348" width="700" height="35" rx="4" class="note-box" />
-  <text x="1962" y="1371" class="note-text">CodeSizeDelegate now collects class/function/method LOC for console outliers and --svgsize treemap.</text>
+  <rect x="1950" y="1348" width="840" height="35" rx="4" class="note-box" />
+  <text x="1962" y="1371" class="note-text">CodeSizeDelegate collects LOC for outliers/treemap, and code_size now feeds MetricsAnalyzer scoring + compliance deductions.</text>
 
   <!-- 5. Return -->
   <text x="50" y="1415" class="section-label">5. Build ProjectMetrics &amp; Return</text>

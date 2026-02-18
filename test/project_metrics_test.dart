@@ -351,7 +351,7 @@ void main() {
           projectType: ProjectType.dart,
         );
 
-        expect(projectMetrics.complianceScore, equals(88));
+        expect(projectMetrics.complianceScore, equals(89));
         expect(
           projectMetrics.complianceFocusAreaLabel,
           equals('Magic numbers'),
@@ -474,7 +474,7 @@ void main() {
             'deadCodeIssues': 1,
             'duplicateCodeIssues': 1,
             'documentationIssues': 0,
-            'complianceScore': 43,
+            'complianceScore': 49,
           },
           'layers': {
             'count': 4,
@@ -556,7 +556,7 @@ void main() {
           'documentationIssues': [],
           'localization': {'usesLocalization': true},
           'compliance': {
-            'score': 43,
+            'score': 49,
             'suppressionPenalty': 0,
             'focusArea': 'one_class_per_file',
             'focusAreaLabel': 'One class per file',
