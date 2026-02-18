@@ -88,6 +88,11 @@ void main() {
       expect(input.outputJson, isTrue);
     });
 
+    test('should parse --no-colors flag correctly', () {
+      final input = parseConsoleInput(['--no-colors'], parser);
+      expect(input.noColors, isTrue);
+    });
+
     test('should parse --list flag correctly', () {
       final input = parseConsoleInput(['--list', 'full'], parser);
       expect(input.listMode, equals(ReportListMode.full));
@@ -129,6 +134,7 @@ void main() {
       expect(input.showVersion, isFalse);
       expect(input.showIgnoresInstructions, isFalse);
       expect(input.showScoreInstructions, isFalse);
+      expect(input.noColors, isFalse);
     });
   });
 
@@ -173,6 +179,7 @@ void main() {
       expect(parser.options, contains('help'));
       expect(parser.options, contains('help-ignore'));
       expect(parser.options, contains('help-score'));
+      expect(parser.options, contains('no-colors'));
     });
 
     test('should have correct default values for options', () {
@@ -193,6 +200,7 @@ void main() {
       expect(argResults['help'], isFalse);
       expect(argResults['help-ignore'], isFalse);
       expect(argResults['help-score'], isFalse);
+      expect(argResults['no-colors'], isFalse);
     });
   });
 }

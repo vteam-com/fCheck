@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:fcheck/src/input_output/issue_location_utils.dart';
 
 /// The type of dead code issue detected.
@@ -19,7 +17,6 @@ enum DeadCodeIssueType {
 
 /// Represents a dead code finding.
 class DeadCodeIssue {
-  static const int _ansiOrange = 208;
   static const Map<DeadCodeIssueType, String> _typeLabelsByIssueType = {
     DeadCodeIssueType.deadFile: 'dead file',
     DeadCodeIssueType.deadClass: 'dead class',
@@ -116,15 +113,7 @@ class DeadCodeIssue {
     }
   }
 
-  String _formatSymbol(String value) => _colorize('"$value"');
-
-  /// Internal helper used by fcheck analysis and reporting.
-  String _colorize(String text) {
-    if (!stdout.supportsAnsiEscapes) {
-      return text;
-    }
-    return '\x1B[1;38;5;${_ansiOrange}m$text\x1B[0m';
-  }
+  String _formatSymbol(String value) => colorizeIssueArtifact('"$value"');
 
   /// Converts this issue to a JSON-compatible map.
   Map<String, dynamic> toJson() => {

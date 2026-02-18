@@ -53,6 +53,9 @@ class ConsoleInput {
   /// Whether `--help-score` is set.
   final bool showScoreInstructions;
 
+  /// Whether ANSI colors are disabled for CLI output.
+  final bool noColors;
+
   /// Creates a parsed CLI input object.
   const ConsoleInput({
     required this.path,
@@ -69,6 +72,7 @@ class ConsoleInput {
     required this.showVersion,
     required this.showIgnoresInstructions,
     required this.showScoreInstructions,
+    required this.noColors,
   });
 }
 
@@ -143,6 +147,11 @@ ArgParser createConsoleArgParser() => ArgParser()
     negatable: false,
   )
   ..addFlag(
+    'no-colors',
+    help: 'Disable ANSI colors in CLI output',
+    negatable: false,
+  )
+  ..addFlag(
     'help',
     abbr: 'h',
     help: 'Show usage information',
@@ -193,5 +202,6 @@ ConsoleInput parseConsoleInput(
     showVersion: argResults['version'] as bool,
     showIgnoresInstructions: argResults['help-ignore'] as bool,
     showScoreInstructions: argResults['help-score'] as bool,
+    noColors: argResults['no-colors'] as bool,
   );
 }

@@ -24,8 +24,53 @@ const int _lineCaptureGroupIndex = 2;
 const String _lineNumberWidthAssertionMessage =
     'lineNumberWidth must be positive when provided.';
 
-bool get _supportsAnsiEscapes =>
-    stdout.hasTerminal && stdout.supportsAnsiEscapes;
+bool _disableAnsiColorsFromCli = false;
+
+/// Configures ANSI color usage from CLI flags.
+void configureCliColorOutput({required bool disableColors}) {
+  _disableAnsiColorsFromCli = disableColors;
+}
+
+/// Returns whether ANSI colors should be used for console output.
+bool get supportsCliAnsiColors {
+  if (_disableAnsiColorsFromCli) {
+    return false;
+  }
+  if (_isNoColorEnvironmentEnabled(Platform.environment)) {
+    return false;
+  }
+  return stdout.hasTerminal && stdout.supportsAnsiEscapes;
+}
+
+bool get _supportsAnsiEscapes => supportsCliAnsiColors;
+
+/// Returns whether current environment variables request disabling colors.
+bool isNoColorEnvironmentEnabled(Map<String, String> env) {
+  if (env.containsKey('NO_COLOR')) {
+    return true;
+  }
+  return _isTruthyNoColorsValue(env['NO_COLORS']) ||
+      _isTruthyNoColorsValue(env['no-colors']) ||
+      _isTruthyNoColorsValue(env['NO-COLORS']) ||
+      _isTruthyNoColorsValue(env['no_colors']);
+}
+
+bool _isNoColorEnvironmentEnabled(Map<String, String> env) =>
+    isNoColorEnvironmentEnabled(env);
+
+bool _isTruthyNoColorsValue(String? value) {
+  if (value == null) {
+    return false;
+  }
+  final normalized = value.trim().toLowerCase();
+  if (normalized.isEmpty) {
+    return true;
+  }
+  return normalized != '0' &&
+      normalized != 'false' &&
+      normalized != 'off' &&
+      normalized != 'no';
+}
 
 String _colorizeBlueDark(String text) =>
     _supportsAnsiEscapes ? '\x1B[38;5;24m$text\x1B[0m' : text;

@@ -349,6 +349,10 @@
   <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/version.dart</title>
 </g>
 <g>
+  <path d="M 270.0 128.0 C 320.0 128.0, 1926.0 102.0, 1976.0 102.0" class="edge"/>
+  <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/input_output/issue_location_utils.dart</title>
+</g>
+<g>
   <path d="M 270.0 128.0 C 320.0 128.0, 326.0 522.0, 376.0 522.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/bin/console_input.dart</title>
 </g>
@@ -1030,7 +1034,7 @@
 </g>
 <g class="badge outgoingBadge">
   <path d="M 278.0,128.0 L 262.0,120.4 Q 259.0,120.4 259.0,123.4 L 259.0,132.6 Q 259.0,135.6 262.0,135.6 Z" fill="#10b981"/>
-  <text x="264.72" y="129.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold" textLength="10.120000000000001" lengthAdjust="spacingAndGlyphs">12</text><title>1. app_strings.dart
+  <text x="264.72" y="129.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold" textLength="10.120000000000001" lengthAdjust="spacingAndGlyphs">13</text><title>1. app_strings.dart
 2. console_common.dart
 3. console_input.dart
 4. console_output.dart
@@ -1040,8 +1044,9 @@
 8. export_svg_folders.dart
 9. fcheck.dart
 10. fcheck_config.dart
-11. layers_results.dart
-12. version.dart</title></g><text x="160.0" y="115.0" class="textNormal">fcheck.dart</text>
+11. issue_location_utils.dart
+12. layers_results.dart
+13. version.dart</title></g><text x="160.0" y="115.0" class="textNormal">fcheck.dart</text>
 <g class="badge incomingBadge">
   <path d="M 382.0,102.0 L 370.0,95.0 Q 367.0,95.0 367.0,98.0 L 367.0,106.0 Q 367.0,109.0 370.0,109.0 Z" fill="#3b82f6"/>
   <text x="371.68" y="103.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="badge outgoingBadge">
@@ -1585,14 +1590,15 @@
   <path d="M 1876.0,758.0 L 1864.0,751.0 Q 1861.0,751.0 1861.0,754.0 L 1861.0,762.0 Q 1861.0,765.0 1864.0,765.0 Z" fill="#10b981"/>
   <text x="1865.68" y="759.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. issue_location_utils.dart</title></g><text x="1760.0" y="745.0" class="textNormal">sort_issue.dart</text>
 <g class="badge incomingBadge">
-  <path d="M 1982.0,102.0 L 1970.0,95.0 Q 1967.0,95.0 1967.0,98.0 L 1967.0,106.0 Q 1967.0,109.0 1970.0,109.0 Z" fill="#3b82f6"/>
-  <text x="1971.68" y="103.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">9</text><title>1. console_output.dart
+  <path d="M 1984.0,102.0 L 1968.0,94.4 Q 1965.0,94.4 1965.0,97.4 L 1965.0,106.6 Q 1965.0,109.6 1968.0,109.6 Z" fill="#3b82f6"/>
+  <text x="1970.72" y="103.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold" textLength="10.120000000000001" lengthAdjust="spacingAndGlyphs">10</text><title>1. console_output.dart
 2. dead_code_issue.dart
 3. documentation_issue.dart
 4. duplicate_code_issue.dart
-5. hardcoded_string_issue.dart
-6. layers_issue.dart
-7. magic_number_issue.dart
-8. secret_issue.dart
-9. sort_issue.dart</title></g><text x="2080.0" y="115.0" class="textNormal">issue_location_utils.dart</text>
+5. fcheck.dart
+6. hardcoded_string_issue.dart
+7. layers_issue.dart
+8. magic_number_issue.dart
+9. secret_issue.dart
+10. sort_issue.dart</title></g><text x="2080.0" y="115.0" class="textNormal">issue_location_utils.dart</text>
 </svg>

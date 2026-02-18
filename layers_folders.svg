@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1420.0" height="4370.0" viewBox="0 0 1420.0 4370.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+<svg width="1423.0" height="4370.0" viewBox="0 0 1423.0 4370.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
 <defs>
   <filter id="whiteShadow" x="-20%" y="-20%" width="140%" height="140%">
     <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
@@ -1350,9 +1350,13 @@
   <path d="M 740.0 222.0 H 1032.0 Q 1038.0 222.0 1038.0 228.0 V 4089.0 Q 1038.0 4095.0 1032.0 4095.0 H 688.0" class="edgeVertical"/>
   <title>bin/console_output.dart ▶ lib/src/input_output/issue_location_utils.dart</title>
 </g>
+<g>
+  <path d="M 740.0 190.0 H 1035.0 Q 1041.0 190.0 1041.0 196.0 V 4089.0 Q 1041.0 4095.0 1035.0 4095.0 H 688.0" class="edgeVertical"/>
+  <title>bin/fcheck.dart ▶ lib/src/input_output/issue_location_utils.dart</title>
+</g>
 <g class="badge outgoingBadge">
   <path d="M 748.0,190.0 L 732.0,182.4 Q 729.0,182.4 729.0,185.4 L 729.0,194.6 Q 729.0,197.6 732.0,197.6 Z" fill="#10b981"/>
-  <text x="734.72" y="191.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold" textLength="10.120000000000001" lengthAdjust="spacingAndGlyphs">12</text><title>1. bin/console_common.dart
+  <text x="734.72" y="191.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold" textLength="10.120000000000001" lengthAdjust="spacingAndGlyphs">13</text><title>1. bin/console_common.dart
 2. bin/console_input.dart
 3. bin/console_output.dart
 4. lib/fcheck.dart
@@ -1361,9 +1365,10 @@
 7. lib/src/graphs/export_plantuml.dart
 8. lib/src/graphs/export_svg.dart
 9. lib/src/graphs/export_svg_folders.dart
-10. lib/src/models/app_strings.dart
-11. lib/src/models/fcheck_config.dart
-12. lib/src/models/version.dart</title></g><text x="482.0" y="184.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">fcheck.dart</text>
+10. lib/src/input_output/issue_location_utils.dart
+11. lib/src/models/app_strings.dart
+12. lib/src/models/fcheck_config.dart
+13. lib/src/models/version.dart</title></g><text x="482.0" y="184.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">fcheck.dart</text>
 <g class="badge incomingBadge">
   <path d="M 730.0,211.0 L 742.0,204.0 Q 745.0,204.0 745.0,207.0 L 745.0,215.0 Q 745.0,218.0 742.0,218.0 Z" fill="#3b82f6"/>
   <text x="740.32" y="212.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. bin/fcheck.dart</title></g><g class="badge outgoingBadge">
@@ -1486,16 +1491,17 @@
   <text x="692.32" y="4064.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. lib/fcheck.dart
 2. lib/src/analyzer_runner/analyzer_runner.dart</title></g><text x="522.0" y="4068.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">file_utils.dart</text>
 <g class="badge incomingBadge">
-  <path d="M 682.0,4095.0 L 694.0,4088.0 Q 697.0,4088.0 697.0,4091.0 L 697.0,4099.0 Q 697.0,4102.0 694.0,4102.0 Z" fill="#3b82f6"/>
-  <text x="692.32" y="4096.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">9</text><title>1. bin/console_output.dart
-2. lib/src/analyzers/dead_code/dead_code_issue.dart
-3. lib/src/analyzers/documentation/documentation_issue.dart
-4. lib/src/analyzers/duplicate_code/duplicate_code_issue.dart
-5. lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart
-6. lib/src/analyzers/layers/layers_issue.dart
-7. lib/src/analyzers/magic_numbers/magic_number_issue.dart
-8. lib/src/analyzers/secrets/secret_issue.dart
-9. lib/src/analyzers/sorted/sort_issue.dart</title></g><text x="522.0" y="4100.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">issue_location_utils.dart</text>
+  <path d="M 680.0,4095.0 L 696.0,4087.4 Q 699.0,4087.4 699.0,4090.4 L 699.0,4099.6 Q 699.0,4102.6 696.0,4102.6 Z" fill="#3b82f6"/>
+  <text x="693.28" y="4096.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold" textLength="10.120000000000001" lengthAdjust="spacingAndGlyphs">10</text><title>1. bin/console_output.dart
+2. bin/fcheck.dart
+3. lib/src/analyzers/dead_code/dead_code_issue.dart
+4. lib/src/analyzers/documentation/documentation_issue.dart
+5. lib/src/analyzers/duplicate_code/duplicate_code_issue.dart
+6. lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart
+7. lib/src/analyzers/layers/layers_issue.dart
+8. lib/src/analyzers/magic_numbers/magic_number_issue.dart
+9. lib/src/analyzers/secrets/secret_issue.dart
+10. lib/src/analyzers/sorted/sort_issue.dart</title></g><text x="522.0" y="4100.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">issue_location_utils.dart</text>
 <g class="badge incomingBadge">
   <path d="M 658.0,1021.0 L 670.0,1014.0 Q 673.0,1014.0 673.0,1017.0 L 673.0,1025.0 Q 673.0,1028.0 670.0,1028.0 Z" fill="#3b82f6"/>
   <text x="668.32" y="1022.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. bin/console_output.dart

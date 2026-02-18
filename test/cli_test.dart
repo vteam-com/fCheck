@@ -153,6 +153,7 @@ class TestClass {
       expect(result.stdout, contains('--fix'));
       expect(result.stdout, contains('--help'));
       expect(result.stdout, contains('--help-score'));
+      expect(result.stdout, contains('--no-colors'));
     });
 
     test('should show help with -h flag', () async {

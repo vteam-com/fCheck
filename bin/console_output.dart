@@ -1667,9 +1667,6 @@ void printAnalysisError(Object error, StackTrace stack) {
 final int dividerLength = 37;
 const int _halfTitleLengthDivisor = 2;
 
-bool get _supportsAnsiEscapes =>
-    stdout.hasTerminal && stdout.supportsAnsiEscapes;
-
 const int _ansiGreen = 32;
 const int _ansiGreenBright = 92;
 const int _ansiYellow = 33;
@@ -1684,10 +1681,10 @@ final RegExp _leadingStatusTagPattern = RegExp(
 );
 
 String _colorize(String text, int colorCode) =>
-    _supportsAnsiEscapes ? '\x1B[${colorCode}m$text\x1B[0m' : text;
+    supportsCliAnsiColors ? '\x1B[${colorCode}m$text\x1B[0m' : text;
 
 String _colorizeBold(String text, int colorCode) =>
-    _supportsAnsiEscapes ? '\x1B[1;${colorCode}m$text\x1B[0m' : text;
+    supportsCliAnsiColors ? '\x1B[1;${colorCode}m$text\x1B[0m' : text;
 
 /// Removes leading status markers (e.g. `[✓]`, `[!]`, `[✗]`, `[-]`).
 String _withoutLeadingStatusTag(String line) {

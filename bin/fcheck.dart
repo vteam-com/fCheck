@@ -7,6 +7,7 @@ import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/version.dart';
+import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:path/path.dart' as p;
 import 'console_input.dart';
 import 'console_output.dart';
@@ -39,6 +40,8 @@ void main(List<String> arguments) {
     );
     exit(1);
   }
+
+  configureCliColorOutput(disableColors: input.noColors);
 
   if (input.showHelp) {
     printHelpScreen(
