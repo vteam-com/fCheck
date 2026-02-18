@@ -4,22 +4,6 @@ import 'package:test/test.dart';
 
 void main() {
   group('ReportListMode', () {
-    test('should have correct cliNames', () {
-      expect(ReportListMode.cliNames,
-          equals(['none', 'partial', 'full', 'filenames']));
-    });
-
-    test('should have correct cliHelp mapping', () {
-      expect(
-          ReportListMode.cliHelp, containsPair('none', AppStrings.summaryOnly));
-      expect(ReportListMode.cliHelp,
-          containsPair('partial', '10 items per list (disabled by default)'));
-      expect(ReportListMode.cliHelp,
-          containsPair('full', 'Show all list entries'));
-      expect(ReportListMode.cliHelp,
-          containsPair('filenames', 'Show unique file names only'));
-    });
-
     test('should find mode from cliName', () {
       expect(ReportListMode.fromCliName('none'), equals(ReportListMode.none));
       expect(ReportListMode.fromCliName('partial'),

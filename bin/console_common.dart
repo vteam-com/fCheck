@@ -8,6 +8,7 @@ const String descriptionLine = AppStrings.descriptionLine;
 
 /// Error message shown when arguments fail parsing.
 const String invalidArgumentsLine = AppStrings.invalidArgumentsLine;
+const int defaultListItemLimit = 10;
 
 /// Controls how detailed issue lists are printed in console reports.
 enum ReportListMode {
@@ -20,7 +21,8 @@ enum ReportListMode {
   /// Print a partial list (default).
   partial(
     cliName: 'partial',
-    help: '10 ${AppStrings.itemsPerList} (${AppStrings.disabled} by default)',
+    help:
+        '$defaultListItemLimit ${AppStrings.itemsPerList} (${AppStrings.disabled} by default)',
   ),
 
   /// Print the full list.
@@ -45,15 +47,6 @@ enum ReportListMode {
 
   /// Human-readable help text for this mode.
   final String help;
-
-  /// Allowed values for the `--list` CLI option.
-  static List<String> get cliNames =>
-      values.map((mode) => mode.cliName).toList(growable: false);
-
-  /// Help text keyed by `--list` value.
-  static Map<String, String> get cliHelp => <String, String>{
-        for (final mode in values) mode.cliName: mode.help,
-      };
 
   /// Finds the mode for a CLI argument value.
   static ReportListMode? fromCliName(String name) {

@@ -153,6 +153,8 @@ fcheck --list none       # summary only
 fcheck --list partial    # top 10 per list (default)
 fcheck --list full       # full lists
 fcheck --list filenames  # unique file names only
+fcheck --list 3          # top 3 per list
+fcheck --list 999        # top 999 per list
 ```
 
 For exclusion commands (`--exclude`, `--excluded`), see the Exclusions section below.

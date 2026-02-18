@@ -35,6 +35,9 @@ class ConsoleInput {
   /// How detailed the report lists should be.
   final ReportListMode listMode;
 
+  /// Maximum entries printed per list when [listMode] is `partial`.
+  final int listItemLimit;
+
   /// Whether excluded files/dirs listing is requested.
   final bool listExcluded;
 
@@ -66,6 +69,7 @@ class ConsoleInput {
     required this.generateFolderSvg,
     required this.outputJson,
     required this.listMode,
+    required this.listItemLimit,
     required this.listExcluded,
     required this.excludePatterns,
     required this.showHelp,
@@ -122,9 +126,8 @@ ArgParser createConsoleArgParser() => ArgParser()
   ..addOption(
     'list',
     abbr: 'l',
-    help: 'Control list output in the console report',
-    allowed: ReportListMode.cliNames,
-    allowedHelp: ReportListMode.cliHelp,
+    help:
+        'Control list output: none | partial | full | filenames | <number> (max items per list, e.g. 3 or 999)',
     defaultsTo: ReportListMode.partial.cliName,
   )
   ..addFlag(
@@ -180,6 +183,7 @@ ConsoleInput parseConsoleInput(
   final argResults = parser.parse(arguments);
 
   final explicitPath = argResults['input'] as String;
+  final listOption = _parseListOption(argResults['list'] as String);
   final path = explicitPath != '.'
       ? explicitPath
       : argResults.rest.isNotEmpty
@@ -194,8 +198,8 @@ ConsoleInput parseConsoleInput(
     generatePlantUML: argResults['plantuml'] as bool,
     generateFolderSvg: argResults['svgfolder'] as bool,
     outputJson: argResults['json'] as bool,
-    listMode: ReportListMode.fromCliName(argResults['list'] as String) ??
-        ReportListMode.partial,
+    listMode: listOption.mode,
+    listItemLimit: listOption.limit,
     listExcluded: argResults['excluded'] as bool,
     excludePatterns: argResults['exclude'] as List<String>,
     showHelp: argResults['help'] as bool,
@@ -204,4 +208,38 @@ ConsoleInput parseConsoleInput(
     showScoreInstructions: argResults['help-score'] as bool,
     noColors: argResults['no-colors'] as bool,
   );
+}
+
+/// Extract the number of lines expected in the list output
+_ListOption _parseListOption(String rawValue) {
+  final normalized = rawValue.trim().toLowerCase();
+  final namedMode = ReportListMode.fromCliName(normalized);
+  if (namedMode != null) {
+    return _ListOption(
+      mode: namedMode,
+      limit: defaultListItemLimit,
+    );
+  }
+
+  final parsedLimit = int.tryParse(normalized);
+  if (parsedLimit != null && parsedLimit > 0) {
+    return _ListOption(
+      mode: ReportListMode.partial,
+      limit: parsedLimit,
+    );
+  }
+
+  throw const FormatException(
+    'Invalid --list value. Use none, partial, full, filenames, or a positive integer.',
+  );
+}
+
+class _ListOption {
+  final ReportListMode mode;
+  final int limit;
+
+  const _ListOption({
+    required this.mode,
+    required this.limit,
+  });
 }

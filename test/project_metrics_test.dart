@@ -849,6 +849,50 @@ void main() {
       expect(joined, isNot(contains('... and')));
     });
 
+    test('should respect a custom partial list limit', () {
+      final magicIssues = List.generate(
+        12,
+        (i) => MagicNumberIssue(
+          filePath: 'lib/num_$i.dart',
+          lineNumber: i + 1,
+          value: '${i + 1}',
+        ),
+      );
+
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 0,
+        fileMetrics: [],
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: magicIssues,
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: true,
+      );
+
+      final output = buildReportLines(
+        projectMetrics,
+        listMode: ReportListMode.partial,
+        listItemLimit: 3,
+      );
+
+      final joined = output.join('\n');
+      expect(joined, contains('lib/num_2.dart'));
+      expect(joined, isNot(contains('lib/num_3.dart')));
+      expect(joined, contains('... and 9 more'));
+    });
+
     test(
         'should sort duplicate code output by similarity then line count descending',
         () {

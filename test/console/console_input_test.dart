@@ -96,6 +96,13 @@ void main() {
     test('should parse --list flag correctly', () {
       final input = parseConsoleInput(['--list', 'full'], parser);
       expect(input.listMode, equals(ReportListMode.full));
+      expect(input.listItemLimit, equals(defaultListItemLimit));
+    });
+
+    test('should parse numeric --list limit correctly', () {
+      final input = parseConsoleInput(['--list', '3'], parser);
+      expect(input.listMode, equals(ReportListMode.partial));
+      expect(input.listItemLimit, equals(3));
     });
 
     test('should parse --excluded flag correctly', () {
@@ -128,6 +135,7 @@ void main() {
       expect(input.generateFolderSvg, isFalse);
       expect(input.outputJson, isFalse);
       expect(input.listMode, equals(ReportListMode.partial));
+      expect(input.listItemLimit, equals(defaultListItemLimit));
       expect(input.listExcluded, isFalse);
       expect(input.excludePatterns, isEmpty);
       expect(input.showHelp, isFalse);
@@ -155,6 +163,13 @@ void main() {
     test('should handle invalid --list values gracefully', () {
       expect(
         () => parseConsoleInput(['--list', 'invalid'], parser),
+        throwsA(isA<FormatException>()),
+      );
+    });
+
+    test('should reject non-positive numeric --list values', () {
+      expect(
+        () => parseConsoleInput(['--list', '0'], parser),
         throwsA(isA<FormatException>()),
       );
     });

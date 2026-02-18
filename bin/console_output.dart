@@ -11,7 +11,6 @@ import 'package:fcheck/src/models/project_type.dart';
 
 import 'console_common.dart';
 
-const int _maxIssuesToShow = 10;
 const int _percentageMultiplier = 100;
 const int _gridLabelWidth = 18;
 const int _gridValueWidth = 15;
@@ -51,9 +50,10 @@ const Map<String, String> _analyzerTitleByKey = {
 Iterable<T> _issuesForMode<T>(
   List<T> issues,
   ReportListMode listMode,
+  int listItemLimit,
 ) {
   if (listMode == ReportListMode.partial) {
-    return issues.take(_maxIssuesToShow);
+    return issues.take(listItemLimit);
   }
   return issues;
 }
@@ -322,7 +322,9 @@ String _formatCompactDecimal(double value) {
 List<String> buildReportLines(
   ProjectMetrics metrics, {
   ReportListMode listMode = ReportListMode.partial,
+  int listItemLimit = defaultListItemLimit,
 }) {
+  final effectiveListItemLimit = listItemLimit > 0 ? listItemLimit : 1;
   final projectName = metrics.projectName;
   final version = metrics.version;
   final totalFolders = metrics.totalFolders;
@@ -662,6 +664,7 @@ List<String> buildReportLines(
         final visibleIgnoreDirectiveEntries = _issuesForMode(
           ignoreDirectiveEntries,
           listMode,
+          effectiveListItemLimit,
         ).toList();
         for (final entry in visibleIgnoreDirectiveEntries) {
           if (filenamesOnly) {
@@ -673,9 +676,9 @@ List<String> buildReportLines(
           );
         }
         if (listMode == ReportListMode.partial &&
-            ignoreDirectiveEntries.length > _maxIssuesToShow) {
+            ignoreDirectiveEntries.length > effectiveListItemLimit) {
           blockLines.add(
-            '    ... ${AppStrings.and} ${formatCount(ignoreDirectiveEntries.length - _maxIssuesToShow)} ${AppStrings.more}',
+            '    ... ${AppStrings.and} ${formatCount(ignoreDirectiveEntries.length - effectiveListItemLimit)} ${AppStrings.more}',
           );
         }
       }
@@ -785,15 +788,16 @@ List<String> buildReportLines(
         blockLines.add('  - ${_pathText(path)}');
       }
     } else {
-      final visibleHardcodedIssues =
-          _issuesForMode(hardcodedStringIssues, listMode).toList();
+      final visibleHardcodedIssues = _issuesForMode(
+              hardcodedStringIssues, listMode, effectiveListItemLimit)
+          .toList();
       for (final issue in visibleHardcodedIssues) {
         blockLines.add('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
-          hardcodedStringIssues.length > _maxIssuesToShow) {
+          hardcodedStringIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... ${AppStrings.and} ${formatCount(hardcodedStringIssues.length - _maxIssuesToShow)} ${AppStrings.more}');
+            '  ... ${AppStrings.and} ${formatCount(hardcodedStringIssues.length - effectiveListItemLimit)} ${AppStrings.more}');
       }
     }
     blockLines.add('');
@@ -813,15 +817,16 @@ List<String> buildReportLines(
         blockLines.add('  - ${_pathText(path)}');
       }
     } else {
-      final visibleHardcodedIssues =
-          _issuesForMode(hardcodedStringIssues, listMode).toList();
+      final visibleHardcodedIssues = _issuesForMode(
+              hardcodedStringIssues, listMode, effectiveListItemLimit)
+          .toList();
       for (final issue in visibleHardcodedIssues) {
         blockLines.add('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
-          hardcodedStringIssues.length > _maxIssuesToShow) {
+          hardcodedStringIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... ${AppStrings.and} ${formatCount(hardcodedStringIssues.length - _maxIssuesToShow)} ${AppStrings.more}');
+            '  ... ${AppStrings.and} ${formatCount(hardcodedStringIssues.length - effectiveListItemLimit)} ${AppStrings.more}');
       }
     }
     blockLines.add('');
@@ -858,14 +863,15 @@ List<String> buildReportLines(
       }
     } else {
       final visibleMagicNumberIssues =
-          _issuesForMode(magicNumberIssues, listMode).toList();
+          _issuesForMode(magicNumberIssues, listMode, effectiveListItemLimit)
+              .toList();
       for (final issue in visibleMagicNumberIssues) {
         blockLines.add('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
-          magicNumberIssues.length > _maxIssuesToShow) {
+          magicNumberIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... ${AppStrings.and} ${formatCount(magicNumberIssues.length - _maxIssuesToShow)} ${AppStrings.more}');
+            '  ... ${AppStrings.and} ${formatCount(magicNumberIssues.length - effectiveListItemLimit)} ${AppStrings.more}');
       }
     }
     blockLines.add('');
@@ -904,14 +910,15 @@ List<String> buildReportLines(
       }
     } else {
       final visibleSourceSortIssues =
-          _issuesForMode(sourceSortIssues, listMode).toList();
+          _issuesForMode(sourceSortIssues, listMode, effectiveListItemLimit)
+              .toList();
       for (final issue in visibleSourceSortIssues) {
         blockLines.add('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
-          sourceSortIssues.length > _maxIssuesToShow) {
+          sourceSortIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... and ${formatCount(sourceSortIssues.length - _maxIssuesToShow)} more');
+            '  ... and ${formatCount(sourceSortIssues.length - effectiveListItemLimit)} more');
       }
     }
     blockLines.add('');
@@ -949,14 +956,15 @@ List<String> buildReportLines(
       }
     } else {
       final visibleSecretIssues =
-          _issuesForMode(secretIssues, listMode).toList();
+          _issuesForMode(secretIssues, listMode, effectiveListItemLimit)
+              .toList();
       for (final issue in visibleSecretIssues) {
         blockLines.add('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
-          secretIssues.length > _maxIssuesToShow) {
+          secretIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... and ${formatCount(secretIssues.length - _maxIssuesToShow)} more');
+            '  ... and ${formatCount(secretIssues.length - effectiveListItemLimit)} more');
       }
     }
     blockLines.add('');
@@ -1001,14 +1009,15 @@ List<String> buildReportLines(
         }
       } else {
         final visibleDeadFileIssues =
-            _issuesForMode(deadFileIssues, listMode).toList();
+            _issuesForMode(deadFileIssues, listMode, effectiveListItemLimit)
+                .toList();
         for (final issue in visibleDeadFileIssues) {
           blockLines.add('    - ${issue.formatGrouped()}');
         }
         if (listMode == ReportListMode.partial &&
-            deadFileIssues.length > _maxIssuesToShow) {
+            deadFileIssues.length > effectiveListItemLimit) {
           blockLines.add(
-              '    ... and ${formatCount(deadFileIssues.length - _maxIssuesToShow)} more');
+              '    ... and ${formatCount(deadFileIssues.length - effectiveListItemLimit)} more');
         }
       }
     }
@@ -1027,14 +1036,15 @@ List<String> buildReportLines(
         }
       } else {
         final visibleDeadClassIssues =
-            _issuesForMode(deadClassIssues, listMode).toList();
+            _issuesForMode(deadClassIssues, listMode, effectiveListItemLimit)
+                .toList();
         for (final issue in visibleDeadClassIssues) {
           blockLines.add('    - ${issue.formatGrouped()}');
         }
         if (listMode == ReportListMode.partial &&
-            deadClassIssues.length > _maxIssuesToShow) {
+            deadClassIssues.length > effectiveListItemLimit) {
           blockLines.add(
-              '    ... and ${formatCount(deadClassIssues.length - _maxIssuesToShow)} more');
+              '    ... and ${formatCount(deadClassIssues.length - effectiveListItemLimit)} more');
         }
       }
     }
@@ -1053,14 +1063,15 @@ List<String> buildReportLines(
         }
       } else {
         final visibleDeadFunctionIssues =
-            _issuesForMode(deadFunctionIssues, listMode).toList();
+            _issuesForMode(deadFunctionIssues, listMode, effectiveListItemLimit)
+                .toList();
         for (final issue in visibleDeadFunctionIssues) {
           blockLines.add('    - ${issue.formatGrouped()}');
         }
         if (listMode == ReportListMode.partial &&
-            deadFunctionIssues.length > _maxIssuesToShow) {
+            deadFunctionIssues.length > effectiveListItemLimit) {
           blockLines.add(
-              '    ... and ${formatCount(deadFunctionIssues.length - _maxIssuesToShow)} more');
+              '    ... and ${formatCount(deadFunctionIssues.length - effectiveListItemLimit)} more');
         }
       }
     }
@@ -1079,15 +1090,16 @@ List<String> buildReportLines(
           blockLines.add('    - ${_pathText(path)}');
         }
       } else {
-        final visibleUnusedVariableIssues =
-            _issuesForMode(unusedVariableIssues, listMode).toList();
+        final visibleUnusedVariableIssues = _issuesForMode(
+                unusedVariableIssues, listMode, effectiveListItemLimit)
+            .toList();
         for (final issue in visibleUnusedVariableIssues) {
           blockLines.add('    - ${issue.formatGrouped()}');
         }
         if (listMode == ReportListMode.partial &&
-            unusedVariableIssues.length > _maxIssuesToShow) {
+            unusedVariableIssues.length > effectiveListItemLimit) {
           blockLines.add(
-              '    ... and ${formatCount(unusedVariableIssues.length - _maxIssuesToShow)} more');
+              '    ... and ${formatCount(unusedVariableIssues.length - effectiveListItemLimit)} more');
         }
       }
     }
@@ -1131,7 +1143,8 @@ List<String> buildReportLines(
       }
     } else {
       final visibleDuplicateCodeIssues =
-          _issuesForMode(duplicateCodeIssues, listMode).toList();
+          _issuesForMode(duplicateCodeIssues, listMode, effectiveListItemLimit)
+              .toList();
       final duplicateSimilarityWidth = _maxIntWidth(
         visibleDuplicateCodeIssues
             .map((issue) => issue.similarityPercentRoundedDown),
@@ -1145,9 +1158,9 @@ List<String> buildReportLines(
         );
       }
       if (listMode == ReportListMode.partial &&
-          duplicateCodeIssues.length > _maxIssuesToShow) {
+          duplicateCodeIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... and ${formatCount(duplicateCodeIssues.length - _maxIssuesToShow)} more');
+            '  ... and ${formatCount(duplicateCodeIssues.length - effectiveListItemLimit)} more');
       }
     }
     blockLines.add('');
@@ -1186,14 +1199,15 @@ List<String> buildReportLines(
       }
     } else {
       final visibleDocumentationIssues =
-          _issuesForMode(documentationIssues, listMode).toList();
+          _issuesForMode(documentationIssues, listMode, effectiveListItemLimit)
+              .toList();
       for (final issue in visibleDocumentationIssues) {
         blockLines.add('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
-          documentationIssues.length > _maxIssuesToShow) {
+          documentationIssues.length > effectiveListItemLimit) {
         blockLines.add(
-          '  ... and ${formatCount(documentationIssues.length - _maxIssuesToShow)} more',
+          '  ... and ${formatCount(documentationIssues.length - effectiveListItemLimit)} more',
         );
       }
     }
@@ -1231,13 +1245,17 @@ List<String> buildReportLines(
         blockLines.add('  - ${_pathText(path)}');
       }
     } else {
-      for (final issue in _issuesForMode(layersIssues, listMode)) {
+      for (final issue in _issuesForMode(
+        layersIssues,
+        listMode,
+        effectiveListItemLimit,
+      )) {
         blockLines.add('  - $issue');
       }
       if (listMode == ReportListMode.partial &&
-          layersIssues.length > _maxIssuesToShow) {
+          layersIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... and ${formatCount(layersIssues.length - _maxIssuesToShow)} more');
+            '  ... and ${formatCount(layersIssues.length - effectiveListItemLimit)} more');
       }
     }
     addListBlock(

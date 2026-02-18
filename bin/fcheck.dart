@@ -145,7 +145,11 @@ void main(List<String> arguments) {
     if (input.outputJson) {
       printJsonOutput(metrics.toJson());
     } else {
-      final reportLines = buildReportLines(metrics, listMode: input.listMode);
+      final reportLines = buildReportLines(
+        metrics,
+        listMode: input.listMode,
+        listItemLimit: input.listItemLimit,
+      );
       if (shouldPrintOutputFilesSection) {
         final scorecardDividerIndex =
             reportLines.indexOf(dividerLine(AppStrings.scorecardDivider));

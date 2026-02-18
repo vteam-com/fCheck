@@ -254,6 +254,25 @@ class TestClass {
       expect(result.stdout, isNot(contains('Lists')));
     });
 
+    test('should accept numeric --list limit', () async {
+      File('${tempDir.path}/list_limit.dart').writeAsStringSync('''
+void main() {
+  final a = 101;
+  final b = 202;
+  final c = 303;
+  final d = 404;
+  final e = 505;
+  print(a + b + c + d + e);
+}
+''');
+
+      final result = await runCli(['--input', tempDir.path, '--list', '3']);
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains('fCheck $packageVersion'));
+      expect(result.stdout, contains('... and 2 more'));
+    });
+
     test('should detect class violations', () async {
       // Create a file with multiple classes (violates one class per file rule)
       File('${tempDir.path}/violation.dart').writeAsStringSync('''
