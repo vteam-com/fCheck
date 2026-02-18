@@ -83,6 +83,11 @@ void main() {
       expect(input.generateFolderSvg, isTrue);
     });
 
+    test('should parse --svgsize flag correctly', () {
+      final input = parseConsoleInput(['--svgsize'], parser);
+      expect(input.generateSizeSvg, isTrue);
+    });
+
     test('should parse --json flag correctly', () {
       final input = parseConsoleInput(['--json'], parser);
       expect(input.outputJson, isTrue);
@@ -133,6 +138,7 @@ void main() {
       expect(input.generateMermaid, isFalse);
       expect(input.generatePlantUML, isFalse);
       expect(input.generateFolderSvg, isFalse);
+      expect(input.generateSizeSvg, isFalse);
       expect(input.outputJson, isFalse);
       expect(input.listMode, equals(ReportListMode.partial));
       expect(input.listItemLimit, equals(defaultListItemLimit));
@@ -186,6 +192,7 @@ void main() {
       expect(parser.options, contains('mermaid'));
       expect(parser.options, contains('plantuml'));
       expect(parser.options, contains('svgfolder'));
+      expect(parser.options, contains('svgsize'));
       expect(parser.options, contains('json'));
       expect(parser.options, contains('list'));
       expect(parser.options, contains('version'));
@@ -207,6 +214,7 @@ void main() {
       expect(argResults['mermaid'], isFalse);
       expect(argResults['plantuml'], isFalse);
       expect(argResults['svgfolder'], isFalse);
+      expect(argResults['svgsize'], isFalse);
       expect(argResults['json'], isFalse);
       expect(argResults['list'], equals('partial'));
       expect(argResults['version'], isFalse);

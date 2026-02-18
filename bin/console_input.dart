@@ -29,6 +29,9 @@ class ConsoleInput {
   /// Whether folder-based SVG graph output should be generated.
   final bool generateFolderSvg;
 
+  /// Whether code-size treemap SVG output should be generated.
+  final bool generateSizeSvg;
+
   /// Whether JSON output is requested.
   final bool outputJson;
 
@@ -67,6 +70,7 @@ class ConsoleInput {
     required this.generateMermaid,
     required this.generatePlantUML,
     required this.generateFolderSvg,
+    required this.generateSizeSvg,
     required this.outputJson,
     required this.listMode,
     required this.listItemLimit,
@@ -116,6 +120,11 @@ ArgParser createConsoleArgParser() => ArgParser()
   ..addFlag(
     'svgfolder',
     help: 'Generate folder-based SVG visualization of the dependency graph',
+    negatable: false,
+  )
+  ..addFlag(
+    'svgsize',
+    help: 'Generate treemap SVG visualization of code size',
     negatable: false,
   )
   ..addFlag(
@@ -197,6 +206,7 @@ ConsoleInput parseConsoleInput(
     generateMermaid: argResults['mermaid'] as bool,
     generatePlantUML: argResults['plantuml'] as bool,
     generateFolderSvg: argResults['svgfolder'] as bool,
+    generateSizeSvg: argResults['svgsize'] as bool,
     outputJson: argResults['json'] as bool,
     listMode: listOption.mode,
     listItemLimit: listOption.limit,

@@ -3,7 +3,10 @@ import 'package:fcheck/src/graphs/export_mermaid.dart';
 import 'package:fcheck/src/graphs/export_plantuml.dart';
 import 'package:fcheck/src/graphs/export_svg.dart';
 import 'package:fcheck/src/graphs/export_svg_folders.dart';
+import 'package:fcheck/src/graphs/export_svg_code_size.dart';
+import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/graphs/graph_format_utils.dart';
+import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 void main() {
@@ -65,6 +68,95 @@ void main() {
       expect(folderSvg, contains('<svg'));
       expect(folderSvg, contains('sample'));
       expect(folderSvg, contains('DemoProject v1.2.3'));
+    });
+
+    test('render code-size treemap SVG with segmented groups', () {
+      final artifacts = <CodeSizeArtifact>[
+        const CodeSizeArtifact(
+          kind: CodeSizeArtifactKind.file,
+          name: 'a.dart',
+          filePath: 'lib/a.dart',
+          linesOfCode: 12058,
+          startLine: 1,
+          endLine: 12058,
+        ),
+        const CodeSizeArtifact(
+          kind: CodeSizeArtifactKind.file,
+          name: 'b.dart',
+          filePath: 'lib/src/b.dart',
+          linesOfCode: 300,
+          startLine: 1,
+          endLine: 300,
+        ),
+        const CodeSizeArtifact(
+          kind: CodeSizeArtifactKind.classDeclaration,
+          name: 'UserController',
+          filePath: 'lib/user_controller.dart',
+          linesOfCode: 9500,
+          startLine: 5,
+          endLine: 9500,
+        ),
+        const CodeSizeArtifact(
+          kind: CodeSizeArtifactKind.function,
+          name: 'bootstrap',
+          filePath: 'lib/main.dart',
+          linesOfCode: 6000,
+          startLine: 10,
+          endLine: 6000,
+        ),
+        const CodeSizeArtifact(
+          kind: CodeSizeArtifactKind.method,
+          name: 'render',
+          ownerName: 'AppView',
+          filePath: 'lib/app_view.dart',
+          linesOfCode: 4500,
+          startLine: 20,
+          endLine: 4500,
+        ),
+      ];
+
+      final svg = exportSvgCodeSize(
+        artifacts,
+        title: 'Code Size Treemap Test',
+      );
+
+      expect(svg, contains('<svg'));
+      expect(svg, contains('Code Size Treemap Test'));
+      expect(svg, contains('Files'));
+      expect(svg, contains('Folders'));
+      expect(svg, contains('Classes'));
+      expect(svg, contains('Functions/Methods'));
+      expect(svg, contains('folder: lib'));
+      expect(svg, contains('UserController'));
+      expect(svg, contains('AppView.render'));
+      expect(svg, contains('12,058 LOC'));
+      expect(svg, contains('fill="#000"'));
+      expect(svg, contains('filter="url(#outlineWhite)"'));
+    });
+
+    test('render empty code-size treemap when there are no artifacts', () {
+      final svg = exportSvgCodeSize(const []);
+      expect(svg, contains('No code-size artifacts found'));
+    });
+
+    test('render code-size treemap with relative paths', () {
+      final projectRoot = p.join('/tmp', 'demo_project');
+      final artifact = CodeSizeArtifact(
+        kind: CodeSizeArtifactKind.file,
+        name: 'a.dart',
+        filePath: p.join(projectRoot, 'lib', 'a.dart'),
+        linesOfCode: 12058,
+        startLine: 1,
+        endLine: 12058,
+      );
+
+      final svg = exportSvgCodeSize(
+        [artifact],
+        relativeTo: projectRoot,
+      );
+
+      expect(svg, contains('lib/a.dart:1'));
+      expect(svg, isNot(contains(projectRoot)));
     });
 
     test('fit long file labels in flat SVG without truncation', () {

@@ -27,5 +27,5 @@ echo "    Running tests..."
 flutter test --reporter=compact --no-pub
 
 echo --- fCheck
-dart run ./bin/fcheck.dart --svg --svgfolder --mermaid --plantuml ./example > /dev/null 2>&1
-dart run ./bin/fcheck.dart --list full --svg --svgfolder --fix . --exclude "**/example"
+dart run ./bin/fcheck.dart --svg --svgfolder --svgsize --mermaid --plantuml ./example > /dev/null 2>&1
+dart run ./bin/fcheck.dart --list full --svg --svgfolder --svgsize --fix . --exclude "**/example"

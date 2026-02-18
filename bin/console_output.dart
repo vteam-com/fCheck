@@ -5,6 +5,7 @@ import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:fcheck/src/input_output/number_format_utils.dart';
 import 'package:fcheck/src/analyzers/project_metrics.dart';
+import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 import 'package:fcheck/src/models/project_type.dart';
@@ -24,6 +25,9 @@ const int _minorSuppressionPenaltyUpperBound = 3;
 const int _moderateSuppressionPenaltyUpperBound = 7;
 const int _maxSuppressionPenaltyPoints = 25;
 const int _analyzerHeaderTitleWidth = 22;
+const int _codeSizeOutlierMinCount = 3;
+const int _codeSizeOutlierMaxCount = 10;
+const double _codeSizeOutlierRatio = 0.1;
 const int _cleanAnalyzerSortGroup = 0;
 const int _warningAnalyzerSortGroup = 1;
 const int _disabledAnalyzerSortGroup = 2;
@@ -84,6 +88,19 @@ int _maxIntWidth(Iterable<int> values) {
     }
   }
   return maxWidth;
+}
+
+/// Returns a stable top slice size for outlier views.
+int _codeSizeOutlierCount(int totalItems) {
+  if (totalItems <= 0) {
+    return 0;
+  }
+  final proportional = (totalItems * _codeSizeOutlierRatio).ceil();
+  final bounded = proportional.clamp(
+    _codeSizeOutlierMinCount,
+    _codeSizeOutlierMaxCount,
+  );
+  return bounded > totalItems ? totalItems : bounded;
 }
 
 String _separatorColon() => _colorize(':', _ansiGray);
@@ -381,6 +398,12 @@ List<String> buildReportLines(
   final fileMetrics = metrics.fileMetrics;
   final sourceSortIssues = metrics.sourceSortIssues;
   final layersIssues = metrics.layersIssues;
+  final codeSizeFileArtifacts = [...metrics.codeSizeFileArtifacts]
+    ..sort((left, right) => right.linesOfCode.compareTo(left.linesOfCode));
+  final codeSizeClassArtifacts = [...metrics.codeSizeClassArtifacts]
+    ..sort((left, right) => right.linesOfCode.compareTo(left.linesOfCode));
+  final codeSizeCallableArtifacts = [...metrics.codeSizeCallableArtifacts]
+    ..sort((left, right) => right.linesOfCode.compareTo(left.linesOfCode));
   final classCount = fileMetrics.fold<int>(
     0,
     (sum, metric) => sum + metric.classCount,
@@ -558,6 +581,53 @@ List<String> buildReportLines(
           );
     addLine(_gridRow([leftDashboardRows[index], rightCell]));
   }
+
+  void appendCodeSizeSection() {
+    final sections = <({
+      String title,
+      List<CodeSizeArtifact> artifacts,
+    })>[
+      (title: 'Files', artifacts: codeSizeFileArtifacts),
+      (title: 'Classes', artifacts: codeSizeClassArtifacts),
+      (title: 'Functions/Methods', artifacts: codeSizeCallableArtifacts),
+    ];
+    addLine(dividerLine('Code Size Outliers'));
+    for (final section in sections) {
+      if (section.artifacts.isEmpty) {
+        addLine(
+          '${skipTag()} ${section.title}: ${AppStrings.noneIndicator.trim()}',
+        );
+        continue;
+      }
+
+      final outlierCount = _codeSizeOutlierCount(section.artifacts.length);
+      final outliers = section.artifacts.take(outlierCount).toList();
+      final fullTotalLoc = section.artifacts.fold<int>(
+        0,
+        (sum, artifact) => sum + artifact.linesOfCode,
+      );
+      addLine(
+        '${warnTag()} ${section.title}: top ${formatCount(outlierCount)} of ${formatCount(section.artifacts.length)} (${formatCount(fullTotalLoc)} LOC total)',
+      );
+
+      final locWidth =
+          _maxIntWidth(outliers.map((artifact) => artifact.linesOfCode));
+      if (listMode == ReportListMode.none) {
+        continue;
+      }
+      for (final artifact in outliers) {
+        final path = normalizeIssueLocation(artifact.filePath).path;
+        final range = 'L${artifact.startLine}';
+        final line = listMode == ReportListMode.filenames
+            ? '  - ${_pathText(path)}'
+            : '  - ${artifact.linesOfCode.toString().padLeft(locWidth)} LOC  ${_colorize("[${artifact.kind.label}]", _ansiGray)} ${artifact.qualifiedName}  (${_pathText(path)}:$range)';
+        addLine(line);
+      }
+    }
+    addLine('');
+  }
+
+  appendCodeSizeSection();
 
   addLine(dividerLine('Analyzers'));
   final listBlocks = <_ListBlock>[];

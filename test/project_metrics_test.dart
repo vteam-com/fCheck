@@ -488,6 +488,12 @@ void main() {
               'ignoreOneClassPerFile': false,
             },
           ],
+          'codeSize': {
+            'artifacts': [],
+            'files': [],
+            'classes': [],
+            'callables': [],
+          },
           'hardcodedStrings': [
             {
               'filePath': 'lib/ui.dart',
@@ -1429,7 +1435,14 @@ void main() {
       final headerPattern = RegExp(
         r'^\s*(\[[^\]]+\])\s+(.+?)(?:\s+-(\d+(?:\.\d+)?)%\s+\((\d+)\))?$',
       );
-      final headerRows = output
+      final analyzersIndex =
+          output.indexWhere((line) => line.contains('Analyzers'));
+      final analyzerSectionLines = analyzersIndex >= 0
+          ? output
+              .skip(analyzersIndex + 1)
+              .takeWhile((line) => !line.contains('Scorecard'))
+          : const <String>[];
+      final headerRows = analyzerSectionLines
           .where((line) => RegExp(r'^\s*\[[^\]]+\]').hasMatch(line))
           .map((line) => headerPattern.firstMatch(line))
           .whereType<RegExpMatch>()

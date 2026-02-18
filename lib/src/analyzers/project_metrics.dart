@@ -6,6 +6,7 @@ import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
+import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/models/project_results.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
@@ -41,6 +42,9 @@ class ProjectMetrics {
 
   /// Metrics for each individual Dart file.
   final List<FileMetrics> fileMetrics;
+
+  /// Sized source artifacts across file/class/function/method levels.
+  final List<CodeSizeArtifact> codeSizeArtifacts;
 
   /// List of secret issues found in the project.
   final List<SecretIssue> secretIssues;
@@ -189,6 +193,7 @@ class ProjectMetrics {
     this.totalStringLiteralCount = 0,
     this.totalNumberLiteralCount = 0,
     required this.fileMetrics,
+    this.codeSizeArtifacts = const [],
     required this.secretIssues,
     required this.hardcodedStringIssues,
     required this.magicNumberIssues,
@@ -291,6 +296,13 @@ class ProjectMetrics {
           'graph': dependencyGraph,
         },
         'files': fileMetrics.map((m) => m.toJson()).toList(),
+        'codeSize': {
+          'artifacts': codeSizeArtifacts.map((a) => a.toJson()).toList(),
+          'files': codeSizeFileArtifacts.map((a) => a.toJson()).toList(),
+          'classes': codeSizeClassArtifacts.map((a) => a.toJson()).toList(),
+          'callables':
+              codeSizeCallableArtifacts.map((a) => a.toJson()).toList(),
+        },
         'hardcodedStrings':
             hardcodedStringIssues.map((i) => i.toJson()).toList(),
         'magicNumbers': magicNumberIssues.map((i) => i.toJson()).toList(),
@@ -330,6 +342,23 @@ class ProjectMetrics {
         duplicateCodeAnalyzerEnabled,
         documentationAnalyzerEnabled,
       ].where((enabled) => !enabled).length;
+
+  /// File-level code size artifacts.
+  List<CodeSizeArtifact> get codeSizeFileArtifacts => codeSizeArtifacts
+      .where((artifact) => artifact.kind == CodeSizeArtifactKind.file)
+      .toList(growable: false);
+
+  /// Class-level code size artifacts.
+  List<CodeSizeArtifact> get codeSizeClassArtifacts => codeSizeArtifacts
+      .where(
+        (artifact) => artifact.kind == CodeSizeArtifactKind.classDeclaration,
+      )
+      .toList(growable: false);
+
+  /// Callable-level code size artifacts (functions + methods).
+  List<CodeSizeArtifact> get codeSizeCallableArtifacts => codeSizeArtifacts
+      .where((artifact) => artifact.isCallable)
+      .toList(growable: false);
 
   /// Equal-share quality score across enabled analyzers from 0 to 100.
   ///

@@ -25,6 +25,9 @@ import 'package:fcheck/src/analyzers/dead_code/dead_code_analyzer.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_delegate.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
+import 'package:fcheck/src/analyzers/code_size/code_size_delegate.dart';
+import 'package:fcheck/src/analyzers/code_size/code_size_file_data.dart';
 import 'package:fcheck/src/analyzers/documentation/documentation_analyzer.dart';
 import 'package:fcheck/src/analyzers/documentation/documentation_delegate.dart';
 import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
@@ -50,6 +53,7 @@ import 'package:fcheck/src/analyzers/metrics/metrics_file_data.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
 import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
+import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
@@ -204,6 +208,7 @@ class AnalyzeFolder {
     // Build delegates for unified analysis
     final delegates = <AnalyzerDelegate>[
       MetricsDelegate(globallyIgnoreOneClassPerFile: !oneClassPerFileEnabled),
+      CodeSizeDelegate(),
       if (hardcodedStringsEnabled)
         HardcodedStringDelegate(
           focus: hardcodedStringsFocus,
@@ -311,6 +316,10 @@ class AnalyzeFolder {
               .toList() ??
           [],
     );
+    final codeSizeArtifacts = _collectCodeSizeArtifacts(
+      unifiedResult,
+      metricsAggregation.fileMetrics,
+    );
 
     return ProjectMetrics(
       totalFolders: totalFolders,
@@ -322,6 +331,7 @@ class AnalyzeFolder {
       totalStringLiteralCount: metricsAggregation.totalStringLiteralCount,
       totalNumberLiteralCount: metricsAggregation.totalNumberLiteralCount,
       fileMetrics: metricsAggregation.fileMetrics,
+      codeSizeArtifacts: codeSizeArtifacts,
       hardcodedStringIssues: hardcodedStringIssues,
       magicNumberIssues: magicNumberIssues,
       sourceSortIssues: sourceSortIssues,
@@ -357,6 +367,41 @@ class AnalyzeFolder {
       duplicateCodeAnalyzerEnabled: duplicateCodeEnabled,
       documentationAnalyzerEnabled: documentationEnabled,
     );
+  }
+
+  /// Combines file LOC metrics with AST-derived class/function/method LOC data.
+  List<CodeSizeArtifact> _collectCodeSizeArtifacts(
+    AnalysisRunnerResult unifiedResult,
+    List<FileMetrics> fileMetrics,
+  ) {
+    final artifacts = <CodeSizeArtifact>[
+      for (final metric in fileMetrics)
+        if (metric.linesOfCode > 0)
+          CodeSizeArtifact(
+            kind: CodeSizeArtifactKind.file,
+            name: p.basename(metric.path),
+            filePath: metric.path,
+            linesOfCode: metric.linesOfCode,
+            startLine: 1,
+            endLine: metric.linesOfCode,
+          ),
+    ];
+
+    final codeSizeDataRaw =
+        unifiedResult.resultsByType[CodeSizeFileData] ?? <dynamic>[];
+    final seenIds = <String>{};
+    for (final fileData in codeSizeDataRaw.whereType<CodeSizeFileData>()) {
+      for (final artifact in fileData.artifacts) {
+        if (artifact.linesOfCode <= 0) {
+          continue;
+        }
+        if (seenIds.add(artifact.stableId)) {
+          artifacts.add(artifact);
+        }
+      }
+    }
+
+    return artifacts;
   }
 
   /// Extracts validated layer input maps from unified analyzer results.

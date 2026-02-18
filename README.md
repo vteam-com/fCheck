@@ -49,8 +49,8 @@ fcheck --input ../my_app
 # CI-friendly output
 fcheck --json
 
-# Generate all dependency graph outputs
-fcheck --svg --svgfolder --mermaid --plantuml
+# Generate all graph outputs
+fcheck --svg --svgfolder --svgsize --mermaid --plantuml
 ```
 
 ## 🧪 Local and CI/CD Workflows
@@ -121,6 +121,7 @@ Comments           :     (16%) 2,086  |  Localization       :             OFF
 ------------------------------- Output files --------------------------------
 SVG layers         : layers.svg
 SVG layers Folder  : layers_folders.svg
+SVG code size         : fcheck_code_size.svg
 --------------------------------- Scorecard ---------------------------------
 Total Score        : 100%
 Invest Next        : Maintain this level by enforcing fcheck in CI on every pull request.
@@ -165,6 +166,7 @@ For exclusion commands (`--exclude`, `--excluded`), see the Exclusions section b
 ```bash
 fcheck --svg
 fcheck --svgfolder
+fcheck --svgsize
 fcheck --mermaid
 fcheck --plantuml
 ```
@@ -297,6 +299,14 @@ fcheck --svgfolder
 fcheck --mermaid    # Generates layers.mmd
 fcheck --plantuml   # Generates layers.puml
 ```
+
+### Code Size Visualization
+
+```bash
+fcheck --svgsize
+```
+
+- Generates `fcheck_code_size.svg` segmented by Files, Folders, Classes, and Functions/Methods.
 
 ## 🛡️ Exclusions
 

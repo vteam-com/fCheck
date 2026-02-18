@@ -3,6 +3,7 @@ import 'package:fcheck/src/graphs/export_mermaid.dart';
 import 'package:fcheck/src/graphs/export_plantuml.dart';
 import 'package:fcheck/src/graphs/export_svg.dart';
 import 'package:fcheck/src/graphs/export_svg_folders.dart';
+import 'package:fcheck/src/graphs/export_svg_code_size.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
@@ -139,7 +140,8 @@ void main(List<String> arguments) {
     final shouldPrintOutputFilesSection = input.generateSvg ||
         input.generateMermaid ||
         input.generatePlantUML ||
-        input.generateFolderSvg;
+        input.generateFolderSvg ||
+        input.generateSizeSvg;
     var deferredScorecardLines = <String>[];
 
     if (input.outputJson) {
@@ -235,6 +237,22 @@ void main(List<String> arguments) {
           printOutputFileLine(
             label: AppStrings.plantUmlLayers,
             path: plantUMLFile.path,
+          );
+        }
+      }
+
+      if (input.generateSizeSvg) {
+        final sizeTreemapContent = exportSvgCodeSize(
+          metrics.codeSizeArtifacts,
+          title: 'Code Size of ${metrics.projectName} ${metrics.version}',
+          relativeTo: directory.path,
+        );
+        final sizeTreemapFile = File('${directory.path}/fcheck_code_size.svg');
+        sizeTreemapFile.writeAsStringSync(sizeTreemapContent);
+        if (!input.outputJson) {
+          printOutputFileLine(
+            label: AppStrings.svgCodeSizeTreemap,
+            path: sizeTreemapFile.path,
           );
         }
       }
