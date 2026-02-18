@@ -943,6 +943,53 @@ void main() {
       expect(joined, contains('... and 9 more'));
     });
 
+    test('should respect partial list limit for one class per file issues', () {
+      final violatingFiles = List.generate(
+        4,
+        (i) => FileMetrics(
+          path: 'lib/violating_$i.dart',
+          linesOfCode: 10,
+          commentLines: 0,
+          classCount: 2,
+          isStatefulWidget: false,
+        ),
+      );
+
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 4,
+        totalDartFiles: 4,
+        totalLinesOfCode: 40,
+        totalCommentLines: 0,
+        fileMetrics: violatingFiles,
+        secretIssues: [],
+        hardcodedStringIssues: [],
+        magicNumberIssues: [],
+        sourceSortIssues: [],
+        layersIssues: [],
+        deadCodeIssues: [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: true,
+      );
+
+      final output = buildReportLines(
+        projectMetrics,
+        listMode: ReportListMode.partial,
+        listItemLimit: 2,
+      );
+
+      final joined = output.join('\n');
+      expect(joined, contains('lib/violating_0.dart'));
+      expect(joined, contains('lib/violating_1.dart'));
+      expect(joined, isNot(contains('lib/violating_2.dart')));
+      expect(joined, contains('... and 2 more'));
+    });
+
     test(
         'should sort duplicate code output by similarity then line count descending',
         () {

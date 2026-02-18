@@ -686,14 +686,23 @@ List<String> buildReportLines(
         blockLines.add('  - ${_pathText(path)}');
       }
     } else {
+      final visibleNonCompliant =
+          _issuesForMode(nonCompliant, listMode, effectiveListItemLimit)
+              .toList();
       final classCountWidth =
-          _maxIntWidth(nonCompliant.map((metric) => metric.classCount));
-      for (final metric in nonCompliant) {
+          _maxIntWidth(visibleNonCompliant.map((metric) => metric.classCount));
+      for (final metric in visibleNonCompliant) {
         final classCountText =
             metric.classCount.toString().padLeft(classCountWidth);
         final normalizedPath = normalizeIssueLocation(metric.path).path;
         blockLines.add(
           '  - ${_pathText(normalizedPath)} ($classCountText classes found)',
+        );
+      }
+      if (listMode == ReportListMode.partial &&
+          nonCompliant.length > effectiveListItemLimit) {
+        blockLines.add(
+          '  ... ${AppStrings.and} ${formatCount(nonCompliant.length - effectiveListItemLimit)} ${AppStrings.more}',
         );
       }
     }
