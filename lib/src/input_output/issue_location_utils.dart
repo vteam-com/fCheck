@@ -23,22 +23,26 @@ const int _pathCaptureGroupIndex = 1;
 const int _lineCaptureGroupIndex = 2;
 const String _lineNumberWidthAssertionMessage =
     'lineNumberWidth must be positive when provided.';
-const int _ansiBlue = 34;
 
 bool get _supportsAnsiEscapes =>
     stdout.hasTerminal && stdout.supportsAnsiEscapes;
 
-String _colorizeBlue(String text) =>
-    _supportsAnsiEscapes ? '\x1B[${_ansiBlue}m$text\x1B[0m' : text;
+String _colorizeBlueDark(String text) =>
+    _supportsAnsiEscapes ? '\x1B[38;5;24m$text\x1B[0m' : text;
+
+String _colorizeBlueBright(String text) =>
+    _supportsAnsiEscapes ? '\x1B[38;5;45m$text\x1B[0m' : text;
 
 String _colorizeOrange(String text) =>
     _supportsAnsiEscapes ? '\x1B[38;5;208m$text\x1B[0m' : text;
 
-/// Colors only the filename token (the last path segment) in blue.
+/// Colors the directory prefix dark blue and the filename token bright blue.
 ///
 /// Examples:
-/// - `lib/src/file.dart:12` -> `lib/src/<blue>file.dart</blue>:12`
-/// - `/tmp/output.svg` -> `/tmp/<blue>output.svg</blue>`
+/// - `lib/src/file.dart:12` ->
+///   `<dark-blue>lib/src/</dark-blue><bright-blue>file.dart</bright-blue>:12`
+/// - `/tmp/output.svg` ->
+///   `<dark-blue>/tmp/</dark-blue><bright-blue>output.svg</bright-blue>`
 String colorizePathFilename(String location) {
   if (!_supportsAnsiEscapes || location.isEmpty) {
     return location;
@@ -61,7 +65,7 @@ String colorizePathFilename(String location) {
   final prefix = location.substring(0, filenameStart);
   final filename = location.substring(filenameStart, filenameEnd);
   final suffix = location.substring(filenameEnd);
-  return '$prefix${_colorizeBlue(filename)}$suffix';
+  return '${_colorizeBlueDark(prefix)}${_colorizeBlueBright(filename)}$suffix';
 }
 
 /// Colors the offending artifact text (symbol/value) in orange.
