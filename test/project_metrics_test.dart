@@ -251,8 +251,8 @@ void main() {
       expect(projectMetrics.complianceScore, equals(75));
       expect(
           projectMetrics.complianceFocusAreaKey, equals('suppression_hygiene'));
-      expect(projectMetrics.complianceFocusAreaLabel,
-          equals('Suppression hygiene'));
+      expect(
+          projectMetrics.complianceFocusAreaLabel, equals('Checks bypassed'));
       expect(projectMetrics.complianceFocusAreaIssueCount, equals(30));
       expect(
         projectMetrics.complianceNextInvestment,
@@ -611,7 +611,17 @@ void main() {
         totalDartFiles: 1,
         totalLinesOfCode: 10,
         totalCommentLines: 0,
-        fileMetrics: const [],
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/main.dart',
+            linesOfCode: 10,
+            commentLines: 0,
+            classCount: 2,
+            methodCount: 4,
+            topLevelFunctionCount: 3,
+            isStatefulWidget: false,
+          ),
+        ],
         secretIssues: const [],
         hardcodedStringIssues: const [],
         magicNumberIssues: const [],
@@ -635,6 +645,12 @@ void main() {
       expect(joined, contains(AppStrings.devDependency));
       expect(joined, contains(RegExp(r'Dependency\s+:.*3')));
       expect(joined, contains(RegExp(r'DevDependency\s+:.*2')));
+      expect(joined, contains(RegExp(r'Classes\s+:.*2')));
+      expect(joined, contains(RegExp(r'Methods\s+:.*4')));
+      expect(joined, contains(RegExp(r'Functions\s+:.*3')));
+      expect(joined, isNot(contains(AppStrings.customExcludes)));
+      expect(joined, isNot(contains(AppStrings.ignoreDirectives)));
+      expect(joined, isNot(contains(AppStrings.disabledRules)));
     });
 
     test('should omit Lists section when listMode is none', () {
@@ -1288,7 +1304,7 @@ void main() {
 
       final output = buildReportLines(projectMetrics);
       final joined = output.join('\n');
-      expect(joined, contains('[✓] Suppression hygiene'));
+      expect(joined, contains('[✓] Checks bypassed'));
       expect(joined,
           isNot(contains('Suppressions check ${AppStrings.checkPassed}')));
     });

@@ -261,7 +261,7 @@ class MetricsAnalyzer {
     return penalty.clamp(0, _maxSuppressionPenaltyPoints.toDouble()).round();
   }
 
-  /// Chooses the highest-impact focus area (including suppression hygiene).
+  /// Chooses the highest-impact focus area (including checks bypassed).
   _ComplianceAreaScore? _resolvePrimaryFocusArea({
     required ProjectMetricsAnalysisInput input,
     required List<_ComplianceAreaScore> enabledAreas,
@@ -311,7 +311,7 @@ class MetricsAnalyzer {
         input.disabledAnalyzersCount;
     return _ComplianceAreaScore(
       key: 'suppression_hygiene',
-      label: 'Suppression hygiene',
+      label: 'Checks bypassed',
       enabled: true,
       issueCount: suppressionEntries,
       score: _clampToUnitRange(

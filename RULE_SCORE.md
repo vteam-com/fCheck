@@ -157,7 +157,7 @@ Special rule:
 
 ## Focus Area Selection
 
-The "Focus Area" is the highest-impact enabled domain, plus suppression hygiene
+The "Focus Area" is the highest-impact enabled domain, plus checks bypassed
 when suppression penalty is active:
 
 ```text

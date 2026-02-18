@@ -41,7 +41,7 @@ void main() {
       );
     });
 
-    test('caps suppression penalty and prioritizes suppression hygiene', () {
+    test('caps suppression penalty and prioritizes checks bypassed', () {
       final result = analyzer.analyze(
         _buildInput(
           ignoreDirectivesCount: 20,
@@ -53,7 +53,7 @@ void main() {
 
       expect(result.suppressionPenaltyPoints, equals(25));
       expect(result.complianceFocusAreaKey, equals('suppression_hygiene'));
-      expect(result.complianceFocusAreaLabel, equals('Suppression hygiene'));
+      expect(result.complianceFocusAreaLabel, equals('Checks bypassed'));
       expect(result.complianceFocusAreaIssueCount, equals(30));
     });
   });

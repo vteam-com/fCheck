@@ -15,6 +15,12 @@ class FileMetrics {
   /// Total number of functions and methods in the file.
   final int functionCount;
 
+  /// Total number of top-level functions in the file.
+  final int topLevelFunctionCount;
+
+  /// Total number of methods in class/mixin/enum/extension declarations.
+  final int methodCount;
+
   /// Total number of string literals in the file.
   final int stringLiteralCount;
 
@@ -45,6 +51,8 @@ class FileMetrics {
     required this.commentLines,
     required this.classCount,
     this.functionCount = 0,
+    this.topLevelFunctionCount = 0,
+    this.methodCount = 0,
     this.stringLiteralCount = 0,
     this.numberLiteralCount = 0,
     required this.isStatefulWidget,

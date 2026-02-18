@@ -37,6 +37,9 @@ class AppStrings {
   static const String folders = 'Folders';
   static const String loc = 'Lines of Code';
   static const String comments = 'Comments';
+  static const String classes = 'Classes';
+  static const String methods = 'Methods';
+  static const String functions = 'Functions';
   static const String oneClassPerFile = 'One Class/File';
   static const String magicNumbers = 'Magic Numbers';
   static const String secrets = 'Secrets';
@@ -203,7 +206,7 @@ class AppStrings {
   static const String focusAreaAndInvestNextLabel =
       'Focus Area and Invest Next:';
   static const String focusAreaExplanation =
-      '  - Focus Area is the enabled domain with the highest penalty impact.';
+      '  - Focus Area is the enabled domain with the highest penalty impact (or checks bypassed when suppression penalties apply).';
   static const String tieBreakerExplanation =
       '  - Tie-breaker: domain with more issues.';
   static const String investNextExplanation =

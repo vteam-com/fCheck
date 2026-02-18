@@ -58,6 +58,8 @@ class MetricsDelegate implements AnalyzerDelegate {
         commentLines: commentLines,
         classCount: visitor.classCount,
         functionCount: visitor.functionCount,
+        topLevelFunctionCount: visitor.topLevelFunctionCount,
+        methodCount: visitor.methodCount,
         stringLiteralCount: visitor.stringLiteralCount,
         numberLiteralCount: visitor.numberLiteralCount,
         isStatefulWidget: visitor.hasStatefulWidget,

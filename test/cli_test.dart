@@ -335,8 +335,10 @@ void main() {
             '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):'),
       );
       expect(result.stdout, contains('logic.dart:'));
-      expect(result.stdout,
-          contains('${AppStrings.localization} (${AppStrings.off})'));
+      expect(
+        result.stdout,
+        contains(RegExp(r'Localization\s+:\s+OFF')),
+      );
       expect(result.stdout, contains(AppStrings.magicNumbersDetected));
     });
 

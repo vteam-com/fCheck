@@ -105,11 +105,12 @@ Suppressions      : -4 pts
 Focus Area         : Hardcoded strings (7 issues)
 Invest Next        : Adopt localization and replace user-facing literals with keys.
 -------------------------------------- Dashboard --------------------------------------
-Files              :                   57  |  Dart Files         :                  36
-Excluded Files     :                   19  |  Localization (OFF) :       HardCoded   7
-Custom Excludes    :                    3  |  Ignore Directives  :                   6
-Disabled Rules     :                    1  |  Folders            :                  14
-Lines of Code      :                7,550  |  Comments           :         1,452 (19%)
+Folders            :                   14  |  Dependency         :                   5
+Files              :                   57  |  DevDependency      :                   2
+Excluded Files     :                   19  |  Classes            :                  22
+Dart Files         :                   36  |  Methods            :                 118
+Lines of Code      :                7,550  |  Functions          :                  11
+Comments           :           (19%) 1,452 |  Localization       :                 OFF
 One Class/File     :                    ✓  |  Magic Numbers      :                   ✓
 Secrets            :                    ✓  |  Dead Code          :                   ✓
 Layers             :                    6  |  Source Sorting     :                   ✓
@@ -364,9 +365,10 @@ Excluded directories (15):
 - **Files**: Total files in project
 - **Dart Files**: `.dart` files analyzed
 - **Excluded Files**: Dart files skipped by defaults and custom patterns
-- **Custom Excludes**: Dart file count skipped by user exclude globs (`.fcheck` `input.exclude` and/or `--exclude`)
-- **Ignore Directives**: Count of `// ignore: fcheck_*` directives
-- **Disabled Rules**: Number of disabled analyzers
+- **Classes**: Total public class declarations across analyzed Dart files
+- **Methods**: Total method declarations across analyzed Dart files
+- **Functions**: Total top-level function declarations across analyzed Dart files
+- **Checks bypassed**: Analyzer block summarizing ignore directives, custom excludes, and disabled rules
 - **Suppression Penalty**: Score deduction from overusing excludes/ignores/disabled rules
 - **Lines of Code**: Total lines in Dart files
 - **Comment Ratio**: Documentation percentage

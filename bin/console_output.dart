@@ -14,14 +14,11 @@ import 'console_common.dart';
 const int _percentageMultiplier = 100;
 const int _gridLabelWidth = 18;
 const int _gridValueWidth = 15;
-const int _domainValueWidth = 18;
 const int _perfectScoreThreshold = 95;
 const int _goodScoreThreshold = 85;
 const int _fairScoreThreshold = 70;
 const int _minHealthyCommentRatioPercent = 10;
-const int _minorIssueCountUpperBound = 3;
 const int _compactDecimalPlaces = 2;
-const int _hardcodedValueWidth = 3;
 const int _emptyRightDashboardCellPadding = 3;
 const int _minorSuppressionPenaltyUpperBound = 3;
 const int _moderateSuppressionPenaltyUpperBound = 7;
@@ -41,7 +38,7 @@ const Map<String, String> _analyzerTitleByKey = {
   'dead_code': 'Dead code',
   'duplicate_code': 'Duplicate code',
   'documentation': 'Documentation',
-  'suppression_hygiene': 'Suppression hygiene',
+  'suppression_hygiene': 'Checks bypassed',
 };
 
 /// Returns all issues or a top slice depending on [listMode].
@@ -203,44 +200,6 @@ String _analyzerDeductionValue({
   return _colorize('$deductionText ($issueText)', _ansiYellow);
 }
 
-/// Formats a domain dashboard value including disabled/issue severity states.
-String _domainValue({
-  required bool enabled,
-  required int issueCount,
-  bool anyIssueIsBad = false,
-  int width = _domainValueWidth,
-}) {
-  if (!enabled) {
-    if (width <= 0) {
-      return AppStrings.disabled;
-    }
-    return AppStrings.disabled.padLeft(width);
-  }
-
-  if (issueCount == 0) {
-    final rawText = '✓';
-    final text = width <= 0 ? rawText : rawText.padLeft(width);
-    return _colorize(text, _ansiGreen);
-  }
-
-  final rawText = formatCount(issueCount);
-  final text = width <= 0 ? rawText : rawText.padLeft(width);
-
-  if (anyIssueIsBad) {
-    return _colorize(text, _ansiRed);
-  }
-
-  if (issueCount == 1) {
-    return _colorize(text, _ansiYellowBright);
-  }
-
-  if (issueCount <= _minorIssueCountUpperBound) {
-    return _colorize(text, _ansiOrange);
-  }
-
-  return _colorize(text, _ansiRed);
-}
-
 /// Formats comments as raw count and percent of LOC.
 String _commentSummary({
   required int totalCommentLines,
@@ -283,7 +242,7 @@ String _suppressionPenaltyValue({
 
 /// Formats suppression-related counts with optional width alignment.
 ///
-/// A zero count is shown as green to indicate healthy suppression hygiene.
+/// A zero count is shown as green to indicate healthy rule opt-out usage.
 String _suppressionCountValue({
   required int count,
   int width = 0,
@@ -422,6 +381,18 @@ List<String> buildReportLines(
   final fileMetrics = metrics.fileMetrics;
   final sourceSortIssues = metrics.sourceSortIssues;
   final layersIssues = metrics.layersIssues;
+  final classCount = fileMetrics.fold<int>(
+    0,
+    (sum, metric) => sum + metric.classCount,
+  );
+  final methodCount = fileMetrics.fold<int>(
+    0,
+    (sum, metric) => sum + metric.methodCount,
+  );
+  final functionCount = fileMetrics.fold<int>(
+    0,
+    (sum, metric) => sum + metric.topLevelFunctionCount,
+  );
   final disabledAnalyzerKeys = <String>[
     if (!oneClassPerFileAnalyzerEnabled)
       AnalyzerDomain.oneClassPerFile.configName,
@@ -536,27 +507,9 @@ List<String> buildReportLines(
       value: '$projectName (${AppStrings.version} $version)',
     ),
   );
-  final hardcodedSummary = _domainValue(
-    enabled: hardcodedStringsAnalyzerEnabled,
-    issueCount: hardcodedStringIssues.length,
-    width: _hardcodedValueWidth,
-  );
-  final localizationLabel =
-      '${AppStrings.localization} (${usesLocalization ? AppStrings.on : AppStrings.off})';
-  final hardcodedCountText = hardcodedStringsAnalyzerEnabled
-      ? formatCount(hardcodedStringIssues.length).padLeft(_hardcodedValueWidth)
-      : AppStrings.disabled;
-  final localizationHardcodedValue = hardcodedSummary;
-  final localizationHardcodedPlain =
-      'Hardcoded $hardcodedCountText'.padLeft(_gridValueWidth);
-  final localizationHardcodedSummary = localizationHardcodedPlain.replaceRange(
-    localizationHardcodedPlain.length - hardcodedCountText.length,
-    localizationHardcodedPlain.length,
-    localizationHardcodedValue,
-  );
-  final localizationCell = _labelValueLine(
-    label: localizationLabel,
-    value: localizationHardcodedSummary,
+  final localizationCell = _gridCell(
+    label: AppStrings.localization,
+    value: usesLocalization ? AppStrings.on : AppStrings.off,
   );
   addLine(dividerLine(AppStrings.dashboardDivider));
   final leftDashboardRows = <String>[
@@ -575,31 +528,6 @@ List<String> buildReportLines(
     ),
   ];
   final rightDashboardRows = <String>[
-    localizationCell,
-    _gridCell(
-      label: AppStrings.customExcludes,
-      value: _suppressionCountValue(
-        count: customExcludedFilesCount,
-        width: _gridValueWidth,
-      ),
-      valuePreAligned: true,
-    ),
-    _gridCell(
-      label: AppStrings.ignoreDirectives,
-      value: _suppressionCountValue(
-        count: ignoreDirectivesCount,
-        width: _gridValueWidth,
-      ),
-      valuePreAligned: true,
-    ),
-    _gridCell(
-      label: AppStrings.disabledRules,
-      value: _suppressionCountValue(
-        count: disabledAnalyzersCount,
-        width: _gridValueWidth,
-      ),
-      valuePreAligned: true,
-    ),
     _gridCell(
       label: AppStrings.dependency,
       value: formatCount(dependencyCount),
@@ -608,6 +536,19 @@ List<String> buildReportLines(
       label: AppStrings.devDependency,
       value: formatCount(devDependencyCount),
     ),
+    _gridCell(
+      label: AppStrings.classes,
+      value: formatCount(classCount),
+    ),
+    _gridCell(
+      label: AppStrings.methods,
+      value: formatCount(methodCount),
+    ),
+    _gridCell(
+      label: AppStrings.functions,
+      value: formatCount(functionCount),
+    ),
+    localizationCell,
   ];
   for (var index = 0; index < leftDashboardRows.length; index++) {
     final rightCell = index < rightDashboardRows.length

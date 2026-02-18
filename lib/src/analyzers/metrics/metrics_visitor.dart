@@ -12,6 +12,12 @@ class MetricsQualityVisitor extends RecursiveAstVisitor<void> {
   /// The total number of functions and methods found.
   int functionCount = 0;
 
+  /// The total number of top-level functions found.
+  int topLevelFunctionCount = 0;
+
+  /// The total number of methods found.
+  int methodCount = 0;
+
   /// The total number of string literals found.
   int stringLiteralCount = 0;
 
@@ -37,12 +43,14 @@ class MetricsQualityVisitor extends RecursiveAstVisitor<void> {
 
   @override
   void visitFunctionDeclaration(FunctionDeclaration node) {
+    topLevelFunctionCount++;
     functionCount++;
     super.visitFunctionDeclaration(node);
   }
 
   @override
   void visitMethodDeclaration(MethodDeclaration node) {
+    methodCount++;
     functionCount++;
     super.visitMethodDeclaration(node);
   }
