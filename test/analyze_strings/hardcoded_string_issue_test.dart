@@ -10,10 +10,7 @@ void main() {
         value: 'Hello World',
       );
 
-      expect(
-        issue.toString(),
-        equals('lib/main.dart:12: "Hello World"'),
-      );
+      expect(issue.toString(), equals('lib/main.dart:12: "Hello World"'));
     });
 
     test('toJson returns all fields', () {

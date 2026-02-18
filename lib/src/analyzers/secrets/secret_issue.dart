@@ -18,20 +18,15 @@ class SecretIssue {
   final String? value;
 
   /// Creates a new SecretIssue instance.
-  SecretIssue({
-    this.filePath,
-    this.lineNumber,
-    this.secretType,
-    this.value,
-  });
+  SecretIssue({this.filePath, this.lineNumber, this.secretType, this.value});
 
   /// Converts this secret issue to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-        'filePath': filePath,
-        'lineNumber': lineNumber,
-        'secretType': secretType,
-        'value': value,
-      };
+    'filePath': filePath,
+    'lineNumber': lineNumber,
+    'secretType': secretType,
+    'value': value,
+  };
 
   @override
   String toString() => format();

@@ -39,8 +39,9 @@ void main() {
       projectRootPath = Directory.current.path;
       cliScriptPath = '$projectRootPath/bin/fcheck.dart';
       compiledCliDir = await Directory.systemTemp.createTemp('fcheck_cli_bin_');
-      final executableName =
-          Platform.isWindows ? 'fcheck_cli_test.exe' : 'fcheck_cli_test';
+      final executableName = Platform.isWindows
+          ? 'fcheck_cli_test.exe'
+          : 'fcheck_cli_test';
       compiledCliPath = '${compiledCliDir.path}/$executableName';
       useCompiledCli = false;
 
@@ -122,8 +123,9 @@ class TestClass {
 
     test('should accept short input option', () async {
       // Create test file
-      File('${tempDir.path}/short.dart')
-          .writeAsStringSync('void main() => print("test");');
+      File(
+        '${tempDir.path}/short.dart',
+      ).writeAsStringSync('void main() => print("test");');
 
       // Run fcheck with short option
       final result = await runCli(['-i', tempDir.path]);
@@ -169,28 +171,21 @@ class TestClass {
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains(AppStrings.setupIgnoresInDartFile));
+      expect(result.stdout, contains('1. dead_code'));
       expect(
         result.stdout,
-        contains('1. dead_code'),
-      );
-      expect(
-        result.stdout,
-        contains(RegExp(
-            r'2\.\s+documentation\s+\|\s+// ignore: fcheck_documentation')),
+        contains(
+          RegExp(r'2\.\s+documentation\s+\|\s+// ignore: fcheck_documentation'),
+        ),
       );
       expect(
         result.stdout,
         contains(
-            '7. one_class_per_file | // ignore: fcheck_one_class_per_file'),
+          '7. one_class_per_file | // ignore: fcheck_one_class_per_file',
+        ),
       );
-      expect(
-        result.stdout,
-        contains('9. source_sorting'),
-      );
-      expect(
-        result.stdout,
-        contains('| (no comment ignore support)'),
-      );
+      expect(result.stdout, contains('9. source_sorting'));
+      expect(result.stdout, contains('| (no comment ignore support)'));
       expect(result.stdout, contains('Setup using the .fcheck file'));
       expect(result.stdout, contains('input:'));
       expect(result.stdout, contains('exclude:'));
@@ -204,20 +199,22 @@ class TestClass {
       expect(result.stdout, isNot(contains('enable:')));
     });
 
-    test('should show ignore setup before validating input directory',
-        () async {
-      final nonExistentPath = '${tempDir.path}/does_not_exist_for_ignores';
+    test(
+      'should show ignore setup before validating input directory',
+      () async {
+        final nonExistentPath = '${tempDir.path}/does_not_exist_for_ignores';
 
-      final result = await runCli([
-        '--help-ignore',
-        '--input',
-        nonExistentPath,
-      ]);
+        final result = await runCli([
+          '--help-ignore',
+          '--input',
+          nonExistentPath,
+        ]);
 
-      expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('Setup ignores directly in Dart file'));
-      expect(result.stdout, isNot(contains('does not exist')));
-    });
+        expect(result.exitCode, equals(0));
+        expect(result.stdout, contains('Setup ignores directly in Dart file'));
+        expect(result.stdout, isNot(contains('does not exist')));
+      },
+    );
 
     test('should show score help with --help-score flag', () async {
       final result = await runCli(['--help-score']);
@@ -232,11 +229,7 @@ class TestClass {
     test('should show score help before validating input directory', () async {
       final nonExistentPath = '${tempDir.path}/does_not_exist_for_score_help';
 
-      final result = await runCli([
-        '--help-score',
-        '--input',
-        nonExistentPath,
-      ]);
+      final result = await runCli(['--help-score', '--input', nonExistentPath]);
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('Compliance score model from 0% to 100%'));
@@ -244,8 +237,9 @@ class TestClass {
     });
 
     test('should respect --list none flag', () async {
-      File('${tempDir.path}/list_none.dart')
-          .writeAsStringSync('void main() => print("list none");');
+      File(
+        '${tempDir.path}/list_none.dart',
+      ).writeAsStringSync('void main() => print("list none");');
 
       final result = await runCli(['--input', tempDir.path, '--list', 'none']);
 
@@ -312,7 +306,9 @@ class SecondClass {
         contains(RegExp(r'\[✓\]\s+One class per file\s*$', multiLine: true)),
       );
       expect(
-          result.stdout, isNot(contains('One class per file check passed.')));
+        result.stdout,
+        isNot(contains('One class per file check passed.')),
+      );
     });
 
     test('should detect hardcoded strings', () async {
@@ -332,52 +328,53 @@ void main() {
       expect(
         result.stdout,
         contains(
-            '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):'),
+          '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
+        ),
       );
       expect(result.stdout, contains('logic.dart:'));
-      expect(
-        result.stdout,
-        contains(RegExp(r'Localization\s+:\s+OFF')),
-      );
+      expect(result.stdout, contains(RegExp(r'Localization\s+:\s+OFF')));
       expect(result.stdout, contains(AppStrings.magicNumbersDetected));
     });
 
     test(
-        'should show hardcoded strings as warnings for Dart projects when localization is off',
-        () async {
-      File('${tempDir.path}/pubspec.yaml').writeAsStringSync('''
+      'should show hardcoded strings as warnings for Dart projects when localization is off',
+      () async {
+        File('${tempDir.path}/pubspec.yaml').writeAsStringSync('''
 name: cli_sample
 version: 1.0.0
 environment:
   sdk: ">=3.0.0 <4.0.0"
 ''');
-      File('${tempDir.path}/main.dart').writeAsStringSync('''
+        File('${tempDir.path}/main.dart').writeAsStringSync('''
 void main() {
   print("This is hardcoded");
 }
 ''');
 
-      final result = await runCli(['--input', tempDir.path]);
+        final result = await runCli(['--input', tempDir.path]);
 
-      expect(result.exitCode, equals(0));
-      expect(
-        result.stdout,
-        contains(
-          '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
-        ),
-      );
-      expect(result.stdout, contains('main.dart:2: "This is hardcoded"'));
-    });
+        expect(result.exitCode, equals(0));
+        expect(
+          result.stdout,
+          contains(
+            '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
+          ),
+        );
+        expect(result.stdout, contains('main.dart:2: "This is hardcoded"'));
+      },
+    );
 
     test('explicit input option should win over positional argument', () async {
       // Create test files in two different directories
       final dir1 = Directory('${tempDir.path}/dir1')..createSync();
       final dir2 = Directory('${tempDir.path}/dir2')..createSync();
 
-      File('${dir1.path}/test1.dart')
-          .writeAsStringSync('void main() => print("dir1");');
-      File('${dir2.path}/test2.dart')
-          .writeAsStringSync('void main() => print("dir2");');
+      File(
+        '${dir1.path}/test1.dart',
+      ).writeAsStringSync('void main() => print("dir1");');
+      File(
+        '${dir2.path}/test2.dart',
+      ).writeAsStringSync('void main() => print("dir2");');
 
       // Run with both explicit option and positional argument - explicit should win
       final result = await runCli(['--input', dir1.path, dir2.path]);
@@ -390,8 +387,9 @@ void main() {
 
     test('should accept positional path argument', () async {
       // Create test file
-      File('${tempDir.path}/positional.dart')
-          .writeAsStringSync('void main() => print("positional test");');
+      File(
+        '${tempDir.path}/positional.dart',
+      ).writeAsStringSync('void main() => print("positional test");');
 
       // Run fcheck with positional argument
       final result = await runCli([tempDir.path]);
@@ -447,31 +445,36 @@ analyzers:
       expect(stats['hardcodedStrings'], equals(0));
     });
 
-    test('should show skipped message for disabled analyzer in text output',
-        () async {
-      File('${tempDir.path}/main.dart').writeAsStringSync('''
+    test(
+      'should show skipped message for disabled analyzer in text output',
+      () async {
+        File('${tempDir.path}/main.dart').writeAsStringSync('''
 void main() {
   print("Hardcoded");
 }
 ''');
-      File('${tempDir.path}/.fcheck').writeAsStringSync('''
+        File('${tempDir.path}/.fcheck').writeAsStringSync('''
 analyzers:
   disabled:
     - hardcoded_strings
 ''');
 
-      final result = await runCli(['--input', tempDir.path]);
+        final result = await runCli(['--input', tempDir.path]);
 
-      expect(result.exitCode, equals(0));
-      expect(result.stdout, contains('Localization'));
-      expect(result.stdout, contains('Hardcoded'));
-      expect(result.stdout, contains('disabled'));
-      expect(
-        result.stdout,
-        contains('Hardcoded strings check skipped (${AppStrings.disabled}).'),
-      );
-      expect(result.stdout, isNot(contains('Hardcoded strings check passed.')));
-    });
+        expect(result.exitCode, equals(0));
+        expect(result.stdout, contains('Localization'));
+        expect(result.stdout, contains('Hardcoded'));
+        expect(result.stdout, contains('disabled'));
+        expect(
+          result.stdout,
+          contains('Hardcoded strings check skipped (${AppStrings.disabled}).'),
+        );
+        expect(
+          result.stdout,
+          isNot(contains('Hardcoded strings check passed.')),
+        );
+      },
+    );
 
     test('should support analyzer opt-in mode via .fcheck', () async {
       File('${tempDir.path}/main.dart').writeAsStringSync('''
@@ -496,26 +499,28 @@ analyzers:
       expect(stats['magicNumbers'], equals(1));
     });
 
-    test('should respect input root and exclude patterns from .fcheck',
-        () async {
-      final appDir = Directory('${tempDir.path}/app')..createSync();
-      final generatedDir = Directory('${appDir.path}/generated')..createSync();
-      File('${appDir.path}/main.dart').writeAsStringSync('''
+    test(
+      'should respect input root and exclude patterns from .fcheck',
+      () async {
+        final appDir = Directory('${tempDir.path}/app')..createSync();
+        final generatedDir = Directory('${appDir.path}/generated')
+          ..createSync();
+        File('${appDir.path}/main.dart').writeAsStringSync('''
 void main() {
   print(2);
 }
 ''');
-      File('${generatedDir.path}/skip.dart').writeAsStringSync('''
+        File('${generatedDir.path}/skip.dart').writeAsStringSync('''
 void skip() {
   print(7);
 }
 ''');
-      File('${tempDir.path}/outside.dart').writeAsStringSync('''
+        File('${tempDir.path}/outside.dart').writeAsStringSync('''
 void outside() {
   print(9);
 }
 ''');
-      File('${tempDir.path}/.fcheck').writeAsStringSync('''
+        File('${tempDir.path}/.fcheck').writeAsStringSync('''
 input:
   root: app
   exclude:
@@ -527,18 +532,20 @@ analyzers:
     - layers
 ''');
 
-      final result = await runCli(['--input', tempDir.path, '--json']);
+        final result = await runCli(['--input', tempDir.path, '--json']);
 
-      expect(result.exitCode, equals(0));
-      final json = jsonDecode(result.stdout as String) as Map<String, dynamic>;
-      final stats = json['stats'] as Map<String, dynamic>;
-      expect(stats['dartFiles'], equals(1));
-      expect(stats['magicNumbers'], equals(1));
+        expect(result.exitCode, equals(0));
+        final json =
+            jsonDecode(result.stdout as String) as Map<String, dynamic>;
+        final stats = json['stats'] as Map<String, dynamic>;
+        expect(stats['dartFiles'], equals(1));
+        expect(stats['magicNumbers'], equals(1));
 
-      final graph = json['layers']['graph'] as Map<String, dynamic>;
-      expect(graph.keys.length, equals(1));
-      expect(graph.keys.first, contains('app/main.dart'));
-    });
+        final graph = json['layers']['graph'] as Map<String, dynamic>;
+        expect(graph.keys.length, equals(1));
+        expect(graph.keys.first, contains('app/main.dart'));
+      },
+    );
 
     test('should apply duplicate code options from .fcheck', () async {
       File('${tempDir.path}/a.dart').writeAsStringSync('''

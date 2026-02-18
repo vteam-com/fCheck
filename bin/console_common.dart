@@ -13,10 +13,7 @@ const int defaultListItemLimit = 10;
 /// Controls how detailed issue lists are printed in console reports.
 enum ReportListMode {
   /// Do not print the Lists section (summary only).
-  none(
-    cliName: 'none',
-    help: AppStrings.summaryOnly,
-  ),
+  none(cliName: 'none', help: AppStrings.summaryOnly),
 
   /// Print a partial list (default).
   partial(
@@ -26,21 +23,12 @@ enum ReportListMode {
   ),
 
   /// Print the full list.
-  full(
-    cliName: 'full',
-    help: AppStrings.showAllEntries,
-  ),
+  full(cliName: 'full', help: AppStrings.showAllEntries),
 
   /// Print unique file names only.
-  filenames(
-    cliName: 'filenames',
-    help: AppStrings.uniqueFileNamesOnly,
-  );
+  filenames(cliName: 'filenames', help: AppStrings.uniqueFileNamesOnly);
 
-  const ReportListMode({
-    required this.cliName,
-    required this.help,
-  });
+  const ReportListMode({required this.cliName, required this.help});
 
   /// The CLI argument value used for this mode.
   final String cliName;

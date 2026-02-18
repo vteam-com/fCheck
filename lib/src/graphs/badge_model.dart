@@ -7,7 +7,7 @@ enum BadgeDirection {
   west,
 
   /// direction of the triangle pointing right
-  east
+  east,
 }
 
 /// Geometry values used to render a badge and fit text inside it.
@@ -123,8 +123,10 @@ class BadgeModel {
 
     final tooltip = peers.isEmpty
         ? ''
-        : List.generate(peers.length, (i) => '${i + 1}. ${peers[i]}')
-            .join('\n');
+        : List.generate(
+            peers.length,
+            (i) => '${i + 1}. ${peers[i]}',
+          ).join('\n');
 
     /// Vertical offset for text positioning within the triangular badge.
     const double textVerticalOffset = 1.0;
@@ -157,8 +159,8 @@ class BadgeModel {
     final fontSize = label.length >= _badgeSmallFontThresholdDigits
         ? _badgeSmallFontSize
         : (label.length >= _badgeMediumFontThresholdDigits
-            ? _badgeMediumFontSize
-            : _badgeDefaultFontSize);
+              ? _badgeMediumFontSize
+              : _badgeDefaultFontSize);
     final textOffsetX = spanX * _badgeTextOffsetXRatio;
     final textLength = spanX * _badgeTextLengthRatio;
 
@@ -232,8 +234,7 @@ class BadgeModel {
     required int count,
     required BadgeDirection direction,
     List<String> peers = const [],
-  }) =>
-      _createDirectional(cx, cy, count, direction, true, peers);
+  }) => _createDirectional(cx, cy, count, direction, true, peers);
 
   /// Creates an outgoing badge pointing in the specified direction.
   ///
@@ -250,8 +251,7 @@ class BadgeModel {
     required int count,
     required BadgeDirection direction,
     List<String> peers = const [],
-  }) =>
-      _createDirectional(cx, cy, count, direction, false, peers);
+  }) => _createDirectional(cx, cy, count, direction, false, peers);
 
   static BadgeModel _createDirectional(
     double cx,
@@ -260,13 +260,12 @@ class BadgeModel {
     BadgeDirection direction,
     bool isIncoming,
     List<String> peers,
-  ) =>
-      BadgeModel(
-        cx: cx,
-        cy: cy,
-        count: count,
-        direction: direction,
-        isIncoming: isIncoming,
-        peers: peers,
-      );
+  ) => BadgeModel(
+    cx: cx,
+    cy: cy,
+    count: count,
+    direction: direction,
+    isIncoming: isIncoming,
+    peers: peers,
+  );
 }

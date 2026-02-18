@@ -151,8 +151,9 @@ class AnalyzeFolder {
   (
     List<File> excludedDartFiles,
     List<File> excludedNonDartFiles,
-    List<Directory> excludedDirectories
-  ) listExcludedFiles() {
+    List<Directory> excludedDirectories,
+  )
+  listExcludedFiles() {
     return FileUtils.listExcludedFiles(
       projectDir,
       excludePatterns: excludePatterns,
@@ -172,10 +173,7 @@ class AnalyzeFolder {
 
     // Perform unified directory scan to get all file system metrics in one pass
     final (dartFiles, totalFolders, totalFiles, excludedDartFilesCount, _, _) =
-        FileUtils.scanDirectory(
-      projectDir,
-      excludePatterns: excludePatterns,
-    );
+        FileUtils.scanDirectory(projectDir, excludePatterns: excludePatterns);
     final customExcludedDartFilesCount = FileUtils.countCustomExcludedDartFiles(
       projectDir,
       excludePatterns: excludePatterns,
@@ -183,25 +181,30 @@ class AnalyzeFolder {
     final projectVersion = pubspecInfo.version;
     final projectName = pubspecInfo.name;
     final projectType = pubspecInfo.projectType;
-    final oneClassPerFileEnabled =
-        _isAnalyzerEnabled(AnalyzerDomain.oneClassPerFile);
-    final hardcodedStringsEnabled =
-        _isAnalyzerEnabled(AnalyzerDomain.hardcodedStrings);
+    final oneClassPerFileEnabled = _isAnalyzerEnabled(
+      AnalyzerDomain.oneClassPerFile,
+    );
+    final hardcodedStringsEnabled = _isAnalyzerEnabled(
+      AnalyzerDomain.hardcodedStrings,
+    );
     final magicNumbersEnabled = _isAnalyzerEnabled(AnalyzerDomain.magicNumbers);
-    final sourceSortingEnabled =
-        _isAnalyzerEnabled(AnalyzerDomain.sourceSorting);
+    final sourceSortingEnabled = _isAnalyzerEnabled(
+      AnalyzerDomain.sourceSorting,
+    );
     final layersEnabled = _isAnalyzerEnabled(AnalyzerDomain.layers);
     final secretsEnabled = _isAnalyzerEnabled(AnalyzerDomain.secrets);
     final deadCodeEnabled = _isAnalyzerEnabled(AnalyzerDomain.deadCode);
-    final duplicateCodeEnabled =
-        _isAnalyzerEnabled(AnalyzerDomain.duplicateCode);
-    final documentationEnabled =
-        _isAnalyzerEnabled(AnalyzerDomain.documentation);
+    final duplicateCodeEnabled = _isAnalyzerEnabled(
+      AnalyzerDomain.duplicateCode,
+    );
+    final documentationEnabled = _isAnalyzerEnabled(
+      AnalyzerDomain.documentation,
+    );
     final hardcodedStringsFocus = projectType == ProjectType.flutter
         ? HardcodedStringFocus.flutterWidgets
         : projectType == ProjectType.dart
-            ? HardcodedStringFocus.dartPrint
-            : HardcodedStringFocus.general;
+        ? HardcodedStringFocus.dartPrint
+        : HardcodedStringFocus.general;
 
     final usesLocalization = detectLocalization(dartFiles);
 
@@ -245,15 +248,19 @@ class AnalyzeFolder {
         unifiedResult.getResults<List<dynamic>>() ?? <List<dynamic>>[];
 
     // Separate results by type
-    final hardcodedStringIssues =
-        allListResults.whereType<HardcodedStringIssue>().toList();
-    final magicNumberIssues =
-        allListResults.whereType<MagicNumberIssue>().toList();
-    final sourceSortIssues =
-        allListResults.whereType<SourceSortIssue>().toList();
+    final hardcodedStringIssues = allListResults
+        .whereType<HardcodedStringIssue>()
+        .toList();
+    final magicNumberIssues = allListResults
+        .whereType<MagicNumberIssue>()
+        .toList();
+    final sourceSortIssues = allListResults
+        .whereType<SourceSortIssue>()
+        .toList();
     final secretIssues = allListResults.whereType<SecretIssue>().toList();
-    final documentationIssuesRaw =
-        allListResults.whereType<DocumentationIssue>().toList();
+    final documentationIssuesRaw = allListResults
+        .whereType<DocumentationIssue>()
+        .toList();
     final duplicateCodeFileDataRaw = duplicateCodeEnabled
         ? (unifiedResult.resultsByType[DuplicateCodeFileData] ?? <dynamic>[])
         : <dynamic>[];
@@ -287,9 +294,7 @@ class AnalyzeFolder {
         ? _toRelativeDocumentationIssues(
             DocumentationAnalyzer(
               projectRoot: projectRoot,
-            ).analyze(
-              documentationIssuesRaw,
-            ),
+            ).analyze(documentationIssuesRaw),
             analysisRootPath: projectDir.path,
           )
         : <DocumentationIssue>[];
@@ -303,11 +308,7 @@ class AnalyzeFolder {
             _extractLayersFileData(unifiedResult),
             analyzedFilePaths: dartFiles.map((file) => file.path).toSet(),
           )
-        : LayersAnalysisResult(
-            issues: [],
-            layers: {},
-            dependencyGraph: {},
-          );
+        : LayersAnalysisResult(issues: [], layers: {}, dependencyGraph: {});
 
     // Extract file metrics from unified results using metrics analyzer
     final metricsAggregation = MetricsAnalyzer().aggregate(
@@ -349,8 +350,8 @@ class AnalyzeFolder {
       excludedFilesCount: excludedDartFilesCount,
       customExcludedFilesCount: customExcludedDartFilesCount,
       ignoreDirectivesCount: metricsAggregation.ignoreDirectivesCount,
-      ignoreDirectiveFiles:
-          metricsAggregation.ignoreDirectiveCountsByFile.keys.toList(),
+      ignoreDirectiveFiles: metricsAggregation.ignoreDirectiveCountsByFile.keys
+          .toList(),
       ignoreDirectiveCountsByFile:
           metricsAggregation.ignoreDirectiveCountsByFile,
       secretIssues: secretIssues,
@@ -439,14 +440,17 @@ class AnalyzeFolder {
       return const <DocumentationIssue>[];
     }
 
-    final normalizedRoot =
-        p.normalize(Directory(analysisRootPath).absolute.path);
+    final normalizedRoot = p.normalize(
+      Directory(analysisRootPath).absolute.path,
+    );
     return issues
         .map(
           (issue) => DocumentationIssue(
             type: issue.type,
-            filePath: _toRelativePathForDisplay(issue.filePath,
-                normalizedRootPath: normalizedRoot),
+            filePath: _toRelativePathForDisplay(
+              issue.filePath,
+              normalizedRootPath: normalizedRoot,
+            ),
             lineNumber: issue.lineNumber,
             subject: issue.subject,
           ),
@@ -463,14 +467,17 @@ class AnalyzeFolder {
       return const <DeadCodeIssue>[];
     }
 
-    final normalizedRoot =
-        p.normalize(Directory(analysisRootPath).absolute.path);
+    final normalizedRoot = p.normalize(
+      Directory(analysisRootPath).absolute.path,
+    );
     return issues
         .map(
           (issue) => DeadCodeIssue(
             type: issue.type,
-            filePath: _toRelativePathForDisplay(issue.filePath,
-                normalizedRootPath: normalizedRoot),
+            filePath: _toRelativePathForDisplay(
+              issue.filePath,
+              normalizedRootPath: normalizedRoot,
+            ),
             lineNumber: issue.lineNumber,
             name: issue.name,
             owner: issue.owner,
@@ -599,8 +606,9 @@ class _PubspecInfo {
       currentDir = parent;
     }
 
-    final descendantPubspecInfo =
-        _loadFromSingleDescendantPubspec(normalizedStartDir);
+    final descendantPubspecInfo = _loadFromSingleDescendantPubspec(
+      normalizedStartDir,
+    );
     if (descendantPubspecInfo != null) {
       return descendantPubspecInfo;
     }

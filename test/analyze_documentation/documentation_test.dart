@@ -182,9 +182,7 @@ class Service {
       expect(issues.length, equals(1));
       expect(
         issues.first.type,
-        equals(
-          DocumentationIssueType.undocumentedComplexPrivateFunction,
-        ),
+        equals(DocumentationIssueType.undocumentedComplexPrivateFunction),
       );
       expect(issues.first.subject, equals('Service._compute'));
     });

@@ -26,14 +26,8 @@ void main() {
         config.duplicateCodeSimilarityThreshold,
         equals(FcheckConfig.defaultDuplicateCodeSimilarityThreshold),
       );
-      expect(
-        config.duplicateCodeMinTokens,
-        equals(20),
-      );
-      expect(
-        config.duplicateCodeMinNonEmptyLines,
-        equals(10),
-      );
+      expect(config.duplicateCodeMinTokens, equals(20));
+      expect(config.duplicateCodeMinNonEmptyLines, equals(10));
       expect(FcheckConfig.defaultDuplicateCodeMinTokens, equals(20));
       expect(FcheckConfig.defaultDuplicateCodeMinNonEmptyLines, equals(10));
       expect(

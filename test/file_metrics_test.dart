@@ -19,32 +19,35 @@ void main() {
       expect(metrics.isStatefulWidget, isFalse);
     });
 
-    test('should be compliant with one class per file rule for regular file',
-        () {
-      final metrics = FileMetrics(
-        path: 'lib/example.dart',
-        linesOfCode: 50,
-        commentLines: 10,
-        classCount: 1,
-        isStatefulWidget: false,
-      );
+    test(
+      'should be compliant with one class per file rule for regular file',
+      () {
+        final metrics = FileMetrics(
+          path: 'lib/example.dart',
+          linesOfCode: 50,
+          commentLines: 10,
+          classCount: 1,
+          isStatefulWidget: false,
+        );
 
-      expect(metrics.isOneClassPerFileCompliant, isTrue);
-    });
+        expect(metrics.isOneClassPerFileCompliant, isTrue);
+      },
+    );
 
     test(
-        'should be non-compliant with one class per file rule for regular file with multiple classes',
-        () {
-      final metrics = FileMetrics(
-        path: 'lib/example.dart',
-        linesOfCode: 50,
-        commentLines: 10,
-        classCount: 3,
-        isStatefulWidget: false,
-      );
+      'should be non-compliant with one class per file rule for regular file with multiple classes',
+      () {
+        final metrics = FileMetrics(
+          path: 'lib/example.dart',
+          linesOfCode: 50,
+          commentLines: 10,
+          classCount: 3,
+          isStatefulWidget: false,
+        );
 
-      expect(metrics.isOneClassPerFileCompliant, isFalse);
-    });
+        expect(metrics.isOneClassPerFileCompliant, isFalse);
+      },
+    );
 
     test('should be compliant for StatefulWidget with 2 classes', () {
       final metrics = FileMetrics(
@@ -58,18 +61,20 @@ void main() {
       expect(metrics.isOneClassPerFileCompliant, isTrue);
     });
 
-    test('should be non-compliant for StatefulWidget with more than 2 classes',
-        () {
-      final metrics = FileMetrics(
-        path: 'lib/home_page.dart',
-        linesOfCode: 100,
-        commentLines: 20,
-        classCount: 4,
-        isStatefulWidget: true,
-      );
+    test(
+      'should be non-compliant for StatefulWidget with more than 2 classes',
+      () {
+        final metrics = FileMetrics(
+          path: 'lib/home_page.dart',
+          linesOfCode: 100,
+          commentLines: 20,
+          classCount: 4,
+          isStatefulWidget: true,
+        );
 
-      expect(metrics.isOneClassPerFileCompliant, isFalse);
-    });
+        expect(metrics.isOneClassPerFileCompliant, isFalse);
+      },
+    );
 
     test('should be compliant when ignore directive is set', () {
       final metrics = FileMetrics(
@@ -84,8 +89,7 @@ void main() {
       expect(metrics.isOneClassPerFileCompliant, isTrue);
     });
 
-    test('should handle private classes correctly (only count public classes)',
-        () {
+    test('should handle private classes correctly (only count public classes)', () {
       // This test demonstrates that classCount should only include public classes
       // The actual counting logic is in the analyzer, but we test the compliance rule
       final metrics = FileMetrics(

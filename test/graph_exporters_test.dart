@@ -115,10 +115,7 @@ void main() {
         ),
       ];
 
-      final svg = exportSvgCodeSize(
-        artifacts,
-        title: 'Code Size Treemap Test',
-      );
+      final svg = exportSvgCodeSize(artifacts, title: 'Code Size Treemap Test');
 
       expect(svg, contains('<svg'));
       expect(svg, contains('Code Size Treemap Test'));
@@ -150,10 +147,7 @@ void main() {
         endLine: 12058,
       );
 
-      final svg = exportSvgCodeSize(
-        [artifact],
-        relativeTo: projectRoot,
-      );
+      final svg = exportSvgCodeSize([artifact], relativeTo: projectRoot);
 
       expect(svg, contains('lib/a.dart:1'));
       expect(svg, isNot(contains(projectRoot)));
@@ -214,35 +208,33 @@ void main() {
     });
 
     test(
-        'creates virtual folder for loose files when folder has both files and subfolders',
-        () {
-      // This test triggers _applyLooseFilesRule:
-      // - lib/ contains both a file (utils.dart) AND a subfolder (src/)
-      // - The rule should create a virtual "..." folder for the loose file
-      final result = LayersAnalysisResult(
-        issues: const [],
-        layers: const {
-          'lib/utils.dart': 0,
-          'lib/src/main.dart': 1,
-        },
-        dependencyGraph: const {
-          'lib/src/main.dart': ['lib/utils.dart'],
-          'lib/utils.dart': [],
-        },
-      );
+      'creates virtual folder for loose files when folder has both files and subfolders',
+      () {
+        // This test triggers _applyLooseFilesRule:
+        // - lib/ contains both a file (utils.dart) AND a subfolder (src/)
+        // - The rule should create a virtual "..." folder for the loose file
+        final result = LayersAnalysisResult(
+          issues: const [],
+          layers: const {'lib/utils.dart': 0, 'lib/src/main.dart': 1},
+          dependencyGraph: const {
+            'lib/src/main.dart': ['lib/utils.dart'],
+            'lib/utils.dart': [],
+          },
+        );
 
-      final folderSvg = exportGraphSvgFolders(
-        result,
-        projectName: 'TestProject',
-        projectVersion: '1.0.0',
-        inputFolderName: 'lib',
-      );
+        final folderSvg = exportGraphSvgFolders(
+          result,
+          projectName: 'TestProject',
+          projectVersion: '1.0.0',
+          inputFolderName: 'lib',
+        );
 
-      // The virtual "..." folder should be created for the loose file
-      expect(folderSvg, contains('...'));
-      // Should have both the virtual folder and the src subfolder
-      expect(folderSvg, contains('src'));
-    });
+        // The virtual "..." folder should be created for the loose file
+        expect(folderSvg, contains('...'));
+        // Should have both the virtual folder and the src subfolder
+        expect(folderSvg, contains('src'));
+      },
+    );
 
     test('handles deeply nested folders with mixed files and subfolders', () {
       // More complex scenario: nested folders with files at multiple levels
@@ -395,8 +387,10 @@ void main() {
       );
 
       final folderSvg = exportGraphSvgFolders(result);
-      final shortFileEdgeX =
-          _extractFolderEdgeColumnX(folderSvg, 'root.dart ▶ a/a.dart');
+      final shortFileEdgeX = _extractFolderEdgeColumnX(
+        folderSvg,
+        'root.dart ▶ a/a.dart',
+      );
       final longFileEdgeX = _extractFolderEdgeColumnX(
         folderSvg,
         'root.dart ▶ very/deep/down/down.dart',
@@ -423,10 +417,12 @@ void main() {
       );
 
       final folderSvg = exportGraphSvgFolders(result);
-      final innerIndex =
-          folderSvg.indexOf('<title>root.dart ▶ a/a.dart</title>');
-      final outerIndex = folderSvg
-          .indexOf('<title>root.dart ▶ very/deep/down/down.dart</title>');
+      final innerIndex = folderSvg.indexOf(
+        '<title>root.dart ▶ a/a.dart</title>',
+      );
+      final outerIndex = folderSvg.indexOf(
+        '<title>root.dart ▶ very/deep/down/down.dart</title>',
+      );
 
       expect(innerIndex, greaterThanOrEqualTo(0));
       expect(outerIndex, greaterThanOrEqualTo(0));
@@ -437,7 +433,8 @@ void main() {
 
 double? _extractFolderEdgeColumnX(String svg, String titlePayload) {
   final pattern = RegExp(
-      '<path d="[^"]*Q ([0-9]+(?:\\.[0-9]+)?) [^"]*" class="[^"]*"/>\\s*<title>${RegExp.escape(titlePayload)}</title>');
+    '<path d="[^"]*Q ([0-9]+(?:\\.[0-9]+)?) [^"]*" class="[^"]*"/>\\s*<title>${RegExp.escape(titlePayload)}</title>',
+  );
   final match = pattern.firstMatch(svg);
   if (match == null) return null;
   return double.tryParse(match.group(1)!);

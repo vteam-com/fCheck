@@ -171,8 +171,11 @@ class FcheckConfig {
     }
 
     final inputSection = _readMap(yaml, 'input', filePath: configFile.path);
-    final analyzersSection =
-        _readMap(yaml, 'analyzers', filePath: configFile.path);
+    final analyzersSection = _readMap(
+      yaml,
+      'analyzers',
+      filePath: configFile.path,
+    );
     final ignoresSection = _readMap(yaml, 'ignores', filePath: configFile.path);
 
     final root = _readOptionalString(
@@ -206,8 +209,9 @@ class FcheckConfig {
       analyzersSection,
       filePath: configFile.path,
     );
-    disabled
-        .addAll(_readLegacyIgnores(ignoresSection, filePath: configFile.path));
+    disabled.addAll(
+      _readLegacyIgnores(ignoresSection, filePath: configFile.path),
+    );
 
     return FcheckConfig(
       inputDirectory: inputDirectory,
@@ -318,13 +322,15 @@ class FcheckConfig {
     }
     if (value is! YamlList) {
       throw FormatException(
-          '`$filePath` field `$contextPath` must be a list of strings.');
+        '`$filePath` field `$contextPath` must be a list of strings.',
+      );
     }
     final values = <String>[];
     for (final entry in value) {
       if (entry is! String) {
         throw FormatException(
-            '`$filePath` field `$contextPath` must contain only strings.');
+          '`$filePath` field `$contextPath` must contain only strings.',
+        );
       }
       final trimmed = entry.trim();
       if (trimmed.isNotEmpty) {
@@ -361,7 +367,8 @@ class FcheckConfig {
       }
     }
     throw FormatException(
-        '`$filePath` field `analyzers.default` must be `on`, `off`, true, or false.');
+      '`$filePath` field `analyzers.default` must be `on`, `off`, true, or false.',
+    );
   }
 
   /// Reads an analyzer name list from `analyzers.[key]` and resolves domains.
@@ -379,18 +386,23 @@ class FcheckConfig {
     }
     if (value is! YamlList) {
       throw FormatException(
-          '`$filePath` field `analyzers.$key` must be a list of analyzer names.');
+        '`$filePath` field `analyzers.$key` must be a list of analyzer names.',
+      );
     }
 
     final analyzers = <AnalyzerDomain>{};
     for (final entry in value) {
       if (entry is! String) {
         throw FormatException(
-            '`$filePath` field `analyzers.$key` must contain only strings.');
+          '`$filePath` field `analyzers.$key` must contain only strings.',
+        );
       }
       analyzers.add(
-        _parseAnalyzer(entry,
-            filePath: filePath, contextPath: 'analyzers.$key'),
+        _parseAnalyzer(
+          entry,
+          filePath: filePath,
+          contextPath: 'analyzers.$key',
+        ),
       );
     }
     return analyzers;
@@ -507,7 +519,8 @@ class FcheckConfig {
     }
     if (value is! num) {
       throw FormatException(
-          '`$filePath` field `$contextPath` must be a number.');
+        '`$filePath` field `$contextPath` must be a number.',
+      );
     }
     final parsed = value.toDouble();
     if (parsed < min || parsed > max) {
@@ -558,11 +571,13 @@ class FcheckConfig {
       final value = entry.value;
       if (key is! String) {
         throw FormatException(
-            '`$filePath` field `ignores` must use string keys.');
+          '`$filePath` field `ignores` must use string keys.',
+        );
       }
       if (value is! bool) {
         throw FormatException(
-            '`$filePath` field `ignores.$key` must be a boolean.');
+          '`$filePath` field `ignores.$key` must be a boolean.',
+        );
       }
       if (value) {
         disabled.add(

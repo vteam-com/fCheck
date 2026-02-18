@@ -57,16 +57,12 @@ void main() {
     });
 
     test('returns no issues for non-Flutter classes', () {
-      final context = _contextForSource(
-        tempDir,
-        '''
+      final context = _contextForSource(tempDir, '''
 class PlainClass {
   void zebra() {}
   void alpha() {}
 }
-''',
-        fileName: 'plain.dart',
-      );
+''', fileName: 'plain.dart');
 
       final delegate = SourceSortDelegate();
       final issues = delegate.analyzeFileWithContext(context);
@@ -88,9 +84,7 @@ class PlainClass {
     });
 
     test('returns no issues when class members are already sorted', () {
-      final context = _contextForSource(
-        tempDir,
-        '''
+      final context = _contextForSource(tempDir, '''
 class SortedWidget extends StatelessWidget {
   void initState() {}
 
@@ -102,9 +96,7 @@ class SortedWidget extends StatelessWidget {
   void _alpha() {}
   void _beta() {}
 }
-''',
-        fileName: 'sorted.dart',
-      );
+''', fileName: 'sorted.dart');
 
       final delegate = SourceSortDelegate();
       final issues = delegate.analyzeFileWithContext(context);
@@ -113,16 +105,12 @@ class SortedWidget extends StatelessWidget {
     });
 
     test('reports issue for unsorted Flutter class when fix is false', () {
-      final context = _contextForSource(
-        tempDir,
-        '''
+      final context = _contextForSource(tempDir, '''
 class UnsortedWidget extends StatelessWidget {
   void zebra() {}
   void alpha() {}
 }
-''',
-        fileName: 'unsorted.dart',
-      );
+''', fileName: 'unsorted.dart');
 
       final delegate = SourceSortDelegate(fix: false);
       final issues = delegate.analyzeFileWithContext(context);
@@ -152,8 +140,10 @@ class FixableWidget extends StatelessWidget {
       expect(issues, isEmpty);
 
       final rewritten = context.file.readAsStringSync();
-      expect(rewritten.indexOf('void alpha() {}'),
-          lessThan(rewritten.indexOf('void zebra() {}')));
+      expect(
+        rewritten.indexOf('void alpha() {}'),
+        lessThan(rewritten.indexOf('void zebra() {}')),
+      );
     });
 
     test('swallows internal exceptions and returns no issues', () {

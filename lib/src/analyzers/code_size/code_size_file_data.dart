@@ -9,8 +9,5 @@ class CodeSizeFileData {
   final List<CodeSizeArtifact> artifacts;
 
   /// Creates code-size file analysis data.
-  const CodeSizeFileData({
-    required this.filePath,
-    required this.artifacts,
-  });
+  const CodeSizeFileData({required this.filePath, required this.artifacts});
 }

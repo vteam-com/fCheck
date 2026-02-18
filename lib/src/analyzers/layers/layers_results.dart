@@ -36,10 +36,10 @@ class LayersAnalysisResult {
 
   /// Converts this result to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-        'issues': issues.map((i) => i.toJson()).toList(),
-        'layers': layers,
-        'dependencyGraph': dependencyGraph,
-        'layerCount': layerCount,
-        'edgeCount': edgeCount,
-      };
+    'issues': issues.map((i) => i.toJson()).toList(),
+    'layers': layers,
+    'dependencyGraph': dependencyGraph,
+    'layerCount': layerCount,
+    'edgeCount': edgeCount,
+  };
 }

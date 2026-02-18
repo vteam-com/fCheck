@@ -79,7 +79,8 @@ void main() {
     });
 
     test('should detect simple hardcoded strings', () {
-      final file = File('${tempDir.path}/simple.dart')..writeAsStringSync('''
+      final file = File('${tempDir.path}/simple.dart')
+        ..writeAsStringSync('''
 void main() {
   print("Hello World");
 }
@@ -118,7 +119,8 @@ void main(String path) {
     });
 
     test('should skip strings in imports', () {
-      final file = File('${tempDir.path}/import.dart')..writeAsStringSync('''
+      final file = File('${tempDir.path}/import.dart')
+        ..writeAsStringSync('''
 import 'package:flutter/material.dart';
 
 void main() {
@@ -146,7 +148,8 @@ void method() {
     });
 
     test('should skip strings in const declarations', () {
-      final file = File('${tempDir.path}/const.dart')..writeAsStringSync('''
+      final file = File('${tempDir.path}/const.dart')
+        ..writeAsStringSync('''
 const String greeting = "Hello";
 const String message = "World";
 
@@ -161,7 +164,8 @@ void main() {
     });
 
     test('should skip strings in RegExp constructors', () {
-      final file = File('${tempDir.path}/regex.dart')..writeAsStringSync('''
+      final file = File('${tempDir.path}/regex.dart')
+        ..writeAsStringSync('''
 void main() {
   final regex = RegExp('\\d+');
   print("This should be detected");
@@ -174,7 +178,8 @@ void main() {
     });
 
     test('should skip strings in Key constructors', () {
-      final file = File('${tempDir.path}/key.dart')..writeAsStringSync('''
+      final file = File('${tempDir.path}/key.dart')
+        ..writeAsStringSync('''
 import 'package:flutter/material.dart';
 
 class MyWidget extends StatelessWidget {
@@ -190,12 +195,15 @@ class MyWidget extends StatelessWidget {
 
       final issues = _analyzeFile(delegate, file);
       expect(issues.length, equals(1));
-      expect(issues.map((issue) => issue.value),
-          contains('This should be detected'));
+      expect(
+        issues.map((issue) => issue.value),
+        contains('This should be detected'),
+      );
     });
 
     test('should skip strings used as map keys', () {
-      final file = File('${tempDir.path}/map.dart')..writeAsStringSync('''
+      final file = File('${tempDir.path}/map.dart')
+        ..writeAsStringSync('''
 void main() {
   final map = {
     "key1": "value1",
@@ -209,12 +217,15 @@ void main() {
       // The analyzer currently detects all strings in the map
       // This test verifies the expected behavior (may need improvement in the analyzer)
       expect(issues.length, equals(3));
-      expect(issues.map((issue) => issue.value),
-          contains('This should be detected'));
+      expect(
+        issues.map((issue) => issue.value),
+        contains('This should be detected'),
+      );
     });
 
     test('should skip strings in l10n calls', () {
-      final file = File('${tempDir.path}/l10n.dart')..writeAsStringSync('''
+      final file = File('${tempDir.path}/l10n.dart')
+        ..writeAsStringSync('''
 void main() {
   final message = AppLocalizations.of(context).hello;
   print("This should be detected");
@@ -229,7 +240,8 @@ void main() {
     test('should skip files in l10n directory', () {
       final l10nDir = Directory('${tempDir.path}/lib/l10n')
         ..createSync(recursive: true);
-      final file = File('${l10nDir.path}/messages.dart')..writeAsStringSync('''
+      final file = File('${l10nDir.path}/messages.dart')
+        ..writeAsStringSync('''
 class Messages {
   static const String hello = "Hello";
   static const String world = "World";
@@ -253,12 +265,15 @@ class Messages {
     });
 
     test('should analyze directory correctly', () {
-      File('${tempDir.path}/file1.dart')
-          .writeAsStringSync('void main() { print("Hello"); }');
-      File('${tempDir.path}/file2.dart')
-          .writeAsStringSync('void main() { print("World"); }');
-      File('${tempDir.path}/readme.txt')
-          .writeAsStringSync('This is not a Dart file');
+      File(
+        '${tempDir.path}/file1.dart',
+      ).writeAsStringSync('void main() { print("Hello"); }');
+      File(
+        '${tempDir.path}/file2.dart',
+      ).writeAsStringSync('void main() { print("World"); }');
+      File(
+        '${tempDir.path}/readme.txt',
+      ).writeAsStringSync('This is not a Dart file');
 
       final issues = _analyzeDirectory(delegate, tempDir);
 
@@ -280,8 +295,9 @@ class Messages {
     });
 
     test('should ignore empty widget text literals', () {
-      final delegate =
-          HardcodedStringDelegate(focus: HardcodedStringFocus.flutterWidgets);
+      final delegate = HardcodedStringDelegate(
+        focus: HardcodedStringFocus.flutterWidgets,
+      );
       final file = File('${tempDir.path}/widget_empty.dart')
         ..writeAsStringSync('''
 import 'package:flutter/widgets.dart';
@@ -318,8 +334,9 @@ class MyWidget extends StatelessWidget {
     });
 
     test('should detect interpolated print strings', () {
-      final delegate =
-          HardcodedStringDelegate(focus: HardcodedStringFocus.dartPrint);
+      final delegate = HardcodedStringDelegate(
+        focus: HardcodedStringFocus.dartPrint,
+      );
       final file = File('${tempDir.path}/dart_print_interpolation.dart')
         ..writeAsStringSync('''
 String label(String name) => 'Hello \$name';

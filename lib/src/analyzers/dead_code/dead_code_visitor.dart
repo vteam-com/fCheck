@@ -83,18 +83,17 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
 
     if (node.parent is CompilationUnit &&
         !IgnoreConfig.isNodeIgnored(node, content, 'dead_code')) {
-      functions.add(DeadCodeSymbol(
-        name: functionName,
-        lineNumber: lineNumberForOffset(node.offset),
-      ));
+      functions.add(
+        DeadCodeSymbol(
+          name: functionName,
+          lineNumber: lineNumberForOffset(node.offset),
+        ),
+      );
     }
 
     final treatParametersAsUsed =
         node.functionExpression.body is EmptyFunctionBody;
-    _pushScope(
-      functionName,
-      treatParametersAsUsed: treatParametersAsUsed,
-    );
+    _pushScope(functionName, treatParametersAsUsed: treatParametersAsUsed);
     super.visitFunctionDeclaration(node);
     _popScope();
   }
@@ -115,10 +114,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
 
     final treatParametersAsUsed =
         _hasOverrideAnnotation(node.metadata) || node.body is EmptyFunctionBody;
-    _pushScope(
-      node.name.lexeme,
-      treatParametersAsUsed: treatParametersAsUsed,
-    );
+    _pushScope(node.name.lexeme, treatParametersAsUsed: treatParametersAsUsed);
     super.visitMethodDeclaration(node);
     _popScope();
   }
@@ -174,10 +170,12 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
   void visitClassDeclaration(ClassDeclaration node) {
     if (!IgnoreConfig.isNodeIgnored(node, content, 'dead_code')) {
       final className = _stripTypeParameters(node.namePart.toString());
-      classes.add(DeadCodeSymbol(
-        name: className,
-        lineNumber: lineNumberForOffset(node.offset),
-      ));
+      classes.add(
+        DeadCodeSymbol(
+          name: className,
+          lineNumber: lineNumberForOffset(node.offset),
+        ),
+      );
     }
     super.visitClassDeclaration(node);
   }
@@ -267,10 +265,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Pushes a variable scope for function/class-local dead-code tracking.
-  void _pushScope(
-    String? ownerName, {
-    bool treatParametersAsUsed = false,
-  }) {
+  void _pushScope(String? ownerName, {bool treatParametersAsUsed = false}) {
     _scopes.add(
       _VariableScope(
         ownerName: ownerName,

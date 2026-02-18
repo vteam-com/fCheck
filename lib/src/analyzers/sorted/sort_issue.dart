@@ -42,9 +42,9 @@ class SourceSortIssue {
 
   /// Converts this issue to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-        'filePath': filePath,
-        'className': className,
-        'lineNumber': lineNumber,
-        'description': description,
-      };
+    'filePath': filePath,
+    'className': className,
+    'lineNumber': lineNumber,
+    'description': description,
+  };
 }

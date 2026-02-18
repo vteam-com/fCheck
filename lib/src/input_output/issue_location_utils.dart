@@ -157,8 +157,9 @@ NormalizedIssueLocation normalizeIssueLocation(String rawPath) {
   int? embeddedLine;
   final embeddedLineMatch = _embeddedLinePattern.firstMatch(normalized);
   if (embeddedLineMatch != null) {
-    final parsedLine =
-        int.tryParse(embeddedLineMatch.group(_lineCaptureGroupIndex) ?? '');
+    final parsedLine = int.tryParse(
+      embeddedLineMatch.group(_lineCaptureGroupIndex) ?? '',
+    );
     if (parsedLine != null) {
       embeddedLine = parsedLine;
       normalized =

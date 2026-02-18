@@ -13,9 +13,7 @@ class MetricsDelegate implements AnalyzerDelegate {
   final bool globallyIgnoreOneClassPerFile;
 
   /// Creates a new metrics delegate.
-  MetricsDelegate({
-    this.globallyIgnoreOneClassPerFile = false,
-  });
+  MetricsDelegate({this.globallyIgnoreOneClassPerFile = false});
 
   @override
   MetricsFileData analyzeFileWithContext(AnalysisFileContext context) {
@@ -45,8 +43,9 @@ class MetricsDelegate implements AnalyzerDelegate {
 
     final unit = context.compilationUnit!;
     final lines = context.lines;
-    final nonEmptyLineCount =
-        lines.where((line) => line.trim().isNotEmpty).length;
+    final nonEmptyLineCount = lines
+        .where((line) => line.trim().isNotEmpty)
+        .length;
     final commentLines = _countCommentLines(unit, lines);
     final visitor = MetricsQualityVisitor();
     unit.accept(visitor);

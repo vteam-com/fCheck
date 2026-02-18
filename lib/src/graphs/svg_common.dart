@@ -48,10 +48,7 @@ const double _svgTextUnitForLowercase = 0.56;
 const double _svgTextUnitForOtherGlyph = 0.70;
 
 /// Renders a triangular directional badge using BadgeModel
-void renderTriangularBadge(
-  StringBuffer buffer,
-  BadgeModel badge,
-) {
+void renderTriangularBadge(StringBuffer buffer, BadgeModel badge) {
   if (badge.count <= 0) return;
 
   buffer.write(badge.renderSvg());
@@ -60,7 +57,7 @@ void renderTriangularBadge(
 /// Builds sorted incoming/outgoing peer lists for tooltip display.
 /// Returns a record with `incoming` and `outgoing` maps keyed by item.
 ({Map<String, List<String>> incoming, Map<String, List<String>> outgoing})
-    buildPeerLists(
+buildPeerLists(
   Map<String, List<String>> graph, {
   String Function(String)? labelFor,
 }) {
@@ -125,8 +122,9 @@ double fitTextFontSize(
     return minFontSize;
   }
 
-  final safeBase =
-      baseFontSize > 0 ? baseFontSize : _defaultFittedTextBaseFontSize;
+  final safeBase = baseFontSize > 0
+      ? baseFontSize
+      : _defaultFittedTextBaseFontSize;
   final safeMin = math.max(1.0, math.min(minFontSize, safeBase));
   final estimatedUnits = _estimateSvgTextUnits(text);
   if (estimatedUnits <= 0) {

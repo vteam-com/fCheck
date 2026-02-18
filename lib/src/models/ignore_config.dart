@@ -107,7 +107,8 @@ class IgnoreConfig {
     String content, {
     CompilationUnit? compilationUnit,
   }) sync* {
-    final unit = compilationUnit ??
+    final unit =
+        compilationUnit ??
         parseString(
           content: content,
           featureSet: FeatureSet.latestLanguageVersion(),
@@ -185,8 +186,9 @@ class IgnoreConfig {
         final endIndex = trimmed.indexOf('*/');
         if (endIndex != -1) {
           inBlockComment = false;
-          final after =
-              trimmed.substring(endIndex + blockCommentEndLength).trim();
+          final after = trimmed
+              .substring(endIndex + blockCommentEndLength)
+              .trim();
           if (after.isNotEmpty) {
             break;
           }

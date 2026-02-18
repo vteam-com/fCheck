@@ -46,8 +46,9 @@ class LayersAnalyzer {
     final Map<String, List<String>> filteredGraph = <String, List<String>>{};
 
     for (final entry in dependencyGraph.entries) {
-      final filteredDeps =
-          entry.value.where((dep) => allowedPaths.contains(dep)).toList();
+      final filteredDeps = entry.value
+          .where((dep) => allowedPaths.contains(dep))
+          .toList();
       filteredGraph[entry.key] = filteredDeps;
     }
 
@@ -79,8 +80,9 @@ class LayersAnalyzer {
     }
 
     // Build folder-to-folder dependency graph
-    final Map<String, List<String>> folderGraph =
-        _buildFolderGraph(dependencyGraph);
+    final Map<String, List<String>> folderGraph = _buildFolderGraph(
+      dependencyGraph,
+    );
 
     // Detect folder-level cycles
     final Set<String> folderVisited = <String>{};
@@ -89,14 +91,21 @@ class LayersAnalyzer {
     for (final String folder in folderGraph.keys) {
       if (!folderVisited.contains(folder)) {
         _detectFolderCycles(
-            folder, folderGraph, folderVisited, folderRecursionStack, issues);
+          folder,
+          folderGraph,
+          folderVisited,
+          folderRecursionStack,
+          issues,
+        );
       }
     }
 
     // If there are cycles, we can't reliably assign layers
-    if (issues.any((i) =>
-        i.type == LayersIssueType.cyclicDependency ||
-        i.type == LayersIssueType.folderCycle)) {
+    if (issues.any(
+      (i) =>
+          i.type == LayersIssueType.cyclicDependency ||
+          i.type == LayersIssueType.folderCycle,
+    )) {
       return LayersAnalysisResult(
         issues: issues,
         layers: <String, int>{},
@@ -188,8 +197,15 @@ class LayersAnalyzer {
 
     for (final T dependency in dependencies) {
       if (!visited.contains(dependency)) {
-        _detectCyclesGeneric(dependency, graph, visited, recursionStack, issues,
-            issueType, getMessage);
+        _detectCyclesGeneric(
+          dependency,
+          graph,
+          visited,
+          recursionStack,
+          issues,
+          issueType,
+          getMessage,
+        );
       } else if (recursionStack.contains(dependency)) {
         // Found a cycle
         issues.add(
@@ -300,9 +316,7 @@ class LayersAnalyzer {
   /// [entryPoints] A map from file paths to whether they are entry points.
   ///
   /// Returns a map from file paths to their assigned layer numbers (1-based, 1 = top).
-  Map<String, int> _assignLayers(
-    Map<String, List<String>> dependencyGraph,
-  ) {
+  Map<String, int> _assignLayers(Map<String, List<String>> dependencyGraph) {
     final Set<String> allFilesSet = <String>{}..addAll(dependencyGraph.keys);
     for (final deps in dependencyGraph.values) {
       allFilesSet.addAll(deps);

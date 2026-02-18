@@ -108,26 +108,30 @@ class DuplicateCodeAnalyzer {
         return lineCountCompare;
       }
 
-      final firstPathCompare =
-          left.firstFilePath.compareTo(right.firstFilePath);
+      final firstPathCompare = left.firstFilePath.compareTo(
+        right.firstFilePath,
+      );
       if (firstPathCompare != 0) {
         return firstPathCompare;
       }
 
-      final secondPathCompare =
-          left.secondFilePath.compareTo(right.secondFilePath);
+      final secondPathCompare = left.secondFilePath.compareTo(
+        right.secondFilePath,
+      );
       if (secondPathCompare != 0) {
         return secondPathCompare;
       }
 
-      final firstLineCompare =
-          left.firstLineNumber.compareTo(right.firstLineNumber);
+      final firstLineCompare = left.firstLineNumber.compareTo(
+        right.firstLineNumber,
+      );
       if (firstLineCompare != 0) {
         return firstLineCompare;
       }
 
-      final secondLineCompare =
-          left.secondLineNumber.compareTo(right.secondLineNumber);
+      final secondLineCompare = left.secondLineNumber.compareTo(
+        right.secondLineNumber,
+      );
       if (secondLineCompare != 0) {
         return secondLineCompare;
       }
@@ -153,14 +157,12 @@ class DuplicateCodeAnalyzer {
       return 1;
     }
 
-    final maxDistance =
-        ((1 - similarityThreshold) * maxLength).floor().clamp(0, maxLength);
-
-    final distance = _boundedLevenshtein(
-      leftTokens,
-      rightTokens,
-      maxDistance,
+    final maxDistance = ((1 - similarityThreshold) * maxLength).floor().clamp(
+      0,
+      maxLength,
     );
+
+    final distance = _boundedLevenshtein(leftTokens, rightTokens, maxDistance);
 
     if (distance > maxDistance) {
       return 0;
@@ -212,8 +214,10 @@ class DuplicateCodeAnalyzer {
         final deleteCost = previous[j] + 1;
         final insertCost = current[j - 1] + 1;
 
-        final nextValue =
-            math.min(replaceCost, math.min(deleteCost, insertCost));
+        final nextValue = math.min(
+          replaceCost,
+          math.min(deleteCost, insertCost),
+        );
         current[j] = nextValue;
         rowMin = math.min(rowMin, nextValue);
       }

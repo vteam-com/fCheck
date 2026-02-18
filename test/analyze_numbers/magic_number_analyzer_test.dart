@@ -26,10 +26,7 @@ AnalysisFileContext _contextForFile(File file) {
   );
 }
 
-List<MagicNumberIssue> _analyzeFile(
-  MagicNumberDelegate delegate,
-  File file,
-) {
+List<MagicNumberIssue> _analyzeFile(MagicNumberDelegate delegate, File file) {
   final context = _contextForFile(file);
   return delegate.analyzeFileWithContext(context);
 }
@@ -67,7 +64,8 @@ void main() {
     });
 
     test('detects simple magic numbers', () {
-      final file = File('${tempDir.path}/simple.dart')..writeAsStringSync('''
+      final file = File('${tempDir.path}/simple.dart')
+        ..writeAsStringSync('''
 void main() {
   print(42);
   print(0);
@@ -82,7 +80,8 @@ void main() {
     });
 
     test('skips const declarations', () {
-      final file = File('${tempDir.path}/const.dart')..writeAsStringSync('''
+      final file = File('${tempDir.path}/const.dart')
+        ..writeAsStringSync('''
 const int maxAttempts = 3;
 
 void main() {
@@ -95,7 +94,8 @@ void main() {
     });
 
     test('skips ignored literal values', () {
-      final file = File('${tempDir.path}/ignored.dart')..writeAsStringSync('''
+      final file = File('${tempDir.path}/ignored.dart')
+        ..writeAsStringSync('''
 void main() {
   print(0);
   print(1);
@@ -121,12 +121,15 @@ void main() {}
     });
 
     test('analyzes directory contents', () {
-      File('${tempDir.path}/file1.dart')
-          .writeAsStringSync('void main() => print(8);');
-      File('${tempDir.path}/file2.dart')
-          .writeAsStringSync('void main() => print(9);');
-      File('${tempDir.path}/README.txt')
-          .writeAsStringSync('This is not a Dart file.');
+      File(
+        '${tempDir.path}/file1.dart',
+      ).writeAsStringSync('void main() => print(8);');
+      File(
+        '${tempDir.path}/file2.dart',
+      ).writeAsStringSync('void main() => print(9);');
+      File(
+        '${tempDir.path}/README.txt',
+      ).writeAsStringSync('This is not a Dart file.');
 
       final issues = _analyzeDirectory(delegate, tempDir);
 

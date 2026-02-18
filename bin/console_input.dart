@@ -139,12 +139,7 @@ ArgParser createConsoleArgParser() => ArgParser()
         'Control list output: none | partial | full | filenames | <number> (max items per list, e.g. 3 or 999)',
     defaultsTo: ReportListMode.partial.cliName,
   )
-  ..addFlag(
-    'version',
-    abbr: 'v',
-    help: 'Show fCheck version',
-    negatable: false,
-  )
+  ..addFlag('version', abbr: 'v', help: 'Show fCheck version', negatable: false)
   ..addMultiOption(
     'exclude',
     abbr: 'e',
@@ -163,12 +158,7 @@ ArgParser createConsoleArgParser() => ArgParser()
     help: 'Disable ANSI colors in CLI output',
     negatable: false,
   )
-  ..addFlag(
-    'help',
-    abbr: 'h',
-    help: 'Show usage information',
-    negatable: false,
-  )
+  ..addFlag('help', abbr: 'h', help: 'Show usage information', negatable: false)
   ..addFlag(
     'help-ignore',
     help: 'Show ignore setup for each analyzer and .fcheck options',
@@ -185,10 +175,7 @@ ArgParser createConsoleArgParser() => ArgParser()
 /// Throws [FormatException] when arguments are invalid.
 ///
 /// If both `--input` and a positional path are provided, `--input` wins.
-ConsoleInput parseConsoleInput(
-  List<String> arguments,
-  ArgParser parser,
-) {
+ConsoleInput parseConsoleInput(List<String> arguments, ArgParser parser) {
   final argResults = parser.parse(arguments);
 
   final explicitPath = argResults['input'] as String;
@@ -196,8 +183,8 @@ ConsoleInput parseConsoleInput(
   final path = explicitPath != '.'
       ? explicitPath
       : argResults.rest.isNotEmpty
-          ? argResults.rest.first
-          : '.';
+      ? argResults.rest.first
+      : '.';
 
   return ConsoleInput(
     path: path,
@@ -225,18 +212,12 @@ _ListOption _parseListOption(String rawValue) {
   final normalized = rawValue.trim().toLowerCase();
   final namedMode = ReportListMode.fromCliName(normalized);
   if (namedMode != null) {
-    return _ListOption(
-      mode: namedMode,
-      limit: defaultListItemLimit,
-    );
+    return _ListOption(mode: namedMode, limit: defaultListItemLimit);
   }
 
   final parsedLimit = int.tryParse(normalized);
   if (parsedLimit != null && parsedLimit > 0) {
-    return _ListOption(
-      mode: ReportListMode.partial,
-      limit: parsedLimit,
-    );
+    return _ListOption(mode: ReportListMode.partial, limit: parsedLimit);
   }
 
   throw const FormatException(
@@ -248,8 +229,5 @@ class _ListOption {
   final ReportListMode mode;
   final int limit;
 
-  const _ListOption({
-    required this.mode,
-    required this.limit,
-  });
+  const _ListOption({required this.mode, required this.limit});
 }

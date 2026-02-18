@@ -107,8 +107,10 @@ class DocumentationVisitor extends RecursiveAstVisitor<void> {
     }
 
     final methodName = node.name.lexeme;
-    final className =
-        node.thisOrAncestorOfType<ClassDeclaration>()?.namePart.toString();
+    final className = node
+        .thisOrAncestorOfType<ClassDeclaration>()
+        ?.namePart
+        .toString();
     final subject = className == null ? methodName : '$className.$methodName';
 
     if (_isPublicName(methodName)) {

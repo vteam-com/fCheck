@@ -66,13 +66,13 @@ class CodeSizeArtifact {
 
   /// Converts this artifact to JSON.
   Map<String, dynamic> toJson() => {
-        'kind': kind.label,
-        'name': name,
-        'qualifiedName': qualifiedName,
-        'filePath': filePath,
-        'linesOfCode': linesOfCode,
-        'startLine': startLine,
-        'endLine': endLine,
-        if (ownerName != null) 'ownerName': ownerName,
-      };
+    'kind': kind.label,
+    'name': name,
+    'qualifiedName': qualifiedName,
+    'filePath': filePath,
+    'linesOfCode': linesOfCode,
+    'startLine': startLine,
+    'endLine': endLine,
+    if (ownerName != null) 'ownerName': ownerName,
+  };
 }

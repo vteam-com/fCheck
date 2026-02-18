@@ -47,17 +47,16 @@ void main() {
       );
     });
 
-    test('toString falls back to unknown location when file path is missing',
-        () {
-      final issue = SecretIssue(
-        lineNumber: 22,
-        secretType: 'private_key',
-      );
+    test(
+      'toString falls back to unknown location when file path is missing',
+      () {
+        final issue = SecretIssue(lineNumber: 22, secretType: 'private_key');
 
-      expect(
-        issue.toString(),
-        equals('Secret issue at unknown location: private_key'),
-      );
-    });
+        expect(
+          issue.toString(),
+          equals('Secret issue at unknown location: private_key'),
+        );
+      },
+    );
   });
 }

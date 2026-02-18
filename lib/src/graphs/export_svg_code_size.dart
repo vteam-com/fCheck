@@ -65,8 +65,12 @@ String exportSvgCodeSize(
     _GroupNode('Folders', folderItems, '#5d6d7e', itemTypeLabel: 'folder'),
     _GroupNode('Files', fileItems, '#1f6f8b', itemTypeLabel: 'file'),
     _GroupNode('Classes', classItems, '#2e8b57', itemTypeLabel: 'class'),
-    _GroupNode('Functions/Methods', callableItems, '#c97a00',
-        itemTypeLabel: 'callable'),
+    _GroupNode(
+      'Functions/Methods',
+      callableItems,
+      '#c97a00',
+      itemTypeLabel: 'callable',
+    ),
   ].where((group) => group.totalSize > 0).toList(growable: false);
 
   if (groups.isEmpty) {
@@ -138,10 +142,7 @@ class _WeightedNode {
   final String id;
   final int weight;
 
-  _WeightedNode({
-    required this.id,
-    required this.weight,
-  });
+  _WeightedNode({required this.id, required this.weight});
 }
 
 class _Rect {
@@ -162,11 +163,7 @@ class _Rect {
 ///
 /// Group content is rendered as a secondary treemap using the already
 /// normalized artifact LOC values.
-void _renderGroup(
-  StringBuffer buffer,
-  _GroupNode group,
-  _Rect rect,
-) {
+void _renderGroup(StringBuffer buffer, _GroupNode group, _Rect rect) {
   const groupInset = _groupInset;
   const groupHeaderHeight = 22.0;
   const itemLabelMinWidth = 90.0;
@@ -215,8 +212,10 @@ void _renderGroup(
         itemRect.height < _minUsableDimension) {
       continue;
     }
-    final shadeFactor =
-        (item.linesOfCode / maxSize).clamp(_shadeClampMin, _shadeClampMax);
+    final shadeFactor = (item.linesOfCode / maxSize).clamp(
+      _shadeClampMin,
+      _shadeClampMax,
+    );
     final fillOpacity = (_fillOpacityBase + (shadeFactor * _fillOpacityScale))
         .toStringAsFixed(_opacityDecimalPlaces);
     final escapedLabel = _xml(item.qualifiedName);
@@ -310,10 +309,7 @@ CodeSizeArtifact _rebaseArtifactPath(CodeSizeArtifact artifact, String? base) {
     return artifact;
   }
 
-  final relativePath = p.relative(
-    normalizedPath,
-    from: base,
-  );
+  final relativePath = p.relative(normalizedPath, from: base);
   return CodeSizeArtifact(
     kind: artifact.kind,
     name: artifact.name,
@@ -328,18 +324,14 @@ CodeSizeArtifact _rebaseArtifactPath(CodeSizeArtifact artifact, String? base) {
 /// Produces a binary treemap layout for [nodes] within [bounds].
 ///
 /// Nodes are sorted by descending weight and recursively partitioned.
-Map<String, _Rect> _layoutTreemap(
-  List<_WeightedNode> nodes,
-  _Rect bounds,
-) {
+Map<String, _Rect> _layoutTreemap(List<_WeightedNode> nodes, _Rect bounds) {
   if (nodes.isEmpty || bounds.width <= 0 || bounds.height <= 0) {
     return const <String, _Rect>{};
   }
 
-  final normalized = nodes
-      .where((node) => node.weight > 0)
-      .toList(growable: false)
-    ..sort((a, b) => b.weight.compareTo(a.weight));
+  final normalized =
+      nodes.where((node) => node.weight > 0).toList(growable: false)
+        ..sort((a, b) => b.weight.compareTo(a.weight));
   if (normalized.isEmpty) {
     return const <String, _Rect>{};
   }

@@ -36,26 +36,28 @@ void main() {
       );
     });
 
-    test('toString includes floored percent, line count, paths, and symbols',
-        () {
-      final issue = DuplicateCodeIssue(
-        firstFilePath: 'lib/a.dart',
-        firstLineNumber: 10,
-        firstSymbol: 'firstFn',
-        secondFilePath: 'lib/b.dart',
-        secondLineNumber: 20,
-        secondSymbol: 'secondFn',
-        similarity: 0.875,
-        lineCount: 9,
-      );
+    test(
+      'toString includes floored percent, line count, paths, and symbols',
+      () {
+        final issue = DuplicateCodeIssue(
+          firstFilePath: 'lib/a.dart',
+          firstLineNumber: 10,
+          firstSymbol: 'firstFn',
+          secondFilePath: 'lib/b.dart',
+          secondLineNumber: 20,
+          secondSymbol: 'secondFn',
+          similarity: 0.875,
+          lineCount: 9,
+        );
 
-      expect(
-        issue.toString(),
-        equals(
-          '87% (9 lines) lib/a.dart:10 <-> lib/b.dart:20 (firstFn, secondFn)',
-        ),
-      );
-    });
+        expect(
+          issue.toString(),
+          equals(
+            '87% (9 lines) lib/a.dart:10 <-> lib/b.dart:20 (firstFn, secondFn)',
+          ),
+        );
+      },
+    );
 
     test('toString strips shared absolute path prefix', () {
       final issue = DuplicateCodeIssue(
@@ -273,9 +275,7 @@ int g(List<int> values) {
 
       final metrics = AnalyzeFolder(
         tempDir,
-        enabledAnalyzers: {
-          AnalyzerDomain.magicNumbers,
-        },
+        enabledAnalyzers: {AnalyzerDomain.magicNumbers},
       ).analyze();
 
       expect(metrics.duplicateCodeAnalyzerEnabled, isFalse);

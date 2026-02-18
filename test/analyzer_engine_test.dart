@@ -94,26 +94,31 @@ void main() {
       expect(metrics.magicNumberIssues.first.value, equals('7'));
     });
 
-    test('should report documentation issue paths relative to analysis root',
-        () {
-      final file = File('${tempDir.path}/lib/feature/service.dart')
-        ..createSync(recursive: true);
-      file.writeAsStringSync('''
+    test(
+      'should report documentation issue paths relative to analysis root',
+      () {
+        final file = File('${tempDir.path}/lib/feature/service.dart')
+          ..createSync(recursive: true);
+        file.writeAsStringSync('''
 class Service {}
 ''');
 
-      final metrics = analyzer.analyze();
-      final readmeIssue = metrics.documentationIssues.firstWhere(
-        (issue) => issue.type == DocumentationIssueType.missingReadme,
-      );
-      final classIssue = metrics.documentationIssues.firstWhere(
-        (issue) => issue.type == DocumentationIssueType.undocumentedPublicClass,
-      );
+        final metrics = analyzer.analyze();
+        final readmeIssue = metrics.documentationIssues.firstWhere(
+          (issue) => issue.type == DocumentationIssueType.missingReadme,
+        );
+        final classIssue = metrics.documentationIssues.firstWhere(
+          (issue) =>
+              issue.type == DocumentationIssueType.undocumentedPublicClass,
+        );
 
-      expect(readmeIssue.filePath, equals('README.md'));
-      expect(classIssue.filePath,
-          equals(p.join('lib', 'feature', 'service.dart')));
-    });
+        expect(readmeIssue.filePath, equals('README.md'));
+        expect(
+          classIssue.filePath,
+          equals(p.join('lib', 'feature', 'service.dart')),
+        );
+      },
+    );
 
     test('should report dead code issue paths relative to analysis root', () {
       final file = File('${tempDir.path}/lib/feature/dead.dart')

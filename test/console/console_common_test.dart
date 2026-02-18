@@ -6,11 +6,15 @@ void main() {
   group('ReportListMode', () {
     test('should find mode from cliName', () {
       expect(ReportListMode.fromCliName('none'), equals(ReportListMode.none));
-      expect(ReportListMode.fromCliName('partial'),
-          equals(ReportListMode.partial));
+      expect(
+        ReportListMode.fromCliName('partial'),
+        equals(ReportListMode.partial),
+      );
       expect(ReportListMode.fromCliName('full'), equals(ReportListMode.full));
-      expect(ReportListMode.fromCliName('filenames'),
-          equals(ReportListMode.filenames));
+      expect(
+        ReportListMode.fromCliName('filenames'),
+        equals(ReportListMode.filenames),
+      );
     });
 
     test('should return null for invalid cliName', () {
@@ -52,10 +56,13 @@ void main() {
     });
 
     test('should build invalid .fcheck configuration error', () {
-      final result =
-          AppStrings.invalidFcheckConfigurationError('Invalid config');
-      expect(result,
-          equals('Error: Invalid .fcheck configuration. Invalid config'));
+      final result = AppStrings.invalidFcheckConfigurationError(
+        'Invalid config',
+      );
+      expect(
+        result,
+        equals('Error: Invalid .fcheck configuration. Invalid config'),
+      );
     });
 
     test('should build excluded Dart files header', () {

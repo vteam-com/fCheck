@@ -210,8 +210,9 @@ String _analyzerDeductionValue({
   if (!enabled || issueCount == 0) {
     return '';
   }
-  final normalizedDeduction =
-      deductionPercent.clamp(0, _percentageMultiplier).toDouble();
+  final normalizedDeduction = deductionPercent
+      .clamp(0, _percentageMultiplier)
+      .toDouble();
   final deductionText = '-${_formatCompactDecimal(normalizedDeduction)}%';
   final issueText = formatCount(issueCount);
   return _colorize('$deductionText ($issueText)', _ansiYellow);
@@ -237,12 +238,10 @@ String _commentSummary({
 ///
 /// Zero penalty is green; larger penalties are highlighted to make score
 /// deductions obvious in the scorecard.
-String _suppressionPenaltyValue({
-  required int penaltyPoints,
-  int width = 0,
-}) {
-  final rawText =
-      penaltyPoints == 0 ? '0 pts' : '-${formatCount(penaltyPoints)} pts';
+String _suppressionPenaltyValue({required int penaltyPoints, int width = 0}) {
+  final rawText = penaltyPoints == 0
+      ? '0 pts'
+      : '-${formatCount(penaltyPoints)} pts';
   final text = width <= 0 ? rawText : rawText.padLeft(width);
 
   if (penaltyPoints == 0) {
@@ -260,10 +259,7 @@ String _suppressionPenaltyValue({
 /// Formats suppression-related counts with optional width alignment.
 ///
 /// A zero count is shown as green to indicate healthy rule opt-out usage.
-String _suppressionCountValue({
-  required int count,
-  int width = 0,
-}) {
+String _suppressionCountValue({required int count, int width = 0}) {
   final rawText = formatCount(count);
   final text = width <= 0 ? rawText : rawText.padLeft(width);
   if (count == 0) {
@@ -311,19 +307,19 @@ List<String> buildReportLines(
   final ignoreDirectivesCount = metrics.ignoreDirectivesCount;
   final ignoreDirectiveCountsByFile =
       metrics.ignoreDirectiveCountsByFile.isEmpty
-          ? <String, int>{
-              for (final path in _uniqueFilePaths(metrics.ignoreDirectiveFiles))
-                path: 1,
-            }
-          : () {
-              final normalizedCounts = <String, int>{};
-              for (final entry in metrics.ignoreDirectiveCountsByFile.entries) {
-                final normalizedPath = normalizeIssueLocation(entry.key).path;
-                normalizedCounts[normalizedPath] =
-                    (normalizedCounts[normalizedPath] ?? 0) + entry.value;
-              }
-              return normalizedCounts;
-            }();
+      ? <String, int>{
+          for (final path in _uniqueFilePaths(metrics.ignoreDirectiveFiles))
+            path: 1,
+        }
+      : () {
+          final normalizedCounts = <String, int>{};
+          for (final entry in metrics.ignoreDirectiveCountsByFile.entries) {
+            final normalizedPath = normalizeIssueLocation(entry.key).path;
+            normalizedCounts[normalizedPath] =
+                (normalizedCounts[normalizedPath] ?? 0) + entry.value;
+          }
+          return normalizedCounts;
+        }();
   final ignoreDirectiveEntries = ignoreDirectiveCountsByFile.entries.toList()
     ..sort((left, right) => left.key.compareTo(right.key));
   final ignoreDirectiveFileCount = ignoreDirectiveEntries.length;
@@ -354,20 +350,23 @@ List<String> buildReportLines(
       return firstPathCompare;
     }
 
-    final secondPathCompare =
-        left.secondFilePath.compareTo(right.secondFilePath);
+    final secondPathCompare = left.secondFilePath.compareTo(
+      right.secondFilePath,
+    );
     if (secondPathCompare != 0) {
       return secondPathCompare;
     }
 
-    final firstLineCompare =
-        left.firstLineNumber.compareTo(right.firstLineNumber);
+    final firstLineCompare = left.firstLineNumber.compareTo(
+      right.firstLineNumber,
+    );
     if (firstLineCompare != 0) {
       return firstLineCompare;
     }
 
-    final secondLineCompare =
-        left.secondLineNumber.compareTo(right.secondLineNumber);
+    final secondLineCompare = left.secondLineNumber.compareTo(
+      right.secondLineNumber,
+    );
     if (secondLineCompare != 0) {
       return secondLineCompare;
     }
@@ -436,15 +435,17 @@ List<String> buildReportLines(
   final complianceNextInvestment = metrics.complianceNextInvestment;
   final analyzerScoresByKey = <String, int>{
     for (final score in metrics.analyzerScores) score.key: score.scorePercent,
-    'suppression_hygiene': (_percentageMultiplier -
-            ((suppressionPenaltyPoints / _maxSuppressionPenaltyPoints) *
-                    _percentageMultiplier)
-                .round())
-        .clamp(0, _percentageMultiplier),
+    'suppression_hygiene':
+        (_percentageMultiplier -
+                ((suppressionPenaltyPoints / _maxSuppressionPenaltyPoints) *
+                        _percentageMultiplier)
+                    .round())
+            .clamp(0, _percentageMultiplier),
   };
   final analyzerIssueCountsByKey = <String, int>{
     for (final score in metrics.analyzerScores) score.key: score.issueCount,
-    'suppression_hygiene': ignoreDirectivesCount +
+    'suppression_hygiene':
+        ignoreDirectivesCount +
         customExcludedFilesCount +
         disabledAnalyzersCount,
   };
@@ -459,13 +460,14 @@ List<String> buildReportLines(
             score.key != 'documentation' || documentationIssues.isNotEmpty,
       )
       .length;
-  final safeEnabledScoredAnalyzerCount =
-      enabledScoredAnalyzerCount == 0 ? 1 : enabledScoredAnalyzerCount;
+  final safeEnabledScoredAnalyzerCount = enabledScoredAnalyzerCount == 0
+      ? 1
+      : enabledScoredAnalyzerCount;
   final analyzerDeductionPercentByKey = <String, double>{
     for (final score in metrics.analyzerScores)
       score.key: score.enabled
           ? ((1 - score.score).clamp(0.0, 1.0) * _percentageMultiplier) /
-              safeEnabledScoredAnalyzerCount
+                safeEnabledScoredAnalyzerCount
           : 0,
     'suppression_hygiene': suppressionPenaltyPoints.toDouble(),
   };
@@ -559,18 +561,9 @@ List<String> buildReportLines(
       label: AppStrings.devDependency,
       value: formatCount(devDependencyCount),
     ),
-    _gridCell(
-      label: AppStrings.classes,
-      value: formatCount(classCount),
-    ),
-    _gridCell(
-      label: AppStrings.methods,
-      value: formatCount(methodCount),
-    ),
-    _gridCell(
-      label: AppStrings.functions,
-      value: formatCount(functionCount),
-    ),
+    _gridCell(label: AppStrings.classes, value: formatCount(classCount)),
+    _gridCell(label: AppStrings.methods, value: formatCount(methodCount)),
+    _gridCell(label: AppStrings.functions, value: formatCount(functionCount)),
     localizationCell,
   ];
   for (var index = 0; index < leftDashboardRows.length; index++) {
@@ -583,10 +576,7 @@ List<String> buildReportLines(
   }
 
   void appendCodeSizeSection() {
-    final sections = <({
-      String title,
-      List<CodeSizeArtifact> artifacts,
-    })>[
+    final sections = <({String title, List<CodeSizeArtifact> artifacts})>[
       (title: 'Files', artifacts: codeSizeFileArtifacts),
       (title: 'Classes', artifacts: codeSizeClassArtifacts),
       (title: 'Functions/Methods', artifacts: codeSizeCallableArtifacts),
@@ -610,8 +600,9 @@ List<String> buildReportLines(
         '${warnTag()} ${section.title}: top ${formatCount(outlierCount)} of ${formatCount(section.artifacts.length)} (${formatCount(fullTotalLoc)} LOC total)',
       );
 
-      final locWidth =
-          _maxIntWidth(outliers.map((artifact) => artifact.linesOfCode));
+      final locWidth = _maxIntWidth(
+        outliers.map((artifact) => artifact.linesOfCode),
+      );
       if (listMode == ReportListMode.none) {
         continue;
       }
@@ -735,7 +726,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.disabled,
       sortKey: 'one class per file',
       blockLines: [
-        '${skipTag()} One class per file check skipped (${AppStrings.disabled}).'
+        '${skipTag()} One class per file check skipped (${AppStrings.disabled}).',
       ],
     );
   } else if (nonCompliant.isEmpty) {
@@ -743,7 +734,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.success,
       sortKey: 'one class per file',
       blockLines: [
-        '${okTag()} One class per file check ${AppStrings.checkPassed}'
+        '${okTag()} One class per file check ${AppStrings.checkPassed}',
       ],
     );
   } else {
@@ -756,14 +747,18 @@ List<String> buildReportLines(
         blockLines.add('  - ${_pathText(path)}');
       }
     } else {
-      final visibleNonCompliant =
-          _issuesForMode(nonCompliant, listMode, effectiveListItemLimit)
-              .toList();
-      final classCountWidth =
-          _maxIntWidth(visibleNonCompliant.map((metric) => metric.classCount));
+      final visibleNonCompliant = _issuesForMode(
+        nonCompliant,
+        listMode,
+        effectiveListItemLimit,
+      ).toList();
+      final classCountWidth = _maxIntWidth(
+        visibleNonCompliant.map((metric) => metric.classCount),
+      );
       for (final metric in visibleNonCompliant) {
-        final classCountText =
-            metric.classCount.toString().padLeft(classCountWidth);
+        final classCountText = metric.classCount.toString().padLeft(
+          classCountWidth,
+        );
         final normalizedPath = normalizeIssueLocation(metric.path).path;
         blockLines.add(
           '  - ${_pathText(normalizedPath)} ($classCountText classes found)',
@@ -789,7 +784,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.disabled,
       sortKey: 'hardcoded strings',
       blockLines: [
-        '${skipTag()} Hardcoded strings check skipped (${AppStrings.disabled}).'
+        '${skipTag()} Hardcoded strings check skipped (${AppStrings.disabled}).',
       ],
     );
   } else if (hardcodedStringIssues.isEmpty) {
@@ -797,7 +792,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.success,
       sortKey: 'hardcoded strings',
       blockLines: [
-        '${okTag()} Hardcoded strings check ${AppStrings.checkPassed}'
+        '${okTag()} Hardcoded strings check ${AppStrings.checkPassed}',
       ],
     );
   } else if (usesLocalization) {
@@ -805,22 +800,26 @@ List<String> buildReportLines(
       '${failTag()} ${formatCount(hardcodedStringIssues.length)} ${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.enabled}):',
     ];
     if (filenamesOnly) {
-      final filePaths =
-          _uniqueFilePaths(hardcodedStringIssues.map((i) => i.filePath));
+      final filePaths = _uniqueFilePaths(
+        hardcodedStringIssues.map((i) => i.filePath),
+      );
       for (final path in filePaths) {
         blockLines.add('  - ${_pathText(path)}');
       }
     } else {
       final visibleHardcodedIssues = _issuesForMode(
-              hardcodedStringIssues, listMode, effectiveListItemLimit)
-          .toList();
+        hardcodedStringIssues,
+        listMode,
+        effectiveListItemLimit,
+      ).toList();
       for (final issue in visibleHardcodedIssues) {
         blockLines.add('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
           hardcodedStringIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... ${AppStrings.and} ${formatCount(hardcodedStringIssues.length - effectiveListItemLimit)} ${AppStrings.more}');
+          '  ... ${AppStrings.and} ${formatCount(hardcodedStringIssues.length - effectiveListItemLimit)} ${AppStrings.more}',
+        );
       }
     }
     blockLines.add('');
@@ -834,22 +833,26 @@ List<String> buildReportLines(
       '${warnTag()} ${formatCount(hardcodedStringIssues.length)} ${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
     ];
     if (filenamesOnly) {
-      final filePaths =
-          _uniqueFilePaths(hardcodedStringIssues.map((i) => i.filePath));
+      final filePaths = _uniqueFilePaths(
+        hardcodedStringIssues.map((i) => i.filePath),
+      );
       for (final path in filePaths) {
         blockLines.add('  - ${_pathText(path)}');
       }
     } else {
       final visibleHardcodedIssues = _issuesForMode(
-              hardcodedStringIssues, listMode, effectiveListItemLimit)
-          .toList();
+        hardcodedStringIssues,
+        listMode,
+        effectiveListItemLimit,
+      ).toList();
       for (final issue in visibleHardcodedIssues) {
         blockLines.add('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
           hardcodedStringIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... ${AppStrings.and} ${formatCount(hardcodedStringIssues.length - effectiveListItemLimit)} ${AppStrings.more}');
+          '  ... ${AppStrings.and} ${formatCount(hardcodedStringIssues.length - effectiveListItemLimit)} ${AppStrings.more}',
+        );
       }
     }
     blockLines.add('');
@@ -865,7 +868,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.disabled,
       sortKey: 'magic numbers',
       blockLines: [
-        '${skipTag()} Magic numbers check skipped (${AppStrings.disabled}).'
+        '${skipTag()} Magic numbers check skipped (${AppStrings.disabled}).',
       ],
     );
   } else if (magicNumberIssues.isEmpty) {
@@ -879,22 +882,26 @@ List<String> buildReportLines(
       '${warnTag()} ${formatCount(magicNumberIssues.length)} ${AppStrings.magicNumbersDetected}',
     ];
     if (filenamesOnly) {
-      final filePaths =
-          _uniqueFilePaths(magicNumberIssues.map((i) => i.filePath));
+      final filePaths = _uniqueFilePaths(
+        magicNumberIssues.map((i) => i.filePath),
+      );
       for (final path in filePaths) {
         blockLines.add('  - ${_pathText(path)}');
       }
     } else {
-      final visibleMagicNumberIssues =
-          _issuesForMode(magicNumberIssues, listMode, effectiveListItemLimit)
-              .toList();
+      final visibleMagicNumberIssues = _issuesForMode(
+        magicNumberIssues,
+        listMode,
+        effectiveListItemLimit,
+      ).toList();
       for (final issue in visibleMagicNumberIssues) {
         blockLines.add('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
           magicNumberIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... ${AppStrings.and} ${formatCount(magicNumberIssues.length - effectiveListItemLimit)} ${AppStrings.more}');
+          '  ... ${AppStrings.and} ${formatCount(magicNumberIssues.length - effectiveListItemLimit)} ${AppStrings.more}',
+        );
       }
     }
     blockLines.add('');
@@ -910,7 +917,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.disabled,
       sortKey: 'source sorting',
       blockLines: [
-        '${skipTag()} Flutter class member sorting skipped (${AppStrings.disabled}).'
+        '${skipTag()} Flutter class member sorting skipped (${AppStrings.disabled}).',
       ],
     );
   } else if (sourceSortIssues.isEmpty) {
@@ -918,7 +925,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.success,
       sortKey: 'source sorting',
       blockLines: [
-        '${okTag()} Flutter class member sorting ${AppStrings.checkPassed}'
+        '${okTag()} Flutter class member sorting ${AppStrings.checkPassed}',
       ],
     );
   } else {
@@ -926,22 +933,26 @@ List<String> buildReportLines(
       '${warnTag()} ${formatCount(sourceSortIssues.length)} ${AppStrings.unsortedMembers}',
     ];
     if (filenamesOnly) {
-      final filePaths =
-          _uniqueFilePaths(sourceSortIssues.map((i) => i.filePath));
+      final filePaths = _uniqueFilePaths(
+        sourceSortIssues.map((i) => i.filePath),
+      );
       for (final path in filePaths) {
         blockLines.add('  - ${_pathText(path)}');
       }
     } else {
-      final visibleSourceSortIssues =
-          _issuesForMode(sourceSortIssues, listMode, effectiveListItemLimit)
-              .toList();
+      final visibleSourceSortIssues = _issuesForMode(
+        sourceSortIssues,
+        listMode,
+        effectiveListItemLimit,
+      ).toList();
       for (final issue in visibleSourceSortIssues) {
         blockLines.add('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
           sourceSortIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... and ${formatCount(sourceSortIssues.length - effectiveListItemLimit)} more');
+          '  ... and ${formatCount(sourceSortIssues.length - effectiveListItemLimit)} more',
+        );
       }
     }
     blockLines.add('');
@@ -957,7 +968,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.disabled,
       sortKey: 'secrets',
       blockLines: [
-        '${skipTag()} ${AppStrings.secretsScan} skipped (${AppStrings.disabled}).'
+        '${skipTag()} ${AppStrings.secretsScan} skipped (${AppStrings.disabled}).',
       ],
     );
   } else if (secretIssues.isEmpty) {
@@ -965,7 +976,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.success,
       sortKey: 'secrets',
       blockLines: [
-        '${okTag()} ${AppStrings.secretsScan} ${AppStrings.checkPassed}'
+        '${okTag()} ${AppStrings.secretsScan} ${AppStrings.checkPassed}',
       ],
     );
   } else {
@@ -978,16 +989,19 @@ List<String> buildReportLines(
         blockLines.add('  - ${_pathText(path)}');
       }
     } else {
-      final visibleSecretIssues =
-          _issuesForMode(secretIssues, listMode, effectiveListItemLimit)
-              .toList();
+      final visibleSecretIssues = _issuesForMode(
+        secretIssues,
+        listMode,
+        effectiveListItemLimit,
+      ).toList();
       for (final issue in visibleSecretIssues) {
         blockLines.add('  - ${issue.format()}');
       }
       if (listMode == ReportListMode.partial &&
           secretIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... and ${formatCount(secretIssues.length - effectiveListItemLimit)} more');
+          '  ... and ${formatCount(secretIssues.length - effectiveListItemLimit)} more',
+        );
       }
     }
     blockLines.add('');
@@ -1003,7 +1017,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.disabled,
       sortKey: 'dead code',
       blockLines: [
-        '${skipTag()} ${AppStrings.deadCodeCheck} skipped (${AppStrings.disabled}).'
+        '${skipTag()} ${AppStrings.deadCodeCheck} skipped (${AppStrings.disabled}).',
       ],
     );
   } else if (deadCodeIssues.isEmpty) {
@@ -1011,7 +1025,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.success,
       sortKey: 'dead code',
       blockLines: [
-        '${okTag()} ${AppStrings.deadCodeCheck} ${AppStrings.checkPassed}'
+        '${okTag()} ${AppStrings.deadCodeCheck} ${AppStrings.checkPassed}',
       ],
     );
   } else {
@@ -1022,25 +1036,30 @@ List<String> buildReportLines(
       final deadFilePaths = filenamesOnly
           ? _uniqueFilePaths(deadFileIssues.map((i) => i.filePath))
           : const <String>[];
-      final deadFileCount =
-          filenamesOnly ? deadFilePaths.length : deadFileIssues.length;
-      blockLines
-          .add('  ${AppStrings.deadFiles} (${formatCount(deadFileCount)}):');
+      final deadFileCount = filenamesOnly
+          ? deadFilePaths.length
+          : deadFileIssues.length;
+      blockLines.add(
+        '  ${AppStrings.deadFiles} (${formatCount(deadFileCount)}):',
+      );
       if (filenamesOnly) {
         for (final path in deadFilePaths) {
           blockLines.add('    - ${_pathText(path)}');
         }
       } else {
-        final visibleDeadFileIssues =
-            _issuesForMode(deadFileIssues, listMode, effectiveListItemLimit)
-                .toList();
+        final visibleDeadFileIssues = _issuesForMode(
+          deadFileIssues,
+          listMode,
+          effectiveListItemLimit,
+        ).toList();
         for (final issue in visibleDeadFileIssues) {
           blockLines.add('    - ${issue.formatGrouped()}');
         }
         if (listMode == ReportListMode.partial &&
             deadFileIssues.length > effectiveListItemLimit) {
           blockLines.add(
-              '    ... and ${formatCount(deadFileIssues.length - effectiveListItemLimit)} more');
+            '    ... and ${formatCount(deadFileIssues.length - effectiveListItemLimit)} more',
+          );
         }
       }
     }
@@ -1049,25 +1068,30 @@ List<String> buildReportLines(
       final deadClassPaths = filenamesOnly
           ? _uniqueFilePaths(deadClassIssues.map((i) => i.filePath))
           : const <String>[];
-      final deadClassCount =
-          filenamesOnly ? deadClassPaths.length : deadClassIssues.length;
-      blockLines
-          .add('  ${AppStrings.deadClasses} (${formatCount(deadClassCount)}):');
+      final deadClassCount = filenamesOnly
+          ? deadClassPaths.length
+          : deadClassIssues.length;
+      blockLines.add(
+        '  ${AppStrings.deadClasses} (${formatCount(deadClassCount)}):',
+      );
       if (filenamesOnly) {
         for (final path in deadClassPaths) {
           blockLines.add('    - ${_pathText(path)}');
         }
       } else {
-        final visibleDeadClassIssues =
-            _issuesForMode(deadClassIssues, listMode, effectiveListItemLimit)
-                .toList();
+        final visibleDeadClassIssues = _issuesForMode(
+          deadClassIssues,
+          listMode,
+          effectiveListItemLimit,
+        ).toList();
         for (final issue in visibleDeadClassIssues) {
           blockLines.add('    - ${issue.formatGrouped()}');
         }
         if (listMode == ReportListMode.partial &&
             deadClassIssues.length > effectiveListItemLimit) {
           blockLines.add(
-              '    ... and ${formatCount(deadClassIssues.length - effectiveListItemLimit)} more');
+            '    ... and ${formatCount(deadClassIssues.length - effectiveListItemLimit)} more',
+          );
         }
       }
     }
@@ -1076,25 +1100,30 @@ List<String> buildReportLines(
       final deadFunctionPaths = filenamesOnly
           ? _uniqueFilePaths(deadFunctionIssues.map((i) => i.filePath))
           : const <String>[];
-      final deadFunctionCount =
-          filenamesOnly ? deadFunctionPaths.length : deadFunctionIssues.length;
+      final deadFunctionCount = filenamesOnly
+          ? deadFunctionPaths.length
+          : deadFunctionIssues.length;
       blockLines.add(
-          '  ${AppStrings.deadFunctions} (${formatCount(deadFunctionCount)}):');
+        '  ${AppStrings.deadFunctions} (${formatCount(deadFunctionCount)}):',
+      );
       if (filenamesOnly) {
         for (final path in deadFunctionPaths) {
           blockLines.add('    - ${_pathText(path)}');
         }
       } else {
-        final visibleDeadFunctionIssues =
-            _issuesForMode(deadFunctionIssues, listMode, effectiveListItemLimit)
-                .toList();
+        final visibleDeadFunctionIssues = _issuesForMode(
+          deadFunctionIssues,
+          listMode,
+          effectiveListItemLimit,
+        ).toList();
         for (final issue in visibleDeadFunctionIssues) {
           blockLines.add('    - ${issue.formatGrouped()}');
         }
         if (listMode == ReportListMode.partial &&
             deadFunctionIssues.length > effectiveListItemLimit) {
           blockLines.add(
-              '    ... and ${formatCount(deadFunctionIssues.length - effectiveListItemLimit)} more');
+            '    ... and ${formatCount(deadFunctionIssues.length - effectiveListItemLimit)} more',
+          );
         }
       }
     }
@@ -1107,22 +1136,26 @@ List<String> buildReportLines(
           ? unusedVariablePaths.length
           : unusedVariableIssues.length;
       blockLines.add(
-          '  ${AppStrings.unusedVariables} (${formatCount(unusedVariableCount)}):');
+        '  ${AppStrings.unusedVariables} (${formatCount(unusedVariableCount)}):',
+      );
       if (filenamesOnly) {
         for (final path in unusedVariablePaths) {
           blockLines.add('    - ${_pathText(path)}');
         }
       } else {
         final visibleUnusedVariableIssues = _issuesForMode(
-                unusedVariableIssues, listMode, effectiveListItemLimit)
-            .toList();
+          unusedVariableIssues,
+          listMode,
+          effectiveListItemLimit,
+        ).toList();
         for (final issue in visibleUnusedVariableIssues) {
           blockLines.add('    - ${issue.formatGrouped()}');
         }
         if (listMode == ReportListMode.partial &&
             unusedVariableIssues.length > effectiveListItemLimit) {
           blockLines.add(
-              '    ... and ${formatCount(unusedVariableIssues.length - effectiveListItemLimit)} more');
+            '    ... and ${formatCount(unusedVariableIssues.length - effectiveListItemLimit)} more',
+          );
         }
       }
     }
@@ -1139,7 +1172,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.disabled,
       sortKey: 'duplicate code',
       blockLines: [
-        '${skipTag()} ${AppStrings.duplicateCodeCheck} skipped (${AppStrings.disabled}).'
+        '${skipTag()} ${AppStrings.duplicateCodeCheck} skipped (${AppStrings.disabled}).',
       ],
     );
   } else if (duplicateCodeIssues.isEmpty) {
@@ -1147,7 +1180,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.success,
       sortKey: 'duplicate code',
       blockLines: [
-        '${okTag()} ${AppStrings.duplicateCodeCheck} ${AppStrings.checkPassed}'
+        '${okTag()} ${AppStrings.duplicateCodeCheck} ${AppStrings.checkPassed}',
       ],
     );
   } else {
@@ -1156,21 +1189,23 @@ List<String> buildReportLines(
     ];
     if (filenamesOnly) {
       final filePaths = _uniqueFilePaths(
-        duplicateCodeIssues.expand((issue) => [
-              issue.firstFilePath,
-              issue.secondFilePath,
-            ]),
+        duplicateCodeIssues.expand(
+          (issue) => [issue.firstFilePath, issue.secondFilePath],
+        ),
       );
       for (final path in filePaths) {
         blockLines.add('  - ${_pathText(path)}');
       }
     } else {
-      final visibleDuplicateCodeIssues =
-          _issuesForMode(duplicateCodeIssues, listMode, effectiveListItemLimit)
-              .toList();
+      final visibleDuplicateCodeIssues = _issuesForMode(
+        duplicateCodeIssues,
+        listMode,
+        effectiveListItemLimit,
+      ).toList();
       final duplicateSimilarityWidth = _maxIntWidth(
-        visibleDuplicateCodeIssues
-            .map((issue) => issue.similarityPercentRoundedDown),
+        visibleDuplicateCodeIssues.map(
+          (issue) => issue.similarityPercentRoundedDown,
+        ),
       );
       final duplicateLineCountWidth = _maxIntWidth(
         visibleDuplicateCodeIssues.map((issue) => issue.lineCount),
@@ -1183,7 +1218,8 @@ List<String> buildReportLines(
       if (listMode == ReportListMode.partial &&
           duplicateCodeIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... and ${formatCount(duplicateCodeIssues.length - effectiveListItemLimit)} more');
+          '  ... and ${formatCount(duplicateCodeIssues.length - effectiveListItemLimit)} more',
+        );
       }
     }
     blockLines.add('');
@@ -1199,7 +1235,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.disabled,
       sortKey: 'documentation',
       blockLines: [
-        '${skipTag()} ${AppStrings.documentationCheck} skipped (${AppStrings.disabled}).'
+        '${skipTag()} ${AppStrings.documentationCheck} skipped (${AppStrings.disabled}).',
       ],
     );
   } else if (documentationIssues.isEmpty) {
@@ -1207,7 +1243,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.success,
       sortKey: 'documentation',
       blockLines: [
-        '${okTag()} ${AppStrings.documentationCheck} ${AppStrings.checkPassed}'
+        '${okTag()} ${AppStrings.documentationCheck} ${AppStrings.checkPassed}',
       ],
     );
   } else {
@@ -1215,15 +1251,18 @@ List<String> buildReportLines(
       '${warnTag()} ${formatCount(documentationIssues.length)} ${AppStrings.documentationIssuesDetected}',
     ];
     if (filenamesOnly) {
-      final filePaths =
-          _uniqueFilePaths(documentationIssues.map((i) => i.filePath));
+      final filePaths = _uniqueFilePaths(
+        documentationIssues.map((i) => i.filePath),
+      );
       for (final path in filePaths) {
         blockLines.add('  - ${_pathText(path)}');
       }
     } else {
-      final visibleDocumentationIssues =
-          _issuesForMode(documentationIssues, listMode, effectiveListItemLimit)
-              .toList();
+      final visibleDocumentationIssues = _issuesForMode(
+        documentationIssues,
+        listMode,
+        effectiveListItemLimit,
+      ).toList();
       for (final issue in visibleDocumentationIssues) {
         blockLines.add('  - ${issue.format()}');
       }
@@ -1247,7 +1286,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.disabled,
       sortKey: 'layers architecture',
       blockLines: [
-        '${skipTag()} ${AppStrings.layersCheck} skipped (${AppStrings.disabled}).'
+        '${skipTag()} ${AppStrings.layersCheck} skipped (${AppStrings.disabled}).',
       ],
     );
   } else if (layersIssues.isEmpty) {
@@ -1255,7 +1294,7 @@ List<String> buildReportLines(
       status: _ListBlockStatus.success,
       sortKey: 'layers architecture',
       blockLines: [
-        '${okTag()} ${AppStrings.layersCheck} ${AppStrings.checkPassed}'
+        '${okTag()} ${AppStrings.layersCheck} ${AppStrings.checkPassed}',
       ],
     );
   } else {
@@ -1278,7 +1317,8 @@ List<String> buildReportLines(
       if (listMode == ReportListMode.partial &&
           layersIssues.length > effectiveListItemLimit) {
         blockLines.add(
-            '  ... and ${formatCount(layersIssues.length - effectiveListItemLimit)} more');
+          '  ... and ${formatCount(layersIssues.length - effectiveListItemLimit)} more',
+        );
       }
     }
     addListBlock(
@@ -1299,13 +1339,13 @@ List<String> buildReportLines(
       final leftGroup = !leftEnabled
           ? _disabledAnalyzerSortGroup
           : (leftIssueCount == 0 && leftScore == _percentageMultiplier
-              ? _cleanAnalyzerSortGroup
-              : _warningAnalyzerSortGroup);
+                ? _cleanAnalyzerSortGroup
+                : _warningAnalyzerSortGroup);
       final rightGroup = !rightEnabled
           ? _disabledAnalyzerSortGroup
           : (rightIssueCount == 0 && rightScore == _percentageMultiplier
-              ? _cleanAnalyzerSortGroup
-              : _warningAnalyzerSortGroup);
+                ? _cleanAnalyzerSortGroup
+                : _warningAnalyzerSortGroup);
       final groupCompare = leftGroup.compareTo(rightGroup);
       if (groupCompare != 0) {
         return groupCompare;
@@ -1327,7 +1367,8 @@ List<String> buildReportLines(
     final analyzerEnabled = analyzerEnabledByKey[block.analyzerKey] ?? false;
     final analyzerDeductionPercent =
         analyzerDeductionPercentByKey[block.analyzerKey] ?? 0;
-    final hidePassedSummaryLine = analyzerEnabled &&
+    final hidePassedSummaryLine =
+        analyzerEnabled &&
         analyzerScore == _percentageMultiplier &&
         analyzerIssueCount == 0;
     addLine(
@@ -1599,13 +1640,11 @@ void printConfigurationError(String message) {
 /// Prints the run header before analysis starts.
 ///
 /// Includes tool version and normalized input directory path.
-void printRunHeader({
-  required String version,
-  required Directory directory,
-}) {
+void printRunHeader({required String version, required Directory directory}) {
   print(dividerLine('fCheck $version', downPointer: true));
   print(
-      _labelValueLine(label: AppStrings.input, value: directory.absolute.path));
+    _labelValueLine(label: AppStrings.input, value: directory.absolute.path),
+  );
 }
 
 /// Prints structured JSON with two-space indentation.
@@ -1624,9 +1663,7 @@ void printExcludedItems({
   required List<Directory> excludedDirectories,
 }) {
   print(
-    AppStrings.excludedDartFilesHeader(
-      formatCount(excludedDartFiles.length),
-    ),
+    AppStrings.excludedDartFilesHeader(formatCount(excludedDartFiles.length)),
   );
   if (excludedDartFiles.isEmpty) {
     print(_noneIndicator);
@@ -1676,23 +1713,22 @@ void printOutputFilesHeader() {
 }
 
 /// Prints one generated output file line using a label and path.
-void printOutputFileLine({
-  required String label,
-  required String path,
-}) {
+void printOutputFileLine({required String label, required String path}) {
   final normalizedPath = normalizeIssueLocation(path).path;
   print(
-    _labelValueLine(
-      label: label.trimRight(),
-      value: _pathText(normalizedPath),
-    ),
+    _labelValueLine(label: label.trimRight(), value: _pathText(normalizedPath)),
   );
 }
 
 /// Prints run completion footer with elapsed time in seconds.
 void printRunCompleted(String elapsedSeconds) {
-  print(dividerLine('fCheck completed (${elapsedSeconds}s)',
-      dot: false, downPointer: false));
+  print(
+    dividerLine(
+      'fCheck completed (${elapsedSeconds}s)',
+      dot: false,
+      downPointer: false,
+    ),
+  );
 }
 
 /// Prints fatal analysis error and stack trace details.
@@ -1766,8 +1802,8 @@ String dividerLine(String title, {bool? downPointer, bool dot = false}) {
   final directionChar = downPointer == null
       ? lineType
       : downPointer == true
-          ? '↓'
-          : '↑';
+      ? '↓'
+      : '↑';
   final sideLines =
       lineType * (dividerLength - (title.length ~/ _halfTitleLengthDivisor));
 

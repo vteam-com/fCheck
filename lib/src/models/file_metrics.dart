@@ -84,15 +84,15 @@ class FileMetrics {
 
   /// Converts these metrics to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-        'path': path,
-        'linesOfCode': linesOfCode,
-        'commentLines': commentLines,
-        'classCount': classCount,
-        'functionCount': functionCount,
-        'stringLiteralCount': stringLiteralCount,
-        'numberLiteralCount': numberLiteralCount,
-        'isStatefulWidget': isStatefulWidget,
-        'isOneClassPerFileCompliant': isOneClassPerFileCompliant,
-        'ignoreOneClassPerFile': ignoreOneClassPerFile,
-      };
+    'path': path,
+    'linesOfCode': linesOfCode,
+    'commentLines': commentLines,
+    'classCount': classCount,
+    'functionCount': functionCount,
+    'stringLiteralCount': stringLiteralCount,
+    'numberLiteralCount': numberLiteralCount,
+    'isStatefulWidget': isStatefulWidget,
+    'isOneClassPerFileCompliant': isOneClassPerFileCompliant,
+    'ignoreOneClassPerFile': ignoreOneClassPerFile,
+  };
 }

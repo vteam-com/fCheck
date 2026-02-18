@@ -9,8 +9,5 @@ class DuplicateCodeFileData {
   final List<DuplicateCodeSnippet> snippets;
 
   /// Creates per-file duplicate-code data.
-  const DuplicateCodeFileData({
-    required this.filePath,
-    required this.snippets,
-  });
+  const DuplicateCodeFileData({required this.filePath, required this.snippets});
 }

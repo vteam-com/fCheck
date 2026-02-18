@@ -75,8 +75,9 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
       final inDiff = (incomingCounts[b] ?? 0).compareTo(incomingCounts[a] ?? 0);
       if (inDiff != 0) return inDiff;
 
-      final outDiff =
-          (outgoingCounts[b] ?? 0).compareTo(outgoingCounts[a] ?? 0);
+      final outDiff = (outgoingCounts[b] ?? 0).compareTo(
+        outgoingCounts[a] ?? 0,
+      );
       if (outDiff != 0) return outDiff;
 
       return a.split('/').last.compareTo(b.split('/').last);
@@ -98,7 +99,8 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
   const badgeOffset = 12;
 
   // Calculate total width based on number of columns
-  final totalWidth = margin +
+  final totalWidth =
+      margin +
       (sortedLayers.length * nodeWidth) +
       ((sortedLayers.length - 1) * columnSpacing) +
       margin;
@@ -109,7 +111,8 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
     if (files.length > maxNodes) maxNodes = files.length;
   }
 
-  final totalHeight = margin +
+  final totalHeight =
+      margin +
       layerHeaderHeight +
       (maxNodes * nodeHeight) +
       ((maxNodes - 1) * nodeVerticalSpacing) +
@@ -120,7 +123,8 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
   // SVG Header
   buffer.writeln('<?xml version="1.0" encoding="UTF-8"?>');
   buffer.writeln(
-      '<svg width="$totalWidth" height="$totalHeight" viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">');
+    '<svg width="$totalWidth" height="$totalHeight" viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">',
+  );
 
   // Common SVG Definitions
   buffer.writeln(SvgDefinitions.generateUnifiedDefs());
@@ -162,23 +166,27 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
     const double titleVerticalOffset = 25.0;
 
     final layerNum = sortedLayers[colIndex];
-    final x = margin +
+    final x =
+        margin +
         (colIndex * (nodeWidth + columnSpacing)) -
         (columnSpacing / columnMarginFactor);
     final width = nodeWidth + (columnSpacing / halfDivisor);
     // Draw column background
     buffer.writeln(
-        '<rect x="$x" y="$margin" width="$width" height="${totalHeight - margin * halfDivisor}" rx="$layerCornerRadius" class="layerBackground"/>');
+      '<rect x="$x" y="$margin" width="$width" height="${totalHeight - margin * halfDivisor}" rx="$layerCornerRadius" class="layerBackground"/>',
+    );
     // Draw layer title
     buffer.writeln(
-        '<text x="${x + width / halfDivisor}" y="${margin + titleVerticalOffset}" class="layerTitle">$layerNum</text>');
+      '<text x="${x + width / halfDivisor}" y="${margin + titleVerticalOffset}" class="layerTitle">$layerNum</text>',
+    );
   }
 
   // 3. Draw Node Rectangles
   for (final entry in nodePositions.entries) {
     final pos = entry.value;
     buffer.writeln(
-        '<rect x="${pos.x}" y="${pos.y}" width="$nodeWidth" height="$nodeHeight" class="fileNode"/>');
+      '<rect x="${pos.x}" y="${pos.y}" width="$nodeWidth" height="$nodeHeight" class="fileNode"/>',
+    );
   }
 
   // 4. Draw Edges
@@ -275,7 +283,8 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
     );
 
     buffer.writeln(
-        '<text x="${pos.x + nodeWidth / halfDivisor0}" y="${pos.y + nodeHeight / halfDivisor0}" class="$textClass">$fileName</text>');
+      '<text x="${pos.x + nodeWidth / halfDivisor0}" y="${pos.y + nodeHeight / halfDivisor0}" class="$textClass">$fileName</text>',
+    );
   }
 
   buffer.writeln('</svg>');

@@ -73,7 +73,8 @@ class DeadCodeAnalyzer {
     final String libRoot = p.join(projectRoot.path, 'lib');
 
     for (final data in fileData) {
-      final bool isPublicLibFile = data.filePath.startsWith(libRoot) &&
+      final bool isPublicLibFile =
+          data.filePath.startsWith(libRoot) &&
           !data.filePath.contains('${p.separator}src${p.separator}');
 
       for (final symbol in data.classes) {

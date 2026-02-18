@@ -76,8 +76,8 @@ class HardcodedStringUtils {
       final code = text.codeUnitAt(i);
       final isAlphaNumeric =
           (code >= asciiDigitStart && code <= asciiDigitEnd) ||
-              (code >= asciiUpperStart && code <= asciiUpperEnd) ||
-              (code >= asciiLowerStart && code <= asciiLowerEnd);
+          (code >= asciiUpperStart && code <= asciiUpperEnd) ||
+          (code >= asciiLowerStart && code <= asciiLowerEnd);
       if (isAlphaNumeric) {
         return true;
       }

@@ -53,11 +53,13 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
 
     final lineNumber = _getLineNumber(node.offset);
 
-    foundIssues.add(MagicNumberIssue(
-      filePath: filePath,
-      lineNumber: lineNumber,
-      value: literalText,
-    ));
+    foundIssues.add(
+      MagicNumberIssue(
+        filePath: filePath,
+        lineNumber: lineNumber,
+        value: literalText,
+      ),
+    );
   }
 
   /// Internal helper used by fcheck analysis and reporting.

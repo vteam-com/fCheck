@@ -75,9 +75,13 @@ void main() {
       );
 
       expect(
-          _normalizeAnsi(withNullLine.toString()), startsWith('lib/a.dart:'));
+        _normalizeAnsi(withNullLine.toString()),
+        startsWith('lib/a.dart:'),
+      );
       expect(
-          _normalizeAnsi(withZeroLine.toString()), startsWith('lib/b.dart:'));
+        _normalizeAnsi(withZeroLine.toString()),
+        startsWith('lib/b.dart:'),
+      );
       expect(
         _normalizeAnsi(withZeroLine.toString()),
         equals('lib/b.dart: dead file b.dart'),
@@ -119,10 +123,7 @@ void main() {
         _normalizeAnsi(unusedVariable.toString()),
         contains('unused variable "value"'),
       );
-      expect(
-        _normalizeAnsi(deadFile.toString()),
-        contains('dead file d.dart'),
-      );
+      expect(_normalizeAnsi(deadFile.toString()), contains('dead file d.dart'));
     });
 
     test('toJson includes all expected fields', () {
@@ -247,53 +248,64 @@ class Util {
 
       expect(
         issues.where(
-            (i) => i.type == DeadCodeIssueType.deadClass && i.name == 'B'),
+          (i) => i.type == DeadCodeIssueType.deadClass && i.name == 'B',
+        ),
         isNotEmpty,
       );
 
       expect(
-        issues.where((i) =>
-            i.type == DeadCodeIssueType.deadFunction && i.name == 'unused'),
+        issues.where(
+          (i) => i.type == DeadCodeIssueType.deadFunction && i.name == 'unused',
+        ),
         isNotEmpty,
       );
 
       expect(
-        issues.where((i) =>
-            i.type == DeadCodeIssueType.deadFunction &&
-            i.name == 'unusedMethod' &&
-            i.owner == 'Util'),
+        issues.where(
+          (i) =>
+              i.type == DeadCodeIssueType.deadFunction &&
+              i.name == 'unusedMethod' &&
+              i.owner == 'Util',
+        ),
         isNotEmpty,
       );
 
       expect(
-        issues.where((i) =>
-            i.type == DeadCodeIssueType.deadFunction &&
-            i.name == 'ignoredUnusedMethod' &&
-            i.owner == 'Util'),
+        issues.where(
+          (i) =>
+              i.type == DeadCodeIssueType.deadFunction &&
+              i.name == 'ignoredUnusedMethod' &&
+              i.owner == 'Util',
+        ),
         isEmpty,
       );
 
       expect(
         issues.where(
-            (i) => i.type == DeadCodeIssueType.unusedVariable && i.name == 'x'),
+          (i) => i.type == DeadCodeIssueType.unusedVariable && i.name == 'x',
+        ),
         isNotEmpty,
       );
 
       expect(
-        issues.where((i) =>
-            i.type == DeadCodeIssueType.unusedVariable && i.name == 'context'),
+        issues.where(
+          (i) =>
+              i.type == DeadCodeIssueType.unusedVariable && i.name == 'context',
+        ),
         isEmpty,
       );
 
       expect(
         issues.where(
-            (i) => i.type == DeadCodeIssueType.deadClass && i.name == 'A'),
+          (i) => i.type == DeadCodeIssueType.deadClass && i.name == 'A',
+        ),
         isEmpty,
       );
 
       expect(
         issues.where(
-            (i) => i.type == DeadCodeIssueType.deadClass && i.name == 'Box'),
+          (i) => i.type == DeadCodeIssueType.deadClass && i.name == 'Box',
+        ),
         isEmpty,
       );
     });

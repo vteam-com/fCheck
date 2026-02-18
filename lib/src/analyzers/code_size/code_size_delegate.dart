@@ -119,10 +119,7 @@ class _CodeSizeVisitor extends RecursiveAstVisitor<void> {
   ///
   /// The range is clamped to available source lines to keep counting robust
   /// for partially malformed nodes.
-  int _countNonEmptyLines({
-    required int startLine,
-    required int endLine,
-  }) {
+  int _countNonEmptyLines({required int startLine, required int endLine}) {
     if (_context.lines.isEmpty) {
       return 0;
     }

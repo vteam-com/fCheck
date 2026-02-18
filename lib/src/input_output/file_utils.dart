@@ -34,7 +34,9 @@ class FileUtils {
     if (pattern.startsWith('**/') && pattern.endsWith('/**')) {
       // Pattern like **/folder/**
       final folderName = pattern.substring(
-          globPrefixLength, pattern.length - globPrefixLength);
+        globPrefixLength,
+        pattern.length - globPrefixLength,
+      );
       expandedPatterns.add('**/$folderName/*');
       expandedPatterns.add('$folderName/**');
       expandedPatterns.add('$folderName/*');
@@ -108,7 +110,7 @@ class FileUtils {
     'web',
     'macos',
     'windows',
-    'linux'
+    'linux',
   ];
 
   /// Private constructor to prevent instantiation.
@@ -126,8 +128,10 @@ class FileUtils {
   /// [excludePatterns] Optional list of glob patterns to exclude.
   ///
   /// Returns a list of [File] objects representing all Dart files found.
-  static List<File> listDartFiles(Directory dir,
-      {List<String> excludePatterns = const []}) {
+  static List<File> listDartFiles(
+    Directory dir, {
+    List<String> excludePatterns = const [],
+  }) {
     final globs = _buildExcludeGlobs(excludePatterns);
 
     return dir
@@ -135,30 +139,31 @@ class FileUtils {
         .whereType<File>()
         .where((file) => p.extension(file.path) == '.dart')
         .where((file) {
-      // Skip files in hidden directories (directories starting with '.')
-      final relativePath = p.relative(file.path, from: dir.path);
-      final pathParts = p.split(relativePath);
-      if (_isHiddenPath(pathParts)) {
-        return false;
-      }
+          // Skip files in hidden directories (directories starting with '.')
+          final relativePath = p.relative(file.path, from: dir.path);
+          final pathParts = p.split(relativePath);
+          if (_isHiddenPath(pathParts)) {
+            return false;
+          }
 
-      // Default hide locale files except for the main app_localizations.dart
-      if (_isGeneratedLocalizationDartFile(file)) {
-        return false;
-      }
+          // Default hide locale files except for the main app_localizations.dart
+          if (_isGeneratedLocalizationDartFile(file)) {
+            return false;
+          }
 
-      // Check if the file is in any default excluded directory
-      if (_isDefaultExcludedPath(pathParts)) {
-        return false;
-      }
+          // Check if the file is in any default excluded directory
+          if (_isDefaultExcludedPath(pathParts)) {
+            return false;
+          }
 
-      // Check glob patterns
-      if (_matchesAnyGlob(globs, relativePath)) {
-        return false;
-      }
+          // Check glob patterns
+          if (_matchesAnyGlob(globs, relativePath)) {
+            return false;
+          }
 
-      return true;
-    }).toList();
+          return true;
+        })
+        .toList();
   }
 
   /// Lists all excluded files and directories in a directory recursively.
@@ -176,9 +181,9 @@ class FileUtils {
   static (
     List<File> excludedDartFiles,
     List<File> excludedNonDartFiles,
-    List<Directory> excludedDirectories
-  ) listExcludedFiles(Directory dir,
-      {List<String> excludePatterns = const []}) {
+    List<Directory> excludedDirectories,
+  )
+  listExcludedFiles(Directory dir, {List<String> excludePatterns = const []}) {
     final globs = _buildExcludeGlobs(excludePatterns);
 
     final excludedDartFiles = <File>[];
@@ -256,8 +261,9 @@ class FileUtils {
     int fileCount,
     int excludedDartFilesCount,
     int excludedFoldersCount,
-    int excludedFilesCount
-  ) scanDirectory(Directory dir, {List<String> excludePatterns = const []}) {
+    int excludedFilesCount,
+  )
+  scanDirectory(Directory dir, {List<String> excludePatterns = const []}) {
     final globs = _buildExcludeGlobs(excludePatterns);
 
     int folderCount = 0;
@@ -308,7 +314,7 @@ class FileUtils {
       fileCount,
       excludedCounts.excludedDartFilesCount,
       excludedCounts.excludedFoldersCount,
-      excludedCounts.excludedFilesCount
+      excludedCounts.excludedFilesCount,
     );
   }
 

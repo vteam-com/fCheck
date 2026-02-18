@@ -46,8 +46,8 @@ class HardcodedStringIssue {
 
   /// Converts this issue to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-        'filePath': filePath,
-        'lineNumber': lineNumber,
-        'value': value,
-      };
+    'filePath': filePath,
+    'lineNumber': lineNumber,
+    'value': value,
+  };
 }

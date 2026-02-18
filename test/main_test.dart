@@ -53,8 +53,11 @@ void main() {
     });
 
     test('should prioritize --input over positional argument', () {
-      final input = parseConsoleInput(
-          ['--input', '/input/path', '/positional/path'], parser);
+      final input = parseConsoleInput([
+        '--input',
+        '/input/path',
+        '/positional/path',
+      ], parser);
       expect(input.path, equals('/input/path'));
     });
 
@@ -116,14 +119,22 @@ void main() {
     });
 
     test('should parse --exclude flag correctly', () {
-      final input = parseConsoleInput(
-          ['--exclude', '**/generated/**', '--exclude', '**/test/**'], parser);
+      final input = parseConsoleInput([
+        '--exclude',
+        '**/generated/**',
+        '--exclude',
+        '**/test/**',
+      ], parser);
       expect(input.excludePatterns, equals(['**/generated/**', '**/test/**']));
     });
 
     test('should parse multiple flags together', () {
-      final input =
-          parseConsoleInput(['--help', '--fix', '--svg', '--json'], parser);
+      final input = parseConsoleInput([
+        '--help',
+        '--fix',
+        '--svg',
+        '--json',
+      ], parser);
       expect(input.showHelp, isTrue);
       expect(input.fix, isTrue);
       expect(input.generateSvg, isTrue);

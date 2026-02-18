@@ -63,7 +63,8 @@ class SourceSortDelegate implements AnalyzerDelegate {
         if (SortUtils.bodiesDiffer(sortedBody, originalBody)) {
           if (fix) {
             // Write the sorted content back to the file.
-            final sortedContent = context.content.substring(0, classBodyStart) +
+            final sortedContent =
+                context.content.substring(0, classBodyStart) +
                 sortedBody +
                 context.content.substring(classBodyEnd);
             context.file.writeAsStringSync(sortedContent);

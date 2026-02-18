@@ -117,10 +117,10 @@ class DeadCodeIssue {
 
   /// Converts this issue to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-        'type': type.name,
-        'filePath': filePath,
-        'lineNumber': lineNumber,
-        'name': name,
-        'owner': owner,
-      };
+    'type': type.name,
+    'filePath': filePath,
+    'lineNumber': lineNumber,
+    'name': name,
+    'owner': owner,
+  };
 }

@@ -27,8 +27,10 @@ void main() {
 
       for (final call in visitor.calls) {
         final location = parsed.lineInfo.getLocation(call.offset);
-        final relativePath =
-            p.relative(file.path, from: Directory.current.path);
+        final relativePath = p.relative(
+          file.path,
+          from: Directory.current.path,
+        );
         violations.add(
           '$relativePath:${location.lineNumber}:${location.columnNumber} ${call.description}',
         );
@@ -38,7 +40,8 @@ void main() {
     expect(
       violations,
       isEmpty,
-      reason: 'Only bin/fcheck.dart should write console output.\n'
+      reason:
+          'Only bin/fcheck.dart should write console output.\n'
           '${violations.join('\n')}',
     );
   });
@@ -61,7 +64,8 @@ class _ConsoleOutputVisitor extends RecursiveAstVisitor<void> {
   void visitMethodInvocation(MethodInvocation node) {
     final targetName = _consoleTargetName(node.target);
     final methodName = node.methodName.name;
-    final isConsoleWrite = targetName != null &&
+    final isConsoleWrite =
+        targetName != null &&
         (targetName == 'stdout' || targetName == 'stderr') &&
         (methodName == 'write' || methodName == 'writeln');
 

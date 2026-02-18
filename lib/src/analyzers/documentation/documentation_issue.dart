@@ -58,8 +58,9 @@ class DocumentationIssue {
       rawPath: filePath,
       lineNumber: lineNumber,
     );
-    final subjectSuffix =
-        subject.isEmpty ? '' : ' "${colorizeIssueArtifact(subject)}"';
+    final subjectSuffix = subject.isEmpty
+        ? ''
+        : ' "${colorizeIssueArtifact(subject)}"';
     return '$location: $typeLabel$subjectSuffix';
   }
 
@@ -68,9 +69,9 @@ class DocumentationIssue {
 
   /// Converts this issue to JSON.
   Map<String, dynamic> toJson() => {
-        'type': type.name,
-        'filePath': filePath,
-        'lineNumber': lineNumber,
-        'subject': subject,
-      };
+    'type': type.name,
+    'filePath': filePath,
+    'lineNumber': lineNumber,
+    'subject': subject,
+  };
 }

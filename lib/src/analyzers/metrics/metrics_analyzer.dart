@@ -67,11 +67,12 @@ class MetricsAnalyzer {
     final averageAreaScore = enabledAreas.isEmpty
         ? 1.0
         : enabledAreas.fold<double>(0, (sum, area) => sum + area.score) /
-            enabledAreas.length;
+              enabledAreas.length;
     final baseScore = averageAreaScore * _maxPercent;
     final scoreAfterSuppression = baseScore - suppressionPenaltyPoints;
-    var complianceScore =
-        scoreAfterSuppression.clamp(0, _maxPercent.toDouble()).round();
+    var complianceScore = scoreAfterSuppression
+        .clamp(0, _maxPercent.toDouble())
+        .round();
 
     if (complianceScore == _maxPercent &&
         (enabledAreas.any((area) => area.score < 1) ||
@@ -253,7 +254,8 @@ class MetricsAnalyzer {
       budget: _disabledAnalyzerBudget,
     );
 
-    final weightedOveruse = ignoreOverBudgetRatio * _ignorePenaltyWeight +
+    final weightedOveruse =
+        ignoreOverBudgetRatio * _ignorePenaltyWeight +
         customExcludedOverBudgetRatio * _customExcludedPenaltyWeight +
         disabledAnalyzersOverBudgetRatio * _disabledAnalyzerPenaltyWeight;
 
@@ -306,7 +308,8 @@ class MetricsAnalyzer {
     if (suppressionPenaltyPoints <= 0) {
       return null;
     }
-    final suppressionEntries = input.ignoreDirectivesCount +
+    final suppressionEntries =
+        input.ignoreDirectivesCount +
         input.customExcludedFilesCount +
         input.disabledAnalyzersCount;
     return _ComplianceAreaScore(
@@ -333,8 +336,10 @@ class MetricsAnalyzer {
 
   /// Computes budget for custom excluded Dart files.
   double _customExcludedFilesBudget(ProjectMetricsAnalysisInput input) {
-    final scopeDartFiles =
-        math.max(1, input.totalDartFiles + input.customExcludedFilesCount);
+    final scopeDartFiles = math.max(
+      1,
+      input.totalDartFiles + input.customExcludedFilesCount,
+    );
     return math.max(
       _minCustomExcludedFileBudget,
       scopeDartFiles * _customExcludedFileBudgetRatio,

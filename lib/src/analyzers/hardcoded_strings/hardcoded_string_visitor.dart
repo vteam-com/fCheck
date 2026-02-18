@@ -75,7 +75,9 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
 
   /// Applies hardcoded-string rules to a string literal node.
   void _analyzeStringLiteral(
-      final StringLiteral node, final String issueValue) {
+    final StringLiteral node,
+    final String issueValue,
+  ) {
     // Focus filter (Flutter widgets vs Dart print).
     if (!_matchesFocus(node)) {
       return;
@@ -160,11 +162,13 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     // Get line number
     final int lineNumber = _getLineNumber(node.offset);
 
-    foundIssues.add(HardcodedStringIssue(
-      filePath: filePath,
-      lineNumber: lineNumber,
-      value: issueValue,
-    ));
+    foundIssues.add(
+      HardcodedStringIssue(
+        filePath: filePath,
+        lineNumber: lineNumber,
+        value: issueValue,
+      ),
+    );
   }
 
   /// Internal helper used by fcheck analysis and reporting.
@@ -200,8 +204,8 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
 
   /// Internal helper used by fcheck analysis and reporting.
   bool _isWidgetOutputString(final StringLiteral node) {
-    final ArgumentList? argumentList =
-        node.thisOrAncestorOfType<ArgumentList>();
+    final ArgumentList? argumentList = node
+        .thisOrAncestorOfType<ArgumentList>();
     if (argumentList == null) {
       return false;
     }
@@ -381,8 +385,8 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
 
   /// Internal helper used by fcheck analysis and reporting.
   bool _isInsideWidgetClass(final AstNode node) {
-    final ClassDeclaration? classDecl =
-        node.thisOrAncestorOfType<ClassDeclaration>();
+    final ClassDeclaration? classDecl = node
+        .thisOrAncestorOfType<ClassDeclaration>();
     if (classDecl == null) {
       return false;
     }
@@ -400,15 +404,15 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
 
   /// Internal helper used by fcheck analysis and reporting.
   bool _isInsideBuildMethod(final AstNode node) {
-    final MethodDeclaration? method =
-        node.thisOrAncestorOfType<MethodDeclaration>();
+    final MethodDeclaration? method = node
+        .thisOrAncestorOfType<MethodDeclaration>();
     return _matchesBuildOrWidgetReturningDeclaration(method);
   }
 
   /// Internal helper used by fcheck analysis and reporting.
   bool _isInsideWidgetReturnFunction(final AstNode node) {
-    final FunctionDeclaration? function =
-        node.thisOrAncestorOfType<FunctionDeclaration>();
+    final FunctionDeclaration? function = node
+        .thisOrAncestorOfType<FunctionDeclaration>();
     return _matchesBuildOrWidgetReturningDeclaration(function);
   }
 
@@ -601,11 +605,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     final String methodName = invocation.methodName.name;
     final String targetName = _getInvocationTargetName(invocation);
 
-    const printNames = {
-      'print',
-      'debugPrint',
-      'debugPrintStack',
-    };
+    const printNames = {'print', 'debugPrint', 'debugPrintStack'};
 
     if (printNames.contains(methodName)) {
       return true;
@@ -638,8 +638,8 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
 
   /// Internal helper used by fcheck analysis and reporting.
   MethodInvocation? _getOwningMethodInvocation(final StringLiteral node) {
-    final ArgumentList? argumentList =
-        node.thisOrAncestorOfType<ArgumentList>();
+    final ArgumentList? argumentList = node
+        .thisOrAncestorOfType<ArgumentList>();
     if (argumentList == null) {
       return null;
     }

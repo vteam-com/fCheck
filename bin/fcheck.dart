@@ -86,8 +86,9 @@ void main(List<String> arguments) {
       printMissingDirectoryError(directory.path);
       exit(1);
     }
-    effectiveExcludePatterns =
-        fcheckConfig.mergeExcludePatterns(input.excludePatterns);
+    effectiveExcludePatterns = fcheckConfig.mergeExcludePatterns(
+      input.excludePatterns,
+    );
   } on FormatException catch (error) {
     printConfigurationError(error.message.toString());
     exit(1);
@@ -120,10 +121,12 @@ void main(List<String> arguments) {
       if (input.outputJson) {
         final excludedData = {
           'excludedDartFiles': excludedDartFiles.map((f) => f.path).toList(),
-          'excludedNonDartFiles':
-              excludedNonDartFiles.map((f) => f.path).toList(),
-          'excludedDirectories':
-              excludedDirectories.map((d) => d.path).toList(),
+          'excludedNonDartFiles': excludedNonDartFiles
+              .map((f) => f.path)
+              .toList(),
+          'excludedDirectories': excludedDirectories
+              .map((d) => d.path)
+              .toList(),
         };
         printJsonOutput(excludedData);
       } else {
@@ -137,7 +140,8 @@ void main(List<String> arguments) {
     }
 
     final metrics = engine.analyze();
-    final shouldPrintOutputFilesSection = input.generateSvg ||
+    final shouldPrintOutputFilesSection =
+        input.generateSvg ||
         input.generateMermaid ||
         input.generatePlantUML ||
         input.generateFolderSvg ||
@@ -153,8 +157,9 @@ void main(List<String> arguments) {
         listItemLimit: input.listItemLimit,
       );
       if (shouldPrintOutputFilesSection) {
-        final scorecardDividerIndex =
-            reportLines.indexOf(dividerLine(AppStrings.scorecardDivider));
+        final scorecardDividerIndex = reportLines.indexOf(
+          dividerLine(AppStrings.scorecardDivider),
+        );
         if (scorecardDividerIndex >= 0) {
           printReportLines(reportLines.sublist(0, scorecardDividerIndex));
           deferredScorecardLines = reportLines.sublist(scorecardDividerIndex);
@@ -183,10 +188,7 @@ void main(List<String> arguments) {
         final svgFile = File('${directory.path}/layers.svg');
         svgFile.writeAsStringSync(svgContent);
         if (!input.outputJson) {
-          printOutputFileLine(
-            label: AppStrings.svgLayers,
-            path: svgFile.path,
-          );
+          printOutputFileLine(label: AppStrings.svgLayers, path: svgFile.path);
         }
       }
 
@@ -262,8 +264,9 @@ void main(List<String> arguments) {
     }
     stopwatch.stop();
     final elapsedMs = stopwatch.elapsedMilliseconds;
-    final elapsedSeconds = (elapsedMs / millisecondsInSecond)
-        .toStringAsFixed(decimalPlacesForSeconds);
+    final elapsedSeconds = (elapsedMs / millisecondsInSecond).toStringAsFixed(
+      decimalPlacesForSeconds,
+    );
     if (!input.outputJson) {
       printRunCompleted(elapsedSeconds);
     }

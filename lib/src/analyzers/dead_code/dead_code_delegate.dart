@@ -15,10 +15,7 @@ class DeadCodeDelegate implements AnalyzerDelegate {
   final String packageName;
 
   /// Creates a new dead code delegate.
-  DeadCodeDelegate({
-    required this.projectRoot,
-    required this.packageName,
-  });
+  DeadCodeDelegate({required this.projectRoot, required this.packageName});
 
   /// Collects dead code metadata for a single file.
   ///

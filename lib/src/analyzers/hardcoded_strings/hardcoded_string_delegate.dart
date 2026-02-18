@@ -92,10 +92,7 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
     AnalysisFileContext context,
   ) {
     final issues = <HardcodedStringIssue>[];
-    final regex = RegExp(
-      r'''\bText\s*\(\s*(['"])(.*?)\1''',
-      dotAll: true,
-    );
+    final regex = RegExp(r'''\bText\s*\(\s*(['"])(.*?)\1''', dotAll: true);
 
     for (final match in regex.allMatches(context.content)) {
       final value = match.group(HardcodedStringUtils.minQuotedLength) ?? '';

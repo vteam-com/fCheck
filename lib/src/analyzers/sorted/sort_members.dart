@@ -127,8 +127,8 @@ class MemberSorter {
     lifecycleMethods.sort(
       (final _SortableMethod a, final _SortableMethod b) =>
           (lifecycleOrderMap[a.name] ?? defaultLifecycleSortOrder).compareTo(
-        lifecycleOrderMap[b.name] ?? defaultLifecycleSortOrder,
-      ),
+            lifecycleOrderMap[b.name] ?? defaultLifecycleSortOrder,
+          ),
     );
     publicMethods.sort(
       (final _SortableMethod a, final _SortableMethod b) =>

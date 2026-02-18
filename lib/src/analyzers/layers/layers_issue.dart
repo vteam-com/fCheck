@@ -38,10 +38,10 @@ class LayersIssue {
 
   /// Converts this issue to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-        'type': type.toString().split('.').last,
-        'filePath': filePath,
-        'message': message,
-      };
+    'type': type.toString().split('.').last,
+    'filePath': filePath,
+    'message': message,
+  };
 }
 
 /// Types of layers architecture violations.

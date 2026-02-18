@@ -9,10 +9,7 @@ void main() {
     test('prepareGraphFormatting counts edges within known layers', () {
       final result = LayersAnalysisResult(
         issues: const [],
-        layers: {
-          'lib/a.dart': 0,
-          'lib/b.dart': 1,
-        },
+        layers: {'lib/a.dart': 0, 'lib/b.dart': 1},
         dependencyGraph: {
           'lib/a.dart': ['lib/b.dart'],
           'lib/b.dart': ['lib/c.dart'],

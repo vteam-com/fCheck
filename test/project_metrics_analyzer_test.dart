@@ -17,29 +17,33 @@ void main() {
       expect(result.complianceFocusAreaLabel, equals('None'));
     });
 
-    test('selects magic numbers as focus area when score impact is highest',
-        () {
-      final result = analyzer.analyze(
-        _buildInput(
-          magicNumberIssues: [
-            for (var i = 0; i < 10; i++)
-              MagicNumberIssue(
-                filePath: 'lib/file_$i.dart',
-                lineNumber: i + 1,
-                value: '${i + 1}',
-              ),
-          ],
-        ),
-      );
+    test(
+      'selects magic numbers as focus area when score impact is highest',
+      () {
+        final result = analyzer.analyze(
+          _buildInput(
+            magicNumberIssues: [
+              for (var i = 0; i < 10; i++)
+                MagicNumberIssue(
+                  filePath: 'lib/file_$i.dart',
+                  lineNumber: i + 1,
+                  value: '${i + 1}',
+                ),
+            ],
+          ),
+        );
 
-      expect(result.complianceScore, lessThan(100));
-      expect(result.complianceFocusAreaKey, equals('magic_numbers'));
-      expect(result.complianceFocusAreaLabel, equals('Magic numbers'));
-      expect(
-        result.complianceNextInvestment,
-        equals('Replace magic numbers with named constants near domain logic.'),
-      );
-    });
+        expect(result.complianceScore, lessThan(100));
+        expect(result.complianceFocusAreaKey, equals('magic_numbers'));
+        expect(result.complianceFocusAreaLabel, equals('Magic numbers'));
+        expect(
+          result.complianceNextInvestment,
+          equals(
+            'Replace magic numbers with named constants near domain logic.',
+          ),
+        );
+      },
+    );
 
     test('caps suppression penalty and prioritizes checks bypassed', () {
       final result = analyzer.analyze(
@@ -78,7 +82,8 @@ ProjectMetricsAnalysisInput _buildInput({
   bool duplicateCodeAnalyzerEnabled = true,
   bool documentationAnalyzerEnabled = true,
 }) {
-  final effectiveFileMetrics = fileMetrics ??
+  final effectiveFileMetrics =
+      fileMetrics ??
       List<FileMetrics>.generate(
         totalDartFiles,
         (index) => FileMetrics(

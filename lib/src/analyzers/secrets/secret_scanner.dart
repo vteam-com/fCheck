@@ -58,82 +58,98 @@ class SecretScanner {
 
     // AWS Access Key
     if (_detectAwsAccessKey(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'aws_access_key',
-        value: 'AWS Access Key detected',
-      ));
+      findings.add(
+        SecretIssue(
+          filePath: filePath,
+          lineNumber: lineNumber,
+          secretType: 'aws_access_key',
+          value: 'AWS Access Key detected',
+        ),
+      );
     }
 
     // Generic Secret
     if (_detectGenericSecret(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'generic_secret',
-        value: 'Generic secret detected',
-      ));
+      findings.add(
+        SecretIssue(
+          filePath: filePath,
+          lineNumber: lineNumber,
+          secretType: 'generic_secret',
+          value: 'Generic secret detected',
+        ),
+      );
     }
 
     // Bearer Token
     if (_detectBearerToken(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'bearer_token',
-        value: 'Bearer token detected',
-      ));
+      findings.add(
+        SecretIssue(
+          filePath: filePath,
+          lineNumber: lineNumber,
+          secretType: 'bearer_token',
+          value: 'Bearer token detected',
+        ),
+      );
     }
 
     // Private Key
     if (_detectPrivateKey(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'private_key',
-        value: 'Private key detected',
-      ));
+      findings.add(
+        SecretIssue(
+          filePath: filePath,
+          lineNumber: lineNumber,
+          secretType: 'private_key',
+          value: 'Private key detected',
+        ),
+      );
     }
 
     // Email PII
     if (_detectEmail(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'email_pii',
-        value: 'Email address detected',
-      ));
+      findings.add(
+        SecretIssue(
+          filePath: filePath,
+          lineNumber: lineNumber,
+          secretType: 'email_pii',
+          value: 'Email address detected',
+        ),
+      );
     }
 
     // Stripe Keys
     if (_detectStripeKey(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'stripe_key',
-        value: 'Stripe key detected',
-      ));
+      findings.add(
+        SecretIssue(
+          filePath: filePath,
+          lineNumber: lineNumber,
+          secretType: 'stripe_key',
+          value: 'Stripe key detected',
+        ),
+      );
     }
 
     // GitHub PAT
     if (_detectGitHubPAT(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'github_pat',
-        value: 'GitHub PAT detected',
-      ));
+      findings.add(
+        SecretIssue(
+          filePath: filePath,
+          lineNumber: lineNumber,
+          secretType: 'github_pat',
+          value: 'GitHub PAT detected',
+        ),
+      );
     }
 
     // High Entropy Strings
     if (_detectHighEntropyString(line)) {
-      findings.add(SecretIssue(
-        filePath: filePath,
-        lineNumber: lineNumber,
-        secretType: 'high_entropy',
-        value: 'High entropy string detected',
-      ));
+      findings.add(
+        SecretIssue(
+          filePath: filePath,
+          lineNumber: lineNumber,
+          secretType: 'high_entropy',
+          value: 'High entropy string detected',
+        ),
+      );
     }
 
     return findings;
@@ -189,7 +205,6 @@ class SecretScanner {
 
     for (final candidate in candidates) {
       if (candidate.length >= genericSecretValueMinLength &&
-
           /// Internal helper used by fcheck analysis and reporting.
           _calculateEntropy(candidate) > genericSecretEntropyThreshold) {
         return true;
@@ -213,15 +228,18 @@ class SecretScanner {
   /// Internal helper used by fcheck analysis and reporting.
   bool _detectPrivateKey(String line) {
     final regex = RegExp(
-        r'-----BEGIN\s+(RSA|EC|DSA|OPENSSH)\s+PRIVATE\s+KEY-----',
-        caseSensitive: false);
+      r'-----BEGIN\s+(RSA|EC|DSA|OPENSSH)\s+PRIVATE\s+KEY-----',
+      caseSensitive: false,
+    );
     return regex.hasMatch(line);
   }
 
   /// Internal helper used by fcheck analysis and reporting.
   bool _detectEmail(String line) {
-    final regex = RegExp(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}',
-        caseSensitive: false);
+    final regex = RegExp(
+      r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}',
+      caseSensitive: false,
+    );
     return regex.hasMatch(line);
   }
 
