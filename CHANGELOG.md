@@ -7,6 +7,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.14] - 2026-02-18
+
+### Added
+
+- 📊 Dashboard now reports 
+  - class, method, and function counts.
+  - pubspec dependency counts.
+
+### Changed
+
+- 🖥️ Improved CLI output readability with better path and filename coloring.
+- 🔢 `--list` now accepts values from 0 to 999.
+
+### Fixed
+
+- 🐛 Corrected line reporting in "one class per file" output.
+- 🧹 Resolved all fcheck warnings reported by fcheck on this codebase.
+
 ## [0.9.13] - 2026-02-17
 
 ### Added
