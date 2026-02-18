@@ -58,6 +58,10 @@ bool isNoColorEnvironmentEnabled(Map<String, String> env) {
 bool _isNoColorEnvironmentEnabled(Map<String, String> env) =>
     isNoColorEnvironmentEnabled(env);
 
+/// Interprets NO_COLORS-style flag values as boolean-like "true".
+///
+/// Empty values are treated as enabled, while common false-like tokens
+/// (`0`, `false`, `off`, `no`) are treated as disabled.
 bool _isTruthyNoColorsValue(String? value) {
   if (value == null) {
     return false;

@@ -23,11 +23,27 @@ const int _minHealthyCommentRatioPercent = 10;
 const int _minorIssueCountUpperBound = 3;
 const int _compactDecimalPlaces = 2;
 const int _hardcodedValueWidth = 3;
+const int _emptyRightDashboardCellPadding = 3;
 const int _minorSuppressionPenaltyUpperBound = 3;
 const int _moderateSuppressionPenaltyUpperBound = 7;
 const int _maxSuppressionPenaltyPoints = 25;
 const int _analyzerHeaderTitleWidth = 22;
+const int _cleanAnalyzerSortGroup = 0;
+const int _warningAnalyzerSortGroup = 1;
+const int _disabledAnalyzerSortGroup = 2;
 const String _noneIndicator = AppStrings.noneIndicator;
+const Map<String, String> _analyzerTitleByKey = {
+  'one_class_per_file': 'One class per file',
+  'hardcoded_strings': 'Hardcoded strings',
+  'magic_numbers': 'Magic numbers',
+  'source_sorting': 'Source sorting',
+  'layers': 'Layers architecture',
+  'secrets': 'Secrets',
+  'dead_code': 'Dead code',
+  'duplicate_code': 'Duplicate code',
+  'documentation': 'Documentation',
+  'suppression_hygiene': 'Suppression hygiene',
+};
 
 /// Returns all issues or a top slice depending on [listMode].
 ///
@@ -119,6 +135,9 @@ String _scoreValue(int score) {
   return _colorizeBold(text, _ansiRedBright);
 }
 
+/// Returns the analyzer status badge used in analyzer section headers.
+///
+/// Badge selection depends on enablement, effective score, and issue count.
 String _analyzerStatusIndicator({
   required bool enabled,
   required int scorePercent,
@@ -136,6 +155,10 @@ String _analyzerStatusIndicator({
   return _colorize('[x]', _ansiRedBright);
 }
 
+/// Builds a formatted analyzer section header with optional deduction suffix.
+///
+/// The header includes the status badge, aligned analyzer title, and when
+/// applicable the deduction percentage with issue count.
 String _analyzerSectionHeader({
   required String title,
   required bool enabled,
@@ -162,6 +185,9 @@ String _analyzerSectionHeader({
   return '$statusText $headerTitle $deductionText';
 }
 
+/// Formats the deduction segment shown in analyzer section headers.
+///
+/// Returns an empty string when the analyzer is disabled or has no issues.
 String _analyzerDeductionValue({
   required bool enabled,
   required int issueCount,
@@ -581,7 +607,9 @@ List<String> buildReportLines(
   for (var index = 0; index < leftDashboardRows.length; index++) {
     final rightCell = index < rightDashboardRows.length
         ? rightDashboardRows[index]
-        : ''.padRight(_gridLabelWidth + _gridValueWidth + 3);
+        : ''.padRight(
+            _gridLabelWidth + _gridValueWidth + _emptyRightDashboardCellPadding,
+          );
     addLine(_gridRow([leftDashboardRows[index], rightCell]));
   }
 
@@ -1228,19 +1256,21 @@ List<String> buildReportLines(
       final leftIssueCount = analyzerIssueCountsByKey[left.analyzerKey] ?? 0;
       final rightIssueCount = analyzerIssueCountsByKey[right.analyzerKey] ?? 0;
       final leftGroup = !leftEnabled
-          ? 2
-          : (leftIssueCount == 0 && leftScore == _percentageMultiplier ? 0 : 1);
+          ? _disabledAnalyzerSortGroup
+          : (leftIssueCount == 0 && leftScore == _percentageMultiplier
+              ? _cleanAnalyzerSortGroup
+              : _warningAnalyzerSortGroup);
       final rightGroup = !rightEnabled
-          ? 2
+          ? _disabledAnalyzerSortGroup
           : (rightIssueCount == 0 && rightScore == _percentageMultiplier
-              ? 0
-              : 1);
+              ? _cleanAnalyzerSortGroup
+              : _warningAnalyzerSortGroup);
       final groupCompare = leftGroup.compareTo(rightGroup);
       if (groupCompare != 0) {
         return groupCompare;
       }
 
-      if (leftGroup == 1) {
+      if (leftGroup == _warningAnalyzerSortGroup) {
         final scoreCompare = rightScore.compareTo(leftScore);
         if (scoreCompare != 0) {
           return scoreCompare;
@@ -1307,56 +1337,25 @@ class _ListBlock {
   });
 }
 
+/// Maps list sorting labels to canonical analyzer keys.
+///
+/// Known analyzer titles are resolved through [_analyzerTitleByKey]. Unknown
+/// labels fall back to snake_case conversion.
 String _analyzerKeyForSortKey(String sortKey) {
-  switch (sortKey) {
-    case 'one class per file':
-      return 'one_class_per_file';
-    case 'hardcoded strings':
-      return 'hardcoded_strings';
-    case 'magic numbers':
-      return 'magic_numbers';
-    case 'source sorting':
-      return 'source_sorting';
-    case 'layers architecture':
-      return 'layers';
-    case 'secrets':
-      return 'secrets';
-    case 'dead code':
-      return 'dead_code';
-    case 'duplicate code':
-      return 'duplicate_code';
-    case 'documentation':
-      return 'documentation';
-    case 'suppressions':
-      return 'suppression_hygiene';
+  final normalized = sortKey.toLowerCase();
+  for (final entry in _analyzerTitleByKey.entries) {
+    if (entry.value.toLowerCase() == normalized) {
+      return entry.key;
+    }
+  }
+  if (normalized == 'suppressions') {
+    return 'suppression_hygiene';
   }
   return sortKey.replaceAll(' ', '_');
 }
 
 String _analyzerTitleForKey(String analyzerKey) {
-  switch (analyzerKey) {
-    case 'one_class_per_file':
-      return 'One class per file';
-    case 'hardcoded_strings':
-      return 'Hardcoded strings';
-    case 'magic_numbers':
-      return 'Magic numbers';
-    case 'source_sorting':
-      return 'Source sorting';
-    case 'layers':
-      return 'Layers architecture';
-    case 'secrets':
-      return 'Secrets';
-    case 'dead_code':
-      return 'Dead code';
-    case 'duplicate_code':
-      return 'Duplicate code';
-    case 'documentation':
-      return 'Documentation';
-    case 'suppression_hygiene':
-      return 'Suppression hygiene';
-  }
-  return analyzerKey;
+  return _analyzerTitleByKey[analyzerKey] ?? analyzerKey;
 }
 
 /// Returns the in-file ignore directive for an analyzer, when supported.

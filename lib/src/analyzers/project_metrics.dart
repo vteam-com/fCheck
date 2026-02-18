@@ -10,6 +10,7 @@ import 'package:fcheck/src/models/project_results.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
+import 'package:fcheck/src/models/project_results_breakdown.dart';
 import 'package:fcheck/src/models/project_type.dart';
 
 /// Represents the overall quality metrics for a Flutter/Dart project.

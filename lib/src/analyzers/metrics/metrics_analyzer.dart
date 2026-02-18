@@ -5,6 +5,7 @@ import 'package:fcheck/src/analyzers/metrics/metrics_results.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_file_data.dart';
 import 'package:fcheck/src/models/project_results.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
+import 'package:fcheck/src/models/project_results_breakdown.dart';
 
 /// Analyzer for computing project-level compliance scoring and focus guidance.
 class MetricsAnalyzer {
