@@ -171,8 +171,15 @@ fcheck --svgsize    # fcheck_code_size.svg
 fcheck --mermaid    # layers.mmd
 fcheck --plantuml   # layers.puml
 ```
+###  Layers Files diagram:
 
-Code size diagram (GitHub-hosted):
+![fcheck layers files diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/layers.svg)
+
+### Layers Folder diagram:
+
+![fcheck Layer folders diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/layers_folders.svg)
+
+### Code size diagram:
 
 ![fcheck code size diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_code_size.svg)
 
