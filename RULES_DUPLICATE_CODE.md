@@ -51,7 +51,7 @@ analyzers:
       min_non_empty_lines: 20
 ```
 
-If a field is omitted, fcheck falls back to the default for that field.
+If a field is omitted, fCheck falls back to the default for that field.
 
 For direct API usage, `DuplicateCodeAnalyzer()` defaults to `0.90` similarity
 unless a threshold is passed explicitly.

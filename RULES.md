@@ -1,10 +1,10 @@
 # RULES.md
 
-This file defines baseline contributor expectations for the `fcheck` project and this repository.
+This file defines baseline contributor expectations for the fCheck project and this repository.
 
 ## Project Overview
 
-`fcheck` is a Dart CLI tool for analyzing Flutter and Dart project quality. It provides metrics and domain-specific checks including:
+fCheck is a Dart CLI tool for analyzing Flutter and Dart project quality. It provides metrics and domain-specific checks including:
 
 - Hardcoded string detection
 - Magic number detection
@@ -73,7 +73,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - `dart fix --apply` apply automated fixes
 - `flutter analyze lib test` run static analysis
 - `flutter test` run all tests
-- `./tool/check.sh` run format, analyze, tests, and fcheck on the example
+- `./tool/check.sh` run format, analyze, tests, and fCheck on the example
 
 ## Key Files
 
