@@ -10,9 +10,9 @@ import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/version.dart';
 import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:path/path.dart' as p;
-import 'console_input.dart';
-import 'console_output.dart';
-import 'console_common.dart';
+import 'console/console_input.dart';
+import 'console/console_output.dart';
+import 'console/console_common.dart';
 import 'package:fcheck/src/models/app_strings.dart';
 
 /// Main entry point for the fcheck command-line tool.

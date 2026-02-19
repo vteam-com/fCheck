@@ -1,4 +1,4 @@
-import '../../bin/console_common.dart';
+import '../../bin/console/console_common.dart';
 import 'package:fcheck/src/models/app_strings.dart';
 import 'package:test/test.dart';
 

@@ -699,99 +699,101 @@
   <text x="30.0" y="832.3018240998168" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">bin</text>
   <text x="795.9056513081096" y="832.3018240998168" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">2,296 LOC</text>
 <g>
-  <rect x="28.0" y="835.3018240998168" width="220.30836799191115" height="116.69817590018317" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="28.0" y="835.3018240998168" width="220.30836799191115" height="116.69817590018317" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="28.0" y="835.3018240998168" width="220.30836799191115" height="116.69817590018317" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: console_output_report_analyzers.dart | 657 LOC | bin/console_output_report_analyzers.dart</title>
-  <text x="138.15418399595558" y="893.6509120499084" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="138.15418399595558" dy="-6.0" font-size="10.54">console_output_report_analyzers.dart</tspan>
-    <tspan x="138.15418399595558" dy="14.0" font-size="10.54">657</tspan>
+  <rect x="28.0" y="835.3018240998168" width="684.7331620083448" height="116.69817590018317" fill="#8fa4ba" fill-opacity="0.70"/>
+  <rect x="28.0" y="835.3018240998168" width="684.7331620083448" height="116.69817590018317" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="28.0" y="835.3018240998168" width="684.7331620083448" height="116.69817590018317" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>folder: console | 2,042 LOC | bin/console</title>
+  <text x="34.0" y="848.3018240998168" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">console</text>
+  <text x="706.7331620083448" y="848.3018240998168" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">2,042 LOC</text>
+<g>
+  <rect x="32.0" y="851.3018240998168" width="217.73442088123537" height="96.69817590018317" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.62"/>
+  <rect x="32.0" y="851.3018240998168" width="217.73442088123537" height="96.69817590018317" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="32.0" y="851.3018240998168" width="217.73442088123537" height="96.69817590018317" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: console_output_report_analyzers.dart | 657 LOC | bin/console/console_output_report_analyzers.dart</title>
+  <text x="140.86721044061767" y="899.6509120499084" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="140.86721044061767" dy="-6.0" font-size="10.41">console_output_report_analyzers.dart</tspan>
+    <tspan x="140.86721044061767" dy="14.0" font-size="10.41">657</tspan>
   </text>
 </g>
 <g>
-  <rect x="248.30836799191115" y="835.3018240998168" width="121.38756349021585" height="116.69817590018317" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="248.30836799191115" y="835.3018240998168" width="121.38756349021585" height="116.69817590018317" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="248.30836799191115" y="835.3018240998168" width="121.38756349021585" height="116.69817590018317" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: console_output_report_context.dart | 362 LOC | bin/console_output_report_context.dart</title>
-  <text x="309.00214973701907" y="893.6509120499084" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="309.00214973701907" dy="-6.0" font-size="6.00">console_output_report_context.dart</tspan>
-    <tspan x="309.00214973701907" dy="14.0" font-size="6.00">362</tspan>
+  <rect x="249.73442088123537" y="851.3018240998168" width="119.96934605632751" height="96.69817590018317" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.62"/>
+  <rect x="249.73442088123537" y="851.3018240998168" width="119.96934605632751" height="96.69817590018317" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="249.73442088123537" y="851.3018240998168" width="119.96934605632751" height="96.69817590018317" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: console_output_report_context.dart | 362 LOC | bin/console/console_output_report_context.dart</title>
+  <text x="309.71909390939913" y="899.6509120499084" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="309.71909390939913" dy="-6.0" font-size="6.00">console_output_report_context.dart</tspan>
+    <tspan x="309.71909390939913" dy="14.0" font-size="6.00">362</tspan>
   </text>
 </g>
 <g>
-  <rect x="369.695931482127" y="835.3018240998168" width="89.86703595408247" height="116.69817590018317" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="369.695931482127" y="835.3018240998168" width="89.86703595408247" height="116.69817590018317" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="369.695931482127" y="835.3018240998168" width="89.86703595408247" height="116.69817590018317" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: console_output_report_helpers.dart | 268 LOC | bin/console_output_report_helpers.dart</title>
-  <text x="414.6294494591682" y="893.6509120499084" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="414.6294494591682" dy="-6.0" font-size="6.00">console_output_report_helpers.dart</tspan>
-    <tspan x="414.6294494591682" dy="14.0" font-size="6.00">268</tspan>
+  <rect x="369.7037669375629" y="851.3018240998168" width="88.81708492567896" height="96.69817590018317" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.62"/>
+  <rect x="369.7037669375629" y="851.3018240998168" width="88.81708492567896" height="96.69817590018317" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="369.7037669375629" y="851.3018240998168" width="88.81708492567896" height="96.69817590018317" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: console_output_report_helpers.dart | 268 LOC | bin/console/console_output_report_helpers.dart</title>
+  <text x="414.11230940040235" y="899.6509120499084" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="414.11230940040235" dy="-6.0" font-size="6.00">console_output_report_helpers.dart</tspan>
+    <tspan x="414.11230940040235" dy="14.0" font-size="6.00">268</tspan>
   </text>
 </g>
 <g>
-  <rect x="459.5629674362095" y="835.3018240998168" width="85.17248929976473" height="116.69817590018317" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="459.5629674362095" y="835.3018240998168" width="85.17248929976473" height="116.69817590018317" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="459.5629674362095" y="835.3018240998168" width="85.17248929976473" height="116.69817590018317" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="458.52085186324183" y="851.3018240998168" width="67.93844182747829" height="96.69817590018317" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.62"/>
+  <rect x="458.52085186324183" y="851.3018240998168" width="67.93844182747829" height="96.69817590018317" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="458.52085186324183" y="851.3018240998168" width="67.93844182747829" height="96.69817590018317" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: console_input.dart | 205 LOC | bin/console/console_input.dart</title>
+  <text x="492.490072776981" y="899.6509120499084" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">205</text>
+</g>
+<g>
+  <rect x="526.4592936907201" y="851.3018240998168" width="52.362311262153995" height="96.69817590018317" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.62"/>
+  <rect x="526.4592936907201" y="851.3018240998168" width="52.362311262153995" height="96.69817590018317" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="526.4592936907201" y="851.3018240998168" width="52.362311262153995" height="96.69817590018317" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: console_output_guides.dart | 158 LOC | bin/console/console_output_guides.dart</title>
+  <text x="552.6404493217971" y="899.6509120499084" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">158</text>
+</g>
+<g>
+  <rect x="578.8216049528742" y="851.3018240998168" width="44.07713542953471" height="96.69817590018317" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.62"/>
+  <rect x="578.8216049528742" y="851.3018240998168" width="44.07713542953471" height="96.69817590018317" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="578.8216049528742" y="851.3018240998168" width="44.07713542953471" height="96.69817590018317" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: console_output_report.dart | 133 LOC | bin/console/console_output_report.dart</title>
+  <text x="600.8601726676416" y="899.6509120499084" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">133</text>
+</g>
+<g>
+  <rect x="622.8987403824088" y="851.3018240998168" width="54.27764896934189" height="76.1638142225381" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.62"/>
+  <rect x="622.8987403824088" y="851.3018240998168" width="54.27764896934189" height="76.1638142225381" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="622.8987403824088" y="851.3018240998168" width="54.27764896934189" height="76.1638142225381" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: console_output_printers.dart | 129 LOC | bin/console/console_output_printers.dart</title>
+  <text x="650.0375648670798" y="889.3837312110859" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">129</text>
+</g>
+<g>
+  <rect x="677.1763893517507" y="851.3018240998168" width="31.556772656594127" height="76.1638142225381" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.62"/>
+  <rect x="677.1763893517507" y="851.3018240998168" width="31.556772656594127" height="76.1638142225381" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="677.1763893517507" y="851.3018240998168" width="31.556772656594127" height="76.1638142225381" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: console_output_styles.dart | 75 LOC | bin/console/console_output_styles.dart</title>
+  <text x="692.9547756800478" y="889.3837312110859" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">75</text>
+</g>
+<g>
+  <rect x="622.8987403824088" y="927.465638322355" width="57.74315636653878" height="20.53436167764508" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.62"/>
+  <rect x="622.8987403824088" y="927.465638322355" width="57.74315636653878" height="20.53436167764508" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="622.8987403824088" y="927.465638322355" width="57.74315636653878" height="20.53436167764508" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: console_common.dart | 37 LOC | bin/console/console_common.dart</title>
+  <text x="651.7703185656783" y="937.7328191611775" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">37</text>
+</g>
+<g>
+  <rect x="680.6418967489476" y="927.465638322355" width="28.09126525939724" height="20.53436167764508" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.62"/>
+  <rect x="680.6418967489476" y="927.465638322355" width="28.09126525939724" height="20.53436167764508" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="680.6418967489476" y="927.465638322355" width="28.09126525939724" height="20.53436167764508" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: console_output.dart | 18 LOC | bin/console/console_output.dart</title>
+  <text x="694.6875293786462" y="937.7328191611775" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">18</text>
+</g>
+</g>
+<g>
+  <rect x="712.7331620083448" y="835.3018240998168" width="85.17248929976472" height="116.69817590018317" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
+  <rect x="712.7331620083448" y="835.3018240998168" width="85.17248929976472" height="116.69817590018317" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="712.7331620083448" y="835.3018240998168" width="85.17248929976472" height="116.69817590018317" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>file: fcheck.dart | 254 LOC | bin/fcheck.dart</title>
-  <text x="502.14921208609184" y="893.6509120499084" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="502.14921208609184" dy="-6.0" font-size="12.63">fcheck.dart</tspan>
-    <tspan x="502.14921208609184" dy="14.0" font-size="12.63">254</tspan>
+  <text x="755.3194066582272" y="893.6509120499084" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="755.3194066582272" dy="-6.0" font-size="12.63">fcheck.dart</tspan>
+    <tspan x="755.3194066582272" dy="14.0" font-size="12.63">254</tspan>
   </text>
-</g>
-<g>
-  <rect x="544.7354567359743" y="835.3018240998168" width="68.74157600965263" height="116.69817590018317" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="544.7354567359743" y="835.3018240998168" width="68.74157600965263" height="116.69817590018317" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="544.7354567359743" y="835.3018240998168" width="68.74157600965263" height="116.69817590018317" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: console_input.dart | 205 LOC | bin/console_input.dart</title>
-  <text x="579.1062447408005" y="893.6509120499084" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">205</text>
-</g>
-<g>
-  <rect x="613.4770327456268" y="835.3018240998168" width="52.981312241585925" height="116.69817590018317" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="613.4770327456268" y="835.3018240998168" width="52.981312241585925" height="116.69817590018317" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="613.4770327456268" y="835.3018240998168" width="52.981312241585925" height="116.69817590018317" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: console_output_guides.dart | 158 LOC | bin/console_output_guides.dart</title>
-  <text x="639.9676888664198" y="893.6509120499084" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">158</text>
-</g>
-<g>
-  <rect x="666.4583449872127" y="835.3018240998168" width="87.85508738794633" height="59.239913720321994" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="666.4583449872127" y="835.3018240998168" width="87.85508738794633" height="59.239913720321994" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="666.4583449872127" y="835.3018240998168" width="87.85508738794633" height="59.239913720321994" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: console_output_report.dart | 133 LOC | bin/console_output_report.dart</title>
-  <text x="710.3858886811859" y="864.9217809599778" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="710.3858886811859" dy="-6.0" font-size="6.00">console_output_report.dart</tspan>
-    <tspan x="710.3858886811859" dy="14.0" font-size="6.00">133</tspan>
-  </text>
-</g>
-<g>
-  <rect x="666.4583449872127" y="894.5417378201388" width="87.85508738794633" height="57.45826217986118" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="666.4583449872127" y="894.5417378201388" width="87.85508738794633" height="57.45826217986118" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="666.4583449872127" y="894.5417378201388" width="87.85508738794633" height="57.45826217986118" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: console_output_printers.dart | 129 LOC | bin/console_output_printers.dart</title>
-  <text x="710.3858886811859" y="923.2708689100693" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="710.3858886811859" dy="-6.0" font-size="6.00">console_output_printers.dart</tspan>
-    <tspan x="710.3858886811859" dy="14.0" font-size="6.00">129</tspan>
-  </text>
-</g>
-<g>
-  <rect x="754.3134323751591" y="835.3018240998168" width="43.59221893295046" height="67.32587071164413" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="754.3134323751591" y="835.3018240998168" width="43.59221893295046" height="67.32587071164413" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="754.3134323751591" y="835.3018240998168" width="43.59221893295046" height="67.32587071164413" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: console_output_styles.dart | 75 LOC | bin/console_output_styles.dart</title>
-  <text x="776.1095418416344" y="868.9647594556388" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">75</text>
-</g>
-<g>
-  <rect x="754.3134323751591" y="902.627694811461" width="43.59221893295046" height="33.21409621774445" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="754.3134323751591" y="902.627694811461" width="43.59221893295046" height="33.21409621774445" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="754.3134323751591" y="902.627694811461" width="43.59221893295046" height="33.21409621774445" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: console_common.dart | 37 LOC | bin/console_common.dart</title>
-  <text x="776.1095418416344" y="919.2347429203332" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">37</text>
-</g>
-<g>
-  <rect x="754.3134323751591" y="935.8417910292054" width="43.59221893295046" height="16.158208970794597" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="754.3134323751591" y="935.8417910292054" width="43.59221893295046" height="16.158208970794597" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="754.3134323751591" y="935.8417910292054" width="43.59221893295046" height="16.158208970794597" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: console_output.dart | 18 LOC | bin/console_output.dart</title>
-  <text x="776.1095418416344" y="943.9208955146028" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">18</text>
 </g>
 </g>
 <rect x="809.9056513081096" y="56.0" width="774.0943486918904" height="908.0" fill="#ffffff" stroke="#d9dce3" stroke-width="1.2"/>
@@ -805,300 +807,6 @@
   <text x="823.9056513081096" y="91.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">&lt;...&gt;</text>
   <text x="1363.2012762491008" y="91.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">5,481 LOC</text>
 <g>
-  <rect x="1239.4426524426697" y="288.71684330581763" width="47.05806568240651" height="25.963841094606376" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1239.4426524426697" y="288.71684330581763" width="47.05806568240651" height="25.963841094606376" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1239.4426524426697" y="288.71684330581763" width="47.05806568240651" height="25.963841094606376" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _ignoreDirectiveForAnalyzer | 28 LOC | bin/console_output_guides.dart:3</title>
-  <text x="1262.9716852838728" y="301.6987638531208" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">28</text>
-</g>
-<g>
-  <rect x="1183.9973478580607" y="94.0" width="55.445304584608834" height="44.072555782720556" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1183.9973478580607" y="94.0" width="55.445304584608834" height="44.072555782720556" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1183.9973478580607" y="94.0" width="55.445304584608834" height="44.072555782720556" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printIgnoreSetupGuide | 56 LOC | bin/console_output_guides.dart:32</title>
-  <text x="1211.7200001503652" y="116.03627789136027" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">56</text>
-</g>
-<g>
-  <rect x="1048.7005299423847" y="379.4000784379855" width="49.164803875434714" height="61.24064588230054" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1048.7005299423847" y="379.4000784379855" width="49.164803875434714" height="61.24064588230054" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1048.7005299423847" y="379.4000784379855" width="49.164803875434714" height="61.24064588230054" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printScoreSystemGuide | 69 LOC | bin/console_output_guides.dart:94</title>
-  <text x="1073.282931880102" y="410.02040137913576" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">69</text>
-</g>
-<g>
-  <rect x="1272.3593449370692" y="453.3622008285565" width="14.23226945430358" height="27.5939157933726" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1272.3593449370692" y="453.3622008285565" width="14.23226945430358" height="27.5939157933726" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1272.3593449370692" y="453.3622008285565" width="14.23226945430358" height="27.5939157933726" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: fromCliName | 9 LOC | bin/console_common.dart:39</title>
-  <text x="1279.475479664221" y="467.15915872524283" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">9</text>
-</g>
-<g>
-  <rect x="1239.4426524426697" y="235.3906404019071" width="47.84236677711329" height="27.362361809304147" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1239.4426524426697" y="235.3906404019071" width="47.84236677711329" height="27.362361809304147" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1239.4426524426697" y="235.3906404019071" width="47.84236677711329" height="27.362361809304147" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: buildReportLines | 30 LOC | bin/console_output_report.dart:3</title>
-  <text x="1263.3638358312264" y="249.07182130655917" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">30</text>
-</g>
-<g>
-  <rect x="1257.4030778398424" y="480.9561166219291" width="12.288907360141646" height="31.957604802557096" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1257.4030778398424" y="480.9561166219291" width="12.288907360141646" height="31.957604802557096" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1257.4030778398424" y="480.9561166219291" width="12.288907360141646" height="31.957604802557096" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _appendProjectHeader | 9 LOC | bin/console_output_report.dart:37</title>
-  <text x="1263.5475315199133" y="496.9349190232076" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">9</text>
-</g>
-<g>
-  <rect x="1183.9973478580607" y="178.99707186667536" width="55.445304584608834" height="40.13750615926338" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1183.9973478580607" y="178.99707186667536" width="55.445304584608834" height="40.13750615926338" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1183.9973478580607" y="178.99707186667536" width="55.445304584608834" height="40.13750615926338" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _appendDashboardSection | 51 LOC | bin/console_output_report.dart:47</title>
-  <text x="1211.7200001503652" y="199.06582494630703" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">51</text>
-</g>
-<g>
-  <rect x="1181.4416219092632" y="251.4848345149377" width="58.00103053340638" height="31.59792494274315" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1181.4416219092632" y="251.4848345149377" width="58.00103053340638" height="31.59792494274315" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1181.4416219092632" y="251.4848345149377" width="58.00103053340638" height="31.59792494274315" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _appendScorecardSection | 42 LOC | bin/console_output_report.dart:100</title>
-  <text x="1210.4421371759663" y="267.28379698630926" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">42</text>
-</g>
-<g>
-  <rect x="1318.031002376702" y="346.9409724635487" width="16.17266532767955" height="29.679465018074758" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1318.031002376702" y="346.9409724635487" width="16.17266532767955" height="29.679465018074758" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1318.031002376702" y="346.9409724635487" width="16.17266532767955" height="29.679465018074758" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _issuesForMode | 11 LOC | bin/console_output_report_helpers.dart:34</title>
-  <text x="1326.1173350405418" y="361.7807049725861" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
-</g>
-<g>
-  <rect x="1232.8252631195592" y="390.4613732055315" width="34.60535278453384" height="17.653455914826193" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1232.8252631195592" y="390.4613732055315" width="34.60535278453384" height="17.653455914826193" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1232.8252631195592" y="390.4613732055315" width="34.60535278453384" height="17.653455914826193" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _uniqueFilePaths | 14 LOC | bin/console_output_report_helpers.dart:46</title>
-  <text x="1250.127939511826" y="399.2881011629446" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">14</text>
-</g>
-<g>
-  <rect x="1334.2036677043816" y="314.68068440042396" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1334.2036677043816" y="314.68068440042396" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1334.2036677043816" y="314.68068440042396" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _maxIntWidth | 11 LOC | bin/console_output_report_helpers.dart:61</title>
-  <text x="1341.9530698405613" y="330.16562267072385" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
-</g>
-<g>
-  <rect x="1357.905171776713" y="528.2380648448242" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1357.905171776713" y="528.2380648448242" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1357.905171776713" y="528.2380648448242" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _separatorColon | 1 LOC | bin/console_output_report_helpers.dart:73</title>
-  <text x="1361.5532240129069" y="531.2284280688409" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">1</text>
-</g>
-<g>
-  <rect x="1357.905171776713" y="522.2573383967907" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1357.905171776713" y="522.2573383967907" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1357.905171776713" y="522.2573383967907" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _separatorPipe | 1 LOC | bin/console_output_report_helpers.dart:74</title>
-  <text x="1361.5532240129069" y="525.2477016208074" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">1</text>
-</g>
-<g>
-  <rect x="1350.6090673043248" y="528.2380648448242" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1350.6090673043248" y="528.2380648448242" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1350.6090673043248" y="528.2380648448242" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _pathText | 1 LOC | bin/console_output_report_helpers.dart:75</title>
-  <text x="1354.2571195405187" y="531.2284280688409" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">1</text>
-</g>
-<g>
-  <rect x="1351.5684166813169" y="454.5754507598785" width="13.632859567784006" height="19.20477714979638" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1351.5684166813169" y="454.5754507598785" width="13.632859567784006" height="19.20477714979638" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1351.5684166813169" y="454.5754507598785" width="13.632859567784006" height="19.20477714979638" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _labelValueLine | 6 LOC | bin/console_output_report_helpers.dart:77</title>
-  <text x="1358.384846465209" y="464.1778393347767" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">6</text>
-</g>
-<g>
-  <rect x="1350.6090673043248" y="522.2573383967907" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1350.6090673043248" y="522.2573383967907" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1350.6090673043248" y="522.2573383967907" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _gridRow | 1 LOC | bin/console_output_report_helpers.dart:84</title>
-  <text x="1354.2571195405187" y="525.2477016208074" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">1</text>
-</g>
-<g>
-  <rect x="1169.95573083614" y="469.43870385243275" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1169.95573083614" y="469.43870385243275" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1169.95573083614" y="469.43870385243275" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _gridCell | 17 LOC | bin/console_output_report_helpers.dart:86</title>
-  <text x="1188.8165905211658" y="479.2713956960687" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">17</text>
-</g>
-<g>
-  <rect x="1232.8252631195592" y="372.80791729070535" width="34.60535278453384" height="17.653455914826193" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1232.8252631195592" y="372.80791729070535" width="34.60535278453384" height="17.653455914826193" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1232.8252631195592" y="372.80791729070535" width="34.60535278453384" height="17.653455914826193" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _scoreValue | 14 LOC | bin/console_output_report_helpers.dart:104</title>
-  <text x="1250.127939511826" y="381.63464524811843" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">14</text>
-</g>
-<g>
-  <rect x="1169.95573083614" y="489.1040875397046" width="31.91837792850512" height="23.24090799404853" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1169.95573083614" y="489.1040875397046" width="31.91837792850512" height="23.24090799404853" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1169.95573083614" y="489.1040875397046" width="31.91837792850512" height="23.24090799404853" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _analyzerStatusIndicator | 17 LOC | bin/console_output_report_helpers.dart:119</title>
-  <text x="1185.9149198003925" y="500.72454153672885" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">17</text>
-</g>
-<g>
-  <rect x="1338.1359996952638" y="272.7621720449513" width="27.065276553836924" height="41.918512355472686" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1338.1359996952638" y="272.7621720449513" width="27.065276553836924" height="41.918512355472686" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1338.1359996952638" y="272.7621720449513" width="27.065276553836924" height="41.918512355472686" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _analyzerSectionHeader | 26 LOC | bin/console_output_report_helpers.dart:137</title>
-  <text x="1351.6686379721823" y="293.7214282226876" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">26</text>
-</g>
-<g>
-  <rect x="1169.95573083614" y="512.3449955337531" width="31.91837792850512" height="21.8737957591045" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1169.95573083614" y="512.3449955337531" width="31.91837792850512" height="21.8737957591045" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1169.95573083614" y="512.3449955337531" width="31.91837792850512" height="21.8737957591045" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _analyzerDeductionValue | 16 LOC | bin/console_output_report_helpers.dart:164</title>
-  <text x="1185.9149198003925" y="523.2818934133054" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">16</text>
-</g>
-<g>
-  <rect x="1266.6066789330328" y="334.0564286971844" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1266.6066789330328" y="334.0564286971844" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1266.6066789330328" y="334.0564286971844" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _commentSummary | 15 LOC | bin/console_output_report_helpers.dart:181</title>
-  <text x="1283.4973868397694" y="343.7443008455646" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
-</g>
-<g>
-  <rect x="1169.95573083614" y="449.77332016516095" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1169.95573083614" y="449.77332016516095" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1169.95573083614" y="449.77332016516095" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _suppressionPenaltyValue | 17 LOC | bin/console_output_report_helpers.dart:197</title>
-  <text x="1188.8165905211658" y="459.6060120087969" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">17</text>
-</g>
-<g>
-  <rect x="1232.8252631195592" y="512.9137214244862" width="18.433361040212468" height="21.3050698683714" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1232.8252631195592" y="512.9137214244862" width="18.433361040212468" height="21.3050698683714" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1232.8252631195592" y="512.9137214244862" width="18.433361040212468" height="21.3050698683714" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _suppressionCountValue | 9 LOC | bin/console_output_report_helpers.dart:216</title>
-  <text x="1242.0419436396653" y="523.5662563586719" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">9</text>
-</g>
-<g>
-  <rect x="1300.388094746506" y="401.7658478578637" width="19.9978048602265" height="24.00243717732023" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1300.388094746506" y="401.7658478578637" width="19.9978048602265" height="24.00243717732023" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1300.388094746506" y="401.7658478578637" width="19.9978048602265" height="24.00243717732023" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _formatCompactDecimal | 11 LOC | bin/console_output_report_helpers.dart:226</title>
-  <text x="1310.3869971766194" y="413.7670664465238" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
-</g>
-<g>
-  <rect x="1097.8653338178194" y="469.65392008977636" width="44.13697776631877" height="19.77299180594364" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1097.8653338178194" y="469.65392008977636" width="44.13697776631877" height="19.77299180594364" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1097.8653338178194" y="469.65392008977636" width="44.13697776631877" height="19.77299180594364" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _addListBlock | 20 LOC | bin/console_output_report_helpers.dart:254</title>
-  <text x="1119.933822700979" y="479.5404159927482" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">20</text>
-</g>
-<g>
-  <rect x="1267.430615904093" y="408.5561655182284" width="32.95747884241319" height="17.21211951695554" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1267.430615904093" y="408.5561655182284" width="32.95747884241319" height="17.21211951695554" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1267.430615904093" y="408.5561655182284" width="32.95747884241319" height="17.21211951695554" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _analyzerKeyForSortKey | 13 LOC | bin/console_output_report_helpers.dart:275</title>
-  <text x="1283.9093553252997" y="417.1622252767062" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">13</text>
-</g>
-<g>
-  <rect x="1336.0168583595485" y="501.32479582867353" width="14.592208944776214" height="8.971089672050216" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1336.0168583595485" y="501.32479582867353" width="14.592208944776214" height="8.971089672050216" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1336.0168583595485" y="501.32479582867353" width="14.592208944776214" height="8.971089672050216" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _analyzerTitleForKey | 3 LOC | bin/console_output_report_helpers.dart:289</title>
-  <text x="1343.3129628319366" y="505.81034066469863" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">3</text>
-</g>
-<g>
-  <rect x="915.5020598246657" y="317.27188696318785" width="57.85959799205288" height="64.10449696328224" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="915.5020598246657" y="317.27188696318785" width="57.85959799205288" height="64.10449696328224" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="915.5020598246657" y="317.27188696318785" width="57.85959799205288" height="64.10449696328224" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: createConsoleArgParser | 85 LOC | bin/console_input.dart:87</title>
-  <text x="944.4318588206921" y="349.324135444829" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">85</text>
-</g>
-<g>
-  <rect x="1314.6663691367005" y="94.0" width="50.53490711240026" height="29.358403018559454" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1314.6663691367005" y="94.0" width="50.53490711240026" height="29.358403018559454" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1314.6663691367005" y="94.0" width="50.53490711240026" height="29.358403018559454" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: parseConsoleInput | 34 LOC | bin/console_input.dart:173</title>
-  <text x="1339.9338226929005" y="108.67920150927972" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">34</text>
-</g>
-<g>
-  <rect x="1266.6066789330328" y="353.43217299394485" width="33.781415813473515" height="19.375744296760466" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1266.6066789330328" y="353.43217299394485" width="33.781415813473515" height="19.375744296760466" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1266.6066789330328" y="353.43217299394485" width="33.781415813473515" height="19.375744296760466" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _parseListOption | 15 LOC | bin/console_input.dart:210</title>
-  <text x="1283.4973868397694" y="363.12004514232507" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
-</g>
-<g>
-  <rect x="821.9056513081096" y="490.6976505219079" width="77.20322409692082" height="43.521140770949735" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="821.9056513081096" y="490.6976505219079" width="77.20322409692082" height="43.521140770949735" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="821.9056513081096" y="490.6976505219079" width="77.20322409692082" height="43.521140770949735" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _populateAnalyzerBlocks | 77 LOC | bin/console_output_report_analyzers.dart:3</title>
-  <text x="860.50726335657" y="512.4582209073828" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">77</text>
-</g>
-<g>
-  <rect x="899.1088754050304" y="445.48088088975237" width="74.25278241168817" height="45.250457622775556" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="899.1088754050304" y="445.48088088975237" width="74.25278241168817" height="45.250457622775556" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="899.1088754050304" y="445.48088088975237" width="74.25278241168817" height="45.250457622775556" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _appendOrderedAnalyzerBlocks | 77 LOC | bin/console_output_report_analyzers.dart:81</title>
-  <text x="936.2352666108745" y="468.10610970114016" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">77</text>
-</g>
-<g>
-  <rect x="973.3616578167185" y="358.9740291684042" width="75.33887212566616" height="41.12294578569939" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="973.3616578167185" y="358.9740291684042" width="75.33887212566616" height="41.12294578569939" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="973.3616578167185" y="358.9740291684042" width="75.33887212566616" height="41.12294578569939" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _addCodeSizeBlock | 71 LOC | bin/console_output_report_analyzers.dart:160</title>
-  <text x="1011.0310938795516" y="379.53550206125385" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">71</text>
-</g>
-<g>
-  <rect x="915.5020598246657" y="381.3763839264701" width="57.85959799205288" height="64.10449696328224" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="915.5020598246657" y="381.3763839264701" width="57.85959799205288" height="64.10449696328224" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="915.5020598246657" y="381.3763839264701" width="57.85959799205288" height="64.10449696328224" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _addSuppressionsBlock | 85 LOC | bin/console_output_report_analyzers.dart:233</title>
-  <text x="944.4318588206921" y="413.42863240811124" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">85</text>
-</g>
-<g>
-  <rect x="973.3616578167185" y="487.77634323980357" width="62.95129685448921" height="46.44244805305406" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="973.3616578167185" y="487.77634323980357" width="62.95129685448921" height="46.44244805305406" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="973.3616578167185" y="487.77634323980357" width="62.95129685448921" height="46.44244805305406" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _addOneClassPerFileBlock | 67 LOC | bin/console_output_report_analyzers.dart:320</title>
-  <text x="1004.8373062439631" y="510.9975672663306" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">67</text>
-</g>
-<g>
-  <rect x="1136.2362941094905" y="373.247221168793" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1136.2362941094905" y="373.247221168793" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1136.2362941094905" y="373.247221168793" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _addHardcodedStringsBlock | 25 LOC | bin/console_output_report_analyzers.dart:388</title>
-  <text x="1155.421774255326" y="387.462399996067" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">25</text>
-</g>
-<g>
-  <rect x="1141.649107621609" y="158.34045104977417" width="42.34824023645202" height="60.79412697616458" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1141.649107621609" y="158.34045104977417" width="42.34824023645202" height="60.79412697616458" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1141.649107621609" y="158.34045104977417" width="42.34824023645202" height="60.79412697616458" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _addDeadCodeBlock | 59 LOC | bin/console_output_report_analyzers.dart:414</title>
-  <text x="1162.823227739835" y="188.73751453785647" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">59</text>
-</g>
-<g>
-  <rect x="1278.0710475017665" y="164.19005222431161" width="36.59532163493397" height="42.92614764131453" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1278.0710475017665" y="164.19005222431161" width="36.59532163493397" height="42.92614764131453" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1278.0710475017665" y="164.19005222431161" width="36.59532163493397" height="42.92614764131453" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _appendDeadCodeCategory | 36 LOC | bin/console_output_report_analyzers.dart:474</title>
-  <text x="1296.3687083192335" y="185.65312604496887" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">36</text>
-</g>
-<g>
-  <rect x="973.3616578167185" y="400.09697495410353" width="75.33887212566616" height="40.543749366182496" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="973.3616578167185" y="400.09697495410353" width="75.33887212566616" height="40.543749366182496" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="973.3616578167185" y="400.09697495410353" width="75.33887212566616" height="40.543749366182496" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _addDuplicateCodeBlock | 70 LOC | bin/console_output_report_analyzers.dart:511</title>
-  <text x="1011.0310938795516" y="420.3688496371948" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">70</text>
-</g>
-<g>
-  <rect x="1213.4192602134267" y="382.88769699165334" width="19.406002906132528" height="47.22023948623573" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1213.4192602134267" y="382.88769699165334" width="19.406002906132528" height="47.22023948623573" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1213.4192602134267" y="382.88769699165334" width="19.406002906132528" height="47.22023948623573" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _addLayersBlock | 21 LOC | bin/console_output_report_analyzers.dart:582</title>
-  <text x="1223.122261666493" y="406.4978167347712" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">21</text>
-</g>
-<g>
-  <rect x="973.3616578167185" y="440.64072432028604" width="62.95129685448921" height="47.13561891951755" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="973.3616578167185" y="440.64072432028604" width="62.95129685448921" height="47.13561891951755" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="973.3616578167185" y="440.64072432028604" width="62.95129685448921" height="47.13561891951755" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _addIssueListAnalyzerBlock | 68 LOC | bin/console_output_report_analyzers.dart:604</title>
-  <text x="1004.8373062439631" y="464.20853378004483" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">68</text>
-</g>
-<g>
   <rect x="821.9056513081096" y="94.0" width="86.24138505306547" height="120.42210570005271" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="821.9056513081096" y="94.0" width="86.24138505306547" height="120.42210570005271" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="821.9056513081096" y="94.0" width="86.24138505306547" height="120.42210570005271" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
@@ -1109,158 +817,452 @@
   </text>
 </g>
 <g>
-  <rect x="1266.6066789330328" y="314.68068440042396" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1266.6066789330328" y="314.68068440042396" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1266.6066789330328" y="314.68068440042396" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printHelpScreen | 15 LOC | bin/console_output_printers.dart:3</title>
-  <text x="1283.4973868397694" y="324.3685565488042" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
+  <rect x="1337.61551360769" y="207.11619986562613" width="27.58576264141071" height="44.29125833785794" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1337.61551360769" y="207.11619986562613" width="27.58576264141071" height="44.29125833785794" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1337.61551360769" y="207.11619986562613" width="27.58576264141071" height="44.29125833785794" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _ignoreDirectiveForAnalyzer | 28 LOC | bin/console/console_output_guides.dart:3</title>
+  <text x="1351.4083949283954" y="229.2618290345551" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">28</text>
+</g>
+<g>
+  <rect x="1183.9973478580607" y="94.0" width="55.445304584608834" height="44.072555782720556" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1183.9973478580607" y="94.0" width="55.445304584608834" height="44.072555782720556" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1183.9973478580607" y="94.0" width="55.445304584608834" height="44.072555782720556" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: printIgnoreSetupGuide | 56 LOC | bin/console/console_output_guides.dart:32</title>
+  <text x="1211.7200001503652" y="116.03627789136027" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">56</text>
+</g>
+<g>
+  <rect x="1048.7005299423847" y="379.4000784379855" width="49.164803875434714" height="61.24064588230054" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1048.7005299423847" y="379.4000784379855" width="49.164803875434714" height="61.24064588230054" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1048.7005299423847" y="379.4000784379855" width="49.164803875434714" height="61.24064588230054" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: printScoreSystemGuide | 69 LOC | bin/console/console_output_guides.dart:94</title>
+  <text x="1073.282931880102" y="410.02040137913576" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">69</text>
+</g>
+<g>
+  <rect x="1272.3593449370692" y="453.3622008285565" width="14.23226945430358" height="27.5939157933726" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1272.3593449370692" y="453.3622008285565" width="14.23226945430358" height="27.5939157933726" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1272.3593449370692" y="453.3622008285565" width="14.23226945430358" height="27.5939157933726" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: fromCliName | 9 LOC | bin/console/console_common.dart:39</title>
+  <text x="1279.475479664221" y="467.15915872524283" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">9</text>
+</g>
+<g>
+  <rect x="1239.4426524426697" y="235.3906404019071" width="47.84236677711329" height="27.362361809304147" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1239.4426524426697" y="235.3906404019071" width="47.84236677711329" height="27.362361809304147" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1239.4426524426697" y="235.3906404019071" width="47.84236677711329" height="27.362361809304147" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: buildReportLines | 30 LOC | bin/console/console_output_report.dart:3</title>
+  <text x="1263.3638358312264" y="249.07182130655917" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">30</text>
+</g>
+<g>
+  <rect x="1257.4030778398424" y="480.9561166219291" width="12.288907360141646" height="31.957604802557096" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1257.4030778398424" y="480.9561166219291" width="12.288907360141646" height="31.957604802557096" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1257.4030778398424" y="480.9561166219291" width="12.288907360141646" height="31.957604802557096" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _appendProjectHeader | 9 LOC | bin/console/console_output_report.dart:37</title>
+  <text x="1263.5475315199133" y="496.9349190232076" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">9</text>
+</g>
+<g>
+  <rect x="1183.9973478580607" y="178.99707186667536" width="55.445304584608834" height="40.13750615926338" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1183.9973478580607" y="178.99707186667536" width="55.445304584608834" height="40.13750615926338" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1183.9973478580607" y="178.99707186667536" width="55.445304584608834" height="40.13750615926338" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _appendDashboardSection | 51 LOC | bin/console/console_output_report.dart:47</title>
+  <text x="1211.7200001503652" y="199.06582494630703" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">51</text>
+</g>
+<g>
+  <rect x="1181.4416219092632" y="251.4848345149377" width="58.00103053340638" height="31.59792494274315" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1181.4416219092632" y="251.4848345149377" width="58.00103053340638" height="31.59792494274315" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1181.4416219092632" y="251.4848345149377" width="58.00103053340638" height="31.59792494274315" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _appendScorecardSection | 42 LOC | bin/console/console_output_report.dart:100</title>
+  <text x="1210.4421371759663" y="267.28379698630926" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">42</text>
+</g>
+<g>
+  <rect x="1334.2036677043816" y="314.68068440042396" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1334.2036677043816" y="314.68068440042396" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1334.2036677043816" y="314.68068440042396" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _issuesForMode | 11 LOC | bin/console/console_output_report_helpers.dart:34</title>
+  <text x="1341.9530698405613" y="330.16562267072385" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
+</g>
+<g>
+  <rect x="1267.430615904093" y="372.80791729070535" width="32.95747884241319" height="18.536128710567503" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1267.430615904093" y="372.80791729070535" width="32.95747884241319" height="18.536128710567503" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1267.430615904093" y="372.80791729070535" width="32.95747884241319" height="18.536128710567503" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _uniqueFilePaths | 14 LOC | bin/console/console_output_report_helpers.dart:46</title>
+  <text x="1283.9093553252997" y="382.0759816459891" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">14</text>
+</g>
+<g>
+  <rect x="1318.031002376702" y="346.9409724635487" width="16.17266532767955" height="29.679465018074758" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1318.031002376702" y="346.9409724635487" width="16.17266532767955" height="29.679465018074758" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1318.031002376702" y="346.9409724635487" width="16.17266532767955" height="29.679465018074758" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _maxIntWidth | 11 LOC | bin/console/console_output_report_helpers.dart:61</title>
+  <text x="1326.1173350405418" y="361.7807049725861" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
+</g>
+<g>
+  <rect x="1357.905171776713" y="528.2380648448242" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1357.905171776713" y="528.2380648448242" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1357.905171776713" y="528.2380648448242" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _separatorColon | 1 LOC | bin/console/console_output_report_helpers.dart:73</title>
+  <text x="1361.5532240129069" y="531.2284280688409" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">1</text>
+</g>
+<g>
+  <rect x="1357.905171776713" y="522.2573383967907" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1357.905171776713" y="522.2573383967907" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1357.905171776713" y="522.2573383967907" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _separatorPipe | 1 LOC | bin/console/console_output_report_helpers.dart:74</title>
+  <text x="1361.5532240129069" y="525.2477016208074" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">1</text>
+</g>
+<g>
+  <rect x="1350.6090673043248" y="528.2380648448242" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1350.6090673043248" y="528.2380648448242" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1350.6090673043248" y="528.2380648448242" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _pathText | 1 LOC | bin/console/console_output_report_helpers.dart:75</title>
+  <text x="1354.2571195405187" y="531.2284280688409" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">1</text>
+</g>
+<g>
+  <rect x="1351.5684166813169" y="454.5754507598785" width="13.632859567784006" height="19.20477714979638" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1351.5684166813169" y="454.5754507598785" width="13.632859567784006" height="19.20477714979638" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1351.5684166813169" y="454.5754507598785" width="13.632859567784006" height="19.20477714979638" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _labelValueLine | 6 LOC | bin/console/console_output_report_helpers.dart:77</title>
+  <text x="1358.384846465209" y="464.1778393347767" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">6</text>
+</g>
+<g>
+  <rect x="1350.6090673043248" y="522.2573383967907" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1350.6090673043248" y="522.2573383967907" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1350.6090673043248" y="522.2573383967907" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _gridRow | 1 LOC | bin/console/console_output_report_helpers.dart:84</title>
+  <text x="1354.2571195405187" y="525.2477016208074" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">1</text>
+</g>
+<g>
+  <rect x="1169.95573083614" y="489.1040875397046" width="31.91837792850512" height="23.24090799404853" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1169.95573083614" y="489.1040875397046" width="31.91837792850512" height="23.24090799404853" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1169.95573083614" y="489.1040875397046" width="31.91837792850512" height="23.24090799404853" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _gridCell | 17 LOC | bin/console/console_output_report_helpers.dart:86</title>
+  <text x="1185.9149198003925" y="500.72454153672885" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">17</text>
+</g>
+<g>
+  <rect x="1232.8252631195592" y="390.4613732055315" width="34.60535278453384" height="17.653455914826193" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1232.8252631195592" y="390.4613732055315" width="34.60535278453384" height="17.653455914826193" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1232.8252631195592" y="390.4613732055315" width="34.60535278453384" height="17.653455914826193" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _scoreValue | 14 LOC | bin/console/console_output_report_helpers.dart:104</title>
+  <text x="1250.127939511826" y="399.2881011629446" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">14</text>
+</g>
+<g>
+  <rect x="1207.6774502061915" y="459.6060120087968" width="25.147812913367673" height="29.49807553090775" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1207.6774502061915" y="459.6060120087968" width="25.147812913367673" height="29.49807553090775" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1207.6774502061915" y="459.6060120087968" width="25.147812913367673" height="29.49807553090775" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _analyzerStatusIndicator | 17 LOC | bin/console/console_output_report_helpers.dart:119</title>
+  <text x="1220.2513566628752" y="474.3550497742507" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">17</text>
+</g>
+<g>
+  <rect x="1338.1359996952638" y="272.7621720449513" width="27.065276553836924" height="41.918512355472686" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1338.1359996952638" y="272.7621720449513" width="27.065276553836924" height="41.918512355472686" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1338.1359996952638" y="272.7621720449513" width="27.065276553836924" height="41.918512355472686" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _analyzerSectionHeader | 26 LOC | bin/console/console_output_report_helpers.dart:137</title>
+  <text x="1351.6686379721823" y="293.7214282226876" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">26</text>
+</g>
+<g>
+  <rect x="1169.95573083614" y="512.3449955337531" width="31.91837792850512" height="21.8737957591045" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1169.95573083614" y="512.3449955337531" width="31.91837792850512" height="21.8737957591045" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1169.95573083614" y="512.3449955337531" width="31.91837792850512" height="21.8737957591045" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _analyzerDeductionValue | 16 LOC | bin/console/console_output_report_helpers.dart:164</title>
+  <text x="1185.9149198003925" y="523.2818934133054" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">16</text>
+</g>
+<g>
+  <rect x="1232.8252631195592" y="314.68068440042396" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1232.8252631195592" y="314.68068440042396" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1232.8252631195592" y="314.68068440042396" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _commentSummary | 15 LOC | bin/console/console_output_report_helpers.dart:181</title>
+  <text x="1249.7159710262958" y="324.3685565488042" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
+</g>
+<g>
+  <rect x="1169.95573083614" y="449.77332016516095" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1169.95573083614" y="449.77332016516095" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1169.95573083614" y="449.77332016516095" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _suppressionPenaltyValue | 17 LOC | bin/console/console_output_report_helpers.dart:197</title>
+  <text x="1188.8165905211658" y="459.6060120087969" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">17</text>
+</g>
+<g>
+  <rect x="1232.8252631195592" y="512.9137214244862" width="18.433361040212468" height="21.3050698683714" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1232.8252631195592" y="512.9137214244862" width="18.433361040212468" height="21.3050698683714" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1232.8252631195592" y="512.9137214244862" width="18.433361040212468" height="21.3050698683714" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _suppressionCountValue | 9 LOC | bin/console/console_output_report_helpers.dart:216</title>
+  <text x="1242.0419436396653" y="523.5662563586719" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">9</text>
+</g>
+<g>
+  <rect x="1319.4769084767222" y="376.62043748162347" width="19.088813730216202" height="25.14541037624024" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1319.4769084767222" y="376.62043748162347" width="19.088813730216202" height="25.14541037624024" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1319.4769084767222" y="376.62043748162347" width="19.088813730216202" height="25.14541037624024" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _formatCompactDecimal | 11 LOC | bin/console/console_output_report_helpers.dart:226</title>
+  <text x="1329.0213153418304" y="389.19314266974357" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
+</g>
+<g>
+  <rect x="1097.8653338178194" y="469.65392008977636" width="44.13697776631877" height="19.77299180594364" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1097.8653338178194" y="469.65392008977636" width="44.13697776631877" height="19.77299180594364" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1097.8653338178194" y="469.65392008977636" width="44.13697776631877" height="19.77299180594364" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _addListBlock | 20 LOC | bin/console/console_output_report_helpers.dart:254</title>
+  <text x="1119.933822700979" y="479.5404159927482" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">20</text>
+</g>
+<g>
+  <rect x="1267.430615904093" y="408.5561655182284" width="32.95747884241319" height="17.21211951695554" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1267.430615904093" y="408.5561655182284" width="32.95747884241319" height="17.21211951695554" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1267.430615904093" y="408.5561655182284" width="32.95747884241319" height="17.21211951695554" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _analyzerKeyForSortKey | 13 LOC | bin/console/console_output_report_helpers.dart:275</title>
+  <text x="1283.9093553252997" y="417.1622252767062" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">13</text>
+</g>
+<g>
+  <rect x="1336.0168583595485" y="501.32479582867353" width="14.592208944776214" height="8.971089672050216" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1336.0168583595485" y="501.32479582867353" width="14.592208944776214" height="8.971089672050216" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1336.0168583595485" y="501.32479582867353" width="14.592208944776214" height="8.971089672050216" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _analyzerTitleForKey | 3 LOC | bin/console/console_output_report_helpers.dart:289</title>
+  <text x="1343.3129628319366" y="505.81034066469863" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">3</text>
+</g>
+<g>
+  <rect x="915.5020598246657" y="381.3763839264701" width="57.85959799205288" height="64.10449696328224" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="915.5020598246657" y="381.3763839264701" width="57.85959799205288" height="64.10449696328224" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="915.5020598246657" y="381.3763839264701" width="57.85959799205288" height="64.10449696328224" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: createConsoleArgParser | 85 LOC | bin/console/console_input.dart:87</title>
+  <text x="944.4318588206921" y="413.42863240811124" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">85</text>
+</g>
+<g>
+  <rect x="1314.6663691367005" y="94.0" width="50.53490711240026" height="29.358403018559454" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1314.6663691367005" y="94.0" width="50.53490711240026" height="29.358403018559454" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1314.6663691367005" y="94.0" width="50.53490711240026" height="29.358403018559454" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: parseConsoleInput | 34 LOC | bin/console/console_input.dart:173</title>
+  <text x="1339.9338226929005" y="108.67920150927972" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">34</text>
+</g>
+<g>
+  <rect x="1232.8252631195592" y="334.0564286971844" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1232.8252631195592" y="334.0564286971844" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1232.8252631195592" y="334.0564286971844" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _parseListOption | 15 LOC | bin/console/console_input.dart:210</title>
+  <text x="1249.7159710262958" y="343.7443008455646" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
+</g>
+<g>
+  <rect x="821.9056513081096" y="490.6976505219079" width="77.20322409692082" height="43.521140770949735" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="821.9056513081096" y="490.6976505219079" width="77.20322409692082" height="43.521140770949735" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="821.9056513081096" y="490.6976505219079" width="77.20322409692082" height="43.521140770949735" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _populateAnalyzerBlocks | 77 LOC | bin/console/console_output_report_analyzers.dart:3</title>
+  <text x="860.50726335657" y="512.4582209073828" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">77</text>
+</g>
+<g>
+  <rect x="899.1088754050304" y="445.48088088975237" width="74.25278241168817" height="45.250457622775556" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="899.1088754050304" y="445.48088088975237" width="74.25278241168817" height="45.250457622775556" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="899.1088754050304" y="445.48088088975237" width="74.25278241168817" height="45.250457622775556" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _appendOrderedAnalyzerBlocks | 77 LOC | bin/console/console_output_report_analyzers.dart:81</title>
+  <text x="936.2352666108745" y="468.10610970114016" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">77</text>
+</g>
+<g>
+  <rect x="973.3616578167185" y="358.9740291684042" width="75.33887212566616" height="41.12294578569939" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="973.3616578167185" y="358.9740291684042" width="75.33887212566616" height="41.12294578569939" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="973.3616578167185" y="358.9740291684042" width="75.33887212566616" height="41.12294578569939" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _addCodeSizeBlock | 71 LOC | bin/console/console_output_report_analyzers.dart:160</title>
+  <text x="1011.0310938795516" y="379.53550206125385" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">71</text>
+</g>
+<g>
+  <rect x="915.5020598246657" y="317.27188696318785" width="57.85959799205288" height="64.10449696328224" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="915.5020598246657" y="317.27188696318785" width="57.85959799205288" height="64.10449696328224" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="915.5020598246657" y="317.27188696318785" width="57.85959799205288" height="64.10449696328224" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _addSuppressionsBlock | 85 LOC | bin/console/console_output_report_analyzers.dart:233</title>
+  <text x="944.4318588206921" y="349.324135444829" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">85</text>
+</g>
+<g>
+  <rect x="973.3616578167185" y="487.77634323980357" width="62.95129685448921" height="46.44244805305406" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="973.3616578167185" y="487.77634323980357" width="62.95129685448921" height="46.44244805305406" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="973.3616578167185" y="487.77634323980357" width="62.95129685448921" height="46.44244805305406" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _addOneClassPerFileBlock | 67 LOC | bin/console/console_output_report_analyzers.dart:320</title>
+  <text x="1004.8373062439631" y="510.9975672663306" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">67</text>
+</g>
+<g>
+  <rect x="1136.6088277045553" y="344.5381345176317" width="37.99842669660636" height="28.709086651161282" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1136.6088277045553" y="344.5381345176317" width="37.99842669660636" height="28.709086651161282" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1136.6088277045553" y="344.5381345176317" width="37.99842669660636" height="28.709086651161282" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _addHardcodedStringsBlock | 25 LOC | bin/console/console_output_report_analyzers.dart:388</title>
+  <text x="1155.6080410528584" y="358.89267784321237" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">25</text>
+</g>
+<g>
+  <rect x="1141.649107621609" y="158.34045104977417" width="42.34824023645202" height="60.79412697616458" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1141.649107621609" y="158.34045104977417" width="42.34824023645202" height="60.79412697616458" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1141.649107621609" y="158.34045104977417" width="42.34824023645202" height="60.79412697616458" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _addDeadCodeBlock | 59 LOC | bin/console/console_output_report_analyzers.dart:414</title>
+  <text x="1162.823227739835" y="188.73751453785647" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">59</text>
+</g>
+<g>
+  <rect x="1278.0710475017665" y="164.19005222431161" width="36.59532163493397" height="42.92614764131453" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1278.0710475017665" y="164.19005222431161" width="36.59532163493397" height="42.92614764131453" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1278.0710475017665" y="164.19005222431161" width="36.59532163493397" height="42.92614764131453" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _appendDeadCodeCategory | 36 LOC | bin/console/console_output_report_analyzers.dart:474</title>
+  <text x="1296.3687083192335" y="185.65312604496887" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">36</text>
+</g>
+<g>
+  <rect x="973.3616578167185" y="400.09697495410353" width="75.33887212566616" height="40.543749366182496" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="973.3616578167185" y="400.09697495410353" width="75.33887212566616" height="40.543749366182496" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="973.3616578167185" y="400.09697495410353" width="75.33887212566616" height="40.543749366182496" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _addDuplicateCodeBlock | 70 LOC | bin/console/console_output_report_analyzers.dart:511</title>
+  <text x="1011.0310938795516" y="420.3688496371948" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">70</text>
+</g>
+<g>
+  <rect x="1213.4192602134267" y="382.88769699165334" width="19.406002906132528" height="47.22023948623573" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1213.4192602134267" y="382.88769699165334" width="19.406002906132528" height="47.22023948623573" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1213.4192602134267" y="382.88769699165334" width="19.406002906132528" height="47.22023948623573" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _addLayersBlock | 21 LOC | bin/console/console_output_report_analyzers.dart:582</title>
+  <text x="1223.122261666493" y="406.4978167347712" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">21</text>
+</g>
+<g>
+  <rect x="973.3616578167185" y="440.64072432028604" width="62.95129685448921" height="47.13561891951755" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="973.3616578167185" y="440.64072432028604" width="62.95129685448921" height="47.13561891951755" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="973.3616578167185" y="440.64072432028604" width="62.95129685448921" height="47.13561891951755" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _addIssueListAnalyzerBlock | 68 LOC | bin/console/console_output_report_analyzers.dart:604</title>
+  <text x="1004.8373062439631" y="464.20853378004483" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">68</text>
+</g>
+<g>
+  <rect x="1266.6066789330328" y="353.43217299394485" width="33.781415813473515" height="19.375744296760466" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1266.6066789330328" y="353.43217299394485" width="33.781415813473515" height="19.375744296760466" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1266.6066789330328" y="353.43217299394485" width="33.781415813473515" height="19.375744296760466" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: printHelpScreen | 15 LOC | bin/console/console_output_printers.dart:3</title>
+  <text x="1283.4973868397694" y="363.12004514232507" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
 </g>
 <g>
   <rect x="1300.388094746506" y="314.68068440042396" width="17.58409793809522" height="32.26028806312474" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1300.388094746506" y="314.68068440042396" width="17.58409793809522" height="32.26028806312474" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1300.388094746506" y="314.68068440042396" width="17.58409793809522" height="32.26028806312474" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printInvalidArgumentsScreen | 13 LOC | bin/console_output_printers.dart:19</title>
+  <title>callable: printInvalidArgumentsScreen | 13 LOC | bin/console/console_output_printers.dart:19</title>
   <text x="1309.1801437155536" y="330.81082843198635" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">13</text>
 </g>
 <g>
   <rect x="1321.9396685539996" y="509.4206572400359" width="14.077189805548816" height="12.399067026410865" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1321.9396685539996" y="509.4206572400359" width="14.077189805548816" height="12.399067026410865" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1321.9396685539996" y="509.4206572400359" width="14.077189805548816" height="12.399067026410865" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printVersionLine | 4 LOC | bin/console_output_printers.dart:33</title>
+  <title>callable: printVersionLine | 4 LOC | bin/console/console_output_printers.dart:33</title>
   <text x="1328.978263456774" y="515.6201907532413" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">4</text>
 </g>
 <g>
   <rect x="1300.8238838456764" y="525.9527466085838" width="21.115784708323222" height="8.266044684273911" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1300.8238838456764" y="525.9527466085838" width="21.115784708323222" height="8.266044684273911" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1300.8238838456764" y="525.9527466085838" width="21.115784708323222" height="8.266044684273911" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printMissingDirectoryError | 4 LOC | bin/console_output_printers.dart:38</title>
+  <title>callable: printMissingDirectoryError | 4 LOC | bin/console/console_output_printers.dart:38</title>
   <text x="1311.381776199838" y="530.0857689507208" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">4</text>
 </g>
 <g>
   <rect x="1311.381776199838" y="509.4206572400359" width="10.557892354161611" height="16.53208936854782" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1311.381776199838" y="509.4206572400359" width="10.557892354161611" height="16.53208936854782" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1311.381776199838" y="509.4206572400359" width="10.557892354161611" height="16.53208936854782" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printConfigurationError | 4 LOC | bin/console_output_printers.dart:43</title>
+  <title>callable: printConfigurationError | 4 LOC | bin/console/console_output_printers.dart:43</title>
   <text x="1316.6607223769188" y="517.6867019243098" text-anchor="middle" dominant-baseline="middle" font-size="7.60" fill="#000" font-weight="700">4</text>
 </g>
 <g>
   <rect x="1232.8252631195592" y="496.9349190232076" width="24.57781472028329" height="15.978802401278548" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1232.8252631195592" y="496.9349190232076" width="24.57781472028329" height="15.978802401278548" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1232.8252631195592" y="496.9349190232076" width="24.57781472028329" height="15.978802401278548" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printRunHeader | 9 LOC | bin/console_output_printers.dart:48</title>
+  <title>callable: printRunHeader | 9 LOC | bin/console/console_output_printers.dart:48</title>
   <text x="1245.1141704797008" y="504.9243202238469" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">9</text>
 </g>
 <g>
   <rect x="1337.935557113533" y="444.9730621849803" width="27.265719135568013" height="9.602388574898193" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1337.935557113533" y="444.9730621849803" width="27.265719135568013" height="9.602388574898193" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1337.935557113533" y="444.9730621849803" width="27.265719135568013" height="9.602388574898193" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printJsonOutput | 6 LOC | bin/console_output_printers.dart:58</title>
+  <title>callable: printJsonOutput | 6 LOC | bin/console/console_output_printers.dart:58</title>
   <text x="1351.5684166813169" y="449.7742564724294" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">6</text>
 </g>
 <g>
   <rect x="1181.4416219092632" y="219.13457802593877" width="58.00103053340638" height="32.35025648899894" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1181.4416219092632" y="219.13457802593877" width="58.00103053340638" height="32.35025648899894" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1181.4416219092632" y="219.13457802593877" width="58.00103053340638" height="32.35025648899894" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printExcludedItems | 43 LOC | bin/console_output_printers.dart:65</title>
+  <title>callable: printExcludedItems | 43 LOC | bin/console/console_output_printers.dart:65</title>
   <text x="1210.4421371759663" y="235.30970627043823" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">43</text>
 </g>
 <g>
   <rect x="1337.935557113533" y="454.5754507598785" width="13.632859567784006" height="19.20477714979638" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1337.935557113533" y="454.5754507598785" width="13.632859567784006" height="19.20477714979638" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1337.935557113533" y="454.5754507598785" width="13.632859567784006" height="19.20477714979638" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printReportLines | 6 LOC | bin/console_output_printers.dart:111</title>
+  <title>callable: printReportLines | 6 LOC | bin/console/console_output_printers.dart:111</title>
   <text x="1344.751986897425" y="464.1778393347767" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">6</text>
 </g>
 <g>
   <rect x="1322.6100109256924" y="483.3826164845731" width="13.406847433856015" height="13.019020377731408" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1322.6100109256924" y="483.3826164845731" width="13.406847433856015" height="13.019020377731408" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1322.6100109256924" y="483.3826164845731" width="13.406847433856015" height="13.019020377731408" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printOutputFilesHeader | 4 LOC | bin/console_output_printers.dart:118</title>
+  <title>callable: printOutputFilesHeader | 4 LOC | bin/console/console_output_printers.dart:118</title>
   <text x="1329.3134346426205" y="489.8921266734388" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">4</text>
 </g>
 <g>
   <rect x="1313.1944416016286" y="458.6907601491206" width="12.37055775595215" height="24.691856335452492" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1313.1944416016286" y="458.6907601491206" width="12.37055775595215" height="24.691856335452492" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1313.1944416016286" y="458.6907601491206" width="12.37055775595215" height="24.691856335452492" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printOutputFileLine | 7 LOC | bin/console_output_printers.dart:123</title>
+  <title>callable: printOutputFileLine | 7 LOC | bin/console/console_output_printers.dart:123</title>
   <text x="1319.3797204796047" y="471.03668831684683" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">7</text>
 </g>
 <g>
-  <rect x="1232.8252631195592" y="442.3246345112075" width="26.356054545006632" height="16.55634947602356" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1232.8252631195592" y="442.3246345112075" width="26.356054545006632" height="16.55634947602356" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1232.8252631195592" y="442.3246345112075" width="26.356054545006632" height="16.55634947602356" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printRunCompleted | 10 LOC | bin/console_output_printers.dart:131</title>
-  <text x="1246.0032903920626" y="450.60280924921926" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">10</text>
+  <rect x="1259.1813176645658" y="425.7682850351839" width="13.178027272503318" height="33.11269895204712" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1259.1813176645658" y="425.7682850351839" width="13.178027272503318" height="33.11269895204712" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1259.1813176645658" y="425.7682850351839" width="13.178027272503318" height="33.11269895204712" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: printRunCompleted | 10 LOC | bin/console/console_output_printers.dart:131</title>
+  <text x="1265.7703313008174" y="442.3246345112075" text-anchor="middle" dominant-baseline="middle" font-size="7.56" fill="#000" font-weight="700">10</text>
 </g>
 <g>
   <rect x="1325.5649993575807" y="458.6907601491206" width="12.370557755952152" height="24.691856335452492" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1325.5649993575807" y="458.6907601491206" width="12.370557755952152" height="24.691856335452492" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1325.5649993575807" y="458.6907601491206" width="12.370557755952152" height="24.691856335452492" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: printAnalysisError | 7 LOC | bin/console_output_styles.dart:3</title>
+  <title>callable: printAnalysisError | 7 LOC | bin/console/console_output_styles.dart:3</title>
   <text x="1331.7502782355568" y="471.03668831684683" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">7</text>
 </g>
 <g>
   <rect x="1350.6090673043248" y="492.3537061566233" width="14.592208944776214" height="5.980726448033478" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1350.6090673043248" y="492.3537061566233" width="14.592208944776214" height="5.980726448033478" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1350.6090673043248" y="492.3537061566233" width="14.592208944776214" height="5.980726448033478" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _colorize | 2 LOC | bin/console_output_styles.dart:29</title>
+  <title>callable: _colorize | 2 LOC | bin/console/console_output_styles.dart:29</title>
   <text x="1357.905171776713" y="495.34406938064" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">2</text>
 </g>
 <g>
   <rect x="1350.6090673043248" y="510.2958855007237" width="7.296104472388107" height="11.961452896066952" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1350.6090673043248" y="510.2958855007237" width="7.296104472388107" height="11.961452896066952" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1350.6090673043248" y="510.2958855007237" width="7.296104472388107" height="11.961452896066952" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _colorizeWithCode | 2 LOC | bin/console_output_styles.dart:32</title>
+  <title>callable: _colorizeWithCode | 2 LOC | bin/console/console_output_styles.dart:32</title>
   <text x="1354.2571195405187" y="516.2766119487572" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">2</text>
 </g>
 <g>
   <rect x="1350.6090673043248" y="498.33443260465674" width="7.296104472388107" height="11.961452896066952" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1350.6090673043248" y="498.33443260465674" width="7.296104472388107" height="11.961452896066952" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1350.6090673043248" y="498.33443260465674" width="7.296104472388107" height="11.961452896066952" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _colorizeBold | 2 LOC | bin/console_output_styles.dart:35</title>
+  <title>callable: _colorizeBold | 2 LOC | bin/console/console_output_styles.dart:35</title>
   <text x="1354.2571195405187" y="504.3151590526902" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">2</text>
 </g>
 <g>
   <rect x="1252.5923040283142" y="458.88098398723105" width="19.767040908754975" height="22.07513263469808" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1252.5923040283142" y="458.88098398723105" width="19.767040908754975" height="22.07513263469808" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1252.5923040283142" y="458.88098398723105" width="19.767040908754975" height="22.07513263469808" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _withoutLeadingStatusTag | 10 LOC | bin/console_output_styles.dart:38</title>
+  <title>callable: _withoutLeadingStatusTag | 10 LOC | bin/console/console_output_styles.dart:38</title>
   <text x="1262.4758244826917" y="469.9185503045801" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">10</text>
 </g>
 <g>
   <rect x="1312.9272877790186" y="483.3826164845731" width="9.682723146673787" height="18.026335907628102" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1312.9272877790186" y="483.3826164845731" width="9.682723146673787" height="18.026335907628102" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1312.9272877790186" y="483.3826164845731" width="9.682723146673787" height="18.026335907628102" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: okTag | 4 LOC | bin/console_output_styles.dart:49</title>
+  <title>callable: okTag | 4 LOC | bin/console/console_output_styles.dart:49</title>
   <text x="1317.7686493523554" y="492.3957844383871" text-anchor="middle" dominant-baseline="middle" font-size="6.14" fill="#000" font-weight="700">4</text>
 </g>
 <g>
   <rect x="1300.8238838456764" y="501.4089523922012" width="21.786127080016023" height="8.011704847834714" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1300.8238838456764" y="501.4089523922012" width="21.786127080016023" height="8.011704847834714" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1300.8238838456764" y="501.4089523922012" width="21.786127080016023" height="8.011704847834714" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: warnTag | 4 LOC | bin/console_output_styles.dart:54</title>
+  <title>callable: warnTag | 4 LOC | bin/console/console_output_styles.dart:54</title>
   <text x="1311.7169473856843" y="505.41480481611853" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">4</text>
 </g>
 <g>
   <rect x="1322.6100109256924" y="496.4016368623045" width="13.406847433856015" height="13.019020377731408" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1322.6100109256924" y="496.4016368623045" width="13.406847433856015" height="13.019020377731408" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1322.6100109256924" y="496.4016368623045" width="13.406847433856015" height="13.019020377731408" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: failTag | 4 LOC | bin/console_output_styles.dart:59</title>
+  <title>callable: failTag | 4 LOC | bin/console/console_output_styles.dart:59</title>
   <text x="1329.3134346426205" y="502.9111470511702" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">4</text>
 </g>
 <g>
   <rect x="1357.905171776713" y="498.33443260465674" width="7.296104472388107" height="11.961452896066952" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1357.905171776713" y="498.33443260465674" width="7.296104472388107" height="11.961452896066952" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1357.905171776713" y="498.33443260465674" width="7.296104472388107" height="11.961452896066952" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: skipTag | 2 LOC | bin/console_output_styles.dart:64</title>
+  <title>callable: skipTag | 2 LOC | bin/console/console_output_styles.dart:64</title>
   <text x="1361.5532240129069" y="504.3151590526902" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">2</text>
 </g>
 <g>
-  <rect x="1174.6072544011618" y="382.88769699165334" width="38.812005812265056" height="23.610119743117863" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1174.6072544011618" y="382.88769699165334" width="38.812005812265056" height="23.610119743117863" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1174.6072544011618" y="382.88769699165334" width="38.812005812265056" height="23.610119743117863" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: dividerLine | 21 LOC | bin/console_output_styles.dart:67</title>
-  <text x="1194.0132573072942" y="394.69275686321225" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">21</text>
+  <rect x="1174.6072544011618" y="406.4978167347712" width="38.812005812265056" height="23.610119743117863" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1174.6072544011618" y="406.4978167347712" width="38.812005812265056" height="23.610119743117863" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1174.6072544011618" y="406.4978167347712" width="38.812005812265056" height="23.610119743117863" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: dividerLine | 21 LOC | bin/console/console_output_styles.dart:67</title>
+  <text x="1194.0132573072942" y="418.30287660633013" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">21</text>
 </g>
 <g>
   <rect x="1300.8238838456764" y="458.6907601491206" width="12.37055775595215" height="24.691856335452492" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1277,11 +1279,11 @@
   <text x="1285.2579345228303" y="509.68992795756157" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">7</text>
 </g>
 <g>
-  <rect x="1319.4769084767222" y="376.62043748162347" width="19.088813730216202" height="25.14541037624024" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1319.4769084767222" y="376.62043748162347" width="19.088813730216202" height="25.14541037624024" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1319.4769084767222" y="376.62043748162347" width="19.088813730216202" height="25.14541037624024" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1300.388094746506" y="376.62043748162347" width="19.088813730216202" height="25.14541037624024" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1300.388094746506" y="376.62043748162347" width="19.088813730216202" height="25.14541037624024" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1300.388094746506" y="376.62043748162347" width="19.088813730216202" height="25.14541037624024" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _overBudgetRatio | 11 LOC | lib/src/analyzers/metrics/metrics_analyzer.dart:500</title>
-  <text x="1329.0213153418304" y="389.19314266974357" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
+  <text x="1309.9325016116143" y="389.19314266974357" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
 </g>
 <g>
   <rect x="1338.5657222069385" y="409.3856691839971" width="26.63555404216214" height="16.382615851186827" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1291,11 +1293,11 @@
   <text x="1351.8834992280197" y="417.57697710959053" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">10</text>
 </g>
 <g>
-  <rect x="1097.8653338178194" y="343.96395278460847" width="38.74349388673589" height="29.283268384184506" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1097.8653338178194" y="343.96395278460847" width="38.74349388673589" height="29.283268384184506" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1097.8653338178194" y="343.96395278460847" width="38.74349388673589" height="29.283268384184506" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1097.8653338178194" y="314.68068440042396" width="38.74349388673589" height="29.283268384184506" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1097.8653338178194" y="314.68068440042396" width="38.74349388673589" height="29.283268384184506" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1097.8653338178194" y="314.68068440042396" width="38.74349388673589" height="29.283268384184506" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: strongConnect | 26 LOC | lib/src/analyzers/layers/layers_analyzer.dart:421</title>
-  <text x="1117.2370807611874" y="358.6055869767007" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">26</text>
+  <text x="1117.2370807611874" y="329.3223185925162" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">26</text>
 </g>
 <g>
   <rect x="1201.8741087646451" y="511.6614394162811" width="30.951154354914056" height="22.557351876576515" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1305,18 +1307,18 @@
   <text x="1217.3496859421023" y="522.9401153545693" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">16</text>
 </g>
 <g>
-  <rect x="1136.6088277045553" y="314.68068440042396" width="37.99842669660636" height="29.85745011720773" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1136.6088277045553" y="314.68068440042396" width="37.99842669660636" height="29.85745011720773" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1136.6088277045553" y="314.68068440042396" width="37.99842669660636" height="29.85745011720773" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1097.8653338178194" y="343.96395278460847" width="38.74349388673589" height="29.283268384184506" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1097.8653338178194" y="343.96395278460847" width="38.74349388673589" height="29.283268384184506" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1097.8653338178194" y="343.96395278460847" width="38.74349388673589" height="29.283268384184506" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: resolveProjectDependencyUri | 26 LOC | lib/src/analyzers/shared/dependency_uri_utils.dart:24</title>
-  <text x="1155.6080410528584" y="329.6094094590278" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">26</text>
+  <text x="1117.2370807611874" y="358.6055869767007" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">26</text>
 </g>
 <g>
-  <rect x="1174.6072544011618" y="406.4978167347712" width="38.812005812265056" height="23.610119743117863" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1174.6072544011618" y="406.4978167347712" width="38.812005812265056" height="23.610119743117863" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1174.6072544011618" y="406.4978167347712" width="38.812005812265056" height="23.610119743117863" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1174.6072544011618" y="382.88769699165334" width="38.812005812265056" height="23.610119743117863" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1174.6072544011618" y="382.88769699165334" width="38.812005812265056" height="23.610119743117863" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1174.6072544011618" y="382.88769699165334" width="38.812005812265056" height="23.610119743117863" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: addResolvedProjectDartDependency | 21 LOC | lib/src/analyzers/shared/dependency_uri_utils.dart:53</title>
-  <text x="1194.0132573072942" y="418.30287660633013" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">21</text>
+  <text x="1194.0132573072942" y="394.69275686321225" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">21</text>
 </g>
 <g>
   <rect x="1287.285019219783" y="207.11619986562613" width="22.744731746496477" height="55.6368023455851" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1326,25 +1328,25 @@
   <text x="1298.6573850930313" y="234.9346010384187" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">29</text>
 </g>
 <g>
-  <rect x="1097.8653338178194" y="401.67757882334104" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1097.8653338178194" y="401.67757882334104" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1097.8653338178194" y="401.67757882334104" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1097.8653338178194" y="373.247221168793" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1097.8653338178194" y="373.247221168793" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1097.8653338178194" y="373.247221168793" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: configName | 25 LOC | lib/src/models/fcheck_config.dart:42</title>
-  <text x="1117.050813963655" y="415.89275765061507" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">25</text>
-</g>
-<g>
-  <rect x="1300.388094746506" y="376.62043748162347" width="19.088813730216202" height="25.14541037624024" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1300.388094746506" y="376.62043748162347" width="19.088813730216202" height="25.14541037624024" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1300.388094746506" y="376.62043748162347" width="19.088813730216202" height="25.14541037624024" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: addPatterns | 11 LOC | lib/src/models/fcheck_config.dart:264</title>
-  <text x="1309.9325016116143" y="389.19314266974357" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
+  <text x="1117.050813963655" y="387.462399996067" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">25</text>
 </g>
 <g>
   <rect x="1349.7024719767412" y="345.6505609410237" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1349.7024719767412" y="345.6505609410237" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1349.7024719767412" y="345.6505609410237" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: label | 11 LOC | lib/src/models/project_type.dart:15</title>
+  <title>callable: addPatterns | 11 LOC | lib/src/models/fcheck_config.dart:264</title>
   <text x="1357.451874112921" y="361.1354992113236" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
+</g>
+<g>
+  <rect x="1334.2036677043816" y="345.6505609410237" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1334.2036677043816" y="345.6505609410237" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1334.2036677043816" y="345.6505609410237" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: label | 11 LOC | lib/src/models/project_type.dart:15</title>
+  <text x="1341.9530698405613" y="361.1354992113236" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
 </g>
 <g>
   <rect x="1300.8238838456764" y="509.4206572400359" width="10.557892354161611" height="16.53208936854782" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1382,11 +1384,11 @@
   <text x="1339.6649105957424" y="516.2766119487572" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">2</text>
 </g>
 <g>
-  <rect x="1207.6774502061915" y="459.6060120087968" width="25.147812913367673" height="29.49807553090775" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1207.6774502061915" y="459.6060120087968" width="25.147812913367673" height="29.49807553090775" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1207.6774502061915" y="459.6060120087968" width="25.147812913367673" height="29.49807553090775" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1169.95573083614" y="430.1079364778891" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1169.95573083614" y="430.1079364778891" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1169.95573083614" y="430.1079364778891" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _isTruthyNoColorsValue | 17 LOC | lib/src/input_output/issue_location_utils.dart:61</title>
-  <text x="1220.2513566628752" y="474.3550497742507" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">17</text>
+  <text x="1188.8165905211658" y="439.940628321525" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">17</text>
 </g>
 <g>
   <rect x="1336.0168583595485" y="522.2573383967907" width="7.296104472388107" height="11.961452896066952" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1410,11 +1412,11 @@
   <text x="1346.9610150681306" y="516.2766119487572" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">2</text>
 </g>
 <g>
-  <rect x="1310.0297509662794" y="207.11619986562613" width="27.58576264141071" height="44.29125833785794" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1310.0297509662794" y="207.11619986562613" width="27.58576264141071" height="44.29125833785794" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1310.0297509662794" y="207.11619986562613" width="27.58576264141071" height="44.29125833785794" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1239.4426524426697" y="288.71684330581763" width="47.05806568240651" height="25.963841094606376" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1239.4426524426697" y="288.71684330581763" width="47.05806568240651" height="25.963841094606376" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1239.4426524426697" y="288.71684330581763" width="47.05806568240651" height="25.963841094606376" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: colorizePathFilename | 28 LOC | lib/src/input_output/issue_location_utils.dart:88</title>
-  <text x="1323.8226322869848" y="229.2618290345551" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">28</text>
+  <text x="1262.9716852838728" y="301.6987638531208" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">28</text>
 </g>
 <g>
   <rect x="1300.8238838456764" y="425.7682850351839" width="18.555836633928227" height="16.461237556968328" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1424,11 +1426,11 @@
   <text x="1310.1018021626405" y="433.99890381366805" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">7</text>
 </g>
 <g>
-  <rect x="1232.8252631195592" y="314.68068440042396" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1232.8252631195592" y="314.68068440042396" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1232.8252631195592" y="314.68068440042396" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1266.6066789330328" y="314.68068440042396" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1266.6066789330328" y="314.68068440042396" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1266.6066789330328" y="314.68068440042396" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _relativizeToCurrentDirectory | 15 LOC | lib/src/input_output/issue_location_utils.dart:128</title>
-  <text x="1249.7159710262958" y="324.3685565488042" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
+  <text x="1283.4973868397694" y="324.3685565488042" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
 </g>
 <g>
   <rect x="1290.420708384079" y="94.0" width="24.24566075262154" height="70.1900522243116" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1452,18 +1454,18 @@
   <text x="1217.3496859421023" y="500.38276347799285" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">16</text>
 </g>
 <g>
-  <rect x="1174.6072544011618" y="349.9084821123776" width="29.109004359198792" height="32.97921487927575" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1174.6072544011618" y="349.9084821123776" width="29.109004359198792" height="32.97921487927575" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1174.6072544011618" y="349.9084821123776" width="29.109004359198792" height="32.97921487927575" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1203.7162587603605" y="349.9084821123776" width="29.109004359198792" height="32.97921487927575" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1203.7162587603605" y="349.9084821123776" width="29.109004359198792" height="32.97921487927575" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1203.7162587603605" y="349.9084821123776" width="29.109004359198792" height="32.97921487927575" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: resolveIssueLocation | 22 LOC | lib/src/input_output/issue_location_utils.dart:216</title>
-  <text x="1189.1617565807612" y="366.3980895520155" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">22</text>
+  <text x="1218.27076093996" y="366.3980895520155" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">22</text>
 </g>
 <g>
-  <rect x="1097.8653338178194" y="511.82285159428886" width="37.019393063461955" height="22.39593969856881" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1097.8653338178194" y="511.82285159428886" width="37.019393063461955" height="22.39593969856881" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1097.8653338178194" y="511.82285159428886" width="37.019393063461955" height="22.39593969856881" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1097.8653338178194" y="489.42691189572" width="37.019393063461955" height="22.39593969856881" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1097.8653338178194" y="489.42691189572" width="37.019393063461955" height="22.39593969856881" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1097.8653338178194" y="489.42691189572" width="37.019393063461955" height="22.39593969856881" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: formatCount | 19 LOC | lib/src/input_output/number_format_utils.dart:1</title>
-  <text x="1116.3750303495503" y="523.0208214435733" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">19</text>
+  <text x="1116.3750303495503" y="500.6248817450044" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">19</text>
 </g>
 <g>
   <rect x="1239.4426524426697" y="94.0" width="50.97805594140939" height="35.951002358793744" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1501,11 +1503,11 @@
   <text x="1328.6576387965688" y="433.99890381366805" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">7</text>
 </g>
 <g>
-  <rect x="1334.2036677043816" y="345.6505609410237" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1334.2036677043816" y="345.6505609410237" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1334.2036677043816" y="345.6505609410237" width="15.498804272359564" height="30.96987654059975" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1300.388094746506" y="401.7658478578637" width="19.9978048602265" height="24.00243717732023" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1300.388094746506" y="401.7658478578637" width="19.9978048602265" height="24.00243717732023" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1300.388094746506" y="401.7658478578637" width="19.9978048602265" height="24.00243717732023" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: emptyPlantUml | 11 LOC | lib/src/graphs/graph_format_utils.dart:123</title>
-  <text x="1341.9530698405613" y="361.1354992113236" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
+  <text x="1310.3869971766194" y="413.7670664465238" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
 </g>
 <g>
   <rect x="1286.5916143913728" y="425.7682850351839" width="14.23226945430358" height="27.5939157933726" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1522,18 +1524,18 @@
   <text x="1258.756849972218" y="185.65312604496887" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">38</text>
 </g>
 <g>
-  <rect x="1232.8252631195592" y="334.0564286971844" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1232.8252631195592" y="334.0564286971844" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1232.8252631195592" y="334.0564286971844" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _relativizeGraph | 15 LOC | lib/src/graphs/export_svg_folders_paths.dart:59</title>
-  <text x="1249.7159710262958" y="343.7443008455646" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
-</g>
-<g>
   <rect x="1232.8252631195592" y="353.43217299394485" width="33.781415813473515" height="19.375744296760466" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1232.8252631195592" y="353.43217299394485" width="33.781415813473515" height="19.375744296760466" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1232.8252631195592" y="353.43217299394485" width="33.781415813473515" height="19.375744296760466" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _commonTopLevelSegment | 15 LOC | lib/src/graphs/export_svg_folders_paths.dart:77</title>
+  <title>callable: _relativizeGraph | 15 LOC | lib/src/graphs/export_svg_folders_paths.dart:59</title>
   <text x="1249.7159710262958" y="363.12004514232507" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
+</g>
+<g>
+  <rect x="1266.6066789330328" y="334.0564286971844" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1266.6066789330328" y="334.0564286971844" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1266.6066789330328" y="334.0564286971844" width="33.781415813473515" height="19.37574429676046" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _commonTopLevelSegment | 15 LOC | lib/src/graphs/export_svg_folders_paths.dart:77</title>
+  <text x="1283.4973868397694" y="343.7443008455646" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
 </g>
 <g>
   <rect x="1239.4426524426697" y="129.95100235879374" width="50.97805594140939" height="34.239049865517856" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1543,11 +1545,11 @@
   <text x="1264.9316804133744" y="147.07052729155268" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">40</text>
 </g>
 <g>
-  <rect x="1286.5007181250762" y="262.75300221121125" width="23.52903284120326" height="51.92768218921275" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1286.5007181250762" y="262.75300221121125" width="23.52903284120326" height="51.92768218921275" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1286.5007181250762" y="262.75300221121125" width="23.52903284120326" height="51.92768218921275" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1239.4426524426697" y="262.75300221121125" width="47.05806568240651" height="25.963841094606376" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1239.4426524426697" y="262.75300221121125" width="47.05806568240651" height="25.963841094606376" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1239.4426524426697" y="262.75300221121125" width="47.05806568240651" height="25.963841094606376" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _applyLooseFilesRule | 28 LOC | lib/src/graphs/export_svg_folders_paths.dart:146</title>
-  <text x="1298.265234545678" y="288.71684330581763" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">28</text>
+  <text x="1262.9716852838728" y="275.7349227585144" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">28</text>
 </g>
 <g>
   <rect x="1139.6534778635414" y="219.13457802593877" width="41.78814404572192" height="48.03410812269203" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1557,11 +1559,11 @@
   <text x="1160.5475498864023" y="243.15163208728478" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">46</text>
 </g>
 <g>
-  <rect x="1097.8653338178194" y="430.1079364778891" width="22.068488883159386" height="39.54598361188727" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1097.8653338178194" y="430.1079364778891" width="22.068488883159386" height="39.54598361188727" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1097.8653338178194" y="430.1079364778891" width="22.068488883159386" height="39.54598361188727" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1119.933822700979" y="430.1079364778891" width="22.068488883159386" height="39.54598361188727" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1119.933822700979" y="430.1079364778891" width="22.068488883159386" height="39.54598361188727" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1119.933822700979" y="430.1079364778891" width="22.068488883159386" height="39.54598361188727" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _getDeepestFolderPath | 20 LOC | lib/src/graphs/export_svg_folders_paths.dart:229</title>
-  <text x="1108.899578259399" y="449.88092828383276" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">20</text>
+  <text x="1130.9680671425585" y="449.88092828383276" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">20</text>
 </g>
 <g>
   <rect x="1286.1735786006448" y="480.9561166219291" width="14.65030524503161" height="23.828038668573274" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1592,18 +1594,18 @@
   <text x="860.50726335657" y="468.08926570583014" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">80</text>
 </g>
 <g>
-  <rect x="1097.8653338178194" y="314.68068440042396" width="38.74349388673589" height="29.283268384184506" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1097.8653338178194" y="314.68068440042396" width="38.74349388673589" height="29.283268384184506" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1097.8653338178194" y="314.68068440042396" width="38.74349388673589" height="29.283268384184506" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1136.6088277045553" y="314.68068440042396" width="37.99842669660636" height="29.85745011720773" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1136.6088277045553" y="314.68068440042396" width="37.99842669660636" height="29.85745011720773" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1136.6088277045553" y="314.68068440042396" width="37.99842669660636" height="29.85745011720773" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _renderFolderGroup | 26 LOC | lib/src/graphs/export_svg_code_size.dart:231</title>
-  <text x="1117.2370807611874" y="329.3223185925162" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">26</text>
+  <text x="1155.6080410528584" y="329.6094094590278" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">26</text>
 </g>
 <g>
-  <rect x="821.9056513081096" y="317.27188696318785" width="46.798204258278055" height="85.78347229995587" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="821.9056513081096" y="317.27188696318785" width="46.798204258278055" height="85.78347229995587" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="821.9056513081096" y="317.27188696318785" width="46.798204258278055" height="85.78347229995587" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="868.7038555663876" y="317.27188696318785" width="46.798204258278055" height="85.78347229995587" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="868.7038555663876" y="317.27188696318785" width="46.798204258278055" height="85.78347229995587" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="868.7038555663876" y="317.27188696318785" width="46.798204258278055" height="85.78347229995587" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _renderFolderLevel | 92 LOC | lib/src/graphs/export_svg_code_size.dart:261</title>
-  <text x="845.3047534372486" y="360.1636231131658" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">92</text>
+  <text x="892.1029576955266" y="360.1636231131658" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">92</text>
 </g>
 <g>
   <rect x="990.7648338069689" y="222.7480224094295" width="62.32141164424494" height="94.52386455375836" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1627,18 +1629,18 @@
   <text x="1337.61551360769" y="262.0848151242177" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">27</text>
 </g>
 <g>
-  <rect x="1097.8653338178194" y="489.42691189572" width="37.019393063461955" height="22.39593969856881" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1097.8653338178194" y="489.42691189572" width="37.019393063461955" height="22.39593969856881" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1097.8653338178194" y="489.42691189572" width="37.019393063461955" height="22.39593969856881" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1097.8653338178194" y="511.82285159428886" width="37.019393063461955" height="22.39593969856881" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1097.8653338178194" y="511.82285159428886" width="37.019393063461955" height="22.39593969856881" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1097.8653338178194" y="511.82285159428886" width="37.019393063461955" height="22.39593969856881" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _renderLocOnlyLabel | 19 LOC | lib/src/graphs/export_svg_code_size.dart:559</title>
-  <text x="1116.3750303495503" y="500.6248817450044" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">19</text>
+  <text x="1116.3750303495503" y="523.0208214435733" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">19</text>
 </g>
 <g>
-  <rect x="1259.1813176645658" y="425.7682850351839" width="13.178027272503318" height="33.11269895204712" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1259.1813176645658" y="425.7682850351839" width="13.178027272503318" height="33.11269895204712" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1259.1813176645658" y="425.7682850351839" width="13.178027272503318" height="33.11269895204712" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1232.8252631195592" y="442.3246345112075" width="26.356054545006632" height="16.55634947602356" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1232.8252631195592" y="442.3246345112075" width="26.356054545006632" height="16.55634947602356" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1232.8252631195592" y="442.3246345112075" width="26.356054545006632" height="16.55634947602356" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _renderInnerTileGradientOverlay | 10 LOC | lib/src/graphs/export_svg_code_size.dart:580</title>
-  <text x="1265.7703313008174" y="442.3246345112075" text-anchor="middle" dominant-baseline="middle" font-size="7.56" fill="#000" font-weight="700">10</text>
+  <text x="1246.0032903920626" y="450.60280924921926" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">10</text>
 </g>
 <g>
   <rect x="1232.8252631195592" y="425.7682850351839" width="26.356054545006632" height="16.55634947602356" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1655,11 +1657,11 @@
   <text x="1277.9327819003145" y="492.87013595621573" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">9</text>
 </g>
 <g>
-  <rect x="1203.7162587603605" y="349.9084821123776" width="29.109004359198792" height="32.97921487927575" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1203.7162587603605" y="349.9084821123776" width="29.109004359198792" height="32.97921487927575" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1203.7162587603605" y="349.9084821123776" width="29.109004359198792" height="32.97921487927575" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1174.6072544011618" y="349.9084821123776" width="29.109004359198792" height="32.97921487927575" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1174.6072544011618" y="349.9084821123776" width="29.109004359198792" height="32.97921487927575" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1174.6072544011618" y="349.9084821123776" width="29.109004359198792" height="32.97921487927575" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _folderEntriesForNode | 22 LOC | lib/src/graphs/export_svg_code_size.dart:612</title>
-  <text x="1218.27076093996" y="366.3980895520155" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">22</text>
+  <text x="1189.1617565807612" y="366.3980895520155" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">22</text>
 </g>
 <g>
   <rect x="899.1088754050304" y="490.73133851252794" width="74.25278241168817" height="43.48745278032975" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1683,11 +1685,11 @@
   <text x="1189.4714268399016" y="332.29458325640076" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">24</text>
 </g>
 <g>
-  <rect x="1169.95573083614" y="430.1079364778891" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1169.95573083614" y="430.1079364778891" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1169.95573083614" y="430.1079364778891" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1169.95573083614" y="469.43870385243275" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1169.95573083614" y="469.43870385243275" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1169.95573083614" y="469.43870385243275" width="37.7217193700515" height="19.665383687271834" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _layoutTreemap | 17 LOC | lib/src/graphs/export_svg_code_size.dart:766</title>
-  <text x="1188.8165905211658" y="439.940628321525" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">17</text>
+  <text x="1188.8165905211658" y="479.2713956960687" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">17</text>
 </g>
 <g>
   <rect x="1048.7005299423847" y="317.27188696318785" width="49.164803875434714" height="62.128191474797646" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1725,18 +1727,18 @@
   <text x="1160.7771550734667" y="290.9246852745274" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">45</text>
 </g>
 <g>
-  <rect x="1337.61551360769" y="207.11619986562613" width="27.58576264141071" height="44.29125833785794" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1337.61551360769" y="207.11619986562613" width="27.58576264141071" height="44.29125833785794" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1337.61551360769" y="207.11619986562613" width="27.58576264141071" height="44.29125833785794" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1310.0297509662794" y="207.11619986562613" width="27.58576264141071" height="44.29125833785794" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1310.0297509662794" y="207.11619986562613" width="27.58576264141071" height="44.29125833785794" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1310.0297509662794" y="207.11619986562613" width="27.58576264141071" height="44.29125833785794" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: strongConnect | 28 LOC | lib/src/graphs/svg_export_helpers.dart:64</title>
-  <text x="1351.4083949283954" y="229.2618290345551" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">28</text>
+  <text x="1323.8226322869848" y="229.2618290345551" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">28</text>
 </g>
 <g>
-  <rect x="1239.4426524426697" y="262.75300221121125" width="47.05806568240651" height="25.963841094606376" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1239.4426524426697" y="262.75300221121125" width="47.05806568240651" height="25.963841094606376" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1239.4426524426697" y="262.75300221121125" width="47.05806568240651" height="25.963841094606376" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1286.5007181250762" y="262.75300221121125" width="23.52903284120326" height="51.92768218921275" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1286.5007181250762" y="262.75300221121125" width="23.52903284120326" height="51.92768218921275" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1286.5007181250762" y="262.75300221121125" width="23.52903284120326" height="51.92768218921275" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: findCycleEdges | 28 LOC | lib/src/graphs/svg_export_helpers.dart:104</title>
-  <text x="1262.9716852838728" y="275.7349227585144" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">28</text>
+  <text x="1298.265234545678" y="288.71684330581763" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">28</text>
 </g>
 <g>
   <rect x="1181.4416219092632" y="283.0827594576808" width="58.00103053340638" height="31.59792494274315" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1888,11 +1890,11 @@
   <text x="1306.8755858123475" y="492.3957844383871" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">5</text>
 </g>
 <g>
-  <rect x="1136.6088277045553" y="344.5381345176317" width="37.99842669660636" height="28.709086651161282" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1136.6088277045553" y="344.5381345176317" width="37.99842669660636" height="28.709086651161282" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1136.6088277045553" y="344.5381345176317" width="37.99842669660636" height="28.709086651161282" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1136.2362941094905" y="373.247221168793" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1136.2362941094905" y="373.247221168793" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1136.2362941094905" y="373.247221168793" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: buildPeerLists | 25 LOC | lib/src/graphs/svg_common.dart:57</title>
-  <text x="1155.6080410528584" y="358.89267784321237" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">25</text>
+  <text x="1155.421774255326" y="387.462399996067" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">25</text>
 </g>
 <g>
   <rect x="1357.905171776713" y="510.2958855007237" width="7.296104472388107" height="5.980726448033476" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1902,11 +1904,11 @@
   <text x="1361.5532240129069" y="513.2862487247405" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">1</text>
 </g>
 <g>
-  <rect x="1267.430615904093" y="372.80791729070535" width="32.95747884241319" height="18.536128710567503" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1267.430615904093" y="372.80791729070535" width="32.95747884241319" height="18.536128710567503" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1267.430615904093" y="372.80791729070535" width="32.95747884241319" height="18.536128710567503" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1232.8252631195592" y="372.80791729070535" width="34.60535278453384" height="17.653455914826193" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1232.8252631195592" y="372.80791729070535" width="34.60535278453384" height="17.653455914826193" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1232.8252631195592" y="372.80791729070535" width="34.60535278453384" height="17.653455914826193" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: renderEdgeWithTooltip | 14 LOC | lib/src/graphs/svg_common.dart:86</title>
-  <text x="1283.9093553252997" y="382.0759816459891" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">14</text>
+  <text x="1250.127939511826" y="381.63464524811843" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">14</text>
 </g>
 <g>
   <rect x="1272.3593449370692" y="425.7682850351839" width="14.23226945430358" height="27.5939157933726" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1916,11 +1918,11 @@
   <text x="1279.475479664221" y="439.5652429318702" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">9</text>
 </g>
 <g>
-  <rect x="1097.8653338178194" y="373.247221168793" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1097.8653338178194" y="373.247221168793" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1097.8653338178194" y="373.247221168793" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1097.8653338178194" y="401.67757882334104" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1097.8653338178194" y="401.67757882334104" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1097.8653338178194" y="401.67757882334104" width="38.370960291671125" height="28.430357654548057" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: fitTextFontSize | 25 LOC | lib/src/graphs/svg_common.dart:111</title>
-  <text x="1117.050813963655" y="387.462399996067" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">25</text>
+  <text x="1117.050813963655" y="415.89275765061507" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">25</text>
 </g>
 <g>
   <rect x="1142.0023115841382" y="430.1079364778891" width="27.953419252001886" height="29.659487708915456" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1944,11 +1946,11 @@
   <text x="1118.7594058406803" y="243.15163208728478" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">46</text>
 </g>
 <g>
-  <rect x="868.7038555663876" y="317.27188696318785" width="46.798204258278055" height="85.78347229995587" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="868.7038555663876" y="317.27188696318785" width="46.798204258278055" height="85.78347229995587" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="868.7038555663876" y="317.27188696318785" width="46.798204258278055" height="85.78347229995587" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="821.9056513081096" y="317.27188696318785" width="46.798204258278055" height="85.78347229995587" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="821.9056513081096" y="317.27188696318785" width="46.798204258278055" height="85.78347229995587" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="821.9056513081096" y="317.27188696318785" width="46.798204258278055" height="85.78347229995587" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _computeFolderLevels | 92 LOC | lib/src/graphs/export_svg_folders_metrics_layout.dart:56</title>
-  <text x="892.1029576955266" y="360.1636231131658" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">92</text>
+  <text x="845.3047534372486" y="360.1636231131658" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">92</text>
 </g>
 <g>
   <rect x="1251.2586241597717" y="512.9137214244862" width="18.433361040212468" height="21.3050698683714" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -1965,11 +1967,11 @@
   <text x="1293.0409091842532" y="524.4072459587392" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">7</text>
 </g>
 <g>
-  <rect x="1119.933822700979" y="430.1079364778891" width="22.068488883159386" height="39.54598361188727" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1119.933822700979" y="430.1079364778891" width="22.068488883159386" height="39.54598361188727" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1119.933822700979" y="430.1079364778891" width="22.068488883159386" height="39.54598361188727" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1097.8653338178194" y="430.1079364778891" width="22.068488883159386" height="39.54598361188727" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1097.8653338178194" y="430.1079364778891" width="22.068488883159386" height="39.54598361188727" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1097.8653338178194" y="430.1079364778891" width="22.068488883159386" height="39.54598361188727" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _calculateFileMetrics | 20 LOC | lib/src/graphs/export_svg_folders_metrics_layout.dart:171</title>
-  <text x="1130.9680671425585" y="449.88092828383276" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">20</text>
+  <text x="1108.899578259399" y="449.88092828383276" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">20</text>
 </g>
 <g>
   <rect x="1336.0168583595485" y="492.3537061566233" width="14.592208944776214" height="8.971089672050214" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
@@ -2827,21 +2829,21 @@
   <rect x="1064.0199608567018" y="538.2187912928576" width="141.35367311372002" height="118.21952090976325" fill="#9eb89a" fill-opacity="0.78"/>
   <rect x="1064.0199608567018" y="538.2187912928576" width="141.35367311372002" height="118.21952090976325" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1064.0199608567018" y="538.2187912928576" width="141.35367311372002" height="118.21952090976325" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: _ReportContext | 361 LOC | bin/console_output_report_context.dart</title>
+  <title>class: _ReportContext | 361 LOC | bin/console/console_output_report_context.dart</title>
   <text x="1070.0199608567018" y="551.2187912928576" text-anchor="start" font-size="7.70" fill="#000" font-weight="700">_ReportContext</text>
   <text x="1199.373633970422" y="551.2187912928576" text-anchor="end" font-size="7.70" fill="#000" font-weight="700">361 LOC</text>
 <g>
   <rect x="1174.167700659596" y="554.2187912928576" width="27.205933310825827" height="98.21952090976325" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1174.167700659596" y="554.2187912928576" width="27.205933310825827" height="98.21952090976325" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1174.167700659596" y="554.2187912928576" width="27.205933310825827" height="98.21952090976325" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _ReportContext | 61 LOC | bin/console_output_report_context.dart:70</title>
+  <title>callable: _ReportContext | 61 LOC | bin/console/console_output_report_context.dart:70</title>
   <text x="1187.770667315009" y="603.3285517477393" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">61</text>
 </g>
 <g>
   <rect x="1068.0199608567018" y="554.2187912928576" width="106.1477398028942" height="98.21952090976325" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1068.0199608567018" y="554.2187912928576" width="106.1477398028942" height="98.21952090976325" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1068.0199608567018" y="554.2187912928576" width="106.1477398028942" height="98.21952090976325" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _ReportContext.fromMetrics | 238 LOC | bin/console_output_report_context.dart:132</title>
+  <title>callable: _ReportContext.fromMetrics | 238 LOC | bin/console/console_output_report_context.dart:132</title>
   <text x="1121.093830758149" y="603.3285517477393" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
     <tspan x="1121.093830758149" dy="-6.0" font-size="6.46">_ReportContext.fromMetrics</tspan>
     <tspan x="1121.093830758149" dy="14.0" font-size="6.46">238</tspan>
@@ -3292,7 +3294,7 @@
   <rect x="1302.9802864171147" y="755.0403692646362" width="48.936887597794495" height="60.53864841920539" fill="#9eb89a" fill-opacity="0.78"/>
   <rect x="1302.9802864171147" y="755.0403692646362" width="48.936887597794495" height="60.53864841920539" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1302.9802864171147" y="755.0403692646362" width="48.936887597794495" height="60.53864841920539" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: ConsoleInput | 64 LOC | bin/console_input.dart</title>
+  <title>class: ConsoleInput | 64 LOC | bin/console/console_input.dart</title>
   <text x="1327.4487302160119" y="785.3096934742389" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">64</text>
 </g>
 <g>
@@ -3586,7 +3588,7 @@
   <rect x="1533.696044259319" y="886.8908172366718" width="23.074884949462266" height="24.07303199589268" fill="#9eb89a" fill-opacity="0.78"/>
   <rect x="1533.696044259319" y="886.8908172366718" width="23.074884949462266" height="24.07303199589268" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1533.696044259319" y="886.8908172366718" width="23.074884949462266" height="24.07303199589268" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: _ListBlock | 12 LOC | bin/console_output_report_helpers.dart</title>
+  <title>class: _ListBlock | 12 LOC | bin/console/console_output_report_helpers.dart</title>
   <text x="1545.23348673405" y="898.9273332346181" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">12</text>
 </g>
 <g>
@@ -3677,14 +3679,14 @@
   <rect x="1559.0707804618305" y="936.85963592384" width="16.92921953816925" height="13.671688625828661" fill="#9eb89a" fill-opacity="0.78"/>
   <rect x="1559.0707804618305" y="936.85963592384" width="16.92921953816925" height="13.671688625828661" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1559.0707804618305" y="936.85963592384" width="16.92921953816925" height="13.671688625828661" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: _ListOption | 5 LOC | bin/console_input.dart</title>
+  <title>class: _ListOption | 5 LOC | bin/console/console_input.dart</title>
   <text x="1567.535390230915" y="943.6954802367543" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">5</text>
 </g>
 <g>
   <rect x="1559.0707804618305" y="950.5313245496686" width="16.92921953816925" height="5.468675450331464" fill="#9eb89a" fill-opacity="0.78"/>
   <rect x="1559.0707804618305" y="950.5313245496686" width="16.92921953816925" height="5.468675450331464" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1559.0707804618305" y="950.5313245496686" width="16.92921953816925" height="5.468675450331464" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: unknown | 2 LOC | bin/console_common.dart</title>
+  <title>class: unknown | 2 LOC | bin/console/console_common.dart</title>
   <text x="1567.535390230915" y="953.2656622748343" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">2</text>
 </g>
 </svg>

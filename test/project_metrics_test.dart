@@ -14,8 +14,8 @@ import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:test/test.dart';
 
-import '../bin/console_common.dart';
-import '../bin/console_output.dart';
+import '../bin/console/console_common.dart';
+import '../bin/console/console_output.dart';
 
 void main() {
   group('ProjectMetrics', () {
