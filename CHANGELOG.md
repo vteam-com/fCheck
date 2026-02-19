@@ -11,14 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- 📊 **Code Size Analyzer**: New analyzer to detect files and functions that exceed configurable size thresholds (default: 900 LOC for files, 700 LOC for functions).
-- 📈 **Code Size Scoring**: Code size violations now contribute to the compliance score with customizable thresholds via `.fcheck` configuration.
-- 🖼️ **Code Size SVG Visualizations**: New SVG treemap and bar chart exports showing code size distribution across files and folders.
+- 📏 **Code Size Analyzer**: New analyzer for LOC threshold violations across files, classes, functions, and methods.
+- ⚙️ **Configurable Code Size Thresholds**: Added `.fcheck` options under `analyzers.options.code_size`:
+  - `max_file_loc` (default: `900`)
+  - `max_class_loc` (default: `800`)
+  - `max_function_loc` (default: `700`)
+  - `max_method_loc` (default: `500`)
+- 🖼️ **Code Size SVG Export**: Added `--svgsize` CLI flag to generate `fcheck_code_size.svg` treemap output.
 
 ### Changed
 
-- 📝 Updated README.md and RULES documentation to reflect new code size analyzer.
-- 🔧 Refactored console output modules for better maintainability.
+- 📈 **Compliance Scoring**: Code size now contributes to analyzer scoring and focus area suggestions.
+
 
 ## [0.9.14] - 2026-02-18
 
