@@ -13,6 +13,9 @@ import 'package:fcheck/src/models/project_type.dart';
 import 'console_common.dart';
 
 part 'console_output_report.dart';
+part 'console_output_report_helpers.dart';
+part 'console_output_report_context.dart';
+part 'console_output_report_analyzers.dart';
 part 'console_output_guides.dart';
 part 'console_output_printers.dart';
 part 'console_output_styles.dart';

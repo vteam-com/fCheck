@@ -214,6 +214,8 @@
 <rect x="50.0" y="580.0" width="220" height="50" class="fileNode"/>
 <rect x="50.0" y="650.0" width="220" height="50" class="fileNode"/>
 <rect x="50.0" y="720.0" width="220" height="50" class="fileNode"/>
+<rect x="50.0" y="790.0" width="220" height="50" class="fileNode"/>
+<rect x="50.0" y="860.0" width="220" height="50" class="fileNode"/>
 <rect x="370.0" y="90.0" width="220" height="50" class="fileNode"/>
 <rect x="370.0" y="160.0" width="220" height="50" class="fileNode"/>
 <rect x="370.0" y="230.0" width="220" height="50" class="fileNode"/>
@@ -1168,15 +1170,17 @@
 12. issue_location_utils.dart
 13. layers_results.dart
 14. version.dart</title></g><text x="160.0" y="115.0" class="textNormal">fcheck.dart</text>
-<text x="160.0" y="185.0" class="textSmall">code_size_outlier_utils.dart</text>
-<text x="160.0" y="255.0" class="textSmall">console_output_guides.dart</text>
-<text x="160.0" y="325.0" class="textSmall">console_output_printers.dart</text>
-<text x="160.0" y="395.0" class="textSmall">console_output_report.dart</text>
-<text x="160.0" y="465.0" class="textSmall">console_output_styles.dart</text>
-<text x="160.0" y="535.0" class="textSmall">export_svg_folders_metrics_layout.dart</text>
-<text x="160.0" y="605.0" class="textSmall">export_svg_folders_models.dart</text>
-<text x="160.0" y="675.0" class="textSmall">export_svg_folders_paths.dart</text>
-<text x="160.0" y="745.0" class="textSmall">export_svg_folders_rendering.dart</text>
+<text x="160.0" y="185.0" class="textSmall">console_output_guides.dart</text>
+<text x="160.0" y="255.0" class="textSmall">console_output_printers.dart</text>
+<text x="160.0" y="325.0" class="textSmall">console_output_report.dart</text>
+<text x="160.0" y="395.0" class="textSmall">console_output_report_analyzers.dart</text>
+<text x="160.0" y="465.0" class="textSmall">console_output_report_context.dart</text>
+<text x="160.0" y="535.0" class="textSmall">console_output_report_helpers.dart</text>
+<text x="160.0" y="605.0" class="textSmall">console_output_styles.dart</text>
+<text x="160.0" y="675.0" class="textSmall">export_svg_folders_metrics_layout.dart</text>
+<text x="160.0" y="745.0" class="textSmall">export_svg_folders_models.dart</text>
+<text x="160.0" y="815.0" class="textSmall">export_svg_folders_paths.dart</text>
+<text x="160.0" y="885.0" class="textSmall">export_svg_folders_rendering.dart</text>
 <g class="badge incomingBadge">
   <path d="M 382.0,102.0 L 370.0,95.0 Q 367.0,95.0 367.0,98.0 L 367.0,106.0 Q 367.0,109.0 370.0,109.0 Z" fill="#3b82f6"/>
   <text x="371.68" y="103.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="badge outgoingBadge">

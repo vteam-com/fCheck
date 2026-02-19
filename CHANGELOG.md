@@ -7,6 +7,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.15] - 2026-02-19
+
+### Added
+
+- 📊 **Code Size Analyzer**: New analyzer to detect files and functions that exceed configurable size thresholds (default: 900 LOC for files, 700 LOC for functions).
+- 📈 **Code Size Scoring**: Code size violations now contribute to the compliance score with customizable thresholds via `.fcheck` configuration.
+- 🖼️ **Code Size SVG Visualizations**: New SVG treemap and bar chart exports showing code size distribution across files and folders.
+
+### Changed
+
+- 📝 Updated README.md and RULES documentation to reflect new code size analyzer.
+- 🔧 Refactored console output modules for better maintainability.
+
 ## [0.9.14] - 2026-02-18
 
 ### Added

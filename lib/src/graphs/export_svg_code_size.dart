@@ -33,6 +33,7 @@ const double _folderLabelInsetX = 6.0;
 const double _folderLabelInsetY = 4.0;
 const double _folderLabelBaseFontSize = 9.0;
 const double _folderLabelGap = 8.0;
+const double _folderLabelLocWidthRatio = 0.45;
 const double _locOnlyLabelHorizontalPadding = 6.0;
 const double _locOnlyLabelBaseFontSize = 10.0;
 const double _folderDepthOpacityBase = 0.78;
@@ -511,7 +512,7 @@ void _renderFolderTopLeftLabel(
   final rightX = rect.x + rect.width - _folderLabelInsetX;
   final y = rect.y + _folderLabelInsetY + _folderLabelBaseFontSize;
   final maxWidth = rect.width - (_folderLabelInsetX * _doubleInsetMultiplier);
-  final locMaxWidth = maxWidth * 0.45;
+  final locMaxWidth = maxWidth * _folderLabelLocWidthRatio;
   final labelMaxWidth = math.max(0.0, maxWidth - locMaxWidth - _folderLabelGap);
   final labelFontSize = fitTextFontSize(
     label,
@@ -587,6 +588,9 @@ void _renderInnerTileGradientOverlay(
   );
 }
 
+/// Returns rounded-corner SVG attributes for the provided radius.
+///
+/// Produces an empty string when `radius` is not positive.
 String _cornerRadiusAttributes(double radius) {
   if (radius <= 0) {
     return '';
