@@ -133,11 +133,16 @@ class AppStrings {
   static const String exampleHardcodedStrings = '      - hardcoded_strings';
   static const String exampleOptions = '    options:';
   static const String exampleDuplicateCode = '      duplicate_code:';
+  static const String exampleCodeSize = '      code_size:';
   static const String exampleSimilarityThreshold =
       '        similarity_threshold: 0.90 # 0.0 to 1.0';
   static const String exampleMinTokens = '        min_tokens: 20';
   static const String exampleMinNonEmptyLines =
       '        min_non_empty_lines: 8';
+  static const String exampleMaxFileLoc = '        max_file_loc: 900';
+  static const String exampleMaxClassLoc = '        max_class_loc: 800';
+  static const String exampleMaxFunctionLoc = '        max_function_loc: 700';
+  static const String exampleMaxMethodLoc = '        max_method_loc: 500';
   static const String availableAnalyzerNames = 'Available analyzer names:';
 
   // Scoring Guide
@@ -157,6 +162,12 @@ class AppStrings {
   static const String oneDomainCanOnlyConsumeShare =
       'One domain can only consume its own share, never more.';
   static const String domainFormulasUsed = 'Domain formulas used:';
+  static const String formulaCodeSize =
+      '  - code_size: threshold overage model by artifact kind (file/class/function/method)';
+  static const String formulaCodeSizeThresholds =
+      '    defaults: file>900, class>800, function>700, method>500 LOC';
+  static const String formulaCodeSizeComputation =
+      '    score = 1 - (sum(overageRatio for violating artifacts) / totalArtifacts), overageRatio=(loc-threshold)/threshold';
   static const String formulaOneClassPerFile =
       '  - one_class_per_file: 1 - (violations / max(1, dartFiles))';
   static const String formulaHardcodedStrings =

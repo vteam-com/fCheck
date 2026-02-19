@@ -129,7 +129,7 @@ void main() {
       expect(svg, contains('&lt;...&gt;'));
       expect(svg, contains('12,058 LOC'));
       expect(svg, contains('fill="#000"'));
-      expect(svg, contains('filter="url(#outlineWhite)"'));
+      expect(svg, isNot(contains('filter="url(#outlineWhite)"')));
       expect(svg, contains('text-anchor="start"'));
     });
 

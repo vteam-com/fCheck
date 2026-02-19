@@ -171,20 +171,20 @@ class TestClass {
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains(AppStrings.setupIgnoresInDartFile));
-      expect(result.stdout, contains('1. dead_code'));
+      expect(result.stdout, contains('1. code_size'));
       expect(
         result.stdout,
         contains(
-          RegExp(r'2\.\s+documentation\s+\|\s+// ignore: fcheck_documentation'),
+          RegExp(r'3\.\s+documentation\s+\|\s+// ignore: fcheck_documentation'),
         ),
       );
       expect(
         result.stdout,
         contains(
-          '7. one_class_per_file | // ignore: fcheck_one_class_per_file',
+          '8. one_class_per_file | // ignore: fcheck_one_class_per_file',
         ),
       );
-      expect(result.stdout, contains('9. source_sorting'));
+      expect(result.stdout, contains('10. source_sorting'));
       expect(result.stdout, contains('| (no comment ignore support)'));
       expect(result.stdout, contains('Setup using the .fcheck file'));
       expect(result.stdout, contains('input:'));
@@ -196,6 +196,11 @@ class TestClass {
       expect(result.stdout, contains('similarity_threshold: 0.90'));
       expect(result.stdout, contains('min_tokens: 20'));
       expect(result.stdout, contains('min_non_empty_lines: 8'));
+      expect(result.stdout, contains('code_size:'));
+      expect(result.stdout, contains('max_file_loc: 900'));
+      expect(result.stdout, contains('max_class_loc: 800'));
+      expect(result.stdout, contains('max_function_loc: 700'));
+      expect(result.stdout, contains('max_method_loc: 500'));
       expect(result.stdout, isNot(contains('enable:')));
     });
 
@@ -576,6 +581,65 @@ analyzers:
       final json = jsonDecode(result.stdout as String) as Map<String, dynamic>;
       final stats = json['stats'] as Map<String, dynamic>;
       expect(stats['duplicateCodeIssues'], equals(1));
+    });
+
+    test('should apply code size options from .fcheck', () async {
+      File('${tempDir.path}/large.dart').writeAsStringSync('''
+class VeryLarge {
+  void veryLargeMethod() {
+    var text = '';
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+    text = text.trim();
+  }
+}
+''');
+      File('${tempDir.path}/.fcheck').writeAsStringSync('''
+analyzers:
+  options:
+    code_size:
+      max_file_loc: 10
+      max_class_loc: 10
+      max_function_loc: 10
+      max_method_loc: 10
+''');
+
+      final result = await runCli(['--input', tempDir.path, '--json']);
+
+      expect(result.exitCode, equals(0));
+      final json = jsonDecode(result.stdout as String) as Map<String, dynamic>;
+      final compliance = json['compliance'] as Map<String, dynamic>;
+      expect(compliance['score'], lessThan(100));
+      expect(compliance['focusArea'], equals('code_size'));
     });
 
     test('should fail with readable error for invalid .fcheck', () async {

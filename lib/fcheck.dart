@@ -55,6 +55,7 @@ import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:fcheck/src/models/project_type.dart';
+import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
@@ -86,6 +87,9 @@ class AnalyzeFolder {
   /// Minimum non-empty lines for duplicate-code snippets.
   final int duplicateCodeMinNonEmptyLineCount;
 
+  /// LOC thresholds used by code-size analyzer scoring/reporting.
+  final CodeSizeThresholds codeSizeThresholds;
+
   /// Creates a new analyzer engine for the specified project directory.
   ///
   /// [projectDir] should point to the root of a Flutter/Dart project.
@@ -96,6 +100,7 @@ class AnalyzeFolder {
   /// CLI usage typically provides this from `.fcheck` (default `0.90`).
   /// [duplicateCodeMinTokenCount] minimum normalized tokens for snippets.
   /// [duplicateCodeMinNonEmptyLineCount] minimum non-empty lines for snippets.
+  /// [codeSizeThresholds] oversized LOC thresholds for file/class/function/method.
   AnalyzeFolder(
     this.projectDir, {
     this.fix = false,
@@ -108,6 +113,7 @@ class AnalyzeFolder {
         DuplicateCodeDelegate.defaultMinTokenCount,
     this.duplicateCodeMinNonEmptyLineCount =
         DuplicateCodeDelegate.defaultMinNonEmptyLineCount,
+    this.codeSizeThresholds = const CodeSizeThresholds(),
   });
 
   /// Global ignore configuration from .fcheck file and constructor.
@@ -184,6 +190,7 @@ class AnalyzeFolder {
     final oneClassPerFileEnabled = _isAnalyzerEnabled(
       AnalyzerDomain.oneClassPerFile,
     );
+    final codeSizeEnabled = _isAnalyzerEnabled(AnalyzerDomain.codeSize);
     final hardcodedStringsEnabled = _isAnalyzerEnabled(
       AnalyzerDomain.hardcodedStrings,
     );
@@ -211,7 +218,7 @@ class AnalyzeFolder {
     // Build delegates for unified analysis
     final delegates = <AnalyzerDelegate>[
       MetricsDelegate(globallyIgnoreOneClassPerFile: !oneClassPerFileEnabled),
-      CodeSizeDelegate(),
+      if (codeSizeEnabled) CodeSizeDelegate(),
       if (hardcodedStringsEnabled)
         HardcodedStringDelegate(
           focus: hardcodedStringsFocus,
@@ -317,10 +324,12 @@ class AnalyzeFolder {
               .toList() ??
           [],
     );
-    final codeSizeArtifacts = _collectCodeSizeArtifacts(
-      unifiedResult,
-      metricsAggregation.fileMetrics,
-    );
+    final codeSizeArtifacts = codeSizeEnabled
+        ? _collectCodeSizeArtifacts(
+            unifiedResult,
+            metricsAggregation.fileMetrics,
+          )
+        : <CodeSizeArtifact>[];
 
     return ProjectMetrics(
       totalFolders: totalFolders,
@@ -333,6 +342,7 @@ class AnalyzeFolder {
       totalNumberLiteralCount: metricsAggregation.totalNumberLiteralCount,
       fileMetrics: metricsAggregation.fileMetrics,
       codeSizeArtifacts: codeSizeArtifacts,
+      codeSizeThresholds: codeSizeThresholds,
       hardcodedStringIssues: hardcodedStringIssues,
       magicNumberIssues: magicNumberIssues,
       sourceSortIssues: sourceSortIssues,
@@ -359,6 +369,7 @@ class AnalyzeFolder {
       duplicateCodeIssues: duplicateCodeIssues,
       deadCodeIssues: deadCodeIssues,
       oneClassPerFileAnalyzerEnabled: oneClassPerFileEnabled,
+      codeSizeAnalyzerEnabled: codeSizeEnabled,
       hardcodedStringsAnalyzerEnabled: hardcodedStringsEnabled,
       magicNumbersAnalyzerEnabled: magicNumbersEnabled,
       sourceSortingAnalyzerEnabled: sourceSortingEnabled,

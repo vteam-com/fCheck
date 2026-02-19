@@ -13,6 +13,7 @@ import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:fcheck/src/models/project_results_breakdown.dart';
 import 'package:fcheck/src/models/project_type.dart';
+import 'package:fcheck/src/models/code_size_thresholds.dart';
 
 /// Represents the overall quality metrics for a Flutter/Dart project.
 ///
@@ -45,6 +46,9 @@ class ProjectMetrics {
 
   /// Sized source artifacts across file/class/function/method levels.
   final List<CodeSizeArtifact> codeSizeArtifacts;
+
+  /// LOC thresholds used for code-size analyzer scoring and reporting.
+  final CodeSizeThresholds codeSizeThresholds;
 
   /// List of secret issues found in the project.
   final List<SecretIssue> secretIssues;
@@ -126,6 +130,9 @@ class ProjectMetrics {
   /// Number of entries in `dev_dependencies` from pubspec.yaml.
   final int devDependencyCount;
 
+  /// Whether the code-size analyzer was enabled for this run.
+  final bool codeSizeAnalyzerEnabled;
+
   /// Whether the one-class-per-file analyzer was enabled for this run.
   final bool oneClassPerFileAnalyzerEnabled;
 
@@ -194,6 +201,7 @@ class ProjectMetrics {
     this.totalNumberLiteralCount = 0,
     required this.fileMetrics,
     this.codeSizeArtifacts = const [],
+    this.codeSizeThresholds = const CodeSizeThresholds(),
     required this.secretIssues,
     required this.hardcodedStringIssues,
     required this.magicNumberIssues,
@@ -217,6 +225,7 @@ class ProjectMetrics {
     this.ignoreDirectivesCount = 0,
     this.ignoreDirectiveFiles = const [],
     this.ignoreDirectiveCountsByFile = const {},
+    this.codeSizeAnalyzerEnabled = true,
     this.oneClassPerFileAnalyzerEnabled = true,
     this.hardcodedStringsAnalyzerEnabled = true,
     this.magicNumbersAnalyzerEnabled = true,
@@ -235,6 +244,7 @@ class ProjectMetrics {
           totalLinesOfCode: totalLinesOfCode,
           fileMetrics: fileMetrics,
           codeSizeArtifacts: codeSizeArtifacts,
+          codeSizeThresholds: codeSizeThresholds,
           hardcodedStringIssues: hardcodedStringIssues,
           magicNumberIssues: magicNumberIssues,
           sourceSortIssues: sourceSortIssues,
@@ -248,6 +258,7 @@ class ProjectMetrics {
           ignoreDirectivesCount: ignoreDirectivesCount,
           customExcludedFilesCount: customExcludedFilesCount,
           disabledAnalyzersCount: disabledAnalyzersCount,
+          codeSizeAnalyzerEnabled: codeSizeAnalyzerEnabled,
           oneClassPerFileAnalyzerEnabled: oneClassPerFileAnalyzerEnabled,
           hardcodedStringsAnalyzerEnabled: hardcodedStringsAnalyzerEnabled,
           magicNumbersAnalyzerEnabled: magicNumbersAnalyzerEnabled,
@@ -298,6 +309,7 @@ class ProjectMetrics {
     },
     'files': fileMetrics.map((m) => m.toJson()).toList(),
     'codeSize': {
+      'thresholds': codeSizeThresholds.toJson(),
       'artifacts': codeSizeArtifacts.map((a) => a.toJson()).toList(),
       'files': codeSizeFileArtifacts.map((a) => a.toJson()).toList(),
       'classes': codeSizeClassArtifacts.map((a) => a.toJson()).toList(),
@@ -329,6 +341,7 @@ class ProjectMetrics {
 
   /// Number of analyzers disabled for this run.
   int get disabledAnalyzersCount => [
+    codeSizeAnalyzerEnabled,
     oneClassPerFileAnalyzerEnabled,
     hardcodedStringsAnalyzerEnabled,
     magicNumbersAnalyzerEnabled,

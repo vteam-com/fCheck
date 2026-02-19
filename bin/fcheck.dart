@@ -111,6 +111,7 @@ void main(List<String> arguments) {
       duplicateCodeMinTokenCount: fcheckConfig.duplicateCodeMinTokens,
       duplicateCodeMinNonEmptyLineCount:
           fcheckConfig.duplicateCodeMinNonEmptyLines,
+      codeSizeThresholds: fcheckConfig.codeSizeThresholds,
     );
 
     // Handle excluded files listing

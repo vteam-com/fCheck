@@ -355,6 +355,7 @@ List<String> buildReportLines(
   final deadClassIssues = metrics.deadClassIssues;
   final deadFunctionIssues = metrics.deadFunctionIssues;
   final unusedVariableIssues = metrics.unusedVariableIssues;
+  final codeSizeAnalyzerEnabled = metrics.codeSizeAnalyzerEnabled;
   final oneClassPerFileAnalyzerEnabled = metrics.oneClassPerFileAnalyzerEnabled;
   final hardcodedStringsAnalyzerEnabled =
       metrics.hardcodedStringsAnalyzerEnabled;
@@ -370,12 +371,19 @@ List<String> buildReportLines(
   final fileMetrics = metrics.fileMetrics;
   final sourceSortIssues = metrics.sourceSortIssues;
   final layersIssues = metrics.layersIssues;
+  final codeSizeThresholds = metrics.codeSizeThresholds;
   final codeSizeFileArtifacts = [...metrics.codeSizeFileArtifacts]
     ..sort((left, right) => right.linesOfCode.compareTo(left.linesOfCode));
   final codeSizeClassArtifacts = [...metrics.codeSizeClassArtifacts]
     ..sort((left, right) => right.linesOfCode.compareTo(left.linesOfCode));
   final codeSizeCallableArtifacts = [...metrics.codeSizeCallableArtifacts]
     ..sort((left, right) => right.linesOfCode.compareTo(left.linesOfCode));
+  final codeSizeFunctionArtifacts = codeSizeCallableArtifacts
+      .where((artifact) => artifact.kind == CodeSizeArtifactKind.function)
+      .toList(growable: false);
+  final codeSizeMethodArtifacts = codeSizeCallableArtifacts
+      .where((artifact) => artifact.kind == CodeSizeArtifactKind.method)
+      .toList(growable: false);
   final classCount = fileMetrics.fold<int>(
     0,
     (sum, metric) => sum + metric.classCount,
@@ -389,6 +397,7 @@ List<String> buildReportLines(
     (sum, metric) => sum + metric.topLevelFunctionCount,
   );
   final disabledAnalyzerKeys = <String>[
+    if (!codeSizeAnalyzerEnabled) AnalyzerDomain.codeSize.configName,
     if (!oneClassPerFileAnalyzerEnabled)
       AnalyzerDomain.oneClassPerFile.configName,
     if (!hardcodedStringsAnalyzerEnabled)
@@ -570,62 +579,97 @@ List<String> buildReportLines(
     );
   }
 
-  final codeSizeSections = <({String title, List<CodeSizeArtifact> artifacts})>[
-    (title: 'Files', artifacts: codeSizeFileArtifacts),
-    (title: 'Classes', artifacts: codeSizeClassArtifacts),
-    (title: 'Functions/Methods', artifacts: codeSizeCallableArtifacts),
-  ];
+  final codeSizeSections =
+      <({String title, int threshold, List<CodeSizeArtifact> artifacts})>[
+        (
+          title: 'Files',
+          threshold: codeSizeThresholds.maxFileLoc,
+          artifacts: codeSizeFileArtifacts,
+        ),
+        (
+          title: 'Classes',
+          threshold: codeSizeThresholds.maxClassLoc,
+          artifacts: codeSizeClassArtifacts,
+        ),
+        (
+          title: 'Functions',
+          threshold: codeSizeThresholds.maxFunctionLoc,
+          artifacts: codeSizeFunctionArtifacts,
+        ),
+        (
+          title: 'Methods',
+          threshold: codeSizeThresholds.maxMethodLoc,
+          artifacts: codeSizeMethodArtifacts,
+        ),
+      ];
   final codeSizeIssueCount = analyzerIssueCountsByKey['code_size'] ?? 0;
-  final codeSizeStatus = codeSizeIssueCount == 0
-      ? _ListBlockStatus.success
-      : _ListBlockStatus.warning;
-  final codeSizeBlockLines = <String>[
-    if (codeSizeIssueCount == 0)
-      '${okTag()} Code size outlier concentration is within budget.'
-    else
-      '${warnTag()} ${formatCount(codeSizeIssueCount)} code-size outlier groups exceed concentration budget.',
-  ];
-  for (final section in codeSizeSections) {
-    if (section.artifacts.isEmpty) {
-      codeSizeBlockLines.add(
-        '  - ${section.title}: ${AppStrings.noneIndicator.trim()}',
-      );
-      continue;
-    }
-
-    final outlierCount = codeSizeOutlierCount(section.artifacts.length);
-    final outliers = section.artifacts.take(outlierCount).toList();
-    final fullTotalLoc = section.artifacts.fold<int>(
-      0,
-      (sum, artifact) => sum + artifact.linesOfCode,
+  if (!codeSizeAnalyzerEnabled) {
+    addListBlock(
+      status: _ListBlockStatus.disabled,
+      sortKey: 'code size',
+      blockLines: [
+        '${skipTag()} Code size check skipped (${AppStrings.disabled}).',
+      ],
     );
-    codeSizeBlockLines.add(
-      '  - ${section.title}: top ${formatCount(outlierCount)} of ${formatCount(section.artifacts.length)} (${formatCount(fullTotalLoc)} LOC total)',
-    );
+  } else {
+    final codeSizeStatus = codeSizeIssueCount == 0
+        ? _ListBlockStatus.success
+        : _ListBlockStatus.warning;
+    final codeSizeBlockLines = <String>[
+      if (codeSizeIssueCount == 0)
+        '${okTag()} Code size is within configured LOC thresholds.'
+      else
+        '${warnTag()} ${formatCount(codeSizeIssueCount)} source code entries exceed configured LOC thresholds.',
+    ];
+    if (codeSizeIssueCount > 0) {
+      for (final section in codeSizeSections) {
+        final violating = section.artifacts
+            .where((artifact) => artifact.linesOfCode > section.threshold)
+            .toList(growable: false);
+        if (violating.isEmpty) {
+          continue;
+        }
 
-    if (listMode == ReportListMode.none) {
-      continue;
+        codeSizeBlockLines.add(
+          '  - ${formatCount(violating.length)} ${section.title} > ${formatCount(section.threshold)}',
+        );
+
+        if (listMode == ReportListMode.none) {
+          continue;
+        }
+        final visibleViolating = _issuesForMode(
+          violating,
+          listMode,
+          effectiveListItemLimit,
+        ).toList(growable: false);
+        for (final artifact in visibleViolating) {
+          final path = normalizeIssueLocation(artifact.filePath).path;
+          final range = '${artifact.startLine}';
+          final detailedLabel = artifact.kind == CodeSizeArtifactKind.file
+              ? '${_pathText(path)} ${_colorize("(${formatCount(artifact.linesOfCode)} LOC)", _ansiYellow)}'
+              : artifact.kind == CodeSizeArtifactKind.classDeclaration
+              ? '${_pathText(path)}:$range ${_colorizeWithCode(artifact.qualifiedName, _ansiOrangeCode)} ${_colorize("(${formatCount(artifact.linesOfCode)} LOC)", _ansiYellow)}'
+              : '${_pathText(path)}:$range ${_colorizeWithCode(artifact.qualifiedName, _ansiOrangeCode)} ${_colorize("(${formatCount(artifact.linesOfCode)} LOC)", _ansiYellow)}';
+          final line = listMode == ReportListMode.filenames
+              ? '    - ${_pathText(path)}'
+              : '    - $detailedLabel';
+          codeSizeBlockLines.add(line);
+        }
+        if (listMode == ReportListMode.partial &&
+            violating.length > effectiveListItemLimit) {
+          codeSizeBlockLines.add(
+            '    ... ${AppStrings.and} ${formatCount(violating.length - effectiveListItemLimit)} ${AppStrings.more}',
+          );
+        }
+      }
     }
-    for (final artifact in outliers) {
-      final path = normalizeIssueLocation(artifact.filePath).path;
-      final range = '${artifact.startLine}';
-      final detailedLabel = artifact.kind == CodeSizeArtifactKind.file
-          ? '${_pathText(path)} ${_colorize("(LOC ${formatCount(artifact.linesOfCode)})", _ansiYellow)}'
-          : artifact.kind == CodeSizeArtifactKind.classDeclaration
-          ? '${_pathText(path)}:$range ${_colorizeWithCode(artifact.qualifiedName, _ansiOrangeCode)} ${_colorize("(LOC ${formatCount(artifact.linesOfCode)})", _ansiYellow)}'
-          : '${_pathText(path)}:$range ${_colorizeWithCode(artifact.qualifiedName, _ansiOrangeCode)} ${_colorize("(LOC ${formatCount(artifact.linesOfCode)})", _ansiYellow)}';
-      final line = listMode == ReportListMode.filenames
-          ? '    - ${_pathText(path)}'
-          : '    - $detailedLabel';
-      codeSizeBlockLines.add(line);
-    }
+    codeSizeBlockLines.add('');
+    addListBlock(
+      status: codeSizeStatus,
+      sortKey: 'code size',
+      blockLines: codeSizeBlockLines,
+    );
   }
-  codeSizeBlockLines.add('');
-  addListBlock(
-    status: codeSizeStatus,
-    sortKey: 'code size',
-    blockLines: codeSizeBlockLines,
-  );
 
   if (ignoreDirectivesCount == 0 &&
       customExcludedFilesCount == 0 &&

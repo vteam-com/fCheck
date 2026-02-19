@@ -175,7 +175,7 @@
 
   <rect x="300" y="325" width="260" height="70" rx="4" class="note-box" />
   <text x="312" y="343" class="note-text">- resolve project type &amp; localization</text>
-  <text x="312" y="359" class="note-text">- evaluate enabled analyzers</text>
+  <text x="312" y="359" class="note-text">- evaluate enabled analyzers (including code_size)</text>
   <text x="312" y="375" class="note-text">- instantiate Delegates for Runner</text>
 
   <!-- 3. Unified single-pass analysis -->
@@ -260,7 +260,7 @@
   <rect x="1950" y="1305" width="460" height="35" rx="4" class="note-box" />
   <text x="1962" y="1328" class="note-text">Consistent post-processing for all complex domain analyzers.</text>
   <rect x="1950" y="1348" width="840" height="35" rx="4" class="note-box" />
-  <text x="1962" y="1371" class="note-text">CodeSizeDelegate collects LOC for outliers/treemap, and code_size now feeds MetricsAnalyzer scoring + compliance deductions.</text>
+  <text x="1962" y="1371" class="note-text">CodeSizeDelegate collects LOC for treemap/reporting; code_size scoring now uses configurable .fcheck LOC thresholds (file/class/function/method) and contributes deductions when exceeded.</text>
 
   <!-- 5. Return -->
   <text x="50" y="1415" class="section-label">5. Build ProjectMetrics &amp; Return</text>

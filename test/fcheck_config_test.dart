@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
@@ -28,6 +29,22 @@ void main() {
       );
       expect(config.duplicateCodeMinTokens, equals(20));
       expect(config.duplicateCodeMinNonEmptyLines, equals(10));
+      expect(
+        config.codeSizeThresholds.maxFileLoc,
+        equals(CodeSizeThresholds.defaultMaxFileLoc),
+      );
+      expect(
+        config.codeSizeThresholds.maxClassLoc,
+        equals(CodeSizeThresholds.defaultMaxClassLoc),
+      );
+      expect(
+        config.codeSizeThresholds.maxFunctionLoc,
+        equals(CodeSizeThresholds.defaultMaxFunctionLoc),
+      );
+      expect(
+        config.codeSizeThresholds.maxMethodLoc,
+        equals(CodeSizeThresholds.defaultMaxMethodLoc),
+      );
       expect(FcheckConfig.defaultDuplicateCodeMinTokens, equals(20));
       expect(FcheckConfig.defaultDuplicateCodeMinNonEmptyLines, equals(10));
       expect(
@@ -131,6 +148,25 @@ analyzers:
       expect(config.duplicateCodeSimilarityThreshold, equals(0.9));
       expect(config.duplicateCodeMinTokens, equals(35));
       expect(config.duplicateCodeMinNonEmptyLines, equals(12));
+    });
+
+    test('reads code size options', () {
+      File(p.join(tempDir.path, '.fcheck')).writeAsStringSync('''
+analyzers:
+  options:
+    code_size:
+      max_file_loc: 1200
+      max_class_loc: 900
+      max_function_loc: 600
+      max_method_loc: 450
+''');
+
+      final config = FcheckConfig.loadForInputDirectory(tempDir);
+
+      expect(config.codeSizeThresholds.maxFileLoc, equals(1200));
+      expect(config.codeSizeThresholds.maxClassLoc, equals(900));
+      expect(config.codeSizeThresholds.maxFunctionLoc, equals(600));
+      expect(config.codeSizeThresholds.maxMethodLoc, equals(450));
     });
   });
 }

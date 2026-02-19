@@ -1,6 +1,8 @@
 import 'package:fcheck/src/analyzers/metrics/metrics_input.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
+import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
+import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:test/test.dart';
 
@@ -45,6 +47,57 @@ void main() {
       },
     );
 
+    test('applies deduction when code-size artifacts exceed thresholds', () {
+      final result = analyzer.analyze(
+        _buildInput(
+          codeSizeArtifacts: const [
+            CodeSizeArtifact(
+              kind: CodeSizeArtifactKind.file,
+              name: 'big.dart',
+              filePath: 'lib/big.dart',
+              linesOfCode: 120,
+              startLine: 1,
+              endLine: 120,
+            ),
+            CodeSizeArtifact(
+              kind: CodeSizeArtifactKind.classDeclaration,
+              name: 'HugeClass',
+              filePath: 'lib/big.dart',
+              linesOfCode: 90,
+              startLine: 2,
+              endLine: 100,
+            ),
+            CodeSizeArtifact(
+              kind: CodeSizeArtifactKind.function,
+              name: 'hugeFn',
+              filePath: 'lib/big.dart',
+              linesOfCode: 70,
+              startLine: 105,
+              endLine: 175,
+            ),
+            CodeSizeArtifact(
+              kind: CodeSizeArtifactKind.method,
+              name: 'hugeMethod',
+              filePath: 'lib/big.dart',
+              linesOfCode: 60,
+              startLine: 20,
+              endLine: 80,
+              ownerName: 'HugeClass',
+            ),
+          ],
+          codeSizeThresholds: const CodeSizeThresholds(
+            maxFileLoc: 100,
+            maxClassLoc: 80,
+            maxFunctionLoc: 60,
+            maxMethodLoc: 50,
+          ),
+        ),
+      );
+
+      expect(result.complianceScore, lessThan(100));
+      expect(result.complianceFocusAreaKey, equals('code_size'));
+    });
+
     test('caps suppression penalty and prioritizes checks bypassed', () {
       final result = analyzer.analyze(
         _buildInput(
@@ -67,11 +120,14 @@ ProjectMetricsAnalysisInput _buildInput({
   int totalDartFiles = 10,
   int totalLinesOfCode = 1000,
   List<FileMetrics>? fileMetrics,
+  List<CodeSizeArtifact> codeSizeArtifacts = const [],
+  CodeSizeThresholds codeSizeThresholds = const CodeSizeThresholds(),
   List<MagicNumberIssue> magicNumberIssues = const [],
   int layersEdgeCount = 0,
   bool usesLocalization = true,
   int ignoreDirectivesCount = 0,
   int customExcludedFilesCount = 0,
+  bool codeSizeAnalyzerEnabled = true,
   bool oneClassPerFileAnalyzerEnabled = true,
   bool hardcodedStringsAnalyzerEnabled = true,
   bool magicNumbersAnalyzerEnabled = true,
@@ -96,6 +152,7 @@ ProjectMetricsAnalysisInput _buildInput({
       );
 
   final disabledAnalyzersCount = [
+    codeSizeAnalyzerEnabled,
     oneClassPerFileAnalyzerEnabled,
     hardcodedStringsAnalyzerEnabled,
     magicNumbersAnalyzerEnabled,
@@ -111,7 +168,8 @@ ProjectMetricsAnalysisInput _buildInput({
     totalDartFiles: totalDartFiles,
     totalLinesOfCode: totalLinesOfCode,
     fileMetrics: effectiveFileMetrics,
-    codeSizeArtifacts: const [],
+    codeSizeArtifacts: codeSizeArtifacts,
+    codeSizeThresholds: codeSizeThresholds,
     hardcodedStringIssues: const [],
     magicNumberIssues: magicNumberIssues,
     sourceSortIssues: const [],
@@ -125,6 +183,7 @@ ProjectMetricsAnalysisInput _buildInput({
     ignoreDirectivesCount: ignoreDirectivesCount,
     customExcludedFilesCount: customExcludedFilesCount,
     disabledAnalyzersCount: disabledAnalyzersCount,
+    codeSizeAnalyzerEnabled: codeSizeAnalyzerEnabled,
     oneClassPerFileAnalyzerEnabled: oneClassPerFileAnalyzerEnabled,
     hardcodedStringsAnalyzerEnabled: hardcodedStringsAnalyzerEnabled,
     magicNumbersAnalyzerEnabled: magicNumbersAnalyzerEnabled,

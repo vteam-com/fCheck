@@ -505,6 +505,12 @@ void main() {
             },
           ],
           'codeSize': {
+            'thresholds': {
+              'maxFileLoc': 900,
+              'maxClassLoc': 800,
+              'maxFunctionLoc': 700,
+              'maxMethodLoc': 500,
+            },
             'artifacts': [],
             'files': [],
             'classes': [],

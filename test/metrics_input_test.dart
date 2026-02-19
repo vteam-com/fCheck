@@ -1,4 +1,5 @@
 import 'package:fcheck/src/analyzers/metrics/metrics_input.dart';
+import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -9,6 +10,7 @@ void main() {
         totalLinesOfCode: 500,
         fileMetrics: [],
         codeSizeArtifacts: [],
+        codeSizeThresholds: const CodeSizeThresholds(),
         hardcodedStringIssues: [],
         magicNumberIssues: [],
         sourceSortIssues: [],
@@ -22,6 +24,7 @@ void main() {
         ignoreDirectivesCount: 3,
         customExcludedFilesCount: 1,
         disabledAnalyzersCount: 2,
+        codeSizeAnalyzerEnabled: true,
         oneClassPerFileAnalyzerEnabled: true,
         hardcodedStringsAnalyzerEnabled: true,
         magicNumbersAnalyzerEnabled: true,
@@ -38,6 +41,7 @@ void main() {
       expect(input.usesLocalization, isTrue);
       expect(input.ignoreDirectivesCount, equals(3));
       expect(input.disabledAnalyzersCount, equals(2));
+      expect(input.codeSizeAnalyzerEnabled, isTrue);
       expect(input.oneClassPerFileAnalyzerEnabled, isTrue);
       expect(input.hardcodedStringsAnalyzerEnabled, isTrue);
       expect(input.magicNumbersAnalyzerEnabled, isTrue);
@@ -55,6 +59,7 @@ void main() {
         totalLinesOfCode: 200,
         fileMetrics: [],
         codeSizeArtifacts: [],
+        codeSizeThresholds: const CodeSizeThresholds(),
         hardcodedStringIssues: [],
         magicNumberIssues: [],
         sourceSortIssues: [],
@@ -68,6 +73,7 @@ void main() {
         ignoreDirectivesCount: 0,
         customExcludedFilesCount: 0,
         disabledAnalyzersCount: 5,
+        codeSizeAnalyzerEnabled: false,
         oneClassPerFileAnalyzerEnabled: false,
         hardcodedStringsAnalyzerEnabled: false,
         magicNumbersAnalyzerEnabled: false,
@@ -80,6 +86,7 @@ void main() {
       );
 
       expect(input.disabledAnalyzersCount, equals(5));
+      expect(input.codeSizeAnalyzerEnabled, isFalse);
       expect(input.oneClassPerFileAnalyzerEnabled, isFalse);
       expect(input.hardcodedStringsAnalyzerEnabled, isFalse);
     });

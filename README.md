@@ -432,6 +432,7 @@ analyzers:
 
 Supported analyzer names:
 
+- `code_size`
 - `dead_code`
 - `documentation`
 - `duplicate_code`
@@ -451,6 +452,18 @@ analyzers:
       similarity_threshold: 0.85 # 0.0..1.0
       min_tokens: 20
       min_non_empty_lines: 10
+```
+
+Code size thresholds can also be tuned in `.fcheck`:
+
+```yaml
+analyzers:
+  options:
+    code_size:
+      max_file_loc: 900
+      max_class_loc: 800
+      max_function_loc: 700
+      max_method_loc: 500
 ```
 
 Configuration precedence:

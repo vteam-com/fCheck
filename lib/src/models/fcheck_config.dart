@@ -1,10 +1,14 @@
 import 'dart:io';
 
+import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 /// Analyzer domains that can be enabled/disabled via `.fcheck`.
 enum AnalyzerDomain {
+  /// Code size threshold analysis.
+  codeSize,
+
   /// One class per file compliance rule.
   oneClassPerFile,
 
@@ -38,6 +42,8 @@ extension AnalyzerDomainName on AnalyzerDomain {
   /// Canonical key used in `.fcheck` config files.
   String get configName {
     switch (this) {
+      case AnalyzerDomain.codeSize:
+        return 'code_size';
       case AnalyzerDomain.oneClassPerFile:
         return 'one_class_per_file';
       case AnalyzerDomain.hardcodedStrings:
@@ -107,6 +113,9 @@ class FcheckConfig {
   /// Duplicate-code minimum non-empty line count.
   final int duplicateCodeMinNonEmptyLines;
 
+  /// Code-size threshold options.
+  final CodeSizeThresholds codeSizeThresholds;
+
   /// Creates a parsed `.fcheck` config object.
   FcheckConfig({
     required this.inputDirectory,
@@ -120,6 +129,7 @@ class FcheckConfig {
     required this.duplicateCodeSimilarityThreshold,
     required this.duplicateCodeMinTokens,
     required this.duplicateCodeMinNonEmptyLines,
+    required this.codeSizeThresholds,
   });
 
   /// Loads `.fcheck` from [inputDirectory], or returns defaults when absent.
@@ -139,6 +149,7 @@ class FcheckConfig {
             defaultDuplicateCodeSimilarityThreshold,
         duplicateCodeMinTokens: defaultDuplicateCodeMinTokens,
         duplicateCodeMinNonEmptyLines: defaultDuplicateCodeMinNonEmptyLines,
+        codeSizeThresholds: const CodeSizeThresholds(),
       );
     }
 
@@ -163,6 +174,7 @@ class FcheckConfig {
             defaultDuplicateCodeSimilarityThreshold,
         duplicateCodeMinTokens: defaultDuplicateCodeMinTokens,
         duplicateCodeMinNonEmptyLines: defaultDuplicateCodeMinNonEmptyLines,
+        codeSizeThresholds: const CodeSizeThresholds(),
       );
     }
 
@@ -209,6 +221,10 @@ class FcheckConfig {
       analyzersSection,
       filePath: configFile.path,
     );
+    final codeSizeOptions = _readCodeSizeOptions(
+      analyzersSection,
+      filePath: configFile.path,
+    );
     disabled.addAll(
       _readLegacyIgnores(ignoresSection, filePath: configFile.path),
     );
@@ -226,6 +242,7 @@ class FcheckConfig {
           duplicateCodeOptions.similarityThreshold,
       duplicateCodeMinTokens: duplicateCodeOptions.minTokens,
       duplicateCodeMinNonEmptyLines: duplicateCodeOptions.minNonEmptyLines,
+      codeSizeThresholds: codeSizeOptions,
     );
   }
 
@@ -457,6 +474,56 @@ class FcheckConfig {
     );
   }
 
+  /// Reads code-size analyzer options with defaults and range checks.
+  static CodeSizeThresholds _readCodeSizeOptions(
+    YamlMap? analyzersSection, {
+    required String filePath,
+  }) {
+    final optionsSection = _readNestedMap(
+      analyzersSection,
+      'options',
+      filePath: filePath,
+      contextPath: 'analyzers.options',
+    );
+    final codeSizeSection = _readNestedMap(
+      optionsSection,
+      'code_size',
+      filePath: filePath,
+      contextPath: 'analyzers.options.code_size',
+    );
+
+    return CodeSizeThresholds(
+      maxFileLoc: _readPositiveInt(
+        codeSizeSection,
+        'max_file_loc',
+        filePath: filePath,
+        contextPath: 'analyzers.options.code_size.max_file_loc',
+        defaultValue: CodeSizeThresholds.defaultMaxFileLoc,
+      ),
+      maxClassLoc: _readPositiveInt(
+        codeSizeSection,
+        'max_class_loc',
+        filePath: filePath,
+        contextPath: 'analyzers.options.code_size.max_class_loc',
+        defaultValue: CodeSizeThresholds.defaultMaxClassLoc,
+      ),
+      maxFunctionLoc: _readPositiveInt(
+        codeSizeSection,
+        'max_function_loc',
+        filePath: filePath,
+        contextPath: 'analyzers.options.code_size.max_function_loc',
+        defaultValue: CodeSizeThresholds.defaultMaxFunctionLoc,
+      ),
+      maxMethodLoc: _readPositiveInt(
+        codeSizeSection,
+        'max_method_loc',
+        filePath: filePath,
+        contextPath: 'analyzers.options.code_size.max_method_loc',
+        defaultValue: CodeSizeThresholds.defaultMaxMethodLoc,
+      ),
+    );
+  }
+
   /// Reads an optional nested map at [key] from [source].
   static YamlMap? _readNestedMap(
     YamlMap? source,
@@ -615,6 +682,8 @@ class FcheckConfig {
   }
 
   static final Map<String, AnalyzerDomain> _analyzerAliases = {
+    'code_size': AnalyzerDomain.codeSize,
+    'codesize': AnalyzerDomain.codeSize,
     'one_class_per_file': AnalyzerDomain.oneClassPerFile,
     'hardcoded_strings': AnalyzerDomain.hardcodedStrings,
     'magic_numbers': AnalyzerDomain.magicNumbers,

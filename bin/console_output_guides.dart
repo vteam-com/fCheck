@@ -6,6 +6,8 @@ part of 'console_output.dart';
 /// return `null`.
 String? _ignoreDirectiveForAnalyzer(AnalyzerDomain analyzer) {
   switch (analyzer) {
+    case AnalyzerDomain.codeSize:
+      return null;
     case AnalyzerDomain.documentation:
       return IgnoreConfig.ignoreDirectiveForDocumentation;
     case AnalyzerDomain.oneClassPerFile:
@@ -77,6 +79,11 @@ void printIgnoreSetupGuide() {
   print(AppStrings.exampleSimilarityThreshold);
   print(AppStrings.exampleMinTokens);
   print(AppStrings.exampleMinNonEmptyLines);
+  print(AppStrings.exampleCodeSize);
+  print(AppStrings.exampleMaxFileLoc);
+  print(AppStrings.exampleMaxClassLoc);
+  print(AppStrings.exampleMaxFunctionLoc);
+  print(AppStrings.exampleMaxMethodLoc);
   print('');
   print(AppStrings.availableAnalyzerNames);
   for (final analyzer in sortedAnalyzers) {
@@ -118,6 +125,9 @@ void printScoreSystemGuide() {
   print(AppStrings.oneDomainCanOnlyConsumeShare);
   print('');
   print(AppStrings.domainFormulasUsed);
+  print(AppStrings.formulaCodeSize);
+  print(AppStrings.formulaCodeSizeThresholds);
+  print(AppStrings.formulaCodeSizeComputation);
   print(AppStrings.formulaOneClassPerFile);
   print(AppStrings.formulaHardcodedStrings);
   print(AppStrings.formulaMagicNumbers);

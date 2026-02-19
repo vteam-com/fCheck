@@ -19,7 +19,6 @@ const double _minUsableDimension = 2.0;
 const int _opacityDecimalPlaces = 2;
 const double _labelHorizontalPadding = 10.0;
 const double _nameLabelBaseFontSize = 14.0;
-const double _locLabelBaseFontSize = 11.0;
 const double _minFittedFontSize = 6.0;
 const double _twoLineNameDy = -6.0;
 const double _twoLineLocDy = 14.0;
@@ -33,6 +32,7 @@ const double _folderTileLabelMinHeight = 20.0;
 const double _folderLabelInsetX = 6.0;
 const double _folderLabelInsetY = 4.0;
 const double _folderLabelBaseFontSize = 9.0;
+const double _folderLabelGap = 8.0;
 const double _locOnlyLabelHorizontalPadding = 6.0;
 const double _locOnlyLabelBaseFontSize = 10.0;
 const double _folderDepthOpacityBase = 0.78;
@@ -50,6 +50,10 @@ const String _classTileFillColor = '#9eb89a';
 const String _methodTileFillColor = '#2e8b57';
 const String _globalFunctionsClassLabel = '<...>';
 const String _innerTileDiagonalGradientId = 'codeSizeInnerTileDiagonalGradient';
+const double _innerTileCornerRadius = 5.0;
+const String _tileBorderColor = '#ffffff';
+const double _tileBorderOpacity = 0.45;
+const double _tileBorderWidth = 0.8;
 
 /// Exports a code-size treemap as SVG.
 ///
@@ -115,16 +119,16 @@ String exportSvgCodeSize(
     width: width,
     height: height,
     leadingBlocks: const [
-      '<defs><linearGradient id="$_innerTileDiagonalGradientId" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.38"/><stop offset="55%" stop-color="#ffffff" stop-opacity="0.08"/><stop offset="100%" stop-color="#000000" stop-opacity="0.12"/></linearGradient></defs>',
+      '<defs><linearGradient xmlns="http://www.w3.org/2000/svg" id="$_innerTileDiagonalGradientId" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/><stop offset="50%" stop-color="#ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="#aaa" stop-opacity="0.1"/></linearGradient></defs>',
     ],
     backgroundFill: '#fbfbfd',
   );
   buffer
     ..writeln(
-      '<text x="${padding + _headerTextInset}" y="${padding + _headerTextBaseline}" font-size="22" font-weight="700" fill="#222" filter="url(#outlineWhite)">${escapeXml(title)}</text>',
+      '<text x="${padding + _headerTextInset}" y="${padding + _headerTextBaseline}" font-size="22" font-weight="700" fill="#222">${escapeXml(title)}</text>',
     )
     ..writeln(
-      '<text x="${width - padding - _headerTextInset}" y="${padding + _headerTextBaseline}" text-anchor="end" font-size="13" fill="#666" filter="url(#outlineWhite)">Sized by non-empty LOC.</text>',
+      '<text x="${width - padding - _headerTextInset}" y="${padding + _headerTextBaseline}" text-anchor="end" font-size="13" fill="#666">Sized by non-empty LOC.</text>',
     );
 
   final foldersRect = groupRects[_foldersGroupId];
@@ -232,7 +236,10 @@ void _renderFolderGroup(StringBuffer buffer, _FolderTreeNode root, _Rect rect) {
     '<rect x="${rect.x}" y="${rect.y}" width="${rect.width}" height="${rect.height}" fill="#ffffff" stroke="#d9dce3" stroke-width="1.2"/>',
   );
   buffer.writeln(
-    '<text x="${rect.x + _groupTitleInsetX}" y="${rect.y + _groupTitleBaselineY}" font-size="13" font-weight="700" fill="#111" filter="url(#outlineWhite)">Folders (${formatCount(root.totalSize)} LOC)</text>',
+    '<text x="${rect.x + _groupTitleInsetX}" y="${rect.y + _groupTitleBaselineY}" font-size="13" font-weight="700" fill="#111">Folders &amp; Files</text>',
+  );
+  buffer.writeln(
+    '<text x="${rect.x + rect.width - _groupTitleInsetX}" y="${rect.y + _groupTitleBaselineY}" text-anchor="end" font-size="13" font-weight="700" fill="#111">${formatCount(root.totalSize)} LOC</text>',
   );
 
   final usableRect = _Rect(
@@ -284,14 +291,20 @@ void _renderFolderLevel(
         );
     final fillOpacity = depthTint.toStringAsFixed(_opacityDecimalPlaces);
     final fillColor = entry.isFolder ? _folderTileFillColor : '#1f6f8b';
+    final cornerRadius = entry.isFolder ? 0.0 : _innerTileCornerRadius;
     final escapedLabel = escapeXml(entry.label);
     final escapedPath = escapeXml(entry.path);
 
     buffer.writeln('<g>');
     buffer.writeln(
-      '  <rect x="${entryRect.x}" y="${entryRect.y}" width="${entryRect.width}" height="${entryRect.height}" fill="$fillColor" fill-opacity="$fillOpacity"/>',
+      '  <rect x="${entryRect.x}" y="${entryRect.y}" width="${entryRect.width}" height="${entryRect.height}"${_cornerRadiusAttributes(cornerRadius)} fill="$fillColor" fill-opacity="$fillOpacity"/>',
     );
-    _renderInnerTileGradientOverlay(buffer, entryRect);
+    _renderInnerTileGradientOverlay(
+      buffer,
+      entryRect,
+      cornerRadius: cornerRadius,
+    );
+    _renderThinWhiteTileBorder(buffer, entryRect, cornerRadius: cornerRadius);
     buffer.writeln(
       '  <title>${entry.isFolder ? "folder" : "file"}: $escapedLabel | ${formatCount(entry.size)} LOC | $escapedPath</title>',
     );
@@ -357,7 +370,10 @@ void _renderClassesGroup(
     '<rect x="${rect.x}" y="${rect.y}" width="${rect.width}" height="${rect.height}" fill="#ffffff" stroke="#d9dce3" stroke-width="1.2"/>',
   );
   buffer.writeln(
-    '<text x="${rect.x + _groupTitleInsetX}" y="${rect.y + _groupTitleBaselineY}" font-size="13" font-weight="700" fill="#111" filter="url(#outlineWhite)">Classes (${formatCount(totalSize)} LOC)</text>',
+    '<text x="${rect.x + _groupTitleInsetX}" y="${rect.y + _groupTitleBaselineY}" font-size="13" font-weight="700" fill="#111">Classes &amp; Functions</text>',
+  );
+  buffer.writeln(
+    '<text x="${rect.x + rect.width - _groupTitleInsetX}" y="${rect.y + _groupTitleBaselineY}" text-anchor="end" font-size="13" font-weight="700" fill="#111">${formatCount(totalSize)} LOC</text>',
   );
 
   final usableRect = _Rect(
@@ -395,6 +411,7 @@ void _renderClassesGroup(
       '  <rect x="${classRect.x}" y="${classRect.y}" width="${classRect.width}" height="${classRect.height}" fill="$_classTileFillColor" fill-opacity="0.78"/>',
     );
     _renderInnerTileGradientOverlay(buffer, classRect);
+    _renderThinWhiteTileBorder(buffer, classRect);
     buffer.writeln(
       '  <title>class: ${escapeXml(classGroup.label)} | ${formatCount(classGroup.size)} LOC | ${escapeXml(classGroup.sourcePath)}</title>',
     );
@@ -444,9 +461,18 @@ void _renderClassesGroup(
           final callablePath = escapeXml(callable.filePath);
           buffer.writeln('<g>');
           buffer.writeln(
-            '  <rect x="${callableRect.x}" y="${callableRect.y}" width="${callableRect.width}" height="${callableRect.height}" fill="$_methodTileFillColor" fill-opacity="0.72"/>',
+            '  <rect x="${callableRect.x}" y="${callableRect.y}" width="${callableRect.width}" height="${callableRect.height}"${_cornerRadiusAttributes(_innerTileCornerRadius)} fill="$_methodTileFillColor" fill-opacity="0.72"/>',
           );
-          _renderInnerTileGradientOverlay(buffer, callableRect);
+          _renderInnerTileGradientOverlay(
+            buffer,
+            callableRect,
+            cornerRadius: _innerTileCornerRadius,
+          );
+          _renderThinWhiteTileBorder(
+            buffer,
+            callableRect,
+            cornerRadius: _innerTileCornerRadius,
+          );
           buffer.writeln(
             '  <title>callable: $callableName | ${formatCount(callable.linesOfCode)} LOC | $callablePath${callable.startLine > 0 ? ':${callable.startLine}' : ''}</title>',
           );
@@ -480,18 +506,24 @@ void _renderFolderTopLeftLabel(
   required String label,
   required int size,
 }) {
-  final folderLabel = '$label (${formatCount(size)} LOC)';
-  final x = rect.x + _folderLabelInsetX;
+  final locLabel = '${formatCount(size)} LOC';
+  final leftX = rect.x + _folderLabelInsetX;
+  final rightX = rect.x + rect.width - _folderLabelInsetX;
   final y = rect.y + _folderLabelInsetY + _folderLabelBaseFontSize;
   final maxWidth = rect.width - (_folderLabelInsetX * _doubleInsetMultiplier);
+  final locMaxWidth = maxWidth * 0.45;
+  final labelMaxWidth = math.max(0.0, maxWidth - locMaxWidth - _folderLabelGap);
   final labelFontSize = fitTextFontSize(
-    folderLabel,
-    maxWidth: maxWidth,
+    label,
+    maxWidth: labelMaxWidth,
     baseFontSize: _folderLabelBaseFontSize,
     minFontSize: _minFittedFontSize,
   );
   buffer.writeln(
-    '  <text x="$x" y="$y" text-anchor="start" font-size="${labelFontSize.toStringAsFixed(_opacityDecimalPlaces)}" fill="#000" filter="url(#outlineWhite)" font-weight="700">$folderLabel</text>',
+    '  <text x="$leftX" y="$y" text-anchor="start" font-size="${labelFontSize.toStringAsFixed(_opacityDecimalPlaces)}" fill="#000" font-weight="700">$label</text>',
+  );
+  buffer.writeln(
+    '  <text x="$rightX" y="$y" text-anchor="end" font-size="${labelFontSize.toStringAsFixed(_opacityDecimalPlaces)}" fill="#000" font-weight="700">$locLabel</text>',
   );
 }
 
@@ -511,21 +543,14 @@ void _renderTileLabel(
     minFontSize: _minFittedFontSize,
   );
   final locLabel = formatCount(size);
-  final locFontSize = fitTextFontSize(
-    locLabel,
-    maxWidth: rect.width - _labelHorizontalPadding,
-    baseFontSize: _locLabelBaseFontSize,
-    minFontSize: _minFittedFontSize,
-  );
-
   buffer.writeln(
-    '  <text x="$centerX" y="$centerY" text-anchor="middle" dominant-baseline="middle" fill="#000" filter="url(#outlineWhite)" font-weight="700">',
+    '  <text x="$centerX" y="$centerY" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">',
   );
   buffer.writeln(
     '    <tspan x="$centerX" dy="$_twoLineNameDy" font-size="${labelFontSize.toStringAsFixed(_opacityDecimalPlaces)}">$label</tspan>',
   );
   buffer.writeln(
-    '    <tspan x="$centerX" dy="$_twoLineLocDy" font-size="${locFontSize.toStringAsFixed(_opacityDecimalPlaces)}">$locLabel</tspan>',
+    '    <tspan x="$centerX" dy="$_twoLineLocDy" font-size="${labelFontSize.toStringAsFixed(_opacityDecimalPlaces)}">$locLabel</tspan>',
   );
   buffer.writeln('  </text>');
 }
@@ -547,14 +572,36 @@ void _renderLocOnlyLabel(
   );
 
   buffer.writeln(
-    '  <text x="$centerX" y="$centerY" text-anchor="middle" dominant-baseline="middle" font-size="${locFontSize.toStringAsFixed(_opacityDecimalPlaces)}" fill="#000" filter="url(#outlineWhite)" font-weight="700">$locLabel</text>',
+    '  <text x="$centerX" y="$centerY" text-anchor="middle" dominant-baseline="middle" font-size="${locFontSize.toStringAsFixed(_opacityDecimalPlaces)}" fill="#000" font-weight="700">$locLabel</text>',
   );
 }
 
 /// Adds diagonal light-to-shadow texture for inner tiles.
-void _renderInnerTileGradientOverlay(StringBuffer buffer, _Rect rect) {
+void _renderInnerTileGradientOverlay(
+  StringBuffer buffer,
+  _Rect rect, {
+  double cornerRadius = 0.0,
+}) {
   buffer.writeln(
-    '  <rect x="${rect.x}" y="${rect.y}" width="${rect.width}" height="${rect.height}" fill="url(#$_innerTileDiagonalGradientId)"/>',
+    '  <rect x="${rect.x}" y="${rect.y}" width="${rect.width}" height="${rect.height}"${_cornerRadiusAttributes(cornerRadius)} fill="url(#$_innerTileDiagonalGradientId)"/>',
+  );
+}
+
+String _cornerRadiusAttributes(double radius) {
+  if (radius <= 0) {
+    return '';
+  }
+  final radiusText = radius.toStringAsFixed(_opacityDecimalPlaces);
+  return ' rx="$radiusText" ry="$radiusText"';
+}
+
+void _renderThinWhiteTileBorder(
+  StringBuffer buffer,
+  _Rect rect, {
+  double cornerRadius = 0.0,
+}) {
+  buffer.writeln(
+    '  <rect x="${rect.x}" y="${rect.y}" width="${rect.width}" height="${rect.height}"${_cornerRadiusAttributes(cornerRadius)} fill="none" stroke="$_tileBorderColor" stroke-opacity="$_tileBorderOpacity" stroke-width="$_tileBorderWidth"/>',
   );
 }
 

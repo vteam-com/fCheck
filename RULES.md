@@ -12,6 +12,7 @@ This file defines baseline contributor expectations for the `fcheck` project and
 - Duplicate code detection
 - Secret/PII scanning
 - Flutter widget member sorting
+- Code size threshold analysis
 - Layer dependency analysis and visualization
 - Project metrics (files, folders, LOC, comment ratios)
 
@@ -25,6 +26,7 @@ This file defines baseline contributor expectations for the `fcheck` project and
 - `RULES_DOCUMENTATION.md` for README/API documentation quality rules.
 - `RULES_SORTING.md` for Flutter widget member ordering rules.
 - `RULES_LAYERS.md` for dependency graph and layer analysis rules.
+- `RULES_SIZE.md` for code-size thresholds, scoring, and reporting.
 - `RULE_METRICS.md` for project metrics analyzer architecture.
 - `RULE_SCORE.md` for overall compliance scoring rules.
 
@@ -175,7 +177,8 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
   - `analyzers.enabled`: explicit opt-in list
   - `analyzers.disabled`: explicit opt-out list
   - `analyzers.options.duplicate_code`: threshold/size tuning for duplicate-code analysis
-- Supported analyzer keys: `one_class_per_file`, `hardcoded_strings`, `magic_numbers`, `source_sorting`, `layers`, `secrets`, `dead_code`, `duplicate_code`, `documentation`.
+  - `analyzers.options.code_size`: LOC threshold tuning (`max_file_loc`, `max_class_loc`, `max_function_loc`, `max_method_loc`)
+- Supported analyzer keys: `code_size`, `one_class_per_file`, `hardcoded_strings`, `magic_numbers`, `source_sorting`, `layers`, `secrets`, `dead_code`, `duplicate_code`, `documentation`.
 - Legacy `ignores.<analyzer>: true` remains supported as a compatibility alias for disabling analyzers.
 - Precedence: built-in defaults < `.fcheck` < CLI flags.
 - File-level ignore: `// ignore: fcheck_<domain>` at the top of a Dart file.

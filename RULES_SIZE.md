@@ -3,74 +3,82 @@
 ## Overview
 
 Collects non-empty LOC (lines of code) across files, classes, functions, and
-methods, then highlights outlier concentration in reports and scoring.
+methods, then evaluates oversized source code entries against configured LOC
+thresholds.
 
 Shared analysis/exclusion conventions are defined in `RULES.md`.
 
 ## What It Measures
 
-- **File artifacts**: per-file non-empty LOC.
-- **Class artifacts**: non-empty LOC for each class declaration.
-- **Function artifacts**: non-empty LOC for top-level functions.
-- **Method artifacts**: non-empty LOC for methods and constructors.
+- **File entries**: per-file non-empty LOC.
+- **Class entries**: non-empty LOC for each class declaration.
+- **Function entries**: non-empty LOC for top-level functions.
+- **Method entries**: non-empty LOC for methods and constructors.
 
 ## How It Works
 
 - `CodeSizeDelegate` visits parsed AST nodes and records class/function/method
-  artifacts with:
+  entries with:
   - `filePath`
   - `startLine` / `endLine`
   - non-empty `linesOfCode`
-- File-level artifacts are added from `FileMetrics` so the report and SVG can
+- File-level entries are added from `FileMetrics` so the report and SVG can
   show file totals.
-- Duplicate artifacts are de-duplicated by `stableId`.
+- Duplicate entries are de-duplicated by `stableId`.
 
-## Outlier Selection
+## Threshold Configuration
 
-Code-size outlier views use a stable top slice count:
+Thresholds are configurable in `.fcheck`:
 
-- ratio: `10%` of group size
-- min: `3`
-- max: `10`
-- a function or method with 200 or more lines will be be flagged
+```yaml
+analyzers:
+  options:
+    code_size:
+      max_file_loc: 900
+      max_class_loc: 800
+      max_function_loc: 700
+      max_method_loc: 500
+```
 
-
-This is implemented by `codeSizeOutlierCount(...)`.
+- Defaults are shown above.
+- All option values must be positive integers.
+- Missing values fall back to defaults.
 
 ## Scoring Integration
 
 Code size is a scored compliance domain with key `code_size`.
 
-- It evaluates concentration for three groups:
-  - files
-  - classes
-  - callables (functions + methods)
-- For each group:
-  - `concentration = topOutlierLoc / totalGroupLoc`
-  - healthy threshold: `0.45`
-  - penalties apply only above threshold
-- Final `code_size` score is the normalized inverse of average group penalty.
-- Issue count is the number of groups currently above the healthy threshold.
+- Each entry is compared to its corresponding threshold by kind:
+  - file -> `max_file_loc`
+  - class -> `max_class_loc`
+  - function -> `max_function_loc`
+  - method -> `max_method_loc`
+- An entry contributes to code-size issues when `linesOfCode > threshold`.
+- Per-entry overage ratio: `(linesOfCode - threshold) / threshold`.
+- Final score model:
+  - `score = clamp(1 - (sum(overageRatio for violating entries) / totalEntries), 0, 1)`
+- Issue count is total violating entries across all kinds.
 
 ## Skips / Limits
 
-- Files with parse errors do not contribute class/function/method artifacts.
-- Artifacts with `linesOfCode <= 0` are ignored.
+- Files with parse errors do not contribute class/function/method entries.
+- Entries with `linesOfCode <= 0` are ignored.
 - There is currently no dedicated `// ignore: fcheck_code_size` directive.
-- Functions or Methods with less than 50 lines will be spaired (we may change this min value in the future)
 
 ## Output
 
 - Included in `ProjectMetrics.toJson()` under:
+  - `codeSize.thresholds`
   - `codeSize.artifacts`
   - `codeSize.files`
   - `codeSize.classes`
   - `codeSize.callables`
 - Included in analyzer breakdown as `code_size`.
-- CLI analyzer section shows grouped outlier lists:
+- CLI analyzer section groups violations by kind:
   - `Files`
   - `Classes`
-  - `Functions/Methods`
+  - `Functions`
+  - `Methods`
 - Used by `--svgsize` to generate `fcheck_code_size.svg`.
 
 ## Related Files

@@ -7,6 +7,7 @@ import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
+import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 
 /// Input contract for project-level metrics scoring.
@@ -17,6 +18,7 @@ class ProjectMetricsAnalysisInput {
     required this.totalLinesOfCode,
     required this.fileMetrics,
     required this.codeSizeArtifacts,
+    required this.codeSizeThresholds,
     required this.hardcodedStringIssues,
     required this.magicNumberIssues,
     required this.sourceSortIssues,
@@ -30,6 +32,7 @@ class ProjectMetricsAnalysisInput {
     required this.ignoreDirectivesCount,
     required this.customExcludedFilesCount,
     required this.disabledAnalyzersCount,
+    required this.codeSizeAnalyzerEnabled,
     required this.oneClassPerFileAnalyzerEnabled,
     required this.hardcodedStringsAnalyzerEnabled,
     required this.magicNumbersAnalyzerEnabled,
@@ -52,6 +55,9 @@ class ProjectMetricsAnalysisInput {
 
   /// Code size artifacts across files, classes, and callables.
   final List<CodeSizeArtifact> codeSizeArtifacts;
+
+  /// LOC thresholds for code-size analyzer.
+  final CodeSizeThresholds codeSizeThresholds;
 
   /// Hardcoded string issues.
   final List<HardcodedStringIssue> hardcodedStringIssues;
@@ -91,6 +97,9 @@ class ProjectMetricsAnalysisInput {
 
   /// Number of disabled analyzers.
   final int disabledAnalyzersCount;
+
+  /// Whether code-size analyzer is enabled.
+  final bool codeSizeAnalyzerEnabled;
 
   /// Whether one-class-per-file analyzer is enabled.
   final bool oneClassPerFileAnalyzerEnabled;

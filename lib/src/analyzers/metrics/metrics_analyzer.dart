@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
-import 'package:fcheck/src/analyzers/code_size/code_size_outlier_utils.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_input.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_results.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_file_data.dart';
@@ -27,7 +26,6 @@ class MetricsAnalyzer {
   static const double _minDocumentationBudget = 2.0;
   static const double _documentationBudgetPerFile = 0.6;
   static const double _duplicateRatioPenaltyMultiplier = 2.5;
-  static const double _codeSizeHealthyConcentration = 0.45;
   static const double _minIgnoreDirectiveBudget = 3.0;
   static const double _ignoreDirectiveBudgetPerFile = 0.12;
   static const double _ignoreDirectiveBudgetPerLoc = 1 / 2500;
@@ -148,13 +146,13 @@ class MetricsAnalyzer {
       (sum, issue) => sum + (issue.lineCount * issue.similarity),
     );
     final duplicateRatio = duplicateImpactLines / safeLoc;
-    final codeSizeScore = _computeCodeSizeScore(input.codeSizeArtifacts);
+    final codeSizeScore = _computeCodeSizeScore(input.codeSizeArtifacts, input);
 
     return [
       _ComplianceAreaScore(
         key: 'code_size',
         label: 'Code size',
-        enabled: true,
+        enabled: input.codeSizeAnalyzerEnabled,
         issueCount: codeSizeScore.issueCount,
         score: codeSizeScore.score,
       ),
@@ -370,7 +368,7 @@ class MetricsAnalyzer {
       case 'one_class_per_file':
         return 'Split files with multiple classes into focused files.';
       case 'code_size':
-        return 'Break up oversized files/classes/functions to reduce outlier concentration.';
+        return 'Break up files/classes/functions/methods that exceed your configured LOC thresholds.';
       case 'hardcoded_strings':
         return usesLocalization
             ? 'Move user-facing literals into localization resources (.arb).'
@@ -396,59 +394,40 @@ class MetricsAnalyzer {
     return 'Invest in the lowest-scoring quality area to raise overall compliance.';
   }
 
-  /// Computes the code-size concentration score from top outlier slices.
+  /// Computes code-size score from absolute LOC threshold overages.
   ({int issueCount, double score}) _computeCodeSizeScore(
     List<CodeSizeArtifact> codeSizeArtifacts,
+    ProjectMetricsAnalysisInput input,
   ) {
-    final fileArtifacts = codeSizeArtifacts.where(
-      (artifact) => artifact.kind == CodeSizeArtifactKind.file,
-    );
-    final classArtifacts = codeSizeArtifacts.where(
-      (artifact) => artifact.kind == CodeSizeArtifactKind.classDeclaration,
-    );
-    final callableArtifacts = codeSizeArtifacts.where(
-      (artifact) => artifact.isCallable,
-    );
-    final groups = [
-      fileArtifacts,
-      classArtifacts,
-      callableArtifacts,
-    ].where((group) => group.isNotEmpty).toList(growable: false);
-    if (groups.isEmpty) {
+    if (codeSizeArtifacts.isEmpty) {
       return (issueCount: 0, score: 1.0);
     }
 
     var issueCount = 0;
     var penaltySum = 0.0;
-    for (final group in groups) {
-      final sorted = group.toList(growable: false)
-        ..sort((left, right) => right.linesOfCode.compareTo(left.linesOfCode));
-      final topCount = codeSizeOutlierCount(sorted.length);
-      if (topCount == 0) {
+    for (final artifact in codeSizeArtifacts) {
+      final threshold = switch (artifact.kind) {
+        CodeSizeArtifactKind.file => input.codeSizeThresholds.maxFileLoc,
+        CodeSizeArtifactKind.classDeclaration =>
+          input.codeSizeThresholds.maxClassLoc,
+        CodeSizeArtifactKind.function =>
+          input.codeSizeThresholds.maxFunctionLoc,
+        CodeSizeArtifactKind.method => input.codeSizeThresholds.maxMethodLoc,
+      };
+      final overflow = artifact.linesOfCode - threshold;
+      if (overflow <= 0) {
         continue;
       }
-      final totalLoc = sorted.fold<int>(
-        0,
-        (sum, artifact) => sum + artifact.linesOfCode,
-      );
-      if (totalLoc <= 0) {
-        continue;
-      }
-      final topLoc = sorted
-          .take(topCount)
-          .fold<int>(0, (sum, artifact) => sum + artifact.linesOfCode);
-      final concentration = topLoc / totalLoc;
-      final rawPenalty = concentration - _codeSizeHealthyConcentration;
-      if (rawPenalty > 0) {
-        issueCount++;
-      }
-      final normalizedPenalty = rawPenalty <= 0
-          ? 0.0
-          : rawPenalty / (1 - _codeSizeHealthyConcentration);
-      penaltySum += _clampToUnitRange(normalizedPenalty);
+      issueCount++;
+      penaltySum += overflow / threshold;
     }
 
-    final score = 1 - (penaltySum / groups.length);
+    if (issueCount == 0) {
+      return (issueCount: 0, score: 1.0);
+    }
+
+    final normalizedPenalty = penaltySum / codeSizeArtifacts.length;
+    final score = 1 - normalizedPenalty;
     return (issueCount: issueCount, score: _clampToUnitRange(score));
   }
 
