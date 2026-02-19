@@ -4,8 +4,8 @@ library;
 import 'dart:math';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/graphs/svg_common.dart';
-import 'package:fcheck/src/graphs/svg_styles.dart';
 import 'package:fcheck/src/graphs/badge_model.dart';
+import 'package:fcheck/src/graphs/svg_export_helpers.dart';
 
 /// Generates an SVG visualization of the dependency graph.
 ///
@@ -30,7 +30,7 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
         };
 
   // Precompute cyclic edges
-  final cyclicEdges = _findCyclicEdges(dependencyGraph);
+  final cyclicEdges = findCycleEdges(dependencyGraph, separator: '|');
 
   // Group files by layer
   final layerGroups = <int, List<String>>{};
@@ -120,20 +120,13 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
 
   final buffer = StringBuffer();
 
-  // SVG Header
-  buffer.writeln('<?xml version="1.0" encoding="UTF-8"?>');
-  buffer.writeln(
-    '<svg width="$totalWidth" height="$totalHeight" viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">',
+  writeSvgDocumentStart(
+    buffer,
+    width: totalWidth,
+    height: totalHeight,
+    includeUnifiedStyles: true,
+    backgroundFill: 'white',
   );
-
-  // Common SVG Definitions
-  buffer.writeln(SvgDefinitions.generateUnifiedDefs());
-
-  // CSS Styles
-  buffer.writeln(SvgDefinitions.generateUnifiedStyles());
-
-  // Background
-  buffer.writeln('<rect width="100%" height="100%" fill="white"/>');
 
   // 1. Calculate positions
   final nodePositions = <String, Point<double>>{};
@@ -287,61 +280,6 @@ String exportGraphSvg(LayersAnalysisResult layersResult) {
     );
   }
 
-  buffer.writeln('</svg>');
+  writeSvgDocumentEnd(buffer);
   return buffer.toString();
-}
-
-/// Detect cyclic edges using Tarjan SCC; edges inside any SCC of size > 1 are marked cyclic.
-Set<String> _findCyclicEdges(Map<String, List<String>> graph) {
-  final index = <String, int>{};
-  final lowlink = <String, int>{};
-  final onStack = <String, bool>{};
-  final stack = <String>[];
-  var idx = 0;
-  final cycles = <String>{};
-
-  void strongConnect(String v) {
-    index[v] = idx;
-    lowlink[v] = idx;
-    idx++;
-    stack.add(v);
-    onStack[v] = true;
-
-    for (final w in graph[v] ?? const []) {
-      if (!index.containsKey(w)) {
-        strongConnect(w);
-        lowlink[v] = min(lowlink[v]!, lowlink[w]!);
-      } else if (onStack[w] == true) {
-        lowlink[v] = min(lowlink[v]!, index[w]!);
-      }
-    }
-
-    if (lowlink[v] == index[v]) {
-      final component = <String>[];
-      String w;
-      do {
-        w = stack.removeLast();
-        onStack[w] = false;
-        component.add(w);
-      } while (w != v && stack.isNotEmpty);
-
-      if (component.length > 1 ||
-          (component.length == 1 &&
-              (graph[component.first] ?? const []).contains(component.first))) {
-        for (final node in component) {
-          for (final tgt in graph[node] ?? const []) {
-            if (component.contains(tgt)) {
-              cycles.add('$node|$tgt');
-            }
-          }
-        }
-      }
-    }
-  }
-
-  for (final v in graph.keys) {
-    if (!index.containsKey(v)) strongConnect(v);
-  }
-
-  return cycles;
 }

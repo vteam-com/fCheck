@@ -4,7 +4,7 @@ import 'dart:math' as math;
 
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/graphs/svg_common.dart';
-import 'package:fcheck/src/graphs/svg_styles.dart';
+import 'package:fcheck/src/graphs/svg_export_helpers.dart';
 import 'package:fcheck/src/input_output/number_format_utils.dart';
 import 'package:path/path.dart' as p;
 
@@ -109,18 +109,19 @@ String exportSvgCodeSize(
       _WeightedNode(id: _classesGroupId, weight: classesTotalSize),
   ], contentRect);
 
-  final buffer = StringBuffer()
-    ..writeln('<?xml version="1.0" encoding="UTF-8"?>')
-    ..writeln(
-      '<svg width="$width" height="$height" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">',
-    )
-    ..writeln(SvgDefinitions.generateUnifiedDefs())
-    ..writeln(
+  final buffer = StringBuffer();
+  writeSvgDocumentStart(
+    buffer,
+    width: width,
+    height: height,
+    leadingBlocks: const [
       '<defs><linearGradient id="$_innerTileDiagonalGradientId" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.38"/><stop offset="55%" stop-color="#ffffff" stop-opacity="0.08"/><stop offset="100%" stop-color="#000000" stop-opacity="0.12"/></linearGradient></defs>',
-    )
-    ..writeln('<rect width="100%" height="100%" fill="#fbfbfd"/>')
+    ],
+    backgroundFill: '#fbfbfd',
+  );
+  buffer
     ..writeln(
-      '<text x="${padding + _headerTextInset}" y="${padding + _headerTextBaseline}" font-size="22" font-weight="700" fill="#222" filter="url(#outlineWhite)">${_xml(title)}</text>',
+      '<text x="${padding + _headerTextInset}" y="${padding + _headerTextBaseline}" font-size="22" font-weight="700" fill="#222" filter="url(#outlineWhite)">${escapeXml(title)}</text>',
     )
     ..writeln(
       '<text x="${width - padding - _headerTextInset}" y="${padding + _headerTextBaseline}" text-anchor="end" font-size="13" fill="#666" filter="url(#outlineWhite)">Sized by non-empty LOC.</text>',
@@ -136,7 +137,7 @@ String exportSvgCodeSize(
     _renderClassesGroup(buffer, classGroups, classesRect);
   }
 
-  buffer.writeln('</svg>');
+  writeSvgDocumentEnd(buffer);
   return buffer.toString();
 }
 
@@ -283,8 +284,8 @@ void _renderFolderLevel(
         );
     final fillOpacity = depthTint.toStringAsFixed(_opacityDecimalPlaces);
     final fillColor = entry.isFolder ? _folderTileFillColor : '#1f6f8b';
-    final escapedLabel = _xml(entry.label);
-    final escapedPath = _xml(entry.path);
+    final escapedLabel = escapeXml(entry.label);
+    final escapedPath = escapeXml(entry.path);
 
     buffer.writeln('<g>');
     buffer.writeln(
@@ -395,14 +396,14 @@ void _renderClassesGroup(
     );
     _renderInnerTileGradientOverlay(buffer, classRect);
     buffer.writeln(
-      '  <title>class: ${_xml(classGroup.label)} | ${formatCount(classGroup.size)} LOC | ${_xml(classGroup.sourcePath)}</title>',
+      '  <title>class: ${escapeXml(classGroup.label)} | ${formatCount(classGroup.size)} LOC | ${escapeXml(classGroup.sourcePath)}</title>',
     );
     if (classRect.width >= _classTileLabelMinWidth &&
         classRect.height >= _classTileLabelMinHeight) {
       _renderFolderTopLeftLabel(
         buffer,
         rect: classRect,
-        label: _xml(classGroup.label),
+        label: escapeXml(classGroup.label),
         size: classGroup.size,
       );
     } else {
@@ -439,8 +440,8 @@ void _renderClassesGroup(
             continue;
           }
 
-          final callableName = _xml(callable.name);
-          final callablePath = _xml(callable.filePath);
+          final callableName = escapeXml(callable.name);
+          final callablePath = escapeXml(callable.filePath);
           buffer.writeln('<g>');
           buffer.writeln(
             '  <rect x="${callableRect.x}" y="${callableRect.y}" width="${callableRect.width}" height="${callableRect.height}" fill="$_methodTileFillColor" fill-opacity="0.72"/>',
@@ -806,10 +807,3 @@ void _binaryTreemap(
     output,
   );
 }
-
-String _xml(String value) => value
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&apos;');
