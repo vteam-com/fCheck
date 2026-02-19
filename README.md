@@ -172,6 +172,10 @@ fcheck --mermaid    # layers.mmd
 fcheck --plantuml   # layers.puml
 ```
 
+Code size diagram (GitHub-hosted):
+
+![fcheck code size diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_code_size.svg)
+
 ## Exclusions
 
 ```bash
@@ -207,10 +211,6 @@ jobs:
           name: fcheck-report
           path: fcheck-report.json
 ```
-
-## Requirements
-
-- Dart SDK `>=3.0.0 <4.0.0`
 
 ## Contributing
 
