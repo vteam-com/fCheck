@@ -1,6 +1,7 @@
 import 'package:fcheck/src/analyzers/metrics/metrics_input.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
@@ -113,6 +114,29 @@ void main() {
       expect(result.complianceFocusAreaLabel, equals('Checks bypassed'));
       expect(result.complianceFocusAreaIssueCount, equals(30));
     });
+
+    test('treats hardcoded strings as passive when localization is off', () {
+      final result = analyzer.analyze(
+        _buildInput(
+          usesLocalization: false,
+          hardcodedStringIssues: [
+            HardcodedStringIssue(
+              filePath: 'lib/main.dart',
+              lineNumber: 2,
+              value: 'hello',
+            ),
+          ],
+        ),
+      );
+
+      final hardcodedScore = result.analyzerScores.firstWhere(
+        (score) => score.key == 'hardcoded_strings',
+      );
+      expect(hardcodedScore.enabled, isFalse);
+      expect(hardcodedScore.issueCount, equals(1));
+      expect(hardcodedScore.scorePercent, equals(100));
+      expect(result.complianceFocusAreaKey, isNot(equals('hardcoded_strings')));
+    });
   });
 }
 
@@ -122,6 +146,7 @@ ProjectMetricsAnalysisInput _buildInput({
   List<FileMetrics>? fileMetrics,
   List<CodeSizeArtifact> codeSizeArtifacts = const [],
   CodeSizeThresholds codeSizeThresholds = const CodeSizeThresholds(),
+  List<HardcodedStringIssue> hardcodedStringIssues = const [],
   List<MagicNumberIssue> magicNumberIssues = const [],
   int layersEdgeCount = 0,
   bool usesLocalization = true,
@@ -170,7 +195,7 @@ ProjectMetricsAnalysisInput _buildInput({
     fileMetrics: effectiveFileMetrics,
     codeSizeArtifacts: codeSizeArtifacts,
     codeSizeThresholds: codeSizeThresholds,
-    hardcodedStringIssues: const [],
+    hardcodedStringIssues: hardcodedStringIssues,
     magicNumberIssues: magicNumberIssues,
     sourceSortIssues: const [],
     layersIssues: const [],

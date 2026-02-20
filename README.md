@@ -29,6 +29,10 @@ fCheck runs one deterministic analysis pass and reports architecture, maintainab
 
 Detailed behavior and edge cases are documented in `RULES*.md`.
 
+Hardcoded-strings note:
+- If project localization is `OFF`, hardcoded-strings runs in passive mode (`[-]`), reports only the total count, and does not affect compliance score/focus area.
+- If localization is `ON`, hardcoded-strings is active and reports detailed issue entries.
+
 ## Install
 
 ### Option 1: Global CLI

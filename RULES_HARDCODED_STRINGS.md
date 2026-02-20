@@ -33,7 +33,9 @@ In non-localized projects, it is common to centralize user-facing strings in ded
 - **Dedicated String Files**: Files ending in `strings.dart`, `constants.dart`, or `keys.dart` are recognized as "dedicated string repositories".
 - **Skips**: All strings within dedicated string files are **skipped** and not flagged as hardcoded issues.
 - **Static Final Permitted**: In these dedicated files, `static final String` fields are treated the same as `const` and are not flagged.
-- **CLI Output**: Detected hardcoded strings are listed in the "Lists" section.
+- **Analyzer Mode**: Hardcoded strings is treated as **passive** (`[-]` in analyzer status).
+- **Scoring**: The hardcoded-strings domain is excluded from compliance-score and focus-area selection.
+- **CLI Output**: Only the total count is shown (summary line). Individual hardcoded string entries are not listed.
 
 #### Localization is ON (Localized Project)
 

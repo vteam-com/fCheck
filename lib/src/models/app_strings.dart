@@ -171,7 +171,7 @@ class AppStrings {
   static const String formulaOneClassPerFile =
       '  - one_class_per_file: 1 - (violations / max(1, dartFiles))';
   static const String formulaHardcodedStrings =
-      '  - hardcoded_strings: 1 - (issues / max(3.0, dartFiles * (l10n ? 0.8 : 2.0)))';
+      '  - hardcoded_strings: when localization is ON -> 1 - (issues / max(3.0, dartFiles * 0.8)); when localization is OFF -> passive (excluded from score)';
   static const String formulaMagicNumbers =
       '  - magic_numbers: 1 - (issues / max(4.0, dartFiles * 2.5 + loc / 450))';
   static const String formulaSourceSorting =

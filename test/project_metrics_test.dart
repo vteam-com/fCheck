@@ -351,7 +351,7 @@ void main() {
           projectType: ProjectType.dart,
         );
 
-        expect(projectMetrics.complianceScore, equals(89));
+        expect(projectMetrics.complianceScore, equals(88));
         expect(
           projectMetrics.complianceFocusAreaLabel,
           equals('Magic numbers'),
@@ -796,7 +796,7 @@ void main() {
     });
 
     test(
-      'should list hardcoded string entries as warnings for Dart projects when localization is off',
+      'should show hardcoded strings as passive summary only for Dart projects when localization is off',
       () {
         final projectMetrics = ProjectMetrics(
           totalFolders: 1,
@@ -835,16 +835,26 @@ void main() {
         expect(
           joined,
           contains(
-            '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
+            '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}).',
           ),
         );
-        expect(joined, contains('lib/strings.dart:2'));
-        expect(joined, contains('"hello"'));
+        expect(
+          joined,
+          contains(RegExp(r'^\[-\]\s+Hardcoded strings\s*$', multiLine: true)),
+        );
+        expect(
+          joined,
+          contains(
+            '1 ${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}).',
+          ),
+        );
+        expect(joined, isNot(contains('lib/strings.dart:2')));
+        expect(joined, isNot(contains('"hello"')));
       },
     );
 
     test(
-      'should list hardcoded string entries as warnings for non-Dart projects when localization is off',
+      'should show hardcoded strings as passive summary only for non-Dart projects when localization is off',
       () {
         final projectMetrics = ProjectMetrics(
           totalFolders: 1,
@@ -883,11 +893,11 @@ void main() {
         expect(
           joined,
           contains(
-            '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
+            '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}).',
           ),
         );
-        expect(joined, contains('lib/strings.dart:2'));
-        expect(joined, contains('"hello"'));
+        expect(joined, isNot(contains('lib/strings.dart:2')));
+        expect(joined, isNot(contains('"hello"')));
       },
     );
 

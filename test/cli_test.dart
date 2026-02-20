@@ -333,16 +333,23 @@ void main() {
       expect(
         result.stdout,
         contains(
-          '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
+          '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}).',
         ),
       );
-      expect(result.stdout, contains('logic.dart:'));
+      expect(
+        result.stdout,
+        isNot(contains('logic.dart:4: "This is hardcoded"')),
+      );
+      expect(
+        result.stdout,
+        isNot(contains('logic.dart:5: "Another hardcoded string"')),
+      );
       expect(result.stdout, contains(RegExp(r'Localization\s+:\s+OFF')));
       expect(result.stdout, contains(AppStrings.magicNumbersDetected));
     });
 
     test(
-      'should show hardcoded strings as warnings for Dart projects when localization is off',
+      'should show hardcoded strings as passive summary for Dart projects when localization is off',
       () async {
         File('${tempDir.path}/pubspec.yaml').writeAsStringSync('''
 name: cli_sample
@@ -362,10 +369,17 @@ void main() {
         expect(
           result.stdout,
           contains(
-            '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}):',
+            '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}).',
           ),
         );
-        expect(result.stdout, contains('main.dart:2: "This is hardcoded"'));
+        expect(
+          result.stdout,
+          contains(RegExp(r'\[-\]\s+Hardcoded strings\s*$', multiLine: true)),
+        );
+        expect(
+          result.stdout,
+          isNot(contains('main.dart:2: "This is hardcoded"')),
+        );
       },
     );
 

@@ -12,7 +12,6 @@ import 'package:fcheck/src/models/project_results_breakdown.dart';
 class MetricsAnalyzer {
   static const double _minHardcodedBudget = 3.0;
   static const double _localizedHardcodedBudgetPerFile = 0.8;
-  static const double _nonLocalizedHardcodedBudgetPerFile = 2.0;
   static const double _minMagicNumberBudget = 4.0;
   static const double _magicNumberBudgetPerFile = 2.5;
   static const double _magicNumberBudgetPerLoc = 1 / 450;
@@ -111,13 +110,13 @@ class MetricsAnalyzer {
     final oneClassPerFileViolations = input.fileMetrics
         .where((metric) => !metric.isOneClassPerFileCompliant)
         .length;
+    final hardcodedStringsPassive = !input.usesLocalization;
+    final hardcodedStringsEnabled =
+        input.hardcodedStringsAnalyzerEnabled && !hardcodedStringsPassive;
 
     final hardcodedBudget = math.max(
       _minHardcodedBudget,
-      safeDartFileCount *
-          (input.usesLocalization
-              ? _localizedHardcodedBudgetPerFile
-              : _nonLocalizedHardcodedBudgetPerFile),
+      safeDartFileCount * _localizedHardcodedBudgetPerFile,
     );
     final magicNumbersBudget = math.max(
       _minMagicNumberBudget,
@@ -169,12 +168,14 @@ class MetricsAnalyzer {
       _ComplianceAreaScore(
         key: 'hardcoded_strings',
         label: 'Hardcoded strings',
-        enabled: input.hardcodedStringsAnalyzerEnabled,
+        enabled: hardcodedStringsEnabled,
         issueCount: input.hardcodedStringIssues.length,
-        score: _budgetScore(
-          issues: input.hardcodedStringIssues.length,
-          budget: hardcodedBudget,
-        ),
+        score: hardcodedStringsEnabled
+            ? _budgetScore(
+                issues: input.hardcodedStringIssues.length,
+                budget: hardcodedBudget,
+              )
+            : 1.0,
       ),
       _ComplianceAreaScore(
         key: 'magic_numbers',

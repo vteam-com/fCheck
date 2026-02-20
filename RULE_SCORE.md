@@ -61,11 +61,12 @@ score = 1 - (violations / max(1, dartFiles))
 ### 2) Hardcoded strings
 
 ```text
-budget = max(
-  3.0,
-  dartFiles * (usesLocalization ? 0.8 : 2.0),
-)
-score = 1 - (hardcodedStringIssues / budget)
+if usesLocalization == false:
+  domain is passive (excluded from enabled analyzers and scoring)
+  score = 1.0
+else:
+  budget = max(3.0, dartFiles * 0.8)
+  score = 1 - (hardcodedStringIssues / budget)
 ```
 
 ### 3) Magic numbers

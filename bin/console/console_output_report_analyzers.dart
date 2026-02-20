@@ -390,21 +390,41 @@ void _addHardcodedStringsBlock(
   _ReportContext ctx,
   List<_ListBlock> listBlocks,
 ) {
-  final withLocalization = ctx.usesLocalization;
+  if (!ctx.hardcodedStringsAnalyzerEnabled) {
+    _addListBlock(
+      listBlocks,
+      status: _ListBlockStatus.disabled,
+      sortKey: 'hardcoded strings',
+      blockLines: [
+        '${skipTag()} Hardcoded strings check skipped (${AppStrings.disabled}).',
+      ],
+    );
+    return;
+  }
+  if (!ctx.usesLocalization) {
+    _addListBlock(
+      listBlocks,
+      status: _ListBlockStatus.disabled,
+      sortKey: 'hardcoded strings',
+      blockLines: [
+        '${skipTag()} ${formatCount(ctx.hardcodedStringIssues.length)} ${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}).',
+      ],
+    );
+    return;
+  }
+
   _addIssueListAnalyzerBlock(
     ctx,
     listBlocks,
-    enabled: ctx.hardcodedStringsAnalyzerEnabled,
+    enabled: true,
     sortKey: 'hardcoded strings',
     skippedLine:
         '${skipTag()} Hardcoded strings check skipped (${AppStrings.disabled}).',
     passedLine: '${okTag()} Hardcoded strings check ${AppStrings.checkPassed}',
     issues: ctx.hardcodedStringIssues,
     summaryLine:
-        '${withLocalization ? failTag() : warnTag()} ${formatCount(ctx.hardcodedStringIssues.length)} ${AppStrings.hardcodedStringsDetected} (localization ${withLocalization ? AppStrings.enabled : AppStrings.off}):',
-    status: withLocalization
-        ? _ListBlockStatus.failure
-        : _ListBlockStatus.warning,
+        '${failTag()} ${formatCount(ctx.hardcodedStringIssues.length)} ${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.enabled}):',
+    status: _ListBlockStatus.failure,
     filePathExtractor: (issue) => issue.filePath as String?,
     detailFormatter: (issue) => issue.format() as String,
     moreConnector: AppStrings.and,

@@ -141,9 +141,10 @@ String _analyzerSectionHeader({
   required int issueCount,
   required double deductionPercent,
 }) {
+  final titleColor = enabled ? _ansiWhiteBright : _ansiGray;
   final headerTitle = _colorizeBold(
     title.padRight(_analyzerHeaderTitleWidth),
-    _ansiWhiteBright,
+    titleColor,
   );
   final statusText = _analyzerStatusIndicator(
     enabled: enabled,
