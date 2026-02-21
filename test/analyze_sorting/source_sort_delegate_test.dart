@@ -160,6 +160,53 @@ class FixableWidget extends StatelessWidget {
       );
     });
 
+    test('fix mode sorts imports by analyzer directive order', () {
+      final source = '''
+import 'b.dart';
+import 'package:zebra/zebra.dart';
+import 'dart:io';
+import 'http://example.com/remote.dart';
+import 'package:apple/apple.dart';
+import 'a.dart';
+
+class FixableWidget extends StatelessWidget {
+  void build() {}
+}
+''';
+      final context = _contextForSource(
+        tempDir,
+        source,
+        fileName: 'fixable_imports.dart',
+      );
+
+      final delegate = SourceSortDelegate(fix: true);
+      final issues = delegate.analyzeFileWithContext(context);
+
+      expect(issues, isEmpty);
+
+      final rewritten = context.file.readAsStringSync();
+      expect(
+        rewritten.indexOf("import 'dart:io';"),
+        lessThan(rewritten.indexOf("import 'package:apple/apple.dart';")),
+      );
+      expect(
+        rewritten.indexOf("import 'package:apple/apple.dart';"),
+        lessThan(rewritten.indexOf("import 'package:zebra/zebra.dart';")),
+      );
+      expect(
+        rewritten.indexOf("import 'package:zebra/zebra.dart';"),
+        lessThan(rewritten.indexOf("import 'http://example.com/remote.dart';")),
+      );
+      expect(
+        rewritten.indexOf("import 'http://example.com/remote.dart';"),
+        lessThan(rewritten.indexOf("import 'a.dart';")),
+      );
+      expect(
+        rewritten.indexOf("import 'a.dart';"),
+        lessThan(rewritten.indexOf("import 'b.dart';")),
+      );
+    });
+
     test('swallows internal exceptions and returns no issues', () {
       const source = '''
 class BrokenContextWidget extends StatelessWidget {

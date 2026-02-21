@@ -2,8 +2,8 @@ import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_utils.dart';
-import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart';
+import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 
 /// Delegate adapter for hardcoded string analysis.

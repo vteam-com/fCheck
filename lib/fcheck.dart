@@ -18,16 +18,17 @@
 // ```
 
 import 'dart:io';
+
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
+import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
+import 'package:fcheck/src/analyzers/code_size/code_size_delegate.dart';
+import 'package:fcheck/src/analyzers/code_size/code_size_file_data.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_analyzer.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_delegate.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
-import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
-import 'package:fcheck/src/analyzers/code_size/code_size_delegate.dart';
-import 'package:fcheck/src/analyzers/code_size/code_size_file_data.dart';
 import 'package:fcheck/src/analyzers/documentation/documentation_analyzer.dart';
 import 'package:fcheck/src/analyzers/documentation/documentation_delegate.dart';
 import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
@@ -43,20 +44,20 @@ import 'package:fcheck/src/analyzers/layers/layers_delegate.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_delegate.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
-import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
+import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
+import 'package:fcheck/src/analyzers/metrics/metrics_delegate.dart';
+import 'package:fcheck/src/analyzers/metrics/metrics_file_data.dart';
+import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_delegate.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
+import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/source_sort_delegate.dart';
 import 'package:fcheck/src/input_output/file_utils.dart';
-import 'package:fcheck/src/analyzers/metrics/metrics_delegate.dart';
-import 'package:fcheck/src/analyzers/metrics/metrics_file_data.dart';
-import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
-import 'package:fcheck/src/analyzers/project_metrics.dart';
+import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:fcheck/src/models/project_type.dart';
-import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 

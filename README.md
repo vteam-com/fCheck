@@ -84,7 +84,7 @@ fcheck --list full
 # Generate diagrams
 fcheck --svg --svgfolder --svgsize --mermaid --plantuml
 
-# Auto-fix source sorting issues
+# Auto-fix source sorting issues (class members + import directives)
 fcheck --fix
 ```
 

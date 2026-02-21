@@ -2,7 +2,7 @@
 
 ## Overview
 
-This rule checks ordering of members inside Flutter widget classes and can optionally auto-fix the ordering.
+This rule checks ordering of members inside Flutter widget classes and can optionally auto-fix the ordering. In fix mode, it also sorts import directives.
 
 Shared analysis/exclusion conventions are defined in `RULES.md`.
 
@@ -19,13 +19,18 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 - Public methods alphabetically.
 - Private methods alphabetically.
 - A blank line is inserted between groups.
+- In `--fix` mode, import directives are sorted using analyzer-style domain groups and ascending order:
+  - `dart:`
+  - `package:`
+  - other absolute URIs (for example `http:`)
+  - relative imports
 
 ## How It Works
 
 - `SourceSortDelegate` runs inside `AnalyzerRunner`, uses `ClassVisitor` to find target classes, then `MemberSorter` builds a sorted class body.
 - It compares the sorted body to the original body with whitespace normalization.
 - If different and `fix` is false, it emits `SourceSortIssue`.
-- If `fix` is true (CLI `--fix`), it rewrites the class body in place.
+- If `fix` is true (CLI `--fix`), it rewrites unsorted class bodies and reorders import directives.
 
 ## Ignores and Exclusions
 

@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:path/path.dart' as p;
 
 import 'package:glob/glob.dart';
+import 'package:path/path.dart' as p;
 
 /// Utility functions for file system operations.
 ///

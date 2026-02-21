@@ -1,19 +1,21 @@
 import 'dart:io';
+
+import 'package:fcheck/fcheck.dart';
+import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/graphs/export_mermaid.dart';
 import 'package:fcheck/src/graphs/export_plantuml.dart';
 import 'package:fcheck/src/graphs/export_svg.dart';
-import 'package:fcheck/src/graphs/export_svg_folders.dart';
 import 'package:fcheck/src/graphs/export_svg_code_size.dart';
-import 'package:fcheck/src/analyzers/layers/layers_results.dart';
-import 'package:fcheck/fcheck.dart';
+import 'package:fcheck/src/graphs/export_svg_folders.dart';
+import 'package:fcheck/src/input_output/issue_location_utils.dart';
+import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/version.dart';
-import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:path/path.dart' as p;
+
+import 'console/console_common.dart';
 import 'console/console_input.dart';
 import 'console/console_output.dart';
-import 'console/console_common.dart';
-import 'package:fcheck/src/models/app_strings.dart';
 
 /// Main entry point for the fcheck command-line tool.
 ///

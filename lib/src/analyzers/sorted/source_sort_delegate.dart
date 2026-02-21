@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:analyzer/dart/analysis/features.dart';
+import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
@@ -6,6 +10,12 @@ import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_members.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_utils.dart';
 import 'package:fcheck/src/models/class_visitor.dart';
+
+const int _minimumImportsToSort = 2;
+const int _importGroupDart = 0;
+const int _importGroupPackage = 1;
+const int _importGroupOtherAbsolute = 2;
+const int _importGroupRelative = 3;
 
 /// Delegate adapter for source sorting.
 class SourceSortDelegate implements AnalyzerDelegate {
@@ -84,10 +94,122 @@ class SourceSortDelegate implements AnalyzerDelegate {
           }
         }
       }
+
+      if (fix) {
+        _sortImportsInFile(context.file.path);
+      }
     } catch (_) {
       // Skip files that can't be analyzed.
     }
 
     return issues;
+  }
+
+  /// Reorders file import directives to match analyzer directive ordering.
+  ///
+  /// Imports are grouped by URI kind (`dart:`, `package:`, other absolute,
+  /// relative) and sorted alphabetically inside each group.
+  void _sortImportsInFile(String filePath) {
+    final file = File(filePath);
+    if (!file.existsSync()) {
+      return;
+    }
+
+    final originalContent = file.readAsStringSync();
+    final parseResult = parseString(
+      content: originalContent,
+      featureSet: FeatureSet.latestLanguageVersion(),
+      throwIfDiagnostics: false,
+    );
+    if (parseResult.errors.isNotEmpty) {
+      return;
+    }
+
+    final imports = parseResult.unit.directives.whereType<ImportDirective>();
+    final originalImports = imports.toList(growable: false);
+    if (originalImports.length < _minimumImportsToSort) {
+      return;
+    }
+
+    final sortedImports = [...originalImports]
+      ..sort((a, b) {
+        final uriA = a.uri.stringValue ?? '';
+        final uriB = b.uri.stringValue ?? '';
+        final groupComparison = _importGroupPriority(
+          uriA,
+        ).compareTo(_importGroupPriority(uriB));
+        if (groupComparison != 0) {
+          return groupComparison;
+        }
+        return _compareDirectiveUris(uriA, uriB);
+      });
+
+    var changed = false;
+    for (var i = 0; i < originalImports.length; i++) {
+      if (originalImports[i] != sortedImports[i]) {
+        changed = true;
+        break;
+      }
+    }
+    if (!changed) {
+      return;
+    }
+
+    final sortedImportText = _buildImportSection(sortedImports);
+    final start = originalImports.first.offset;
+    final end = originalImports.last.end;
+    final updatedContent =
+        originalContent.substring(0, start) +
+        sortedImportText +
+        originalContent.substring(end);
+    file.writeAsStringSync(updatedContent);
+  }
+
+  /// Builds the replacement import section text with blank lines between groups.
+  String _buildImportSection(List<ImportDirective> sortedImports) {
+    final buffer = StringBuffer();
+    int? previousGroup;
+
+    for (final directive in sortedImports) {
+      final uri = directive.uri.stringValue ?? '';
+      final group = _importGroupPriority(uri);
+      if (previousGroup != null && group != previousGroup) {
+        buffer.writeln();
+      }
+      buffer.writeln(directive.toSource());
+      previousGroup = group;
+    }
+
+    return buffer.toString().trimRight();
+  }
+
+  /// Returns the import group priority used for analyzer-style ordering.
+  int _importGroupPriority(String uri) {
+    if (uri.startsWith('dart:')) {
+      return _importGroupDart;
+    }
+    if (uri.startsWith('package:')) {
+      return _importGroupPackage;
+    }
+    if (uri.contains(':')) {
+      return _importGroupOtherAbsolute;
+    }
+    return _importGroupRelative;
+  }
+
+  /// Compares import URIs using the same package/path ordering used by linter.
+  int _compareDirectiveUris(String a, String b) {
+    final indexA = a.indexOf('/');
+    final indexB = b.indexOf('/');
+    if (indexA == -1 || indexB == -1) {
+      return a.compareTo(b);
+    }
+    final packageComparison = a
+        .substring(0, indexA)
+        .compareTo(b.substring(0, indexB));
+    if (packageComparison != 0) {
+      return packageComparison;
+    }
+    return a.substring(indexA + 1).compareTo(b.substring(indexB + 1));
   }
 }

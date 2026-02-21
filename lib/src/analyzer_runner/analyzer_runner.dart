@@ -1,10 +1,11 @@
 import 'dart:io';
+
 import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
-import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
-import 'package:fcheck/src/input_output/file_utils.dart';
-import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
+import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
+import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
+import 'package:fcheck/src/input_output/file_utils.dart';
 
 /// Unified analyzer that performs single traversal and delegates to multiple analyzers.
 class AnalyzerRunner {

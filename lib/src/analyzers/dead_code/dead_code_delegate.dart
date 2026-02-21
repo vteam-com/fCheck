@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
-import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_visitor.dart';
+import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 
 /// Delegate adapter for dead code analysis.

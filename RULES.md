@@ -149,7 +149,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 
 - `fcheck` analyze current directory
 - `fcheck /path/to/project` analyze specific project
-- `fcheck --fix` auto-fix sorting issues
+- `fcheck --fix` auto-fix sorting issues (Flutter class members + import directive order)
 - `fcheck --exclude "**/generated/**"` exclude glob patterns
 - `fcheck --excluded` list excluded files and directories
 - `fcheck --svg` generate SVG dependency graph
