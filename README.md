@@ -90,6 +90,39 @@ fcheck --fix
 
 If installed as a dev dependency, prefix commands with `dart run`.
 
+## Sample Bash Output
+
+```bash
+$ fcheck .
+↓------------------------------ fCheck 0.9.16 ------------------------------↓
+Input              : /path/to/project
+Dart Project       : fcheck (version: 0.9.16)
+--------------------------------- Dashboard ---------------------------------
+Folders            :              21  |  Dependency         :               5
+Files              :             120  |  DevDependency      :               2
+Excluded Files     :              39  |  Classes            :              66
+Dart Files         :              91  |  Methods            :             357
+Lines of Code      :          15,022  |  Functions          :             179
+Comments           :     (14%) 2,145  |  Localization       :             OFF
+--------------------------------- Analyzers ---------------------------------
+[✓] Checks bypassed
+[✓] Code size
+[✓] Dead code
+[✓] Documentation
+[✓] Duplicate code
+[✓] Layers architecture
+[✓] Magic numbers
+[✓] One class per file
+[✓] Secrets
+[✓] Source sorting
+[-] Hardcoded strings
+0 hardcoded strings detected (localization OFF).
+--------------------------------- Scorecard ---------------------------------
+Total Score        : 100%
+Invest Next        : Maintain this level by enforcing fcheck in CI on every pull request.
+↑------------------------ fCheck completed (1.73s) -------------------------↑
+```
+
 ## Configuration (`.fcheck`)
 
 Create `.fcheck` in the input directory (`--input`) or current directory.

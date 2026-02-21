@@ -7,6 +7,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.16] - 2026-02-21
+
+### Added
+
+- 🔧 **Source Sorting Auto-fix**: `--fix` now also reorders import directives using analyzer-style grouping and alphabetical ordering.
+
+### Changed
+
+- 🚫 **Generated Dart Handling**: `*.g.dart` files are now automatically excluded from non-actionable analyzer findings while still contributing where required for project-wide analysis.
+- 📁 **Default Exclusions**: Added `integration_test` to default excluded directories for file discovery and metrics scanning.
+
 ## [0.9.15] - 2026-02-19
 
 ### Added
