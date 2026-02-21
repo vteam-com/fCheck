@@ -245,6 +245,11 @@ void main() {
         final testDir = Directory('${tempDir.path}/test');
         testDir.createSync();
 
+        final integrationTestDir = Directory(
+          '${tempDir.path}/integration_test',
+        );
+        integrationTestDir.createSync();
+
         final exampleDir = Directory('${tempDir.path}/example');
         exampleDir.createSync();
 
@@ -256,6 +261,9 @@ void main() {
         File(
           '${testDir.path}/test_helper.dart',
         ).writeAsStringSync('class TestHelper {}');
+        File(
+          '${integrationTestDir.path}/integration_test_helper.dart',
+        ).writeAsStringSync('class IntegrationTestHelper {}');
         File(
           '${exampleDir.path}/example.dart',
         ).writeAsStringSync('class Example {}');
@@ -270,10 +278,13 @@ void main() {
 
         expect(
           excludedDartFiles.length,
-          equals(3),
-        ); // hidden.dart, test_helper.dart, example.dart
+          equals(4),
+        ); // hidden.dart, test_helper.dart, integration_test_helper.dart, example.dart
         expect(excludedNonDartFiles.length, equals(1)); // hidden.txt
-        expect(excludedDirectories.length, equals(3)); // .hidden, test, example
+        expect(
+          excludedDirectories.length,
+          equals(4),
+        ); // .hidden, test, integration_test, example
 
         expect(
           excludedDartFiles.any((f) => f.path.contains('hidden.dart')),
@@ -281,6 +292,12 @@ void main() {
         );
         expect(
           excludedDartFiles.any((f) => f.path.contains('test_helper.dart')),
+          isTrue,
+        );
+        expect(
+          excludedDartFiles.any(
+            (f) => f.path.contains('integration_test_helper.dart'),
+          ),
           isTrue,
         );
         expect(
@@ -298,6 +315,10 @@ void main() {
           isTrue,
         );
         expect(excludedDirectories.any((d) => d.path.contains('test')), isTrue);
+        expect(
+          excludedDirectories.any((d) => d.path.contains('integration_test')),
+          isTrue,
+        );
         expect(
           excludedDirectories.any((d) => d.path.contains('example')),
           isTrue,
@@ -431,6 +452,11 @@ void main() {
         final testDir = Directory('${tempDir.path}/test');
         testDir.createSync();
 
+        final integrationTestDir = Directory(
+          '${tempDir.path}/integration_test',
+        );
+        integrationTestDir.createSync();
+
         // Create files
         File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
         File(
@@ -439,6 +465,9 @@ void main() {
         File(
           '${testDir.path}/test_helper.dart',
         ).writeAsStringSync('class TestHelper {}');
+        File(
+          '${integrationTestDir.path}/integration_test_helper.dart',
+        ).writeAsStringSync('class IntegrationTestHelper {}');
 
         // Test unified scan with exclude patterns
         final (
@@ -457,18 +486,28 @@ void main() {
         expect(
           folderCount,
           equals(1),
-        ); // src only (test is excluded by default)
+        ); // src only (test and integration_test are excluded by default)
         expect(fileCount, equals(2)); // main.dart and service.dart only
-        expect(excludedDartFilesCount, equals(1)); // test_helper.dart excluded
+        expect(
+          excludedDartFilesCount,
+          equals(2),
+        ); // test_helper.dart and integration_test_helper.dart excluded
         expect(
           excludedFoldersCount,
-          equals(1),
-        ); // test folder excluded by default
-        expect(excludedFilesCount, equals(1)); // test_helper.dart excluded
+          equals(2),
+        ); // test and integration_test folders excluded by default
+        expect(
+          excludedFilesCount,
+          equals(2),
+        ); // test_helper.dart and integration_test_helper.dart excluded
 
         expect(dartFiles.any((f) => f.path.contains('main.dart')), isTrue);
         expect(dartFiles.any((f) => f.path.contains('service.dart')), isTrue);
         expect(dartFiles.any((f) => f.path.contains('test_helper')), isFalse);
+        expect(
+          dartFiles.any((f) => f.path.contains('integration_test_helper')),
+          isFalse,
+        );
       });
 
       test('should skip hidden folders in unified scan', () {
@@ -518,11 +557,16 @@ void main() {
         final helpersDir = Directory('${tempDir.path}/helpers')..createSync();
         final hiddenDir = Directory('${tempDir.path}/.hidden')..createSync();
         final testDir = Directory('${tempDir.path}/test')..createSync();
+        final integrationTestDir = Directory('${tempDir.path}/integration_test')
+          ..createSync();
 
         File('${tempDir.path}/main.dart').writeAsStringSync('void main() {}');
         File('${helpersDir.path}/helper.dart').writeAsStringSync('class H {}');
         File('${hiddenDir.path}/hidden.dart').writeAsStringSync('class X {}');
         File('${testDir.path}/test_file.dart').writeAsStringSync('class T {}');
+        File(
+          '${integrationTestDir.path}/integration_test_file.dart',
+        ).writeAsStringSync('class IT {}');
 
         final count = FileUtils.countCustomExcludedDartFiles(
           tempDir,

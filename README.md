@@ -202,7 +202,7 @@ fcheck --excluded
 fcheck --excluded --json
 ```
 
-Default exclusion behavior includes hidden folders and common non-analysis directories (`.git`, `.dart_tool`, `build`, `example`, `test`, platform folders, etc.).
+Default exclusion behavior includes hidden folders and common non-analysis directories (`.git`, `.dart_tool`, `build`, `example`, `test`, `integration_test`, platform folders, etc.).
 
 ## CI Example (GitHub Actions)
 

@@ -101,6 +101,7 @@ class FileUtils {
   static const List<String> defaultExcludedDirs = [
     'example',
     'test',
+    'integration_test',
     'tool',
     '.dart_tool',
     'build',

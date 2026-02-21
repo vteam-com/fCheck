@@ -68,6 +68,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - `lib/src/metrics/` project and file metrics
 - `lib/src/graphs/` graph exporters (SVG, Mermaid, PlantUML)
 - `test/` unit tests
+- `integration_test/` integration tests
 - `example/` example project for testing
 - `tool/` development scripts
 
