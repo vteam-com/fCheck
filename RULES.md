@@ -129,6 +129,13 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - When validating coverage locally, generate coverage data with:
   - `dart test --coverage=coverage`
 
+## CI Quality Gate
+
+- GitHub Actions workflow is defined in `.github/workflows/ci.yml`.
+- CI must run format check, static analysis, tests, and `fcheck` against this repository.
+- The self-check compliance score gate is strict: `summary.complianceScore` must equal `100`, otherwise the workflow fails.
+- CI should publish `fcheck-report.json` as an artifact for failure investigation.
+
 ## CLI Help Sync Rule
 
 - Any user-facing behavior change must update CLI help output in the same PR.

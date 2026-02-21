@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  quality:
+    name: Build, test, and self-check (100%)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate version file
+        run: ./tool/generate_version.sh
+
+      - name: Format check
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Static analysis
+        run: flutter analyze lib test --no-pub
+
+      - name: Tests
+        run: flutter test --reporter=compact --no-pub
+
+      - name: Run fcheck against itself (JSON)
+        run: dart run ./bin/fcheck.dart --json --exclude "**/example" . > fcheck-report.json
+
+      - name: Upload fcheck report
+        uses: actions/upload-artifact@v4
+        with:
+          name: fcheck-report
+          path: fcheck-report.json
+
+      - name: Enforce 100% compliance score
+        id: score_gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          score_raw="$(grep -oE '"complianceScore"[[:space:]]*:[[:space:]]*[0-9]+([.][0-9]+)?' fcheck-report.json | head -n1 | sed -E 's/.*:[[:space:]]*//')"
+          if [ -z "${score_raw}" ]; then
+            echo "::error title=Missing compliance score::Could not read .summary.complianceScore from fcheck-report.json"
+            exit 1
+          fi
+
+          score_int="$(awk "BEGIN { printf \"%d\", ${score_raw} }")"
+          echo "score=$score_int" >> "$GITHUB_OUTPUT"
+          echo "Compliance score: ${score_int}%"
+
+          if [ "$score_int" -ne 100 ]; then
+            echo "::error title=fcheck score gate failed::Expected 100%, got ${score_int}%"
+            exit 1
+          fi
+
+      - name: Add score summary
+        if: always()
+        run: |
+          echo "### fcheck self-check" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Compliance score: \`${{ steps.score_gate.outputs.score || 'unknown' }}%\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Required score: \`100%\`" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Notify PR when score gate fails
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const score = `${{ steps.score_gate.outputs.score || 'unknown' }}`;
+            const body = [
+              '## fcheck CI gate failed',
+              '',
+              `Required compliance score: **100%**`,
+              `Observed compliance score: **${score}%**`,
+              '',
+              'Download the `fcheck-report` artifact for details.'
+            ].join('\n');
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });

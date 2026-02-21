@@ -242,7 +242,7 @@ Generated Dart files ending with `*.g.dart` are analyzed for dependency/usage fl
 ## CI Example (GitHub Actions)
 
 ```yaml
-name: fcheck
+name: CI
 on:
   pull_request:
   push:
@@ -250,17 +250,31 @@ on:
 
 jobs:
   quality:
+    name: Build, test, and self-check (100%)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dart-lang/setup-dart@v1
-      - run: dart pub global activate fcheck
-      - run: dart pub global run fcheck --json > fcheck-report.json
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: ./tool/generate_version.sh
+      - run: dart format --output=none --set-exit-if-changed .
+      - run: flutter analyze lib test --no-pub
+      - run: flutter test --reporter=compact --no-pub
+      - run: dart run ./bin/fcheck.dart --json --exclude "**/example" . > fcheck-report.json
+      - run: |
+          score="$(grep -oE '"complianceScore"[[:space:]]*:[[:space:]]*[0-9]+([.][0-9]+)?' fcheck-report.json | head -n1 | sed -E 's/.*:[[:space:]]*//')"
+          score_int="$(awk "BEGIN { printf \"%d\", ${score} }")"
+          test "$score_int" -eq 100
       - uses: actions/upload-artifact@v4
         with:
           name: fcheck-report
           path: fcheck-report.json
 ```
+
+This repository already includes this workflow at `.github/workflows/ci.yml`.
+The CI gate fails unless fcheck's self-analysis score is exactly `100%`.
 
 ## Contributing
 
