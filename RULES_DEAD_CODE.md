@@ -17,7 +17,9 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 
 ## Skips
 
-- Files with a top-of-file `// ignore: fcheck_dead_code` directive.
+- Files with a top-of-file `// ignore: fcheck_dead_code` directive do not emit
+  dead-code declarations/issues, but still contribute dependencies and symbol
+  usages to project-wide reachability/usage analysis.
 - Nodes with `// ignore: fcheck_dead_code` on the same line as the node or an
   ancestor declaration line.
 - Files with parse errors or missing compilation units.

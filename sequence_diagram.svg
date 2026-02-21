@@ -212,6 +212,9 @@
   <rect x="1740" y="660" width="20" height="20" class="activation" />
   <line x1="610" y1="670" x2="1740" y2="670" class="message-arrow" />
   <text x="1175" y="665" text-anchor="middle" class="message-text">analyzeFileWithContext()</text>
+  <rect x="1768" y="648" width="255" height="44" rx="4" class="note-box" />
+  <text x="1778" y="666" class="note-text">dead_code ignore files: keep deps/usages</text>
+  <text x="1778" y="682" class="note-text">but suppress declarations/issues</text>
 
   <rect x="1940" y="690" width="20" height="20" class="activation" />
   <line x1="610" y1="700" x2="1940" y2="700" class="message-arrow" />

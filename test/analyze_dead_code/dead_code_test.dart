@@ -177,6 +177,7 @@ version: 0.0.1
       File(p.join(libDir.path, 'main.dart')).writeAsStringSync('''
 import 'a.dart';
 import 'methods.dart';
+import 'ignored_usage.dart';
 
 void main() {
   final a = A();
@@ -185,6 +186,7 @@ void main() {
   box.toString();
   final util = Util();
   util.usedMethod();
+  useIgnoredCaller();
 }
 ''');
 
@@ -226,6 +228,17 @@ class Util {
   void unusedMethod() {}
 
   void ignoredUnusedMethod() {} // ignore: fcheck_dead_code
+
+  static void staticUsedFromIgnoredFile() {}
+}
+''');
+
+      File(p.join(libDir.path, 'ignored_usage.dart')).writeAsStringSync('''
+// ignore: fcheck_dead_code
+import 'methods.dart';
+
+void useIgnoredCaller() {
+  Util.staticUsedFromIgnoredFile();
 }
 ''');
     });
@@ -275,6 +288,16 @@ class Util {
           (i) =>
               i.type == DeadCodeIssueType.deadFunction &&
               i.name == 'ignoredUnusedMethod' &&
+              i.owner == 'Util',
+        ),
+        isEmpty,
+      );
+
+      expect(
+        issues.where(
+          (i) =>
+              i.type == DeadCodeIssueType.deadFunction &&
+              i.name == 'staticUsedFromIgnoredFile' &&
               i.owner == 'Util',
         ),
         isEmpty,

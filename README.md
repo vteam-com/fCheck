@@ -166,6 +166,9 @@ For generated guidance:
 fcheck --help-ignore
 ```
 
+Dead-code note:
+- `// ignore: fcheck_dead_code` suppresses dead-code findings for that file's declarations, while keeping its dependencies/usages in global dead-code analysis.
+
 ## Visual Outputs
 
 ```bash

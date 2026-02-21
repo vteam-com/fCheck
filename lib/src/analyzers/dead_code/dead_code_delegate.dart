@@ -22,13 +22,12 @@ class DeadCodeDelegate implements AnalyzerDelegate {
   /// Returns [DeadCodeFileData] or null if the file should be skipped.
   @override
   DeadCodeFileData? analyzeFileWithContext(AnalysisFileContext context) {
-    if (context.hasIgnoreForFileDirective(
-          IgnoreConfig.ignoreDirectiveForDeadCode,
-        ) ||
-        context.hasParseErrors ||
-        context.compilationUnit == null) {
+    if (context.hasParseErrors || context.compilationUnit == null) {
       return null;
     }
+    final ignoredForDeadCode = context.hasIgnoreForFileDirective(
+      IgnoreConfig.ignoreDirectiveForDeadCode,
+    );
 
     final visitor = DeadCodeVisitor(
       filePath: context.file.path,
@@ -44,11 +43,13 @@ class DeadCodeDelegate implements AnalyzerDelegate {
       filePath: context.file.path,
       hasMain: visitor.hasMain,
       dependencies: visitor.dependencies,
-      classes: visitor.classes,
-      functions: visitor.functions,
-      methods: visitor.methods,
+      classes: ignoredForDeadCode ? const [] : visitor.classes,
+      functions: ignoredForDeadCode ? const [] : visitor.functions,
+      methods: ignoredForDeadCode ? const [] : visitor.methods,
       usedIdentifiers: visitor.usedIdentifiers,
-      unusedVariableIssues: visitor.unusedVariableIssues,
+      unusedVariableIssues: ignoredForDeadCode
+          ? const []
+          : visitor.unusedVariableIssues,
     );
   }
 }
