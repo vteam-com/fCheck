@@ -264,6 +264,39 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     super.visitNamedType(node);
   }
 
+  @override
+  void visitBinaryExpression(BinaryExpression node) {
+    _recordOperatorUsage(node.operator.lexeme);
+    super.visitBinaryExpression(node);
+  }
+
+  @override
+  void visitPrefixExpression(PrefixExpression node) {
+    _recordOperatorUsage(node.operator.lexeme);
+    super.visitPrefixExpression(node);
+  }
+
+  @override
+  void visitPostfixExpression(PostfixExpression node) {
+    _recordOperatorUsage(node.operator.lexeme);
+    super.visitPostfixExpression(node);
+  }
+
+  @override
+  void visitAssignmentExpression(AssignmentExpression node) {
+    _recordCompoundAssignmentUsage(node.operator.lexeme);
+    if (node.leftHandSide is IndexExpression) {
+      usedIdentifiers.add('[]=');
+    }
+    super.visitAssignmentExpression(node);
+  }
+
+  @override
+  void visitIndexExpression(IndexExpression node) {
+    usedIdentifiers.add('[]');
+    super.visitIndexExpression(node);
+  }
+
   /// Pushes a variable scope for function/class-local dead-code tracking.
   void _pushScope(String? ownerName, {bool treatParametersAsUsed = false}) {
     _scopes.add(
@@ -452,6 +485,89 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
       return name;
     }
     return name.substring(0, typeStart).trimRight();
+  }
+
+  /// Records usage of an operator method name from expression syntax.
+  void _recordOperatorUsage(String operatorLexeme) {
+    switch (operatorLexeme) {
+      case '++':
+        usedIdentifiers.add('+');
+        return;
+      case '--':
+        usedIdentifiers.add('-');
+        return;
+      case '+':
+      case '-':
+      case '*':
+      case '/':
+      case '~/':
+      case '%':
+      case '>':
+      case '>=':
+      case '<':
+      case '<=':
+      case '==':
+      case '&':
+      case '|':
+      case '^':
+      case '<<':
+      case '>>':
+      case '>>>':
+      case '~':
+      case '[]':
+      case '[]=':
+        usedIdentifiers.add(operatorLexeme);
+        return;
+      default:
+        return;
+    }
+  }
+
+  /// Maps compound assignment syntax to operator method names.
+  void _recordCompoundAssignmentUsage(String assignmentOperator) {
+    switch (assignmentOperator) {
+      case '=':
+      case '??=':
+        return;
+      case '+=':
+        usedIdentifiers.add('+');
+        return;
+      case '-=':
+        usedIdentifiers.add('-');
+        return;
+      case '*=':
+        usedIdentifiers.add('*');
+        return;
+      case '/=':
+        usedIdentifiers.add('/');
+        return;
+      case '~/=':
+        usedIdentifiers.add('~/');
+        return;
+      case '%=':
+        usedIdentifiers.add('%');
+        return;
+      case '&=':
+        usedIdentifiers.add('&');
+        return;
+      case '|=':
+        usedIdentifiers.add('|');
+        return;
+      case '^=':
+        usedIdentifiers.add('^');
+        return;
+      case '<<=':
+        usedIdentifiers.add('<<');
+        return;
+      case '>>=':
+        usedIdentifiers.add('>>');
+        return;
+      case '>>>=':
+        usedIdentifiers.add('>>>');
+        return;
+      default:
+        return;
+    }
   }
 
   /// Adds dependencies declared through import/export/part directives.

@@ -54,6 +54,9 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - Dead-code specific behavior: files with top-of-file `// ignore: fcheck_dead_code`
   suppress dead-code findings for declarations in that file, but still contribute
   dependencies/usages used by project-wide dead-code reachability.
+- Dead-code usage collection includes identifier usage plus operator/property
+  syntax signals to reduce false positives for overloaded operators and
+  getter/setter access patterns.
 
 ## Repository Structure
 

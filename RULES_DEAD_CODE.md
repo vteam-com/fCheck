@@ -31,7 +31,7 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
   - dependencies (imports/exports/parts resolved to paths)
   - top-level classes and functions
   - methods in classes/mixins/enums/extensions (except `@override` and abstract signatures)
-  - identifiers used in the file (including type identifiers)
+  - identifiers used in the file (including type identifiers, getter/setter property names, and operator tokens inferred from expressions)
   - unused local variables/parameters (per-scope)
 - `DeadCodeAnalyzer` builds a dependency graph, resolves entry points, and
   determines reachability and unused symbols.

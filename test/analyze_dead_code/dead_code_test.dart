@@ -178,6 +178,7 @@ version: 0.0.1
 import 'a.dart';
 import 'methods.dart';
 import 'ignored_usage.dart';
+import 'operators.dart';
 
 void main() {
   final a = A();
@@ -187,6 +188,12 @@ void main() {
   final util = Util();
   util.usedMethod();
   useIgnoredCaller();
+  final math = MathBox(10);
+  final other = MathBox(2);
+  math + other;
+  math - other;
+  math.value = 5;
+  math.value.toString();
 }
 ''');
 
@@ -239,6 +246,28 @@ import 'methods.dart';
 
 void useIgnoredCaller() {
   Util.staticUsedFromIgnoredFile();
+}
+''');
+
+      File(p.join(libDir.path, 'operators.dart')).writeAsStringSync('''
+class MathBox {
+  MathBox(this._value);
+
+  int _value;
+
+  int get value => _value;
+
+  set value(int next) {
+    _value = next;
+  }
+
+  MathBox operator +(MathBox other) {
+    return MathBox(_value + other._value);
+  }
+
+  MathBox operator -(MathBox other) {
+    return MathBox(_value - other._value);
+  }
 }
 ''');
     });
@@ -299,6 +328,36 @@ void useIgnoredCaller() {
               i.type == DeadCodeIssueType.deadFunction &&
               i.name == 'staticUsedFromIgnoredFile' &&
               i.owner == 'Util',
+        ),
+        isEmpty,
+      );
+
+      expect(
+        issues.where(
+          (i) =>
+              i.type == DeadCodeIssueType.deadFunction &&
+              i.name == '+' &&
+              i.owner == 'MathBox',
+        ),
+        isEmpty,
+      );
+
+      expect(
+        issues.where(
+          (i) =>
+              i.type == DeadCodeIssueType.deadFunction &&
+              i.name == '-' &&
+              i.owner == 'MathBox',
+        ),
+        isEmpty,
+      );
+
+      expect(
+        issues.where(
+          (i) =>
+              i.type == DeadCodeIssueType.deadFunction &&
+              i.name == 'value' &&
+              i.owner == 'MathBox',
         ),
         isEmpty,
       );
