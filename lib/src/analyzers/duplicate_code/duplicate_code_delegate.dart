@@ -2,6 +2,7 @@ import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_file_data.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_visitor.dart';
+import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 
 /// Delegate adapter for duplicate code analysis.
@@ -57,6 +58,6 @@ class DuplicateCodeDelegate implements AnalyzerDelegate {
   }
 
   bool _shouldSkipFile(String path) {
-    return path.contains('lib/l10n/') || path.contains('.g.dart');
+    return isLibL10nPath(path) || isGeneratedDartFilePath(path);
   }
 }

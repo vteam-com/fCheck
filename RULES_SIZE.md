@@ -62,6 +62,7 @@ Code size is a scored compliance domain with key `code_size`.
 ## Skips / Limits
 
 - Files with parse errors do not contribute class/function/method entries.
+- Generated Dart files ending with `*.g.dart` do not contribute code-size artifacts.
 - Entries with `linesOfCode <= 0` are ignored.
 - There is currently no dedicated `// ignore: fcheck_code_size` directive.
 

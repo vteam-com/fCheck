@@ -4,6 +4,7 @@ import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_file_data.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_visitor.dart';
+import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 
@@ -20,8 +21,9 @@ class MetricsDelegate implements AnalyzerDelegate {
     final hasIgnoreDirective = context.hasIgnoreForFileDirective(
       IgnoreConfig.ignoreDirectiveForOneClassPerFile,
     );
+    final generatedFile = isGeneratedDartFilePath(context.file.path);
     final ignoreOneClassPerFile =
-        hasIgnoreDirective || globallyIgnoreOneClassPerFile;
+        hasIgnoreDirective || globallyIgnoreOneClassPerFile || generatedFile;
 
     // Skip files with parse errors
     if (context.hasParseErrors || context.compilationUnit == null) {

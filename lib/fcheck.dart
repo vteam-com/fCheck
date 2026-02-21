@@ -43,6 +43,7 @@ import 'package:fcheck/src/analyzers/layers/layers_delegate.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_delegate.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
+import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_delegate.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
@@ -388,7 +389,7 @@ class AnalyzeFolder {
   ) {
     final artifacts = <CodeSizeArtifact>[
       for (final metric in fileMetrics)
-        if (metric.linesOfCode > 0)
+        if (metric.linesOfCode > 0 && !isGeneratedDartFilePath(metric.path))
           CodeSizeArtifact(
             kind: CodeSizeArtifactKind.file,
             name: p.basename(metric.path),

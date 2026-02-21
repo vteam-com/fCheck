@@ -204,6 +204,8 @@ fcheck --excluded --json
 
 Default exclusion behavior includes hidden folders and common non-analysis directories (`.git`, `.dart_tool`, `build`, `example`, `test`, `integration_test`, platform folders, etc.).
 
+Generated Dart files ending with `*.g.dart` are analyzed for dependency/usage flow, but non-actionable checks are suppressed (for example code size, one-class-per-file, dead-code declarations, hardcoded strings, magic numbers, sorting, duplicate code, and documentation).
+
 ## CI Example (GitHub Actions)
 
 ```yaml

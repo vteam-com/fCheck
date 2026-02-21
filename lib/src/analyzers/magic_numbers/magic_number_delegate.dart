@@ -2,6 +2,7 @@ import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_visitor.dart';
+import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 
 /// Delegate adapter for magic number analysis.
@@ -45,6 +46,6 @@ class MagicNumberDelegate implements AnalyzerDelegate {
   ///
   /// Returns true if the file should be skipped.
   bool _shouldSkipFile(String path) {
-    return path.contains('lib/l10n/') || path.contains('.g.dart');
+    return isLibL10nPath(path) || isGeneratedDartFilePath(path);
   }
 }

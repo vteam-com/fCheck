@@ -70,6 +70,20 @@ class PlainClass {
       expect(issues, isEmpty);
     });
 
+    test('skips generated files', () {
+      final context = _contextForSource(tempDir, '''
+class UnsortedWidget extends StatelessWidget {
+  void zebra() {}
+  void alpha() {}
+}
+''', fileName: 'generated_widget.g.dart');
+
+      final delegate = SourceSortDelegate();
+      final issues = delegate.analyzeFileWithContext(context);
+
+      expect(issues, isEmpty);
+    });
+
     test('skips target class with empty members', () {
       final context = _contextForSource(
         tempDir,

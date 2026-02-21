@@ -1,6 +1,7 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
+import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_members.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_utils.dart';
@@ -31,7 +32,9 @@ class SourceSortDelegate implements AnalyzerDelegate {
   List<SourceSortIssue> analyzeFileWithContext(AnalysisFileContext context) {
     final issues = <SourceSortIssue>[];
 
-    if (context.hasParseErrors || context.compilationUnit == null) {
+    if (isGeneratedDartFilePath(context.file.path) ||
+        context.hasParseErrors ||
+        context.compilationUnit == null) {
       return issues;
     }
 

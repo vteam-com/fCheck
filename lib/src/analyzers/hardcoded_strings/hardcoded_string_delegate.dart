@@ -2,6 +2,7 @@ import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_utils.dart';
+import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 
@@ -41,8 +42,8 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
     final filePath = context.file.path;
 
     // Skip l10n generated files and files with ignore directive
-    if (filePath.contains('lib/l10n/') ||
-        filePath.contains('.g.dart') ||
+    if (isLibL10nPath(filePath) ||
+        isGeneratedDartFilePath(filePath) ||
         context.hasIgnoreForFileDirective(
           IgnoreConfig.ignoreDirectiveForHardcodedStrings,
         ) ||

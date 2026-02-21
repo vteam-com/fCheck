@@ -30,6 +30,7 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 ## Ignores and Exclusions
 
 - There is no per-file ignore directive for sorting.
+- Generated Dart files ending with `*.g.dart` are skipped.
 - CLI/project excludes and default directory excludes follow `RULES.md`.
 
 ## Output

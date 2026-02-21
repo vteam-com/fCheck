@@ -4,12 +4,15 @@ import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_file_data.dart';
+import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 
 /// Delegate collecting LOC size artifacts for classes and callables.
 class CodeSizeDelegate implements AnalyzerDelegate {
   @override
   CodeSizeFileData analyzeFileWithContext(AnalysisFileContext context) {
-    if (context.hasParseErrors || context.compilationUnit == null) {
+    if (isGeneratedDartFilePath(context.file.path) ||
+        context.hasParseErrors ||
+        context.compilationUnit == null) {
       return CodeSizeFileData(filePath: context.file.path, artifacts: const []);
     }
 

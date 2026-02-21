@@ -51,6 +51,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - Full-project analysis should run in the unified `AnalyzerRunner` pass.
 - File-level ignore directives are read from leading comments via `IgnoreConfig.hasIgnoreForFileDirective`.
 - Node-level ignores use `// ignore: fcheck_<domain>` on the relevant line for AST-based analyzers.
+- Generated Dart files (`*.g.dart`) are treated as dependency/usage contributors, while non-actionable analyzer findings are suppressed by domain-specific delegates.
 - Dead-code specific behavior: files with top-of-file `// ignore: fcheck_dead_code`
   suppress dead-code findings for declarations in that file, but still contribute
   dependencies/usages used by project-wide dead-code reachability.

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:fcheck/fcheck.dart';
+import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
 import 'package:path/path.dart' as p;
@@ -140,5 +141,107 @@ void main() {
         equals(p.join('lib', 'feature', 'dead.dart')),
       );
     });
+
+    test(
+      'should suppress non-actionable generated warnings while keeping dead-code usage edges',
+      () {
+        File('${tempDir.path}/pubspec.yaml').writeAsStringSync('''
+name: sample
+version: 0.0.1
+''');
+
+        final libDir = Directory('${tempDir.path}/lib')..createSync();
+        File('${libDir.path}/main.dart').writeAsStringSync('''
+import 'api.g.dart';
+
+void main() {
+  generatedCall();
+}
+''');
+
+        File('${libDir.path}/service.dart').writeAsStringSync('''
+void helper() {}
+
+void unusedServiceFunction() {}
+''');
+
+        File('${libDir.path}/api.g.dart').writeAsStringSync('''
+import 'service.dart';
+
+class GeneratedOne {}
+class GeneratedTwo {}
+
+void generatedCall() {
+  final count = 42;
+  if (count > 0) {
+    helper();
+    print("generated");
+  }
+}
+
+void generatedDead() {}
+''');
+
+        final metrics = AnalyzeFolder(
+          tempDir,
+          codeSizeThresholds: const CodeSizeThresholds(
+            maxFileLoc: 1,
+            maxClassLoc: 1,
+            maxFunctionLoc: 1,
+            maxMethodLoc: 1,
+          ),
+        ).analyze();
+
+        expect(
+          metrics.hardcodedStringIssues.any(
+            (issue) => issue.filePath.endsWith('api.g.dart'),
+          ),
+          isFalse,
+        );
+        expect(
+          metrics.magicNumberIssues.any(
+            (issue) => issue.filePath.endsWith('api.g.dart'),
+          ),
+          isFalse,
+        );
+        expect(
+          metrics.codeSizeArtifacts.any(
+            (artifact) => artifact.filePath.endsWith('api.g.dart'),
+          ),
+          isFalse,
+        );
+
+        final generatedMetric = metrics.fileMetrics.firstWhere(
+          (metric) => metric.path.endsWith('api.g.dart'),
+        );
+        expect(generatedMetric.ignoreOneClassPerFile, isTrue);
+        expect(generatedMetric.isOneClassPerFileCompliant, isTrue);
+
+        expect(
+          metrics.deadCodeIssues.any(
+            (issue) =>
+                issue.type == DeadCodeIssueType.deadFunction &&
+                issue.name == 'helper',
+          ),
+          isFalse,
+        );
+        expect(
+          metrics.deadCodeIssues.any(
+            (issue) =>
+                issue.filePath.endsWith('api.g.dart') &&
+                issue.type == DeadCodeIssueType.deadFunction,
+          ),
+          isFalse,
+        );
+        expect(
+          metrics.deadCodeIssues.any(
+            (issue) =>
+                issue.type == DeadCodeIssueType.deadFunction &&
+                issue.name == 'unusedServiceFunction',
+          ),
+          isTrue,
+        );
+      },
+    );
   });
 }

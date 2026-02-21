@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
+import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_visitor.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 
@@ -28,6 +29,8 @@ class DeadCodeDelegate implements AnalyzerDelegate {
     final ignoredForDeadCode = context.hasIgnoreForFileDirective(
       IgnoreConfig.ignoreDirectiveForDeadCode,
     );
+    final suppressDeclarationsAndIssues =
+        ignoredForDeadCode || isGeneratedDartFilePath(context.file.path);
 
     final visitor = DeadCodeVisitor(
       filePath: context.file.path,
@@ -43,11 +46,11 @@ class DeadCodeDelegate implements AnalyzerDelegate {
       filePath: context.file.path,
       hasMain: visitor.hasMain,
       dependencies: visitor.dependencies,
-      classes: ignoredForDeadCode ? const [] : visitor.classes,
-      functions: ignoredForDeadCode ? const [] : visitor.functions,
-      methods: ignoredForDeadCode ? const [] : visitor.methods,
+      classes: suppressDeclarationsAndIssues ? const [] : visitor.classes,
+      functions: suppressDeclarationsAndIssues ? const [] : visitor.functions,
+      methods: suppressDeclarationsAndIssues ? const [] : visitor.methods,
       usedIdentifiers: visitor.usedIdentifiers,
-      unusedVariableIssues: ignoredForDeadCode
+      unusedVariableIssues: suppressDeclarationsAndIssues
           ? const []
           : visitor.unusedVariableIssues,
     );
