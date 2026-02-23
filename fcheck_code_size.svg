@@ -859,7 +859,7 @@
   <rect x="821.9121639606068" y="94.0" width="80.98562287465444" height="124.22583522613068" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="821.9121639606068" y="94.0" width="80.98562287465444" height="124.22583522613068" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="821.9121639606068" y="94.0" width="80.98562287465444" height="124.22583522613068" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: main | 238 LOC | bin/fcheck.dart:19</title>
+  <title>callable: main | 238 LOC | bin/fcheck.dart:20</title>
   <text x="862.404975397934" y="156.11291761306535" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
     <tspan x="862.404975397934" dy="-6.0" font-size="14.00">main</tspan>
     <tspan x="862.404975397934" dy="14.0" font-size="14.00">238</tspan>
@@ -1065,21 +1065,21 @@
   <rect x="914.8814785636628" y="325.124032491535" width="57.23857055785166" height="62.77302266175393" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="914.8814785636628" y="325.124032491535" width="57.23857055785166" height="62.77302266175393" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="914.8814785636628" y="325.124032491535" width="57.23857055785166" height="62.77302266175393" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: createConsoleArgParser | 85 LOC | bin/console/console_input.dart:86</title>
+  <title>callable: createConsoleArgParser | 85 LOC | bin/console/console_input.dart:87</title>
   <text x="943.5007638425886" y="356.51054382241193" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">85</text>
 </g>
 <g>
   <rect x="1303.9098512374271" y="94.0" width="29.79254480446388" height="48.24076775363038" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1303.9098512374271" y="94.0" width="29.79254480446388" height="48.24076775363038" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1303.9098512374271" y="94.0" width="29.79254480446388" height="48.24076775363038" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: parseConsoleInput | 34 LOC | bin/console/console_input.dart:172</title>
+  <title>callable: parseConsoleInput | 34 LOC | bin/console/console_input.dart:173</title>
   <text x="1318.806123639659" y="118.1203838768152" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">34</text>
 </g>
 <g>
   <rect x="1206.6242521769518" y="506.3423395849421" width="25.301619258202194" height="25.060275322727406" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1206.6242521769518" y="506.3423395849421" width="25.301619258202194" height="25.060275322727406" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1206.6242521769518" y="506.3423395849421" width="25.301619258202194" height="25.060275322727406" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _parseListOption | 15 LOC | bin/console/console_input.dart:209</title>
+  <title>callable: _parseListOption | 15 LOC | bin/console/console_input.dart:210</title>
   <text x="1219.275061806053" y="518.8724772463058" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
 </g>
 <g>
@@ -1439,112 +1439,112 @@
   <rect x="1321.0740846712708" y="493.8454613926821" width="13.07738041573538" height="12.929511865815337" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1321.0740846712708" y="493.8454613926821" width="13.07738041573538" height="12.929511865815337" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1321.0740846712708" y="493.8454613926821" width="13.07738041573538" height="12.929511865815337" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: configureCliColorOutput | 4 LOC | lib/src/input_output/issue_location_utils.dart:28</title>
+  <title>callable: configureCliColorOutput | 4 LOC | lib/src/input_output/issue_location_utils.dart:29</title>
   <text x="1327.6127748791384" y="500.3102173255898" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">4</text>
 </g>
 <g>
   <rect x="1301.1389319047476" y="399.8846671248499" width="17.75119762378159" height="23.81306163710705" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1301.1389319047476" y="399.8846671248499" width="17.75119762378159" height="23.81306163710705" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1301.1389319047476" y="399.8846671248499" width="17.75119762378159" height="23.81306163710705" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: supportsCliAnsiColors | 10 LOC | lib/src/input_output/issue_location_utils.dart:33</title>
+  <title>callable: supportsCliAnsiColors | 10 LOC | lib/src/input_output/issue_location_utils.dart:34</title>
   <text x="1310.0145307166383" y="411.7911979434034" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">10</text>
 </g>
 <g>
   <rect x="1355.501883418184" y="519.5233995239512" width="7.116806110392577" height="5.9396076918591465" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1355.501883418184" y="519.5233995239512" width="7.116806110392577" height="5.9396076918591465" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1355.501883418184" y="519.5233995239512" width="7.116806110392577" height="5.9396076918591465" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _supportsAnsiEscapes | 1 LOC | lib/src/input_output/issue_location_utils.dart:44</title>
+  <title>callable: _supportsAnsiEscapes | 1 LOC | lib/src/input_output/issue_location_utils.dart:45</title>
   <text x="1359.0602864733803" y="522.4932033698808" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">1</text>
 </g>
 <g>
   <rect x="1319.7354246534712" y="374.8809524058875" width="16.90590249883961" height="25.003714718962403" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1319.7354246534712" y="374.8809524058875" width="16.90590249883961" height="25.003714718962403" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1319.7354246534712" y="374.8809524058875" width="16.90590249883961" height="25.003714718962403" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: isNoColorEnvironmentEnabled | 10 LOC | lib/src/input_output/issue_location_utils.dart:46</title>
+  <title>callable: isNoColorEnvironmentEnabled | 10 LOC | lib/src/input_output/issue_location_utils.dart:47</title>
   <text x="1328.188375902891" y="387.38280976536873" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">10</text>
 </g>
 <g>
   <rect x="1334.1514650870063" y="507.64418414023294" width="7.116806110392577" height="11.879215383718293" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1334.1514650870063" y="507.64418414023294" width="7.116806110392577" height="11.879215383718293" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1334.1514650870063" y="507.64418414023294" width="7.116806110392577" height="11.879215383718293" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isNoColorEnvironmentEnabled | 2 LOC | lib/src/input_output/issue_location_utils.dart:57</title>
+  <title>callable: _isNoColorEnvironmentEnabled | 2 LOC | lib/src/input_output/issue_location_utils.dart:58</title>
   <text x="1337.7098681422026" y="513.5837918320921" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">2</text>
 </g>
 <g>
   <rect x="1185.876924385226" y="426.66351548191136" width="19.73526302139771" height="36.41236585353554" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1185.876924385226" y="426.66351548191136" width="19.73526302139771" height="36.41236585353554" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1185.876924385226" y="426.66351548191136" width="19.73526302139771" height="36.41236585353554" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isTruthyNoColorsValue | 17 LOC | lib/src/input_output/issue_location_utils.dart:60</title>
+  <title>callable: _isTruthyNoColorsValue | 17 LOC | lib/src/input_output/issue_location_utils.dart:61</title>
   <text x="1195.7445558959248" y="444.86969840867914" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">17</text>
 </g>
 <g>
   <rect x="1355.501883418184" y="495.76496875651463" width="7.116806110392577" height="11.879215383718293" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1355.501883418184" y="495.76496875651463" width="7.116806110392577" height="11.879215383718293" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1355.501883418184" y="495.76496875651463" width="7.116806110392577" height="11.879215383718293" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _colorizeBlueDark | 2 LOC | lib/src/input_output/issue_location_utils.dart:78</title>
+  <title>callable: _colorizeBlueDark | 2 LOC | lib/src/input_output/issue_location_utils.dart:79</title>
   <text x="1359.0602864733803" y="501.70457644837376" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">2</text>
 </g>
 <g>
   <rect x="1341.268271197399" y="519.5233995239512" width="7.116806110392577" height="11.879215383718293" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1341.268271197399" y="519.5233995239512" width="7.116806110392577" height="11.879215383718293" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1341.268271197399" y="519.5233995239512" width="7.116806110392577" height="11.879215383718293" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _colorizeBlueBright | 2 LOC | lib/src/input_output/issue_location_utils.dart:81</title>
+  <title>callable: _colorizeBlueBright | 2 LOC | lib/src/input_output/issue_location_utils.dart:82</title>
   <text x="1344.8266742525952" y="525.4630072158103" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">2</text>
 </g>
 <g>
   <rect x="1341.268271197399" y="507.64418414023294" width="7.116806110392577" height="11.879215383718293" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1341.268271197399" y="507.64418414023294" width="7.116806110392577" height="11.879215383718293" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1341.268271197399" y="507.64418414023294" width="7.116806110392577" height="11.879215383718293" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _colorizeOrange | 2 LOC | lib/src/input_output/issue_location_utils.dart:84</title>
+  <title>callable: _colorizeOrange | 2 LOC | lib/src/input_output/issue_location_utils.dart:85</title>
   <text x="1344.8266742525952" y="513.5837918320921" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">2</text>
 </g>
 <g>
   <rect x="1306.0059377115895" y="212.081879277543" width="28.306375908493465" height="41.813512992247084" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1306.0059377115895" y="212.081879277543" width="28.306375908493465" height="41.813512992247084" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1306.0059377115895" y="212.081879277543" width="28.306375908493465" height="41.813512992247084" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: colorizePathFilename | 28 LOC | lib/src/input_output/issue_location_utils.dart:87</title>
+  <title>callable: colorizePathFilename | 28 LOC | lib/src/input_output/issue_location_utils.dart:88</title>
   <text x="1320.1591256658362" y="232.98863577366654" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">28</text>
 </g>
 <g>
   <rect x="1317.9231771051768" y="423.69772876195697" width="18.099835609475928" height="16.34806307568851" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1317.9231771051768" y="423.69772876195697" width="18.099835609475928" height="16.34806307568851" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1317.9231771051768" y="423.69772876195697" width="18.099835609475928" height="16.34806307568851" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: colorizeIssueArtifact | 7 LOC | lib/src/input_output/issue_location_utils.dart:119</title>
+  <title>callable: colorizeIssueArtifact | 7 LOC | lib/src/input_output/issue_location_utils.dart:120</title>
   <text x="1326.9730949099148" y="431.8717602998012" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">7</text>
 </g>
 <g>
   <rect x="1231.925871435154" y="314.37565213357607" width="20.356782491056933" height="31.14763077121466" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1231.925871435154" y="314.37565213357607" width="20.356782491056933" height="31.14763077121466" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1231.925871435154" y="314.37565213357607" width="20.356782491056933" height="31.14763077121466" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _relativizeToCurrentDirectory | 15 LOC | lib/src/input_output/issue_location_utils.dart:127</title>
+  <title>callable: _relativizeToCurrentDirectory | 15 LOC | lib/src/input_output/issue_location_utils.dart:128</title>
   <text x="1242.1042626806825" y="329.9494675191834" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
 </g>
 <g>
   <rect x="1234.1036105863652" y="143.65494410645397" width="69.8062406510618" height="23.616375855508608" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1234.1036105863652" y="143.65494410645397" width="69.8062406510618" height="23.616375855508608" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1234.1036105863652" y="143.65494410645397" width="69.8062406510618" height="23.616375855508608" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: normalizeIssueLocation | 39 LOC | lib/src/input_output/issue_location_utils.dart:145</title>
+  <title>callable: normalizeIssueLocation | 39 LOC | lib/src/input_output/issue_location_utils.dart:146</title>
   <text x="1269.006730911896" y="155.4631320342083" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">39</text>
 </g>
 <g>
   <rect x="1289.7962889551138" y="482.2194588064482" width="10.027052540587086" height="29.5098936607328" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1289.7962889551138" y="482.2194588064482" width="10.027052540587086" height="29.5098936607328" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1289.7962889551138" y="482.2194588064482" width="10.027052540587086" height="29.5098936607328" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: assertValidLineNumberWidth | 7 LOC | lib/src/input_output/issue_location_utils.dart:190</title>
+  <title>callable: assertValidLineNumberWidth | 7 LOC | lib/src/input_output/issue_location_utils.dart:191</title>
   <text x="1294.8098152254074" y="496.9744056368146" text-anchor="middle" dominant-baseline="middle" font-size="6.71" fill="#000" font-weight="700">7</text>
 </g>
 <g>
   <rect x="1166.1416613638282" y="514.695764692518" width="40.48259081312351" height="16.706850215151604" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1166.1416613638282" y="514.695764692518" width="40.48259081312351" height="16.706850215151604" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1166.1416613638282" y="514.695764692518" width="40.48259081312351" height="16.706850215151604" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: resolveIssueLocationWithLine | 16 LOC | lib/src/input_output/issue_location_utils.dart:198</title>
+  <title>callable: resolveIssueLocationWithLine | 16 LOC | lib/src/input_output/issue_location_utils.dart:199</title>
   <text x="1186.38295677039" y="523.0491898000938" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">16</text>
 </g>
 <g>
   <rect x="1199.8473206741148" y="344.68356231573597" width="32.07855076103915" height="28.990174956848612" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1199.8473206741148" y="344.68356231573597" width="32.07855076103915" height="28.990174956848612" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1199.8473206741148" y="344.68356231573597" width="32.07855076103915" height="28.990174956848612" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: resolveIssueLocation | 22 LOC | lib/src/input_output/issue_location_utils.dart:215</title>
+  <title>callable: resolveIssueLocation | 22 LOC | lib/src/input_output/issue_location_utils.dart:216</title>
   <text x="1215.8865960546343" y="359.17864979416026" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">22</text>
 </g>
 <g>
@@ -2308,238 +2308,238 @@
   <rect x="1508.0461777654389" y="271.37769066027755" width="20.55658571825181" height="18.2269130365227" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1508.0461777654389" y="271.37769066027755" width="20.55658571825181" height="18.2269130365227" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1508.0461777654389" y="271.37769066027755" width="20.55658571825181" height="18.2269130365227" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: HardcodedStringVisitor | 10 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:31</title>
+  <title>callable: HardcodedStringVisitor | 10 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:30</title>
   <text x="1518.3244706245648" y="280.4911471785389" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">10</text>
 </g>
 <g>
   <rect x="1552.9810528648854" y="245.7670179548778" width="19.0189471351146" height="25.610672705399743" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1552.9810528648854" y="245.7670179548778" width="19.0189471351146" height="25.610672705399743" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1552.9810528648854" y="245.7670179548778" width="19.0189471351146" height="25.610672705399743" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitSimpleStringLiteral | 13 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:57</title>
+  <title>callable: visitSimpleStringLiteral | 13 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:56</title>
   <text x="1562.4905264324427" y="258.57235430757765" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">13</text>
 </g>
 <g>
   <rect x="1556.9778796674314" y="298.14247348759244" width="15.022120332568626" height="12.471045761831318" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1556.9778796674314" y="298.14247348759244" width="15.022120332568626" height="12.471045761831318" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1556.9778796674314" y="298.14247348759244" width="15.022120332568626" height="12.471045761831318" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitStringInterpolation | 5 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:71</title>
+  <title>callable: visitStringInterpolation | 5 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:70</title>
   <text x="1564.4889398337157" y="304.3779963685081" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">5</text>
 </g>
 <g>
   <rect x="1370.6186895285764" y="218.2592583824114" width="53.45758423423245" height="56.07183423368625" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1370.6186895285764" y="218.2592583824114" width="53.45758423423245" height="56.07183423368625" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1370.6186895285764" y="218.2592583824114" width="53.45758423423245" height="56.07183423368625" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _analyzeStringLiteral | 80 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:77</title>
+  <title>callable: _analyzeStringLiteral | 80 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:76</title>
   <text x="1397.3474816456926" y="246.29517549925453" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">80</text>
 </g>
 <g>
   <rect x="1532.4991097963004" y="245.7670179548778" width="20.481943068584954" height="25.610672705399743" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1532.4991097963004" y="245.7670179548778" width="20.481943068584954" height="25.610672705399743" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1532.4991097963004" y="245.7670179548778" width="20.481943068584954" height="25.610672705399743" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _matchesFocus | 14 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:175</title>
+  <title>callable: _matchesFocus | 14 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:174</title>
   <text x="1542.7400813305928" y="258.57235430757765" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">14</text>
 </g>
 <g>
   <rect x="1510.6325455763954" y="245.67522342905198" width="21.866564219905108" height="25.702467231225555" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1510.6325455763954" y="245.67522342905198" width="21.866564219905108" height="25.702467231225555" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1510.6325455763954" y="245.67522342905198" width="21.866564219905108" height="25.702467231225555" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isInDirective | 15 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:190</title>
+  <title>callable: _isInDirective | 15 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:189</title>
   <text x="1521.565827686348" y="258.52645704466477" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
 </g>
 <g>
   <rect x="1424.0762737628088" y="260.0564672108317" width="51.99299288534937" height="18.01603828811222" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1424.0762737628088" y="260.0564672108317" width="51.99299288534937" height="18.01603828811222" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1424.0762737628088" y="260.0564672108317" width="51.99299288534937" height="18.01603828811222" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isWidgetOutputString | 25 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:206</title>
+  <title>callable: _isWidgetOutputString | 25 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:205</title>
   <text x="1450.0727702054835" y="269.06448635488783" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">25</text>
 </g>
 <g>
   <rect x="1460.206997632289" y="278.072505498944" width="15.862269015869302" height="42.517850359944845" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1460.206997632289" y="278.072505498944" width="15.862269015869302" height="42.517850359944845" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1460.206997632289" y="278.072505498944" width="15.862269015869302" height="42.517850359944845" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _hasWidgetLintIgnoreComment | 18 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:238</title>
+  <title>callable: _hasWidgetLintIgnoreComment | 18 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:237</title>
   <text x="1468.1381321402237" y="299.33143067891643" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">18</text>
 </g>
 <g>
   <rect x="1508.0461777654389" y="289.60460369680027" width="20.55658571825181" height="16.40422173287043" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1508.0461777654389" y="289.60460369680027" width="20.55658571825181" height="16.40422173287043" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1508.0461777654389" y="289.60460369680027" width="20.55658571825181" height="16.40422173287043" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _extractLiteralTextWithoutInterpolations | 9 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:260</title>
+  <title>callable: _extractLiteralTextWithoutInterpolations | 9 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:259</title>
   <text x="1518.3244706245648" y="297.80671456323546" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">9</text>
 </g>
 <g>
   <rect x="1452.7620629409325" y="218.2592583824114" width="23.307203707225582" height="41.79720882842036" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1452.7620629409325" y="218.2592583824114" width="23.307203707225582" height="41.79720882842036" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1452.7620629409325" y="218.2592583824114" width="23.307203707225582" height="41.79720882842036" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _stripLiteralDelimiters | 26 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:271</title>
+  <title>callable: _stripLiteralDelimiters | 26 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:270</title>
   <text x="1464.4156647945454" y="239.15786279662157" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">26</text>
 </g>
 <g>
   <rect x="1492.0577222067984" y="297.15575338335964" width="15.9884555586403" height="23.434602475529182" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1492.0577222067984" y="297.15575338335964" width="15.9884555586403" height="23.434602475529182" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1492.0577222067984" y="297.15575338335964" width="15.9884555586403" height="23.434602475529182" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _containsWidgetLintIgnoreComment | 10 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:302</title>
+  <title>callable: _containsWidgetLintIgnoreComment | 10 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:301</title>
   <text x="1500.0519499861186" y="308.87305462112425" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">10</text>
 </g>
 <g>
   <rect x="1370.6186895285764" y="274.33109261609764" width="26.728792117116225" height="46.25926324279117" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1370.6186895285764" y="274.33109261609764" width="26.728792117116225" height="46.25926324279117" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1370.6186895285764" y="274.33109261609764" width="26.728792117116225" height="46.25926324279117" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isAcceptableWidgetProperty | 33 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:314</title>
+  <title>callable: _isAcceptableWidgetProperty | 33 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:313</title>
   <text x="1383.9830855871346" y="297.4607242374932" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">33</text>
 </g>
 <g>
   <rect x="1556.9778796674314" y="310.61351924942375" width="15.022120332568626" height="9.976836609465055" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1556.9778796674314" y="310.61351924942375" width="15.022120332568626" height="9.976836609465055" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1556.9778796674314" y="310.61351924942375" width="15.022120332568626" height="9.976836609465055" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isTechnicalString | 4 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:351</title>
+  <title>callable: _isTechnicalString | 4 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:350</title>
   <text x="1564.4889398337157" y="315.6019375541563" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">4</text>
 </g>
 <g>
   <rect x="1532.4991097963004" y="218.2592583824114" width="20.43149493294805" height="27.507759572466398" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1532.4991097963004" y="218.2592583824114" width="20.43149493294805" height="27.507759572466398" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1532.4991097963004" y="218.2592583824114" width="20.43149493294805" height="27.507759572466398" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isDirectArgument | 15 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:356</title>
+  <title>callable: _isDirectArgument | 15 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:355</title>
   <text x="1542.7148572627746" y="232.0131381686446" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
 </g>
 <g>
   <rect x="1552.9306047292484" y="218.2592583824114" width="19.069395270751507" height="27.507759572466398" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1552.9306047292484" y="218.2592583824114" width="19.069395270751507" height="27.507759572466398" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1552.9306047292484" y="218.2592583824114" width="19.069395270751507" height="27.507759572466398" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _hasFunctionBoundary | 14 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:372</title>
+  <title>callable: _hasFunctionBoundary | 14 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:371</title>
   <text x="1562.4653023646242" y="232.0131381686446" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">14</text>
 </g>
 <g>
   <rect x="1476.0692666481582" y="218.2592583824114" width="34.56327892823712" height="18.428843851504578" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1476.0692666481582" y="218.2592583824114" width="34.56327892823712" height="18.428843851504578" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1476.0692666481582" y="218.2592583824114" width="34.56327892823712" height="18.428843851504578" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isInsideWidgetClass | 17 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:387</title>
+  <title>callable: _isInsideWidgetClass | 17 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:386</title>
   <text x="1493.3509061122768" y="227.47368030816367" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">17</text>
 </g>
 <g>
   <rect x="1528.6027634836905" y="298.14247348759244" width="20.029493776758173" height="11.223941185648187" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1528.6027634836905" y="298.14247348759244" width="20.029493776758173" height="11.223941185648187" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1528.6027634836905" y="298.14247348759244" width="20.029493776758173" height="11.223941185648187" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isInsideBuildMethod | 6 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:406</title>
+  <title>callable: _isInsideBuildMethod | 6 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:405</title>
   <text x="1538.6175103720695" y="303.75444408041653" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">6</text>
 </g>
 <g>
   <rect x="1528.6027634836905" y="309.3664146732406" width="20.029493776758173" height="11.223941185648187" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1528.6027634836905" y="309.3664146732406" width="20.029493776758173" height="11.223941185648187" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1528.6027634836905" y="309.3664146732406" width="20.029493776758173" height="11.223941185648187" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isInsideWidgetReturnFunction | 6 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:413</title>
+  <title>callable: _isInsideWidgetReturnFunction | 6 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:412</title>
   <text x="1538.6175103720695" y="314.9783852660647" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">6</text>
 </g>
 <g>
   <rect x="1476.0692666481582" y="254.03289644709673" width="34.56327892823712" height="17.344794213180784" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1476.0692666481582" y="254.03289644709673" width="34.56327892823712" height="17.344794213180784" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1476.0692666481582" y="254.03289644709673" width="34.56327892823712" height="17.344794213180784" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _matchesBuildOrWidgetReturningDeclaration | 16 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:420</title>
+  <title>callable: _matchesBuildOrWidgetReturningDeclaration | 16 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:419</title>
   <text x="1493.3509061122768" y="262.7052935536871" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">16</text>
 </g>
 <g>
   <rect x="1476.0692666481582" y="297.15575338335964" width="15.9884555586403" height="23.434602475529182" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1476.0692666481582" y="297.15575338335964" width="15.9884555586403" height="23.434602475529182" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1476.0692666481582" y="297.15575338335964" width="15.9884555586403" height="23.434602475529182" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isBuildOrWidgetReturning | 10 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:437</title>
+  <title>callable: _isBuildOrWidgetReturning | 10 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:436</title>
   <text x="1484.0634944274784" y="308.87305462112425" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">10</text>
 </g>
 <g>
   <rect x="1508.0461777654389" y="306.00882542967065" width="20.55658571825181" height="14.581530429218155" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1508.0461777654389" y="306.00882542967065" width="20.55658571825181" height="14.581530429218155" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1508.0461777654389" y="306.00882542967065" width="20.55658571825181" height="14.581530429218155" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isWidgetReturnType | 8 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:448</title>
+  <title>callable: _isWidgetReturnType | 8 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:447</title>
   <text x="1518.3244706245648" y="313.2995906442797" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">8</text>
 </g>
 <g>
   <rect x="1476.0692666481582" y="271.37769066027755" width="15.9884555586403" height="25.7780627230821" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1476.0692666481582" y="271.37769066027755" width="15.9884555586403" height="25.7780627230821" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1476.0692666481582" y="271.37769066027755" width="15.9884555586403" height="25.7780627230821" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isInAnnotation | 11 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:457</title>
+  <title>callable: _isInAnnotation | 11 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:456</title>
   <text x="1484.0634944274784" y="284.2667220218186" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
 </g>
 <g>
   <rect x="1528.6027634836905" y="284.760082073935" width="22.398573685837093" height="13.382391413657455" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1528.6027634836905" y="284.760082073935" width="22.398573685837093" height="13.382391413657455" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1528.6027634836905" y="284.760082073935" width="22.398573685837093" height="13.382391413657455" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isMapKey | 8 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:469</title>
+  <title>callable: _isMapKey | 8 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:468</title>
   <text x="1539.802050326609" y="291.45127778076375" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">8</text>
 </g>
 <g>
   <rect x="1424.0762737628088" y="218.2592583824114" width="28.68578917812379" height="41.79720882842036" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1424.0762737628088" y="218.2592583824114" width="28.68578917812379" height="41.79720882842036" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1424.0762737628088" y="218.2592583824114" width="28.68578917812379" height="41.79720882842036" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isInConstDeclaration | 32 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:478</title>
+  <title>callable: _isInConstDeclaration | 32 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:477</title>
   <text x="1438.4191683518707" y="239.15786279662157" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">32</text>
 </g>
 <g>
   <rect x="1551.0013371695277" y="285.65224150151215" width="20.998662830472277" height="12.49023198608029" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1551.0013371695277" y="285.65224150151215" width="20.998662830472277" height="12.49023198608029" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1551.0013371695277" y="285.65224150151215" width="20.998662830472277" height="12.49023198608029" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isDedicatedStringFile | 7 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:512</title>
+  <title>callable: _isDedicatedStringFile | 7 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:511</title>
   <text x="1561.5006685847638" y="291.8973574945523" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">7</text>
 </g>
 <g>
   <rect x="1510.6325455763954" y="218.2592583824114" width="21.866564219905108" height="27.415965046640586" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1510.6325455763954" y="218.2592583824114" width="21.866564219905108" height="27.415965046640586" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1510.6325455763954" y="218.2592583824114" width="21.866564219905108" height="27.415965046640586" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isInL10nCall | 16 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:520</title>
+  <title>callable: _isInL10nCall | 16 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:519</title>
   <text x="1521.565827686348" y="231.96724090573167" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">16</text>
 </g>
 <g>
   <rect x="1424.0762737628088" y="300.88696178964614" width="36.13072386948007" height="19.70339406924273" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1424.0762737628088" y="300.88696178964614" width="36.13072386948007" height="19.70339406924273" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1424.0762737628088" y="300.88696178964614" width="36.13072386948007" height="19.70339406924273" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isInRegExpCall | 19 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:537</title>
+  <title>callable: _isInRegExpCall | 19 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:536</title>
   <text x="1442.1416356975487" y="310.7386588242675" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">19</text>
 </g>
 <g>
   <rect x="1424.0762737628088" y="278.072505498944" width="36.13072386948007" height="22.814456290702115" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1424.0762737628088" y="278.072505498944" width="36.13072386948007" height="22.814456290702115" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1424.0762737628088" y="278.072505498944" width="36.13072386948007" height="22.814456290702115" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isInKey | 22 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:557</title>
+  <title>callable: _isInKey | 22 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:556</title>
   <text x="1442.1416356975487" y="289.47973364429504" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">22</text>
 </g>
 <g>
   <rect x="1551.0013371695277" y="271.37769066027755" width="20.998662830472277" height="14.27455084123462" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1551.0013371695277" y="271.37769066027755" width="20.998662830472277" height="14.27455084123462" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1551.0013371695277" y="271.37769066027755" width="20.998662830472277" height="14.27455084123462" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isIndex | 8 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:580</title>
+  <title>callable: _isIndex | 8 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:579</title>
   <text x="1561.5006685847638" y="278.51496608089485" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">8</text>
 </g>
 <g>
   <rect x="1528.6027634836905" y="271.37769066027755" width="22.398573685837093" height="13.382391413657455" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1528.6027634836905" y="271.37769066027755" width="22.398573685837093" height="13.382391413657455" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1528.6027634836905" y="271.37769066027755" width="22.398573685837093" height="13.382391413657455" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isInPrintCall | 8 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:589</title>
+  <title>callable: _isInPrintCall | 8 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:588</title>
   <text x="1539.802050326609" y="278.0688863671063" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">8</text>
 </g>
 <g>
   <rect x="1397.3474816456926" y="274.33109261609764" width="26.728792117116225" height="46.25926324279117" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1397.3474816456926" y="274.33109261609764" width="26.728792117116225" height="46.25926324279117" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1397.3474816456926" y="274.33109261609764" width="26.728792117116225" height="46.25926324279117" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isInPrintOrLoggerCall | 33 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:599</title>
+  <title>callable: _isInPrintOrLoggerCall | 33 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:598</title>
   <text x="1410.7118777042508" y="297.4607242374932" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">33</text>
 </g>
 <g>
   <rect x="1476.0692666481582" y="236.68810223391597" width="34.56327892823712" height="17.34479421318078" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1476.0692666481582" y="236.68810223391597" width="34.56327892823712" height="17.34479421318078" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1476.0692666481582" y="236.68810223391597" width="34.56327892823712" height="17.34479421318078" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _getOwningMethodInvocation | 16 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:640</title>
+  <title>callable: _getOwningMethodInvocation | 16 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:639</title>
   <text x="1493.3509061122768" y="245.36049934050635" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">16</text>
 </g>
 <g>
   <rect x="1492.0577222067984" y="271.37769066027755" width="15.9884555586403" height="25.7780627230821" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1492.0577222067984" y="271.37769066027755" width="15.9884555586403" height="25.7780627230821" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1492.0577222067984" y="271.37769066027755" width="15.9884555586403" height="25.7780627230821" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _getInvocationTargetName | 11 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:660</title>
+  <title>callable: _getInvocationTargetName | 11 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:659</title>
   <text x="1500.0519499861186" y="284.2667220218186" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
 </g>
 <g>
   <rect x="1548.6322572604488" y="298.14247348759244" width="8.34562240698257" height="22.447882371296373" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1548.6322572604488" y="298.14247348759244" width="8.34562240698257" height="22.447882371296373" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1548.6322572604488" y="298.14247348759244" width="8.34562240698257" height="22.447882371296373" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _getLineNumber | 5 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:672</title>
+  <title>callable: _getLineNumber | 5 LOC | lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart:671</title>
   <text x="1552.8050684639402" y="309.3664146732406" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">5</text>
 </g>
 </g>
@@ -2554,287 +2554,287 @@
   <rect x="1524.616162242018" y="353.22747205799374" width="23.691918878991014" height="12.637116199104952" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1524.616162242018" y="353.22747205799374" width="23.691918878991014" height="12.637116199104952" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1524.616162242018" y="353.22747205799374" width="23.691918878991014" height="12.637116199104952" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: DeadCodeVisitor | 8 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:13</title>
+  <title>callable: DeadCodeVisitor | 8 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:12</title>
   <text x="1536.4621216815135" y="359.5460301575462" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">8</text>
 </g>
 <g>
   <rect x="1551.6926409608648" y="406.4086693958938" width="20.307359039135157" height="9.214563895180692" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1551.6926409608648" y="406.4086693958938" width="20.307359039135157" height="9.214563895180692" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1551.6926409608648" y="406.4086693958938" width="20.307359039135157" height="9.214563895180692" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitImportDirective | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:60</title>
+  <title>callable: visitImportDirective | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:59</title>
   <text x="1561.8463204804323" y="411.0159513434842" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">5</text>
 </g>
 <g>
   <rect x="1561.8463204804323" y="387.9795416055324" width="10.153679519567579" height="18.429127790361385" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1561.8463204804323" y="387.9795416055324" width="10.153679519567579" height="18.429127790361385" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1561.8463204804323" y="387.9795416055324" width="10.153679519567579" height="18.429127790361385" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitExportDirective | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:66</title>
+  <title>callable: visitExportDirective | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:65</title>
   <text x="1566.923160240216" y="397.1941055007131" text-anchor="middle" dominant-baseline="middle" font-size="6.92" fill="#000" font-weight="700">5</text>
 </g>
 <g>
   <rect x="1551.6926409608648" y="387.9795416055324" width="10.153679519567579" height="18.429127790361385" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1551.6926409608648" y="387.9795416055324" width="10.153679519567579" height="18.429127790361385" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1551.6926409608648" y="387.9795416055324" width="10.153679519567579" height="18.429127790361385" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitPartDirective | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:72</title>
+  <title>callable: visitPartDirective | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:71</title>
   <text x="1556.7694807206485" y="397.1941055007131" text-anchor="middle" dominant-baseline="middle" font-size="6.92" fill="#000" font-weight="700">5</text>
 </g>
 <g>
   <rect x="1423.721266326315" y="340.5903558588888" width="25.53008499891273" height="30.784015061019662" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1423.721266326315" y="340.5903558588888" width="25.53008499891273" height="30.784015061019662" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1423.721266326315" y="340.5903558588888" width="25.53008499891273" height="30.784015061019662" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitFunctionDeclaration | 21 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:78</title>
+  <title>callable: visitFunctionDeclaration | 21 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:77</title>
   <text x="1436.4863088257712" y="355.98236338939864" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">21</text>
 </g>
 <g>
   <rect x="1449.9059688893024" y="371.3743709199085" width="24.875467434838047" height="28.5851568423754" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1449.9059688893024" y="371.3743709199085" width="24.875467434838047" height="28.5851568423754" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1449.9059688893024" y="371.3743709199085" width="24.875467434838047" height="28.5851568423754" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitMethodDeclaration | 19 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:102</title>
+  <title>callable: visitMethodDeclaration | 19 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:101</title>
   <text x="1462.3437026067213" y="385.6669493410962" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">19</text>
 </g>
 <g>
   <rect x="1500.5580186954562" y="388.65283058335353" width="24.058143546561617" height="15.555934899659343" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1500.5580186954562" y="388.65283058335353" width="24.058143546561617" height="15.555934899659343" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1500.5580186954562" y="388.65283058335353" width="24.058143546561617" height="15.555934899659343" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitConstructorDeclaration | 10 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:123</title>
+  <title>callable: visitConstructorDeclaration | 10 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:122</title>
   <text x="1512.587090468737" y="396.4307980331832" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">10</text>
 </g>
 <g>
   <rect x="1524.616162242018" y="399.7281105718878" width="19.112808507421324" height="11.748568966355384" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1524.616162242018" y="399.7281105718878" width="19.112808507421324" height="11.748568966355384" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1524.616162242018" y="399.7281105718878" width="19.112808507421324" height="11.748568966355384" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitFunctionExpression | 6 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:134</title>
+  <title>callable: visitFunctionExpression | 6 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:133</title>
   <text x="1534.1725664957287" y="405.6023950550655" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">6</text>
 </g>
 <g>
   <rect x="1524.616162242018" y="387.9795416055324" width="19.112808507421324" height="11.748568966355384" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1524.616162242018" y="387.9795416055324" width="19.112808507421324" height="11.748568966355384" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1524.616162242018" y="387.9795416055324" width="19.112808507421324" height="11.748568966355384" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitBlock | 6 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:141</title>
+  <title>callable: visitBlock | 6 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:140</title>
   <text x="1534.1725664957287" y="393.8538260887101" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">6</text>
 </g>
 <g>
   <rect x="1550.000361040937" y="377.7726400601015" width="21.999638959063084" height="10.206901545430924" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1550.000361040937" y="377.7726400601015" width="21.999638959063084" height="10.206901545430924" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1550.000361040937" y="377.7726400601015" width="21.999638959063084" height="10.206901545430924" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitForStatement | 6 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:148</title>
+  <title>callable: visitForStatement | 6 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:147</title>
   <text x="1561.0001805204686" y="382.87609083281694" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">6</text>
 </g>
 <g>
   <rect x="1458.5350185975594" y="399.95952776228387" width="16.24641772658083" height="32.24992054011583" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1458.5350185975594" y="399.95952776228387" width="16.24641772658083" height="32.24992054011583" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1458.5350185975594" y="399.95952776228387" width="16.24641772658083" height="32.24992054011583" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitCatchClause | 14 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:155</title>
+  <title>callable: visitCatchClause | 14 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:154</title>
   <text x="1466.65822746085" y="416.08448803234177" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">14</text>
 </g>
 <g>
   <rect x="1474.7814363241403" y="373.0325262979025" width="31.146703698673527" height="15.620304285451034" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1474.7814363241403" y="373.0325262979025" width="31.146703698673527" height="15.620304285451034" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1474.7814363241403" y="373.0325262979025" width="31.146703698673527" height="15.620304285451034" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitClassDeclaration | 13 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:170</title>
+  <title>callable: visitClassDeclaration | 13 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:169</title>
   <text x="1490.3547881734771" y="380.84267844062805" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">13</text>
 </g>
 <g>
   <rect x="1548.3080811210089" y="340.5903558588888" width="23.691918878991014" height="12.637116199104952" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1548.3080811210089" y="340.5903558588888" width="23.691918878991014" height="12.637116199104952" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1548.3080811210089" y="340.5903558588888" width="23.691918878991014" height="12.637116199104952" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitVariableDeclaration | 8 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:184</title>
+  <title>callable: visitVariableDeclaration | 8 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:183</title>
   <text x="1560.1540405605044" y="346.9089139584413" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">8</text>
 </g>
 <g>
   <rect x="1550.000361040937" y="365.8645882570987" width="21.999638959063084" height="11.908051803002742" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1550.000361040937" y="365.8645882570987" width="21.999638959063084" height="11.908051803002742" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1550.000361040937" y="365.8645882570987" width="21.999638959063084" height="11.908051803002742" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitDeclaredIdentifier | 7 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:193</title>
+  <title>callable: visitDeclaredIdentifier | 7 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:192</title>
   <text x="1561.0001805204686" y="371.8186141586001" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">7</text>
 </g>
 <g>
   <rect x="1500.5580186954562" y="418.2091068927063" width="24.058143546561617" height="14.000341409693405" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1500.5580186954562" y="418.2091068927063" width="24.058143546561617" height="14.000341409693405" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1500.5580186954562" y="418.2091068927063" width="24.058143546561617" height="14.000341409693405" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitSimpleFormalParameter | 9 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:201</title>
+  <title>callable: visitSimpleFormalParameter | 9 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:200</title>
   <text x="1512.587090468737" y="425.209277597553" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">9</text>
 </g>
 <g>
   <rect x="1505.9281400228137" y="340.5903558588888" width="18.688022219204115" height="24.031237362232368" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1505.9281400228137" y="340.5903558588888" width="18.688022219204115" height="24.031237362232368" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1505.9281400228137" y="340.5903558588888" width="18.688022219204115" height="24.031237362232368" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitFieldFormalParameter | 12 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:211</title>
+  <title>callable: visitFieldFormalParameter | 12 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:210</title>
   <text x="1515.2721511324157" y="352.605974540005" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">12</text>
 </g>
 <g>
   <rect x="1538.1544016014414" y="365.8645882570987" width="11.845959439495507" height="22.114953348433666" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1538.1544016014414" y="365.8645882570987" width="11.845959439495507" height="22.114953348433666" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1538.1544016014414" y="365.8645882570987" width="11.845959439495507" height="22.114953348433666" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitFunctionTypedFormalParameter | 7 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:224</title>
+  <title>callable: visitFunctionTypedFormalParameter | 7 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:223</title>
   <text x="1544.077381321189" y="376.92206493131556" text-anchor="middle" dominant-baseline="middle" font-size="9.74" fill="#000" font-weight="700">7</text>
 </g>
 <g>
   <rect x="1505.9281400228137" y="364.6215932211212" width="18.688022219204115" height="24.031237362232368" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1505.9281400228137" y="364.6215932211212" width="18.688022219204115" height="24.031237362232368" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1505.9281400228137" y="364.6215932211212" width="18.688022219204115" height="24.031237362232368" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitSuperFormalParameter | 12 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:232</title>
+  <title>callable: visitSuperFormalParameter | 12 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:231</title>
   <text x="1515.2721511324157" y="376.63721190223737" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">12</text>
 </g>
 <g>
   <rect x="1423.721266326315" y="399.95952776228387" width="17.406876135622316" height="32.24992054011583" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1423.721266326315" y="399.95952776228387" width="17.406876135622316" height="32.24992054011583" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1423.721266326315" y="399.95952776228387" width="17.406876135622316" height="32.24992054011583" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitSimpleIdentifier | 15 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:245</title>
+  <title>callable: visitSimpleIdentifier | 15 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:244</title>
   <text x="1432.4247043941261" y="416.08448803234177" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
 </g>
 <g>
   <rect x="1524.616162242018" y="421.8430639203214" width="18.05098581256458" height="10.366384382078278" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1524.616162242018" y="421.8430639203214" width="18.05098581256458" height="10.366384382078278" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1524.616162242018" y="421.8430639203214" width="18.05098581256458" height="10.366384382078278" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitNamedType | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:262</title>
+  <title>callable: visitNamedType | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:261</title>
   <text x="1533.6416551483003" y="427.02625611136057" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">5</text>
 </g>
 <g>
   <rect x="1542.6671480545824" y="411.47667953824316" width="9.025492906282292" height="20.732768764156557" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1542.6671480545824" y="411.47667953824316" width="9.025492906282292" height="20.732768764156557" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1542.6671480545824" y="411.47667953824316" width="9.025492906282292" height="20.732768764156557" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitBinaryExpression | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:268</title>
+  <title>callable: visitBinaryExpression | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:267</title>
   <text x="1547.1798945077235" y="421.8430639203214" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">5</text>
 </g>
 <g>
   <rect x="1551.6926409608648" y="415.6232332910745" width="11.281866132852866" height="16.586215011325248" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1551.6926409608648" y="415.6232332910745" width="11.281866132852866" height="16.586215011325248" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1551.6926409608648" y="415.6232332910745" width="11.281866132852866" height="16.586215011325248" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitPrefixExpression | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:274</title>
+  <title>callable: visitPrefixExpression | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:273</title>
   <text x="1557.3335740272912" y="423.91634079673713" text-anchor="middle" dominant-baseline="middle" font-size="8.80" fill="#000" font-weight="700">5</text>
 </g>
 <g>
   <rect x="1543.7289707494392" y="387.9795416055324" width="7.963670211425548" height="23.497137932710768" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1543.7289707494392" y="387.9795416055324" width="7.963670211425548" height="23.497137932710768" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1543.7289707494392" y="387.9795416055324" width="7.963670211425548" height="23.497137932710768" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitPostfixExpression | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:280</title>
+  <title>callable: visitPostfixExpression | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:279</title>
   <text x="1547.7108058551519" y="399.7281105718878" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">5</text>
 </g>
 <g>
   <rect x="1524.616162242018" y="340.5903558588888" width="23.691918878991014" height="12.637116199104952" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1524.616162242018" y="340.5903558588888" width="23.691918878991014" height="12.637116199104952" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1524.616162242018" y="340.5903558588888" width="23.691918878991014" height="12.637116199104952" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitAssignmentExpression | 8 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:286</title>
+  <title>callable: visitAssignmentExpression | 8 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:285</title>
   <text x="1536.4621216815135" y="346.9089139584413" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">8</text>
 </g>
 <g>
   <rect x="1524.616162242018" y="411.47667953824316" width="18.05098581256458" height="10.366384382078278" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1524.616162242018" y="411.47667953824316" width="18.05098581256458" height="10.366384382078278" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1524.616162242018" y="411.47667953824316" width="18.05098581256458" height="10.366384382078278" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitIndexExpression | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:295</title>
+  <title>callable: visitIndexExpression | 5 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:294</title>
   <text x="1533.6416551483003" y="416.6598717292823" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">5</text>
 </g>
 <g>
   <rect x="1500.5580186954562" y="404.2087654830129" width="24.058143546561617" height="14.00034140969341" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1500.5580186954562" y="404.2087654830129" width="24.058143546561617" height="14.00034140969341" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1500.5580186954562" y="404.2087654830129" width="24.058143546561617" height="14.00034140969341" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _pushScope | 9 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:301</title>
+  <title>callable: _pushScope | 9 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:300</title>
   <text x="1512.587090468737" y="411.2089361878596" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">9</text>
 </g>
 <g>
   <rect x="1474.7814363241403" y="388.65283058335353" width="25.776582371316024" height="14.518872573015386" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1474.7814363241403" y="388.65283058335353" width="25.776582371316024" height="14.518872573015386" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1474.7814363241403" y="388.65283058335353" width="25.776582371316024" height="14.518872573015386" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _currentOwnerName | 10 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:311</title>
+  <title>callable: _currentOwnerName | 10 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:310</title>
   <text x="1487.6697275097983" y="395.91226686986124" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">10</text>
 </g>
 <g>
   <rect x="1449.2513513252277" y="340.5903558588888" width="25.53008499891273" height="30.784015061019662" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1449.2513513252277" y="340.5903558588888" width="25.53008499891273" height="30.784015061019662" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1449.2513513252277" y="340.5903558588888" width="25.53008499891273" height="30.784015061019662" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _popScope | 21 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:322</title>
+  <title>callable: _popScope | 21 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:321</title>
   <text x="1462.016393824684" y="355.98236338939864" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">21</text>
 </g>
 <g>
   <rect x="1370.6186895285764" y="397.6760980736918" width="29.26060354161099" height="34.53335022870795" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1370.6186895285764" y="397.6760980736918" width="29.26060354161099" height="34.53335022870795" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1370.6186895285764" y="397.6760980736918" width="29.26060354161099" height="34.53335022870795" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _declareVariable | 27 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:344</title>
+  <title>callable: _declareVariable | 27 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:343</title>
   <text x="1385.248991299382" y="414.94277318804575" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">27</text>
 </g>
 <g>
   <rect x="1474.7814363241403" y="417.6905757293843" width="25.776582371316024" height="14.518872573015386" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1474.7814363241403" y="417.6905757293843" width="25.776582371316024" height="14.518872573015386" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1474.7814363241403" y="417.6905757293843" width="25.776582371316024" height="14.518872573015386" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _markUsed | 10 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:372</title>
+  <title>callable: _markUsed | 10 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:371</title>
   <text x="1487.6697275097983" y="424.950012015892" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">10</text>
 </g>
 <g>
   <rect x="1441.1281424619372" y="399.95952776228387" width="17.406876135622316" height="32.24992054011583" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1441.1281424619372" y="399.95952776228387" width="17.406876135622316" height="32.24992054011583" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1441.1281424619372" y="399.95952776228387" width="17.406876135622316" height="32.24992054011583" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isLocalVariable | 15 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:383</title>
+  <title>callable: _isLocalVariable | 15 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:382</title>
   <text x="1449.8315805297484" y="416.08448803234177" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">15</text>
 </g>
 <g>
   <rect x="1399.8792930701875" y="397.6760980736918" width="23.84197325612748" height="34.53335022870795" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1399.8792930701875" y="397.6760980736918" width="23.84197325612748" height="34.53335022870795" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1399.8792930701875" y="397.6760980736918" width="23.84197325612748" height="34.53335022870795" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isVariableUsage | 22 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:399</title>
+  <title>callable: _isVariableUsage | 22 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:398</title>
   <text x="1411.8002796982512" y="414.94277318804575" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">22</text>
 </g>
 <g>
   <rect x="1548.3080811210089" y="353.22747205799374" width="23.691918878991014" height="12.637116199104952" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1548.3080811210089" y="353.22747205799374" width="23.691918878991014" height="12.637116199104952" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1548.3080811210089" y="353.22747205799374" width="23.691918878991014" height="12.637116199104952" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isTypeIdentifier | 8 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:422</title>
+  <title>callable: _isTypeIdentifier | 8 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:421</title>
   <text x="1560.1540405605044" y="359.5460301575462" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">8</text>
 </g>
 <g>
   <rect x="1474.7814363241403" y="403.17170315636895" width="25.776582371316024" height="14.518872573015386" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1474.7814363241403" y="403.17170315636895" width="25.776582371316024" height="14.518872573015386" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1474.7814363241403" y="403.17170315636895" width="25.776582371316024" height="14.518872573015386" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _shouldIgnoreVariableName | 10 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:431</title>
+  <title>callable: _shouldIgnoreVariableName | 10 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:430</title>
   <text x="1487.6697275097983" y="410.43113944287666" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">10</text>
 </g>
 <g>
   <rect x="1474.7814363241403" y="357.4122220124515" width="31.146703698673527" height="15.620304285451041" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1474.7814363241403" y="357.4122220124515" width="31.146703698673527" height="15.620304285451041" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1474.7814363241403" y="357.4122220124515" width="31.146703698673527" height="15.620304285451041" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _hasOverrideAnnotation | 13 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:442</title>
+  <title>callable: _hasOverrideAnnotation | 13 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:441</title>
   <text x="1490.3547881734771" y="365.222374155177" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">13</text>
 </g>
 <g>
   <rect x="1562.9745070937176" y="415.6232332910745" width="9.025492906282292" height="16.586215011325248" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1562.9745070937176" y="415.6232332910745" width="9.025492906282292" height="16.586215011325248" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1562.9745070937176" y="415.6232332910745" width="9.025492906282292" height="16.586215011325248" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isAbstractMethod | 4 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:456</title>
+  <title>callable: _isAbstractMethod | 4 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:455</title>
   <text x="1567.4872535468587" y="423.91634079673713" text-anchor="middle" dominant-baseline="middle" font-size="6.00" fill="#000" font-weight="700">4</text>
 </g>
 <g>
   <rect x="1423.721266326315" y="371.3743709199085" width="26.184702562987415" height="28.5851568423754" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1423.721266326315" y="371.3743709199085" width="26.184702562987415" height="28.5851568423754" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1423.721266326315" y="371.3743709199085" width="26.184702562987415" height="28.5851568423754" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _resolveMethodOwner | 20 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:461</title>
+  <title>callable: _resolveMethodOwner | 20 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:460</title>
   <text x="1436.8136176078085" y="385.6669493410962" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">20</text>
 </g>
 <g>
   <rect x="1524.616162242018" y="365.8645882570987" width="13.538239359423438" height="22.114953348433666" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1524.616162242018" y="365.8645882570987" width="13.538239359423438" height="22.114953348433666" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1524.616162242018" y="365.8645882570987" width="13.538239359423438" height="22.114953348433666" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _stripTypeParameters | 8 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:482</title>
+  <title>callable: _stripTypeParameters | 8 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:481</title>
   <text x="1531.3852819217298" y="376.92206493131556" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">8</text>
 </g>
 <g>
   <rect x="1370.6186895285764" y="373.00941933890033" width="53.10257679773847" height="24.666678734791397" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1370.6186895285764" y="373.00941933890033" width="53.10257679773847" height="24.666678734791397" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1370.6186895285764" y="373.00941933890033" width="53.10257679773847" height="24.666678734791397" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _recordOperatorUsage | 35 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:491</title>
+  <title>callable: _recordOperatorUsage | 35 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:490</title>
   <text x="1397.1699779274456" y="385.342758706296" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">35</text>
 </g>
 <g>
   <rect x="1370.6186895285764" y="340.5903558588888" width="53.10257679773847" height="32.419063480011545" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1370.6186895285764" y="340.5903558588888" width="53.10257679773847" height="32.419063480011545" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1370.6186895285764" y="340.5903558588888" width="53.10257679773847" height="32.419063480011545" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _recordCompoundAssignmentUsage | 46 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:527</title>
+  <title>callable: _recordCompoundAssignmentUsage | 46 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:526</title>
   <text x="1397.1699779274456" y="356.7998875988946" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">46</text>
 </g>
 <g>
   <rect x="1474.7814363241403" y="340.5903558588888" width="31.146703698673527" height="16.82186615356266" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1474.7814363241403" y="340.5903558588888" width="31.146703698673527" height="16.82186615356266" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1474.7814363241403" y="340.5903558588888" width="31.146703698673527" height="16.82186615356266" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _addDirectiveDependencies | 14 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:574</title>
+  <title>callable: _addDirectiveDependencies | 14 LOC | lib/src/analyzers/dead_code/dead_code_visitor.dart:573</title>
   <text x="1490.3547881734771" y="349.0012889356701" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">14</text>
 </g>
 </g>
@@ -3132,84 +3132,84 @@
   <rect x="1177.5174783298687" y="670.4648705181869" width="23.33090807740643" height="46.20958772145364" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1177.5174783298687" y="670.4648705181869" width="23.33090807740643" height="46.20958772145364" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1177.5174783298687" y="670.4648705181869" width="23.33090807740643" height="46.20958772145364" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _expandGlobPattern | 29 LOC | lib/src/input_output/file_utils.dart:14</title>
+  <title>callable: _expandGlobPattern | 29 LOC | lib/src/input_output/file_utils.dart:15</title>
   <text x="1189.182932368572" y="693.5696643789137" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">29</text>
 </g>
 <g>
   <rect x="1178.35354197294" y="716.6744582396406" width="22.494844434335068" height="13.221256514974112" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1178.35354197294" y="716.6744582396406" width="22.494844434335068" height="13.221256514974112" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1178.35354197294" y="716.6744582396406" width="22.494844434335068" height="13.221256514974112" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _buildExcludeGlobs | 8 LOC | lib/src/input_output/file_utils.dart:47</title>
+  <title>callable: _buildExcludeGlobs | 8 LOC | lib/src/input_output/file_utils.dart:48</title>
   <text x="1189.6009641901076" y="723.2850864971276" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">8</text>
 </g>
 <g>
   <rect x="1190.8506777697928" y="739.8116571408452" width="9.997708637482251" height="7.436956789672937" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1190.8506777697928" y="739.8116571408452" width="9.997708637482251" height="7.436956789672937" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1190.8506777697928" y="739.8116571408452" width="9.997708637482251" height="7.436956789672937" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isHiddenPath | 2 LOC | lib/src/input_output/file_utils.dart:56</title>
+  <title>callable: _isHiddenPath | 2 LOC | lib/src/input_output/file_utils.dart:57</title>
   <text x="1195.849532088534" y="743.5301355356817" text-anchor="middle" dominant-baseline="middle" font-size="6.66" fill="#000" font-weight="700">2</text>
 </g>
 <g>
   <rect x="1190.8506777697928" y="747.2486139305182" width="9.997708637482251" height="7.436956789672937" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1190.8506777697928" y="747.2486139305182" width="9.997708637482251" height="7.436956789672937" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1190.8506777697928" y="747.2486139305182" width="9.997708637482251" height="7.436956789672937" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isDefaultExcludedPath | 2 LOC | lib/src/input_output/file_utils.dart:59</title>
+  <title>callable: _isDefaultExcludedPath | 2 LOC | lib/src/input_output/file_utils.dart:60</title>
   <text x="1195.849532088534" y="750.9670923253547" text-anchor="middle" dominant-baseline="middle" font-size="6.66" fill="#000" font-weight="700">2</text>
 </g>
 <g>
   <rect x="1150.9685139659234" y="742.467713137157" width="27.38502800701661" height="12.21785758303411" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1150.9685139659234" y="742.467713137157" width="27.38502800701661" height="12.21785758303411" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1150.9685139659234" y="742.467713137157" width="27.38502800701661" height="12.21785758303411" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _matchesAnyGlob | 9 LOC | lib/src/input_output/file_utils.dart:62</title>
+  <title>callable: _matchesAnyGlob | 9 LOC | lib/src/input_output/file_utils.dart:63</title>
   <text x="1164.6610279694316" y="748.5766419286741" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">9</text>
 </g>
 <g>
   <rect x="1178.35354197294" y="729.8957147546147" width="22.494844434335068" height="9.915942386230586" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1178.35354197294" y="729.8957147546147" width="22.494844434335068" height="9.915942386230586" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1178.35354197294" y="729.8957147546147" width="22.494844434335068" height="9.915942386230586" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _isGeneratedLocalizationDartFile | 6 LOC | lib/src/input_output/file_utils.dart:72</title>
+  <title>callable: _isGeneratedLocalizationDartFile | 6 LOC | lib/src/input_output/file_utils.dart:73</title>
   <text x="1189.6009641901076" y="734.85368594773" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">6</text>
 </g>
 <g>
   <rect x="1150.9685139659234" y="716.6744582396406" width="27.38502800701661" height="25.793254897516462" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1150.9685139659234" y="716.6744582396406" width="27.38502800701661" height="25.793254897516462" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1150.9685139659234" y="716.6744582396406" width="27.38502800701661" height="25.793254897516462" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _addExcludedEntity | 19 LOC | lib/src/input_output/file_utils.dart:79</title>
+  <title>callable: _addExcludedEntity | 19 LOC | lib/src/input_output/file_utils.dart:80</title>
   <text x="1164.6610279694316" y="729.5710856883987" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">19</text>
 </g>
 <g>
   <rect x="1178.35354197294" y="739.8116571408452" width="12.497135796852817" height="14.873913579345874" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1178.35354197294" y="739.8116571408452" width="12.497135796852817" height="14.873913579345874" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1178.35354197294" y="739.8116571408452" width="12.497135796852817" height="14.873913579345874" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: FileUtils._ | 5 LOC | lib/src/input_output/file_utils.dart:116</title>
+  <title>callable: FileUtils._ | 5 LOC | lib/src/input_output/file_utils.dart:117</title>
   <text x="1184.6021098713666" y="747.2486139305182" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">5</text>
 </g>
 <g>
   <rect x="1072.8380943011514" y="735.1768209558851" width="78.1304196647721" height="19.50874976430606" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1072.8380943011514" y="735.1768209558851" width="78.1304196647721" height="19.50874976430606" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1072.8380943011514" y="735.1768209558851" width="78.1304196647721" height="19.50874976430606" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: listDartFiles | 41 LOC | lib/src/input_output/file_utils.dart:122</title>
+  <title>callable: listDartFiles | 41 LOC | lib/src/input_output/file_utils.dart:123</title>
   <text x="1111.9033041335374" y="744.9311958380381" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">41</text>
 </g>
 <g>
   <rect x="1113.0522808933135" y="670.4648705181869" width="37.91623307261" height="64.71195043769815" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1113.0522808933135" y="670.4648705181869" width="37.91623307261" height="64.71195043769815" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1113.0522808933135" y="670.4648705181869" width="37.91623307261" height="64.71195043769815" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: listExcludedFiles | 66 LOC | lib/src/input_output/file_utils.dart:169</title>
+  <title>callable: listExcludedFiles | 66 LOC | lib/src/input_output/file_utils.dart:170</title>
   <text x="1132.0103974296185" y="702.8208457370359" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">66</text>
 </g>
 <g>
   <rect x="1072.8380943011514" y="670.4648705181869" width="40.21418659216211" height="64.71195043769815" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1072.8380943011514" y="670.4648705181869" width="40.21418659216211" height="64.71195043769815" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1072.8380943011514" y="670.4648705181869" width="40.21418659216211" height="64.71195043769815" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: scanDirectory | 70 LOC | lib/src/input_output/file_utils.dart:243</title>
+  <title>callable: scanDirectory | 70 LOC | lib/src/input_output/file_utils.dart:244</title>
   <text x="1092.9451875972325" y="702.8208457370359" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">70</text>
 </g>
 <g>
   <rect x="1150.9685139659234" y="670.4648705181869" width="26.54896436394525" height="46.20958772145364" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="1150.9685139659234" y="670.4648705181869" width="26.54896436394525" height="46.20958772145364" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="1150.9685139659234" y="670.4648705181869" width="26.54896436394525" height="46.20958772145364" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: countCustomExcludedDartFiles | 33 LOC | lib/src/input_output/file_utils.dart:321</title>
+  <title>callable: countCustomExcludedDartFiles | 33 LOC | lib/src/input_output/file_utils.dart:322</title>
   <text x="1164.242996147896" y="693.5696643789137" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">33</text>
 </g>
 </g>
@@ -3224,84 +3224,84 @@
   <rect x="883.6259063667441" y="843.351559354891" width="31.460761990502412" height="13.41807623949726" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="883.6259063667441" y="843.351559354891" width="31.460761990502412" height="13.41807623949726" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="883.6259063667441" y="843.351559354891" width="31.460761990502412" height="13.41807623949726" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: DuplicateCodeVisitor | 8 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:102</title>
+  <title>callable: DuplicateCodeVisitor | 8 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:101</title>
   <text x="899.3562873619952" y="850.0605974746396" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">8</text>
 </g>
 <g>
   <rect x="914.0995391854797" y="800.8852927056126" width="24.168743270031708" height="24.01641181996974" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="914.0995391854797" y="800.8852927056126" width="24.168743270031708" height="24.01641181996974" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="914.0995391854797" y="800.8852927056126" width="24.168743270031708" height="24.01641181996974" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitFunctionDeclaration | 11 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:129</title>
+  <title>callable: visitFunctionDeclaration | 11 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:128</title>
   <text x="926.1839108204955" y="812.8934986155975" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
 </g>
 <g>
   <rect x="883.6259063667441" y="824.9017045255823" width="31.460761990502412" height="18.449854829308734" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="883.6259063667441" y="824.9017045255823" width="31.460761990502412" height="18.449854829308734" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="883.6259063667441" y="824.9017045255823" width="31.460761990502412" height="18.449854829308734" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitMethodDeclaration | 11 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:141</title>
+  <title>callable: visitMethodDeclaration | 11 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:140</title>
   <text x="899.3562873619952" y="834.1266319402367" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">11</text>
 </g>
 <g>
   <rect x="883.6259063667441" y="774.6855707201911" width="30.473632818735634" height="27.705453134008977" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="883.6259063667441" y="774.6855707201911" width="30.473632818735634" height="27.705453134008977" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="883.6259063667441" y="774.6855707201911" width="30.473632818735634" height="27.705453134008977" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: visitConstructorDeclaration | 16 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:153</title>
+  <title>callable: visitConstructorDeclaration | 16 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:152</title>
   <text x="898.8627227761119" y="788.5382972871956" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">16</text>
 </g>
 <g>
   <rect x="821.9121639606068" y="774.6855707201911" width="35.26499566064984" height="47.882371176615074" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="821.9121639606068" y="774.6855707201911" width="35.26499566064984" height="47.882371176615074" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="821.9121639606068" y="774.6855707201911" width="35.26499566064984" height="47.882371176615074" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _addSnippet | 32 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:171</title>
+  <title>callable: _addSnippet | 32 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:170</title>
   <text x="839.5446617909317" y="798.6267563084987" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">32</text>
 </g>
 <g>
   <rect x="857.1771596212566" y="774.6855707201911" width="26.448746745487384" height="47.882371176615074" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="857.1771596212566" y="774.6855707201911" width="26.448746745487384" height="47.882371176615074" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="857.1771596212566" y="774.6855707201911" width="26.448746745487384" height="47.882371176615074" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _normalizeTokens | 24 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:206</title>
+  <title>callable: _normalizeTokens | 24 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:205</title>
   <text x="870.4015329940003" y="798.6267563084987" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">24</text>
 </g>
 <g>
   <rect x="915.0866683572465" y="824.9017045255823" width="23.18161409826493" height="15.933965534402997" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="915.0866683572465" y="824.9017045255823" width="23.18161409826493" height="15.933965534402997" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="915.0866683572465" y="824.9017045255823" width="23.18161409826493" height="15.933965534402997" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _buildParameterSignature | 7 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:237</title>
+  <title>callable: _buildParameterSignature | 7 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:236</title>
   <text x="926.6774754063789" y="832.8686872927838" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">7</text>
 </g>
 <g>
   <rect x="914.0995391854797" y="774.6855707201911" width="24.168743270031708" height="26.199721985421533" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="914.0995391854797" y="774.6855707201911" width="24.168743270031708" height="26.199721985421533" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="914.0995391854797" y="774.6855707201911" width="24.168743270031708" height="26.199721985421533" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _buildParameterDescriptor | 12 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:246</title>
+  <title>callable: _buildParameterDescriptor | 12 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:245</title>
   <text x="926.1839108204955" y="787.7854317129019" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">12</text>
 </g>
 <g>
   <rect x="883.6259063667441" y="802.3910238542001" width="30.473632818735634" height="22.510680671382296" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="883.6259063667441" y="802.3910238542001" width="30.473632818735634" height="22.510680671382296" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="883.6259063667441" y="802.3910238542001" width="30.473632818735634" height="22.510680671382296" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _parameterKindLabel | 13 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:261</title>
+  <title>callable: _parameterKindLabel | 13 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:260</title>
   <text x="898.8627227761119" y="813.6463641898912" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">13</text>
 </g>
 <g>
   <rect x="821.9121639606068" y="822.5679418968061" width="33.94255832337547" height="34.20169369758219" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="821.9121639606068" y="822.5679418968061" width="33.94255832337547" height="34.20169369758219" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="821.9121639606068" y="822.5679418968061" width="33.94255832337547" height="34.20169369758219" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _describeParameter | 22 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:275</title>
+  <title>callable: _describeParameter | 22 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:274</title>
   <text x="838.8834431222946" y="839.6687887455972" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">22</text>
 </g>
 <g>
   <rect x="915.0866683572465" y="840.8356700599853" width="23.18161409826493" height="15.933965534402997" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="915.0866683572465" y="840.8356700599853" width="23.18161409826493" height="15.933965534402997" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="915.0866683572465" y="840.8356700599853" width="23.18161409826493" height="15.933965534402997" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _compactSource | 7 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:302</title>
+  <title>callable: _compactSource | 7 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:301</title>
   <text x="926.6774754063789" y="848.8026528271868" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">7</text>
 </g>
 <g>
   <rect x="855.8547222839823" y="822.5679418968061" width="27.77118408276175" height="34.20169369758219" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="855.8547222839823" y="822.5679418968061" width="27.77118408276175" height="34.20169369758219" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="855.8547222839823" y="822.5679418968061" width="27.77118408276175" height="34.20169369758219" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _countNonEmptyBodyLines | 18 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:310</title>
+  <title>callable: _countNonEmptyBodyLines | 18 LOC | lib/src/analyzers/duplicate_code/duplicate_code_visitor.dart:309</title>
   <text x="869.7403143253631" y="839.6687887455972" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">18</text>
 </g>
 </g>

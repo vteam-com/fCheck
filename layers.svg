@@ -296,18 +296,6 @@
 <rect x="1650.0" y="930.0" width="220" height="50" class="fileNode"/>
 <rect x="1970.0" y="90.0" width="220" height="50" class="fileNode"/>
 <g>
-  <path d="M 270.0 128.0 C 320.0 128.0, 646.0 102.0, 696.0 102.0" class="edge"/>
-  <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/bin/console/console_common.dart</title>
-</g>
-<g>
-  <path d="M 270.0 128.0 C 320.0 128.0, 326.0 592.0, 376.0 592.0" class="edge"/>
-  <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/bin/console/console_input.dart</title>
-</g>
-<g>
-  <path d="M 270.0 128.0 C 320.0 128.0, 326.0 172.0, 376.0 172.0" class="edge"/>
-  <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart</title>
-</g>
-<g>
   <path d="M 270.0 128.0 C 320.0 128.0, 326.0 102.0, 376.0 102.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/fcheck.dart</title>
 </g>
@@ -352,8 +340,16 @@
   <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/version.dart</title>
 </g>
 <g>
-  <path d="M 590.0 198.0 C 640.0 198.0, 646.0 102.0, 696.0 102.0" class="edge"/>
-  <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/bin/console/console_common.dart</title>
+  <path d="M 270.0 128.0 C 320.0 128.0, 646.0 102.0, 696.0 102.0" class="edge"/>
+  <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/bin/console/console_common.dart</title>
+</g>
+<g>
+  <path d="M 270.0 128.0 C 320.0 128.0, 326.0 592.0, 376.0 592.0" class="edge"/>
+  <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/bin/console/console_input.dart</title>
+</g>
+<g>
+  <path d="M 270.0 128.0 C 320.0 128.0, 326.0 172.0, 376.0 172.0" class="edge"/>
+  <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart</title>
 </g>
 <g>
   <path d="M 590.0 198.0 C 640.0 198.0, 1606.0 172.0, 1656.0 172.0" class="edge"/>
@@ -390,6 +386,10 @@
 <g>
   <path d="M 590.0 198.0 C 640.0 198.0, 966.0 312.0, 1016.0 312.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/project_type.dart</title>
+</g>
+<g>
+  <path d="M 590.0 198.0 C 640.0 198.0, 646.0 102.0, 696.0 102.0" class="edge"/>
+  <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/bin/console/console_common.dart</title>
 </g>
 <g>
   <path d="M 910.0 128.0 C 960.0 128.0, 966.0 522.0, 1016.0 522.0" class="edge"/>

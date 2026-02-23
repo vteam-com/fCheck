@@ -88,8 +88,19 @@ fcheck --svg --svgfolder --svgsize --mermaid --plantuml
 fcheck --fix
 ```
 
-`--fix` import ordering groups: `dart:*`, then all `package:*` imports in alphabetical order (including `flutter` and your own package), then other absolute imports (for example `http:`), then relative imports. A single blank line is inserted between groups.
-In the same pass, relative imports that resolve under `lib/` are rewritten to `package:<this-package>/...`.
+### What `--fix` does
+
+- Rewrites Dart source files in place.
+- Applies only `source_sorting` auto-fixes:
+  - Reorders Flutter widget class members to match fCheck sorting rules.
+  - Reorders `import` directives with these groups:
+    - `dart:*`
+    - all `package:*` imports (including `flutter` and your own package), alphabetical
+    - other absolute URIs (for example `http:`)
+    - relative imports
+  - Inserts one blank line between import groups.
+  - Rewrites relative imports that resolve under `lib/` to `package:<this-package>/...`.
+- Does not auto-fix other analyzers; it only reports their issues.
 
 If installed as a dev dependency, prefix commands with `dart run`.
 
@@ -97,9 +108,9 @@ If installed as a dev dependency, prefix commands with `dart run`.
 
 ```bash
 $ fcheck .
-↓------------------------------ fCheck 0.9.16 ------------------------------↓
+↓------------------------------ fCheck 0.9.17 ------------------------------↓
 Input              : /path/to/project
-Dart Project       : fcheck (version: 0.9.16)
+Dart Project       : fcheck (version: 0.9.17)
 --------------------------------- Dashboard ---------------------------------
 Folders            :              21  |  Dependency         :               5
 Files              :             120  |  DevDependency      :               2

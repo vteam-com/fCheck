@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.17] - 2026-02-23
+
+### Changed
+
+- 📥 **Source Sorting Auto-fix**: Improved import directive normalization during `--fix` by rewriting relative imports under `lib/` to `package:<current-package>/...` before sorting, while preserving directive suffixes.
+- 🧭 **Layers Console Reporting**: Refined layers output so cycle issues remain failures while non-cycle folder-layer upward dependencies are reported as warnings with clearer, colorized path details.
+
 ## [0.9.16] - 2026-02-21
 
 ### Added
