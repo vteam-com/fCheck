@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 

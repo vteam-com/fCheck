@@ -1,6 +1,3 @@
-/// Generates a PlantUML visualization of the dependency graph.
-library;
-
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/graphs/graph_format_utils.dart';
 

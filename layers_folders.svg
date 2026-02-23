@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1591.0" height="5258.0" viewBox="0 0 1591.0 5258.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+<svg width="1594.0" height="5258.0" viewBox="0 0 1594.0 5258.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
 <defs>
   <filter id="whiteShadow" x="-20%" y="-20%" width="140%" height="140%">
     <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
@@ -1262,8 +1262,8 @@
   <title>lib/src/analyzers/documentation/documentation_delegate.dart ▶ lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 603.0 242.0 H 915.0 Q 921.0 242.0 921.0 248.0 V 2121.0 Q 921.0 2127.0 915.0 2127.0 H 727.0" class="edgeVertical"/>
-  <title>bin/fcheck.dart ▶ lib/src/analyzers/layers/layers_results.dart</title>
+  <path d="M 603.0 364.0 H 915.0 Q 921.0 364.0 921.0 370.0 V 2153.0 Q 921.0 2159.0 915.0 2159.0 H 727.0" class="edgeVertical"/>
+  <title>bin/console/console_output.dart ▶ lib/src/analyzers/layers/layers_issue.dart</title>
 </g>
 <g>
   <path d="M 731.0 2478.0 H 915.0 Q 921.0 2478.0 921.0 2484.0 V 4083.0 Q 921.0 4089.0 915.0 4089.0 H 727.0" class="edgeVertical"/>
@@ -1300,6 +1300,10 @@
 <g>
   <path d="M 779.0 874.0 H 930.0 Q 936.0 874.0 936.0 880.0 V 2589.0 Q 936.0 2595.0 930.0 2595.0 H 727.0" class="edgeVertical"/>
   <title>lib/fcheck.dart ▶ lib/src/analyzers/dead_code/dead_code_issue.dart</title>
+</g>
+<g>
+  <path d="M 603.0 242.0 H 933.0 Q 939.0 242.0 939.0 248.0 V 2121.0 Q 939.0 2127.0 933.0 2127.0 H 727.0" class="edgeVertical"/>
+  <title>bin/fcheck.dart ▶ lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
   <path d="M 731.0 2292.0 H 933.0 Q 939.0 2292.0 939.0 2298.0 V 4083.0 Q 939.0 4089.0 933.0 4089.0 H 727.0" class="edgeVertical"/>
@@ -1628,16 +1632,17 @@
 <g class="badge incomingBadge">
   <path d="M 593.0,353.0 L 605.0,346.0 Q 608.0,346.0 608.0,349.0 L 608.0,357.0 Q 608.0,360.0 605.0,360.0 Z" fill="#3b82f6"/>
   <text x="603.32" y="354.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. bin/fcheck.dart</title></g><g class="badge outgoingBadge">
-  <path d="M 609.0,364.0 L 597.0,357.0 Q 594.0,357.0 594.0,360.0 L 594.0,368.0 Q 594.0,371.0 597.0,371.0 Z" fill="#10b981"/>
-  <text x="598.68" y="365.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">9</text><title>1. bin/console/console_common.dart
+  <path d="M 611.0,364.0 L 595.0,356.4 Q 592.0,356.4 592.0,359.4 L 592.0,368.6 Q 592.0,371.6 595.0,371.6 Z" fill="#10b981"/>
+  <text x="597.72" y="365.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold" textLength="10.120000000000001" lengthAdjust="spacingAndGlyphs">10</text><title>1. bin/console/console_common.dart
 2. lib/src/analyzers/code_size/code_size_artifact.dart
-3. lib/src/analyzers/project_metrics.dart
-4. lib/src/input_output/issue_location_utils.dart
-5. lib/src/input_output/number_format_utils.dart
-6. lib/src/models/app_strings.dart
-7. lib/src/models/fcheck_config.dart
-8. lib/src/models/ignore_config.dart
-9. lib/src/models/project_type.dart</title></g><text x="462.0" y="358.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">console_output.dart</text>
+3. lib/src/analyzers/layers/layers_issue.dart
+4. lib/src/analyzers/project_metrics.dart
+5. lib/src/input_output/issue_location_utils.dart
+6. lib/src/input_output/number_format_utils.dart
+7. lib/src/models/app_strings.dart
+8. lib/src/models/fcheck_config.dart
+9. lib/src/models/ignore_config.dart
+10. lib/src/models/project_type.dart</title></g><text x="462.0" y="358.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">console_output.dart</text>
 <g class="badge incomingBadge">
   <path d="M 593.0,385.0 L 605.0,378.0 Q 608.0,378.0 608.0,381.0 L 608.0,389.0 Q 608.0,392.0 605.0,392.0 Z" fill="#3b82f6"/>
   <text x="603.32" y="386.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. bin/fcheck.dart</title></g><g class="badge outgoingBadge">
@@ -1754,11 +1759,12 @@
   <text x="726.68" y="2139.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. lib/src/analyzers/layers/layers_issue.dart</title></g><text x="590.0" y="2132.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">layers_results.dart</text>
 <g class="badge incomingBadge">
   <path d="M 721.0,2159.0 L 733.0,2152.0 Q 736.0,2152.0 736.0,2155.0 L 736.0,2163.0 Q 736.0,2166.0 733.0,2166.0 Z" fill="#3b82f6"/>
-  <text x="731.32" y="2160.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">5</text><title>1. lib/src/analyzers/layers/layers_analyzer.dart
-2. lib/src/analyzers/layers/layers_results.dart
-3. lib/src/analyzers/metrics/metrics_input.dart
-4. lib/src/analyzers/project_metrics.dart
-5. lib/src/graphs/export_svg_folders.dart</title></g><g class="badge outgoingBadge">
+  <text x="731.32" y="2160.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">6</text><title>1. bin/console/console_output.dart
+2. lib/src/analyzers/layers/layers_analyzer.dart
+3. lib/src/analyzers/layers/layers_results.dart
+4. lib/src/analyzers/metrics/metrics_input.dart
+5. lib/src/analyzers/project_metrics.dart
+6. lib/src/graphs/export_svg_folders.dart</title></g><g class="badge outgoingBadge">
   <path d="M 737.0,2170.0 L 725.0,2163.0 Q 722.0,2163.0 722.0,2166.0 L 722.0,2174.0 Q 722.0,2177.0 725.0,2177.0 Z" fill="#10b981"/>
   <text x="726.68" y="2171.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. lib/src/input_output/issue_location_utils.dart</title></g><text x="590.0" y="2164.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">layers_issue.dart</text>
 <g class="badge incomingBadge">
@@ -2284,7 +2290,7 @@
   <text x="755.32" y="4356.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. lib/fcheck.dart
 2. lib/src/analyzer_runner/analyzer_runner.dart</title></g><text x="570.0" y="4360.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">analyzer_runner_result.dart</text>
 <g class="folderTitleLayer">
-<text x="518.0" y="105.0" class="layerTitle">fcheck v0.9.16</text>
+<text x="518.0" y="105.0" class="layerTitle">fcheck v0.9.17</text>
 <text x="538.0" y="157.0" class="layerTitle">  bin</text>
 <text x="470.0" y="209.0" class="layerTitle">    ...</text>
 <text x="470.0" y="331.0" class="layerTitle">    console</text>

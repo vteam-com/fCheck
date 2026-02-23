@@ -1,6 +1,3 @@
-/// Generates an SVG visualization of the dependency graph.
-library;
-
 import 'dart:math';
 
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';

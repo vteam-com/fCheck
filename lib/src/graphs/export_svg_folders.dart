@@ -1,7 +1,3 @@
-/// Generates a hierarchical SVG visualization of the dependency graph.
-/// This approach preserves the parent-child folder relationships.
-library;
-
 import 'dart:math';
 
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';

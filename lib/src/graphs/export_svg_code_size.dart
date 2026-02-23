@@ -1,5 +1,3 @@
-library;
-
 import 'dart:math' as math;
 
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';

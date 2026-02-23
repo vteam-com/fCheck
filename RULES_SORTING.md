@@ -18,12 +18,15 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 - Lifecycle methods in this fixed order: `initState`, `dispose`, `didChangeDependencies`, `didUpdateWidget`, `build`.
 - Public methods alphabetically.
 - Private methods alphabetically.
-- A blank line is inserted between groups.
-- In `--fix` mode, import directives are sorted using analyzer-style domain groups and ascending order:
-  - `dart:`
-  - `package:`
+- Member spacing is compacted to single-line separation (no extra blank lines between sorted members).
+- In `--fix` mode, import directives are sorted by domain and ascending order:
+  - `dart:*`
+  - all `package:*` imports (including `flutter` and current package), alphabetical
   - other absolute URIs (for example `http:`)
   - relative imports
+- In `--fix` mode, relative imports that resolve under `lib/` are rewritten to
+  `package:<this-package>/...` before sorting.
+- A single blank line is inserted between distinct import groups.
 
 ## How It Works
 

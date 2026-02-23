@@ -88,6 +88,9 @@ fcheck --svg --svgfolder --svgsize --mermaid --plantuml
 fcheck --fix
 ```
 
+`--fix` import ordering groups: `dart:*`, then all `package:*` imports in alphabetical order (including `flutter` and your own package), then other absolute imports (for example `http:`), then relative imports. A single blank line is inserted between groups.
+In the same pass, relative imports that resolve under `lib/` are rewritten to `package:<this-package>/...`.
+
 If installed as a dev dependency, prefix commands with `dart run`.
 
 ## Sample Bash Output

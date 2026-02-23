@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'badge_model.dart';
+import 'package:fcheck/src/graphs/badge_model.dart';
 
 /// Default fitted label font size used by SVG text helpers.
 const double _defaultFittedTextBaseFontSize = 14.0;

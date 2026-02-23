@@ -109,5 +109,24 @@ class Sample {
         );
       },
     );
+
+    test('uses single-line separation between sorted members', () {
+      const source = '''
+class CompactSpacing extends StatelessWidget {
+  void zebra() {}
+  void alpha() {}
+}
+''';
+
+      final classNode = _parseFirstClass(source);
+      final sorter = MemberSorter(
+        source,
+        (classNode.body as BlockClassBody).members,
+      );
+      final sorted = sorter.getSortedBody();
+
+      expect(sorted, isNot(contains('\n\n')));
+      expect(sorted, contains('\nvoid alpha() {}\nvoid zebra() {}\n'));
+    });
   });
 }

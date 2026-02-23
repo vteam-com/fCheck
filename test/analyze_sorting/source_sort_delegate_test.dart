@@ -13,7 +13,13 @@ AnalysisFileContext _contextForSource(
   String fileName = 'sample.dart',
   String? contentOverride,
 }) {
-  final file = File('${tempDir.path}/$fileName')..writeAsStringSync(source);
+  final file = File('${tempDir.path}/$fileName');
+  file.parent.createSync(recursive: true);
+  file.writeAsStringSync(source);
+  final pubspec = File('${tempDir.path}/pubspec.yaml');
+  if (!pubspec.existsSync()) {
+    pubspec.writeAsStringSync('name: fcheck\n');
+  }
   final parseResult = parseString(
     content: source,
     featureSet: FeatureSet.latestLanguageVersion(),
@@ -160,10 +166,12 @@ class FixableWidget extends StatelessWidget {
       );
     });
 
-    test('fix mode sorts imports by analyzer directive order', () {
+    test('fix mode sorts imports by directive ordering lint groups', () {
       final source = '''
 import 'b.dart';
+import 'package:fcheck/local.dart';
 import 'package:zebra/zebra.dart';
+import 'package:flutter/material.dart';
 import 'dart:io';
 import 'http://example.com/remote.dart';
 import 'package:apple/apple.dart';
@@ -179,7 +187,7 @@ class FixableWidget extends StatelessWidget {
         fileName: 'fixable_imports.dart',
       );
 
-      final delegate = SourceSortDelegate(fix: true);
+      final delegate = SourceSortDelegate(fix: true, packageName: 'fcheck');
       final issues = delegate.analyzeFileWithContext(context);
 
       expect(issues, isEmpty);
@@ -191,6 +199,14 @@ class FixableWidget extends StatelessWidget {
       );
       expect(
         rewritten.indexOf("import 'package:apple/apple.dart';"),
+        lessThan(rewritten.indexOf("import 'package:fcheck/local.dart';")),
+      );
+      expect(
+        rewritten.indexOf("import 'package:fcheck/local.dart';"),
+        lessThan(rewritten.indexOf("import 'package:flutter/material.dart';")),
+      );
+      expect(
+        rewritten.indexOf("import 'package:flutter/material.dart';"),
         lessThan(rewritten.indexOf("import 'package:zebra/zebra.dart';")),
       );
       expect(
@@ -205,7 +221,83 @@ class FixableWidget extends StatelessWidget {
         rewritten.indexOf("import 'a.dart';"),
         lessThan(rewritten.indexOf("import 'b.dart';")),
       );
+      expect(
+        rewritten,
+        contains(
+          "import 'package:zebra/zebra.dart';\n\nimport 'http://example.com/remote.dart';\n\nimport 'a.dart';",
+        ),
+      );
     });
+
+    test('fix mode converts relative imports under lib to package imports', () {
+      final source = '''
+import '../../core/config.dart';
+import 'helpers.dart';
+import 'package:flutter/widgets.dart';
+import 'dart:io';
+
+class FixableWidget extends StatelessWidget {
+  void build() {}
+}
+''';
+      final context = _contextForSource(
+        tempDir,
+        source,
+        fileName: 'lib/src/feature/fixable_relative_imports.dart',
+      );
+
+      final delegate = SourceSortDelegate(fix: true, packageName: 'fcheck');
+      final issues = delegate.analyzeFileWithContext(context);
+
+      expect(issues, isEmpty);
+
+      final rewritten = context.file.readAsStringSync();
+      expect(rewritten, isNot(contains("import '../../core/config.dart';")));
+      expect(rewritten, isNot(contains("import 'helpers.dart';")));
+      expect(rewritten, contains("import 'package:fcheck/core/config.dart';"));
+      expect(
+        rewritten,
+        contains("import 'package:fcheck/src/feature/helpers.dart';"),
+      );
+      expect(
+        rewritten,
+        contains(
+          "import 'dart:io';\n\nimport 'package:fcheck/core/config.dart';\nimport 'package:fcheck/src/feature/helpers.dart';\nimport 'package:flutter/widgets.dart';",
+        ),
+      );
+    });
+
+    test(
+      'fix mode inserts blank line between directive sections even when already ordered',
+      () {
+        final source = '''
+import 'dart:io';
+import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
+import 'package:fcheck/src/analyzers/layers/layers_results.dart';
+
+class FixableWidget extends StatelessWidget {
+  void build() {}
+}
+''';
+        final context = _contextForSource(
+          tempDir,
+          source,
+          fileName: 'lib/src/analyzers/layers/fixable_spacing.dart',
+        );
+
+        final delegate = SourceSortDelegate(fix: true, packageName: 'fcheck');
+        final issues = delegate.analyzeFileWithContext(context);
+        expect(issues, isEmpty);
+
+        final rewritten = context.file.readAsStringSync();
+        expect(
+          rewritten,
+          contains(
+            "import 'dart:io';\n\nimport 'package:fcheck/src/analyzers/layers/layers_issue.dart';",
+          ),
+        );
+      },
+    );
 
     test('swallows internal exceptions and returns no issues', () {
       const source = '''

@@ -145,31 +145,22 @@ class MemberSorter {
       parts.addAll(otherMembers.map((final String s) => s.trimRight()));
     }
     if (lifecycleMethods.isNotEmpty) {
-      if (parts.isNotEmpty) {
-        parts.add('');
-      }
       parts.addAll(
         lifecycleMethods.map((final _SortableMethod m) => m.source.trimRight()),
       );
     }
     if (publicMethods.isNotEmpty) {
-      if (parts.isNotEmpty) {
-        parts.add('');
-      }
       parts.addAll(
         publicMethods.map((final _SortableMethod m) => m.source.trimRight()),
       );
     }
     if (privateMethods.isNotEmpty) {
-      if (parts.isNotEmpty) {
-        parts.add('');
-      }
       parts.addAll(
         privateMethods.map((final _SortableMethod m) => m.source.trimRight()),
       );
     }
 
-    final String result = parts.join('\n\n');
+    final String result = parts.join('\n');
     return result.isEmpty ? '' : '\n$result\n';
   }
 

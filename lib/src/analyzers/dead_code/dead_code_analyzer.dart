@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:fcheck/src/analyzers/dead_code/dead_code_file_data.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/models/project_type.dart';

@@ -227,7 +227,8 @@ class AnalyzeFolder {
           usesLocalization: usesLocalization,
         ),
       if (magicNumbersEnabled) MagicNumberDelegate(),
-      if (sourceSortingEnabled) SourceSortDelegate(fix: fix),
+      if (sourceSortingEnabled)
+        SourceSortDelegate(fix: fix, packageName: pubspecInfo.packageName),
       if (layersEnabled) LayersDelegate(projectRoot, pubspecInfo.packageName),
       if (secretsEnabled) SecretDelegate(),
       if (duplicateCodeEnabled)
