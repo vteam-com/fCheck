@@ -80,5 +80,6 @@ This prevents false positives where code organization naturally creates hierarch
 ### Cross-Layer Dependencies
 
 - For folders that don't fall into the above categories, the layer assignment is based on the deepest file in each folder
-- Folder-level layer violations are not explicitly flagged to avoid false positives, as folder organization can vary significantly between projects
+- Folder-level upward dependencies (`sourceFolderLayer > targetFolderLayer`) are reported as `LayersIssueType.wrongFolderLayer` using the source Dart file path for actionable refactoring
+- In console output, these folder-layer issues are warnings; cycle issues remain failures
 - The layer assignment still correctly handles cycle detection and file-level layer computation

@@ -796,6 +796,52 @@ void main() {
     });
 
     test(
+      'should report non-cycle layers violations as warnings in console output',
+      () {
+        final projectMetrics = ProjectMetrics(
+          totalFolders: 1,
+          totalFiles: 1,
+          totalDartFiles: 1,
+          totalLinesOfCode: 10,
+          totalCommentLines: 0,
+          fileMetrics: const [],
+          secretIssues: const [],
+          hardcodedStringIssues: const [],
+          magicNumberIssues: const [],
+          sourceSortIssues: const [],
+          layersIssues: [
+            LayersIssue(
+              type: LayersIssueType.wrongFolderLayer,
+              filePath: 'lib/feature',
+              message:
+                  'Layer 3 depends on file "lib/shared/b.dart" (above layer 2)',
+            ),
+          ],
+          deadCodeIssues: const [],
+          layersEdgeCount: 4,
+          layersCount: 3,
+          dependencyGraph: const {
+            'lib/feature/a.dart': ['lib/shared/b.dart'],
+          },
+          projectName: 'example_project',
+          version: '1.0.0',
+          projectType: ProjectType.dart,
+          usesLocalization: true,
+        );
+
+        final output = buildReportLines(
+          projectMetrics,
+          listMode: ReportListMode.full,
+        );
+        final joined = output.join('\n');
+
+        expect(joined, contains('[!] Layers architecture'));
+        expect(joined, contains('1 ${AppStrings.layersViolationsDetected}'));
+        expect(joined, isNot(contains('[✗] Layers architecture')));
+      },
+    );
+
+    test(
       'should show hardcoded strings as passive summary only for Dart projects when localization is off',
       () {
         final projectMetrics = ProjectMetrics(

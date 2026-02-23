@@ -220,6 +220,8 @@ fcheck --plantuml   # layers.puml
 
 ![fcheck Layer folders diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/layers_folders.svg)
 
+Orange upward folder dependencies in `layers_folders.svg` are also emitted in CLI report output as layers warnings (`wrongFolderLayer`) with the source Dart file path.
+
 ### Code size diagram:
 
 ![fcheck code size diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_code_size.svg)

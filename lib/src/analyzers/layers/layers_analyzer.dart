@@ -117,7 +117,7 @@ class LayersAnalyzer {
     final Map<String, int> layers = _assignLayers(dependencyGraph);
 
     // Detect folder layer violations
-    _detectFolderLayerViolations(folderGraph, layers, issues);
+    _detectFolderLayerViolations(folderGraph, layers, dependencyGraph, issues);
 
     return LayersAnalysisResult(
       issues: issues,
@@ -247,14 +247,60 @@ class LayersAnalyzer {
   void _detectFolderLayerViolations(
     Map<String, List<String>> folderGraph,
     Map<String, int> fileLayers,
+    Map<String, List<String>> dependencyGraph,
     List<LayersIssue> issues,
   ) {
-    // Folder-level layer violations are intentionally suppressed.
-    // Folder placement can vary by project structure and frequently creates
-    // false positives. Layers issues should focus on file-level dependency
-    // direction instead of directory naming/layout conventions.
-    if (folderGraph.isEmpty || fileLayers.isEmpty || issues.isEmpty) {
+    if (folderGraph.isEmpty || fileLayers.isEmpty || dependencyGraph.isEmpty) {
       return;
+    }
+
+    final Map<String, int> folderLayers = <String, int>{};
+    for (final entry in fileLayers.entries) {
+      final folder = _getFolder(entry.key);
+      if (folder.isEmpty) continue;
+      final current = folderLayers[folder];
+      if (current == null || entry.value > current) {
+        folderLayers[folder] = entry.value;
+      }
+    }
+
+    final seenViolations = <String>{};
+    for (final entry in dependencyGraph.entries) {
+      final sourceFile = entry.key;
+      final sourceLayer = fileLayers[sourceFile];
+      if (sourceLayer == null) continue;
+      final sourceFolder = _getFolder(sourceFile);
+      if (sourceFolder.isEmpty) continue;
+
+      for (final targetFile in entry.value) {
+        final targetLayer = fileLayers[targetFile];
+        if (targetLayer == null) continue;
+        final targetFolder = _getFolder(targetFile);
+        if (targetFolder.isEmpty || targetFolder == sourceFolder) continue;
+
+        // Respect folderGraph edges and only flag upward folder dependencies.
+        final sourceFolderDeps = folderGraph[sourceFolder];
+        if (sourceFolderDeps == null ||
+            !sourceFolderDeps.contains(targetFolder)) {
+          continue;
+        }
+        final sourceFolderLayer = folderLayers[sourceFolder];
+        final targetFolderLayer = folderLayers[targetFolder];
+        if (sourceFolderLayer == null || targetFolderLayer == null) continue;
+        if (sourceLayer <= targetLayer) continue;
+
+        final violationKey = '$sourceFile->$targetFile';
+        if (!seenViolations.add(violationKey)) continue;
+
+        issues.add(
+          LayersIssue(
+            type: LayersIssueType.wrongFolderLayer,
+            filePath: sourceFile,
+            message:
+                'Layer $sourceLayer depends on file "$targetFile" (above layer $targetLayer)',
+          ),
+        );
+      }
     }
   }
 

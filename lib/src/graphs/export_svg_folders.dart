@@ -220,6 +220,8 @@ String exportGraphSvgFolders(
   final folderCycles = folderIssues['cycles'] as Set<String>;
   final layerViolationEdges =
       folderIssues['layerViolationEdges'] as Map<String, Set<String>>? ?? {};
+  final fileViolationEdges =
+      folderIssues['fileViolationEdges'] as Set<String>? ?? const <String>{};
 
   // Draw inter-folder dependency edges between backgrounds and badges
   _drawEdgeVerticalFolders(
@@ -242,6 +244,7 @@ String exportGraphSvgFolders(
     fileAnchors,
     folderLevels,
     rightLaneGutterX: rightLaneGutterX,
+    fileViolationEdges: fileViolationEdges,
   );
 
   _drawFileVisuals(buffer, fileVisuals);

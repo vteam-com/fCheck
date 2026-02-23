@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:fcheck/fcheck.dart';
+import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
@@ -240,6 +241,114 @@ void generatedDead() {}
                 issue.name == 'unusedServiceFunction',
           ),
           isTrue,
+        );
+      },
+    );
+
+    test(
+      'should expose code-size artifacts through analyze path and JSON output',
+      () {
+        final file = File('${tempDir.path}/lib/code_size_sample.dart')
+          ..createSync(recursive: true);
+        file.writeAsStringSync('''
+class AccountService {
+  AccountService();
+
+  AccountService.named();
+
+  void save() {
+    final local = 1;
+    print(local);
+  }
+}
+
+int topSum(int a, int b) {
+  return a + b;
+}
+''');
+
+        final metrics = analyzer.analyze();
+
+        final fileArtifact = metrics.codeSizeArtifacts.firstWhere(
+          (artifact) =>
+              artifact.kind == CodeSizeArtifactKind.file &&
+              artifact.filePath.endsWith('code_size_sample.dart'),
+        );
+        expect(fileArtifact.name, equals('code_size_sample.dart'));
+        expect(fileArtifact.isCallable, isFalse);
+        expect(fileArtifact.qualifiedName, equals('code_size_sample.dart'));
+
+        final classArtifact = metrics.codeSizeArtifacts.firstWhere(
+          (artifact) =>
+              artifact.kind == CodeSizeArtifactKind.classDeclaration &&
+              artifact.name == 'AccountService' &&
+              artifact.filePath.endsWith('code_size_sample.dart'),
+        );
+        expect(classArtifact.ownerName, isNull);
+        expect(classArtifact.qualifiedName, equals('AccountService'));
+        expect(classArtifact.isCallable, isFalse);
+
+        final functionArtifact = metrics.codeSizeArtifacts.firstWhere(
+          (artifact) =>
+              artifact.kind == CodeSizeArtifactKind.function &&
+              artifact.name == 'topSum' &&
+              artifact.filePath.endsWith('code_size_sample.dart'),
+        );
+        expect(functionArtifact.ownerName, isNull);
+        expect(functionArtifact.qualifiedName, equals('topSum'));
+        expect(functionArtifact.isCallable, isTrue);
+
+        final methodArtifact = metrics.codeSizeArtifacts.firstWhere(
+          (artifact) =>
+              artifact.kind == CodeSizeArtifactKind.method &&
+              artifact.name == 'save' &&
+              artifact.filePath.endsWith('code_size_sample.dart'),
+        );
+        expect(methodArtifact.ownerName, equals('AccountService'));
+        expect(methodArtifact.qualifiedName, equals('AccountService.save'));
+        expect(methodArtifact.isCallable, isTrue);
+
+        final defaultConstructorArtifact = metrics.codeSizeArtifacts.firstWhere(
+          (artifact) =>
+              artifact.kind == CodeSizeArtifactKind.method &&
+              artifact.name == 'AccountService' &&
+              artifact.filePath.endsWith('code_size_sample.dart'),
+        );
+        expect(defaultConstructorArtifact.ownerName, equals('AccountService'));
+        expect(
+          defaultConstructorArtifact.qualifiedName,
+          equals('AccountService.AccountService'),
+        );
+
+        final namedConstructorArtifact = metrics.codeSizeArtifacts.firstWhere(
+          (artifact) =>
+              artifact.kind == CodeSizeArtifactKind.method &&
+              artifact.name == 'AccountService.named' &&
+              artifact.filePath.endsWith('code_size_sample.dart'),
+        );
+        expect(namedConstructorArtifact.ownerName, equals('AccountService'));
+        expect(
+          namedConstructorArtifact.qualifiedName,
+          equals('AccountService.AccountService.named'),
+        );
+
+        final jsonArtifacts =
+            (metrics.toJson()['codeSize'] as Map<String, dynamic>)['artifacts']
+                as List<dynamic>;
+
+        expect(
+          jsonArtifacts,
+          contains(containsPair('qualifiedName', 'AccountService.save')),
+        );
+        expect(
+          jsonArtifacts,
+          contains(
+            allOf(
+              containsPair('name', 'save'),
+              containsPair('ownerName', 'AccountService'),
+              containsPair('kind', 'method'),
+            ),
+          ),
         );
       },
     );

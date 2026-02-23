@@ -1,3 +1,4 @@
+import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/graphs/export_mermaid.dart';
 import 'package:fcheck/src/graphs/export_plantuml.dart';
@@ -10,6 +11,9 @@ import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 void main() {
+  int warningPathCount(String svg) =>
+      RegExp(r'<path[^>]*class="warningEdge"').allMatches(svg).length;
+
   group('graph exporters', () {
     test('return empty outputs for empty graphs', () {
       final result = LayersAnalysisResult(
@@ -237,6 +241,39 @@ void main() {
         expect(folderSvg, contains('src'));
       },
     );
+
+    test('does not color downward-rendered violation edges orange', () {
+      // Use cross-folder ordering where source folder is visually lower than target
+      // folder, so violation edges are truly rendered as "going up".
+      final graph = const {
+        'lib/a/target.dart': <String>[],
+        'lib/z/source.dart': ['lib/a/target.dart'],
+      };
+      final layers = const {'lib/z/source.dart': 2, 'lib/a/target.dart': 1};
+
+      final withoutViolation = LayersAnalysisResult(
+        issues: const [],
+        layers: layers,
+        dependencyGraph: graph,
+      );
+      final withoutViolationSvg = exportGraphSvgFolders(withoutViolation);
+      expect(warningPathCount(withoutViolationSvg), equals(0));
+
+      final withViolation = LayersAnalysisResult(
+        issues: [
+          LayersIssue(
+            type: LayersIssueType.wrongFolderLayer,
+            filePath: 'lib/z/source.dart',
+            message:
+                'Layer 2 depends on file "lib/a/target.dart" (above layer 1)',
+          ),
+        ],
+        layers: layers,
+        dependencyGraph: graph,
+      );
+      final withViolationSvg = exportGraphSvgFolders(withViolation);
+      expect(warningPathCount(withViolationSvg), equals(0));
+    });
 
     test('handles deeply nested folders with mixed files and subfolders', () {
       // More complex scenario: nested folders with files at multiple levels

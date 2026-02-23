@@ -51,18 +51,19 @@ void _drawEdgeHorizontalCurve(
 
 /// Determine the CSS class for an edge based on its properties.
 String _getEdgeCssClass(
-  String sourceFolder,
-  String targetFolder,
+  String sourceFile,
+  String targetFile,
   double startY,
   double endY,
   Set<String> cycleEdges,
+  Set<String> violationEdges,
 ) {
-  final edgeKey = '$sourceFolder->$targetFolder';
+  final edgeKey = '$sourceFile->$targetFile';
 
-  // Priority rule: Red (cycle) > Orange (upward) > Default (gradient)
+  // Priority rule: Red (cycle) > Orange (reported upward violation) > Default
   if (cycleEdges.contains(edgeKey)) {
     return 'cycleEdge';
-  } else if (startY > endY) {
+  } else if (violationEdges.contains(edgeKey) && startY > endY) {
     return 'warningEdge';
   } else {
     return 'edgeVertical';
@@ -76,6 +77,7 @@ void _drawEdgeVerticalsFiles(
   Map<String, Map<String, Point<double>>> anchors,
   Map<String, int> _, { // folderLevels
   double? rightLaneGutterX,
+  Set<String> fileViolationEdges = const <String>{},
 }) {
   final cycleEdges = findCycleEdges(graph);
   final drawableEdges = <_FileEdge>[];
@@ -166,6 +168,7 @@ void _drawEdgeVerticalsFiles(
       startY - fileYOffsetUp, // fileY
       endY + fileYOffsetDown, // fileY
       cycleEdges,
+      fileViolationEdges,
     );
 
     renderEdgeWithTooltip(
@@ -409,10 +412,8 @@ void _drawEdgeVerticalFolders(
       String cssClass;
       if (cycleEdges.contains(edgeKey)) {
         cssClass = 'cycleEdge';
-      } else if (violationEdges.contains(edgeKey)) {
-        cssClass = 'warningEdge';
-      } else if (sourcePos.y > targetPos.y) {
-        // Upward edge (going up in the hierarchy)
+      } else if (violationEdges.contains(edgeKey) &&
+          sourcePos.y > targetPos.y) {
         cssClass = 'warningEdge';
       } else {
         cssClass = 'edgeVertical';

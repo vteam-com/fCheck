@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:test/test.dart';
 
@@ -52,5 +55,62 @@ void main() {
         }),
       );
     });
+  });
+
+  group('LayersAnalyzer', () {
+    late Directory tempDir;
+    late LayersAnalyzer analyzer;
+
+    setUp(() {
+      tempDir = Directory.systemTemp.createTempSync('fcheck_layers_analyzer_');
+      analyzer = LayersAnalyzer(
+        tempDir,
+        projectRoot: tempDir,
+        packageName: 'sample',
+      );
+    });
+
+    tearDown(() {
+      tempDir.deleteSync(recursive: true);
+    });
+
+    test(
+      'does not report folder-layer violation for downward file dependency',
+      () {
+        final result = analyzer.analyzeFromFileData([
+          {
+            'filePath': 'lib/x/x.dart',
+            'dependencies': ['lib/y/y.dart'],
+            'isEntryPoint': false,
+          },
+          {
+            'filePath': 'lib/y/y.dart',
+            'dependencies': ['lib/a/a2.dart'],
+            'isEntryPoint': false,
+          },
+          {
+            'filePath': 'lib/a/a1.dart',
+            'dependencies': ['lib/b/b1.dart'],
+            'isEntryPoint': false,
+          },
+          {
+            'filePath': 'lib/a/a2.dart',
+            'dependencies': <String>[],
+            'isEntryPoint': false,
+          },
+          {
+            'filePath': 'lib/b/b1.dart',
+            'dependencies': <String>[],
+            'isEntryPoint': false,
+          },
+        ]);
+
+        final folderViolations = result.issues
+            .where((issue) => issue.type == LayersIssueType.wrongFolderLayer)
+            .toList();
+
+        expect(folderViolations, isEmpty);
+      },
+    );
   });
 }

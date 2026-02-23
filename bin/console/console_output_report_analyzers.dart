@@ -599,8 +599,21 @@ void _addDuplicateCodeBlock(_ReportContext ctx, List<_ListBlock> listBlocks) {
   );
 }
 
-/// Adds layers analyzer output and escalates violations as failures.
+/// Adds layers analyzer output.
+///
+/// Cycle issues are treated as failures, while non-cycle layer-order issues
+/// are treated as warnings.
 void _addLayersBlock(_ReportContext ctx, List<_ListBlock> listBlocks) {
+  final hasCycleIssues = ctx.layersIssues.any(
+    (issue) =>
+        issue.type == LayersIssueType.cyclicDependency ||
+        issue.type == LayersIssueType.folderCycle,
+  );
+  final status = hasCycleIssues
+      ? _ListBlockStatus.failure
+      : _ListBlockStatus.warning;
+  final summaryTag = hasCycleIssues ? failTag() : warnTag();
+
   _addIssueListAnalyzerBlock(
     ctx,
     listBlocks,
@@ -612,13 +625,65 @@ void _addLayersBlock(_ReportContext ctx, List<_ListBlock> listBlocks) {
         '${okTag()} ${AppStrings.layersCheck} ${AppStrings.checkPassed}',
     issues: ctx.layersIssues,
     summaryLine:
-        '${failTag()} ${formatCount(ctx.layersIssues.length)} ${AppStrings.layersViolationsDetected}',
-    status: _ListBlockStatus.failure,
+        '$summaryTag ${formatCount(ctx.layersIssues.length)} ${AppStrings.layersViolationsDetected}',
+    status: status,
     filePathExtractor: (issue) => issue.filePath as String?,
-    detailFormatter: (issue) => '$issue',
+    detailFormatter: _formatLayersIssue,
     moreConnector: AppStrings.and,
     appendTrailingBlankLine: false,
   );
+}
+
+/// Formats layers issues while preserving path coloring in both location and
+/// message content.
+String _formatLayersIssue(dynamic issue) {
+  if (issue is! LayersIssue) {
+    return '$issue';
+  }
+
+  final location = resolveIssueLocation(rawPath: issue.filePath);
+  final message = _colorizePathsInLayersMessage(issue.message);
+  return '[${issue.type}] $location: $message';
+}
+
+const int _quotedPathCaptureGroup = 1;
+const int _involvingPathCaptureGroup = 2;
+
+/// Colorizes path-like tokens inside layers issue messages.
+///
+/// This keeps quoted paths and cycle `involving <path>` segments aligned with
+/// the standard blue path color scheme used in console output.
+String _colorizePathsInLayersMessage(String message) {
+  var formatted = message.replaceAllMapped(RegExp(r'"([^"]+)"'), (match) {
+    final candidate = match.group(_quotedPathCaptureGroup) ?? '';
+    if (!_looksLikePath(candidate)) {
+      return match.group(0) ?? '';
+    }
+    final normalizedPath = normalizeIssueLocation(candidate).path;
+    return '"${_pathText(normalizedPath)}"';
+  });
+
+  formatted = formatted.replaceAllMapped(RegExp(r'(involving )([^\s]+)'), (
+    match,
+  ) {
+    final prefix = match.group(_quotedPathCaptureGroup) ?? '';
+    final candidate = match.group(_involvingPathCaptureGroup) ?? '';
+    if (!_looksLikePath(candidate)) {
+      return match.group(0) ?? '';
+    }
+    final normalizedPath = normalizeIssueLocation(candidate).path;
+    return '$prefix${_pathText(normalizedPath)}';
+  });
+
+  return formatted;
+}
+
+/// Returns whether [value] appears to be a file-system path token.
+bool _looksLikePath(String value) {
+  return value.contains('/') ||
+      value.contains(r'\') ||
+      value.endsWith('.dart') ||
+      value.contains('.dart:');
 }
 
 /// Adds a generic analyzer block for issue-list based analyzers.

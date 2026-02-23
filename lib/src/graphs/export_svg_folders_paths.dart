@@ -304,6 +304,8 @@ Map<String, Object> _extractFolderIssuesFromIssues(
   final Set<String> folderCycles = <String>{};
   // For layer violations: map of sourceFolder -> Set<targetFolder> that are violating
   final Map<String, Set<String>> layerViolationEdges = <String, Set<String>>{};
+  // For file-level violations: set of normalized source->target file edges.
+  final Set<String> fileViolationEdges = <String>{};
 
   // Find common root to normalize paths
   final allPaths = <String>{};
@@ -319,18 +321,30 @@ Map<String, Object> _extractFolderIssuesFromIssues(
       final normalizedPath = p.relative(issue.filePath, from: commonRoot);
       folderCycles.add(normalizedPath);
     } else if (issue.type == LayersIssueType.wrongFolderLayer) {
-      // Extract target folder from message: 'Folder at layer X depends on folder "Y" at higher layer Z'
+      // Extract target file path from message:
+      // 'Layer X depends on file "target.dart" (above layer Y)'.
+      // Source file path is issue.filePath.
       final message = issue.message;
-      final targetMatch = RegExp(r'folder "([^"]+)"').firstMatch(message);
+      final targetMatch = RegExp(
+        r'depends on file "([^"]+)"',
+        caseSensitive: false,
+      ).firstMatch(message);
       if (targetMatch != null) {
-        final targetPath = targetMatch.group(1)!;
-        // Normalize the target path
+        final sourceFilePath = issue.filePath;
+        final targetFilePath = targetMatch.group(1)!;
+        final normalizedSourceFile = p.relative(
+          sourceFilePath,
+          from: commonRoot,
+        );
+        final normalizedTargetFile = p.relative(
+          targetFilePath,
+          from: commonRoot,
+        );
+        fileViolationEdges.add('$normalizedSourceFile->$normalizedTargetFile');
+        final sourcePath = p.dirname(sourceFilePath);
+        final targetPath = p.dirname(targetFilePath);
+        final normalizedSource = p.relative(sourcePath, from: commonRoot);
         final normalizedTarget = p.relative(targetPath, from: commonRoot);
-
-        // Also normalize source path
-        final normalizedSource = p.relative(issue.filePath, from: commonRoot);
-
-        // Add this specific violating edge
         layerViolationEdges.putIfAbsent(normalizedSource, () => <String>{});
         layerViolationEdges[normalizedSource]!.add(normalizedTarget);
       }
@@ -344,5 +358,6 @@ Map<String, Object> _extractFolderIssuesFromIssues(
     'cycles': folderCycles,
     'layerViolations': folderLayerViolations,
     'layerViolationEdges': layerViolationEdges,
+    'fileViolationEdges': fileViolationEdges,
   };
 }
