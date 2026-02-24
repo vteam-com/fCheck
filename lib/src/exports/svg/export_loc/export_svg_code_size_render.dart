@@ -49,9 +49,15 @@ void _renderFolderLevel(
   );
 
   for (final entry in entries) {
-    final entryRect = entryRects[entry.id];
-    if (entryRect == null ||
-        entryRect.width <= _minUsableDimension ||
+    final baseRect = entryRects[entry.id];
+    if (baseRect == null ||
+        baseRect.width <= _minUsableDimension ||
+        baseRect.height <= _minUsableDimension) {
+      continue;
+    }
+    final gap = entry.isFolder ? _folderTileGap : _fileTileGap;
+    final entryRect = _insetRect(baseRect, gap);
+    if (entryRect.width <= _minUsableDimension ||
         entryRect.height <= _minUsableDimension) {
       continue;
     }
@@ -137,6 +143,16 @@ void _renderFolderLevel(
     }
     buffer.writeln('</g>');
   }
+}
+
+_Rect _insetRect(_Rect rect, double inset) {
+  final doubleInset = inset * _doubleInsetMultiplier;
+  return _Rect(
+    x: rect.x + inset,
+    y: rect.y + inset,
+    width: math.max(0, rect.width - doubleInset),
+    height: math.max(0, rect.height - doubleInset),
+  );
 }
 
 /// Renders class containers and nested callables within a file tile.
