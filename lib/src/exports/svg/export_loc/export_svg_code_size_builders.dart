@@ -323,6 +323,7 @@ class _WarningAccumulator {
   bool hasHardError = false;
   final Map<String, int> warningTypeCounts = <String, int>{};
 
+  /// Adds one warning occurrence and updates severity flags.
   void add(
     String warningType, {
     bool deadArtifact = false,
@@ -339,6 +340,7 @@ class _WarningAccumulator {
   }
 }
 
+/// Builds per-artifact warning index used by treemap tinting and tooltips.
 _ArtifactWarningIndex _buildArtifactWarningIndex({
   required ProjectMetrics? projectMetrics,
   required List<CodeSizeArtifact> fileItems,

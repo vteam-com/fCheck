@@ -220,30 +220,30 @@ Dead-code note:
 ## Visual Outputs
 
 ```bash
-fcheck --svg        # layers.svg
-fcheck --svgfolder  # layers_folders.svg
-fcheck --svgsize    # fcheck_code_size.svg
-fcheck --mermaid    # layers.mmd
-fcheck --plantuml   # layers.puml
+fcheck --svg        # fcheck_files.svg
+fcheck --svgfolder  # fcheck_folders.svg
+fcheck --svgsize    # fcheck_loc.svg
+fcheck --mermaid    # fcheck.mmd
+fcheck --plantuml   # fcheck.puml
 ```
 ###  Layers Files diagram:
 
-![fcheck layers files diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/layers.svg)
+![fcheck layers files diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_files.svg)
 
 ### Layers Folder diagram:
 
-![fcheck Layer folders diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/layers_folders.svg)
+![fcheck Layer folders diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_folders.svg)
 
-Orange upward folder dependencies in `layers_folders.svg` are also emitted in CLI report output as layers warnings (`wrongFolderLayer`) with the source Dart file path.
+Orange upward folder dependencies in `fcheck_folders.svg` are also emitted in CLI report output as layers warnings (`wrongFolderLayer`) with the source Dart file path.
 
 ### Code size diagram:
 
-![fcheck code size diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_code_size.svg)
+![fcheck code size diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_loc.svg)
 
-`fcheck_code_size.svg` uses a unified treemap hierarchy:
+`fcheck_loc.svg` uses a unified treemap hierarchy:
 `Folders > Files > Classes > Functions`.
 
-Warning highlighting in `fcheck_code_size.svg`:
+Warning highlighting in `fcheck_loc.svg`:
 - Artifacts with analyzer findings are tinted on a red transparency spectrum
   (low warnings => light pink, high warnings => stronger red).
 - Dead artifacts are treated as maximum severity tint.

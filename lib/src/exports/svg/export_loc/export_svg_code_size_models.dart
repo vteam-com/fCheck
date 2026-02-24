@@ -102,6 +102,7 @@ class _ArtifactWarningSummary {
     warningTypeCounts: <String, int>{},
   );
 
+  /// Returns `true` when this artifact has any warning or dead-artifact flag.
   bool get hasWarnings => warningCount > 0 || hasDeadArtifact;
 }
 
@@ -122,15 +123,19 @@ class _ArtifactWarningIndex {
     callableWarnings: <String, _ArtifactWarningSummary>{},
   );
 
+  /// Returns warning summary for a file path.
   _ArtifactWarningSummary fileForPath(String filePath) =>
       fileWarnings[filePath] ?? _ArtifactWarningSummary.empty;
 
+  /// Returns warning summary for a class by file path and class name.
   _ArtifactWarningSummary classFor(String filePath, String className) =>
       classWarnings['$filePath|$className'] ?? _ArtifactWarningSummary.empty;
 
+  /// Returns warning summary for a callable using its stable identifier.
   _ArtifactWarningSummary callableForStableId(String stableId) =>
       callableWarnings[stableId] ?? _ArtifactWarningSummary.empty;
 
+  /// Iterates all warning summaries across file/class/callable scopes.
   Iterable<_ArtifactWarningSummary> get allSummaries sync* {
     yield* fileWarnings.values;
     yield* classWarnings.values;

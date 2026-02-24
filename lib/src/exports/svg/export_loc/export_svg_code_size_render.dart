@@ -337,6 +337,7 @@ void _renderFileClasses(
   }
 }
 
+/// Chooses warning/error tint for artifact tiles, or keeps [normalColor].
 String _artifactTintColor(String normalColor, _ArtifactWarningSummary summary) {
   if (summary.hasHardError) {
     return _hardErrorTintFillColor;
@@ -347,6 +348,7 @@ String _artifactTintColor(String normalColor, _ArtifactWarningSummary summary) {
   return normalColor;
 }
 
+/// Builds multiline tooltip text for a treemap artifact tile.
 String _buildArtifactTitle({
   required String typeLabel,
   required int loc,
@@ -379,6 +381,7 @@ String _buildArtifactTitle({
   return lines.map(escapeXml).join('\n');
 }
 
+/// Adds a transparent hover target so tooltip works over the full rectangle.
 void _renderTooltipHitArea(
   StringBuffer buffer, {
   required _Rect rect,

@@ -191,7 +191,7 @@ void main(List<String> arguments) {
           layersResult,
           projectMetrics: metrics,
         );
-        final svgFile = File('${directory.path}/layers.svg');
+        final svgFile = File('${directory.path}/fcheck_files.svg');
         svgFile.writeAsStringSync(svgContent);
         if (!input.outputJson) {
           printOutputFileLine(label: AppStrings.svgLayers, path: svgFile.path);
@@ -214,7 +214,7 @@ void main(List<String> arguments) {
           inputFolderName: inputFolderName,
           projectMetrics: metrics,
         );
-        final folderSvgFile = File('${directory.path}/layers_folders.svg');
+        final folderSvgFile = File('${directory.path}/fcheck_folders.svg');
         folderSvgFile.writeAsStringSync(folderSvgContent);
         if (!input.outputJson) {
           printOutputFileLine(
@@ -227,7 +227,7 @@ void main(List<String> arguments) {
       if (input.generateMermaid) {
         // Generate Mermaid visualization
         final mermaidContent = exportGraphMermaid(layersResult);
-        final mermaidFile = File('${directory.path}/layers.mmd');
+        final mermaidFile = File('${directory.path}/fcheck.mmd');
         mermaidFile.writeAsStringSync(mermaidContent);
         if (!input.outputJson) {
           printOutputFileLine(
@@ -240,7 +240,7 @@ void main(List<String> arguments) {
       if (input.generatePlantUML) {
         // Generate PlantUML visualization
         final plantUMLContent = exportGraphPlantUML(layersResult);
-        final plantUMLFile = File('${directory.path}/layers.puml');
+        final plantUMLFile = File('${directory.path}/fcheck.puml');
         plantUMLFile.writeAsStringSync(plantUMLContent);
         if (!input.outputJson) {
           printOutputFileLine(
@@ -257,7 +257,7 @@ void main(List<String> arguments) {
           relativeTo: directory.path,
           projectMetrics: metrics,
         );
-        final sizeTreemapFile = File('${directory.path}/fcheck_code_size.svg');
+        final sizeTreemapFile = File('${directory.path}/fcheck_loc.svg');
         sizeTreemapFile.writeAsStringSync(sizeTreemapContent);
         if (!input.outputJson) {
           printOutputFileLine(

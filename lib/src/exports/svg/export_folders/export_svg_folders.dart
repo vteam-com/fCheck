@@ -280,6 +280,7 @@ String exportGraphSvgFolders(
   return buffer.toString();
 }
 
+/// Aggregates severity per relative file path for folder SVG rendering.
 Map<String, String> _buildRelativeFileSeverityByPath(
   List<LayersIssue> issues,
   String commonRoot, {
@@ -302,18 +303,19 @@ Map<String, String> _buildRelativeFileSeverityByPath(
       return;
     }
     final normalized = p.normalize(filePath);
-    final relative = _resolveToKnownRelativeFilePath(
+    final relative = resolvePathToKnown(
       relativize(normalized),
       knownRelativeFiles,
+      fallbackToNormalized: true,
     );
-    if (relative == '.' || relative.isEmpty) {
+    if (relative == null || relative == '.' || relative.isEmpty) {
       return;
     }
     severityByPath[relative] = _maxSeverity(severityByPath[relative], severity);
   }
 
   for (final issue in issues) {
-    push(issue.filePath, _severityForIssueType(issue.type));
+    push(issue.filePath, severityForLayersIssueType(issue.type));
   }
 
   if (projectMetrics != null) {
@@ -346,6 +348,7 @@ Map<String, String> _buildRelativeFileSeverityByPath(
   return severityByPath;
 }
 
+/// Aggregates severity per relative folder path for folder SVG rendering.
 Map<String, String> _buildFolderSeverityByPath(
   List<LayersIssue> issues,
   String commonRoot, {
@@ -368,11 +371,12 @@ Map<String, String> _buildFolderSeverityByPath(
       return;
     }
     final normalized = p.normalize(filePath);
-    final relative = _resolveToKnownRelativeFilePath(
+    final relative = resolvePathToKnown(
       relativize(normalized),
       knownRelativeFiles,
+      fallbackToNormalized: true,
     );
-    if (relative == '.' || relative.isEmpty) {
+    if (relative == null || relative == '.' || relative.isEmpty) {
       return;
     }
     final folderPath = p.dirname(relative);
@@ -389,11 +393,12 @@ Map<String, String> _buildFolderSeverityByPath(
     final normalized = p.normalize(issue.filePath);
     final relative = issue.type == LayersIssueType.folderCycle
         ? relativize(normalized)
-        : _resolveToKnownRelativeFilePath(
+        : resolvePathToKnown(
             relativize(normalized),
             knownRelativeFiles,
+            fallbackToNormalized: true,
           );
-    if (relative == '.' || relative.isEmpty) {
+    if (relative == null || relative == '.' || relative.isEmpty) {
       continue;
     }
     final folderPath = issue.type == LayersIssueType.folderCycle
@@ -401,7 +406,7 @@ Map<String, String> _buildFolderSeverityByPath(
         : p.dirname(relative);
     severityByPath[folderPath] = _maxSeverity(
       severityByPath[folderPath],
-      _severityForIssueType(issue.type),
+      severityForLayersIssueType(issue.type),
     );
   }
 
@@ -435,17 +440,7 @@ Map<String, String> _buildFolderSeverityByPath(
   return severityByPath;
 }
 
-String? _severityForIssueType(LayersIssueType type) {
-  switch (type) {
-    case LayersIssueType.cyclicDependency:
-    case LayersIssueType.folderCycle:
-      return 'error';
-    case LayersIssueType.wrongLayer:
-    case LayersIssueType.wrongFolderLayer:
-      return 'warning';
-  }
-}
-
+/// Returns the strongest severity between [current] and [next].
 String _maxSeverity(String? current, String? next) {
   if (next == null) {
     return current ?? '';
@@ -456,6 +451,7 @@ String _maxSeverity(String? current, String? next) {
   return next;
 }
 
+/// Maps severity label to folder/file node fill color.
 String? _fillColorForSeverity(String? severity) {
   if (severity == 'error') {
     return '#e05545';
@@ -466,11 +462,45 @@ String? _fillColorForSeverity(String? severity) {
   return null;
 }
 
+/// Builds warning counters keyed by relative file path.
 Map<String, Map<String, int>> _buildRelativeFileWarningsByPath(
   List<LayersIssue> issues,
   String commonRoot, {
   required Set<String> knownRelativeFiles,
   required ProjectMetrics? projectMetrics,
+}) {
+  return _buildRelativeWarningsByPath(
+    issues,
+    commonRoot,
+    knownRelativeFiles: knownRelativeFiles,
+    projectMetrics: projectMetrics,
+    keyForRelativePath: (relative) => relative,
+  );
+}
+
+/// Builds warning counters keyed by relative folder path.
+Map<String, Map<String, int>> _buildFolderWarningsByPath(
+  List<LayersIssue> issues,
+  String commonRoot, {
+  required Set<String> knownRelativeFiles,
+  required ProjectMetrics? projectMetrics,
+}) {
+  return _buildRelativeWarningsByPath(
+    issues,
+    commonRoot,
+    knownRelativeFiles: knownRelativeFiles,
+    projectMetrics: projectMetrics,
+    keyForRelativePath: p.dirname,
+  );
+}
+
+/// Shared warning aggregation for relative file/folder keys.
+Map<String, Map<String, int>> _buildRelativeWarningsByPath(
+  List<LayersIssue> issues,
+  String commonRoot, {
+  required Set<String> knownRelativeFiles,
+  required ProjectMetrics? projectMetrics,
+  required String Function(String) keyForRelativePath,
 }) {
   final warningsByPath = <String, Map<String, int>>{};
   String relativize(String normalizedPath) {
@@ -487,14 +517,16 @@ Map<String, Map<String, int>> _buildRelativeFileWarningsByPath(
     if (rawPath.isEmpty) {
       return;
     }
-    final relative = _resolveToKnownRelativeFilePath(
+    final relative = resolvePathToKnown(
       relativize(p.normalize(rawPath)),
       knownRelativeFiles,
+      fallbackToNormalized: true,
     );
-    if (relative == '.' || relative.isEmpty) {
+    if (relative == null || relative == '.' || relative.isEmpty) {
       return;
     }
-    final bucket = warningsByPath.putIfAbsent(relative, () => <String, int>{});
+    final key = keyForRelativePath(relative);
+    final bucket = warningsByPath.putIfAbsent(key, () => <String, int>{});
     bucket[warningType] = (bucket[warningType] ?? 0) + 1;
   }
 
@@ -531,126 +563,6 @@ Map<String, Map<String, int>> _buildRelativeFileWarningsByPath(
   return warningsByPath;
 }
 
-Map<String, Map<String, int>> _buildFolderWarningsByPath(
-  List<LayersIssue> issues,
-  String commonRoot, {
-  required Set<String> knownRelativeFiles,
-  required ProjectMetrics? projectMetrics,
-}) {
-  final warningsByPath = <String, Map<String, int>>{};
-  String relativize(String normalizedPath) {
-    if (p.isAbsolute(normalizedPath)) {
-      return p.relative(normalizedPath, from: commonRoot);
-    }
-    if (commonRoot != '.' && normalizedPath.startsWith('$commonRoot/')) {
-      return normalizedPath.substring(commonRoot.length + 1);
-    }
-    return normalizedPath;
-  }
-
-  void addFolder(String rawPath, String warningType) {
-    if (rawPath.isEmpty) {
-      return;
-    }
-    final relative = _resolveToKnownRelativeFilePath(
-      relativize(p.normalize(rawPath)),
-      knownRelativeFiles,
-    );
-    if (relative == '.' || relative.isEmpty) {
-      return;
-    }
-    final folderPath = p.dirname(relative);
-    final bucket = warningsByPath.putIfAbsent(
-      folderPath,
-      () => <String, int>{},
-    );
-    bucket[warningType] = (bucket[warningType] ?? 0) + 1;
-  }
-
-  for (final issue in issues) {
-    final rawPath = issue.type == LayersIssueType.folderCycle
-        ? issue.filePath
-        : issue.filePath;
-    addFolder(rawPath, 'Layers');
-  }
-  if (projectMetrics != null) {
-    for (final issue in projectMetrics.hardcodedStringIssues) {
-      addFolder(issue.filePath, 'Hardcoded Strings');
-    }
-    for (final issue in projectMetrics.magicNumberIssues) {
-      addFolder(issue.filePath, 'Magic Numbers');
-    }
-    for (final issue in projectMetrics.secretIssues) {
-      final filePath = issue.filePath;
-      if (filePath != null) {
-        addFolder(filePath, 'Secrets');
-      }
-    }
-    for (final issue in projectMetrics.documentationIssues) {
-      addFolder(issue.filePath, 'Documentation');
-    }
-    for (final issue in projectMetrics.sourceSortIssues) {
-      addFolder(issue.filePath, 'Source Sorting');
-    }
-    for (final issue in projectMetrics.duplicateCodeIssues) {
-      addFolder(issue.firstFilePath, 'Duplicate Code');
-      addFolder(issue.secondFilePath, 'Duplicate Code');
-    }
-    for (final issue in projectMetrics.deadCodeIssues) {
-      addFolder(issue.filePath, 'Dead Code');
-    }
-  }
-  return warningsByPath;
-}
-
-String _resolveToKnownRelativeFilePath(
-  String rawRelativePath,
-  Set<String> knownRelativeFiles,
-) {
-  final normalizedRaw = p.normalize(rawRelativePath).replaceAll('\\', '/');
-  if (knownRelativeFiles.contains(normalizedRaw)) {
-    return normalizedRaw;
-  }
-
-  final noDot = normalizedRaw.startsWith('./')
-      ? normalizedRaw.substring(2)
-      : normalizedRaw;
-  if (knownRelativeFiles.contains(noDot)) {
-    return noDot;
-  }
-
-  String? bestMatch;
-  for (final candidate in knownRelativeFiles) {
-    if (candidate == normalizedRaw ||
-        candidate.endsWith('/$normalizedRaw') ||
-        normalizedRaw.endsWith('/$candidate') ||
-        candidate == noDot ||
-        candidate.endsWith('/$noDot') ||
-        noDot.endsWith('/$candidate')) {
-      if (bestMatch == null || candidate.length > bestMatch.length) {
-        bestMatch = candidate;
-      }
-    }
-  }
-  return bestMatch ?? normalizedRaw;
-}
-
 String _buildWarningTitle(String heading, Map<String, int>? warningTypeCounts) {
-  final lines = <String>[heading];
-  if (warningTypeCounts != null && warningTypeCounts.isNotEmpty) {
-    lines.add('');
-    final sorted = warningTypeCounts.entries.toList()
-      ..sort((a, b) {
-        final countCompare = b.value.compareTo(a.value);
-        if (countCompare != 0) {
-          return countCompare;
-        }
-        return a.key.compareTo(b.key);
-      });
-    for (final entry in sorted) {
-      final suffix = entry.value == 1 ? 'warning' : 'warnings';
-      lines.add('${entry.value} ${entry.key} $suffix');
-    }
-  }
-  return escapeXml(lines.join('\n'));
+  return buildWarningTooltipTitle(heading, warningTypeCounts);
 }

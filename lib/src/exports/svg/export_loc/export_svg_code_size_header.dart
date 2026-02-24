@@ -86,6 +86,7 @@ void _renderHeaderTitleLine(
   }
 }
 
+/// Renders right-aligned legend chips for warning/error artifact counts.
 void _renderRightAlignedSeverityChips(
   StringBuffer buffer, {
   required double y,

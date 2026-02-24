@@ -1,8 +1,10 @@
 import 'dart:math' as math;
 import 'dart:math';
 
+import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_styles.dart';
+import 'package:path/path.dart' as p;
 
 /// Default fitted label font size used by SVG text helpers.
 const double _defaultFittedTextBaseFontSize = 14.0;
@@ -48,6 +50,9 @@ const double _svgTextUnitForLowercase = 0.56;
 
 /// Estimated width unit fallback for other glyph types.
 const double _svgTextUnitForOtherGlyph = 0.70;
+
+/// Character count for a leading `./` prefix.
+const int _dotSlashPrefixLength = 2;
 
 /// Renders a triangular directional badge using BadgeModel
 void renderTriangularBadge(StringBuffer buffer, BadgeModel badge) {
@@ -248,6 +253,80 @@ String escapeXml(String value) => value
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&apos;');
+
+/// Resolves [rawPath] against [knownPaths], tolerating absolute/relative forms.
+String? resolvePathToKnown(
+  String rawPath,
+  Set<String> knownPaths, {
+  bool fallbackToNormalized = false,
+}) {
+  final normalizedRaw = p.normalize(rawPath).replaceAll('\\', '/');
+  if (knownPaths.contains(normalizedRaw)) {
+    return normalizedRaw;
+  }
+
+  final noDot = normalizedRaw.startsWith('./')
+      ? normalizedRaw.substring(_dotSlashPrefixLength)
+      : normalizedRaw;
+  if (knownPaths.contains(noDot)) {
+    return noDot;
+  }
+
+  String? bestMatch;
+  for (final candidate in knownPaths) {
+    if (candidate == normalizedRaw ||
+        candidate.endsWith('/$normalizedRaw') ||
+        normalizedRaw.endsWith('/$candidate') ||
+        candidate == noDot ||
+        candidate.endsWith('/$noDot') ||
+        noDot.endsWith('/$candidate')) {
+      if (bestMatch == null || candidate.length > bestMatch.length) {
+        bestMatch = candidate;
+      }
+    }
+  }
+
+  if (bestMatch != null) {
+    return bestMatch;
+  }
+  return fallbackToNormalized ? normalizedRaw : null;
+}
+
+/// Builds multiline warning tooltip content with sorted warning groups.
+String buildWarningTooltipTitle(
+  String heading,
+  Map<String, int>? warningTypeCounts,
+) {
+  final lines = <String>[heading];
+  if (warningTypeCounts != null && warningTypeCounts.isNotEmpty) {
+    lines.add('');
+    final sorted = warningTypeCounts.entries.toList()
+      ..sort((a, b) {
+        final countCompare = b.value.compareTo(a.value);
+        if (countCompare != 0) {
+          return countCompare;
+        }
+        return a.key.compareTo(b.key);
+      });
+    for (final entry in sorted) {
+      final suffix = entry.value == 1 ? 'warning' : 'warnings';
+      lines.add('${entry.value} ${entry.key} $suffix');
+    }
+  }
+  return escapeXml(lines.join('\n'));
+}
+
+/// Maps layer-analysis issue type to display severity.
+String? severityForLayersIssueType(LayersIssueType type) {
+  switch (type) {
+    case LayersIssueType.cyclicDependency:
+    case LayersIssueType.folderCycle:
+      return 'error';
+    case LayersIssueType.wrongLayer:
+    case LayersIssueType.wrongFolderLayer:
+      return 'warning';
+  }
+}
 
 /// Finds all strongly connected components in [graph] using Tarjan's algorithm.
 List<List<String>> findStronglyConnectedComponents(

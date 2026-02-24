@@ -79,9 +79,9 @@ class AppStrings {
   static const String deadClasses = 'Dead classes';
   static const String deadFunctions = 'Dead functions';
   static const String unusedVariables = 'Unused variables';
-  static const String svgLayers = 'SVG layers';
-  static const String svgLayersFolder = 'SVG layers Folder';
-  static const String svgCodeSizeTreemap = 'SVG code size';
+  static const String svgLayers = 'SVG Files';
+  static const String svgLayersFolder = 'SVG Folders';
+  static const String svgCodeSizeTreemap = 'SVG Lines of Code';
   static const String mermaidLayers = 'Mermaid layers';
   static const String plantUmlLayers = 'PlantUML layers';
   static const String input = 'Input';

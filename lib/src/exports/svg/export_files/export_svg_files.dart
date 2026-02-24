@@ -5,7 +5,6 @@ import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
-import 'package:path/path.dart' as p;
 
 /// Generates an SVG visualization of the dependency graph.
 ///
@@ -303,6 +302,7 @@ String exportGraphSvgFiles(
   return buffer.toString();
 }
 
+/// Aggregates severity per file path from layer issues and project metrics.
 Map<String, String> _buildFileSeverityByPath(
   List<LayersIssue> issues, {
   required Set<String> knownPaths,
@@ -313,7 +313,7 @@ Map<String, String> _buildFileSeverityByPath(
     if (filePath.isEmpty) {
       return;
     }
-    final resolved = _resolveToKnownPath(filePath, knownPaths);
+    final resolved = resolvePathToKnown(filePath, knownPaths);
     if (resolved == null) {
       return;
     }
@@ -321,7 +321,7 @@ Map<String, String> _buildFileSeverityByPath(
   }
 
   for (final issue in issues) {
-    push(issue.filePath, _severityForIssueType(issue.type));
+    push(issue.filePath, severityForLayersIssueType(issue.type));
   }
 
   if (projectMetrics != null) {
@@ -354,17 +354,7 @@ Map<String, String> _buildFileSeverityByPath(
   return severityByPath;
 }
 
-String? _severityForIssueType(LayersIssueType type) {
-  switch (type) {
-    case LayersIssueType.cyclicDependency:
-    case LayersIssueType.folderCycle:
-      return 'error';
-    case LayersIssueType.wrongLayer:
-    case LayersIssueType.wrongFolderLayer:
-      return 'warning';
-  }
-}
-
+/// Returns the strongest severity between [current] and [next].
 String _maxSeverity(String? current, String? next) {
   if (next == null) {
     return current ?? '';
@@ -375,6 +365,7 @@ String _maxSeverity(String? current, String? next) {
   return next;
 }
 
+/// Maps severity label to file-node fill color.
 String? _fillColorForSeverity(String? severity) {
   if (severity == 'error') {
     return '#e05545';
@@ -385,6 +376,7 @@ String? _fillColorForSeverity(String? severity) {
   return null;
 }
 
+/// Aggregates warning counts per file path from all analyzers.
 Map<String, Map<String, int>> _buildFileWarningsByPath(
   List<LayersIssue> issues, {
   required Set<String> knownPaths,
@@ -395,7 +387,7 @@ Map<String, Map<String, int>> _buildFileWarningsByPath(
     if (filePath.isEmpty) {
       return;
     }
-    final resolved = _resolveToKnownPath(filePath, knownPaths);
+    final resolved = resolvePathToKnown(filePath, knownPaths);
     if (resolved == null) {
       return;
     }
@@ -436,51 +428,6 @@ Map<String, Map<String, int>> _buildFileWarningsByPath(
   return warningsByPath;
 }
 
-String? _resolveToKnownPath(String rawPath, Set<String> knownPaths) {
-  final normalizedRaw = p.normalize(rawPath).replaceAll('\\', '/');
-  if (knownPaths.contains(normalizedRaw)) {
-    return normalizedRaw;
-  }
-
-  final noDot = normalizedRaw.startsWith('./')
-      ? normalizedRaw.substring(2)
-      : normalizedRaw;
-  if (knownPaths.contains(noDot)) {
-    return noDot;
-  }
-
-  String? bestMatch;
-  for (final candidate in knownPaths) {
-    if (candidate == normalizedRaw ||
-        candidate.endsWith('/$normalizedRaw') ||
-        normalizedRaw.endsWith('/$candidate') ||
-        candidate == noDot ||
-        candidate.endsWith('/$noDot') ||
-        noDot.endsWith('/$candidate')) {
-      if (bestMatch == null || candidate.length > bestMatch.length) {
-        bestMatch = candidate;
-      }
-    }
-  }
-  return bestMatch;
-}
-
 String _buildNodeTitle(String filePath, Map<String, int>? warnings) {
-  final lines = <String>['File: $filePath'];
-  if (warnings != null && warnings.isNotEmpty) {
-    lines.add('');
-    final sorted = warnings.entries.toList()
-      ..sort((a, b) {
-        final countCompare = b.value.compareTo(a.value);
-        if (countCompare != 0) {
-          return countCompare;
-        }
-        return a.key.compareTo(b.key);
-      });
-    for (final entry in sorted) {
-      final suffix = entry.value == 1 ? 'warning' : 'warnings';
-      lines.add('${entry.value} ${entry.key} $suffix');
-    }
-  }
-  return escapeXml(lines.join('\n'));
+  return buildWarningTooltipTitle('File: $filePath', warnings);
 }
