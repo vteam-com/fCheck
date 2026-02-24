@@ -145,6 +145,9 @@ void _renderFolderLevel(
   }
 }
 
+/// This shrinks the rectangle uniformly inward by [inset] along the x and y axes.
+/// The resulting width and height are reduced by twice the inset value (using
+/// an internal multiplier defined by [_doubleInsetMultiplier]).
 _Rect _insetRect(_Rect rect, double inset) {
   final doubleInset = inset * _doubleInsetMultiplier;
   return _Rect(
@@ -185,12 +188,22 @@ void _renderFileClasses(
       continue;
     }
 
+    final isSyntheticGlobalClass =
+        classGroup.label == _globalFunctionsClassLabel;
+    final classFillOpacity = isSyntheticGlobalClass ? '0.45' : '0.78';
+    final classStrokeDashArray = isSyntheticGlobalClass
+        ? ' stroke-dasharray="6,4"'
+        : '';
     buffer.writeln('<g>');
     buffer.writeln(
-      '  <rect x="${classRect.x}" y="${classRect.y}" width="${classRect.width}" height="${classRect.height}" fill="$_classTileFillColor" fill-opacity="0.78"/>',
+      '  <rect x="${classRect.x}" y="${classRect.y}" width="${classRect.width}" height="${classRect.height}" fill="$_classTileFillColor" fill-opacity="$classFillOpacity"/>',
     );
     _renderInnerTileGradientOverlay(buffer, classRect);
-    _renderThinWhiteTileBorder(buffer, classRect);
+    _renderThinWhiteTileBorder(
+      buffer,
+      classRect,
+      strokeDashArray: classStrokeDashArray,
+    );
     buffer.writeln(
       '  <title>class: ${escapeXml(classGroup.label)} | ${formatCount(classGroup.size)} LOC | ${escapeXml(classGroup.sourcePath)}</title>',
     );
@@ -393,8 +406,9 @@ void _renderThinWhiteTileBorder(
   StringBuffer buffer,
   _Rect rect, {
   double cornerRadius = 0.0,
+  String strokeDashArray = '',
 }) {
   buffer.writeln(
-    '  <rect x="${rect.x}" y="${rect.y}" width="${rect.width}" height="${rect.height}"${_cornerRadiusAttributes(cornerRadius)} fill="none" stroke="$_tileBorderColor" stroke-opacity="$_tileBorderOpacity" stroke-width="$_tileBorderWidth"/>',
+    '  <rect x="${rect.x}" y="${rect.y}" width="${rect.width}" height="${rect.height}"${_cornerRadiusAttributes(cornerRadius)} fill="none" stroke="$_tileBorderColor" stroke-opacity="$_tileBorderOpacity" stroke-width="$_tileBorderWidth"$strokeDashArray/>',
   );
 }

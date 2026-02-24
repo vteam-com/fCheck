@@ -371,9 +371,9 @@
 </g>
 </g>
 <g>
-  <rect x="2759.9530403371464" y="557.3055555555555" width="402.04695966285385" height="269.58333333333337" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="2759.9530403371464" y="557.3055555555555" width="402.04695966285385" height="269.58333333333337" fill="#9eb89a" fill-opacity="0.45"/>
   <rect x="2759.9530403371464" y="557.3055555555555" width="402.04695966285385" height="269.58333333333337" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="2759.9530403371464" y="557.3055555555555" width="402.04695966285385" height="269.58333333333337" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="2759.9530403371464" y="557.3055555555555" width="402.04695966285385" height="269.58333333333337" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8" stroke-dasharray="6,4"/>
   <title>class: &lt;...&gt; | 3 LOC | lib/main.dart</title>
   <text x="2767.9530403371464" y="572.3055555555555" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">&lt;...&gt;</text>
   <text x="3154.0" y="572.3055555555555" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">3 LOC</text>
