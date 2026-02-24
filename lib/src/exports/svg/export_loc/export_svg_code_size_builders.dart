@@ -439,24 +439,28 @@ _ArtifactWarningIndex _buildArtifactWarningIndex({
     required String rawPath,
     required int? lineNumber,
     required String warningType,
+    bool hardError = false,
   }) {
     final filePath = normalizePath(rawPath);
     if (!filesByPath.containsKey(filePath)) {
       return;
     }
-    upsertFile(filePath).add(warningType);
+    upsertFile(filePath).add(warningType, hardError: hardError);
     final callable = findCallableByLine(filePath, lineNumber);
     if (callable != null) {
-      upsertCallable(callable.stableId).add(warningType);
+      upsertCallable(callable.stableId).add(warningType, hardError: hardError);
       final ownerName = callable.ownerName;
       if (ownerName != null && ownerName.isNotEmpty) {
-        upsertClass(filePath, ownerName).add(warningType);
+        upsertClass(filePath, ownerName).add(warningType, hardError: hardError);
       }
       return;
     }
     final classArtifact = findClassByLine(filePath, lineNumber);
     if (classArtifact != null) {
-      upsertClass(filePath, classArtifact.name).add(warningType);
+      upsertClass(
+        filePath,
+        classArtifact.name,
+      ).add(warningType, hardError: hardError);
     }
   }
 
@@ -567,6 +571,7 @@ _ArtifactWarningIndex _buildArtifactWarningIndex({
           rawPath: issue.filePath,
           lineNumber: issue.lineNumber,
           warningType: 'Dead Code',
+          hardError: true,
         );
         break;
     }

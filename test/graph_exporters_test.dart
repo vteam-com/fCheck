@@ -2,6 +2,7 @@ import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
 import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/exports/externals/export_mermaid.dart';
 import 'package:fcheck/src/exports/externals/export_plantuml.dart';
@@ -76,6 +77,139 @@ void main() {
       expect(folderSvg, contains('<svg'));
       expect(folderSvg, contains('sample'));
       expect(folderSvg, contains('DemoProject v1.2.3'));
+    });
+
+    test('apply warning and error tints in layers SVG exports', () {
+      final result = LayersAnalysisResult(
+        issues: [
+          LayersIssue(
+            type: LayersIssueType.wrongLayer,
+            filePath: 'lib/src/a.dart',
+            message: 'warning',
+          ),
+          LayersIssue(
+            type: LayersIssueType.cyclicDependency,
+            filePath: 'lib/src/b.dart',
+            message: 'cycle',
+          ),
+          LayersIssue(
+            type: LayersIssueType.folderCycle,
+            filePath: 'lib/src',
+            message: 'folder cycle',
+          ),
+        ],
+        layers: const {'lib/src/a.dart': 0, 'lib/src/b.dart': 0},
+        dependencyGraph: const {
+          'lib/src/a.dart': ['lib/src/b.dart'],
+          'lib/src/b.dart': ['lib/src/a.dart'],
+        },
+      );
+
+      final filesSvg = exportGraphSvgFiles(result);
+      expect(filesSvg, contains('#f2a23a'));
+      expect(filesSvg, contains('#e05545'));
+
+      final foldersSvg = exportGraphSvgFolders(result);
+      expect(foldersSvg, contains('#f2a23a'));
+      expect(foldersSvg, contains('#e05545'));
+    });
+
+    test(
+      'apply non-layer analyzer warnings to layers SVG exports when metrics are provided',
+      () {
+        final result = LayersAnalysisResult(
+          issues: const [],
+          layers: const {'lib/src/a.dart': 0, 'lib/src/b.dart': 0},
+          dependencyGraph: const {
+            'lib/src/a.dart': ['lib/src/b.dart'],
+            'lib/src/b.dart': <String>[],
+          },
+        );
+        final metrics = ProjectMetrics(
+          totalFolders: 0,
+          totalFiles: 0,
+          totalDartFiles: 0,
+          totalLinesOfCode: 0,
+          totalCommentLines: 0,
+          fileMetrics: const [],
+          secretIssues: const [],
+          hardcodedStringIssues: const [],
+          magicNumberIssues: [
+            MagicNumberIssue(
+              filePath: 'lib/src/a.dart',
+              lineNumber: 12,
+              value: '42',
+            ),
+          ],
+          sourceSortIssues: const [],
+          layersIssues: const [],
+          deadCodeIssues: const [],
+          layersEdgeCount: 0,
+          layersCount: 0,
+          dependencyGraph: const {},
+          projectName: 'demo',
+          version: '1.0.0',
+          projectType: ProjectType.dart,
+        );
+
+        final filesSvg = exportGraphSvgFiles(result, projectMetrics: metrics);
+        expect(filesSvg, contains('#f2a23a'));
+        expect(filesSvg, contains('File: lib/src/a.dart'));
+        expect(filesSvg, contains('1 Magic Numbers warning'));
+
+        final foldersSvg = exportGraphSvgFolders(
+          result,
+          projectMetrics: metrics,
+        );
+        expect(foldersSvg, contains('#f2a23a'));
+        expect(foldersSvg, contains('File: a.dart'));
+        expect(foldersSvg, contains('Folder: .'));
+        expect(foldersSvg, contains('1 Magic Numbers warning'));
+      },
+    );
+
+    test('match relative metric paths to absolute layers SVG node paths', () {
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {'/repo/lib/src/a.dart': 0, '/repo/lib/src/b.dart': 0},
+        dependencyGraph: const {
+          '/repo/lib/src/a.dart': ['/repo/lib/src/b.dart'],
+          '/repo/lib/src/b.dart': <String>[],
+        },
+      );
+      final metrics = ProjectMetrics(
+        totalFolders: 0,
+        totalFiles: 0,
+        totalDartFiles: 0,
+        totalLinesOfCode: 0,
+        totalCommentLines: 0,
+        fileMetrics: const [],
+        secretIssues: const [],
+        hardcodedStringIssues: const [],
+        magicNumberIssues: const [],
+        sourceSortIssues: const [],
+        documentationIssues: const [
+          DocumentationIssue(
+            filePath: 'lib/src/a.dart',
+            lineNumber: 3,
+            subject: 'A',
+            type: DocumentationIssueType.undocumentedPublicClass,
+          ),
+        ],
+        layersIssues: const [],
+        deadCodeIssues: const [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: const {},
+        projectName: 'demo',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+      );
+
+      final svg = exportGraphSvgFiles(result, projectMetrics: metrics);
+      expect(svg, contains('#f2a23a'));
+      expect(svg, contains('File: /repo/lib/src/a.dart'));
+      expect(svg, contains('1 Documentation warning'));
     });
 
     test('render code-size treemap SVG with unified hierarchy', () {

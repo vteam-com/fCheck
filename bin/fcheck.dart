@@ -187,7 +187,10 @@ void main(List<String> arguments) {
       }
       if (input.generateSvg) {
         // Generate SVG visualization
-        final svgContent = exportGraphSvgFiles(layersResult);
+        final svgContent = exportGraphSvgFiles(
+          layersResult,
+          projectMetrics: metrics,
+        );
         final svgFile = File('${directory.path}/layers.svg');
         svgFile.writeAsStringSync(svgContent);
         if (!input.outputJson) {
@@ -209,6 +212,7 @@ void main(List<String> arguments) {
           projectName: metrics.projectName,
           projectVersion: metrics.version,
           inputFolderName: inputFolderName,
+          projectMetrics: metrics,
         );
         final folderSvgFile = File('${directory.path}/layers_folders.svg');
         folderSvgFile.writeAsStringSync(folderSvgContent);

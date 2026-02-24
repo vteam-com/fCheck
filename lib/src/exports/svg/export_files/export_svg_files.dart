@@ -1,15 +1,21 @@
 import 'dart:math';
 
+import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
+import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
+import 'package:path/path.dart' as p;
 
 /// Generates an SVG visualization of the dependency graph.
 ///
 /// [layersResult] The result of layers analysis containing the dependency graph.
 ///
 /// Returns an SVG string representing the dependency graph.
-String exportGraphSvgFiles(LayersAnalysisResult layersResult) {
+String exportGraphSvgFiles(
+  LayersAnalysisResult layersResult, {
+  ProjectMetrics? projectMetrics,
+}) {
   final dependencyGraph = layersResult.dependencyGraph;
   final layers = layersResult.layers;
 
@@ -25,6 +31,17 @@ String exportGraphSvgFiles(LayersAnalysisResult layersResult) {
           for (final deps in dependencyGraph.values)
             for (final t in deps) t: 0,
         };
+  final knownPaths = effectiveLayers.keys.toSet();
+  final fileSeverity = _buildFileSeverityByPath(
+    layersResult.issues,
+    knownPaths: knownPaths,
+    projectMetrics: projectMetrics,
+  );
+  final fileWarnings = _buildFileWarningsByPath(
+    layersResult.issues,
+    knownPaths: knownPaths,
+    projectMetrics: projectMetrics,
+  );
 
   // Precompute cyclic edges
   final cyclicEdges = findCycleEdges(dependencyGraph, separator: '|');
@@ -173,9 +190,14 @@ String exportGraphSvgFiles(LayersAnalysisResult layersResult) {
 
   // 3. Draw Node Rectangles
   for (final entry in nodePositions.entries) {
+    final filePath = entry.key;
     final pos = entry.value;
+    final severity = fileSeverity[filePath];
+    final fillColor = _fillColorForSeverity(severity);
+    final fillAttribute = fillColor == null ? '' : ' style="fill: $fillColor"';
+    final title = _buildNodeTitle(filePath, fileWarnings[filePath]);
     buffer.writeln(
-      '<rect x="${pos.x}" y="${pos.y}" width="$nodeWidth" height="$nodeHeight" class="fileNode"/>',
+      '<rect x="${pos.x}" y="${pos.y}" width="$nodeWidth" height="$nodeHeight" class="fileNode"$fillAttribute><title>$title</title></rect>',
     );
   }
 
@@ -279,4 +301,186 @@ String exportGraphSvgFiles(LayersAnalysisResult layersResult) {
 
   writeSvgDocumentEnd(buffer);
   return buffer.toString();
+}
+
+Map<String, String> _buildFileSeverityByPath(
+  List<LayersIssue> issues, {
+  required Set<String> knownPaths,
+  required ProjectMetrics? projectMetrics,
+}) {
+  final severityByPath = <String, String>{};
+  void push(String filePath, String? severity) {
+    if (filePath.isEmpty) {
+      return;
+    }
+    final resolved = _resolveToKnownPath(filePath, knownPaths);
+    if (resolved == null) {
+      return;
+    }
+    severityByPath[resolved] = _maxSeverity(severityByPath[resolved], severity);
+  }
+
+  for (final issue in issues) {
+    push(issue.filePath, _severityForIssueType(issue.type));
+  }
+
+  if (projectMetrics != null) {
+    for (final issue in projectMetrics.hardcodedStringIssues) {
+      push(issue.filePath, 'warning');
+    }
+    for (final issue in projectMetrics.magicNumberIssues) {
+      push(issue.filePath, 'warning');
+    }
+    for (final issue in projectMetrics.secretIssues) {
+      final filePath = issue.filePath;
+      if (filePath != null) {
+        push(filePath, 'warning');
+      }
+    }
+    for (final issue in projectMetrics.documentationIssues) {
+      push(issue.filePath, 'warning');
+    }
+    for (final issue in projectMetrics.sourceSortIssues) {
+      push(issue.filePath, 'warning');
+    }
+    for (final issue in projectMetrics.duplicateCodeIssues) {
+      push(issue.firstFilePath, 'warning');
+      push(issue.secondFilePath, 'warning');
+    }
+    for (final issue in projectMetrics.deadCodeIssues) {
+      push(issue.filePath, 'error');
+    }
+  }
+  return severityByPath;
+}
+
+String? _severityForIssueType(LayersIssueType type) {
+  switch (type) {
+    case LayersIssueType.cyclicDependency:
+    case LayersIssueType.folderCycle:
+      return 'error';
+    case LayersIssueType.wrongLayer:
+    case LayersIssueType.wrongFolderLayer:
+      return 'warning';
+  }
+}
+
+String _maxSeverity(String? current, String? next) {
+  if (next == null) {
+    return current ?? '';
+  }
+  if (current == 'error' || next == 'error') {
+    return 'error';
+  }
+  return next;
+}
+
+String? _fillColorForSeverity(String? severity) {
+  if (severity == 'error') {
+    return '#e05545';
+  }
+  if (severity == 'warning') {
+    return '#f2a23a';
+  }
+  return null;
+}
+
+Map<String, Map<String, int>> _buildFileWarningsByPath(
+  List<LayersIssue> issues, {
+  required Set<String> knownPaths,
+  required ProjectMetrics? projectMetrics,
+}) {
+  final warningsByPath = <String, Map<String, int>>{};
+  void add(String filePath, String warningType) {
+    if (filePath.isEmpty) {
+      return;
+    }
+    final resolved = _resolveToKnownPath(filePath, knownPaths);
+    if (resolved == null) {
+      return;
+    }
+    final bucket = warningsByPath.putIfAbsent(resolved, () => <String, int>{});
+    bucket[warningType] = (bucket[warningType] ?? 0) + 1;
+  }
+
+  for (final issue in issues) {
+    add(issue.filePath, 'Layers');
+  }
+  if (projectMetrics != null) {
+    for (final issue in projectMetrics.hardcodedStringIssues) {
+      add(issue.filePath, 'Hardcoded Strings');
+    }
+    for (final issue in projectMetrics.magicNumberIssues) {
+      add(issue.filePath, 'Magic Numbers');
+    }
+    for (final issue in projectMetrics.secretIssues) {
+      final filePath = issue.filePath;
+      if (filePath != null) {
+        add(filePath, 'Secrets');
+      }
+    }
+    for (final issue in projectMetrics.documentationIssues) {
+      add(issue.filePath, 'Documentation');
+    }
+    for (final issue in projectMetrics.sourceSortIssues) {
+      add(issue.filePath, 'Source Sorting');
+    }
+    for (final issue in projectMetrics.duplicateCodeIssues) {
+      add(issue.firstFilePath, 'Duplicate Code');
+      add(issue.secondFilePath, 'Duplicate Code');
+    }
+    for (final issue in projectMetrics.deadCodeIssues) {
+      add(issue.filePath, 'Dead Code');
+    }
+  }
+  return warningsByPath;
+}
+
+String? _resolveToKnownPath(String rawPath, Set<String> knownPaths) {
+  final normalizedRaw = p.normalize(rawPath).replaceAll('\\', '/');
+  if (knownPaths.contains(normalizedRaw)) {
+    return normalizedRaw;
+  }
+
+  final noDot = normalizedRaw.startsWith('./')
+      ? normalizedRaw.substring(2)
+      : normalizedRaw;
+  if (knownPaths.contains(noDot)) {
+    return noDot;
+  }
+
+  String? bestMatch;
+  for (final candidate in knownPaths) {
+    if (candidate == normalizedRaw ||
+        candidate.endsWith('/$normalizedRaw') ||
+        normalizedRaw.endsWith('/$candidate') ||
+        candidate == noDot ||
+        candidate.endsWith('/$noDot') ||
+        noDot.endsWith('/$candidate')) {
+      if (bestMatch == null || candidate.length > bestMatch.length) {
+        bestMatch = candidate;
+      }
+    }
+  }
+  return bestMatch;
+}
+
+String _buildNodeTitle(String filePath, Map<String, int>? warnings) {
+  final lines = <String>['File: $filePath'];
+  if (warnings != null && warnings.isNotEmpty) {
+    lines.add('');
+    final sorted = warnings.entries.toList()
+      ..sort((a, b) {
+        final countCompare = b.value.compareTo(a.value);
+        if (countCompare != 0) {
+          return countCompare;
+        }
+        return a.key.compareTo(b.key);
+      });
+    for (final entry in sorted) {
+      final suffix = entry.value == 1 ? 'warning' : 'warnings';
+      lines.add('${entry.value} ${entry.key} $suffix');
+    }
+  }
+  return escapeXml(lines.join('\n'));
 }

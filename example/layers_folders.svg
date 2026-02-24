@@ -199,21 +199,54 @@
   <title>. ▶ subfolder</title>
 </g>
 <g class="folderLayer">
-<rect x="80.0" y="80.0" width="348.0" height="480.0" rx="12.0" ry="12.0" class="layerBackground"/>
+<rect x="80.0" y="80.0" width="348.0" height="480.0" rx="12.0" ry="12.0" class="layerBackground" style="fill: #e05545"><title>Folder: .
+
+18 Dead Code warnings
+11 Documentation warnings
+3 Hardcoded Strings warnings
+2 Magic Numbers warnings
+2 Source Sorting warnings</title></rect>
 </g>
 <g class="folderLayer">
-<rect x="144.0" y="132.0" width="260.0" height="258.0" rx="12.0" ry="12.0" class="layerBackgroundVirtualFolder" stroke-dasharray="4 2"/>
+<rect x="144.0" y="132.0" width="260.0" height="258.0" rx="12.0" ry="12.0" class="layerBackgroundVirtualFolder" stroke-dasharray="4 2"><title>Folder: ...</title></rect>
 </g>
 <g class="folderLayer">
-<rect x="144.0" y="414.0" width="260.0" height="98.0" rx="12.0" ry="12.0" class="layerBackground"/>
+<rect x="144.0" y="414.0" width="260.0" height="98.0" rx="12.0" ry="12.0" class="layerBackground" style="fill: #e05545"><title>Folder: subfolder
+
+2 Dead Code warnings
+1 Documentation warning</title></rect>
 </g>
-<rect x="152.0" y="170.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
-<rect x="152.0" y="202.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
-<rect x="152.0" y="234.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
-<rect x="152.0" y="266.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
-<rect x="152.0" y="298.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
-<rect x="152.0" y="330.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
-<rect x="152.0" y="452.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode"/>
+<rect x="152.0" y="170.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #e05545"><title>File: main.dart
+
+3 Documentation warnings
+2 Dead Code warnings
+1 Hardcoded Strings warning</title></rect>
+<rect x="152.0" y="202.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #f2a23a"><title>File: home_page.dart
+
+1 Documentation warning
+1 Source Sorting warning</title></rect>
+<rect x="152.0" y="234.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #e05545"><title>File: counter_widget.dart
+
+4 Dead Code warnings
+2 Documentation warnings
+2 Hardcoded Strings warnings
+1 Source Sorting warning</title></rect>
+<rect x="152.0" y="266.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #e05545"><title>File: comments_example.dart
+
+4 Dead Code warnings
+1 Documentation warning</title></rect>
+<rect x="152.0" y="298.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #e05545"><title>File: models.dart
+
+5 Dead Code warnings
+4 Documentation warnings
+2 Magic Numbers warnings</title></rect>
+<rect x="152.0" y="330.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #e05545"><title>File: utils.dart
+
+3 Dead Code warnings</title></rect>
+<rect x="152.0" y="452.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #e05545"><title>File: subfolder/subclass.dart
+
+2 Dead Code warnings
+1 Documentation warning</title></rect>
 <g>
   <path d="M 392.0 254.0 H 408.0 Q 414.0 254.0 414.0 260.0 V 333.0 Q 414.0 339.0 408.0 339.0 H 388.0" class="edgeVertical"/>
   <title>counter_widget.dart ▶ utils.dart</title>

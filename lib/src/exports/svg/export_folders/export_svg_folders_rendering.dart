@@ -517,6 +517,10 @@ void _drawHierarchicalFolders(
   Map<String, List<String>> fileIncomingPeers,
   Map<String, List<String>> fileOutgoingPeers,
   Map<String, int> depths, {
+  required Map<String, String> folderSeverityByPath,
+  required Map<String, String> fileSeverityByPath,
+  required Map<String, Map<String, int>> folderWarningsByPath,
+  required Map<String, Map<String, int>> fileWarningsByPath,
   required double headerHeight,
   required double fileItemHeight,
   required double fileItemSpacing,
@@ -544,18 +548,28 @@ void _drawHierarchicalFolders(
     const double titleVerticalOffset = 25.0;
 
     buffer.writeln('<g class="folderLayer">');
+    final folderFillColor = _fillColorForSeverity(
+      folderSeverityByPath[folder.fullPath],
+    );
+    final folderFillAttribute = folderFillColor == null
+        ? ''
+        : ' style="fill: $folderFillColor"';
+    final folderTitle = _buildWarningTitle(
+      'Folder: ${folder.fullPath}',
+      folderWarningsByPath[folder.fullPath],
+    );
     if (folder.isVirtual) {
       /// Dash array for virtual folder borders.
       const String virtualFolderDashArray = '4 2';
 
       // Render virtual folder with dash-dot border
       buffer.writeln(
-        '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="$folderCornerRadius" ry="$folderCornerRadius" class="layerBackgroundVirtualFolder" stroke-dasharray="$virtualFolderDashArray"/>',
+        '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="$folderCornerRadius" ry="$folderCornerRadius" class="layerBackgroundVirtualFolder" stroke-dasharray="$virtualFolderDashArray"$folderFillAttribute><title>$folderTitle</title></rect>',
       );
     } else {
       // Render regular folder with solid border
       buffer.writeln(
-        '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="$folderCornerRadius" ry="$folderCornerRadius" class="layerBackground"/>',
+        '<rect x="${pos.x}" y="${pos.y}" width="${dim.width}" height="${dim.height}" rx="$folderCornerRadius" ry="$folderCornerRadius" class="layerBackground"$folderFillAttribute><title>$folderTitle</title></rect>',
       );
     }
 
@@ -705,6 +719,11 @@ void _drawHierarchicalFolders(
             outgoing: fOutgoing,
             incomingPeers: incomingPeers,
             outgoingPeers: outgoingPeers,
+            fillColor: _fillColorForSeverity(fileSeverityByPath[filePath]),
+            tooltipTitle: _buildWarningTitle(
+              'File: $filePath',
+              fileWarningsByPath[filePath],
+            ),
           ),
         );
       }
@@ -849,7 +868,7 @@ void _drawFilePanels(StringBuffer buffer, List<_FileVisual> visuals) {
     final top = v.textY - filePanelHalfHeight;
 
     buffer.writeln(
-      '<rect x="$left" y="$top" width="$width" height="$filePanelHeight" rx="$filePanelCornerRadius" ry="$filePanelCornerRadius" class="fileNode"/>',
+      '<rect x="$left" y="$top" width="$width" height="$filePanelHeight" rx="$filePanelCornerRadius" ry="$filePanelCornerRadius" class="fileNode"${v.fillColor == null ? '' : ' style="fill: ${v.fillColor}"'}><title>${v.tooltipTitle}</title></rect>',
     );
   }
 }

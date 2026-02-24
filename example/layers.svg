@@ -198,13 +198,37 @@
 <text x="800.0" y="75.0" class="layerTitle">3</text>
 <rect x="985.0" y="50" width="270.0" height="230.0" rx="8.0" class="layerBackground"/>
 <text x="1120.0" y="75.0" class="layerTitle">4</text>
-<rect x="50.0" y="90.0" width="220" height="50" class="fileNode"/>
-<rect x="50.0" y="160.0" width="220" height="50" class="fileNode"/>
-<rect x="50.0" y="230.0" width="220" height="50" class="fileNode"/>
-<rect x="370.0" y="90.0" width="220" height="50" class="fileNode"/>
-<rect x="690.0" y="90.0" width="220" height="50" class="fileNode"/>
-<rect x="690.0" y="160.0" width="220" height="50" class="fileNode"/>
-<rect x="1010.0" y="90.0" width="220" height="50" class="fileNode"/>
+<rect x="50.0" y="90.0" width="220" height="50" class="fileNode" style="fill: #e05545"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/main.dart
+
+3 Documentation warnings
+2 Dead Code warnings
+1 Hardcoded Strings warning</title></rect>
+<rect x="50.0" y="160.0" width="220" height="50" class="fileNode" style="fill: #e05545"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/comments_example.dart
+
+4 Dead Code warnings
+1 Documentation warning</title></rect>
+<rect x="50.0" y="230.0" width="220" height="50" class="fileNode" style="fill: #e05545"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/subfolder/subclass.dart
+
+2 Dead Code warnings
+1 Documentation warning</title></rect>
+<rect x="370.0" y="90.0" width="220" height="50" class="fileNode" style="fill: #f2a23a"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/home_page.dart
+
+1 Documentation warning
+1 Source Sorting warning</title></rect>
+<rect x="690.0" y="90.0" width="220" height="50" class="fileNode" style="fill: #e05545"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/counter_widget.dart
+
+4 Dead Code warnings
+2 Documentation warnings
+2 Hardcoded Strings warnings
+1 Source Sorting warning</title></rect>
+<rect x="690.0" y="160.0" width="220" height="50" class="fileNode" style="fill: #e05545"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/models.dart
+
+5 Dead Code warnings
+4 Documentation warnings
+2 Magic Numbers warnings</title></rect>
+<rect x="1010.0" y="90.0" width="220" height="50" class="fileNode" style="fill: #e05545"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/utils.dart
+
+3 Dead Code warnings</title></rect>
 <g>
   <path d="M 270.0 128.0 C 320.0 128.0, 326.0 102.0, 376.0 102.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/example/lib/main.dart ▶ /Users/jp/src/github/vteam/fcheck/example/lib/home_page.dart</title>

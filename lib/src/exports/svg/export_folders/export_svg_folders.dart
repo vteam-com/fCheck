@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
+import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
 import 'package:fcheck/src/models/rect.dart';
@@ -25,6 +26,7 @@ String exportGraphSvgFolders(
   String projectName = 'unknown',
   String projectVersion = 'unknown',
   String inputFolderName = '.',
+  ProjectMetrics? projectMetrics,
 }) {
   final dependencyGraph = layersResult.dependencyGraph;
 
@@ -36,6 +38,31 @@ String exportGraphSvgFolders(
   final allAbsolutePaths = _collectAllFilePaths(dependencyGraph);
   final commonRoot = _findCommonRoot(allAbsolutePaths);
   final relativeGraph = _relativizeGraph(dependencyGraph, commonRoot);
+  final knownRelativeFiles = _collectAllFilePaths(relativeGraph);
+  final fileSeverityByPath = _buildRelativeFileSeverityByPath(
+    layersResult.issues,
+    commonRoot,
+    knownRelativeFiles: knownRelativeFiles,
+    projectMetrics: projectMetrics,
+  );
+  final fileWarningsByPath = _buildRelativeFileWarningsByPath(
+    layersResult.issues,
+    commonRoot,
+    knownRelativeFiles: knownRelativeFiles,
+    projectMetrics: projectMetrics,
+  );
+  final folderSeverityByPath = _buildFolderSeverityByPath(
+    layersResult.issues,
+    commonRoot,
+    knownRelativeFiles: knownRelativeFiles,
+    projectMetrics: projectMetrics,
+  );
+  final folderWarningsByPath = _buildFolderWarningsByPath(
+    layersResult.issues,
+    commonRoot,
+    knownRelativeFiles: knownRelativeFiles,
+    projectMetrics: projectMetrics,
+  );
 
   // Build hierarchical folder structure from relative paths
   final allRelativePaths = _collectAllFilePaths(relativeGraph).toList();
@@ -194,6 +221,10 @@ String exportGraphSvgFolders(
     fileIncomingPeers,
     fileOutgoingPeers,
     depthMap,
+    folderSeverityByPath: folderSeverityByPath,
+    fileSeverityByPath: fileSeverityByPath,
+    folderWarningsByPath: folderWarningsByPath,
+    fileWarningsByPath: fileWarningsByPath,
     headerHeight: folderHeaderHeight,
     fileItemHeight: fileItemHeight,
     fileItemSpacing: fileItemSpacing,
@@ -247,4 +278,379 @@ String exportGraphSvgFolders(
 
   writeSvgDocumentEnd(buffer);
   return buffer.toString();
+}
+
+Map<String, String> _buildRelativeFileSeverityByPath(
+  List<LayersIssue> issues,
+  String commonRoot, {
+  required Set<String> knownRelativeFiles,
+  required ProjectMetrics? projectMetrics,
+}) {
+  final severityByPath = <String, String>{};
+  String relativize(String normalizedPath) {
+    if (p.isAbsolute(normalizedPath)) {
+      return p.relative(normalizedPath, from: commonRoot);
+    }
+    if (commonRoot != '.' && normalizedPath.startsWith('$commonRoot/')) {
+      return normalizedPath.substring(commonRoot.length + 1);
+    }
+    return normalizedPath;
+  }
+
+  void push(String filePath, String? severity) {
+    if (filePath.isEmpty) {
+      return;
+    }
+    final normalized = p.normalize(filePath);
+    final relative = _resolveToKnownRelativeFilePath(
+      relativize(normalized),
+      knownRelativeFiles,
+    );
+    if (relative == '.' || relative.isEmpty) {
+      return;
+    }
+    severityByPath[relative] = _maxSeverity(severityByPath[relative], severity);
+  }
+
+  for (final issue in issues) {
+    push(issue.filePath, _severityForIssueType(issue.type));
+  }
+
+  if (projectMetrics != null) {
+    for (final issue in projectMetrics.hardcodedStringIssues) {
+      push(issue.filePath, 'warning');
+    }
+    for (final issue in projectMetrics.magicNumberIssues) {
+      push(issue.filePath, 'warning');
+    }
+    for (final issue in projectMetrics.secretIssues) {
+      final filePath = issue.filePath;
+      if (filePath != null) {
+        push(filePath, 'warning');
+      }
+    }
+    for (final issue in projectMetrics.documentationIssues) {
+      push(issue.filePath, 'warning');
+    }
+    for (final issue in projectMetrics.sourceSortIssues) {
+      push(issue.filePath, 'warning');
+    }
+    for (final issue in projectMetrics.duplicateCodeIssues) {
+      push(issue.firstFilePath, 'warning');
+      push(issue.secondFilePath, 'warning');
+    }
+    for (final issue in projectMetrics.deadCodeIssues) {
+      push(issue.filePath, 'error');
+    }
+  }
+  return severityByPath;
+}
+
+Map<String, String> _buildFolderSeverityByPath(
+  List<LayersIssue> issues,
+  String commonRoot, {
+  required Set<String> knownRelativeFiles,
+  required ProjectMetrics? projectMetrics,
+}) {
+  final severityByPath = <String, String>{};
+  String relativize(String normalizedPath) {
+    if (p.isAbsolute(normalizedPath)) {
+      return p.relative(normalizedPath, from: commonRoot);
+    }
+    if (commonRoot != '.' && normalizedPath.startsWith('$commonRoot/')) {
+      return normalizedPath.substring(commonRoot.length + 1);
+    }
+    return normalizedPath;
+  }
+
+  void pushFolder(String filePath, String? severity) {
+    if (filePath.isEmpty) {
+      return;
+    }
+    final normalized = p.normalize(filePath);
+    final relative = _resolveToKnownRelativeFilePath(
+      relativize(normalized),
+      knownRelativeFiles,
+    );
+    if (relative == '.' || relative.isEmpty) {
+      return;
+    }
+    final folderPath = p.dirname(relative);
+    severityByPath[folderPath] = _maxSeverity(
+      severityByPath[folderPath],
+      severity,
+    );
+  }
+
+  for (final issue in issues) {
+    if (issue.filePath.isEmpty) {
+      continue;
+    }
+    final normalized = p.normalize(issue.filePath);
+    final relative = issue.type == LayersIssueType.folderCycle
+        ? relativize(normalized)
+        : _resolveToKnownRelativeFilePath(
+            relativize(normalized),
+            knownRelativeFiles,
+          );
+    if (relative == '.' || relative.isEmpty) {
+      continue;
+    }
+    final folderPath = issue.type == LayersIssueType.folderCycle
+        ? relative
+        : p.dirname(relative);
+    severityByPath[folderPath] = _maxSeverity(
+      severityByPath[folderPath],
+      _severityForIssueType(issue.type),
+    );
+  }
+
+  if (projectMetrics != null) {
+    for (final issue in projectMetrics.hardcodedStringIssues) {
+      pushFolder(issue.filePath, 'warning');
+    }
+    for (final issue in projectMetrics.magicNumberIssues) {
+      pushFolder(issue.filePath, 'warning');
+    }
+    for (final issue in projectMetrics.secretIssues) {
+      final filePath = issue.filePath;
+      if (filePath != null) {
+        pushFolder(filePath, 'warning');
+      }
+    }
+    for (final issue in projectMetrics.documentationIssues) {
+      pushFolder(issue.filePath, 'warning');
+    }
+    for (final issue in projectMetrics.sourceSortIssues) {
+      pushFolder(issue.filePath, 'warning');
+    }
+    for (final issue in projectMetrics.duplicateCodeIssues) {
+      pushFolder(issue.firstFilePath, 'warning');
+      pushFolder(issue.secondFilePath, 'warning');
+    }
+    for (final issue in projectMetrics.deadCodeIssues) {
+      pushFolder(issue.filePath, 'error');
+    }
+  }
+  return severityByPath;
+}
+
+String? _severityForIssueType(LayersIssueType type) {
+  switch (type) {
+    case LayersIssueType.cyclicDependency:
+    case LayersIssueType.folderCycle:
+      return 'error';
+    case LayersIssueType.wrongLayer:
+    case LayersIssueType.wrongFolderLayer:
+      return 'warning';
+  }
+}
+
+String _maxSeverity(String? current, String? next) {
+  if (next == null) {
+    return current ?? '';
+  }
+  if (current == 'error' || next == 'error') {
+    return 'error';
+  }
+  return next;
+}
+
+String? _fillColorForSeverity(String? severity) {
+  if (severity == 'error') {
+    return '#e05545';
+  }
+  if (severity == 'warning') {
+    return '#f2a23a';
+  }
+  return null;
+}
+
+Map<String, Map<String, int>> _buildRelativeFileWarningsByPath(
+  List<LayersIssue> issues,
+  String commonRoot, {
+  required Set<String> knownRelativeFiles,
+  required ProjectMetrics? projectMetrics,
+}) {
+  final warningsByPath = <String, Map<String, int>>{};
+  String relativize(String normalizedPath) {
+    if (p.isAbsolute(normalizedPath)) {
+      return p.relative(normalizedPath, from: commonRoot);
+    }
+    if (commonRoot != '.' && normalizedPath.startsWith('$commonRoot/')) {
+      return normalizedPath.substring(commonRoot.length + 1);
+    }
+    return normalizedPath;
+  }
+
+  void add(String rawPath, String warningType) {
+    if (rawPath.isEmpty) {
+      return;
+    }
+    final relative = _resolveToKnownRelativeFilePath(
+      relativize(p.normalize(rawPath)),
+      knownRelativeFiles,
+    );
+    if (relative == '.' || relative.isEmpty) {
+      return;
+    }
+    final bucket = warningsByPath.putIfAbsent(relative, () => <String, int>{});
+    bucket[warningType] = (bucket[warningType] ?? 0) + 1;
+  }
+
+  for (final issue in issues) {
+    add(issue.filePath, 'Layers');
+  }
+  if (projectMetrics != null) {
+    for (final issue in projectMetrics.hardcodedStringIssues) {
+      add(issue.filePath, 'Hardcoded Strings');
+    }
+    for (final issue in projectMetrics.magicNumberIssues) {
+      add(issue.filePath, 'Magic Numbers');
+    }
+    for (final issue in projectMetrics.secretIssues) {
+      final filePath = issue.filePath;
+      if (filePath != null) {
+        add(filePath, 'Secrets');
+      }
+    }
+    for (final issue in projectMetrics.documentationIssues) {
+      add(issue.filePath, 'Documentation');
+    }
+    for (final issue in projectMetrics.sourceSortIssues) {
+      add(issue.filePath, 'Source Sorting');
+    }
+    for (final issue in projectMetrics.duplicateCodeIssues) {
+      add(issue.firstFilePath, 'Duplicate Code');
+      add(issue.secondFilePath, 'Duplicate Code');
+    }
+    for (final issue in projectMetrics.deadCodeIssues) {
+      add(issue.filePath, 'Dead Code');
+    }
+  }
+  return warningsByPath;
+}
+
+Map<String, Map<String, int>> _buildFolderWarningsByPath(
+  List<LayersIssue> issues,
+  String commonRoot, {
+  required Set<String> knownRelativeFiles,
+  required ProjectMetrics? projectMetrics,
+}) {
+  final warningsByPath = <String, Map<String, int>>{};
+  String relativize(String normalizedPath) {
+    if (p.isAbsolute(normalizedPath)) {
+      return p.relative(normalizedPath, from: commonRoot);
+    }
+    if (commonRoot != '.' && normalizedPath.startsWith('$commonRoot/')) {
+      return normalizedPath.substring(commonRoot.length + 1);
+    }
+    return normalizedPath;
+  }
+
+  void addFolder(String rawPath, String warningType) {
+    if (rawPath.isEmpty) {
+      return;
+    }
+    final relative = _resolveToKnownRelativeFilePath(
+      relativize(p.normalize(rawPath)),
+      knownRelativeFiles,
+    );
+    if (relative == '.' || relative.isEmpty) {
+      return;
+    }
+    final folderPath = p.dirname(relative);
+    final bucket = warningsByPath.putIfAbsent(
+      folderPath,
+      () => <String, int>{},
+    );
+    bucket[warningType] = (bucket[warningType] ?? 0) + 1;
+  }
+
+  for (final issue in issues) {
+    final rawPath = issue.type == LayersIssueType.folderCycle
+        ? issue.filePath
+        : issue.filePath;
+    addFolder(rawPath, 'Layers');
+  }
+  if (projectMetrics != null) {
+    for (final issue in projectMetrics.hardcodedStringIssues) {
+      addFolder(issue.filePath, 'Hardcoded Strings');
+    }
+    for (final issue in projectMetrics.magicNumberIssues) {
+      addFolder(issue.filePath, 'Magic Numbers');
+    }
+    for (final issue in projectMetrics.secretIssues) {
+      final filePath = issue.filePath;
+      if (filePath != null) {
+        addFolder(filePath, 'Secrets');
+      }
+    }
+    for (final issue in projectMetrics.documentationIssues) {
+      addFolder(issue.filePath, 'Documentation');
+    }
+    for (final issue in projectMetrics.sourceSortIssues) {
+      addFolder(issue.filePath, 'Source Sorting');
+    }
+    for (final issue in projectMetrics.duplicateCodeIssues) {
+      addFolder(issue.firstFilePath, 'Duplicate Code');
+      addFolder(issue.secondFilePath, 'Duplicate Code');
+    }
+    for (final issue in projectMetrics.deadCodeIssues) {
+      addFolder(issue.filePath, 'Dead Code');
+    }
+  }
+  return warningsByPath;
+}
+
+String _resolveToKnownRelativeFilePath(
+  String rawRelativePath,
+  Set<String> knownRelativeFiles,
+) {
+  final normalizedRaw = p.normalize(rawRelativePath).replaceAll('\\', '/');
+  if (knownRelativeFiles.contains(normalizedRaw)) {
+    return normalizedRaw;
+  }
+
+  final noDot = normalizedRaw.startsWith('./')
+      ? normalizedRaw.substring(2)
+      : normalizedRaw;
+  if (knownRelativeFiles.contains(noDot)) {
+    return noDot;
+  }
+
+  String? bestMatch;
+  for (final candidate in knownRelativeFiles) {
+    if (candidate == normalizedRaw ||
+        candidate.endsWith('/$normalizedRaw') ||
+        normalizedRaw.endsWith('/$candidate') ||
+        candidate == noDot ||
+        candidate.endsWith('/$noDot') ||
+        noDot.endsWith('/$candidate')) {
+      if (bestMatch == null || candidate.length > bestMatch.length) {
+        bestMatch = candidate;
+      }
+    }
+  }
+  return bestMatch ?? normalizedRaw;
+}
+
+String _buildWarningTitle(String heading, Map<String, int>? warningTypeCounts) {
+  final lines = <String>[heading];
+  if (warningTypeCounts != null && warningTypeCounts.isNotEmpty) {
+    lines.add('');
+    final sorted = warningTypeCounts.entries.toList()
+      ..sort((a, b) {
+        final countCompare = b.value.compareTo(a.value);
+        if (countCompare != 0) {
+          return countCompare;
+        }
+        return a.key.compareTo(b.key);
+      });
+    for (final entry in sorted) {
+      final suffix = entry.value == 1 ? 'warning' : 'warnings';
+      lines.add('${entry.value} ${entry.key} $suffix');
+    }
+  }
+  return escapeXml(lines.join('\n'));
 }
