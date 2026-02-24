@@ -6,6 +6,7 @@ void _renderFolderGroup(
   _FolderTreeNode root,
   _Rect rect, {
   required Map<String, List<_ClassGroup>> classGroupsByFile,
+  required _ArtifactWarningIndex warningIndex,
 }) {
   final usableRect = _Rect(
     x: rect.x,
@@ -25,6 +26,7 @@ void _renderFolderGroup(
     rect: usableRect,
     depth: 0,
     classGroupsByFile: classGroupsByFile,
+    warningIndex: warningIndex,
   );
 }
 
@@ -35,6 +37,7 @@ void _renderFolderLevel(
   required _Rect rect,
   required int depth,
   required Map<String, List<_ClassGroup>> classGroupsByFile,
+  required _ArtifactWarningIndex warningIndex,
 }) {
   final entries = _folderEntriesForNode(node);
   if (entries.isEmpty) {
@@ -67,13 +70,18 @@ void _renderFolderLevel(
           _folderDepthOpacityMin,
           _folderDepthOpacityBase,
         );
+    final warningSummary = entry.isFolder
+        ? _ArtifactWarningSummary.empty
+        : warningIndex.fileForPath(entry.path);
     final fillOpacity = depthTint.toStringAsFixed(_opacityDecimalPlaces);
-    final fillColor = entry.isFolder
+    final baseFillColor = entry.isFolder
         ? _folderTileFillColor
         : _fileTileFillColor;
-    final cornerRadius = entry.isFolder ? 0.0 : _innerTileCornerRadius;
+    final fillColor = entry.isFolder
+        ? baseFillColor
+        : _artifactTintColor(baseFillColor, warningSummary);
+    final cornerRadius = entry.isFolder ? _innerTileCornerRadius : 0.0;
     final escapedLabel = escapeXml(entry.label);
-    final escapedPath = escapeXml(entry.path);
 
     buffer.writeln('<g>');
     buffer.writeln(
@@ -85,8 +93,18 @@ void _renderFolderLevel(
       cornerRadius: cornerRadius,
     );
     _renderThinWhiteTileBorder(buffer, entryRect, cornerRadius: cornerRadius);
-    buffer.writeln(
-      '  <title>${entry.isFolder ? "folder" : "file"}: $escapedLabel | ${formatCount(entry.size)} LOC | $escapedPath</title>',
+    final entryTitle = _buildArtifactTitle(
+      typeLabel: entry.isFolder ? 'Folder' : 'File',
+      loc: entry.size,
+      displayName: entry.label,
+      filePathLine: entry.path,
+      warningSummary: warningSummary,
+    );
+    _renderTooltipHitArea(
+      buffer,
+      rect: entryRect,
+      title: entryTitle,
+      cornerRadius: cornerRadius,
     );
 
     final fileClassGroups = entry.isFolder
@@ -126,6 +144,7 @@ void _renderFolderLevel(
           rect: nestedRect,
           depth: depth + 1,
           classGroupsByFile: classGroupsByFile,
+          warningIndex: warningIndex,
         );
       }
     }
@@ -139,7 +158,12 @@ void _renderFolderLevel(
         width: entryRect.width - (_classNestedInset * _doubleInsetMultiplier),
         height: entryRect.height - _classNestedHeaderHeight - _classNestedInset,
       );
-      _renderFileClasses(buffer, classGroups: fileClassGroups, rect: classRect);
+      _renderFileClasses(
+        buffer,
+        classGroups: fileClassGroups,
+        rect: classRect,
+        warningIndex: warningIndex,
+      );
     }
     buffer.writeln('</g>');
   }
@@ -163,6 +187,7 @@ void _renderFileClasses(
   StringBuffer buffer, {
   required List<_ClassGroup> classGroups,
   required _Rect rect,
+  required _ArtifactWarningIndex warningIndex,
 }) {
   if (rect.width <= _minUsableDimension ||
       rect.height <= _minUsableDimension ||
@@ -194,18 +219,42 @@ void _renderFileClasses(
     final classStrokeDashArray = isSyntheticGlobalClass
         ? ' stroke-dasharray="6,4"'
         : '';
-    buffer.writeln('<g>');
-    buffer.writeln(
-      '  <rect x="${classRect.x}" y="${classRect.y}" width="${classRect.width}" height="${classRect.height}" fill="$_classTileFillColor" fill-opacity="$classFillOpacity"/>',
+    const classCornerRadius = _innerTileCornerRadius;
+    final classWarnings = warningIndex.classFor(
+      classGroup.sourcePath,
+      classGroup.label,
     );
-    _renderInnerTileGradientOverlay(buffer, classRect);
+    buffer.writeln('<g>');
+    final classFillColor = _artifactTintColor(
+      _classTileFillColor,
+      classWarnings,
+    );
+    buffer.writeln(
+      '  <rect x="${classRect.x}" y="${classRect.y}" width="${classRect.width}" height="${classRect.height}"${_cornerRadiusAttributes(classCornerRadius)} fill="$classFillColor" fill-opacity="$classFillOpacity"/>',
+    );
+    _renderInnerTileGradientOverlay(
+      buffer,
+      classRect,
+      cornerRadius: classCornerRadius,
+    );
     _renderThinWhiteTileBorder(
       buffer,
       classRect,
+      cornerRadius: classCornerRadius,
       strokeDashArray: classStrokeDashArray,
     );
-    buffer.writeln(
-      '  <title>class: ${escapeXml(classGroup.label)} | ${formatCount(classGroup.size)} LOC | ${escapeXml(classGroup.sourcePath)}</title>',
+    final classTitle = _buildArtifactTitle(
+      typeLabel: 'Class',
+      loc: classGroup.size,
+      displayName: classGroup.label,
+      filePathLine: classGroup.sourcePath,
+      warningSummary: classWarnings,
+    );
+    _renderTooltipHitArea(
+      buffer,
+      rect: classRect,
+      title: classTitle,
+      cornerRadius: classCornerRadius,
     );
     _renderFolderTopLeftLabel(
       buffer,
@@ -245,23 +294,34 @@ void _renderFileClasses(
           }
 
           final callableName = escapeXml(callable.name);
-          final callablePath = escapeXml(callable.filePath);
+          final callableWarnings = warningIndex.callableForStableId(
+            callable.stableId,
+          );
           buffer.writeln('<g>');
-          buffer.writeln(
-            '  <rect x="${callableRect.x}" y="${callableRect.y}" width="${callableRect.width}" height="${callableRect.height}"${_cornerRadiusAttributes(_innerTileCornerRadius)} fill="$_methodTileFillColor" fill-opacity="0.72"/>',
-          );
-          _renderInnerTileGradientOverlay(
-            buffer,
-            callableRect,
-            cornerRadius: _innerTileCornerRadius,
-          );
-          _renderThinWhiteTileBorder(
-            buffer,
-            callableRect,
-            cornerRadius: _innerTileCornerRadius,
+          final callableFillColor = _artifactTintColor(
+            _methodTileFillColor,
+            callableWarnings,
           );
           buffer.writeln(
-            '  <title>callable: $callableName | ${formatCount(callable.linesOfCode)} LOC | $callablePath${callable.startLine > 0 ? ':${callable.startLine}' : ''}</title>',
+            '  <rect x="${callableRect.x}" y="${callableRect.y}" width="${callableRect.width}" height="${callableRect.height}" fill="$callableFillColor" fill-opacity="0.72"/>',
+          );
+          _renderInnerTileGradientOverlay(buffer, callableRect);
+          _renderThinWhiteTileBorder(buffer, callableRect);
+          final callableTitle = _buildArtifactTitle(
+            typeLabel: callable.kind == CodeSizeArtifactKind.method
+                ? 'Method'
+                : 'Function',
+            loc: callable.linesOfCode,
+            displayName: callable.kind == CodeSizeArtifactKind.method
+                ? '${callable.ownerName ?? ''}.${callable.name}()'
+                : '${callable.name}()',
+            filePathLine: callable.filePath,
+            warningSummary: callableWarnings,
+          );
+          _renderTooltipHitArea(
+            buffer,
+            rect: callableRect,
+            title: callableTitle,
           );
           _renderTileLabel(
             buffer,
@@ -275,6 +335,61 @@ void _renderFileClasses(
     }
     buffer.writeln('</g>');
   }
+}
+
+String _artifactTintColor(String normalColor, _ArtifactWarningSummary summary) {
+  if (summary.hasHardError) {
+    return _hardErrorTintFillColor;
+  }
+  if (summary.hasWarnings) {
+    return _warningTintFillColor;
+  }
+  return normalColor;
+}
+
+String _buildArtifactTitle({
+  required String typeLabel,
+  required int loc,
+  required String displayName,
+  required String filePathLine,
+  required _ArtifactWarningSummary warningSummary,
+}) {
+  final includeInPrefix = typeLabel != 'Folder' && typeLabel != 'File';
+  final lines = <String>[
+    includeInPrefix
+        ? '${formatCount(loc)} LOC in $typeLabel: $displayName'
+        : '${formatCount(loc)} LOC $typeLabel: $filePathLine',
+    if (includeInPrefix) ...<String>['', 'File: $filePathLine'],
+  ];
+  if (warningSummary.hasWarnings) {
+    lines.add('');
+    final warningEntries = warningSummary.warningTypeCounts.entries.toList()
+      ..sort((left, right) {
+        final countCompare = right.value.compareTo(left.value);
+        if (countCompare != 0) {
+          return countCompare;
+        }
+        return left.key.compareTo(right.key);
+      });
+    for (final entry in warningEntries) {
+      final suffix = entry.value == 1 ? 'warning' : 'warnings';
+      lines.add('${entry.value} ${entry.key} $suffix');
+    }
+  }
+  return lines.map(escapeXml).join('\n');
+}
+
+void _renderTooltipHitArea(
+  StringBuffer buffer, {
+  required _Rect rect,
+  required String title,
+  double cornerRadius = 0.0,
+}) {
+  buffer.writeln(
+    '  <rect x="${rect.x}" y="${rect.y}" width="${rect.width}" height="${rect.height}"${_cornerRadiusAttributes(cornerRadius)} fill="transparent" pointer-events="all">',
+  );
+  buffer.writeln('    <title>$title</title>');
+  buffer.writeln('  </rect>');
 }
 
 /// Renders folder names in the top-left corner of folder containers.

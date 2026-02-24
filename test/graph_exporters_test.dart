@@ -1,11 +1,15 @@
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
+import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
+import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/exports/externals/export_mermaid.dart';
 import 'package:fcheck/src/exports/externals/export_plantuml.dart';
 import 'package:fcheck/src/exports/svg/export_files/export_svg_files.dart';
 import 'package:fcheck/src/exports/svg/export_folders/export_svg_folders.dart';
 import 'package:fcheck/src/exports/svg/export_loc/export_svg_code_size.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
+import 'package:fcheck/src/models/project_type.dart';
 import 'package:fcheck/src/exports/externals/graph_format_utils.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
@@ -151,21 +155,67 @@ void main() {
         ),
       ];
 
-      final svg = exportSvgCodeSize(artifacts, title: 'Code Size Treemap Test');
+      final metrics = ProjectMetrics(
+        totalFolders: 0,
+        totalFiles: 0,
+        totalDartFiles: 0,
+        totalLinesOfCode: 0,
+        totalCommentLines: 0,
+        fileMetrics: const [],
+        secretIssues: const [],
+        hardcodedStringIssues: const [],
+        magicNumberIssues: [
+          MagicNumberIssue(
+            filePath: 'lib/app_view.dart',
+            lineNumber: 22,
+            value: '42',
+          ),
+        ],
+        sourceSortIssues: const [],
+        layersIssues: const [],
+        deadCodeIssues: [
+          DeadCodeIssue(
+            type: DeadCodeIssueType.deadFunction,
+            filePath: 'lib/app_view.dart',
+            lineNumber: 20,
+            name: 'render',
+            owner: 'AppView',
+          ),
+        ],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: const {},
+        projectName: 'demo',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+      );
+
+      final svg = exportSvgCodeSize(
+        artifacts,
+        title: 'Code Size Treemap Test',
+        projectMetrics: metrics,
+      );
 
       expect(svg, contains('<svg'));
       expect(svg, contains('Code Size Treemap Test'));
       expect(svg, contains('Folders'));
-      expect(svg, contains('classes'));
-      expect(svg, contains('Functions'));
+      expect(svg, anyOf(contains('classes'), contains('Classes')));
+      expect(svg, anyOf(contains('Functions'), contains('Functions/Methods')));
       expect(svg, isNot(contains('Classes &amp; Functions')));
-      expect(svg, isNot(contains('Functions/Methods')));
-      expect(svg, contains('folder: lib'));
+      expect(svg, contains('2,580 LOC Folder: lib'));
+      expect(svg, isNot(contains('2,580 LOC Folder: lib\n\nlib')));
       expect(svg, contains('UserController'));
-      expect(svg, contains('callable: render'));
+      expect(svg, contains('45 LOC in Method: AppView.render()'));
+      expect(svg, contains('File: lib/app_view.dart'));
       expect(svg, contains('&lt;...&gt;'));
       expect(svg, contains('2,580 LOC'));
       expect(svg, contains('fill="#000"'));
+      expect(svg, contains('fill="#e05545"'));
+      expect(svg, contains('Warning'));
+      expect(svg, contains('Error'));
+      expect(svg, isNot(contains('warnings:')));
+      expect(svg, contains('1 Dead Code warning'));
+      expect(svg, contains('1 Magic Numbers warning'));
       expect(svg, isNot(contains('filter="url(#outlineWhite)"')));
       expect(svg, contains('text-anchor="start"'));
     });
@@ -190,6 +240,8 @@ void main() {
 
       expect(svg, contains('lib/a.dart'));
       expect(svg, isNot(contains(projectRoot)));
+      expect(svg, isNot(contains('Warning')));
+      expect(svg, isNot(contains('Error')));
     });
 
     test('fit long file labels in flat SVG without truncation', () {

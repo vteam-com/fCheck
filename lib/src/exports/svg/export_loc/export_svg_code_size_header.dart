@@ -6,12 +6,17 @@ void _renderHeaderTitleLine(
   StringBuffer buffer, {
   required double x,
   required double y,
+  required double rightX,
   required String title,
   required int totalLoc,
   required int folderCount,
   required int fileCount,
   required int classCount,
   required int functionCount,
+  required bool hasWarningArtifacts,
+  required bool hasErrorArtifacts,
+  required int warningArtifactCount,
+  required int errorArtifactCount,
 }) {
   var cursorX = x;
 
@@ -54,7 +59,7 @@ void _renderHeaderTitleLine(
     buffer,
     x: cursorX,
     y: y - _headerChipHeight + _headerChipYAdjustment,
-    text: '${formatCount(classCount)} classes',
+    text: '${formatCount(classCount)} Classes',
     fillColor: _classTileFillColor,
     cornerRadius: 0.0,
   );
@@ -63,10 +68,79 @@ void _renderHeaderTitleLine(
     buffer,
     x: cursorX,
     y: y - _headerChipHeight + _headerChipYAdjustment,
-    text: '${formatCount(functionCount)} Functions',
+    text: '${formatCount(functionCount)} Functions/Methods',
     fillColor: _methodTileFillColor,
     cornerRadius: _headerChipRoundedRadius,
   );
+
+  if (hasWarningArtifacts || hasErrorArtifacts) {
+    _renderRightAlignedSeverityChips(
+      buffer,
+      y: y - _headerChipHeight + _headerChipYAdjustment,
+      rightX: rightX,
+      hasWarningArtifacts: hasWarningArtifacts,
+      hasErrorArtifacts: hasErrorArtifacts,
+      warningArtifactCount: warningArtifactCount,
+      errorArtifactCount: errorArtifactCount,
+    );
+  }
+}
+
+void _renderRightAlignedSeverityChips(
+  StringBuffer buffer, {
+  required double y,
+  required double rightX,
+  required bool hasWarningArtifacts,
+  required bool hasErrorArtifacts,
+  required int warningArtifactCount,
+  required int errorArtifactCount,
+}) {
+  final chips = <({String text, String fillColor})>[
+    if (hasWarningArtifacts)
+      (
+        text:
+            '${formatCount(warningArtifactCount)} ${warningArtifactCount == 1 ? 'Warning' : 'Warnings'}',
+        fillColor: _warningTintFillColor,
+      ),
+    if (hasErrorArtifacts)
+      (
+        text:
+            '${formatCount(errorArtifactCount)} ${errorArtifactCount == 1 ? 'Error' : 'Errors'}',
+        fillColor: _hardErrorTintFillColor,
+      ),
+  ];
+  if (chips.isEmpty) {
+    return;
+  }
+
+  final widths = chips
+      .map(
+        (chip) =>
+            _estimateLegendTextWidth(chip.text, _headerChipFontSize) +
+            (_headerChipTextInsetX * _headerChipHorizontalInsetMultiplier),
+      )
+      .toList(growable: false);
+  final totalWidth =
+      widths.fold<double>(0, (sum, width) => sum + width) +
+      (_headerChipGap * (chips.length - 1));
+  var cursorX = rightX - totalWidth;
+
+  for (var i = 0; i < chips.length; i++) {
+    final chip = chips[i];
+    final width = widths[i];
+    final textY =
+        y +
+        (_headerChipHeight / _headerChipVerticalCenterDivisor) +
+        (_headerChipFontSize / _headerChipBaselineDivisor);
+    final textX = cursorX + _headerChipTextInsetX;
+    buffer.writeln(
+      '<rect x="$cursorX" y="$y" width="$width" height="$_headerChipHeight"${_cornerRadiusAttributes(_headerChipRoundedRadius)} fill="${chip.fillColor}" fill-opacity="0.85"/>',
+    );
+    buffer.writeln(
+      '<text x="$textX" y="$textY" font-size="$_headerChipFontSize" font-weight="700" fill="#fff">${escapeXml(chip.text)}</text>',
+    );
+    cursorX += width + _headerChipGap;
+  }
 }
 
 double _renderHeaderSeparator(

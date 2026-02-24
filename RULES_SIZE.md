@@ -83,6 +83,10 @@ Code size is a scored compliance domain with key `code_size`.
 - Used by `--svgsize` to generate `fcheck_code_size.svg`.
 - The SVG hierarchy is rendered as:
   - `Folders > Files > Classes > Functions`.
+- The SVG also applies warning severity overlays for artifact nodes:
+  - warning density maps to red transparency intensity
+  - dead artifacts are always rendered at maximum warning tint
+  - per-node tooltips include warning count plus sampled issue details
 
 ## Related Files
 

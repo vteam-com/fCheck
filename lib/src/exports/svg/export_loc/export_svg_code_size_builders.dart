@@ -316,3 +316,282 @@ CodeSizeArtifact _rebaseArtifactPath(CodeSizeArtifact artifact, String? base) {
     ownerName: artifact.ownerName,
   );
 }
+
+class _WarningAccumulator {
+  int warningCount = 0;
+  bool hasDeadArtifact = false;
+  bool hasHardError = false;
+  final Map<String, int> warningTypeCounts = <String, int>{};
+
+  void add(
+    String warningType, {
+    bool deadArtifact = false,
+    bool hardError = false,
+  }) {
+    warningCount += 1;
+    warningTypeCounts[warningType] = (warningTypeCounts[warningType] ?? 0) + 1;
+    if (deadArtifact) {
+      hasDeadArtifact = true;
+    }
+    if (hardError) {
+      hasHardError = true;
+    }
+  }
+}
+
+_ArtifactWarningIndex _buildArtifactWarningIndex({
+  required ProjectMetrics? projectMetrics,
+  required List<CodeSizeArtifact> fileItems,
+  required List<CodeSizeArtifact> classItems,
+  required List<CodeSizeArtifact> callableItems,
+  required String? relativeTo,
+}) {
+  if (projectMetrics == null) {
+    return _ArtifactWarningIndex.empty;
+  }
+
+  final filesByPath = <String, CodeSizeArtifact>{
+    for (final item in fileItems) item.filePath: item,
+  };
+  final classesByPath = <String, List<CodeSizeArtifact>>{};
+  final callablesByPath = <String, List<CodeSizeArtifact>>{};
+  for (final item in classItems) {
+    classesByPath
+        .putIfAbsent(item.filePath, () => <CodeSizeArtifact>[])
+        .add(item);
+  }
+  for (final item in callableItems) {
+    callablesByPath
+        .putIfAbsent(item.filePath, () => <CodeSizeArtifact>[])
+        .add(item);
+  }
+
+  final fileWarnings = <String, _WarningAccumulator>{};
+  final classWarnings = <String, _WarningAccumulator>{};
+  final callableWarnings = <String, _WarningAccumulator>{};
+
+  String normalizePath(String path) {
+    final normalizedPath = p.normalize(path);
+    if (relativeTo == null || !p.isAbsolute(normalizedPath)) {
+      return normalizedPath;
+    }
+    return p.relative(normalizedPath, from: relativeTo);
+  }
+
+  _WarningAccumulator upsertFile(String filePath) =>
+      fileWarnings.putIfAbsent(filePath, () => _WarningAccumulator());
+  _WarningAccumulator upsertClass(String filePath, String className) =>
+      classWarnings.putIfAbsent(
+        '$filePath|$className',
+        () => _WarningAccumulator(),
+      );
+  _WarningAccumulator upsertCallable(String stableId) =>
+      callableWarnings.putIfAbsent(stableId, () => _WarningAccumulator());
+
+  List<CodeSizeArtifact> classesForPath(String filePath) =>
+      classesByPath[filePath] ?? const <CodeSizeArtifact>[];
+  List<CodeSizeArtifact> callablesForPath(String filePath) =>
+      callablesByPath[filePath] ?? const <CodeSizeArtifact>[];
+
+  CodeSizeArtifact? findCallableByLine(String filePath, int? lineNumber) {
+    if (lineNumber == null || lineNumber <= 0) {
+      return null;
+    }
+    for (final artifact in callablesForPath(filePath)) {
+      if (lineNumber >= artifact.startLine && lineNumber <= artifact.endLine) {
+        return artifact;
+      }
+    }
+    return null;
+  }
+
+  CodeSizeArtifact? findClassByLine(String filePath, int? lineNumber) {
+    if (lineNumber == null || lineNumber <= 0) {
+      return null;
+    }
+    for (final artifact in classesForPath(filePath)) {
+      if (lineNumber >= artifact.startLine && lineNumber <= artifact.endLine) {
+        return artifact;
+      }
+    }
+    return null;
+  }
+
+  CodeSizeArtifact? findCallableByName(
+    String filePath,
+    String callableName, {
+    String? ownerName,
+  }) {
+    for (final candidate in callablesForPath(filePath)) {
+      if (candidate.name != callableName) {
+        continue;
+      }
+      if (ownerName == null ||
+          ownerName.isEmpty ||
+          candidate.ownerName == ownerName) {
+        return candidate;
+      }
+    }
+    return null;
+  }
+
+  void addLineScopedIssue({
+    required String rawPath,
+    required int? lineNumber,
+    required String warningType,
+  }) {
+    final filePath = normalizePath(rawPath);
+    if (!filesByPath.containsKey(filePath)) {
+      return;
+    }
+    upsertFile(filePath).add(warningType);
+    final callable = findCallableByLine(filePath, lineNumber);
+    if (callable != null) {
+      upsertCallable(callable.stableId).add(warningType);
+      final ownerName = callable.ownerName;
+      if (ownerName != null && ownerName.isNotEmpty) {
+        upsertClass(filePath, ownerName).add(warningType);
+      }
+      return;
+    }
+    final classArtifact = findClassByLine(filePath, lineNumber);
+    if (classArtifact != null) {
+      upsertClass(filePath, classArtifact.name).add(warningType);
+    }
+  }
+
+  for (final issue in projectMetrics.hardcodedStringIssues) {
+    addLineScopedIssue(
+      rawPath: issue.filePath,
+      lineNumber: issue.lineNumber,
+      warningType: 'Hardcoded Strings',
+    );
+  }
+  for (final issue in projectMetrics.magicNumberIssues) {
+    addLineScopedIssue(
+      rawPath: issue.filePath,
+      lineNumber: issue.lineNumber,
+      warningType: 'Magic Numbers',
+    );
+  }
+  for (final issue in projectMetrics.secretIssues) {
+    final rawPath = issue.filePath;
+    if (rawPath == null || rawPath.isEmpty) {
+      continue;
+    }
+    addLineScopedIssue(
+      rawPath: rawPath,
+      lineNumber: issue.lineNumber,
+      warningType: 'Secrets',
+    );
+  }
+  for (final issue in projectMetrics.documentationIssues) {
+    addLineScopedIssue(
+      rawPath: issue.filePath,
+      lineNumber: issue.lineNumber,
+      warningType: 'Documentation',
+    );
+  }
+  for (final issue in projectMetrics.sourceSortIssues) {
+    addLineScopedIssue(
+      rawPath: issue.filePath,
+      lineNumber: issue.lineNumber,
+      warningType: 'Source Sorting',
+    );
+  }
+  for (final issue in projectMetrics.layersIssues) {
+    final filePath = normalizePath(issue.filePath);
+    if (!filesByPath.containsKey(filePath)) {
+      continue;
+    }
+    final issueTypeName = issue.type.name;
+    final isCycleIssue =
+        issueTypeName == 'cyclicDependency' || issueTypeName == 'folderCycle';
+    upsertFile(filePath).add('Layers', hardError: isCycleIssue);
+  }
+  for (final issue in projectMetrics.duplicateCodeIssues) {
+    addLineScopedIssue(
+      rawPath: issue.firstFilePath,
+      lineNumber: issue.firstLineNumber,
+      warningType: 'Duplicate Code',
+    );
+    addLineScopedIssue(
+      rawPath: issue.secondFilePath,
+      lineNumber: issue.secondLineNumber,
+      warningType: 'Duplicate Code',
+    );
+  }
+
+  for (final issue in projectMetrics.deadCodeIssues) {
+    final filePath = normalizePath(issue.filePath);
+    if (!filesByPath.containsKey(filePath)) {
+      continue;
+    }
+    switch (issue.type) {
+      case DeadCodeIssueType.deadFile:
+        upsertFile(
+          filePath,
+        ).add('Dead Code', deadArtifact: true, hardError: true);
+        break;
+      case DeadCodeIssueType.deadClass:
+        upsertFile(filePath).add('Dead Code', hardError: true);
+        upsertClass(
+          filePath,
+          issue.name,
+        ).add('Dead Code', deadArtifact: true, hardError: true);
+        break;
+      case DeadCodeIssueType.deadFunction:
+        final owner = issue.owner;
+        final callable = findCallableByName(
+          filePath,
+          issue.name,
+          ownerName: owner,
+        );
+        upsertFile(filePath).add('Dead Code', hardError: true);
+        if (callable != null) {
+          upsertCallable(
+            callable.stableId,
+          ).add('Dead Code', deadArtifact: true, hardError: true);
+          if (callable.ownerName != null && callable.ownerName!.isNotEmpty) {
+            upsertClass(
+              filePath,
+              callable.ownerName!,
+            ).add('Dead Code', hardError: true);
+          }
+        } else if (owner != null && owner.isNotEmpty) {
+          upsertClass(filePath, owner).add('Dead Code', hardError: true);
+        }
+        break;
+      case DeadCodeIssueType.unusedVariable:
+        addLineScopedIssue(
+          rawPath: issue.filePath,
+          lineNumber: issue.lineNumber,
+          warningType: 'Dead Code',
+        );
+        break;
+    }
+  }
+
+  _ArtifactWarningSummary toSummary(_WarningAccumulator value) =>
+      _ArtifactWarningSummary(
+        warningCount: value.warningCount,
+        hasDeadArtifact: value.hasDeadArtifact,
+        hasHardError: value.hasHardError,
+        warningTypeCounts: value.warningTypeCounts,
+      );
+
+  return _ArtifactWarningIndex(
+    fileWarnings: {
+      for (final entry in fileWarnings.entries)
+        entry.key: toSummary(entry.value),
+    },
+    classWarnings: {
+      for (final entry in classWarnings.entries)
+        entry.key: toSummary(entry.value),
+    },
+    callableWarnings: {
+      for (final entry in callableWarnings.entries)
+        entry.key: toSummary(entry.value),
+    },
+  );
+}

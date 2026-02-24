@@ -81,3 +81,59 @@ class _FolderEntry {
   /// Whether this entry represents a folder rather than a file.
   bool get isFolder => folder != null;
 }
+
+class _ArtifactWarningSummary {
+  final int warningCount;
+  final bool hasDeadArtifact;
+  final bool hasHardError;
+  final Map<String, int> warningTypeCounts;
+
+  const _ArtifactWarningSummary({
+    required this.warningCount,
+    required this.hasDeadArtifact,
+    required this.hasHardError,
+    required this.warningTypeCounts,
+  });
+
+  static const empty = _ArtifactWarningSummary(
+    warningCount: 0,
+    hasDeadArtifact: false,
+    hasHardError: false,
+    warningTypeCounts: <String, int>{},
+  );
+
+  bool get hasWarnings => warningCount > 0 || hasDeadArtifact;
+}
+
+class _ArtifactWarningIndex {
+  final Map<String, _ArtifactWarningSummary> fileWarnings;
+  final Map<String, _ArtifactWarningSummary> classWarnings;
+  final Map<String, _ArtifactWarningSummary> callableWarnings;
+
+  const _ArtifactWarningIndex({
+    required this.fileWarnings,
+    required this.classWarnings,
+    required this.callableWarnings,
+  });
+
+  static const empty = _ArtifactWarningIndex(
+    fileWarnings: <String, _ArtifactWarningSummary>{},
+    classWarnings: <String, _ArtifactWarningSummary>{},
+    callableWarnings: <String, _ArtifactWarningSummary>{},
+  );
+
+  _ArtifactWarningSummary fileForPath(String filePath) =>
+      fileWarnings[filePath] ?? _ArtifactWarningSummary.empty;
+
+  _ArtifactWarningSummary classFor(String filePath, String className) =>
+      classWarnings['$filePath|$className'] ?? _ArtifactWarningSummary.empty;
+
+  _ArtifactWarningSummary callableForStableId(String stableId) =>
+      callableWarnings[stableId] ?? _ArtifactWarningSummary.empty;
+
+  Iterable<_ArtifactWarningSummary> get allSummaries sync* {
+    yield* fileWarnings.values;
+    yield* classWarnings.values;
+    yield* callableWarnings.values;
+  }
+}

@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
+import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
 import 'package:fcheck/src/input_output/number_format_utils.dart';
 import 'package:path/path.dart' as p;
@@ -65,6 +67,8 @@ const double _fileTileGap = 1.0;
 const String _tileBorderColor = '#ffffff';
 const double _tileBorderOpacity = 0.45;
 const double _tileBorderWidth = 0.8;
+const String _warningTintFillColor = '#f2a23a';
+const String _hardErrorTintFillColor = '#e05545';
 
 /// Exports a code-size treemap as SVG.
 ///
@@ -73,6 +77,7 @@ String exportSvgCodeSize(
   List<CodeSizeArtifact> artifacts, {
   String title = 'Code Size',
   String? relativeTo,
+  ProjectMetrics? projectMetrics,
 }) {
   if (artifacts.isEmpty) {
     return generateEmptySvg('No code-size artifacts found');
@@ -97,6 +102,25 @@ String exportSvgCodeSize(
     for (final file in fileItems) file.filePath: file.linesOfCode,
   };
   final callableItems = _filterNestedCallables(rawCallableItems);
+  final warningIndex = _buildArtifactWarningIndex(
+    projectMetrics: projectMetrics,
+    fileItems: fileItems,
+    classItems: classItems,
+    callableItems: callableItems,
+    relativeTo: normalizedBase,
+  );
+  final hasWarningArtifacts = warningIndex.allSummaries.any(
+    (summary) => summary.hasWarnings,
+  );
+  final hasErrorArtifacts = warningIndex.allSummaries.any(
+    (summary) => summary.hasHardError,
+  );
+  final warningArtifactCount = warningIndex.allSummaries
+      .where((summary) => summary.hasWarnings)
+      .length;
+  final errorArtifactCount = warningIndex.allSummaries
+      .where((summary) => summary.hasHardError)
+      .length;
   final classGroupsByFile = _buildClassGroupsByFile(
     classItems,
     callableItems,
@@ -150,12 +174,17 @@ String exportSvgCodeSize(
     buffer,
     x: padding + _headerTextInset,
     y: padding + _headerTextBaseline,
+    rightX: width - padding,
     title: title,
     totalLoc: folderTotalSize,
     folderCount: folderCount,
     fileCount: rolledUpFileItems.length,
     classCount: rolledClassCount,
     functionCount: rolledCallableCount,
+    hasWarningArtifacts: hasWarningArtifacts,
+    hasErrorArtifacts: hasErrorArtifacts,
+    warningArtifactCount: warningArtifactCount,
+    errorArtifactCount: errorArtifactCount,
   );
 
   _renderFolderGroup(
@@ -163,6 +192,7 @@ String exportSvgCodeSize(
     folderRoot,
     contentRect,
     classGroupsByFile: classGroupsByFile,
+    warningIndex: warningIndex,
   );
 
   writeSvgDocumentEnd(buffer);

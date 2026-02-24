@@ -243,6 +243,13 @@ Orange upward folder dependencies in `layers_folders.svg` are also emitted in CL
 `fcheck_code_size.svg` uses a unified treemap hierarchy:
 `Folders > Files > Classes > Functions`.
 
+Warning highlighting in `fcheck_code_size.svg`:
+- Artifacts with analyzer findings are tinted on a red transparency spectrum
+  (low warnings => light pink, high warnings => stronger red).
+- Dead artifacts are treated as maximum severity tint.
+- SVG tooltips include warning counts and sampled issue details for each
+  affected file/class/function tile.
+
 ## Exclusions
 
 ```bash

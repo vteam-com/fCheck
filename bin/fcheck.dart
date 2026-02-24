@@ -251,6 +251,7 @@ void main(List<String> arguments) {
           metrics.codeSizeArtifacts,
           title: '${metrics.projectName} ${metrics.version}',
           relativeTo: directory.path,
+          projectMetrics: metrics,
         );
         final sizeTreemapFile = File('${directory.path}/fcheck_code_size.svg');
         sizeTreemapFile.writeAsStringSync(sizeTreemapContent);
