@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1600.0" height="980.0" viewBox="0 0 1600.0 980.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+<svg width="3200.0" height="1960.0" viewBox="0 0 3200.0 1960.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
 <defs>
   <filter id="whiteShadow" x="-20%" y="-20%" width="140%" height="140%">
     <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
@@ -41,439 +41,449 @@
 </defs>
 <defs><linearGradient xmlns="http://www.w3.org/2000/svg" id="codeSizeInnerTileDiagonalGradient" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/><stop offset="50%" stop-color="#ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="#aaa" stop-opacity="0.1"/></linearGradient></defs>
 <rect width="100%" height="100%" fill="#fbfbfd"/>
-<text x="18.0" y="34.0" font-size="22" font-weight="700" fill="#222">Code Size of example_flutter_app 1.0.0</text>
-<text x="1582.0" y="34.0" text-anchor="end" font-size="13" fill="#666">Sized by non-empty LOC.</text>
-<rect x="16.0" y="56.0" width="834.6584615384614" height="908.0" fill="#ffffff" stroke="#d9dce3" stroke-width="1.2"/>
-<text x="24.0" y="72.0" font-size="13" font-weight="700" fill="#111">Folders &amp; Files</text>
-<text x="842.6584615384614" y="72.0" text-anchor="end" font-size="13" font-weight="700" fill="#111">173 LOC</text>
+<text x="18.0" y="34.0" font-size="20.0" font-weight="700" fill="#222">example_flutter_app 1.0.0</text>
+<text x="346.0" y="34.0" font-size="18.0" font-weight="700" fill="#222">151 LOC</text>
+<rect x="440.12" y="17.0" width="94.12" height="20.0" fill="#8fa4ba" fill-opacity="0.85"/>
+<text x="448.12" y="32.0" font-size="14.0" font-weight="700" fill="#fff">2 Folders</text>
+<text x="542.24" y="34.0" font-size="18.0" font-weight="700" fill="#666">&gt;</text>
+<rect x="558.24" y="17.0" width="76.75999999999999" height="20.0" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.85"/>
+<text x="566.24" y="32.0" font-size="14.0" font-weight="700" fill="#fff">7 Files</text>
+<text x="643.0" y="34.0" font-size="18.0" font-weight="700" fill="#666">&gt;</text>
+<rect x="659.0" y="17.0" width="102.8" height="20.0" fill="#9eb89a" fill-opacity="0.85"/>
+<text x="667.0" y="32.0" font-size="14.0" font-weight="700" fill="#fff">15 classes</text>
+<text x="769.8" y="34.0" font-size="18.0" font-weight="700" fill="#666">&gt;</text>
+<rect x="785.8" y="17.0" width="120.16" height="20.0" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.85"/>
+<text x="793.8" y="32.0" font-size="14.0" font-weight="700" fill="#fff">24 Functions</text>
 <g>
-  <rect x="24.0" y="78.0" width="818.6584615384614" height="878.0" fill="#8fa4ba" fill-opacity="0.78"/>
-  <rect x="24.0" y="78.0" width="818.6584615384614" height="878.0" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="24.0" y="78.0" width="818.6584615384614" height="878.0" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>folder: lib | 173 LOC | lib</title>
-  <text x="30.0" y="91.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">lib</text>
-  <text x="836.6584615384614" y="91.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">173 LOC</text>
+  <rect x="16.0" y="56.0" width="3168.0" height="1888.0" fill="#8fa4ba" fill-opacity="0.78"/>
+  <rect x="16.0" y="56.0" width="3168.0" height="1888.0" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="16.0" y="56.0" width="3168.0" height="1888.0" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>folder: lib | 151 LOC | lib</title>
+  <text x="22.0" y="69.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">lib</text>
+  <text x="3178.0" y="69.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">151 LOC</text>
 <g>
-  <rect x="28.0" y="94.0" width="313.55657474600866" height="525.7109826589596" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="28.0" y="94.0" width="313.55657474600866" height="525.7109826589596" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="28.0" y="94.0" width="313.55657474600866" height="525.7109826589596" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: home_page.dart | 41 LOC | lib/home_page.dart</title>
-  <text x="184.77828737300433" y="356.8554913294798" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="184.77828737300433" dy="-6.0" font-size="14.00">home_page.dart</tspan>
-    <tspan x="184.77828737300433" dy="14.0" font-size="14.00">41</tspan>
-  </text>
-</g>
+  <rect x="20.0" y="72.0" width="1464.9006622516554" height="960.6857142857142" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
+  <rect x="20.0" y="72.0" width="1464.9006622516554" height="960.6857142857142" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="20.0" y="72.0" width="1464.9006622516554" height="960.6857142857142" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: home_page.dart | 36 LOC | lib/home_page.dart</title>
+  <text x="26.0" y="85.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">home_page.dart</text>
+  <text x="1478.9006622516554" y="85.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">36 LOC</text>
 <g>
-  <rect x="341.55657474600866" y="94.0" width="282.96568940493466" height="525.7109826589596" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="341.55657474600866" y="94.0" width="282.96568940493466" height="525.7109826589596" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="341.55657474600866" y="94.0" width="282.96568940493466" height="525.7109826589596" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: counter_widget.dart | 37 LOC | lib/counter_widget.dart</title>
-  <text x="483.039419448476" y="356.8554913294798" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="483.039419448476" dy="-6.0" font-size="14.00">counter_widget.dart</tspan>
-    <tspan x="483.039419448476" dy="14.0" font-size="14.00">37</tspan>
-  </text>
-</g>
-<g>
-  <rect x="624.5222641509433" y="94.0" width="214.1361973875181" height="525.7109826589596" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="624.5222641509433" y="94.0" width="214.1361973875181" height="525.7109826589596" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="624.5222641509433" y="94.0" width="214.1361973875181" height="525.7109826589596" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: models.dart | 28 LOC | lib/models.dart</title>
-  <text x="731.5903628447024" y="356.8554913294798" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="731.5903628447024" dy="-6.0" font-size="14.00">models.dart</tspan>
-    <tspan x="731.5903628447024" dy="14.0" font-size="14.00">28</tspan>
-  </text>
-</g>
-<g>
-  <rect x="28.0" y="619.7109826589596" width="314.5838805970149" height="332.28901734104045" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="28.0" y="619.7109826589596" width="314.5838805970149" height="332.28901734104045" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="28.0" y="619.7109826589596" width="314.5838805970149" height="332.28901734104045" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: comments_example.dart | 26 LOC | lib/comments_example.dart</title>
-  <text x="185.29194029850746" y="785.8554913294797" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="185.29194029850746" dy="-6.0" font-size="14.00">comments_example.dart</tspan>
-    <tspan x="185.29194029850746" dy="14.0" font-size="14.00">26</tspan>
-  </text>
-</g>
-<g>
-  <rect x="342.5838805970149" y="619.7109826589596" width="314.5838805970149" height="332.28901734104045" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="342.5838805970149" y="619.7109826589596" width="314.5838805970149" height="332.28901734104045" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="342.5838805970149" y="619.7109826589596" width="314.5838805970149" height="332.28901734104045" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: main.dart | 26 LOC | lib/main.dart</title>
-  <text x="499.87582089552234" y="785.8554913294797" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="499.87582089552234" dy="-6.0" font-size="14.00">main.dart</tspan>
-    <tspan x="499.87582089552234" dy="14.0" font-size="14.00">26</tspan>
-  </text>
-</g>
-<g>
-  <rect x="657.1677611940298" y="619.7109826589596" width="181.49070034443162" height="287.98381502890174" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
-  <rect x="657.1677611940298" y="619.7109826589596" width="181.49070034443162" height="287.98381502890174" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="657.1677611940298" y="619.7109826589596" width="181.49070034443162" height="287.98381502890174" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>file: utils.dart | 13 LOC | lib/utils.dart</title>
-  <text x="747.9131113662456" y="763.7028901734104" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="747.9131113662456" dy="-6.0" font-size="14.00">utils.dart</tspan>
-    <tspan x="747.9131113662456" dy="14.0" font-size="14.00">13</tspan>
-  </text>
-</g>
-<g>
-  <rect x="657.1677611940298" y="907.6947976878613" width="181.49070034443162" height="44.305202312138704" fill="#8fa4ba" fill-opacity="0.70"/>
-  <rect x="657.1677611940298" y="907.6947976878613" width="181.49070034443162" height="44.305202312138704" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="657.1677611940298" y="907.6947976878613" width="181.49070034443162" height="44.305202312138704" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>folder: subfolder | 2 LOC | lib/subfolder</title>
-  <text x="663.1677611940298" y="920.6947976878613" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">subfolder</text>
-  <text x="832.6584615384614" y="920.6947976878613" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">2 LOC</text>
-</g>
-</g>
-<rect x="850.6584615384614" y="56.0" width="733.3415384615386" height="908.0" fill="#ffffff" stroke="#d9dce3" stroke-width="1.2"/>
-<text x="858.6584615384614" y="72.0" font-size="13" font-weight="700" fill="#111">Classes &amp; Functions</text>
-<text x="1576.0" y="72.0" text-anchor="end" font-size="13" font-weight="700" fill="#111">152 LOC</text>
-<g>
-  <rect x="858.6584615384614" y="78.0" width="275.90059171597636" height="450.5526315789474" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="858.6584615384614" y="78.0" width="275.90059171597636" height="450.5526315789474" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="858.6584615384614" y="78.0" width="275.90059171597636" height="450.5526315789474" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="24.0" y="88.0" width="1214.083885209713" height="940.6857142857142" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="24.0" y="88.0" width="1214.083885209713" height="940.6857142857142" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="24.0" y="88.0" width="1214.083885209713" height="940.6857142857142" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>class: _MyHomePageState | 30 LOC | lib/home_page.dart</title>
-  <text x="864.6584615384614" y="91.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">_MyHomePageState</text>
-  <text x="1128.559053254438" y="91.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">30 LOC</text>
+  <text x="30.0" y="101.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">_MyHomePageState</text>
+  <text x="1232.083885209713" y="101.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">30 LOC</text>
 <g>
-  <rect x="862.6584615384614" y="444.8206627680312" width="267.90059171597636" height="79.73196881091621" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="862.6584615384614" y="444.8206627680312" width="267.90059171597636" height="79.73196881091621" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="862.6584615384614" y="444.8206627680312" width="267.90059171597636" height="79.73196881091621" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1010.7350175782846" y="104.0" width="223.34886763142833" height="920.6857142857142" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1010.7350175782846" y="104.0" width="223.34886763142833" height="920.6857142857142" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1010.7350175782846" y="104.0" width="223.34886763142833" height="920.6857142857142" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: _incrementCounter | 5 LOC | lib/home_page.dart:19</title>
-  <text x="996.6087573964496" y="484.6866471734893" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="996.6087573964496" dy="-6.0" font-size="14.00">_incrementCounter</tspan>
-    <tspan x="996.6087573964496" dy="14.0" font-size="14.00">5</tspan>
+  <text x="1122.4094513939988" y="564.3428571428572" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="1122.4094513939988" dy="-6.0" font-size="14.00">_incrementCounter</tspan>
+    <tspan x="1122.4094513939988" dy="14.0" font-size="14.00">5</tspan>
   </text>
 </g>
 <g>
-  <rect x="862.6584615384614" y="94.0" width="267.90059171597636" height="350.8206627680312" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="862.6584615384614" y="94.0" width="267.90059171597636" height="350.8206627680312" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="862.6584615384614" y="94.0" width="267.90059171597636" height="350.8206627680312" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="28.0" y="104.0" width="982.7350175782846" height="920.6857142857142" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="28.0" y="104.0" width="982.7350175782846" height="920.6857142857142" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="28.0" y="104.0" width="982.7350175782846" height="920.6857142857142" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: build | 22 LOC | lib/home_page.dart:25</title>
-  <text x="996.6087573964496" y="269.4103313840156" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="996.6087573964496" dy="-6.0" font-size="14.00">build</tspan>
-    <tspan x="996.6087573964496" dy="14.0" font-size="14.00">22</tspan>
+  <text x="519.3675087891422" y="564.3428571428572" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="519.3675087891422" dy="-6.0" font-size="14.00">build</tspan>
+    <tspan x="519.3675087891422" dy="14.0" font-size="14.00">22</tspan>
   </text>
 </g>
 </g>
 <g>
-  <rect x="1134.559053254438" y="78.0" width="174.73704142011837" height="450.5526315789474" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="1134.559053254438" y="78.0" width="174.73704142011837" height="450.5526315789474" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1134.559053254438" y="78.0" width="174.73704142011837" height="450.5526315789474" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: CommentsExample | 19 LOC | lib/comments_example.dart</title>
-  <text x="1140.559053254438" y="91.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">CommentsExample</text>
-  <text x="1303.2960946745563" y="91.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">19 LOC</text>
-<g>
-  <rect x="1138.559053254438" y="94.0" width="166.73704142011837" height="215.2763157894737" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1138.559053254438" y="94.0" width="166.73704142011837" height="215.2763157894737" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1138.559053254438" y="94.0" width="166.73704142011837" height="215.2763157894737" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: documentedMethod | 5 LOC | lib/comments_example.dart:14</title>
-  <text x="1221.927573964497" y="201.63815789473685" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1221.927573964497" dy="-6.0" font-size="14.00">documentedMethod</tspan>
-    <tspan x="1221.927573964497" dy="14.0" font-size="14.00">5</tspan>
-  </text>
-</g>
-<g>
-  <rect x="1138.559053254438" y="309.2763157894737" width="166.73704142011837" height="215.2763157894737" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1138.559053254438" y="309.2763157894737" width="166.73704142011837" height="215.2763157894737" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1138.559053254438" y="309.2763157894737" width="166.73704142011837" height="215.2763157894737" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: anotherMethod | 5 LOC | lib/comments_example.dart:24</title>
-  <text x="1221.927573964497" y="416.9144736842105" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1221.927573964497" dy="-6.0" font-size="14.00">anotherMethod</tspan>
-    <tspan x="1221.927573964497" dy="14.0" font-size="14.00">5</tspan>
-  </text>
-</g>
-</g>
-<g>
-  <rect x="1309.2960946745561" y="78.0" width="266.7039053254438" height="233.0444646098004" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="1309.2960946745561" y="78.0" width="266.7039053254438" height="233.0444646098004" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1309.2960946745561" y="78.0" width="266.7039053254438" height="233.0444646098004" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: _CounterWidgetState | 15 LOC | lib/counter_widget.dart</title>
-  <text x="1315.2960946745561" y="91.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">_CounterWidgetState</text>
-  <text x="1570.0" y="91.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">15 LOC</text>
-<g>
-  <rect x="1507.324023668639" y="94.0" width="64.67597633136097" height="213.0444646098004" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1507.324023668639" y="94.0" width="64.67597633136097" height="213.0444646098004" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1507.324023668639" y="94.0" width="64.67597633136097" height="213.0444646098004" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: _increment | 3 LOC | lib/counter_widget.dart:17</title>
-  <text x="1539.6620118343194" y="200.5222323049002" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">3</text>
-</g>
-<g>
-  <rect x="1313.2960946745561" y="94.0" width="194.02792899408286" height="213.0444646098004" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1313.2960946745561" y="94.0" width="194.02792899408286" height="213.0444646098004" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1313.2960946745561" y="94.0" width="194.02792899408286" height="213.0444646098004" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: build | 9 LOC | lib/counter_widget.dart:21</title>
-  <text x="1410.3100591715975" y="200.5222323049002" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1410.3100591715975" dy="-6.0" font-size="14.00">build</tspan>
-    <tspan x="1410.3100591715975" dy="14.0" font-size="14.00">9</tspan>
-  </text>
-</g>
-</g>
-<g>
-  <rect x="1309.2960946745561" y="311.0444646098004" width="266.7039053254438" height="217.508166969147" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="1309.2960946745561" y="311.0444646098004" width="266.7039053254438" height="217.508166969147" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1309.2960946745561" y="311.0444646098004" width="266.7039053254438" height="217.508166969147" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: MyApp | 14 LOC | lib/main.dart</title>
-  <text x="1315.2960946745561" y="324.0444646098004" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">MyApp</text>
-  <text x="1570.0" y="324.0444646098004" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">14 LOC</text>
-<g>
-  <rect x="1550.4413412228796" y="327.0444646098004" width="21.558658777120343" height="197.508166969147" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1550.4413412228796" y="327.0444646098004" width="21.558658777120343" height="197.508166969147" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1550.4413412228796" y="327.0444646098004" width="21.558658777120343" height="197.508166969147" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: MyApp | 1 LOC | lib/main.dart:10</title>
-  <text x="1561.2206706114398" y="425.7985480943739" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">1</text>
-</g>
-<g>
-  <rect x="1313.2960946745561" y="327.0444646098004" width="237.14524654832348" height="197.508166969147" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1313.2960946745561" y="327.0444646098004" width="237.14524654832348" height="197.508166969147" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1313.2960946745561" y="327.0444646098004" width="237.14524654832348" height="197.508166969147" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: build | 11 LOC | lib/main.dart:12</title>
-  <text x="1431.8687179487179" y="425.7985480943739" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1431.8687179487179" dy="-6.0" font-size="14.00">build</tspan>
-    <tspan x="1431.8687179487179" dy="14.0" font-size="14.00">11</tspan>
-  </text>
-</g>
-</g>
-<g>
-  <rect x="858.6584615384614" y="528.5526315789474" width="216.03335907335907" height="230.163967611336" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="858.6584615384614" y="528.5526315789474" width="216.03335907335907" height="230.163967611336" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="858.6584615384614" y="528.5526315789474" width="216.03335907335907" height="230.163967611336" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: AppUtils | 12 LOC | lib/utils.dart</title>
-  <text x="864.6584615384614" y="541.5526315789474" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">AppUtils</text>
-  <text x="1068.6918206118205" y="541.5526315789474" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">12 LOC</text>
-<g>
-  <rect x="862.6584615384614" y="544.5526315789474" width="208.03335907335907" height="116.75775978407556" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="862.6584615384614" y="544.5526315789474" width="208.03335907335907" height="116.75775978407556" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="862.6584615384614" y="544.5526315789474" width="208.03335907335907" height="116.75775978407556" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: toTitleCase | 5 LOC | lib/utils.dart:5</title>
-  <text x="966.675141075141" y="602.9315114709851" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="966.675141075141" dy="-6.0" font-size="14.00">toTitleCase</tspan>
-    <tspan x="966.675141075141" dy="14.0" font-size="14.00">5</tspan>
-  </text>
-</g>
-<g>
-  <rect x="862.6584615384614" y="661.310391363023" width="208.03335907335907" height="93.40620782726045" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="862.6584615384614" y="661.310391363023" width="208.03335907335907" height="93.40620782726045" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="862.6584615384614" y="661.310391363023" width="208.03335907335907" height="93.40620782726045" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: sum | 4 LOC | lib/utils.dart:11</title>
-  <text x="966.675141075141" y="708.0134952766532" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="966.675141075141" dy="-6.0" font-size="14.00">sum</tspan>
-    <tspan x="966.675141075141" dy="14.0" font-size="14.00">4</tspan>
-  </text>
-</g>
-</g>
-<g>
-  <rect x="1074.6918206118205" y="528.5526315789474" width="162.02501930501933" height="230.163967611336" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="1074.6918206118205" y="528.5526315789474" width="162.02501930501933" height="230.163967611336" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1074.6918206118205" y="528.5526315789474" width="162.02501930501933" height="230.163967611336" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: User | 9 LOC | lib/models.dart</title>
-  <text x="1080.6918206118205" y="541.5526315789474" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">User</text>
-  <text x="1230.71683991684" y="541.5526315789474" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">9 LOC</text>
-<g>
-  <rect x="1078.6918206118205" y="702.1756072874493" width="154.02501930501933" height="52.54099190283401" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1078.6918206118205" y="702.1756072874493" width="154.02501930501933" height="52.54099190283401" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1078.6918206118205" y="702.1756072874493" width="154.02501930501933" height="52.54099190283401" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: User | 1 LOC | lib/models.dart:8</title>
-  <text x="1155.70433026433" y="728.4461032388664" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1155.70433026433" dy="-6.0" font-size="14.00">User</tspan>
-    <tspan x="1155.70433026433" dy="14.0" font-size="14.00">1</tspan>
-  </text>
-</g>
-<g>
-  <rect x="1078.6918206118205" y="544.5526315789474" width="154.02501930501933" height="157.622975708502" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1078.6918206118205" y="544.5526315789474" width="154.02501930501933" height="157.622975708502" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1078.6918206118205" y="544.5526315789474" width="154.02501930501933" height="157.622975708502" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: greet | 3 LOC | lib/models.dart:10</title>
-  <text x="1155.70433026433" y="623.3641194331984" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1155.70433026433" dy="-6.0" font-size="14.00">greet</tspan>
-    <tspan x="1155.70433026433" dy="14.0" font-size="14.00">3</tspan>
-  </text>
-</g>
-</g>
-<g>
-  <rect x="858.6584615384614" y="758.7165991902834" width="189.0291891891892" height="197.2834008097166" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="858.6584615384614" y="758.7165991902834" width="189.0291891891892" height="197.2834008097166" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="858.6584615384614" y="758.7165991902834" width="189.0291891891892" height="197.2834008097166" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: Product | 9 LOC | lib/models.dart</title>
-  <text x="864.6584615384614" y="771.7165991902834" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">Product</text>
-  <text x="1041.6876507276506" y="771.7165991902834" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">9 LOC</text>
-<g>
-  <rect x="998.4303534303533" y="774.7165991902834" width="45.2572972972973" height="177.2834008097166" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="998.4303534303533" y="774.7165991902834" width="45.2572972972973" height="177.2834008097166" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="998.4303534303533" y="774.7165991902834" width="45.2572972972973" height="177.2834008097166" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: Product | 1 LOC | lib/models.dart:20</title>
-  <text x="1021.059002079002" y="863.3582995951417" text-anchor="middle" dominant-baseline="middle" font-size="10.00" fill="#000" font-weight="700">1</text>
-</g>
-<g>
-  <rect x="862.6584615384614" y="774.7165991902834" width="135.7718918918919" height="177.2834008097166" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="862.6584615384614" y="774.7165991902834" width="135.7718918918919" height="177.2834008097166" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="862.6584615384614" y="774.7165991902834" width="135.7718918918919" height="177.2834008097166" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: display | 3 LOC | lib/models.dart:22</title>
-  <text x="930.5444074844074" y="863.3582995951417" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="930.5444074844074" dy="-6.0" font-size="14.00">display</tspan>
-    <tspan x="930.5444074844074" dy="14.0" font-size="14.00">3</tspan>
-  </text>
-</g>
-</g>
-<g>
-  <rect x="1047.6876507276506" y="758.7165991902834" width="189.0291891891892" height="197.2834008097166" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="1047.6876507276506" y="758.7165991902834" width="189.0291891891892" height="197.2834008097166" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1047.6876507276506" y="758.7165991902834" width="189.0291891891892" height="197.2834008097166" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: Validator | 9 LOC | lib/models.dart</title>
-  <text x="1053.6876507276506" y="771.7165991902834" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">Validator</text>
-  <text x="1230.71683991684" y="771.7165991902834" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">9 LOC</text>
-<g>
-  <rect x="1051.6876507276506" y="774.7165991902834" width="90.5145945945946" height="177.2834008097166" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1051.6876507276506" y="774.7165991902834" width="90.5145945945946" height="177.2834008097166" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1051.6876507276506" y="774.7165991902834" width="90.5145945945946" height="177.2834008097166" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: isValidEmail | 3 LOC | lib/models.dart:29</title>
-  <text x="1096.944948024948" y="863.3582995951417" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1096.944948024948" dy="-6.0" font-size="13.67">isValidEmail</tspan>
-    <tspan x="1096.944948024948" dy="14.0" font-size="13.67">3</tspan>
-  </text>
-</g>
-<g>
-  <rect x="1142.2022453222453" y="774.7165991902834" width="90.5145945945946" height="177.2834008097166" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1142.2022453222453" y="774.7165991902834" width="90.5145945945946" height="177.2834008097166" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1142.2022453222453" y="774.7165991902834" width="90.5145945945946" height="177.2834008097166" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: isValidAge | 3 LOC | lib/models.dart:33</title>
-  <text x="1187.4595426195426" y="863.3582995951417" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1187.4595426195426" dy="-6.0" font-size="14.00">isValidAge</tspan>
-    <tspan x="1187.4595426195426" dy="14.0" font-size="14.00">3</tspan>
-  </text>
-</g>
-</g>
-<g>
-  <rect x="1236.71683991684" y="528.5526315789474" width="124.99905897800639" height="232.04285714285712" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="1236.71683991684" y="528.5526315789474" width="124.99905897800639" height="232.04285714285712" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1236.71683991684" y="528.5526315789474" width="124.99905897800639" height="232.04285714285712" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: CounterWidget | 7 LOC | lib/counter_widget.dart</title>
-  <text x="1242.71683991684" y="541.5526315789474" text-anchor="start" font-size="7.15" fill="#000" font-weight="700">CounterWidget</text>
-  <text x="1355.7158988948463" y="541.5526315789474" text-anchor="end" font-size="7.15" fill="#000" font-weight="700">7 LOC</text>
-<g>
-  <rect x="1240.71683991684" y="685.9145363408521" width="116.99905897800639" height="70.68095238095239" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1240.71683991684" y="685.9145363408521" width="116.99905897800639" height="70.68095238095239" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1240.71683991684" y="685.9145363408521" width="116.99905897800639" height="70.68095238095239" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: CounterWidget | 1 LOC | lib/counter_widget.dart:8</title>
-  <text x="1299.2163694058431" y="721.2550125313284" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1299.2163694058431" dy="-6.0" font-size="14.00">CounterWidget</tspan>
-    <tspan x="1299.2163694058431" dy="14.0" font-size="14.00">1</tspan>
-  </text>
-</g>
-<g>
-  <rect x="1240.71683991684" y="544.5526315789474" width="116.99905897800639" height="141.36190476190473" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1240.71683991684" y="544.5526315789474" width="116.99905897800639" height="141.36190476190473" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1240.71683991684" y="544.5526315789474" width="116.99905897800639" height="141.36190476190473" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: createState | 2 LOC | lib/counter_widget.dart:11</title>
-  <text x="1299.2163694058431" y="615.2335839598998" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1299.2163694058431" dy="-6.0" font-size="14.00">createState</tspan>
-    <tspan x="1299.2163694058431" dy="14.0" font-size="14.00">2</tspan>
-  </text>
-</g>
-</g>
-<g>
-  <rect x="1236.71683991684" y="760.5954887218045" width="127.23118503118506" height="195.40451127819549" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="1236.71683991684" y="760.5954887218045" width="127.23118503118506" height="195.40451127819549" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1236.71683991684" y="760.5954887218045" width="127.23118503118506" height="195.40451127819549" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: AnotherClass | 6 LOC | lib/main.dart</title>
-  <text x="1242.71683991684" y="773.5954887218045" text-anchor="start" font-size="8.23" fill="#000" font-weight="700">AnotherClass</text>
-  <text x="1357.948024948025" y="773.5954887218045" text-anchor="end" font-size="8.23" fill="#000" font-weight="700">6 LOC</text>
-<g>
-  <rect x="1240.71683991684" y="776.5954887218045" width="119.23118503118506" height="87.70225563909774" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1240.71683991684" y="776.5954887218045" width="119.23118503118506" height="87.70225563909774" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1240.71683991684" y="776.5954887218045" width="119.23118503118506" height="87.70225563909774" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: doSomething | 3 LOC | lib/main.dart:27</title>
-  <text x="1300.3324324324324" y="820.4466165413534" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1300.3324324324324" dy="-6.0" font-size="14.00">doSomething</tspan>
-    <tspan x="1300.3324324324324" dy="14.0" font-size="14.00">3</tspan>
-  </text>
-</g>
-<g>
-  <rect x="1240.71683991684" y="864.2977443609022" width="119.23118503118506" height="87.70225563909774" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1240.71683991684" y="864.2977443609022" width="119.23118503118506" height="87.70225563909774" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1240.71683991684" y="864.2977443609022" width="119.23118503118506" height="87.70225563909774" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: doNothing | 3 LOC | lib/counter_widget.dart:41</title>
-  <text x="1300.3324324324324" y="908.1488721804511" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1300.3324324324324" dy="-6.0" font-size="14.00">doNothing</tspan>
-    <tspan x="1300.3324324324324" dy="14.0" font-size="14.00">3</tspan>
-  </text>
-</g>
-</g>
-<g>
-  <rect x="1468.8579494474232" y="528.5526315789474" width="107.14205055257688" height="232.04285714285712" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="1468.8579494474232" y="528.5526315789474" width="107.14205055257688" height="232.04285714285712" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1468.8579494474232" y="528.5526315789474" width="107.14205055257688" height="232.04285714285712" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: ExtraHelper | 6 LOC | lib/counter_widget.dart</title>
-  <text x="1474.8579494474232" y="541.5526315789474" text-anchor="start" font-size="7.18" fill="#000" font-weight="700">ExtraHelper</text>
-  <text x="1570.0" y="541.5526315789474" text-anchor="end" font-size="7.18" fill="#000" font-weight="700">6 LOC</text>
-</g>
-<g>
-  <rect x="1236.71683991684" y="760.5954887218045" width="127.23118503118506" height="195.40451127819549" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="1236.71683991684" y="760.5954887218045" width="127.23118503118506" height="195.40451127819549" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1236.71683991684" y="760.5954887218045" width="127.23118503118506" height="195.40451127819549" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: AnotherClass | 6 LOC | lib/counter_widget.dart</title>
-  <text x="1242.71683991684" y="773.5954887218045" text-anchor="start" font-size="8.23" fill="#000" font-weight="700">AnotherClass</text>
-  <text x="1357.948024948025" y="773.5954887218045" text-anchor="end" font-size="8.23" fill="#000" font-weight="700">6 LOC</text>
-<g>
-  <rect x="1240.71683991684" y="776.5954887218045" width="119.23118503118506" height="87.70225563909774" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1240.71683991684" y="776.5954887218045" width="119.23118503118506" height="87.70225563909774" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1240.71683991684" y="776.5954887218045" width="119.23118503118506" height="87.70225563909774" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: doSomething | 3 LOC | lib/main.dart:27</title>
-  <text x="1300.3324324324324" y="820.4466165413534" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1300.3324324324324" dy="-6.0" font-size="14.00">doSomething</tspan>
-    <tspan x="1300.3324324324324" dy="14.0" font-size="14.00">3</tspan>
-  </text>
-</g>
-<g>
-  <rect x="1240.71683991684" y="864.2977443609022" width="119.23118503118506" height="87.70225563909774" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1240.71683991684" y="864.2977443609022" width="119.23118503118506" height="87.70225563909774" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1240.71683991684" y="864.2977443609022" width="119.23118503118506" height="87.70225563909774" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>callable: doNothing | 3 LOC | lib/counter_widget.dart:41</title>
-  <text x="1300.3324324324324" y="908.1488721804511" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1300.3324324324324" dy="-6.0" font-size="14.00">doNothing</tspan>
-    <tspan x="1300.3324324324324" dy="14.0" font-size="14.00">3</tspan>
-  </text>
-</g>
-</g>
-<g>
-  <rect x="1363.948024948025" y="760.5954887218045" width="127.23118503118506" height="195.40451127819549" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="1363.948024948025" y="760.5954887218045" width="127.23118503118506" height="195.40451127819549" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1363.948024948025" y="760.5954887218045" width="127.23118503118506" height="195.40451127819549" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1238.083885209713" y="88.0" width="242.8167770419425" height="940.6857142857142" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="1238.083885209713" y="88.0" width="242.8167770419425" height="940.6857142857142" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1238.083885209713" y="88.0" width="242.8167770419425" height="940.6857142857142" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>class: MyHomePage | 6 LOC | lib/home_page.dart</title>
-  <text x="1369.948024948025" y="773.5954887218045" text-anchor="start" font-size="8.92" fill="#000" font-weight="700">MyHomePage</text>
-  <text x="1485.17920997921" y="773.5954887218045" text-anchor="end" font-size="8.92" fill="#000" font-weight="700">6 LOC</text>
+  <text x="1244.083885209713" y="101.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">MyHomePage</text>
+  <text x="1474.9006622516554" y="101.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">6 LOC</text>
 <g>
-  <rect x="1367.948024948025" y="893.5318295739348" width="119.23118503118506" height="58.46817042606517" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1367.948024948025" y="893.5318295739348" width="119.23118503118506" height="58.46817042606517" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1367.948024948025" y="893.5318295739348" width="119.23118503118506" height="58.46817042606517" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1242.083885209713" y="717.790476190476" width="234.8167770419425" height="306.89523809523814" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1242.083885209713" y="717.790476190476" width="234.8167770419425" height="306.89523809523814" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1242.083885209713" y="717.790476190476" width="234.8167770419425" height="306.89523809523814" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: MyHomePage | 1 LOC | lib/home_page.dart:7</title>
-  <text x="1427.5636174636174" y="922.7659147869674" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1427.5636174636174" dy="-6.0" font-size="14.00">MyHomePage</tspan>
-    <tspan x="1427.5636174636174" dy="14.0" font-size="14.00">1</tspan>
+  <text x="1359.4922737306842" y="871.2380952380952" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="1359.4922737306842" dy="-6.0" font-size="14.00">MyHomePage</tspan>
+    <tspan x="1359.4922737306842" dy="14.0" font-size="14.00">1</tspan>
   </text>
 </g>
 <g>
-  <rect x="1367.948024948025" y="776.5954887218045" width="119.23118503118506" height="116.93634085213031" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
-  <rect x="1367.948024948025" y="776.5954887218045" width="119.23118503118506" height="116.93634085213031" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1367.948024948025" y="776.5954887218045" width="119.23118503118506" height="116.93634085213031" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="1242.083885209713" y="104.0" width="234.8167770419425" height="613.790476190476" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1242.083885209713" y="104.0" width="234.8167770419425" height="613.790476190476" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1242.083885209713" y="104.0" width="234.8167770419425" height="613.790476190476" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>callable: createState | 2 LOC | lib/home_page.dart:11</title>
-  <text x="1427.5636174636174" y="835.0636591478697" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
-    <tspan x="1427.5636174636174" dy="-6.0" font-size="14.00">createState</tspan>
-    <tspan x="1427.5636174636174" dy="14.0" font-size="14.00">2</tspan>
+  <text x="1359.4922737306842" y="410.895238095238" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="1359.4922737306842" dy="-6.0" font-size="14.00">createState</tspan>
+    <tspan x="1359.4922737306842" dy="14.0" font-size="14.00">2</tspan>
+  </text>
+</g>
+</g>
+</g>
+<g>
+  <rect x="20.0" y="1032.6857142857143" width="1464.9006622516554" height="907.3142857142858" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
+  <rect x="20.0" y="1032.6857142857143" width="1464.9006622516554" height="907.3142857142858" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="20.0" y="1032.6857142857143" width="1464.9006622516554" height="907.3142857142858" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: counter_widget.dart | 34 LOC | lib/counter_widget.dart</title>
+  <text x="26.0" y="1045.6857142857143" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">counter_widget.dart</text>
+  <text x="1478.9006622516554" y="1045.6857142857143" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">34 LOC</text>
+<g>
+  <rect x="24.0" y="1048.6857142857143" width="642.750292169848" height="887.3142857142858" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="24.0" y="1048.6857142857143" width="642.750292169848" height="887.3142857142858" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="24.0" y="1048.6857142857143" width="642.750292169848" height="887.3142857142858" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>class: _CounterWidgetState | 15 LOC | lib/counter_widget.dart</title>
+  <text x="30.0" y="1061.6857142857143" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">_CounterWidgetState</text>
+  <text x="660.750292169848" y="1061.6857142857143" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">15 LOC</text>
+<g>
+  <rect x="28.0" y="1715.1714285714288" width="634.750292169848" height="216.82857142857142" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="28.0" y="1715.1714285714288" width="634.750292169848" height="216.82857142857142" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="28.0" y="1715.1714285714288" width="634.750292169848" height="216.82857142857142" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: _increment | 3 LOC | lib/counter_widget.dart:17</title>
+  <text x="345.375146084924" y="1823.5857142857144" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="345.375146084924" dy="-6.0" font-size="14.00">_increment</tspan>
+    <tspan x="345.375146084924" dy="14.0" font-size="14.00">3</tspan>
+  </text>
+</g>
+<g>
+  <rect x="28.0" y="1064.6857142857143" width="634.750292169848" height="650.4857142857144" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="28.0" y="1064.6857142857143" width="634.750292169848" height="650.4857142857144" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="28.0" y="1064.6857142857143" width="634.750292169848" height="650.4857142857144" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: build | 9 LOC | lib/counter_widget.dart:21</title>
+  <text x="345.375146084924" y="1389.9285714285716" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="345.375146084924" dy="-6.0" font-size="14.00">build</tspan>
+    <tspan x="345.375146084924" dy="14.0" font-size="14.00">9</tspan>
   </text>
 </g>
 </g>
 <g>
-  <rect x="1491.17920997921" y="760.5954887218045" width="84.82079002079004" height="146.5533834586466" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="1491.17920997921" y="760.5954887218045" width="84.82079002079004" height="146.5533834586466" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1491.17920997921" y="760.5954887218045" width="84.82079002079004" height="146.5533834586466" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
-  <title>class: &lt;...&gt; | 3 LOC | .</title>
-  <text x="1497.17920997921" y="773.5954887218045" text-anchor="start" font-size="6.00" fill="#000" font-weight="700">&lt;...&gt;</text>
-  <text x="1570.0000000000002" y="773.5954887218045" text-anchor="end" font-size="6.00" fill="#000" font-weight="700">3 LOC</text>
+  <rect x="666.750292169848" y="1048.6857142857143" width="299.9501363459291" height="887.3142857142858" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="666.750292169848" y="1048.6857142857143" width="299.9501363459291" height="887.3142857142858" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="666.750292169848" y="1048.6857142857143" width="299.9501363459291" height="887.3142857142858" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>class: CounterWidget | 7 LOC | lib/counter_widget.dart</title>
+  <text x="672.750292169848" y="1061.6857142857143" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">CounterWidget</text>
+  <text x="960.700428515777" y="1061.6857142857143" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">7 LOC</text>
+<g>
+  <rect x="670.750292169848" y="1642.8952380952383" width="291.9501363459291" height="289.104761904762" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="670.750292169848" y="1642.8952380952383" width="291.9501363459291" height="289.104761904762" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="670.750292169848" y="1642.8952380952383" width="291.9501363459291" height="289.104761904762" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: CounterWidget | 1 LOC | lib/counter_widget.dart:8</title>
+  <text x="816.7253603428126" y="1787.4476190476194" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="816.7253603428126" dy="-6.0" font-size="14.00">CounterWidget</tspan>
+    <tspan x="816.7253603428126" dy="14.0" font-size="14.00">1</tspan>
+  </text>
 </g>
 <g>
-  <rect x="1491.17920997921" y="907.1488721804511" width="84.82079002079004" height="48.85112781954888" fill="#9eb89a" fill-opacity="0.78"/>
-  <rect x="1491.17920997921" y="907.1488721804511" width="84.82079002079004" height="48.85112781954888" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
-  <rect x="1491.17920997921" y="907.1488721804511" width="84.82079002079004" height="48.85112781954888" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <rect x="670.750292169848" y="1064.6857142857143" width="291.9501363459291" height="578.2095238095238" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="670.750292169848" y="1064.6857142857143" width="291.9501363459291" height="578.2095238095238" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="670.750292169848" y="1064.6857142857143" width="291.9501363459291" height="578.2095238095238" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: createState | 2 LOC | lib/counter_widget.dart:11</title>
+  <text x="816.7253603428126" y="1353.7904761904763" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="816.7253603428126" dy="-6.0" font-size="14.00">createState</tspan>
+    <tspan x="816.7253603428126" dy="14.0" font-size="14.00">2</tspan>
+  </text>
+</g>
+</g>
+<g>
+  <rect x="966.700428515777" y="1048.6857142857143" width="514.2002337358783" height="443.6571428571429" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="966.700428515777" y="1048.6857142857143" width="514.2002337358783" height="443.6571428571429" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="966.700428515777" y="1048.6857142857143" width="514.2002337358783" height="443.6571428571429" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>class: ExtraHelper | 6 LOC | lib/counter_widget.dart</title>
+  <text x="972.700428515777" y="1061.6857142857143" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">ExtraHelper</text>
+  <text x="1474.9006622516554" y="1061.6857142857143" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">6 LOC</text>
+<g>
+  <rect x="970.700428515777" y="1064.6857142857143" width="506.2002337358783" height="423.6571428571429" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="970.700428515777" y="1064.6857142857143" width="506.2002337358783" height="423.6571428571429" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="970.700428515777" y="1064.6857142857143" width="506.2002337358783" height="423.6571428571429" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: formatCount | 3 LOC | lib/counter_widget.dart:34</title>
+  <text x="1223.8005453837163" y="1276.5142857142857" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="1223.8005453837163" dy="-6.0" font-size="14.00">formatCount</tspan>
+    <tspan x="1223.8005453837163" dy="14.0" font-size="14.00">3</tspan>
+  </text>
+</g>
+</g>
+<g>
+  <rect x="966.700428515777" y="1492.3428571428572" width="514.2002337358783" height="443.6571428571429" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="966.700428515777" y="1492.3428571428572" width="514.2002337358783" height="443.6571428571429" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="966.700428515777" y="1492.3428571428572" width="514.2002337358783" height="443.6571428571429" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>class: AnotherClass | 6 LOC | lib/counter_widget.dart</title>
+  <text x="972.700428515777" y="1505.3428571428572" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">AnotherClass</text>
+  <text x="1474.9006622516554" y="1505.3428571428572" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">6 LOC</text>
+<g>
+  <rect x="970.700428515777" y="1508.3428571428572" width="506.2002337358783" height="423.6571428571429" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="970.700428515777" y="1508.3428571428572" width="506.2002337358783" height="423.6571428571429" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="970.700428515777" y="1508.3428571428572" width="506.2002337358783" height="423.6571428571429" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: doNothing | 3 LOC | lib/counter_widget.dart:41</title>
+  <text x="1223.8005453837163" y="1720.1714285714286" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="1223.8005453837163" dy="-6.0" font-size="14.00">doNothing</tspan>
+    <tspan x="1223.8005453837163" dy="14.0" font-size="14.00">3</tspan>
+  </text>
+</g>
+</g>
+</g>
+<g>
+  <rect x="1484.9006622516554" y="72.0" width="565.0331125827815" height="1868.0" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
+  <rect x="1484.9006622516554" y="72.0" width="565.0331125827815" height="1868.0" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1484.9006622516554" y="72.0" width="565.0331125827815" height="1868.0" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: models.dart | 27 LOC | lib/models.dart</title>
+  <text x="1490.9006622516554" y="85.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">models.dart</text>
+  <text x="2043.933774834437" y="85.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">27 LOC</text>
+<g>
+  <rect x="1488.9006622516554" y="88.0" width="557.0331125827815" height="616.0" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="1488.9006622516554" y="88.0" width="557.0331125827815" height="616.0" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1488.9006622516554" y="88.0" width="557.0331125827815" height="616.0" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>class: User | 9 LOC | lib/models.dart</title>
+  <text x="1494.9006622516554" y="101.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">User</text>
+  <text x="2039.933774834437" y="101.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">9 LOC</text>
+<g>
+  <rect x="1492.9006622516554" y="551.0" width="549.0331125827815" height="149.0" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1492.9006622516554" y="551.0" width="549.0331125827815" height="149.0" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1492.9006622516554" y="551.0" width="549.0331125827815" height="149.0" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: User | 1 LOC | lib/models.dart:8</title>
+  <text x="1767.4172185430461" y="625.5" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="1767.4172185430461" dy="-6.0" font-size="14.00">User</tspan>
+    <tspan x="1767.4172185430461" dy="14.0" font-size="14.00">1</tspan>
+  </text>
+</g>
+<g>
+  <rect x="1492.9006622516554" y="104.0" width="549.0331125827815" height="447.0" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1492.9006622516554" y="104.0" width="549.0331125827815" height="447.0" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1492.9006622516554" y="104.0" width="549.0331125827815" height="447.0" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: greet | 3 LOC | lib/models.dart:10</title>
+  <text x="1767.4172185430461" y="327.5" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="1767.4172185430461" dy="-6.0" font-size="14.00">greet</tspan>
+    <tspan x="1767.4172185430461" dy="14.0" font-size="14.00">3</tspan>
+  </text>
+</g>
+</g>
+<g>
+  <rect x="1488.9006622516554" y="704.0" width="557.0331125827815" height="616.0" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="1488.9006622516554" y="704.0" width="557.0331125827815" height="616.0" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1488.9006622516554" y="704.0" width="557.0331125827815" height="616.0" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>class: Product | 9 LOC | lib/models.dart</title>
+  <text x="1494.9006622516554" y="717.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">Product</text>
+  <text x="2039.933774834437" y="717.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">9 LOC</text>
+<g>
+  <rect x="1492.9006622516554" y="1167.0" width="549.0331125827815" height="149.0" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1492.9006622516554" y="1167.0" width="549.0331125827815" height="149.0" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1492.9006622516554" y="1167.0" width="549.0331125827815" height="149.0" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: Product | 1 LOC | lib/models.dart:20</title>
+  <text x="1767.4172185430461" y="1241.5" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="1767.4172185430461" dy="-6.0" font-size="14.00">Product</tspan>
+    <tspan x="1767.4172185430461" dy="14.0" font-size="14.00">1</tspan>
+  </text>
+</g>
+<g>
+  <rect x="1492.9006622516554" y="720.0" width="549.0331125827815" height="447.0" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1492.9006622516554" y="720.0" width="549.0331125827815" height="447.0" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1492.9006622516554" y="720.0" width="549.0331125827815" height="447.0" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: display | 3 LOC | lib/models.dart:22</title>
+  <text x="1767.4172185430461" y="943.5" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="1767.4172185430461" dy="-6.0" font-size="14.00">display</tspan>
+    <tspan x="1767.4172185430461" dy="14.0" font-size="14.00">3</tspan>
+  </text>
+</g>
+</g>
+<g>
+  <rect x="1488.9006622516554" y="1320.0" width="557.0331125827815" height="616.0" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="1488.9006622516554" y="1320.0" width="557.0331125827815" height="616.0" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1488.9006622516554" y="1320.0" width="557.0331125827815" height="616.0" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>class: Validator | 9 LOC | lib/models.dart</title>
+  <text x="1494.9006622516554" y="1333.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">Validator</text>
+  <text x="2039.933774834437" y="1333.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">9 LOC</text>
+<g>
+  <rect x="1492.9006622516554" y="1336.0" width="549.0331125827815" height="298.0" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1492.9006622516554" y="1336.0" width="549.0331125827815" height="298.0" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1492.9006622516554" y="1336.0" width="549.0331125827815" height="298.0" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: isValidEmail | 3 LOC | lib/models.dart:29</title>
+  <text x="1767.4172185430461" y="1485.0" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="1767.4172185430461" dy="-6.0" font-size="14.00">isValidEmail</tspan>
+    <tspan x="1767.4172185430461" dy="14.0" font-size="14.00">3</tspan>
+  </text>
+</g>
+<g>
+  <rect x="1492.9006622516554" y="1634.0" width="549.0331125827815" height="298.0" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="1492.9006622516554" y="1634.0" width="549.0331125827815" height="298.0" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="1492.9006622516554" y="1634.0" width="549.0331125827815" height="298.0" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: isValidAge | 3 LOC | lib/models.dart:33</title>
+  <text x="1767.4172185430461" y="1783.0" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="1767.4172185430461" dy="-6.0" font-size="14.00">isValidAge</tspan>
+    <tspan x="1767.4172185430461" dy="14.0" font-size="14.00">3</tspan>
+  </text>
+</g>
+</g>
+</g>
+<g>
+  <rect x="2049.933774834437" y="72.0" width="1130.066225165563" height="761.0370370370371" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
+  <rect x="2049.933774834437" y="72.0" width="1130.066225165563" height="761.0370370370371" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2049.933774834437" y="72.0" width="1130.066225165563" height="761.0370370370371" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: main.dart | 22 LOC | lib/main.dart</title>
+  <text x="2055.933774834437" y="85.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">main.dart</text>
+  <text x="3174.0" y="85.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">22 LOC</text>
+<g>
+  <rect x="2053.933774834437" y="88.0" width="714.0421432871765" height="741.0370370370371" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="2053.933774834437" y="88.0" width="714.0421432871765" height="741.0370370370371" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2053.933774834437" y="88.0" width="714.0421432871765" height="741.0370370370371" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>class: MyApp | 14 LOC | lib/main.dart</title>
+  <text x="2059.933774834437" y="101.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">MyApp</text>
+  <text x="2761.975918121613" y="101.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">14 LOC</text>
+<g>
+  <rect x="2057.933774834437" y="764.9506172839506" width="706.0421432871765" height="60.08641975308649" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="2057.933774834437" y="764.9506172839506" width="706.0421432871765" height="60.08641975308649" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2057.933774834437" y="764.9506172839506" width="706.0421432871765" height="60.08641975308649" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: MyApp | 1 LOC | lib/main.dart:10</title>
+  <text x="2410.954846478025" y="794.9938271604938" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="2410.954846478025" dy="-6.0" font-size="14.00">MyApp</tspan>
+    <tspan x="2410.954846478025" dy="14.0" font-size="14.00">1</tspan>
+  </text>
+</g>
+<g>
+  <rect x="2057.933774834437" y="104.0" width="706.0421432871765" height="660.9506172839506" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="2057.933774834437" y="104.0" width="706.0421432871765" height="660.9506172839506" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2057.933774834437" y="104.0" width="706.0421432871765" height="660.9506172839506" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: build | 11 LOC | lib/main.dart:12</title>
+  <text x="2410.954846478025" y="434.4753086419753" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="2410.954846478025" dy="-6.0" font-size="14.00">build</tspan>
+    <tspan x="2410.954846478025" dy="14.0" font-size="14.00">11</tspan>
+  </text>
+</g>
+</g>
+<g>
+  <rect x="2767.975918121613" y="88.0" width="408.0240818783866" height="463.14814814814815" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="2767.975918121613" y="88.0" width="408.0240818783866" height="463.14814814814815" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2767.975918121613" y="88.0" width="408.0240818783866" height="463.14814814814815" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>class: AnotherClass | 5 LOC | lib/main.dart</title>
+  <text x="2773.975918121613" y="101.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">AnotherClass</text>
+  <text x="3170.0" y="101.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">5 LOC</text>
+<g>
+  <rect x="2771.975918121613" y="104.0" width="400.0240818783866" height="443.14814814814815" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="2771.975918121613" y="104.0" width="400.0240818783866" height="443.14814814814815" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2771.975918121613" y="104.0" width="400.0240818783866" height="443.14814814814815" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: doSomething | 3 LOC | lib/main.dart:27</title>
+  <text x="2971.9879590608066" y="325.5740740740741" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="2971.9879590608066" dy="-6.0" font-size="14.00">doSomething</tspan>
+    <tspan x="2971.9879590608066" dy="14.0" font-size="14.00">3</tspan>
+  </text>
+</g>
+</g>
+<g>
+  <rect x="2767.975918121613" y="551.1481481481482" width="408.0240818783866" height="277.8888888888889" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="2767.975918121613" y="551.1481481481482" width="408.0240818783866" height="277.8888888888889" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2767.975918121613" y="551.1481481481482" width="408.0240818783866" height="277.8888888888889" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>class: &lt;...&gt; | 3 LOC | lib/main.dart</title>
+  <text x="2773.975918121613" y="564.1481481481482" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">&lt;...&gt;</text>
+  <text x="3170.0" y="564.1481481481482" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">3 LOC</text>
+<g>
+  <rect x="2771.975918121613" y="567.1481481481482" width="400.0240818783866" height="257.8888888888889" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="2771.975918121613" y="567.1481481481482" width="400.0240818783866" height="257.8888888888889" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2771.975918121613" y="567.1481481481482" width="400.0240818783866" height="257.8888888888889" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: main | 3 LOC | lib/main.dart:4</title>
+  <text x="2971.9879590608066" y="696.0925925925926" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="2971.9879590608066" dy="-6.0" font-size="14.00">main</tspan>
+    <tspan x="2971.9879590608066" dy="14.0" font-size="14.00">3</tspan>
+  </text>
+</g>
+</g>
+</g>
+<g>
+  <rect x="2049.933774834437" y="833.0370370370371" width="1130.066225165563" height="657.2592592592592" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
+  <rect x="2049.933774834437" y="833.0370370370371" width="1130.066225165563" height="657.2592592592592" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2049.933774834437" y="833.0370370370371" width="1130.066225165563" height="657.2592592592592" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: comments_example.dart | 19 LOC | lib/comments_example.dart</title>
+  <text x="2055.933774834437" y="846.0370370370371" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">comments_example.dart</text>
+  <text x="3174.0" y="846.0370370370371" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">19 LOC</text>
+<g>
+  <rect x="2053.933774834437" y="849.0370370370371" width="1122.066225165563" height="637.2592592592592" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="2053.933774834437" y="849.0370370370371" width="1122.066225165563" height="637.2592592592592" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2053.933774834437" y="849.0370370370371" width="1122.066225165563" height="637.2592592592592" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>class: CommentsExample | 19 LOC | lib/comments_example.dart</title>
+  <text x="2059.933774834437" y="862.0370370370371" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">CommentsExample</text>
+  <text x="3170.0" y="862.0370370370371" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">19 LOC</text>
+<g>
+  <rect x="2057.933774834437" y="865.0370370370371" width="557.0331125827815" height="617.2592592592592" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="2057.933774834437" y="865.0370370370371" width="557.0331125827815" height="617.2592592592592" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2057.933774834437" y="865.0370370370371" width="557.0331125827815" height="617.2592592592592" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: documentedMethod | 5 LOC | lib/comments_example.dart:14</title>
+  <text x="2336.4503311258277" y="1173.6666666666667" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="2336.4503311258277" dy="-6.0" font-size="14.00">documentedMethod</tspan>
+    <tspan x="2336.4503311258277" dy="14.0" font-size="14.00">5</tspan>
+  </text>
+</g>
+<g>
+  <rect x="2614.9668874172185" y="865.0370370370371" width="557.0331125827815" height="617.2592592592592" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="2614.9668874172185" y="865.0370370370371" width="557.0331125827815" height="617.2592592592592" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2614.9668874172185" y="865.0370370370371" width="557.0331125827815" height="617.2592592592592" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: anotherMethod | 5 LOC | lib/comments_example.dart:24</title>
+  <text x="2893.4834437086092" y="1173.6666666666667" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="2893.4834437086092" dy="-6.0" font-size="14.00">anotherMethod</tspan>
+    <tspan x="2893.4834437086092" dy="14.0" font-size="14.00">5</tspan>
+  </text>
+</g>
+</g>
+</g>
+<g>
+  <rect x="2049.933774834437" y="1490.2962962962963" width="1043.1380539989814" height="449.7037037037037" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.70"/>
+  <rect x="2049.933774834437" y="1490.2962962962963" width="1043.1380539989814" height="449.7037037037037" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2049.933774834437" y="1490.2962962962963" width="1043.1380539989814" height="449.7037037037037" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: utils.dart | 12 LOC | lib/utils.dart</title>
+  <text x="2055.933774834437" y="1503.2962962962963" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">utils.dart</text>
+  <text x="3087.0718288334183" y="1503.2962962962963" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">12 LOC</text>
+<g>
+  <rect x="2053.933774834437" y="1506.2962962962963" width="1035.1380539989814" height="429.7037037037037" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="2053.933774834437" y="1506.2962962962963" width="1035.1380539989814" height="429.7037037037037" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2053.933774834437" y="1506.2962962962963" width="1035.1380539989814" height="429.7037037037037" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>class: AppUtils | 12 LOC | lib/utils.dart</title>
+  <text x="2059.933774834437" y="1519.2962962962963" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">AppUtils</text>
+  <text x="3083.0718288334183" y="1519.2962962962963" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">12 LOC</text>
+<g>
+  <rect x="2057.933774834437" y="1522.2962962962963" width="570.6322522216564" height="409.7037037037037" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="2057.933774834437" y="1522.2962962962963" width="570.6322522216564" height="409.7037037037037" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2057.933774834437" y="1522.2962962962963" width="570.6322522216564" height="409.7037037037037" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: toTitleCase | 5 LOC | lib/utils.dart:5</title>
+  <text x="2343.249900945265" y="1727.1481481481483" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="2343.249900945265" dy="-6.0" font-size="14.00">toTitleCase</tspan>
+    <tspan x="2343.249900945265" dy="14.0" font-size="14.00">5</tspan>
+  </text>
+</g>
+<g>
+  <rect x="2628.5660270560934" y="1522.2962962962963" width="456.505801777325" height="409.7037037037037" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.72"/>
+  <rect x="2628.5660270560934" y="1522.2962962962963" width="456.505801777325" height="409.7037037037037" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="2628.5660270560934" y="1522.2962962962963" width="456.505801777325" height="409.7037037037037" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>callable: sum | 4 LOC | lib/utils.dart:11</title>
+  <text x="2856.818927944756" y="1727.1481481481483" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
+    <tspan x="2856.818927944756" dy="-6.0" font-size="14.00">sum</tspan>
+    <tspan x="2856.818927944756" dy="14.0" font-size="14.00">4</tspan>
+  </text>
+</g>
+</g>
+</g>
+<g>
+  <rect x="3093.0718288334183" y="1490.2962962962963" width="86.9281711665817" height="449.7037037037037" fill="#8fa4ba" fill-opacity="0.70"/>
+  <rect x="3093.0718288334183" y="1490.2962962962963" width="86.9281711665817" height="449.7037037037037" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="3093.0718288334183" y="1490.2962962962963" width="86.9281711665817" height="449.7037037037037" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>folder: subfolder | 1 LOC | lib/subfolder</title>
+  <text x="3099.0718288334183" y="1503.2962962962963" text-anchor="start" font-size="6.88" fill="#000" font-weight="700">subfolder</text>
+  <text x="3174.0" y="1503.2962962962963" text-anchor="end" font-size="6.88" fill="#000" font-weight="700">1 LOC</text>
+<g>
+  <rect x="3097.0718288334183" y="1506.2962962962963" width="78.9281711665817" height="429.7037037037037" rx="5.00" ry="5.00" fill="#1f6f8b" fill-opacity="0.62"/>
+  <rect x="3097.0718288334183" y="1506.2962962962963" width="78.9281711665817" height="429.7037037037037" rx="5.00" ry="5.00" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="3097.0718288334183" y="1506.2962962962963" width="78.9281711665817" height="429.7037037037037" rx="5.00" ry="5.00" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
+  <title>file: subclass.dart | 1 LOC | lib/subfolder/subclass.dart</title>
+  <text x="3103.0718288334183" y="1519.2962962962963" text-anchor="start" font-size="4.20" fill="#000" font-weight="700">subclass.dart</text>
+  <text x="3170.0" y="1519.2962962962963" text-anchor="end" font-size="4.20" fill="#000" font-weight="700">1 LOC</text>
+<g>
+  <rect x="3101.0718288334183" y="1522.2962962962963" width="70.9281711665817" height="409.7037037037037" fill="#9eb89a" fill-opacity="0.78"/>
+  <rect x="3101.0718288334183" y="1522.2962962962963" width="70.9281711665817" height="409.7037037037037" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
+  <rect x="3101.0718288334183" y="1522.2962962962963" width="70.9281711665817" height="409.7037037037037" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <title>class: SubClass | 1 LOC | lib/subfolder/subclass.dart</title>
-  <text x="1497.17920997921" y="920.1488721804511" text-anchor="start" font-size="7.14" fill="#000" font-weight="700">SubClass</text>
-  <text x="1570.0000000000002" y="920.1488721804511" text-anchor="end" font-size="7.14" fill="#000" font-weight="700">1 LOC</text>
+  <text x="3107.0718288334183" y="1535.2962962962963" text-anchor="start" font-size="5.44" fill="#000" font-weight="700">SubClass</text>
+  <text x="3166.0" y="1535.2962962962963" text-anchor="end" font-size="5.44" fill="#000" font-weight="700">1 LOC</text>
+</g>
+</g>
+</g>
 </g>
 </svg>

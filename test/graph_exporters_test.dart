@@ -1,12 +1,12 @@
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
-import 'package:fcheck/src/graphs/export_mermaid.dart';
-import 'package:fcheck/src/graphs/export_plantuml.dart';
-import 'package:fcheck/src/graphs/export_svg.dart';
-import 'package:fcheck/src/graphs/export_svg_folders.dart';
-import 'package:fcheck/src/graphs/export_svg_code_size.dart';
+import 'package:fcheck/src/exports/externals/export_mermaid.dart';
+import 'package:fcheck/src/exports/externals/export_plantuml.dart';
+import 'package:fcheck/src/exports/svg/export_files/export_svg_files.dart';
+import 'package:fcheck/src/exports/svg/export_folders/export_svg_folders.dart';
+import 'package:fcheck/src/exports/svg/export_loc/export_svg_code_size.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
-import 'package:fcheck/src/graphs/graph_format_utils.dart';
+import 'package:fcheck/src/exports/externals/graph_format_utils.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
@@ -24,7 +24,7 @@ void main() {
 
       expect(exportGraphMermaid(result), equals(emptyMermaidGraph()));
       expect(exportGraphPlantUML(result), equals(emptyPlantUml()));
-      expect(exportGraphSvg(result), contains('No dependencies found'));
+      expect(exportGraphSvgFiles(result), contains('No dependencies found'));
       expect(
         exportGraphSvgFolders(result),
         contains('No hierarchical dependencies found'),
@@ -59,7 +59,7 @@ void main() {
       expect(plantUml, contains('-->'));
       expect(plantUml, contains('..>'));
 
-      final svg = exportGraphSvg(result);
+      final svg = exportGraphSvgFiles(result);
       expect(svg, contains('<svg'));
       expect(svg, contains('class="fileNode"'));
 
@@ -74,15 +74,15 @@ void main() {
       expect(folderSvg, contains('DemoProject v1.2.3'));
     });
 
-    test('render code-size treemap SVG with segmented groups', () {
+    test('render code-size treemap SVG with unified hierarchy', () {
       final artifacts = <CodeSizeArtifact>[
         const CodeSizeArtifact(
           kind: CodeSizeArtifactKind.file,
           name: 'a.dart',
           filePath: 'lib/a.dart',
-          linesOfCode: 12058,
+          linesOfCode: 2000,
           startLine: 1,
-          endLine: 12058,
+          endLine: 2000,
         ),
         const CodeSizeArtifact(
           kind: CodeSizeArtifactKind.file,
@@ -93,29 +93,61 @@ void main() {
           endLine: 300,
         ),
         const CodeSizeArtifact(
+          kind: CodeSizeArtifactKind.file,
+          name: 'user_controller.dart',
+          filePath: 'lib/user_controller.dart',
+          linesOfCode: 2500,
+          startLine: 1,
+          endLine: 2500,
+        ),
+        const CodeSizeArtifact(
+          kind: CodeSizeArtifactKind.file,
+          name: 'main.dart',
+          filePath: 'lib/main.dart',
+          linesOfCode: 1200,
+          startLine: 1,
+          endLine: 1200,
+        ),
+        const CodeSizeArtifact(
+          kind: CodeSizeArtifactKind.file,
+          name: 'app_view.dart',
+          filePath: 'lib/app_view.dart',
+          linesOfCode: 1800,
+          startLine: 1,
+          endLine: 1800,
+        ),
+        const CodeSizeArtifact(
           kind: CodeSizeArtifactKind.classDeclaration,
           name: 'UserController',
           filePath: 'lib/user_controller.dart',
-          linesOfCode: 9500,
+          linesOfCode: 150,
           startLine: 5,
-          endLine: 9500,
+          endLine: 150,
+        ),
+        const CodeSizeArtifact(
+          kind: CodeSizeArtifactKind.classDeclaration,
+          name: 'AppView',
+          filePath: 'lib/app_view.dart',
+          linesOfCode: 70,
+          startLine: 5,
+          endLine: 70,
         ),
         const CodeSizeArtifact(
           kind: CodeSizeArtifactKind.function,
           name: 'bootstrap',
           filePath: 'lib/main.dart',
-          linesOfCode: 6000,
+          linesOfCode: 60,
           startLine: 10,
-          endLine: 6000,
+          endLine: 60,
         ),
         const CodeSizeArtifact(
           kind: CodeSizeArtifactKind.method,
           name: 'render',
           ownerName: 'AppView',
           filePath: 'lib/app_view.dart',
-          linesOfCode: 4500,
+          linesOfCode: 45,
           startLine: 20,
-          endLine: 4500,
+          endLine: 45,
         ),
       ];
 
@@ -124,14 +156,15 @@ void main() {
       expect(svg, contains('<svg'));
       expect(svg, contains('Code Size Treemap Test'));
       expect(svg, contains('Folders'));
-      expect(svg, contains('Classes'));
+      expect(svg, contains('classes'));
+      expect(svg, contains('Functions'));
+      expect(svg, isNot(contains('Classes &amp; Functions')));
       expect(svg, isNot(contains('Functions/Methods')));
-      expect(svg, isNot(contains('>Files (')));
       expect(svg, contains('folder: lib'));
       expect(svg, contains('UserController'));
       expect(svg, contains('callable: render'));
       expect(svg, contains('&lt;...&gt;'));
-      expect(svg, contains('12,058 LOC'));
+      expect(svg, contains('2,580 LOC'));
       expect(svg, contains('fill="#000"'));
       expect(svg, isNot(contains('filter="url(#outlineWhite)"')));
       expect(svg, contains('text-anchor="start"'));
@@ -171,7 +204,7 @@ void main() {
         dependencyGraph: const {longPath: []},
       );
 
-      final svg = exportGraphSvg(result);
+      final svg = exportGraphSvgFiles(result);
 
       expect(svg, contains(longName));
       expect(svg, isNot(contains('$longName...')));

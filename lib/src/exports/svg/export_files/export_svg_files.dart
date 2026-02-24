@@ -1,16 +1,15 @@
 import 'dart:math';
 
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
-import 'package:fcheck/src/graphs/badge_model.dart';
-import 'package:fcheck/src/graphs/svg_common.dart';
-import 'package:fcheck/src/graphs/svg_export_helpers.dart';
+import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
+import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
 
 /// Generates an SVG visualization of the dependency graph.
 ///
 /// [layersResult] The result of layers analysis containing the dependency graph.
 ///
 /// Returns an SVG string representing the dependency graph.
-String exportGraphSvg(LayersAnalysisResult layersResult) {
+String exportGraphSvgFiles(LayersAnalysisResult layersResult) {
   final dependencyGraph = layersResult.dependencyGraph;
   final layers = layersResult.layers;
 

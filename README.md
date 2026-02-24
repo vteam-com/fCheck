@@ -240,6 +240,9 @@ Orange upward folder dependencies in `layers_folders.svg` are also emitted in CL
 
 ![fcheck code size diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_code_size.svg)
 
+`fcheck_code_size.svg` uses a unified treemap hierarchy:
+`Folders > Files > Classes > Functions`.
+
 ## Exclusions
 
 ```bash

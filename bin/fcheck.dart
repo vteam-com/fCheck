@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
-import 'package:fcheck/src/graphs/export_mermaid.dart';
-import 'package:fcheck/src/graphs/export_plantuml.dart';
-import 'package:fcheck/src/graphs/export_svg.dart';
-import 'package:fcheck/src/graphs/export_svg_code_size.dart';
-import 'package:fcheck/src/graphs/export_svg_folders.dart';
+import 'package:fcheck/src/exports/externals/export_mermaid.dart';
+import 'package:fcheck/src/exports/externals/export_plantuml.dart';
+import 'package:fcheck/src/exports/svg/export_files/export_svg_files.dart';
+import 'package:fcheck/src/exports/svg/export_folders/export_svg_folders.dart';
+import 'package:fcheck/src/exports/svg/export_loc/export_svg_code_size.dart';
 import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
@@ -187,7 +187,7 @@ void main(List<String> arguments) {
       }
       if (input.generateSvg) {
         // Generate SVG visualization
-        final svgContent = exportGraphSvg(layersResult);
+        final svgContent = exportGraphSvgFiles(layersResult);
         final svgFile = File('${directory.path}/layers.svg');
         svgFile.writeAsStringSync(svgContent);
         if (!input.outputJson) {
@@ -249,7 +249,7 @@ void main(List<String> arguments) {
       if (input.generateSizeSvg) {
         final sizeTreemapContent = exportSvgCodeSize(
           metrics.codeSizeArtifacts,
-          title: 'Code Size of ${metrics.projectName} ${metrics.version}',
+          title: '${metrics.projectName} ${metrics.version}',
           relativeTo: directory.path,
         );
         final sizeTreemapFile = File('${directory.path}/fcheck_code_size.svg');

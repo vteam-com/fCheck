@@ -1,6 +1,3 @@
-/// Unified SVG definitions and styles for consistent visualization across all SVG exports.
-library;
-
 /// Utility class providing common SVG definitions, filters, gradients, and styles.
 /// This consolidated approach minimizes duplication and ensures consistency.
 class SvgDefinitions {

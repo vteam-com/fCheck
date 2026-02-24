@@ -81,6 +81,8 @@ Code size is a scored compliance domain with key `code_size`.
   - `Functions`
   - `Methods`
 - Used by `--svgsize` to generate `fcheck_code_size.svg`.
+- The SVG hierarchy is rendered as:
+  - `Folders > Files > Classes > Functions`.
 
 ## Related Files
 

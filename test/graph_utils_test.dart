@@ -1,7 +1,7 @@
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
-import 'package:fcheck/src/graphs/badge_model.dart';
-import 'package:fcheck/src/graphs/graph_format_utils.dart';
-import 'package:fcheck/src/graphs/svg_common.dart';
+import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
+import 'package:fcheck/src/exports/externals/graph_format_utils.dart';
+import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -2,9 +2,8 @@ import 'dart:math';
 
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
-import 'package:fcheck/src/graphs/badge_model.dart';
-import 'package:fcheck/src/graphs/svg_common.dart';
-import 'package:fcheck/src/graphs/svg_export_helpers.dart';
+import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
+import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
 import 'package:fcheck/src/models/rect.dart';
 import 'package:path/path.dart' as p;
 

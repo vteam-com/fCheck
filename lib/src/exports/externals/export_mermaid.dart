@@ -1,5 +1,5 @@
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
-import 'package:fcheck/src/graphs/graph_format_utils.dart';
+import 'package:fcheck/src/exports/externals/graph_format_utils.dart';
 
 ///
 /// [layersResult] The result of layers analysis containing the dependency graph.
