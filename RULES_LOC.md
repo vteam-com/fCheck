@@ -80,7 +80,7 @@ Code size is a scored compliance domain with key `code_size`.
   - `Classes`
   - `Functions`
   - `Methods`
-- Used by `--svgsize` to generate `fcheck_loc.svg`.
+- Used by `--svgloc` to generate `fcheck_loc.svg`.
 - The SVG hierarchy is rendered as:
   - `Folders > Files > Classes > Functions`.
 - The SVG also applies warning severity overlays for artifact nodes:

@@ -175,6 +175,40 @@ void main(List<String> arguments) {
     }
 
     if (shouldPrintOutputFilesSection) {
+      String resolveOutputPath({
+        required String defaultFileName,
+        String? overridePath,
+      }) {
+        if (overridePath != null) {
+          return p.normalize(
+            p.isAbsolute(overridePath)
+                ? overridePath
+                : p.join(directory.path, overridePath),
+          );
+        }
+        final outputBaseDir = input.outputDirectory == null
+            ? directory.path
+            : p.normalize(
+                p.isAbsolute(input.outputDirectory!)
+                    ? input.outputDirectory!
+                    : p.join(directory.path, input.outputDirectory!),
+              );
+        return p.join(outputBaseDir, defaultFileName);
+      }
+
+      File prepareOutputFile({
+        required String defaultFileName,
+        String? overridePath,
+      }) {
+        final outputPath = resolveOutputPath(
+          defaultFileName: defaultFileName,
+          overridePath: overridePath,
+        );
+        final outputFile = File(outputPath);
+        outputFile.parent.createSync(recursive: true);
+        return outputFile;
+      }
+
       // Generate layer analysis result for visualization
       final layersResult = LayersAnalysisResult(
         issues: metrics.layersIssues,
@@ -191,7 +225,10 @@ void main(List<String> arguments) {
           layersResult,
           projectMetrics: metrics,
         );
-        final svgFile = File('${directory.path}/fcheck_files.svg');
+        final svgFile = prepareOutputFile(
+          defaultFileName: 'fcheck_files.svg',
+          overridePath: input.outputSvgFilesPath,
+        );
         svgFile.writeAsStringSync(svgContent);
         if (!input.outputJson) {
           printOutputFileLine(label: AppStrings.svgLayers, path: svgFile.path);
@@ -214,7 +251,10 @@ void main(List<String> arguments) {
           inputFolderName: inputFolderName,
           projectMetrics: metrics,
         );
-        final folderSvgFile = File('${directory.path}/fcheck_folders.svg');
+        final folderSvgFile = prepareOutputFile(
+          defaultFileName: 'fcheck_folders.svg',
+          overridePath: input.outputSvgFoldersPath,
+        );
         folderSvgFile.writeAsStringSync(folderSvgContent);
         if (!input.outputJson) {
           printOutputFileLine(
@@ -227,7 +267,10 @@ void main(List<String> arguments) {
       if (input.generateMermaid) {
         // Generate Mermaid visualization
         final mermaidContent = exportGraphMermaid(layersResult);
-        final mermaidFile = File('${directory.path}/fcheck.mmd');
+        final mermaidFile = prepareOutputFile(
+          defaultFileName: 'fcheck.mmd',
+          overridePath: input.outputMermaidPath,
+        );
         mermaidFile.writeAsStringSync(mermaidContent);
         if (!input.outputJson) {
           printOutputFileLine(
@@ -240,7 +283,10 @@ void main(List<String> arguments) {
       if (input.generatePlantUML) {
         // Generate PlantUML visualization
         final plantUMLContent = exportGraphPlantUML(layersResult);
-        final plantUMLFile = File('${directory.path}/fcheck.puml');
+        final plantUMLFile = prepareOutputFile(
+          defaultFileName: 'fcheck.puml',
+          overridePath: input.outputPlantUmlPath,
+        );
         plantUMLFile.writeAsStringSync(plantUMLContent);
         if (!input.outputJson) {
           printOutputFileLine(
@@ -257,7 +303,10 @@ void main(List<String> arguments) {
           relativeTo: directory.path,
           projectMetrics: metrics,
         );
-        final sizeTreemapFile = File('${directory.path}/fcheck_loc.svg');
+        final sizeTreemapFile = prepareOutputFile(
+          defaultFileName: 'fcheck_loc.svg',
+          overridePath: input.outputSvgLocPath,
+        );
         sizeTreemapFile.writeAsStringSync(sizeTreemapContent);
         if (!input.outputJson) {
           printOutputFileLine(

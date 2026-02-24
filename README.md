@@ -1,18 +1,15 @@
 # fCheck
 
-Fast local quality checks for Flutter and Dart projects.
-
-fCheck runs one deterministic analysis pass and reports architecture, maintainability, and safety issues that default lints usually do not cover.
+fCheck provides fast local quality checks for Flutter and Dart projects in one deterministic analysis pass, reporting architecture, maintainability, and safety issues that default lints usually do not cover, with console/JSON/diagram outputs and fully private execution: it does not require any AI service, no network calls are needed, and no source code is sent to external services.
 
 ## Why fCheck
 
 - Single local run for multiple quality domains
 - Deterministic output for CI and code review
-- No network calls required
+- 100% private local execution (no AI service, no code sent externally)
 - Console, JSON, and diagram outputs
-- Works as both:
-  - CLI tool
-  - Dart package in your own app/tooling
+- Works as a CLI tool
+- Works as a Dart package in your own app/tooling
 
 ## Checks Included
 
@@ -30,6 +27,7 @@ fCheck runs one deterministic analysis pass and reports architecture, maintainab
 Detailed behavior and edge cases are documented in `RULES*.md`.
 
 Hardcoded-strings note:
+
 - If project localization is `OFF`, hardcoded-strings runs in passive mode (`[-]`), reports only the total count, and does not affect compliance score/focus area.
 - If localization is `ON`, hardcoded-strings is active and reports detailed issue entries.
 
@@ -82,7 +80,7 @@ fcheck --json
 fcheck --list full
 
 # Generate diagrams
-fcheck --svg --svgfolder --svgsize --mermaid --plantuml
+fcheck --svg --svgfolder --svgloc --mermaid --plantuml
 
 # Auto-fix source sorting issues (class members + import directives)
 fcheck --fix
@@ -101,8 +99,6 @@ fcheck --fix
   - Inserts one blank line between import groups.
   - Rewrites relative imports that resolve under `lib/` to `package:<this-package>/...`.
 - Does not auto-fix other analyzers; it only reports their issues.
-
-If installed as a dev dependency, prefix commands with `dart run`.
 
 ## Sample Bash Output
 
@@ -214,29 +210,42 @@ fcheck --help-ignore
 ```
 
 Dead-code note:
+
 - `// ignore: fcheck_dead_code` suppresses dead-code findings for that file's declarations, while keeping its dependencies/usages in global dead-code analysis.
 - Dead-code usage tracking includes property-style getter/setter access and operator usage (`+`, `-`, `[]`, etc.) inferred from expression syntax.
 
 ## Visual Outputs
 
 ```bash
-fcheck --svg        # fcheck_files.svg
+fcheck --svg        # shortcut: fcheck_files.svg + fcheck_folders.svg + fcheck_loc.svg
+fcheck --svgfiles   # fcheck_files.svg
 fcheck --svgfolder  # fcheck_folders.svg
-fcheck --svgsize    # fcheck_loc.svg
+fcheck --svgloc     # fcheck_loc.svg
 fcheck --mermaid    # fcheck.mmd
 fcheck --plantuml   # fcheck.puml
+
+# Custom output base directory
+fcheck --svg --svgfolder --svgloc --mermaid --plantuml --out ./reports/fcheck
+
+# Per-artifact file overrides
+fcheck --svg --out-svg-files ./artifacts/graph/files.svg
+fcheck --svgfolder --out-svg-folders ./artifacts/graph/folders.svg
+fcheck --svgloc --out-svg-loc ./artifacts/graph/loc.svg
+fcheck --mermaid --out-mermaid ./artifacts/graph/fcheck.mmd
+fcheck --plantuml --out-plantuml ./artifacts/graph/fcheck.puml
 ```
-###  Layers Files diagram:
+
+### Layers Files diagram
 
 ![fcheck layers files diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_files.svg)
 
-### Layers Folder diagram:
+### Layers Folder diagram
 
 ![fcheck Layer folders diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_folders.svg)
 
 Orange upward folder dependencies in `fcheck_folders.svg` are also emitted in CLI report output as layers warnings (`wrongFolderLayer`) with the source Dart file path.
 
-### Code size diagram:
+### Code size diagram
 
 ![fcheck code size diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_loc.svg)
 
@@ -244,6 +253,7 @@ Orange upward folder dependencies in `fcheck_folders.svg` are also emitted in CL
 `Folders > Files > Classes > Functions`.
 
 Warning highlighting in `fcheck_loc.svg`:
+
 - Artifacts with analyzer findings are tinted on a red transparency spectrum
   (low warnings => light pink, high warnings => stronger red).
 - Dead artifacts are treated as maximum severity tint.

@@ -32,6 +32,24 @@ class ConsoleInput {
   /// Whether code-size treemap SVG output should be generated.
   final bool generateSizeSvg;
 
+  /// Optional output directory for generated artifacts.
+  final String? outputDirectory;
+
+  /// Optional override path for files SVG export.
+  final String? outputSvgFilesPath;
+
+  /// Optional override path for folders SVG export.
+  final String? outputSvgFoldersPath;
+
+  /// Optional override path for LOC treemap SVG export.
+  final String? outputSvgLocPath;
+
+  /// Optional override path for Mermaid export.
+  final String? outputMermaidPath;
+
+  /// Optional override path for PlantUML export.
+  final String? outputPlantUmlPath;
+
   /// Whether JSON output is requested.
   final bool outputJson;
 
@@ -71,6 +89,12 @@ class ConsoleInput {
     required this.generatePlantUML,
     required this.generateFolderSvg,
     required this.generateSizeSvg,
+    required this.outputDirectory,
+    required this.outputSvgFilesPath,
+    required this.outputSvgFoldersPath,
+    required this.outputSvgLocPath,
+    required this.outputMermaidPath,
+    required this.outputPlantUmlPath,
     required this.outputJson,
     required this.listMode,
     required this.listItemLimit,
@@ -104,7 +128,13 @@ ArgParser createConsoleArgParser() => ArgParser()
   )
   ..addFlag(
     'svg',
-    help: 'Generate SVG visualization of the dependency graph',
+    help:
+        'Shortcut to generate all SVG outputs (files, folders, and LOC treemap)',
+    negatable: false,
+  )
+  ..addFlag(
+    'svgfiles',
+    help: 'Generate files SVG visualization of the dependency graph',
     negatable: false,
   )
   ..addFlag(
@@ -123,9 +153,34 @@ ArgParser createConsoleArgParser() => ArgParser()
     negatable: false,
   )
   ..addFlag(
-    'svgsize',
+    'svgloc',
     help: 'Generate treemap SVG visualization of code size',
     negatable: false,
+  )
+  ..addOption(
+    'out',
+    help:
+        'Output directory for generated files. Default is the analyzed directory.',
+  )
+  ..addOption(
+    'out-svg-files',
+    help: 'Custom output file path for files SVG export.',
+  )
+  ..addOption(
+    'out-svg-folders',
+    help: 'Custom output file path for folders SVG export.',
+  )
+  ..addOption(
+    'out-svg-loc',
+    help: 'Custom output file path for LOC treemap SVG export.',
+  )
+  ..addOption(
+    'out-mermaid',
+    help: 'Custom output file path for Mermaid export.',
+  )
+  ..addOption(
+    'out-plantuml',
+    help: 'Custom output file path for PlantUML export.',
   )
   ..addFlag(
     'json',
@@ -180,6 +235,7 @@ ConsoleInput parseConsoleInput(List<String> arguments, ArgParser parser) {
 
   final explicitPath = argResults['input'] as String;
   final listOption = _parseListOption(argResults['list'] as String);
+  final svgShortcut = argResults['svg'] as bool;
   final path = explicitPath != '.'
       ? explicitPath
       : argResults.rest.isNotEmpty
@@ -189,11 +245,21 @@ ConsoleInput parseConsoleInput(List<String> arguments, ArgParser parser) {
   return ConsoleInput(
     path: path,
     fix: argResults['fix'] as bool,
-    generateSvg: argResults['svg'] as bool,
     generateMermaid: argResults['mermaid'] as bool,
     generatePlantUML: argResults['plantuml'] as bool,
-    generateFolderSvg: argResults['svgfolder'] as bool,
-    generateSizeSvg: argResults['svgsize'] as bool,
+    generateSvg: (argResults['svgfiles'] as bool) || svgShortcut,
+    generateFolderSvg: (argResults['svgfolder'] as bool) || svgShortcut,
+    generateSizeSvg: (argResults['svgloc'] as bool) || svgShortcut,
+    outputDirectory: _optionalTrimmed(argResults['out'] as String?),
+    outputSvgFilesPath: _optionalTrimmed(
+      argResults['out-svg-files'] as String?,
+    ),
+    outputSvgFoldersPath: _optionalTrimmed(
+      argResults['out-svg-folders'] as String?,
+    ),
+    outputSvgLocPath: _optionalTrimmed(argResults['out-svg-loc'] as String?),
+    outputMermaidPath: _optionalTrimmed(argResults['out-mermaid'] as String?),
+    outputPlantUmlPath: _optionalTrimmed(argResults['out-plantuml'] as String?),
     outputJson: argResults['json'] as bool,
     listMode: listOption.mode,
     listItemLimit: listOption.limit,
@@ -230,4 +296,13 @@ class _ListOption {
   final int limit;
 
   const _ListOption({required this.mode, required this.limit});
+}
+
+/// Remove blank space, in a null safe way
+String? _optionalTrimmed(String? value) {
+  if (value == null) {
+    return null;
+  }
+  final trimmed = value.trim();
+  return trimmed.isEmpty ? null : trimmed;
 }

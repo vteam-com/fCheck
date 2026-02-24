@@ -26,7 +26,7 @@ fCheck is a Dart CLI tool for analyzing Flutter and Dart project quality. It pro
 - `RULES_DOCUMENTATION.md` for README/API documentation quality rules.
 - `RULES_SORTING.md` for Flutter widget member ordering rules.
 - `RULES_LAYERS.md` for dependency graph and layer analysis rules.
-- `RULES_SIZE.md` for code-size thresholds, scoring, and reporting.
+- `RULES_LOC.md` for code-size thresholds, scoring, and reporting.
 - `RULE_METRICS.md` for project metrics analyzer architecture.
 - `RULE_SCORE.md` for overall compliance scoring rules.
 
