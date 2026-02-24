@@ -133,7 +133,7 @@ ArgParser createConsoleArgParser() => ArgParser()
     negatable: false,
   )
   ..addFlag(
-    'svgfiles',
+    'svg-files',
     help: 'Generate files SVG visualization of the dependency graph',
     negatable: false,
   )
@@ -148,38 +148,38 @@ ArgParser createConsoleArgParser() => ArgParser()
     negatable: false,
   )
   ..addFlag(
-    'svgfolder',
+    'svg-folders',
     help: 'Generate folder-based SVG visualization of the dependency graph',
     negatable: false,
   )
   ..addFlag(
-    'svgloc',
+    'svg-loc',
     help: 'Generate treemap SVG visualization of code size',
     negatable: false,
   )
   ..addOption(
-    'out',
+    'output',
     help:
         'Output directory for generated files. Default is the analyzed directory.',
   )
   ..addOption(
-    'out-svg-files',
+    'output-svg-files',
     help: 'Custom output file path for files SVG export.',
   )
   ..addOption(
-    'out-svg-folders',
+    'output-svg-folders',
     help: 'Custom output file path for folders SVG export.',
   )
   ..addOption(
-    'out-svg-loc',
+    'output-svg-loc',
     help: 'Custom output file path for LOC treemap SVG export.',
   )
   ..addOption(
-    'out-mermaid',
+    'output-mermaid',
     help: 'Custom output file path for Mermaid export.',
   )
   ..addOption(
-    'out-plantuml',
+    'output-plantuml',
     help: 'Custom output file path for PlantUML export.',
   )
   ..addFlag(
@@ -247,19 +247,23 @@ ConsoleInput parseConsoleInput(List<String> arguments, ArgParser parser) {
     fix: argResults['fix'] as bool,
     generateMermaid: argResults['mermaid'] as bool,
     generatePlantUML: argResults['plantuml'] as bool,
-    generateSvg: (argResults['svgfiles'] as bool) || svgShortcut,
-    generateFolderSvg: (argResults['svgfolder'] as bool) || svgShortcut,
-    generateSizeSvg: (argResults['svgloc'] as bool) || svgShortcut,
-    outputDirectory: _optionalTrimmed(argResults['out'] as String?),
+    generateSvg: (argResults['svg-files'] as bool) || svgShortcut,
+    generateFolderSvg: (argResults['svg-folders'] as bool) || svgShortcut,
+    generateSizeSvg: (argResults['svg-loc'] as bool) || svgShortcut,
+    outputDirectory: _optionalTrimmed(argResults['output'] as String?),
     outputSvgFilesPath: _optionalTrimmed(
-      argResults['out-svg-files'] as String?,
+      argResults['output-svg-files'] as String?,
     ),
     outputSvgFoldersPath: _optionalTrimmed(
-      argResults['out-svg-folders'] as String?,
+      argResults['output-svg-folders'] as String?,
     ),
-    outputSvgLocPath: _optionalTrimmed(argResults['out-svg-loc'] as String?),
-    outputMermaidPath: _optionalTrimmed(argResults['out-mermaid'] as String?),
-    outputPlantUmlPath: _optionalTrimmed(argResults['out-plantuml'] as String?),
+    outputSvgLocPath: _optionalTrimmed(argResults['output-svg-loc'] as String?),
+    outputMermaidPath: _optionalTrimmed(
+      argResults['output-mermaid'] as String?,
+    ),
+    outputPlantUmlPath: _optionalTrimmed(
+      argResults['output-plantuml'] as String?,
+    ),
     outputJson: argResults['json'] as bool,
     listMode: listOption.mode,
     listItemLimit: listOption.limit,

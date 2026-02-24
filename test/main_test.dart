@@ -66,8 +66,8 @@ void main() {
       expect(input.fix, isTrue);
     });
 
-    test('should parse --svgfiles flag correctly', () {
-      final input = parseConsoleInput(['--svgfiles'], parser);
+    test('should parse --svg-files flag correctly', () {
+      final input = parseConsoleInput(['--svg-files'], parser);
       expect(input.generateSvg, isTrue);
       expect(input.generateFolderSvg, isFalse);
       expect(input.generateSizeSvg, isFalse);
@@ -90,13 +90,13 @@ void main() {
       expect(input.generatePlantUML, isTrue);
     });
 
-    test('should parse --svgfolder flag correctly', () {
-      final input = parseConsoleInput(['--svgfolder'], parser);
+    test('should parse --svg-folders flag correctly', () {
+      final input = parseConsoleInput(['--svg-folders'], parser);
       expect(input.generateFolderSvg, isTrue);
     });
 
-    test('should parse --svgloc flag correctly', () {
-      final input = parseConsoleInput(['--svgloc'], parser);
+    test('should parse --svg-loc flag correctly', () {
+      final input = parseConsoleInput(['--svg-loc'], parser);
       expect(input.generateSizeSvg, isTrue);
     });
 
@@ -105,22 +105,22 @@ void main() {
       expect(input.outputJson, isTrue);
     });
 
-    test('should parse --out flag correctly', () {
-      final input = parseConsoleInput(['--out', 'reports'], parser);
+    test('should parse --output flag correctly', () {
+      final input = parseConsoleInput(['--output', 'reports'], parser);
       expect(input.outputDirectory, equals('reports'));
     });
 
     test('should parse per-output path flags correctly', () {
       final input = parseConsoleInput([
-        '--out-svg-files',
+        '--output-svg-files',
         'a.svg',
-        '--out-svg-folders',
+        '--output-svg-folders',
         'b.svg',
-        '--out-svg-loc',
+        '--output-svg-loc',
         'c.svg',
-        '--out-mermaid',
+        '--output-mermaid',
         'd.mmd',
-        '--out-plantuml',
+        '--output-plantuml',
         'e.puml',
       ], parser);
       expect(input.outputSvgFilesPath, equals('a.svg'));
@@ -166,7 +166,7 @@ void main() {
       final input = parseConsoleInput([
         '--help',
         '--fix',
-        '--svgfiles',
+        '--svg-files',
         '--json',
       ], parser);
       expect(input.showHelp, isTrue);
@@ -240,17 +240,17 @@ void main() {
       expect(parser.options, contains('input'));
       expect(parser.options, contains('fix'));
       expect(parser.options, contains('svg'));
-      expect(parser.options, contains('svgfiles'));
+      expect(parser.options, contains('svg-files'));
       expect(parser.options, contains('mermaid'));
       expect(parser.options, contains('plantuml'));
-      expect(parser.options, contains('svgfolder'));
-      expect(parser.options, contains('svgloc'));
-      expect(parser.options, contains('out'));
-      expect(parser.options, contains('out-svg-files'));
-      expect(parser.options, contains('out-svg-folders'));
-      expect(parser.options, contains('out-svg-loc'));
-      expect(parser.options, contains('out-mermaid'));
-      expect(parser.options, contains('out-plantuml'));
+      expect(parser.options, contains('svg-folders'));
+      expect(parser.options, contains('svg-loc'));
+      expect(parser.options, contains('output'));
+      expect(parser.options, contains('output-svg-files'));
+      expect(parser.options, contains('output-svg-folders'));
+      expect(parser.options, contains('output-svg-loc'));
+      expect(parser.options, contains('output-mermaid'));
+      expect(parser.options, contains('output-plantuml'));
       expect(parser.options, contains('json'));
       expect(parser.options, contains('list'));
       expect(parser.options, contains('version'));
@@ -269,17 +269,17 @@ void main() {
       expect(argResults['input'], equals('.'));
       expect(argResults['fix'], isFalse);
       expect(argResults['svg'], isFalse);
-      expect(argResults['svgfiles'], isFalse);
+      expect(argResults['svg-files'], isFalse);
       expect(argResults['mermaid'], isFalse);
       expect(argResults['plantuml'], isFalse);
-      expect(argResults['svgfolder'], isFalse);
-      expect(argResults['svgloc'], isFalse);
-      expect(argResults['out'], isNull);
-      expect(argResults['out-svg-files'], isNull);
-      expect(argResults['out-svg-folders'], isNull);
-      expect(argResults['out-svg-loc'], isNull);
-      expect(argResults['out-mermaid'], isNull);
-      expect(argResults['out-plantuml'], isNull);
+      expect(argResults['svg-folders'], isFalse);
+      expect(argResults['svg-loc'], isFalse);
+      expect(argResults['output'], isNull);
+      expect(argResults['output-svg-files'], isNull);
+      expect(argResults['output-svg-folders'], isNull);
+      expect(argResults['output-svg-loc'], isNull);
+      expect(argResults['output-mermaid'], isNull);
+      expect(argResults['output-plantuml'], isNull);
       expect(argResults['json'], isFalse);
       expect(argResults['list'], equals('partial'));
       expect(argResults['version'], isFalse);

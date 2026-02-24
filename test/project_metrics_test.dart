@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:fcheck/src/models/app_strings.dart';
 
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
@@ -351,7 +352,7 @@ void main() {
           projectType: ProjectType.dart,
         );
 
-        expect(projectMetrics.complianceScore, equals(88));
+        expect(projectMetrics.complianceScore, equals(89));
         expect(
           projectMetrics.complianceFocusAreaLabel,
           equals('Magic numbers'),
@@ -474,7 +475,7 @@ void main() {
             'deadCodeIssues': 1,
             'duplicateCodeIssues': 1,
             'documentationIssues': 0,
-            'complianceScore': 49,
+            'complianceScore': 54,
           },
           'layers': {
             'count': 4,
@@ -562,7 +563,7 @@ void main() {
           'documentationIssues': [],
           'localization': {'usesLocalization': true},
           'compliance': {
-            'score': 49,
+            'score': 54,
             'suppressionPenalty': 0,
             'focusArea': 'one_class_per_file',
             'focusAreaLabel': 'One class per file',
@@ -1657,8 +1658,10 @@ void main() {
     test(
       'should normalize duplicated absolute path prefixes in issue lines',
       () {
-        const absolute =
-            '/Users/jp/src/github/vteam/fcheck/bin/console_output.dart';
+        final absolute =
+            '${Directory.current.path}'
+            '${Platform.pathSeparator}bin'
+            '${Platform.pathSeparator}console_output.dart';
 
         final projectMetrics = ProjectMetrics(
           totalFolders: 1,
@@ -1704,7 +1707,10 @@ void main() {
         final joined = output.join('\n');
 
         expect(joined, isNot(contains('$absolute:$absolute:')));
-        expect(joined, contains('bin/console_output.dart:2: 2'));
+        expect(
+          joined,
+          contains('bin${Platform.pathSeparator}console_output.dart:2: 2'),
+        );
       },
     );
 

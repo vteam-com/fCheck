@@ -79,6 +79,9 @@ Add a new entry to `CHANGELOG.md` at the top (under the unreleased section):
 
 Update the date to today's date in YYYY-MM-DD format.
 
+For major releases (`X.0.0`), include a dedicated **BREAKING** migration section listing
+old CLI flags/file names and their replacements.
+
 ## 5. Validate README Output Sample
 
 Always update the version displayed in the README.md bash sample output

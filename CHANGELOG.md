@@ -7,6 +7,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-02-24
+
+### Changed
+
+- 💥 **BREAKING CLI Arguments**: Replaced legacy graph/export flags with normalized names:
+  - `--svgfiles` -> `--svg-files`
+  - `--svgfolder` -> `--svg-folders`
+  - `--svgloc` -> `--svg-loc`
+  - `--out` -> `--output`
+  - `--out-svg-files` -> `--output-svg-files`
+  - `--out-svg-folders` -> `--output-svg-folders`
+  - `--out-svg-loc` -> `--output-svg-loc`
+  - `--out-mermaid` -> `--output-mermaid`
+  - `--out-plantuml` -> `--output-plantuml`
+- 📄 **Output Filenames**: Default generated artifact names are unchanged in `1.0.0`:
+  - `fcheck_files.svg`
+  - `fcheck_folders.svg`
+  - `fcheck_loc.svg`
+  - `fcheck.mmd`
+  - `fcheck.puml`
+- 📝 **Docs/Tests Alignment**: Updated README, RULES docs, and CLI parsing tests for the v1.0.0 contract.
+
 ## [0.9.17] - 2026-02-23
 
 ### Changed
@@ -41,12 +63,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 📈 **Compliance Scoring**: Code size now contributes to analyzer scoring and focus area suggestions.
 
-
 ## [0.9.14] - 2026-02-18
 
 ### Added
 
-- 📊 Dashboard now reports 
+- 📊 Dashboard now reports
   - class, method, and function counts.
   - pubspec dependency counts.
 
@@ -125,7 +146,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- 📝 Corrected the dashboard label from `Coments` to `Comments`.
+- 📝 Corrected the dashboard typos.
 
 ## [0.9.8] - 2026-02-10
 
@@ -511,7 +532,7 @@ fcheck --list filenames  # unique file names only
 
 ### Changed
 
-- 📝 **Documentation**: Major improvements to `LAYOUT.md` and `README.md`.
+- 📝 **Documentation**: Major improvements to layers layout documentation and `README.md`.
 - ⚡ **Model Updates**: Metrics and issues now support JSON serialization.
 
 ## [0.3.5] - 2026-01-21

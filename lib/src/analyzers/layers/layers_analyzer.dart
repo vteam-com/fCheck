@@ -353,7 +353,7 @@ class LayersAnalyzer {
 
   /// Assigns layers to components using cake layout algorithm.
   ///
-  /// This method implements proper topological layering based on LAYOUT.md:
+  /// This method implements proper topological layering based on RULES_LAYERS.md:
   /// 1. Entry points (files with main() function) get Layer 1 (top)
   /// 2. Dependencies flow downwards to higher layer numbers
   /// 3. Each file is placed one layer below its deepest dependent

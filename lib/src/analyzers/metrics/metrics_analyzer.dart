@@ -56,11 +56,6 @@ class MetricsAnalyzer {
         .toList(growable: false);
     final enabledAreas = complianceAreas
         .where((area) => area.enabled)
-        .where(
-          (area) =>
-              area.key != 'documentation' ||
-              input.documentationIssues.isNotEmpty,
-        )
         .toList(growable: false);
 
     final suppressionPenaltyPoints = _computeSuppressionPenaltyPoints(input);

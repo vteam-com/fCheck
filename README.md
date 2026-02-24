@@ -11,6 +11,11 @@ fCheck provides fast local quality checks for Flutter and Dart projects in one d
 - Works as a CLI tool
 - Works as a Dart package in your own app/tooling
 
+## Platform Scope (v1.0.0)
+
+- Supported scope: macOS and Linux
+- Windows is not in scope for `fCheck 1.0.0`
+
 ## Checks Included
 
 - `code_size`
@@ -80,7 +85,7 @@ fcheck --json
 fcheck --list full
 
 # Generate diagrams
-fcheck --svg --svgfolder --svgloc --mermaid --plantuml
+fcheck --svg --svg-folders --svg-loc --mermaid --plantuml
 
 # Auto-fix source sorting issues (class members + import directives)
 fcheck --fix
@@ -104,9 +109,9 @@ fcheck --fix
 
 ```bash
 $ fcheck .
-↓------------------------------ fCheck 0.9.17 ------------------------------↓
+↓------------------------------ fCheck 1.0.0 ------------------------------↓
 Input              : /path/to/project
-Dart Project       : fcheck (version: 0.9.17)
+Dart Project       : fcheck (version: 1.0.0)
 --------------------------------- Dashboard ---------------------------------
 Folders            :              21  |  Dependency         :               5
 Files              :             120  |  DevDependency      :               2
@@ -218,22 +223,37 @@ Dead-code note:
 
 ```bash
 fcheck --svg        # shortcut: fcheck_files.svg + fcheck_folders.svg + fcheck_loc.svg
-fcheck --svgfiles   # fcheck_files.svg
-fcheck --svgfolder  # fcheck_folders.svg
-fcheck --svgloc     # fcheck_loc.svg
+fcheck --svg-files   # fcheck_files.svg
+fcheck --svg-folders  # fcheck_folders.svg
+fcheck --svg-loc     # fcheck_loc.svg
 fcheck --mermaid    # fcheck.mmd
 fcheck --plantuml   # fcheck.puml
 
 # Custom output base directory
-fcheck --svg --svgfolder --svgloc --mermaid --plantuml --out ./reports/fcheck
+fcheck --svg --svg-folders --svg-loc --mermaid --plantuml --output ./reports/fcheck
 
 # Per-artifact file overrides
-fcheck --svg --out-svg-files ./artifacts/graph/files.svg
-fcheck --svgfolder --out-svg-folders ./artifacts/graph/folders.svg
-fcheck --svgloc --out-svg-loc ./artifacts/graph/loc.svg
-fcheck --mermaid --out-mermaid ./artifacts/graph/fcheck.mmd
-fcheck --plantuml --out-plantuml ./artifacts/graph/fcheck.puml
+fcheck --svg --output-svg-files ./artifacts/graph/files.svg
+fcheck --svg-folders --output-svg-folders ./artifacts/graph/folders.svg
+fcheck --svg-loc --output-svg-loc ./artifacts/graph/loc.svg
+fcheck --mermaid --output-mermaid ./artifacts/graph/fcheck.mmd
+fcheck --plantuml --output-plantuml ./artifacts/graph/fcheck.puml
 ```
+
+### Breaking Changes (1.0.0)
+
+- CLI flags renamed:
+  - `--svgfiles` -> `--svg-files`
+  - `--svgfolder` -> `--svg-folders`
+  - `--svgloc` -> `--svg-loc`
+  - `--out` -> `--output`
+  - `--out-*` -> `--output-*`
+- Default output file names are unchanged:
+  - `fcheck_files.svg`
+  - `fcheck_folders.svg`
+  - `fcheck_loc.svg`
+  - `fcheck.mmd`
+  - `fcheck.puml`
 
 ### Layers Files diagram
 

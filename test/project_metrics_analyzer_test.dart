@@ -137,6 +137,38 @@ void main() {
       expect(hardcodedScore.scorePercent, equals(100));
       expect(result.complianceFocusAreaKey, isNot(equals('hardcoded_strings')));
     });
+
+    test(
+      'includes enabled documentation in score denominator even with zero issues',
+      () {
+        final result = analyzer.analyze(
+          _buildInput(
+            totalDartFiles: 1,
+            totalLinesOfCode: 10,
+            magicNumberIssues: [
+              MagicNumberIssue(
+                filePath: 'lib/main.dart',
+                lineNumber: 1,
+                value: '2',
+              ),
+            ],
+            codeSizeAnalyzerEnabled: false,
+            oneClassPerFileAnalyzerEnabled: false,
+            hardcodedStringsAnalyzerEnabled: false,
+            sourceSortingAnalyzerEnabled: false,
+            layersAnalyzerEnabled: false,
+            secretsAnalyzerEnabled: false,
+            deadCodeAnalyzerEnabled: false,
+            duplicateCodeAnalyzerEnabled: false,
+            magicNumbersAnalyzerEnabled: true,
+            documentationAnalyzerEnabled: true,
+            disabledAnalyzersCount: 0,
+          ),
+        );
+
+        expect(result.complianceScore, equals(88));
+      },
+    );
   });
 }
 
@@ -162,6 +194,7 @@ ProjectMetricsAnalysisInput _buildInput({
   bool deadCodeAnalyzerEnabled = true,
   bool duplicateCodeAnalyzerEnabled = true,
   bool documentationAnalyzerEnabled = true,
+  int? disabledAnalyzersCount,
 }) {
   final effectiveFileMetrics =
       fileMetrics ??
@@ -176,18 +209,20 @@ ProjectMetricsAnalysisInput _buildInput({
         ),
       );
 
-  final disabledAnalyzersCount = [
-    codeSizeAnalyzerEnabled,
-    oneClassPerFileAnalyzerEnabled,
-    hardcodedStringsAnalyzerEnabled,
-    magicNumbersAnalyzerEnabled,
-    sourceSortingAnalyzerEnabled,
-    layersAnalyzerEnabled,
-    secretsAnalyzerEnabled,
-    deadCodeAnalyzerEnabled,
-    duplicateCodeAnalyzerEnabled,
-    documentationAnalyzerEnabled,
-  ].where((enabled) => !enabled).length;
+  final effectiveDisabledAnalyzersCount =
+      disabledAnalyzersCount ??
+      [
+        codeSizeAnalyzerEnabled,
+        oneClassPerFileAnalyzerEnabled,
+        hardcodedStringsAnalyzerEnabled,
+        magicNumbersAnalyzerEnabled,
+        sourceSortingAnalyzerEnabled,
+        layersAnalyzerEnabled,
+        secretsAnalyzerEnabled,
+        deadCodeAnalyzerEnabled,
+        duplicateCodeAnalyzerEnabled,
+        documentationAnalyzerEnabled,
+      ].where((enabled) => !enabled).length;
 
   return ProjectMetricsAnalysisInput(
     totalDartFiles: totalDartFiles,
@@ -207,7 +242,7 @@ ProjectMetricsAnalysisInput _buildInput({
     usesLocalization: usesLocalization,
     ignoreDirectivesCount: ignoreDirectivesCount,
     customExcludedFilesCount: customExcludedFilesCount,
-    disabledAnalyzersCount: disabledAnalyzersCount,
+    disabledAnalyzersCount: effectiveDisabledAnalyzersCount,
     codeSizeAnalyzerEnabled: codeSizeAnalyzerEnabled,
     oneClassPerFileAnalyzerEnabled: oneClassPerFileAnalyzerEnabled,
     hardcodedStringsAnalyzerEnabled: hardcodedStringsAnalyzerEnabled,
