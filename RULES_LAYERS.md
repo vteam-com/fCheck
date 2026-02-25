@@ -335,6 +335,8 @@ def calculate_layout(layers, container_width, alignment="center"):
 
 The SVG visualization system uses a unified styling approach with consistent CSS classes embedded in the SVG `<defs>` section. This ensures visual consistency across both layers and folder-based visualizations.
 
+For warning/error node emphasis, file and folder nodes use soft transparent gradients (instead of opaque flat fills) so labels and structure details remain legible.
+
 ```css
 /* Unified edge styles - all maintain gradients on hover */
 .edge { 

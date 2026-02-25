@@ -38,6 +38,14 @@
     <stop offset="0%" stop-color="#28a745"/>
     <stop offset="100%" stop-color="#007bff"/>
   </linearGradient>
+  <linearGradient id="warningNodeGradient" x1="20%" y1="0%" x2="80%" y2="100%">
+    <stop offset="0%" stop-color="#fff6e8" stop-opacity="0.95"/>
+    <stop offset="100%" stop-color="#f2a23a" stop-opacity="0.45"/>
+  </linearGradient>
+  <linearGradient id="errorNodeGradient" x1="20%" y1="0%" x2="80%" y2="100%">
+    <stop offset="0%" stop-color="#fdeeed" stop-opacity="0.95"/>
+    <stop offset="100%" stop-color="#e05545" stop-opacity="0.5"/>
+  </linearGradient>
 </defs>
 <defs><linearGradient xmlns="http://www.w3.org/2000/svg" id="codeSizeInnerTileDiagonalGradient" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/><stop offset="50%" stop-color="#ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="#aaa" stop-opacity="0.1"/></linearGradient></defs>
 <rect width="100%" height="100%" fill="#fbfbfd"/>
@@ -55,7 +63,7 @@
 <rect x="785.8" y="17.0" width="189.6" height="20.0" rx="5.00" ry="5.00" fill="#2e8b57" fill-opacity="0.85"/>
 <text x="793.8" y="32.0" font-size="14.0" font-weight="700" fill="#fff">24 Functions/Methods</text>
 <rect x="2970.4" y="17.0" width="111.48" height="20.0" rx="5.00" ry="5.00" fill="#f2a23a" fill-opacity="0.85"/>
-<text x="2978.4" y="32.0" font-size="14.0" font-weight="700" fill="#fff">33 Warnings</text>
+<text x="2978.4" y="32.0" font-size="14.0" font-weight="700" fill="#fff">31 Warnings</text>
 <rect x="3089.88" y="17.0" width="94.12" height="20.0" rx="5.00" ry="5.00" fill="#e05545" fill-opacity="0.85"/>
 <text x="3097.88" y="32.0" font-size="14.0" font-weight="700" fill="#fff">26 Errors</text>
 <g>
@@ -173,7 +181,6 @@ File: lib/home_page.dart</title>
 
 4 Dead Code warnings
 2 Documentation warnings
-2 Hardcoded Strings warnings
 1 Source Sorting warning</title>
   </rect>
   <text x="38.0" y="1049.3999999999999" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">counter_widget.dart</text>
@@ -187,7 +194,6 @@ File: lib/home_page.dart</title>
 
 File: lib/counter_widget.dart
 
-2 Hardcoded Strings warnings
 1 Source Sorting warning</title>
   </rect>
   <text x="46.0" y="1073.3999999999999" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">_CounterWidgetState</text>
@@ -207,15 +213,13 @@ File: lib/counter_widget.dart</title>
   </text>
 </g>
 <g>
-  <rect x="46.0" y="1082.3999999999999" width="618.6571873782625" height="623.7" fill="#f2a23a" fill-opacity="0.72"/>
+  <rect x="46.0" y="1082.3999999999999" width="618.6571873782625" height="623.7" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="46.0" y="1082.3999999999999" width="618.6571873782625" height="623.7" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="46.0" y="1082.3999999999999" width="618.6571873782625" height="623.7" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <rect x="46.0" y="1082.3999999999999" width="618.6571873782625" height="623.7" fill="transparent" pointer-events="all">
     <title>9 LOC in Method: _CounterWidgetState.build()
 
-File: lib/counter_widget.dart
-
-2 Hardcoded Strings warnings</title>
+File: lib/counter_widget.dart</title>
   </rect>
   <text x="355.32859368913125" y="1394.25" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
     <tspan x="355.32859368913125" dy="-6.0" font-size="14.00">build</tspan>
@@ -495,8 +499,7 @@ File: lib/models.dart
     <title>22 LOC File: lib/main.dart
 
 3 Documentation warnings
-2 Dead Code warnings
-1 Hardcoded Strings warning</title>
+2 Dead Code warnings</title>
   </rect>
   <text x="2056.370860927152" y="99.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">main.dart</text>
   <text x="3162.0" y="99.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">22 LOC</text>
@@ -509,8 +512,7 @@ File: lib/models.dart
 
 File: lib/main.dart
 
-1 Documentation warning
-1 Hardcoded Strings warning</title>
+1 Documentation warning</title>
   </rect>
   <text x="2064.370860927152" y="123.0" text-anchor="start" font-size="9.00" fill="#000" font-weight="700">MyApp</text>
   <text x="2751.9530403371464" y="123.0" text-anchor="end" font-size="9.00" fill="#000" font-weight="700">14 LOC</text>
@@ -529,15 +531,13 @@ File: lib/main.dart</title>
   </text>
 </g>
 <g>
-  <rect x="2064.370860927152" y="132.0" width="630.2836644591612" height="686.8888888888889" fill="#f2a23a" fill-opacity="0.72"/>
+  <rect x="2064.370860927152" y="132.0" width="630.2836644591612" height="686.8888888888889" fill="#2e8b57" fill-opacity="0.72"/>
   <rect x="2064.370860927152" y="132.0" width="630.2836644591612" height="686.8888888888889" fill="url(#codeSizeInnerTileDiagonalGradient)"/>
   <rect x="2064.370860927152" y="132.0" width="630.2836644591612" height="686.8888888888889" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="0.8"/>
   <rect x="2064.370860927152" y="132.0" width="630.2836644591612" height="686.8888888888889" fill="transparent" pointer-events="all">
     <title>11 LOC in Method: MyApp.build()
 
-File: lib/main.dart
-
-1 Hardcoded Strings warning</title>
+File: lib/main.dart</title>
   </rect>
   <text x="2379.512693156733" y="475.44444444444446" text-anchor="middle" dominant-baseline="middle" fill="#000" font-weight="700">
     <tspan x="2379.512693156733" dy="-6.0" font-size="14.00">build</tspan>

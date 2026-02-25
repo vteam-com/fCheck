@@ -192,11 +192,13 @@ String exportGraphSvgFiles(
     final filePath = entry.key;
     final pos = entry.value;
     final severity = fileSeverity[filePath];
-    final fillColor = _fillColorForSeverity(severity);
-    final fillAttribute = fillColor == null ? '' : ' style="fill: $fillColor"';
+    final severityClass = _severityClassForFileNode(severity);
+    final classAttribute = severityClass == null
+        ? 'fileNode'
+        : 'fileNode $severityClass';
     final title = _buildNodeTitle(filePath, fileWarnings[filePath]);
     buffer.writeln(
-      '<rect x="${pos.x}" y="${pos.y}" width="$nodeWidth" height="$nodeHeight" class="fileNode"$fillAttribute><title>$title</title></rect>',
+      '<rect x="${pos.x}" y="${pos.y}" width="$nodeWidth" height="$nodeHeight" class="$classAttribute"><title>$title</title></rect>',
     );
   }
 
@@ -325,8 +327,10 @@ Map<String, String> _buildFileSeverityByPath(
   }
 
   if (projectMetrics != null) {
-    for (final issue in projectMetrics.hardcodedStringIssues) {
-      push(issue.filePath, 'warning');
+    if (projectMetrics.usesLocalization) {
+      for (final issue in projectMetrics.hardcodedStringIssues) {
+        push(issue.filePath, 'warning');
+      }
     }
     for (final issue in projectMetrics.magicNumberIssues) {
       push(issue.filePath, 'warning');
@@ -366,12 +370,12 @@ String _maxSeverity(String? current, String? next) {
 }
 
 /// Maps severity label to file-node fill color.
-String? _fillColorForSeverity(String? severity) {
+String? _severityClassForFileNode(String? severity) {
   if (severity == 'error') {
-    return '#e05545';
+    return 'fileNodeError';
   }
   if (severity == 'warning') {
-    return '#f2a23a';
+    return 'fileNodeWarning';
   }
   return null;
 }
@@ -399,8 +403,10 @@ Map<String, Map<String, int>> _buildFileWarningsByPath(
     add(issue.filePath, 'Layers');
   }
   if (projectMetrics != null) {
-    for (final issue in projectMetrics.hardcodedStringIssues) {
-      add(issue.filePath, 'Hardcoded Strings');
+    if (projectMetrics.usesLocalization) {
+      for (final issue in projectMetrics.hardcodedStringIssues) {
+        add(issue.filePath, 'Hardcoded Strings');
+      }
     }
     for (final issue in projectMetrics.magicNumberIssues) {
       add(issue.filePath, 'Magic Numbers');

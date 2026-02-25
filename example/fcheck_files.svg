@@ -38,6 +38,14 @@
     <stop offset="0%" stop-color="#28a745"/>
     <stop offset="100%" stop-color="#007bff"/>
   </linearGradient>
+  <linearGradient id="warningNodeGradient" x1="20%" y1="0%" x2="80%" y2="100%">
+    <stop offset="0%" stop-color="#fff6e8" stop-opacity="0.95"/>
+    <stop offset="100%" stop-color="#f2a23a" stop-opacity="0.45"/>
+  </linearGradient>
+  <linearGradient id="errorNodeGradient" x1="20%" y1="0%" x2="80%" y2="100%">
+    <stop offset="0%" stop-color="#fdeeed" stop-opacity="0.95"/>
+    <stop offset="100%" stop-color="#e05545" stop-opacity="0.5"/>
+  </linearGradient>
 </defs>
 <style>  
   .layerBackground { 
@@ -92,6 +100,20 @@
   .fileNode:hover {     
     fill: PaleGoldenRod;
     transition: all 0.1s ease-in-out; 
+  }
+
+  .fileNodeWarning,
+  .layerBackgroundWarning,
+  .layerBackgroundVirtualFolderWarning {
+    fill: url(#warningNodeGradient);
+    fill-opacity: 0.68;
+  }
+
+  .fileNodeError,
+  .layerBackgroundError,
+  .layerBackgroundVirtualFolderError {
+    fill: url(#errorNodeGradient);
+    fill-opacity: 0.72;
   }
 
   .textNormal,
@@ -198,35 +220,33 @@
 <text x="800.0" y="75.0" class="layerTitle">3</text>
 <rect x="985.0" y="50" width="270.0" height="230.0" rx="8.0" class="layerBackground"/>
 <text x="1120.0" y="75.0" class="layerTitle">4</text>
-<rect x="50.0" y="90.0" width="220" height="50" class="fileNode" style="fill: #e05545"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/main.dart
+<rect x="50.0" y="90.0" width="220" height="50" class="fileNode fileNodeError"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/main.dart
 
 3 Documentation warnings
-2 Dead Code warnings
-1 Hardcoded Strings warning</title></rect>
-<rect x="50.0" y="160.0" width="220" height="50" class="fileNode" style="fill: #e05545"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/comments_example.dart
+2 Dead Code warnings</title></rect>
+<rect x="50.0" y="160.0" width="220" height="50" class="fileNode fileNodeError"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/comments_example.dart
 
 4 Dead Code warnings
 1 Documentation warning</title></rect>
-<rect x="50.0" y="230.0" width="220" height="50" class="fileNode" style="fill: #e05545"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/subfolder/subclass.dart
+<rect x="50.0" y="230.0" width="220" height="50" class="fileNode fileNodeError"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/subfolder/subclass.dart
 
 2 Dead Code warnings
 1 Documentation warning</title></rect>
-<rect x="370.0" y="90.0" width="220" height="50" class="fileNode" style="fill: #f2a23a"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/home_page.dart
+<rect x="370.0" y="90.0" width="220" height="50" class="fileNode fileNodeWarning"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/home_page.dart
 
 1 Documentation warning
 1 Source Sorting warning</title></rect>
-<rect x="690.0" y="90.0" width="220" height="50" class="fileNode" style="fill: #e05545"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/counter_widget.dart
+<rect x="690.0" y="90.0" width="220" height="50" class="fileNode fileNodeError"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/counter_widget.dart
 
 4 Dead Code warnings
 2 Documentation warnings
-2 Hardcoded Strings warnings
 1 Source Sorting warning</title></rect>
-<rect x="690.0" y="160.0" width="220" height="50" class="fileNode" style="fill: #e05545"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/models.dart
+<rect x="690.0" y="160.0" width="220" height="50" class="fileNode fileNodeError"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/models.dart
 
 5 Dead Code warnings
 4 Documentation warnings
 2 Magic Numbers warnings</title></rect>
-<rect x="1010.0" y="90.0" width="220" height="50" class="fileNode" style="fill: #e05545"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/utils.dart
+<rect x="1010.0" y="90.0" width="220" height="50" class="fileNode fileNodeError"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/utils.dart
 
 3 Dead Code warnings</title></rect>
 <g>

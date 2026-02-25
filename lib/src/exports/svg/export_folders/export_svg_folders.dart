@@ -320,9 +320,9 @@ Map<String, String> _buildRelativeFileSeverityByPath(
 
   if (projectMetrics != null) {
     if (projectMetrics.usesLocalization) {
-    for (final issue in projectMetrics.hardcodedStringIssues) {
-      push(issue.filePath, 'warning');
-    }
+      for (final issue in projectMetrics.hardcodedStringIssues) {
+        push(issue.filePath, 'warning');
+      }
     }
     for (final issue in projectMetrics.magicNumberIssues) {
       push(issue.filePath, 'warning');
@@ -414,8 +414,8 @@ Map<String, String> _buildFolderSeverityByPath(
 
   if (projectMetrics != null) {
     if (projectMetrics.usesLocalization) {
-    for (final issue in projectMetrics.hardcodedStringIssues) {
-      pushFolder(issue.filePath, 'warning');
+      for (final issue in projectMetrics.hardcodedStringIssues) {
+        pushFolder(issue.filePath, 'warning');
       }
     }
     for (final issue in projectMetrics.magicNumberIssues) {
@@ -456,12 +456,12 @@ String _maxSeverity(String? current, String? next) {
 }
 
 /// Maps severity label to folder/file node fill color.
-String? _fillColorForSeverity(String? severity) {
+String? _severityClassSuffix(String? severity) {
   if (severity == 'error') {
-    return '#e05545';
+    return 'Error';
   }
   if (severity == 'warning') {
-    return '#f2a23a';
+    return 'Warning';
   }
   return null;
 }
@@ -539,8 +539,8 @@ Map<String, Map<String, int>> _buildRelativeWarningsByPath(
   }
   if (projectMetrics != null) {
     if (projectMetrics.usesLocalization) {
-    for (final issue in projectMetrics.hardcodedStringIssues) {
-      add(issue.filePath, 'Hardcoded Strings');
+      for (final issue in projectMetrics.hardcodedStringIssues) {
+        add(issue.filePath, 'Hardcoded Strings');
       }
     }
     for (final issue in projectMetrics.magicNumberIssues) {

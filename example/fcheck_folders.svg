@@ -38,6 +38,14 @@
     <stop offset="0%" stop-color="#28a745"/>
     <stop offset="100%" stop-color="#007bff"/>
   </linearGradient>
+  <linearGradient id="warningNodeGradient" x1="20%" y1="0%" x2="80%" y2="100%">
+    <stop offset="0%" stop-color="#fff6e8" stop-opacity="0.95"/>
+    <stop offset="100%" stop-color="#f2a23a" stop-opacity="0.45"/>
+  </linearGradient>
+  <linearGradient id="errorNodeGradient" x1="20%" y1="0%" x2="80%" y2="100%">
+    <stop offset="0%" stop-color="#fdeeed" stop-opacity="0.95"/>
+    <stop offset="100%" stop-color="#e05545" stop-opacity="0.5"/>
+  </linearGradient>
 </defs>
 <style>  
   .layerBackground { 
@@ -92,6 +100,20 @@
   .fileNode:hover {     
     fill: PaleGoldenRod;
     transition: all 0.1s ease-in-out; 
+  }
+
+  .fileNodeWarning,
+  .layerBackgroundWarning,
+  .layerBackgroundVirtualFolderWarning {
+    fill: url(#warningNodeGradient);
+    fill-opacity: 0.68;
+  }
+
+  .fileNodeError,
+  .layerBackgroundError,
+  .layerBackgroundVirtualFolderError {
+    fill: url(#errorNodeGradient);
+    fill-opacity: 0.72;
   }
 
   .textNormal,
@@ -199,11 +221,10 @@
   <title>. ▶ subfolder</title>
 </g>
 <g class="folderLayer">
-<rect x="80.0" y="80.0" width="348.0" height="480.0" rx="12.0" ry="12.0" class="layerBackground" style="fill: #e05545"><title>Folder: .
+<rect x="80.0" y="80.0" width="348.0" height="480.0" rx="12.0" ry="12.0" class="layerBackground layerBackgroundError"><title>Folder: .
 
 18 Dead Code warnings
 11 Documentation warnings
-3 Hardcoded Strings warnings
 2 Magic Numbers warnings
 2 Source Sorting warnings</title></rect>
 </g>
@@ -211,39 +232,37 @@
 <rect x="144.0" y="132.0" width="260.0" height="258.0" rx="12.0" ry="12.0" class="layerBackgroundVirtualFolder" stroke-dasharray="4 2"><title>Folder: ...</title></rect>
 </g>
 <g class="folderLayer">
-<rect x="144.0" y="414.0" width="260.0" height="98.0" rx="12.0" ry="12.0" class="layerBackground" style="fill: #e05545"><title>Folder: subfolder
+<rect x="144.0" y="414.0" width="260.0" height="98.0" rx="12.0" ry="12.0" class="layerBackground layerBackgroundError"><title>Folder: subfolder
 
 2 Dead Code warnings
 1 Documentation warning</title></rect>
 </g>
-<rect x="152.0" y="170.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #e05545"><title>File: main.dart
+<rect x="152.0" y="170.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode fileNodeError"><title>File: main.dart
 
 3 Documentation warnings
-2 Dead Code warnings
-1 Hardcoded Strings warning</title></rect>
-<rect x="152.0" y="202.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #f2a23a"><title>File: home_page.dart
+2 Dead Code warnings</title></rect>
+<rect x="152.0" y="202.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode fileNodeWarning"><title>File: home_page.dart
 
 1 Documentation warning
 1 Source Sorting warning</title></rect>
-<rect x="152.0" y="234.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #e05545"><title>File: counter_widget.dart
+<rect x="152.0" y="234.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode fileNodeError"><title>File: counter_widget.dart
 
 4 Dead Code warnings
 2 Documentation warnings
-2 Hardcoded Strings warnings
 1 Source Sorting warning</title></rect>
-<rect x="152.0" y="266.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #e05545"><title>File: comments_example.dart
+<rect x="152.0" y="266.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode fileNodeError"><title>File: comments_example.dart
 
 4 Dead Code warnings
 1 Documentation warning</title></rect>
-<rect x="152.0" y="298.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #e05545"><title>File: models.dart
+<rect x="152.0" y="298.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode fileNodeError"><title>File: models.dart
 
 5 Dead Code warnings
 4 Documentation warnings
 2 Magic Numbers warnings</title></rect>
-<rect x="152.0" y="330.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #e05545"><title>File: utils.dart
+<rect x="152.0" y="330.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode fileNodeError"><title>File: utils.dart
 
 3 Dead Code warnings</title></rect>
-<rect x="152.0" y="452.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode" style="fill: #e05545"><title>File: subfolder/subclass.dart
+<rect x="152.0" y="452.0" width="244.0" height="28.0" rx="5.0" ry="5.0" class="fileNode fileNodeError"><title>File: subfolder/subclass.dart
 
 2 Dead Code warnings
 1 Documentation warning</title></rect>

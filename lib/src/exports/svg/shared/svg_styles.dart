@@ -64,6 +64,20 @@ class SvgDefinitions {
     <stop offset="100%" stop-color="#007bff"/>
   </linearGradient>''';
 
+  /// Soft warning tint gradient used for warning-highlighted file/folder nodes.
+  static const String warningNodeGradient = '''
+  <linearGradient id="warningNodeGradient" x1="20%" y1="0%" x2="80%" y2="100%">
+    <stop offset="0%" stop-color="#fff6e8" stop-opacity="0.95"/>
+    <stop offset="100%" stop-color="#f2a23a" stop-opacity="0.45"/>
+  </linearGradient>''';
+
+  /// Soft error tint gradient used for error-highlighted file/folder nodes.
+  static const String errorNodeGradient = '''
+  <linearGradient id="errorNodeGradient" x1="20%" y1="0%" x2="80%" y2="100%">
+    <stop offset="0%" stop-color="#fdeeed" stop-opacity="0.95"/>
+    <stop offset="100%" stop-color="#e05545" stop-opacity="0.5"/>
+  </linearGradient>''';
+
   /// Generate complete unified SVG definitions block.
   ///
   /// Returns a complete `<defs>` block containing all necessary filters and gradients:
@@ -83,6 +97,8 @@ $hierarchicalShadowFilter
 $outlineWhiteFilter
 $horizontalGradient
 $verticalGradient
+$warningNodeGradient
+$errorNodeGradient
 </defs>''';
   }
 
@@ -156,6 +172,20 @@ $verticalGradient
   .fileNode:hover {     
     fill: PaleGoldenRod;
     transition: all 0.1s ease-in-out; 
+  }
+
+  .fileNodeWarning,
+  .layerBackgroundWarning,
+  .layerBackgroundVirtualFolderWarning {
+    fill: url(#warningNodeGradient);
+    fill-opacity: 0.68;
+  }
+
+  .fileNodeError,
+  .layerBackgroundError,
+  .layerBackgroundVirtualFolderError {
+    fill: url(#errorNodeGradient);
+    fill-opacity: 0.72;
   }
 
   .textNormal,

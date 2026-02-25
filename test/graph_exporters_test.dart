@@ -3,6 +3,7 @@ import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/exports/externals/export_mermaid.dart';
 import 'package:fcheck/src/exports/externals/export_plantuml.dart';
@@ -106,12 +107,12 @@ void main() {
       );
 
       final filesSvg = exportGraphSvgFiles(result);
-      expect(filesSvg, contains('#f2a23a'));
-      expect(filesSvg, contains('#e05545'));
+      expect(filesSvg, contains('warningNodeGradient'));
+      expect(filesSvg, contains('errorNodeGradient'));
 
       final foldersSvg = exportGraphSvgFolders(result);
-      expect(foldersSvg, contains('#f2a23a'));
-      expect(foldersSvg, contains('#e05545'));
+      expect(foldersSvg, contains('warningNodeGradient'));
+      expect(foldersSvg, contains('errorNodeGradient'));
     });
 
     test(
@@ -153,7 +154,7 @@ void main() {
         );
 
         final filesSvg = exportGraphSvgFiles(result, projectMetrics: metrics);
-        expect(filesSvg, contains('#f2a23a'));
+        expect(filesSvg, contains('warningNodeGradient'));
         expect(filesSvg, contains('File: lib/src/a.dart'));
         expect(filesSvg, contains('1 Magic Numbers warning'));
 
@@ -161,7 +162,7 @@ void main() {
           result,
           projectMetrics: metrics,
         );
-        expect(foldersSvg, contains('#f2a23a'));
+        expect(foldersSvg, contains('warningNodeGradient'));
         expect(foldersSvg, contains('File: a.dart'));
         expect(foldersSvg, contains('Folder: .'));
         expect(foldersSvg, contains('1 Magic Numbers warning'));
@@ -266,7 +267,7 @@ void main() {
       );
 
       final svg = exportGraphSvgFiles(result, projectMetrics: metrics);
-      expect(svg, contains('#f2a23a'));
+      expect(svg, contains('warningNodeGradient'));
       expect(svg, contains('File: /repo/lib/src/a.dart'));
       expect(svg, contains('1 Documentation warning'));
     });

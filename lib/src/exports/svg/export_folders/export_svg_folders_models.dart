@@ -47,7 +47,7 @@ class _FileVisual {
   final int outgoing;
   final List<String> incomingPeers;
   final List<String> outgoingPeers;
-  final String? fillColor;
+  final String? severityClassSuffix;
   final String tooltipTitle;
 
   _FileVisual({
@@ -63,7 +63,7 @@ class _FileVisual {
     required this.outgoing,
     required this.incomingPeers,
     required this.outgoingPeers,
-    required this.fillColor,
+    required this.severityClassSuffix,
     required this.tooltipTitle,
   });
 }
