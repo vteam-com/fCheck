@@ -87,6 +87,7 @@ Code size is a scored compliance domain with key `code_size`.
   - warning density maps to red transparency intensity
   - dead artifacts are always rendered at maximum warning tint
   - per-node tooltips include warning count plus sampled issue details
+  - hardcoded-string warnings are only included when localization is detected (`usesLocalization = true`)
 
 ## Related Files
 

@@ -466,12 +466,14 @@ _ArtifactWarningIndex _buildArtifactWarningIndex({
     }
   }
 
-  for (final issue in projectMetrics.hardcodedStringIssues) {
-    addLineScopedIssue(
-      rawPath: issue.filePath,
-      lineNumber: issue.lineNumber,
-      warningType: 'Hardcoded Strings',
-    );
+  if (projectMetrics.usesLocalization) {
+    for (final issue in projectMetrics.hardcodedStringIssues) {
+      addLineScopedIssue(
+        rawPath: issue.filePath,
+        lineNumber: issue.lineNumber,
+        warningType: 'Hardcoded Strings',
+      );
+    }
   }
   for (final issue in projectMetrics.magicNumberIssues) {
     addLineScopedIssue(

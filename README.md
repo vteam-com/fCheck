@@ -34,6 +34,7 @@ Detailed behavior and edge cases are documented in `RULES*.md`.
 Hardcoded-strings note:
 
 - If project localization is `OFF`, hardcoded-strings runs in passive mode (`[-]`), reports only the total count, and does not affect compliance score/focus area.
+- If project localization is `OFF`, hardcoded-string findings are also excluded from SVG warning tint/counters (`fcheck_files.svg`, `fcheck_folders.svg`, `fcheck_loc.svg`).
 - If localization is `ON`, hardcoded-strings is active and reports detailed issue entries.
 
 ## Install
@@ -264,6 +265,8 @@ fcheck --plantuml --output-plantuml ./artifacts/graph/fcheck.puml
 ![fcheck Layer folders diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_folders.svg)
 
 Orange upward folder dependencies in `fcheck_folders.svg` are also emitted in CLI report output as layers warnings (`wrongFolderLayer`) with the source Dart file path.
+
+Warning/error-highlighted file and folder nodes in layers SVGs now use a softer transparent gradient tint (instead of opaque flat fills) to preserve node text/details readability.
 
 ### Code size diagram
 

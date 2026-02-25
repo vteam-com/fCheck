@@ -319,8 +319,10 @@ Map<String, String> _buildRelativeFileSeverityByPath(
   }
 
   if (projectMetrics != null) {
+    if (projectMetrics.usesLocalization) {
     for (final issue in projectMetrics.hardcodedStringIssues) {
       push(issue.filePath, 'warning');
+    }
     }
     for (final issue in projectMetrics.magicNumberIssues) {
       push(issue.filePath, 'warning');
@@ -411,8 +413,10 @@ Map<String, String> _buildFolderSeverityByPath(
   }
 
   if (projectMetrics != null) {
+    if (projectMetrics.usesLocalization) {
     for (final issue in projectMetrics.hardcodedStringIssues) {
       pushFolder(issue.filePath, 'warning');
+      }
     }
     for (final issue in projectMetrics.magicNumberIssues) {
       pushFolder(issue.filePath, 'warning');
@@ -534,8 +538,10 @@ Map<String, Map<String, int>> _buildRelativeWarningsByPath(
     add(issue.filePath, 'Layers');
   }
   if (projectMetrics != null) {
+    if (projectMetrics.usesLocalization) {
     for (final issue in projectMetrics.hardcodedStringIssues) {
       add(issue.filePath, 'Hardcoded Strings');
+      }
     }
     for (final issue in projectMetrics.magicNumberIssues) {
       add(issue.filePath, 'Magic Numbers');

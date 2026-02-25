@@ -168,6 +168,65 @@ void main() {
       },
     );
 
+    test(
+      'exclude hardcoded warnings from SVG warnings when localization is OFF',
+      () {
+        final result = LayersAnalysisResult(
+          issues: const [],
+          layers: const {'lib/src/a.dart': 0},
+          dependencyGraph: const {'lib/src/a.dart': <String>[]},
+        );
+        final metrics = ProjectMetrics(
+          totalFolders: 0,
+          totalFiles: 0,
+          totalDartFiles: 0,
+          totalLinesOfCode: 0,
+          totalCommentLines: 0,
+          fileMetrics: const [],
+          secretIssues: const [],
+          hardcodedStringIssues: [
+            HardcodedStringIssue(
+              filePath: 'lib/src/a.dart',
+              lineNumber: 10,
+              value: 'Hello',
+            ),
+          ],
+          magicNumberIssues: const [],
+          sourceSortIssues: const [],
+          layersIssues: const [],
+          deadCodeIssues: const [],
+          layersEdgeCount: 0,
+          layersCount: 0,
+          dependencyGraph: const {},
+          projectName: 'demo',
+          version: '1.0.0',
+          projectType: ProjectType.dart,
+          usesLocalization: false,
+        );
+
+        final filesSvg = exportGraphSvgFiles(result, projectMetrics: metrics);
+        expect(filesSvg, isNot(contains('Hardcoded Strings warning')));
+
+        final foldersSvg = exportGraphSvgFolders(
+          result,
+          projectMetrics: metrics,
+        );
+        expect(foldersSvg, isNot(contains('Hardcoded Strings warning')));
+
+        final codeSizeSvg = exportSvgCodeSize(const [
+          CodeSizeArtifact(
+            kind: CodeSizeArtifactKind.file,
+            name: 'a.dart',
+            filePath: 'lib/src/a.dart',
+            linesOfCode: 10,
+            startLine: 1,
+            endLine: 10,
+          ),
+        ], projectMetrics: metrics);
+        expect(codeSizeSvg, isNot(contains('Hardcoded Strings warning')));
+      },
+    );
+
     test('match relative metric paths to absolute layers SVG node paths', () {
       final result = LayersAnalysisResult(
         issues: const [],
