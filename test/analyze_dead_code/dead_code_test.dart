@@ -270,6 +270,26 @@ class MathBox {
   }
 }
 ''');
+
+      File(p.join(libDir.path, 'preview.dart')).writeAsStringSync('''
+class Widget {}
+
+class Preview {
+  const Preview();
+}
+
+@Preview()
+Widget previewCard() {
+  return Widget();
+}
+
+class PreviewHost {
+  @ui.Preview()
+  Widget previewMethod() {
+    return Widget();
+  }
+}
+''');
     });
 
     tearDown(() {
@@ -358,6 +378,25 @@ class MathBox {
               i.type == DeadCodeIssueType.deadFunction &&
               i.name == 'value' &&
               i.owner == 'MathBox',
+        ),
+        isEmpty,
+      );
+
+      expect(
+        issues.where(
+          (i) =>
+              i.type == DeadCodeIssueType.deadFunction &&
+              i.name == 'previewCard',
+        ),
+        isEmpty,
+      );
+
+      expect(
+        issues.where(
+          (i) =>
+              i.type == DeadCodeIssueType.deadFunction &&
+              i.name == 'previewMethod' &&
+              i.owner == 'PreviewHost',
         ),
         isEmpty,
       );

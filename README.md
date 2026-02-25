@@ -223,6 +223,7 @@ Dead-code note:
 
 - `// ignore: fcheck_dead_code` suppresses dead-code findings for that file's declarations, while keeping its dependencies/usages in global dead-code analysis.
 - Dead-code usage tracking includes property-style getter/setter access and operator usage (`+`, `-`, `[]`, etc.) inferred from expression syntax.
+- Functions/methods annotated with `@Preview` (including prefixed forms such as `@ui.Preview`) are treated as externally used and are not reported as dead functions.
 
 ## Visual Outputs
 

@@ -24,6 +24,9 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
   declarations/issues are suppressed, while dependencies/usages are still collected.
 - Nodes with `// ignore: fcheck_dead_code` on the same line as the node or an
   ancestor declaration line.
+- Declarations annotated with `@Preview` (including prefixed forms such as
+  `@ui.Preview`) are treated as externally used and are not reported as dead
+  functions/methods.
 - Files with parse errors or missing compilation units.
 - Files excluded by the default directory exclusions or custom `--exclude` patterns.
 
@@ -32,7 +35,8 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 - `DeadCodeDelegate` runs `DeadCodeVisitor` per file to collect:
   - dependencies (imports/exports/parts resolved to paths)
   - top-level classes and functions
-  - methods in classes/mixins/enums/extensions (except `@override` and abstract signatures)
+  - methods in classes/mixins/enums/extensions (except `@override`,
+    `@Preview`, and abstract signatures)
   - identifiers used in the file (including type identifiers, getter/setter property names, and operator tokens inferred from expressions)
   - unused local variables/parameters (per-scope)
 - `DeadCodeAnalyzer` builds a dependency graph, resolves entry points, and

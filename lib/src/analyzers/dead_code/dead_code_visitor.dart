@@ -82,7 +82,8 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     }
 
     if (node.parent is CompilationUnit &&
-        !IgnoreConfig.isNodeIgnored(node, content, 'dead_code')) {
+        !IgnoreConfig.isNodeIgnored(node, content, 'dead_code') &&
+        !_hasPreviewAnnotation(node.metadata)) {
       functions.add(
         DeadCodeSymbol(
           name: functionName,
@@ -102,6 +103,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
   void visitMethodDeclaration(MethodDeclaration node) {
     if (!IgnoreConfig.isNodeIgnored(node, content, 'dead_code') &&
         !_hasOverrideAnnotation(node.metadata) &&
+        !_hasPreviewAnnotation(node.metadata) &&
         !_isAbstractMethod(node)) {
       methods.add(
         DeadCodeSymbol(
@@ -440,12 +442,23 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
 
   /// Internal helper used by fcheck analysis and reporting.
   bool _hasOverrideAnnotation(List<Annotation> metadata) {
+    return _hasAnnotationNamed(metadata, 'override');
+  }
+
+  /// Internal helper used by fcheck analysis and reporting.
+  bool _hasPreviewAnnotation(List<Annotation> metadata) {
+    return _hasAnnotationNamed(metadata, 'Preview');
+  }
+
+  /// Internal helper used by fcheck analysis and reporting.
+  bool _hasAnnotationNamed(List<Annotation> metadata, String annotationName) {
     for (final annotation in metadata) {
       final name = annotation.name;
-      if (name is SimpleIdentifier && name.name == 'override') {
+      if (name is SimpleIdentifier && name.name == annotationName) {
         return true;
       }
-      if (name is PrefixedIdentifier && name.identifier.name == 'override') {
+      if (name is PrefixedIdentifier &&
+          name.identifier.name == annotationName) {
         return true;
       }
     }
