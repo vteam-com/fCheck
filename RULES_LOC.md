@@ -63,6 +63,10 @@ Code size is a scored compliance domain with key `code_size`.
 
 - Files with parse errors do not contribute class/function/method entries.
 - Generated Dart files ending with `*.g.dart` do not contribute code-size artifacts.
+- Localization Dart files do not contribute code-size artifacts:
+  - files under `lib/l10n/`
+  - generated localization files such as `app_localizations.dart`,
+    `app_localizations_<locale>.dart`, and `app_localization_<locale>.dart`
 - Entries with `linesOfCode <= 0` are ignored.
 - There is currently no dedicated `// ignore: fcheck_code_size` directive.
 

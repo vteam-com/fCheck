@@ -391,7 +391,10 @@ class AnalyzeFolder {
   ) {
     final artifacts = <CodeSizeArtifact>[
       for (final metric in fileMetrics)
-        if (metric.linesOfCode > 0 && !isGeneratedDartFilePath(metric.path))
+        if (metric.linesOfCode > 0 &&
+            !isGeneratedDartFilePath(metric.path) &&
+            !isGeneratedLocalizationDartFilePath(metric.path) &&
+            !isLibL10nPath(metric.path))
           CodeSizeArtifact(
             kind: CodeSizeArtifactKind.file,
             name: p.basename(metric.path),

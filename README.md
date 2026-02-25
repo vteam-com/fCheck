@@ -37,6 +37,10 @@ Hardcoded-strings note:
 - If project localization is `OFF`, hardcoded-string findings are also excluded from SVG warning tint/counters (`fcheck_files.svg`, `fcheck_folders.svg`, `fcheck_loc.svg`).
 - If localization is `ON`, hardcoded-strings is active and reports detailed issue entries.
 
+Code-size LOC note:
+
+- Localization Dart files are excluded from LOC code-size evaluation (`lib/l10n/**`, `app_localizations.dart`, and generated locale variants such as `app_localizations_<locale>.dart`).
+
 ## Install
 
 ### Option 1: Global CLI

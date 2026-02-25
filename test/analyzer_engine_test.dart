@@ -352,5 +352,62 @@ int topSum(int a, int b) {
         );
       },
     );
+
+    test(
+      'should exclude localization Dart files from LOC code-size artifacts',
+      () {
+        File('${tempDir.path}/pubspec.yaml').writeAsStringSync('''
+name: sample
+version: 0.0.1
+''');
+
+        final libDir = Directory('${tempDir.path}/lib')..createSync();
+        final l10nDir = Directory('${libDir.path}/l10n')..createSync();
+
+        File('${l10nDir.path}/app_localizations.dart').writeAsStringSync('''
+class AppLocalizations {
+  String get title => 'Title';
+}
+''');
+
+        File('${l10nDir.path}/app_localizations_en.dart').writeAsStringSync('''
+class AppLocalizationsEn {
+  String get title => 'Title';
+}
+''');
+
+        File('${libDir.path}/feature.dart').writeAsStringSync('''
+class Feature {
+  void run() {
+    print('ok');
+  }
+}
+''');
+
+        final metrics = AnalyzeFolder(
+          tempDir,
+          codeSizeThresholds: const CodeSizeThresholds(
+            maxFileLoc: 1,
+            maxClassLoc: 1,
+            maxFunctionLoc: 1,
+            maxMethodLoc: 1,
+          ),
+        ).analyze();
+
+        expect(
+          metrics.codeSizeArtifacts.any(
+            (artifact) => artifact.filePath.contains('/lib/l10n/'),
+          ),
+          isFalse,
+        );
+
+        expect(
+          metrics.codeSizeArtifacts.any(
+            (artifact) => artifact.filePath.endsWith('feature.dart'),
+          ),
+          isTrue,
+        );
+      },
+    );
   });
 }

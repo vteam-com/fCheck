@@ -11,6 +11,8 @@ class CodeSizeDelegate implements AnalyzerDelegate {
   @override
   CodeSizeFileData analyzeFileWithContext(AnalysisFileContext context) {
     if (isGeneratedDartFilePath(context.file.path) ||
+        isGeneratedLocalizationDartFilePath(context.file.path) ||
+        isLibL10nPath(context.file.path) ||
         context.hasParseErrors ||
         context.compilationUnit == null) {
       return CodeSizeFileData(filePath: context.file.path, artifacts: const []);
