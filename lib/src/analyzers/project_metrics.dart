@@ -97,6 +97,18 @@ class ProjectMetrics {
   /// Total number of numeric literals in the project.
   final int totalNumberLiteralCount;
 
+  /// Number of string literal occurrences that belong to duplicated values.
+  final int duplicatedStringLiteralCount;
+
+  /// Number of numeric literal occurrences that belong to duplicated values.
+  final int duplicatedNumberLiteralCount;
+
+  /// Frequency map of string literal values across the project.
+  final Map<String, int> stringLiteralFrequencies;
+
+  /// Frequency map of numeric literal lexemes across the project.
+  final Map<String, int> numberLiteralFrequencies;
+
   /// Number of files successfully skipped based on exclusion glob patterns.
   final int excludedFilesCount;
 
@@ -170,6 +182,10 @@ class ProjectMetrics {
   /// [totalFunctionCount] Total number of functions and methods in the project.
   /// [totalStringLiteralCount] Total number of string literals in the project.
   /// [totalNumberLiteralCount] Total number of numeric literals in the project.
+  /// [duplicatedStringLiteralCount] Number of string literal occurrences that belong to duplicated values.
+  /// [duplicatedNumberLiteralCount] Number of numeric literal occurrences that belong to duplicated values.
+  /// [stringLiteralFrequencies] Frequency map of string literal values across the project.
+  /// [numberLiteralFrequencies] Frequency map of numeric literal lexemes across the project.
   /// [fileMetrics] Metrics for each individual Dart file.
   /// [secretIssues] List of secret issues found in the project.
   /// [hardcodedStringIssues] List of hardcoded string issues found in the project.
@@ -199,6 +215,10 @@ class ProjectMetrics {
     this.totalFunctionCount = 0,
     this.totalStringLiteralCount = 0,
     this.totalNumberLiteralCount = 0,
+    this.duplicatedStringLiteralCount = 0,
+    this.duplicatedNumberLiteralCount = 0,
+    this.stringLiteralFrequencies = const {},
+    this.numberLiteralFrequencies = const {},
     required this.fileMetrics,
     this.codeSizeArtifacts = const [],
     this.codeSizeThresholds = const CodeSizeThresholds(),
@@ -293,6 +313,10 @@ class ProjectMetrics {
       'functions': totalFunctionCount,
       'stringLiterals': totalStringLiteralCount,
       'numberLiterals': totalNumberLiteralCount,
+      'duplicatedStringLiterals': duplicatedStringLiteralCount,
+      'duplicatedNumberLiterals': duplicatedNumberLiteralCount,
+      'stringLiteralDuplicateRatio': stringLiteralDuplicateRatio,
+      'numberLiteralDuplicateRatio': numberLiteralDuplicateRatio,
       'hardcodedStrings': hardcodedStringIssues.length,
       'magicNumbers': magicNumberIssues.length,
       'secretIssues': secretIssues.length,
@@ -338,6 +362,16 @@ class ProjectMetrics {
   /// Returns 0.0 if there are no lines of code.
   double get commentRatio =>
       totalLinesOfCode == 0 ? 0 : totalCommentLines / totalLinesOfCode;
+
+  /// Ratio of duplicated string literal occurrences across all string literals.
+  double get stringLiteralDuplicateRatio => totalStringLiteralCount == 0
+      ? 0
+      : duplicatedStringLiteralCount / totalStringLiteralCount;
+
+  /// Ratio of duplicated number literal occurrences across all number literals.
+  double get numberLiteralDuplicateRatio => totalNumberLiteralCount == 0
+      ? 0
+      : duplicatedNumberLiteralCount / totalNumberLiteralCount;
 
   /// Number of analyzers disabled for this run.
   int get disabledAnalyzersCount => [

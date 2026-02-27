@@ -20,6 +20,18 @@ class MetricsAggregationResult {
   /// Total number of numeric literals found.
   final int totalNumberLiteralCount;
 
+  /// Number of string literal occurrences that belong to duplicated values.
+  final int duplicatedStringLiteralCount;
+
+  /// Number of numeric literal occurrences that belong to duplicated values.
+  final int duplicatedNumberLiteralCount;
+
+  /// Frequency map of string literal values across the project.
+  final Map<String, int> stringLiteralFrequencies;
+
+  /// Frequency map of numeric literal lexemes across the project.
+  final Map<String, int> numberLiteralFrequencies;
+
   /// Count of // ignore: fcheck_* directives found.
   final int ignoreDirectivesCount;
 
@@ -34,6 +46,10 @@ class MetricsAggregationResult {
     required this.totalFunctionCount,
     required this.totalStringLiteralCount,
     required this.totalNumberLiteralCount,
+    required this.duplicatedStringLiteralCount,
+    required this.duplicatedNumberLiteralCount,
+    required this.stringLiteralFrequencies,
+    required this.numberLiteralFrequencies,
     required this.ignoreDirectivesCount,
     required this.ignoreDirectiveCountsByFile,
   });

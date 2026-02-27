@@ -306,7 +306,8 @@
 <rect x="1330.0" y="440.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_symbol.dart</title></rect>
 <rect x="1330.0" y="510.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/shared/dependency_uri_utils.dart</title></rect>
 <rect x="1330.0" y="580.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_utils.dart</title></rect>
-<rect x="1330.0" y="650.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_results.dart</title></rect>
+<rect x="1330.0" y="650.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/input_output/number_lexeme_utils.dart</title></rect>
+<rect x="1330.0" y="720.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_results.dart</title></rect>
 <rect x="1650.0" y="90.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title></rect>
 <rect x="1650.0" y="160.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_issue.dart</title></rect>
 <rect x="1650.0" y="230.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_artifact.dart</title></rect>
@@ -396,6 +397,10 @@
 <g>
   <path d="M 590.0 198.0 C 640.0 198.0, 646.0 452.0, 696.0 452.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/input_output/number_format_utils.dart</title>
+</g>
+<g>
+  <path d="M 590.0 198.0 C 640.0 198.0, 1286.0 662.0, 1336.0 662.0" class="edge"/>
+  <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/input_output/number_lexeme_utils.dart</title>
 </g>
 <g>
   <path d="M 590.0 198.0 C 640.0 198.0, 966.0 522.0, 1016.0 522.0" class="edge"/>
@@ -598,8 +603,12 @@
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_analyzer.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_input.dart</title>
 </g>
 <g>
-  <path d="M 1230.0 688.0 C 1280.0 688.0, 1286.0 662.0, 1336.0 662.0" class="edge"/>
+  <path d="M 1230.0 688.0 C 1280.0 688.0, 1286.0 732.0, 1336.0 732.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_analyzer.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_results.dart</title>
+</g>
+<g>
+  <path d="M 1230.0 688.0 C 1280.0 688.0, 1286.0 662.0, 1336.0 662.0" class="edge"/>
+  <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_analyzer.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/input_output/number_lexeme_utils.dart</title>
 </g>
 <g>
   <path d="M 1230.0 688.0 C 1280.0 688.0, 1606.0 382.0, 1656.0 382.0" class="edge"/>
@@ -658,7 +667,7 @@
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_input.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/file_metrics.dart</title>
 </g>
 <g>
-  <path d="M 1550.0 688.0 C 1600.0 688.0, 1606.0 382.0, 1656.0 382.0" class="edge"/>
+  <path d="M 1550.0 758.0 C 1600.0 758.0, 1606.0 382.0, 1656.0 382.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_results.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/file_metrics.dart</title>
 </g>
 <g>
@@ -1312,7 +1321,7 @@
   <path d="M 382.0,172.0 L 370.0,165.0 Q 367.0,165.0 367.0,168.0 L 367.0,176.0 Q 367.0,179.0 370.0,179.0 Z" fill="#3b82f6"/>
   <text x="371.68" y="173.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="badge outgoingBadge">
   <path d="M 598.0,198.0 L 582.0,190.4 Q 579.0,190.4 579.0,193.4 L 579.0,202.6 Q 579.0,205.6 582.0,205.6 Z" fill="#10b981"/>
-  <text x="584.72" y="199.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold" textLength="10.120000000000001" lengthAdjust="spacingAndGlyphs">10</text><title>1. app_strings.dart
+  <text x="584.72" y="199.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold" textLength="10.120000000000001" lengthAdjust="spacingAndGlyphs">11</text><title>1. app_strings.dart
 2. code_size_artifact.dart
 3. console_common.dart
 4. fcheck_config.dart
@@ -1320,8 +1329,9 @@
 6. issue_location_utils.dart
 7. layers_issue.dart
 8. number_format_utils.dart
-9. project_metrics.dart
-10. project_type.dart</title></g><text x="480.0" y="185.0" class="textNormal">console_output.dart</text>
+9. number_lexeme_utils.dart
+10. project_metrics.dart
+11. project_type.dart</title></g><text x="480.0" y="185.0" class="textNormal">console_output.dart</text>
 <g class="badge incomingBadge">
   <path d="M 382.0,242.0 L 370.0,235.0 Q 367.0,235.0 367.0,238.0 L 367.0,246.0 Q 367.0,249.0 370.0,249.0 Z" fill="#3b82f6"/>
   <text x="371.68" y="243.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="badge outgoingBadge">
@@ -1634,13 +1644,14 @@
   <text x="1011.68" y="663.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. fcheck.dart
 2. project_metrics.dart</title></g><g class="badge outgoingBadge">
   <path d="M 1236.0,688.0 L 1224.0,681.0 Q 1221.0,681.0 1221.0,684.0 L 1221.0,692.0 Q 1221.0,695.0 1224.0,695.0 Z" fill="#10b981"/>
-  <text x="1225.68" y="689.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">7</text><title>1. code_size_artifact.dart
+  <text x="1225.68" y="689.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">8</text><title>1. code_size_artifact.dart
 2. file_metrics.dart
 3. metrics_file_data.dart
 4. metrics_input.dart
 5. metrics_results.dart
-6. project_results.dart
-7. project_results_breakdown.dart</title></g><text x="1120.0" y="675.0" class="textNormal">metrics_analyzer.dart</text>
+6. number_lexeme_utils.dart
+7. project_results.dart
+8. project_results_breakdown.dart</title></g><text x="1120.0" y="675.0" class="textNormal">metrics_analyzer.dart</text>
 <g class="badge incomingBadge">
   <path d="M 1022.0,732.0 L 1010.0,725.0 Q 1007.0,725.0 1007.0,728.0 L 1007.0,736.0 Q 1007.0,739.0 1010.0,739.0 Z" fill="#3b82f6"/>
   <text x="1011.68" y="733.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. fcheck.dart
@@ -1778,9 +1789,13 @@
 2. hardcoded_string_visitor.dart</title></g><text x="1440.0" y="605.0" class="textSmall">hardcoded_string_utils.dart</text>
 <g class="badge incomingBadge">
   <path d="M 1342.0,662.0 L 1330.0,655.0 Q 1327.0,655.0 1327.0,658.0 L 1327.0,666.0 Q 1327.0,669.0 1330.0,669.0 Z" fill="#3b82f6"/>
-  <text x="1331.68" y="663.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. metrics_analyzer.dart</title></g><g class="badge outgoingBadge">
-  <path d="M 1556.0,688.0 L 1544.0,681.0 Q 1541.0,681.0 1541.0,684.0 L 1541.0,692.0 Q 1541.0,695.0 1544.0,695.0 Z" fill="#10b981"/>
-  <text x="1545.68" y="689.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. file_metrics.dart</title></g><text x="1440.0" y="675.0" class="textNormal">metrics_results.dart</text>
+  <text x="1331.68" y="663.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. console_output.dart
+2. metrics_analyzer.dart</title></g><text x="1440.0" y="675.0" class="textNormal">number_lexeme_utils.dart</text>
+<g class="badge incomingBadge">
+  <path d="M 1342.0,732.0 L 1330.0,725.0 Q 1327.0,725.0 1327.0,728.0 L 1327.0,736.0 Q 1327.0,739.0 1330.0,739.0 Z" fill="#3b82f6"/>
+  <text x="1331.68" y="733.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. metrics_analyzer.dart</title></g><g class="badge outgoingBadge">
+  <path d="M 1556.0,758.0 L 1544.0,751.0 Q 1541.0,751.0 1541.0,754.0 L 1541.0,762.0 Q 1541.0,765.0 1544.0,765.0 Z" fill="#10b981"/>
+  <text x="1545.68" y="759.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. file_metrics.dart</title></g><text x="1440.0" y="745.0" class="textNormal">metrics_results.dart</text>
 <g class="badge incomingBadge">
   <path d="M 1664.0,102.0 L 1648.0,94.4 Q 1645.0,94.4 1645.0,97.4 L 1645.0,106.6 Q 1645.0,109.6 1648.0,109.6 Z" fill="#3b82f6"/>
   <text x="1650.72" y="103.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold" textLength="10.120000000000001" lengthAdjust="spacingAndGlyphs">14</text><title>1. analysis_file_context.dart

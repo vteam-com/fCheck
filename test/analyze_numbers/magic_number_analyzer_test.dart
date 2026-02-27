@@ -93,6 +93,24 @@ void main() {
       expect(issues, isEmpty);
     });
 
+    test('detects magic numbers in const constructor arguments', () {
+      final file = File('${tempDir.path}/const_constructor.dart')
+        ..writeAsStringSync('''
+class WidgetLike {
+  const WidgetLike({required this.size});
+  final int size;
+}
+
+void main() {
+  print(const WidgetLike(size: 20));
+}
+''');
+
+      final issues = _analyzeFile(delegate, file);
+      expect(issues.length, equals(1));
+      expect(issues[0].value, equals('20'));
+    });
+
     test('skips ignored literal values', () {
       final file = File('${tempDir.path}/ignored.dart')
         ..writeAsStringSync('''

@@ -4,6 +4,7 @@ import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_file_data.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_input.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_results.dart';
+import 'package:fcheck/src/input_output/number_lexeme_utils.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:fcheck/src/models/project_results.dart';
 import 'package:fcheck/src/models/project_results_breakdown.dart';
@@ -36,6 +37,8 @@ class MetricsAnalyzer {
   static const double _disabledAnalyzerPenaltyWeight = 0.20;
   static const int _maxSuppressionPenaltyPoints = 25;
   static const int _maxPercent = 100;
+  static const int _minimumDuplicateFrequency = 2;
+  static const Set<int> _allowedDuplicateNumbers = {-1, 0, 1};
 
   /// Creates a metrics analyzer.
   const MetricsAnalyzer();
@@ -439,6 +442,8 @@ class MetricsAnalyzer {
     int totalFunctions = 0;
     int totalStrings = 0;
     int totalNumbers = 0;
+    final globalStringLiteralFrequencies = <String, int>{};
+    final globalNumberLiteralFrequencies = <String, int>{};
     int ignoreDirectivesCount = 0;
     final ignoreDirectiveCountsByFile = <String, int>{};
 
@@ -450,12 +455,28 @@ class MetricsAnalyzer {
       totalFunctions += metrics.functionCount;
       totalStrings += metrics.stringLiteralCount;
       totalNumbers += metrics.numberLiteralCount;
+      _mergeFrequencies(
+        target: globalStringLiteralFrequencies,
+        source: data.stringLiteralFrequencies,
+      );
+      _mergeFrequencies(
+        target: globalNumberLiteralFrequencies,
+        source: data.numberLiteralFrequencies,
+      );
       ignoreDirectivesCount += data.fcheckIgnoreDirectiveCount;
       if (data.fcheckIgnoreDirectiveCount > 0) {
         ignoreDirectiveCountsByFile[metrics.path] =
             data.fcheckIgnoreDirectiveCount;
       }
     }
+
+    final duplicatedStringLiteralCount = _duplicatedOccurrenceCount(
+      globalStringLiteralFrequencies,
+    );
+    final duplicatedNumberLiteralCount = _duplicatedOccurrenceCount(
+      globalNumberLiteralFrequencies,
+      shouldCount: (key) => !_isAllowedDuplicateNumberLexeme(key),
+    );
 
     final sortedIgnoreDirectiveFiles = ignoreDirectiveCountsByFile.keys.toList()
       ..sort();
@@ -471,9 +492,61 @@ class MetricsAnalyzer {
       totalFunctionCount: totalFunctions,
       totalStringLiteralCount: totalStrings,
       totalNumberLiteralCount: totalNumbers,
+      duplicatedStringLiteralCount: duplicatedStringLiteralCount,
+      duplicatedNumberLiteralCount: duplicatedNumberLiteralCount,
+      stringLiteralFrequencies: Map<String, int>.unmodifiable(
+        globalStringLiteralFrequencies,
+      ),
+      numberLiteralFrequencies: Map<String, int>.unmodifiable(
+        globalNumberLiteralFrequencies,
+      ),
       ignoreDirectivesCount: ignoreDirectivesCount,
       ignoreDirectiveCountsByFile: sortedIgnoreDirectiveCountsByFile,
     );
+  }
+
+  void _mergeFrequencies({
+    required Map<String, int> target,
+    required Map<String, int> source,
+  }) {
+    for (final entry in source.entries) {
+      target[entry.key] = (target[entry.key] ?? 0) + entry.value;
+    }
+  }
+
+  /// Counts duplicated literal occurrences in [frequencies].
+  ///
+  /// A literal contributes only when its occurrence count is at least
+  /// [_minimumDuplicateFrequency]. Optional [shouldCount] can filter entries.
+  int _duplicatedOccurrenceCount(
+    Map<String, int> frequencies, {
+    bool Function(String _ /* key */)? shouldCount,
+  }) {
+    var duplicatedOccurrences = 0;
+    for (final entry in frequencies.entries) {
+      if (shouldCount != null && !shouldCount(entry.key)) {
+        continue;
+      }
+      final count = entry.value;
+      if (count >= _minimumDuplicateFrequency) {
+        duplicatedOccurrences += count;
+      }
+    }
+    return duplicatedOccurrences;
+  }
+
+  /// Returns whether [raw] is an allowed numeric lexeme for duplicate exemptions.
+  ///
+  /// Allowed values are sentinel numbers defined by [_allowedDuplicateNumbers].
+  bool _isAllowedDuplicateNumberLexeme(String raw) {
+    final value = parseNumericLexeme(raw);
+    if (value == null) {
+      return false;
+    }
+    if (value.isFinite && value.truncateToDouble() == value) {
+      return _allowedDuplicateNumbers.contains(value.toInt());
+    }
+    return false;
   }
 }
 

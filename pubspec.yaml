@@ -1,6 +1,6 @@
 name: fcheck
 description: Fast local quality checks for Flutter and Dart projects with deterministic CLI/JSON reports across architecture, maintainability, and safety rules.
-version: 1.0.2
+version: 1.0.3
 repository: https://github.com/vteam-com/fCheck
 topics:
   - analysis

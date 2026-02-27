@@ -24,6 +24,12 @@ class MetricsQualityVisitor extends RecursiveAstVisitor<void> {
   /// The total number of numeric literals found.
   int numberLiteralCount = 0;
 
+  /// Frequency map of normalized string literal values in the visited file.
+  final Map<String, int> stringLiteralFrequencies = <String, int>{};
+
+  /// Frequency map of numeric literal lexemes in the visited file.
+  final Map<String, int> numberLiteralFrequencies = <String, int>{};
+
   @override
   void visitClassDeclaration(ClassDeclaration node) {
     final className = node.namePart.toString();
@@ -57,25 +63,60 @@ class MetricsQualityVisitor extends RecursiveAstVisitor<void> {
 
   @override
   void visitSimpleStringLiteral(SimpleStringLiteral node) {
+    if (_isInDirective(node)) {
+      super.visitSimpleStringLiteral(node);
+      return;
+    }
     stringLiteralCount++;
+    _incrementFrequency(stringLiteralFrequencies, node.value);
     super.visitSimpleStringLiteral(node);
   }
 
   @override
   void visitInterpolationString(InterpolationString node) {
+    if (_isInDirective(node)) {
+      super.visitInterpolationString(node);
+      return;
+    }
     stringLiteralCount++;
+    _incrementFrequency(stringLiteralFrequencies, node.value);
     super.visitInterpolationString(node);
   }
 
   @override
   void visitIntegerLiteral(IntegerLiteral node) {
     numberLiteralCount++;
+    _incrementFrequency(numberLiteralFrequencies, node.literal.lexeme);
     super.visitIntegerLiteral(node);
   }
 
   @override
   void visitDoubleLiteral(DoubleLiteral node) {
     numberLiteralCount++;
+    _incrementFrequency(numberLiteralFrequencies, node.literal.lexeme);
     super.visitDoubleLiteral(node);
+  }
+
+  void _incrementFrequency(Map<String, int> frequencies, String key) {
+    frequencies[key] = (frequencies[key] ?? 0) + 1;
+  }
+
+  /// Returns true when [node] belongs to a directive URI context.
+  ///
+  /// Directive literals (imports/exports/parts/library) are excluded from
+  /// literal inventory metrics.
+  bool _isInDirective(AstNode node) {
+    AstNode? current = node.parent;
+    while (current != null) {
+      if (current is ImportDirective ||
+          current is ExportDirective ||
+          current is PartDirective ||
+          current is PartOfDirective ||
+          current is LibraryDirective) {
+        return true;
+      }
+      current = current.parent;
+    }
+    return false;
   }
 }

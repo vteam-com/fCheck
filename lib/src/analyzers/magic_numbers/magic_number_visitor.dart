@@ -103,9 +103,6 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
   bool _isInsideConstExpression(AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
-      if (current is InstanceCreationExpression && current.isConst) {
-        return true;
-      }
       if (current is ListLiteral && current.isConst) {
         return true;
       }

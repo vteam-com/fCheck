@@ -62,6 +62,9 @@ class ConsoleInput {
   /// Whether excluded files/dirs listing is requested.
   final bool listExcluded;
 
+  /// Whether literals inventory listing is requested.
+  final bool listLiterals;
+
   /// Exclusion globs passed through `--exclude`.
   final List<String> excludePatterns;
 
@@ -99,6 +102,7 @@ class ConsoleInput {
     required this.listMode,
     required this.listItemLimit,
     required this.listExcluded,
+    required this.listLiterals,
     required this.excludePatterns,
     required this.showHelp,
     required this.showVersion,
@@ -209,6 +213,12 @@ ArgParser createConsoleArgParser() => ArgParser()
     negatable: false,
   )
   ..addFlag(
+    'literals',
+    help:
+        'List literals inventory only (strings/numbers, duplicate ratio, hardcoded counts)',
+    negatable: false,
+  )
+  ..addFlag(
     'no-colors',
     help: 'Disable ANSI colors in CLI output',
     negatable: false,
@@ -268,6 +278,7 @@ ConsoleInput parseConsoleInput(List<String> arguments, ArgParser parser) {
     listMode: listOption.mode,
     listItemLimit: listOption.limit,
     listExcluded: argResults['excluded'] as bool,
+    listLiterals: argResults['literals'] as bool,
     excludePatterns: argResults['exclude'] as List<String>,
     showHelp: argResults['help'] as bool,
     showVersion: argResults['version'] as bool,

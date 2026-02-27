@@ -343,6 +343,12 @@ class AnalyzeFolder {
       totalFunctionCount: metricsAggregation.totalFunctionCount,
       totalStringLiteralCount: metricsAggregation.totalStringLiteralCount,
       totalNumberLiteralCount: metricsAggregation.totalNumberLiteralCount,
+      duplicatedStringLiteralCount:
+          metricsAggregation.duplicatedStringLiteralCount,
+      duplicatedNumberLiteralCount:
+          metricsAggregation.duplicatedNumberLiteralCount,
+      stringLiteralFrequencies: metricsAggregation.stringLiteralFrequencies,
+      numberLiteralFrequencies: metricsAggregation.numberLiteralFrequencies,
       fileMetrics: metricsAggregation.fileMetrics,
       codeSizeArtifacts: codeSizeArtifacts,
       codeSizeThresholds: codeSizeThresholds,

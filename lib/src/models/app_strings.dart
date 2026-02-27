@@ -15,6 +15,7 @@ class AppStrings {
   // Report Sections
   static const String scorecardDivider = 'Scorecard';
   static const String dashboardDivider = 'Dashboard';
+  static const String literalsDivider = 'Literals';
   static const String listsDivider = 'Lists';
 
   // Labels
@@ -40,7 +41,14 @@ class AppStrings {
   static const String classes = 'Classes';
   static const String methods = 'Methods';
   static const String functions = 'Functions';
+  static const String stringLiterals = 'String Literals';
+  static const String numberLiterals = 'Number Literals';
+  static const String strings = 'Strings';
+  static const String numbers = 'Numbers';
+  static const String dupeSuffix = 'dupe';
+  static const String hardcodedSuffix = 'hardcoded';
   static const String oneClassPerFile = 'One Class/File';
+  static const String hardcodedStrings = 'Hardcoded Strings';
   static const String magicNumbers = 'Magic Numbers';
   static const String secrets = 'Secrets';
   static const String deadCode = 'Dead Code';
@@ -225,6 +233,18 @@ class AppStrings {
       '  - Invest Next recommendation is mapped from the selected focus area.';
 
   // Dynamic messages
+  /// Builds a generic `<label> found (<count>):` section header.
+  static String foundItemsHeader({
+    required String label,
+    required String count,
+  }) => '$label found ($count):';
+
+  /// Builds a generic `Unique <label> found (<count>):` section header.
+  static String uniqueFoundItemsHeader({
+    required String label,
+    required String count,
+  }) => 'Unique $label found ($count):';
+
   /// Formats the current enabled analyzer count and percentage share line.
   static String currentAnalyzerCountLine(int analyzerCount, String share) =>
       '  Current: $analyzerCount analyzers -> $share% each';

@@ -143,6 +143,68 @@ void main(List<String> arguments) {
     }
 
     final metrics = engine.analyze();
+
+    if (input.listLiterals) {
+      List<Map<String, dynamic>> buildLiteralEntries(
+        Map<String, int> frequencies,
+      ) {
+        final entries = frequencies.entries.toList()
+          ..sort((left, right) {
+            final countCompare = right.value.compareTo(left.value);
+            if (countCompare != 0) {
+              return countCompare;
+            }
+            return left.key.compareTo(right.key);
+          });
+        return entries
+            .map((entry) => {'value': entry.key, 'count': entry.value})
+            .toList(growable: false);
+      }
+
+      if (input.outputJson) {
+        final literalsData = {
+          'strings': {
+            'total': metrics.totalStringLiteralCount,
+            'duplicated': metrics.duplicatedStringLiteralCount,
+            'duplicateRatio': metrics.stringLiteralDuplicateRatio,
+            'hardcoded': metrics.hardcodedStringIssues.length,
+            'entries': buildLiteralEntries(metrics.stringLiteralFrequencies),
+          },
+          'numbers': {
+            'total': metrics.totalNumberLiteralCount,
+            'duplicated': metrics.duplicatedNumberLiteralCount,
+            'duplicateRatio': metrics.numberLiteralDuplicateRatio,
+            'hardcoded': metrics.magicNumberIssues.length,
+            'entries': buildLiteralEntries(metrics.numberLiteralFrequencies),
+          },
+        };
+        printJsonOutput(literalsData);
+      } else {
+        printLiteralsSummary(
+          totalStringLiteralCount: metrics.totalStringLiteralCount,
+          duplicatedStringLiteralCount: metrics.duplicatedStringLiteralCount,
+          hardcodedStringCount: metrics.hardcodedStringIssues.length,
+          totalNumberLiteralCount: metrics.totalNumberLiteralCount,
+          duplicatedNumberLiteralCount: metrics.duplicatedNumberLiteralCount,
+          hardcodedNumberCount: metrics.magicNumberIssues.length,
+          stringLiteralFrequencies: metrics.stringLiteralFrequencies,
+          numberLiteralFrequencies: metrics.numberLiteralFrequencies,
+          hardcodedStringEntries: metrics.hardcodedStringIssues
+              .map(
+                (issue) => <String, Object?>{
+                  'filePath': issue.filePath,
+                  'lineNumber': issue.lineNumber,
+                  'value': issue.value,
+                },
+              )
+              .toList(growable: false),
+          listMode: input.listMode,
+          listItemLimit: input.listItemLimit,
+        );
+      }
+      return;
+    }
+
     final shouldPrintOutputFilesSection =
         input.generateSvg ||
         input.generateMermaid ||

@@ -24,6 +24,12 @@ class _ReportContext {
   final int classCount;
   final int methodCount;
   final int functionCount;
+  final int totalStringLiteralCount;
+  final int totalNumberLiteralCount;
+  final int duplicatedStringLiteralCount;
+  final int duplicatedNumberLiteralCount;
+  final String stringLiteralsSummary;
+  final String numberLiteralsSummary;
   final String commentSummary;
   final ProjectType projectType;
 
@@ -90,6 +96,12 @@ class _ReportContext {
     required this.classCount,
     required this.methodCount,
     required this.functionCount,
+    required this.totalStringLiteralCount,
+    required this.totalNumberLiteralCount,
+    required this.duplicatedStringLiteralCount,
+    required this.duplicatedNumberLiteralCount,
+    required this.stringLiteralsSummary,
+    required this.numberLiteralsSummary,
     required this.commentSummary,
     required this.projectType,
     required this.hardcodedStringIssues,
@@ -326,6 +338,20 @@ class _ReportContext {
       classCount: classCount,
       methodCount: methodCount,
       functionCount: functionCount,
+      totalStringLiteralCount: metrics.totalStringLiteralCount,
+      totalNumberLiteralCount: metrics.totalNumberLiteralCount,
+      duplicatedStringLiteralCount: metrics.duplicatedStringLiteralCount,
+      duplicatedNumberLiteralCount: metrics.duplicatedNumberLiteralCount,
+      stringLiteralsSummary: _literalInventorySummary(
+        totalCount: metrics.totalStringLiteralCount,
+        duplicatedCount: metrics.duplicatedStringLiteralCount,
+        hardcodedCount: metrics.hardcodedStringIssues.length,
+      ),
+      numberLiteralsSummary: _literalInventorySummary(
+        totalCount: metrics.totalNumberLiteralCount,
+        duplicatedCount: metrics.duplicatedNumberLiteralCount,
+        hardcodedCount: metrics.magicNumberIssues.length,
+      ),
       commentSummary: _commentSummary(
         totalCommentLines: metrics.totalCommentLines,
         commentRatio: metrics.commentRatio,

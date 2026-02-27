@@ -7,6 +7,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2026-02-27
+
+### Added
+
+- `--literals` CLI mode to print a focused literals inventory (console and JSON).
+
+### Changed
+
+- Literals console section was redesigned for readability:
+  - Shows aligned summary rows for strings and numbers.
+  - Uses "Unique strings found" and "Unique numbers found" headings for inventory lists.
+  - Lists hardcoded strings first, including `file:line` locations.
+- String literal inventory now ignores directive URIs (`import`, `export`, `part`, `library`).
+- Duplicate-number ratio now excludes allowed values `-1`, `0`, and `1`.
+- Number literal list ordering is now deterministic and numeric-aware for equal-frequency entries.
+
+### Fixed
+
+- Discovers more cases of Magic Numbers
+
 ## [1.0.2] - 2026-02-26
 
 ### Changed

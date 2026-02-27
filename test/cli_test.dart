@@ -272,6 +272,73 @@ void main() {
       expect(result.stdout, contains('... and 2 more'));
     });
 
+    test('should print literals listing with --literals', () async {
+      File('${tempDir.path}/literals.dart').writeAsStringSync('''
+import 'package:path/path.dart';
+
+void main() {
+  print("hello");
+  print("bye");
+  print("hello");
+  final a = 42;
+  final b = 42;
+  print(a + b);
+}
+''');
+
+      final result = await runCli(['--input', tempDir.path, '--literals']);
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains(AppStrings.literalsDivider));
+      expect(result.stdout, contains(AppStrings.strings));
+      expect(result.stdout, contains(AppStrings.numbers));
+      expect(result.stdout, contains('Hardcoded Strings found'));
+      expect(result.stdout, contains('Unique strings found'));
+      expect(result.stdout, contains('Unique numbers found'));
+      expect(result.stdout, contains('"hello"'));
+      expect(result.stdout, contains('"bye"'));
+      expect(result.stdout, contains('42 (2)'));
+      expect(result.stdout, isNot(contains('package:path/path.dart')));
+      final hardcodedIndex = result.stdout.indexOf('Hardcoded Strings found');
+      final uniqueStringsIndex = result.stdout.indexOf('Unique strings found');
+      expect(hardcodedIndex != -1 && uniqueStringsIndex != -1, isTrue);
+      expect(hardcodedIndex < uniqueStringsIndex, isTrue);
+      expect(result.stdout, isNot(contains('Analyzers')));
+    });
+
+    test('should print literals JSON with --literals --json', () async {
+      File('${tempDir.path}/literals_json.dart').writeAsStringSync('''
+void main() {
+  print("x");
+  print("x");
+  final n = 9;
+  print(n);
+}
+''');
+
+      final result = await runCli([
+        '--input',
+        tempDir.path,
+        '--literals',
+        '--json',
+      ]);
+
+      expect(result.exitCode, equals(0));
+      final json = jsonDecode(result.stdout) as Map<String, dynamic>;
+      expect(json['strings'], isA<Map<String, dynamic>>());
+      expect(json['numbers'], isA<Map<String, dynamic>>());
+      expect((json['strings'] as Map<String, dynamic>)['total'], isNotNull);
+      expect((json['numbers'] as Map<String, dynamic>)['total'], isNotNull);
+      expect(
+        (json['strings'] as Map<String, dynamic>)['entries'],
+        isA<List<dynamic>>(),
+      );
+      expect(
+        (json['numbers'] as Map<String, dynamic>)['entries'],
+        isA<List<dynamic>>(),
+      );
+    });
+
     test('should detect class violations', () async {
       // Create a file with multiple classes (violates one class per file rule)
       File('${tempDir.path}/violation.dart').writeAsStringSync('''

@@ -151,6 +151,11 @@ void main() {
       expect(input.listExcluded, isTrue);
     });
 
+    test('should parse --literals flag correctly', () {
+      final input = parseConsoleInput(['--literals'], parser);
+      expect(input.listLiterals, isTrue);
+    });
+
     test('should parse --exclude flag correctly', () {
       final input = parseConsoleInput([
         '--exclude',
@@ -193,6 +198,7 @@ void main() {
       expect(input.listMode, equals(ReportListMode.partial));
       expect(input.listItemLimit, equals(defaultListItemLimit));
       expect(input.listExcluded, isFalse);
+      expect(input.listLiterals, isFalse);
       expect(input.excludePatterns, isEmpty);
       expect(input.showHelp, isFalse);
       expect(input.showVersion, isFalse);
@@ -255,6 +261,7 @@ void main() {
       expect(parser.options, contains('version'));
       expect(parser.options, contains('exclude'));
       expect(parser.options, contains('excluded'));
+      expect(parser.options, contains('literals'));
       expect(parser.options, contains('help'));
       expect(parser.options, contains('help-ignore'));
       expect(parser.options, contains('help-score'));
@@ -284,6 +291,7 @@ void main() {
       expect(argResults['version'], isFalse);
       expect(argResults['exclude'], equals([]));
       expect(argResults['excluded'], isFalse);
+      expect(argResults['literals'], isFalse);
       expect(argResults['help'], isFalse);
       expect(argResults['help-ignore'], isFalse);
       expect(argResults['help-score'], isFalse);

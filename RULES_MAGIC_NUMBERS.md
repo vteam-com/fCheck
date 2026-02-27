@@ -16,7 +16,7 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 - Literals inside annotations.
 - Literals in const declarations or static const fields with descriptive names (name length > 3).
 - Literals in final int/double/num declarations with descriptive names (name length > 3).
-- Literals inside const expressions (const constructors, const lists, const sets/maps).
+- Literals inside const collection literals (`const []`, `const {}`, `const {k: v}`).
 - Nodes with `// ignore: fcheck_magic_numbers` on the same line or an ancestor line.
 - Files in `lib/l10n/` and generated files ending in `.g.dart`.
 - Files with a top-of-file `// ignore: fcheck_magic_numbers` directive.

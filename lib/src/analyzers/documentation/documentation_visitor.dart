@@ -7,6 +7,7 @@ import 'package:fcheck/src/models/ignore_config.dart';
 class DocumentationVisitor extends RecursiveAstVisitor<void> {
   static const int _maxShortStatementCount = 3;
   static const int _maxShortLineCount = 6;
+  static const int _minComplexPrivateFunctionLineCount = 10;
 
   /// Creates a visitor for one file.
   DocumentationVisitor({
@@ -167,6 +168,9 @@ class DocumentationVisitor extends RecursiveAstVisitor<void> {
 
     final statementCount = body.block.statements.length;
     final lineCount = _countNonEmptyBodyLines(body);
+    if (lineCount < _minComplexPrivateFunctionLineCount) {
+      return false;
+    }
     final complexityCounter = _ComplexityCounter();
     body.accept(complexityCounter);
 

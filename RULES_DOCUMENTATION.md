@@ -15,11 +15,13 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 
 ## Complexity Rule for Private Functions
 
-Private functions (name starts with `_`) are treated as complex when any of these is true:
+Private functions (name starts with `_`) are treated as complex when:
 
-- function body has control-flow constructs (`if`, loops, `switch`, `try`, ternary)
-- body has more than a short statement threshold
-- body spans more than a short non-empty line threshold
+- body has at least 10 non-empty lines, and
+- at least one of these is true:
+  - function body has control-flow constructs (`if`, loops, `switch`, `try`, ternary)
+  - body has more than a short statement threshold
+  - body spans more than a short non-empty line threshold
 
 Short, self-explanatory private functions are allowed without comments.
 

@@ -1,5 +1,6 @@
 import 'package:fcheck/src/analyzers/metrics/metrics_input.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
+import 'package:fcheck/src/analyzers/metrics/metrics_file_data.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
@@ -169,6 +170,80 @@ void main() {
         expect(result.complianceScore, equals(88));
       },
     );
+
+    test('aggregate computes duplicate literal occurrences', () {
+      final aggregation = analyzer.aggregate([
+        MetricsFileData(
+          metrics: FileMetrics(
+            path: 'lib/a.dart',
+            linesOfCode: 1,
+            commentLines: 0,
+            classCount: 0,
+            isStatefulWidget: false,
+            stringLiteralCount: 2,
+            numberLiteralCount: 1,
+          ),
+          fcheckIgnoreDirectiveCount: 0,
+          stringLiteralFrequencies: const {'hello': 2},
+          numberLiteralFrequencies: const {'1': 1},
+        ),
+        MetricsFileData(
+          metrics: FileMetrics(
+            path: 'lib/b.dart',
+            linesOfCode: 1,
+            commentLines: 0,
+            classCount: 0,
+            isStatefulWidget: false,
+            stringLiteralCount: 1,
+            numberLiteralCount: 2,
+          ),
+          fcheckIgnoreDirectiveCount: 0,
+          stringLiteralFrequencies: const {'bye': 1},
+          numberLiteralFrequencies: const {'9': 2},
+        ),
+      ]);
+
+      expect(aggregation.totalStringLiteralCount, equals(3));
+      expect(aggregation.duplicatedStringLiteralCount, equals(2));
+      expect(aggregation.totalNumberLiteralCount, equals(3));
+      expect(aggregation.duplicatedNumberLiteralCount, equals(2));
+    });
+
+    test('aggregate ignores -1/0/1 for number duplicate counts', () {
+      final aggregation = analyzer.aggregate([
+        MetricsFileData(
+          metrics: FileMetrics(
+            path: 'lib/a.dart',
+            linesOfCode: 1,
+            commentLines: 0,
+            classCount: 0,
+            isStatefulWidget: false,
+            stringLiteralCount: 0,
+            numberLiteralCount: 6,
+          ),
+          fcheckIgnoreDirectiveCount: 0,
+          stringLiteralFrequencies: const {},
+          numberLiteralFrequencies: const {'0': 2, '1.0': 2, '-1': 1, '9': 1},
+        ),
+        MetricsFileData(
+          metrics: FileMetrics(
+            path: 'lib/b.dart',
+            linesOfCode: 1,
+            commentLines: 0,
+            classCount: 0,
+            isStatefulWidget: false,
+            stringLiteralCount: 0,
+            numberLiteralCount: 2,
+          ),
+          fcheckIgnoreDirectiveCount: 0,
+          stringLiteralFrequencies: const {},
+          numberLiteralFrequencies: const {'9': 1, '0x1': 2},
+        ),
+      ]);
+
+      expect(aggregation.totalNumberLiteralCount, equals(8));
+      expect(aggregation.duplicatedNumberLiteralCount, equals(2));
+    });
   });
 }
 

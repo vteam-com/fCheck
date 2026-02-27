@@ -114,7 +114,7 @@ fcheck --fix
 
 ```bash
 $ fcheck .
-↓------------------------------ fCheck 1.0.0 ------------------------------↓
+↓------------------------------ fCheck 1.0.3 ------------------------------↓
 Input              : /path/to/project
 Dart Project       : fcheck (version: 1.0.0)
 --------------------------------- Dashboard ---------------------------------
@@ -124,6 +124,9 @@ Excluded Files     :              39  |  Classes            :              66
 Dart Files         :              91  |  Methods            :             357
 Lines of Code      :          15,022  |  Functions          :             179
 Comments           :     (14%) 2,145  |  Localization       :             OFF
+--------------------------------- Literals ----------------------------------
+Strings            : 1,203 (64% dupe), (31 hardcoded)
+Numbers            : 842, (74 hardcoded)
 --------------------------------- Analyzers ---------------------------------
 [✓] Checks bypassed
 [✓] Code size
@@ -297,6 +300,10 @@ fcheck --exclude "**/generated/**" --exclude "**/*.g.dart"
 # Inspect excluded items
 fcheck --excluded
 fcheck --excluded --json
+
+# Inspect literals inventory only
+fcheck --literals
+fcheck --literals --json
 ```
 
 Default exclusion behavior includes hidden folders and common non-analysis directories (`.git`, `.dart_tool`, `build`, `example`, `test`, `integration_test`, platform folders, etc.).

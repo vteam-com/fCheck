@@ -23,6 +23,7 @@ List<String> buildReportLines(
 
   _appendProjectHeader(lines, ctx);
   _appendDashboardSection(lines, ctx);
+  _appendLiteralsSection(lines, ctx);
 
   lines.add(dividerLine('Analyzers'));
   final listBlocks = <_ListBlock>[];
@@ -95,6 +96,44 @@ void _appendDashboardSection(List<String> lines, _ReportContext ctx) {
           );
     lines.add(_gridRow([leftDashboardRows[index], rightCell]));
   }
+}
+
+/// Appends a compact literals inventory block.
+void _appendLiteralsSection(List<String> lines, _ReportContext ctx) {
+  final literalCounts = [
+    formatCount(ctx.totalStringLiteralCount),
+    formatCount(ctx.totalNumberLiteralCount),
+  ];
+  var literalCountWidth = 0;
+  for (final count in literalCounts) {
+    if (count.length > literalCountWidth) {
+      literalCountWidth = count.length;
+    }
+  }
+
+  lines.add(dividerLine(AppStrings.literalsDivider));
+  lines.add(
+    _labelValueLine(
+      label: AppStrings.strings,
+      value: _literalInventorySummary(
+        totalCount: ctx.totalStringLiteralCount,
+        duplicatedCount: ctx.duplicatedStringLiteralCount,
+        hardcodedCount: ctx.hardcodedStringIssues.length,
+        countWidth: literalCountWidth,
+      ),
+    ),
+  );
+  lines.add(
+    _labelValueLine(
+      label: AppStrings.numbers,
+      value: _literalInventorySummary(
+        totalCount: ctx.totalNumberLiteralCount,
+        duplicatedCount: ctx.duplicatedNumberLiteralCount,
+        hardcodedCount: ctx.magicNumberIssues.length,
+        countWidth: literalCountWidth,
+      ),
+    ),
+  );
 }
 
 /// Appends the final scorecard section with score, focus area, and next step.

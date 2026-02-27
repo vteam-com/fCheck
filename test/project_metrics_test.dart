@@ -118,6 +118,36 @@ void main() {
       expect(projectMetrics.commentRatio, equals(0.0));
     });
 
+    test('should calculate literal duplicate ratios', () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 1,
+        totalStringLiteralCount: 3,
+        totalNumberLiteralCount: 4,
+        duplicatedStringLiteralCount: 2,
+        duplicatedNumberLiteralCount: 0,
+        fileMetrics: const [],
+        secretIssues: const [],
+        hardcodedStringIssues: const [],
+        magicNumberIssues: const [],
+        sourceSortIssues: const [],
+        layersIssues: const [],
+        deadCodeIssues: const [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: const {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+      );
+
+      expect(projectMetrics.stringLiteralDuplicateRatio, equals(2 / 3));
+      expect(projectMetrics.numberLiteralDuplicateRatio, equals(0));
+    });
+
     test(
       'should not report 100 compliance score when there are open issues',
       () {
@@ -469,6 +499,10 @@ void main() {
             'functions': 0,
             'stringLiterals': 0,
             'numberLiterals': 0,
+            'duplicatedStringLiterals': 0,
+            'duplicatedNumberLiterals': 0,
+            'stringLiteralDuplicateRatio': 0.0,
+            'numberLiteralDuplicateRatio': 0.0,
             'hardcodedStrings': 1,
             'magicNumbers': 1,
             'secretIssues': 1,
@@ -1899,6 +1933,78 @@ void main() {
           joined,
           isNot(contains('bin/console_output.dart:bin/console_output.dart:')),
         );
+      },
+    );
+
+    test(
+      'literals section should show literal inventory and only show dupe percent when duplicates exist',
+      () {
+        final projectMetrics = ProjectMetrics(
+          totalFolders: 1,
+          totalFiles: 1,
+          totalDartFiles: 1,
+          totalLinesOfCode: 20,
+          totalCommentLines: 2,
+          totalStringLiteralCount: 3,
+          totalNumberLiteralCount: 4,
+          duplicatedStringLiteralCount: 2,
+          duplicatedNumberLiteralCount: 0,
+          fileMetrics: [
+            FileMetrics(
+              path: 'lib/main.dart',
+              linesOfCode: 20,
+              commentLines: 2,
+              classCount: 1,
+              isStatefulWidget: false,
+            ),
+          ],
+          secretIssues: const [],
+          hardcodedStringIssues: [
+            HardcodedStringIssue(
+              filePath: 'lib/main.dart',
+              lineNumber: 1,
+              value: 'hello',
+            ),
+            HardcodedStringIssue(
+              filePath: 'lib/main.dart',
+              lineNumber: 2,
+              value: 'bye',
+            ),
+          ],
+          magicNumberIssues: [
+            MagicNumberIssue(
+              filePath: 'lib/main.dart',
+              lineNumber: 3,
+              value: '9',
+            ),
+          ],
+          sourceSortIssues: const [],
+          layersIssues: const [],
+          deadCodeIssues: const [],
+          duplicateCodeIssues: const [],
+          layersEdgeCount: 0,
+          layersCount: 0,
+          dependencyGraph: const {},
+          projectName: 'example_project',
+          version: '1.0.0',
+          projectType: ProjectType.dart,
+          usesLocalization: true,
+        );
+
+        final output = buildReportLines(projectMetrics);
+        final joined = output.join('\n');
+
+        expect(joined, contains(AppStrings.literalsDivider));
+        expect(joined, contains(AppStrings.strings));
+        expect(
+          joined,
+          contains(
+            '3 (66% ${AppStrings.dupeSuffix}), (2 ${AppStrings.hardcodedSuffix})',
+          ),
+        );
+        expect(joined, contains(AppStrings.numbers));
+        expect(joined, contains('4, (1 ${AppStrings.hardcodedSuffix})'));
+        expect(joined, isNot(contains('4 (')));
       },
     );
   });

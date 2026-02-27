@@ -8,6 +8,7 @@ const int _goodScoreThreshold = 85;
 const int _fairScoreThreshold = 70;
 const int _minHealthyCommentRatioPercent = 10;
 const int _compactDecimalPlaces = 2;
+const int _percentMultiplier = 100;
 const int _emptyRightDashboardCellPadding = 3;
 const int _minorSuppressionPenaltyUpperBound = 3;
 const int _moderateSuppressionPenaltyUpperBound = 7;
@@ -193,6 +194,35 @@ String _commentSummary({
     return _colorize(text, _ansiRed);
   }
   return text;
+}
+
+/// Formats literal inventory count and duplicate ratio.
+///
+/// Example: `3 Strings (66% dupe)` when duplicated values exist.
+/// Example: `3 Strings` when there are no duplicates.
+String _literalInventorySummary({
+  required int totalCount,
+  required int duplicatedCount,
+  required int hardcodedCount,
+  int countWidth = 0,
+}) {
+  final rawTotalText = formatCount(totalCount);
+  final totalText = countWidth > 0
+      ? rawTotalText.padLeft(countWidth)
+      : rawTotalText;
+  final hardcodedLabel =
+      '(${formatCount(hardcodedCount)} ${AppStrings.hardcodedSuffix})';
+  final hardcodedText = hardcodedCount == 0
+      ? _colorize(hardcodedLabel, _ansiGray)
+      : _colorize(hardcodedLabel, _ansiOrange);
+
+  if (duplicatedCount <= 0 || totalCount <= 0) {
+    return '$totalText, $hardcodedText';
+  }
+
+  final duplicatePercent = ((duplicatedCount / totalCount) * _percentMultiplier)
+      .floor();
+  return '$totalText (${formatCount(duplicatePercent)}% ${AppStrings.dupeSuffix}), $hardcodedText';
 }
 
 /// Formats suppression penalty points with severity-based color emphasis.

@@ -40,6 +40,8 @@ class MetricsDelegate implements AnalyzerDelegate {
           context.content,
           compilationUnit: context.compilationUnit,
         ),
+        stringLiteralFrequencies: const <String, int>{},
+        numberLiteralFrequencies: const <String, int>{},
       );
     }
 
@@ -69,6 +71,12 @@ class MetricsDelegate implements AnalyzerDelegate {
       fcheckIgnoreDirectiveCount: IgnoreConfig.countFcheckIgnoreDirectives(
         context.content,
         compilationUnit: unit,
+      ),
+      stringLiteralFrequencies: Map<String, int>.unmodifiable(
+        visitor.stringLiteralFrequencies,
+      ),
+      numberLiteralFrequencies: Map<String, int>.unmodifiable(
+        visitor.numberLiteralFrequencies,
       ),
     );
   }

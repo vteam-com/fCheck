@@ -166,12 +166,19 @@ class Service {
 
   int _compute() {
     var total = 0;
+    var evenCount = 0;
+    var oddCount = 0;
     for (var i = 0; i < 6; i++) {
       if (i.isEven) {
         total += i;
+        evenCount++;
       } else {
         total -= i;
+        oddCount++;
       }
+    }
+    if (evenCount > oddCount) {
+      total += evenCount - oddCount;
     }
     return total;
   }
@@ -185,6 +192,24 @@ class Service {
         equals(DocumentationIssueType.undocumentedComplexPrivateFunction),
       );
       expect(issues.first.subject, equals('Service._compute'));
+    });
+
+    test('does not flag short private function with simple control flow', () {
+      final file = File('${tempDir.path}/private_short_control_flow.dart')
+        ..writeAsStringSync('''
+/// Existing docs for class.
+class Service {
+  int _merge(Map<String, int> target, Map<String, int> source) {
+    for (final entry in source.entries) {
+      target[entry.key] = (target[entry.key] ?? 0) + entry.value;
+    }
+    return target.length;
+  }
+}
+''');
+
+      final issues = _analyzeFile(delegate, file);
+      expect(issues, isEmpty);
     });
 
     test('allows short self-explanatory private functions', () {
