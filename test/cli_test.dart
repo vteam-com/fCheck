@@ -5,6 +5,8 @@ import 'package:fcheck/src/models/version.dart';
 import 'package:test/test.dart';
 
 void main() {
+  final ansiEscapePattern = RegExp(r'\x1B\[[0-9;]*m');
+
   group('CLI Integration', () {
     late Directory tempDir;
     late Directory compiledCliDir;
@@ -17,12 +19,14 @@ void main() {
       List<String> args, {
       String? workingDirectory,
       bool useDirectInvocation = false,
+      Map<String, String>? environment,
     }) {
       if (useDirectInvocation || !useCompiledCli) {
         return Process.run(
           'dart',
           ['run', cliScriptPath, ...args],
           workingDirectory: workingDirectory ?? projectRootPath,
+          environment: environment,
           runInShell: true,
         );
       }
@@ -31,6 +35,7 @@ void main() {
         compiledCliPath,
         args,
         workingDirectory: workingDirectory ?? projectRootPath,
+        environment: environment,
         runInShell: true,
       );
     }
@@ -306,6 +311,32 @@ void main() {
       expect(result.stdout, isNot(contains('Analyzers')));
     });
 
+    test(
+      'should hit unique literals headers via direct CLI invocation',
+      () async {
+        File('${tempDir.path}/literals_direct.dart').writeAsStringSync('''
+void main() {
+  print("alpha");
+  print("beta");
+  print(7);
+  print(8);
+}
+''');
+
+        final result = await runCli([
+          '--input',
+          tempDir.path,
+          '--literals',
+          '--list',
+          'full',
+        ], useDirectInvocation: true);
+
+        expect(result.exitCode, equals(0));
+        expect(result.stdout, contains('Unique strings found'));
+        expect(result.stdout, contains('Unique numbers found'));
+      },
+    );
+
     test('should print literals JSON with --literals --json', () async {
       File('${tempDir.path}/literals_json.dart').writeAsStringSync('''
 void main() {
@@ -416,6 +447,27 @@ void main() {
     });
 
     test(
+      'should render issue file locations through CLI reporting path',
+      () async {
+        File('${tempDir.path}/locations.dart').writeAsStringSync('''
+void main() {
+  print(42);
+}
+''');
+
+        final result = await runCli([
+          '--input',
+          tempDir.path,
+          '--list',
+          'full',
+        ]);
+
+        expect(result.exitCode, equals(0));
+        expect(result.stdout, contains('locations.dart:2'));
+      },
+    );
+
+    test(
       'should show hardcoded strings as passive summary for Dart projects when localization is off',
       () async {
         File('${tempDir.path}/pubspec.yaml').writeAsStringSync('''
@@ -449,6 +501,35 @@ void main() {
         );
       },
     );
+
+    test('should disable ANSI colors with --no-colors', () async {
+      File('${tempDir.path}/no_colors.dart').writeAsStringSync('''
+void main() {
+  print("Hello");
+}
+''');
+
+      final result = await runCli(['--input', tempDir.path, '--no-colors']);
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, isNot(matches(ansiEscapePattern)));
+    });
+
+    test('should disable ANSI colors when NO_COLOR is set', () async {
+      File('${tempDir.path}/no_color_env.dart').writeAsStringSync('''
+void main() {
+  print("Hello");
+}
+''');
+
+      final result = await runCli(
+        ['--input', tempDir.path],
+        environment: {'NO_COLOR': '1'},
+      );
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, isNot(matches(ansiEscapePattern)));
+    });
 
     test('explicit input option should win over positional argument', () async {
       // Create test files in two different directories
@@ -510,6 +591,31 @@ void main() {
       expect(graph[aKey], contains(contains('b.dart')));
       expect(json['magicNumbers'], isA<List<dynamic>>());
     });
+
+    test(
+      'should print analysis error and exit with code 1 when output generation throws',
+      () async {
+        File('${tempDir.path}/main.dart').writeAsStringSync('''
+void main() {
+  print("ok");
+}
+''');
+        final blockedOutputPath = '${tempDir.path}/blocked_output';
+        File(blockedOutputPath).writeAsStringSync('blocking file');
+
+        final result = await runCli([
+          '--input',
+          tempDir.path,
+          '--svg-files',
+          '--output',
+          blockedOutputPath,
+        ], useDirectInvocation: true);
+
+        expect(result.exitCode, equals(1));
+        expect(result.stdout, contains(AppStrings.analysisError));
+        expect(result.stdout, contains('FileSystemException'));
+      },
+    );
 
     test('should disable analyzers via .fcheck', () async {
       File('${tempDir.path}/main.dart').writeAsStringSync('''

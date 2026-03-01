@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:test/test.dart';
 
@@ -18,5 +20,30 @@ void main() {
     test('NO_COLORS falsey value does not disable colors', () {
       expect(isNoColorEnvironmentEnabled({'NO_COLORS': '0'}), isFalse);
     });
+  });
+
+  group('CLI color configuration', () {
+    tearDown(() {
+      configureCliColorOutput(disableColors: false);
+    });
+
+    test('configureCliColorOutput disables ANSI colors when requested', () {
+      configureCliColorOutput(disableColors: true);
+
+      expect(supportsCliAnsiColors, isFalse);
+    });
+
+    test(
+      'configureCliColorOutput false follows environment/terminal support',
+      () {
+        configureCliColorOutput(disableColors: false);
+
+        final expected =
+            !isNoColorEnvironmentEnabled(Platform.environment) &&
+            stdout.hasTerminal &&
+            stdout.supportsAnsiEscapes;
+        expect(supportsCliAnsiColors, equals(expected));
+      },
+    );
   });
 }

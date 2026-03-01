@@ -96,6 +96,110 @@ void main() {
       expect(metrics.magicNumberIssues.first.value, equals('7'));
     });
 
+    test('should detect all supported secret patterns', () {
+      File('${tempDir.path}/secrets.dart').writeAsStringSync('''
+void main() {
+  const aws = "AKIA1234567890ABCD12";
+  final apiKey = "aB3dE5fG7hJ9kL1mN3pQ5rS7";
+  final bearer = "Bearer AbCdEfGhIjKlMnOpQrStUvWxYz1234567890";
+  const privateKeyHeader = "-----BEGIN RSA PRIVATE KEY-----";
+  const email = "dev.team@example.com";
+  const stripe = "sk_live_1234567890abcdefghijklmn";
+  const githubPat = "ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+  const entropyBlob = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890abcd";
+  print(aws + apiKey + bearer + privateKeyHeader + email + stripe + githubPat + entropyBlob);
+}
+''');
+
+      final metrics = analyzer.analyze();
+      final detectedTypes = metrics.secretIssues
+          .map((issue) => issue.secretType)
+          .toSet();
+
+      expect(detectedTypes, contains('aws_access_key'));
+      expect(detectedTypes, contains('generic_secret'));
+      expect(detectedTypes, contains('bearer_token'));
+      expect(detectedTypes, contains('private_key'));
+      expect(detectedTypes, contains('email_pii'));
+      expect(detectedTypes, contains('stripe_key'));
+      expect(detectedTypes, contains('github_pat'));
+      expect(detectedTypes, contains('high_entropy'));
+    });
+
+    test(
+      'should detect generic secret assigned with triple-quoted literal',
+      () {
+        File('${tempDir.path}/triple_secret.dart').writeAsStringSync('''
+void main() {
+  final private_key = """AbC123xYz789LmN456OpQ901RsT234UvW""";
+  print(private_key);
+}
+''');
+
+        final metrics = analyzer.analyze();
+        expect(
+          metrics.secretIssues.any(
+            (issue) => issue.secretType == 'generic_secret',
+          ),
+          isTrue,
+        );
+      },
+    );
+
+    test(
+      'should skip secret scanning when ignore directive is in first 10 lines',
+      () {
+        File('${tempDir.path}/ignored_secrets.dart').writeAsStringSync('''
+// ignore: fcheck_secrets
+void main() {
+  const stripe = "sk_live_1234567890abcdefghijklmn";
+  print(stripe);
+}
+''');
+
+        final metrics = analyzer.analyze();
+        expect(
+          metrics.secretIssues.any(
+            (issue) => (issue.filePath ?? '').endsWith('ignored_secrets.dart'),
+          ),
+          isFalse,
+        );
+      },
+    );
+
+    test(
+      'should not honor secrets ignore directive when declared after first 10 lines',
+      () {
+        File('${tempDir.path}/late_ignore_secrets.dart').writeAsStringSync('''
+void line01() {}
+void line02() {}
+void line03() {}
+void line04() {}
+void line05() {}
+void line06() {}
+void line07() {}
+void line08() {}
+void line09() {}
+void line10() {}
+// ignore: fcheck_secrets
+void main() {
+  const stripe = "sk_live_1234567890abcdefghijklmn";
+  print(stripe);
+}
+''');
+
+        final metrics = analyzer.analyze();
+        expect(
+          metrics.secretIssues.any(
+            (issue) =>
+                (issue.filePath ?? '').endsWith('late_ignore_secrets.dart') &&
+                issue.secretType == 'stripe_key',
+          ),
+          isTrue,
+        );
+      },
+    );
+
     test('should count derived widget implementations by type', () {
       File('${tempDir.path}/base.dart').writeAsStringSync('''
 abstract class BaseStateless extends StatelessWidget {}
@@ -158,6 +262,213 @@ void main() {
         equals(p.join('lib', 'feature', 'dead.dart')),
       );
     });
+
+    test(
+      'should treat export directive dependencies as reachable for dead-file analysis',
+      () {
+        final libDir = Directory('${tempDir.path}/lib')..createSync();
+        File('${libDir.path}/main.dart').writeAsStringSync('''
+import 'barrel.dart';
+
+void main() {
+  runApp();
+}
+''');
+        File('${libDir.path}/barrel.dart').writeAsStringSync('''
+export 'exported.dart';
+
+void runApp() {}
+''');
+        File('${libDir.path}/exported.dart').writeAsStringSync('''
+class ExportedType {}
+''');
+
+        final metrics = analyzer.analyze();
+        final deadFileIssues = metrics.deadCodeIssues
+            .where((issue) => issue.type == DeadCodeIssueType.deadFile)
+            .toList();
+
+        expect(
+          deadFileIssues.any(
+            (issue) => issue.filePath.endsWith('exported.dart'),
+          ),
+          isFalse,
+        );
+      },
+    );
+
+    test(
+      'should treat part directive dependencies as reachable for dead-file analysis',
+      () {
+        final libDir = Directory('${tempDir.path}/lib')..createSync();
+        File('${libDir.path}/main.dart').writeAsStringSync('''
+import 'owner.dart';
+
+void main() {
+  bootstrap();
+}
+''');
+        File('${libDir.path}/owner.dart').writeAsStringSync('''
+part 'owner_part.dart';
+
+void bootstrap() {}
+''');
+        File('${libDir.path}/owner_part.dart').writeAsStringSync('''
+part of 'owner.dart';
+
+class PartOnlyType {}
+''');
+
+        final metrics = analyzer.analyze();
+        final deadFileIssues = metrics.deadCodeIssues
+            .where((issue) => issue.type == DeadCodeIssueType.deadFile)
+            .toList();
+
+        expect(
+          deadFileIssues.any(
+            (issue) => issue.filePath.endsWith('owner_part.dart'),
+          ),
+          isFalse,
+        );
+      },
+    );
+
+    test(
+      'should mark catch variables, function-typed parameters, and operator usages as used',
+      () {
+        File('${tempDir.path}/operators_coverage.dart').writeAsStringSync('''
+class Ops {
+  Ops(this.value);
+
+  int value;
+
+  Ops operator +(Ops other) => Ops(value + other.value);
+  Ops operator -(Ops other) => Ops(value - other.value);
+  Ops operator *(Ops other) => Ops(value * other.value);
+  Ops operator /(Ops other) => Ops(value ~/ other.value);
+  Ops operator ~/(Ops other) => Ops(value ~/ other.value);
+  Ops operator %(Ops other) => Ops(value % other.value);
+  bool operator >(Ops other) => value > other.value;
+  bool operator >=(Ops other) => value >= other.value;
+  bool operator <(Ops other) => value < other.value;
+  bool operator <=(Ops other) => value <= other.value;
+  Ops operator &(Ops other) => Ops(value & other.value);
+  Ops operator |(Ops other) => Ops(value | other.value);
+  Ops operator ^(Ops other) => Ops(value ^ other.value);
+  Ops operator <<(int bits) => Ops(value << bits);
+  Ops operator >>(int bits) => Ops(value >> bits);
+  Ops operator >>>(int bits) => Ops(value >>> bits);
+  Ops operator ~() => Ops(~value);
+
+  int operator [](int index) => value + index;
+  void operator []=(int index, int next) {
+    value = next + index;
+  }
+}
+
+int increment(int input) => input + 1;
+
+int applyTwice(int callback(int value), int input) {
+  return callback(callback(input));
+}
+
+void main() {
+  final left = Ops(8);
+  final right = Ops(2);
+
+  left + right;
+  left - right;
+  left * right;
+  left / right;
+  left ~/ right;
+  left % right;
+  left > right;
+  left >= right;
+  left < right;
+  left <= right;
+  left & right;
+  left | right;
+  left ^ right;
+  left << 1;
+  left >> 1;
+  left >>> 1;
+  ~left;
+
+  left[0];
+  left[0] = 5;
+
+  var counter = 0;
+  counter++;
+  ++counter;
+  counter--;
+  --counter;
+
+  var numeric = 32;
+  numeric += 1;
+  numeric -= 1;
+  numeric *= 2;
+  numeric /= 2;
+  numeric ~/= 2;
+  numeric %= 5;
+
+  var bits = 8;
+  bits &= 3;
+  bits |= 1;
+  bits ^= 2;
+  bits <<= 1;
+  bits >>= 1;
+  bits >>>= 1;
+
+  applyTwice(increment, 1);
+
+  try {
+    throw StateError('boom');
+  } catch (e, st) {
+    if ('\$e\$st'.isEmpty) {
+      print('never');
+    }
+  }
+}
+''');
+
+        final metrics = analyzer.analyze();
+        final deadFunctionIssues = metrics.deadCodeIssues
+            .where((issue) => issue.type == DeadCodeIssueType.deadFunction)
+            .toList();
+        final unusedVariableIssues = metrics.deadCodeIssues
+            .where((issue) => issue.type == DeadCodeIssueType.unusedVariable)
+            .toList();
+
+        expect(deadFunctionIssues.any((issue) => issue.name == '[]'), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '[]='), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '+'), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '-'), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '*'), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '/'), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '~/'), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '%'), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '&'), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '|'), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '^'), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '<<'), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '>>'), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '>>>'), isFalse);
+        expect(deadFunctionIssues.any((issue) => issue.name == '~'), isFalse);
+        expect(
+          deadFunctionIssues.any((issue) => issue.name == 'applyTwice'),
+          isFalse,
+        );
+        expect(
+          unusedVariableIssues.any((issue) => issue.name == 'callback'),
+          isFalse,
+        );
+        expect(unusedVariableIssues.any((issue) => issue.name == 'e'), isFalse);
+        expect(
+          unusedVariableIssues.any((issue) => issue.name == 'st'),
+          isFalse,
+        );
+      },
+    );
 
     test(
       'should suppress non-actionable generated warnings while keeping dead-code usage edges',

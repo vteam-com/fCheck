@@ -357,7 +357,3 @@ void printRunCompleted(String elapsedSeconds) {
     ),
   );
 }
-
-/// Prints fatal analysis error and stack trace details.
-///
-/// This keeps CLI failures transparent for local debugging and CI logs.
