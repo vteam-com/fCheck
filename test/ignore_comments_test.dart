@@ -97,6 +97,18 @@ void main() {
       final issues = delegate.analyzeFileWithContext(_contextForFile(file));
       expect(issues, isNotEmpty);
     });
+
+    test('should ignore with flexible whitespace in inline directive', () {
+      final file = File(p.join(tempDir.path, 'inline_whitespace.dart'));
+      file.writeAsStringSync('''
+void main() { //ignore : fcheck_magic_numbers
+  var x = 42;
+}
+''');
+
+      final issues = delegate.analyzeFileWithContext(_contextForFile(file));
+      expect(issues, isEmpty);
+    });
   });
 
   group('HardcodedStringDelegate Ignore Directive', () {

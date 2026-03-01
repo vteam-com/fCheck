@@ -241,13 +241,39 @@ class IgnoreConfig {
       final lineNumber = _getLineNumber(content, offset);
       final lineContent = _getLineContent(content, lineNumber);
 
-      if (lineContent.contains('// ignore: fcheck_$domain')) {
+      if (_lineHasDomainIgnoreDirective(lineContent, domain)) {
         return true;
       }
 
       current = current.parent;
     }
     return false;
+  }
+
+  /// Checks whether [lineContent] has `// ignore: fcheck_<domain>`.
+  ///
+  /// Matching is whitespace tolerant, so variants like
+  /// `//ignore:fcheck_dead_code` and `// ignore : fcheck_dead_code` are valid.
+  static bool _lineHasDomainIgnoreDirective(String lineContent, String domain) {
+    final commentIndex = lineContent.indexOf('//');
+    if (commentIndex == -1) {
+      return false;
+    }
+
+    final comment = lineContent.substring(
+      commentIndex + _lineCommentPrefixLength,
+    );
+    final match = _lineIgnorePattern.firstMatch(comment);
+    if (match == null) {
+      return false;
+    }
+
+    final directives = match.group(1) ?? '';
+    final domainDirectivePattern = RegExp(
+      '\\bfcheck_${RegExp.escape(domain)}\\b',
+      caseSensitive: false,
+    );
+    return domainDirectivePattern.hasMatch(directives);
   }
 
   /// Calculates the 1-based line number for a given character offset.

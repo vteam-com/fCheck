@@ -217,6 +217,8 @@ Use top-of-file or line-level ignore directives:
 // ignore: fcheck_secrets
 ```
 
+Spacing around `ignore` and `:` is flexible (for example `//ignore:fcheck_magic_numbers` also works).
+
 For generated guidance:
 
 ```bash
