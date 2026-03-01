@@ -103,6 +103,12 @@ class ProjectMetrics {
   /// Number of numeric literal occurrences that belong to duplicated values.
   final int duplicatedNumberLiteralCount;
 
+  /// Total number of widget implementations derived from StatelessWidget.
+  final int totalStatelessWidgetCount;
+
+  /// Total number of widget implementations derived from StatefulWidget.
+  final int totalStatefulWidgetCount;
+
   /// Frequency map of string literal values across the project.
   final Map<String, int> stringLiteralFrequencies;
 
@@ -184,6 +190,8 @@ class ProjectMetrics {
   /// [totalNumberLiteralCount] Total number of numeric literals in the project.
   /// [duplicatedStringLiteralCount] Number of string literal occurrences that belong to duplicated values.
   /// [duplicatedNumberLiteralCount] Number of numeric literal occurrences that belong to duplicated values.
+  /// [totalStatelessWidgetCount] Number of widget implementations derived from StatelessWidget.
+  /// [totalStatefulWidgetCount] Number of widget implementations derived from StatefulWidget.
   /// [stringLiteralFrequencies] Frequency map of string literal values across the project.
   /// [numberLiteralFrequencies] Frequency map of numeric literal lexemes across the project.
   /// [fileMetrics] Metrics for each individual Dart file.
@@ -217,6 +225,8 @@ class ProjectMetrics {
     this.totalNumberLiteralCount = 0,
     this.duplicatedStringLiteralCount = 0,
     this.duplicatedNumberLiteralCount = 0,
+    this.totalStatelessWidgetCount = 0,
+    this.totalStatefulWidgetCount = 0,
     this.stringLiteralFrequencies = const {},
     this.numberLiteralFrequencies = const {},
     required this.fileMetrics,
@@ -315,6 +325,8 @@ class ProjectMetrics {
       'numberLiterals': totalNumberLiteralCount,
       'duplicatedStringLiterals': duplicatedStringLiteralCount,
       'duplicatedNumberLiterals': duplicatedNumberLiteralCount,
+      'statelessWidgets': totalStatelessWidgetCount,
+      'statefulWidgets': totalStatefulWidgetCount,
       'stringLiteralDuplicateRatio': stringLiteralDuplicateRatio,
       'numberLiteralDuplicateRatio': numberLiteralDuplicateRatio,
       'hardcodedStrings': hardcodedStringIssues.length,

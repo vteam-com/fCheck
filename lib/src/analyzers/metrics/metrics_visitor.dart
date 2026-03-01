@@ -3,6 +3,10 @@ import 'package:analyzer/dart/ast/visitor.dart';
 
 /// A visitor that traverses the AST to collect quality metrics.
 class MetricsQualityVisitor extends RecursiveAstVisitor<void> {
+  static const String _statefulWidgetTypeName = 'StatefulWidget';
+  static const String _genericTypeSeparator = '<';
+  static const String _namespaceSeparator = '.';
+
   /// The total number of public class declarations found in the visited file.
   int classCount = 0;
 
@@ -30,6 +34,12 @@ class MetricsQualityVisitor extends RecursiveAstVisitor<void> {
   /// Frequency map of numeric literal lexemes in the visited file.
   final Map<String, int> numberLiteralFrequencies = <String, int>{};
 
+  /// Mapping of class names to their normalized superclass type names.
+  ///
+  /// This includes private and public classes so derived widget chains can be
+  /// resolved across files during aggregation.
+  final Map<String, String> classSuperTypes = <String, String>{};
+
   @override
   void visitClassDeclaration(ClassDeclaration node) {
     final className = node.namePart.toString();
@@ -39,8 +49,14 @@ class MetricsQualityVisitor extends RecursiveAstVisitor<void> {
       classCount++;
     }
 
-    final superclass = node.extendsClause?.superclass.toString();
-    if (superclass == 'StatefulWidget') {
+    final normalizedSuperType = _normalizeTypeName(
+      node.extendsClause?.superclass.toString(),
+    );
+    if (normalizedSuperType != null) {
+      classSuperTypes[className] = normalizedSuperType;
+    }
+
+    if (normalizedSuperType == _statefulWidgetTypeName) {
       hasStatefulWidget = true;
     }
 
@@ -99,6 +115,34 @@ class MetricsQualityVisitor extends RecursiveAstVisitor<void> {
 
   void _incrementFrequency(Map<String, int> frequencies, String key) {
     frequencies[key] = (frequencies[key] ?? 0) + 1;
+  }
+
+  /// Normalizes a type name for inheritance matching.
+  ///
+  /// Removes generic suffixes (for example `State<MyWidget>` -> `State`) and
+  /// namespace qualifiers (for example `widgets.StatelessWidget` ->
+  /// `StatelessWidget`), returning `null` for empty/invalid inputs.
+  String? _normalizeTypeName(String? rawTypeName) {
+    if (rawTypeName == null) {
+      return null;
+    }
+    final trimmedTypeName = rawTypeName.trim();
+    if (trimmedTypeName.isEmpty) {
+      return null;
+    }
+    final genericStart = trimmedTypeName.indexOf(_genericTypeSeparator);
+    final withoutGenerics = genericStart < 0
+        ? trimmedTypeName
+        : trimmedTypeName.substring(0, genericStart).trim();
+    if (withoutGenerics.isEmpty) {
+      return null;
+    }
+    final namespaceStart = withoutGenerics.lastIndexOf(_namespaceSeparator);
+    if (namespaceStart < 0) {
+      return withoutGenerics;
+    }
+    final normalized = withoutGenerics.substring(namespaceStart + 1).trim();
+    return normalized.isEmpty ? null : normalized;
   }
 
   /// Returns true when [node] belongs to a directive URI context.

@@ -14,11 +14,15 @@ class MetricsFileData {
   /// Frequency map of numeric literal lexemes found in the file.
   final Map<String, int> numberLiteralFrequencies;
 
+  /// Mapping of class names to normalized superclass type names.
+  final Map<String, String> classSuperTypes;
+
   /// Creates a new metrics file data instance.
   const MetricsFileData({
     required this.metrics,
     required this.fcheckIgnoreDirectiveCount,
     this.stringLiteralFrequencies = const <String, int>{},
     this.numberLiteralFrequencies = const <String, int>{},
+    this.classSuperTypes = const <String, String>{},
   });
 }

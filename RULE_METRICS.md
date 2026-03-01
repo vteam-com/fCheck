@@ -36,6 +36,7 @@ This file defines project-level metrics architecture and behavior.
 `ProjectMetrics` exposes:
 
 - `commentRatio = totalCommentLines / totalLinesOfCode` (0 when LOC is 0)
+- widget implementation totals split by `StatelessWidget` and `StatefulWidget`, including derived classes when inheritance can be resolved unambiguously
 - `disabledAnalyzersCount` from analyzer enabled flags
 - analyzer-driven compliance and focus getters via cached `ProjectMetricsAnalyzer` output
 

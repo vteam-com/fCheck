@@ -501,6 +501,8 @@ void main() {
             'numberLiterals': 0,
             'duplicatedStringLiterals': 0,
             'duplicatedNumberLiterals': 0,
+            'statelessWidgets': 0,
+            'statefulWidgets': 0,
             'stringLiteralDuplicateRatio': 0.0,
             'numberLiteralDuplicateRatio': 0.0,
             'hardcodedStrings': 1,
@@ -702,6 +704,8 @@ void main() {
         expect(joined, contains(RegExp(r'Dependency\s+:.*3')));
         expect(joined, contains(RegExp(r'DevDependency\s+:.*2')));
         expect(joined, contains(RegExp(r'Classes\s+:.*2')));
+        expect(joined, contains(RegExp(r'Widgets: Stateless\s+:.*0')));
+        expect(joined, contains(RegExp(r'Widgets: Stateful\s+:.*0')));
         expect(joined, contains(RegExp(r'Methods\s+:.*4')));
         expect(joined, contains(RegExp(r'Functions\s+:.*3')));
         expect(joined, isNot(contains(AppStrings.customExcludes)));

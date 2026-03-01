@@ -22,6 +22,8 @@ class _ReportContext {
   final int dependencyCount;
   final int devDependencyCount;
   final int classCount;
+  final int statelessWidgetCount;
+  final int statefulWidgetCount;
   final int methodCount;
   final int functionCount;
   final int totalStringLiteralCount;
@@ -94,6 +96,8 @@ class _ReportContext {
     required this.dependencyCount,
     required this.devDependencyCount,
     required this.classCount,
+    required this.statelessWidgetCount,
+    required this.statefulWidgetCount,
     required this.methodCount,
     required this.functionCount,
     required this.totalStringLiteralCount,
@@ -336,6 +340,8 @@ class _ReportContext {
       dependencyCount: metrics.dependencyCount,
       devDependencyCount: metrics.devDependencyCount,
       classCount: classCount,
+      statelessWidgetCount: metrics.totalStatelessWidgetCount,
+      statefulWidgetCount: metrics.totalStatefulWidgetCount,
       methodCount: methodCount,
       functionCount: functionCount,
       totalStringLiteralCount: metrics.totalStringLiteralCount,

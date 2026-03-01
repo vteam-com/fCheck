@@ -96,6 +96,22 @@ void main() {
       expect(metrics.magicNumberIssues.first.value, equals('7'));
     });
 
+    test('should count derived widget implementations by type', () {
+      File('${tempDir.path}/base.dart').writeAsStringSync('''
+abstract class BaseStateless extends StatelessWidget {}
+abstract class BaseStateful extends StatefulWidget {}
+''');
+      File('${tempDir.path}/derived.dart').writeAsStringSync('''
+class ScreenA extends BaseStateless {}
+class ScreenB extends BaseStateful {}
+''');
+
+      final metrics = analyzer.analyze();
+
+      expect(metrics.totalStatelessWidgetCount, equals(2));
+      expect(metrics.totalStatefulWidgetCount, equals(2));
+    });
+
     test(
       'should report documentation issue paths relative to analysis root',
       () {

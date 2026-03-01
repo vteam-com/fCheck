@@ -39,6 +39,8 @@ class MetricsAnalyzer {
   static const int _maxPercent = 100;
   static const int _minimumDuplicateFrequency = 2;
   static const Set<int> _allowedDuplicateNumbers = {-1, 0, 1};
+  static const String _statelessWidgetTypeName = 'StatelessWidget';
+  static const String _statefulWidgetTypeName = 'StatefulWidget';
 
   /// Creates a metrics analyzer.
   const MetricsAnalyzer();
@@ -446,6 +448,7 @@ class MetricsAnalyzer {
     final globalNumberLiteralFrequencies = <String, int>{};
     int ignoreDirectivesCount = 0;
     final ignoreDirectiveCountsByFile = <String, int>{};
+    final classInheritanceNodes = <_ClassInheritanceNode>[];
 
     for (final data in fileData) {
       final metrics = data.metrics;
@@ -468,6 +471,11 @@ class MetricsAnalyzer {
         ignoreDirectiveCountsByFile[metrics.path] =
             data.fcheckIgnoreDirectiveCount;
       }
+      data.classSuperTypes.forEach((className, superName) {
+        classInheritanceNodes.add(
+          _ClassInheritanceNode(name: className, superName: superName),
+        );
+      });
     }
 
     final duplicatedStringLiteralCount = _duplicatedOccurrenceCount(
@@ -484,6 +492,9 @@ class MetricsAnalyzer {
       for (final path in sortedIgnoreDirectiveFiles)
         path: ignoreDirectiveCountsByFile[path]!,
     };
+    final widgetImplementationCounts = _countWidgetImplementations(
+      classInheritanceNodes,
+    );
 
     return MetricsAggregationResult(
       fileMetrics: fileMetricsList,
@@ -502,7 +513,95 @@ class MetricsAnalyzer {
       ),
       ignoreDirectivesCount: ignoreDirectivesCount,
       ignoreDirectiveCountsByFile: sortedIgnoreDirectiveCountsByFile,
+      totalStatelessWidgetCount: widgetImplementationCounts.statelessCount,
+      totalStatefulWidgetCount: widgetImplementationCounts.statefulCount,
     );
+  }
+
+  /// Resolves widget implementation totals by following class inheritance.
+  ///
+  /// Counts classes that directly or transitively inherit from
+  /// `StatelessWidget` and `StatefulWidget`. Inheritance is only followed when
+  /// the parent class name resolves unambiguously to a single class node in the
+  /// analyzed project snapshot.
+  ({int statelessCount, int statefulCount}) _countWidgetImplementations(
+    List<_ClassInheritanceNode> classNodes,
+  ) {
+    final classIndexesByName = <String, List<int>>{};
+    for (var index = 0; index < classNodes.length; index++) {
+      final className = classNodes[index].name;
+      classIndexesByName.putIfAbsent(className, () => <int>[]).add(index);
+    }
+
+    final resolvedTypesByIndex = <int, _WidgetImplementationType>{};
+    final activeIndexes = <int>{};
+
+    _WidgetImplementationType resolve(int index) {
+      final cachedType = resolvedTypesByIndex[index];
+      if (cachedType != null) {
+        return cachedType;
+      }
+      if (!activeIndexes.add(index)) {
+        return _WidgetImplementationType.none;
+      }
+
+      final classNode = classNodes[index];
+      final directWidgetType = _directWidgetType(classNode.superName);
+      if (directWidgetType != _WidgetImplementationType.none) {
+        resolvedTypesByIndex[index] = directWidgetType;
+        activeIndexes.remove(index);
+        return directWidgetType;
+      }
+
+      final superName = classNode.superName;
+      if (superName == null) {
+        resolvedTypesByIndex[index] = _WidgetImplementationType.none;
+        activeIndexes.remove(index);
+        return _WidgetImplementationType.none;
+      }
+
+      final parentCandidates = classIndexesByName[superName];
+      if (parentCandidates == null || parentCandidates.length != 1) {
+        resolvedTypesByIndex[index] = _WidgetImplementationType.none;
+        activeIndexes.remove(index);
+        return _WidgetImplementationType.none;
+      }
+
+      final parentIndex = parentCandidates.first;
+      if (parentIndex == index) {
+        resolvedTypesByIndex[index] = _WidgetImplementationType.none;
+        activeIndexes.remove(index);
+        return _WidgetImplementationType.none;
+      }
+
+      final resolvedType = resolve(parentIndex);
+      resolvedTypesByIndex[index] = resolvedType;
+      activeIndexes.remove(index);
+      return resolvedType;
+    }
+
+    var statelessCount = 0;
+    var statefulCount = 0;
+    for (var index = 0; index < classNodes.length; index++) {
+      final widgetType = resolve(index);
+      if (widgetType == _WidgetImplementationType.stateless) {
+        statelessCount++;
+      } else if (widgetType == _WidgetImplementationType.stateful) {
+        statefulCount++;
+      }
+    }
+
+    return (statelessCount: statelessCount, statefulCount: statefulCount);
+  }
+
+  _WidgetImplementationType _directWidgetType(String? superName) {
+    if (superName == _statelessWidgetTypeName) {
+      return _WidgetImplementationType.stateless;
+    }
+    if (superName == _statefulWidgetTypeName) {
+      return _WidgetImplementationType.stateful;
+    }
+    return _WidgetImplementationType.none;
   }
 
   void _mergeFrequencies({
@@ -606,4 +705,13 @@ class _ComplianceAreaScore {
 
   /// Penalty contribution used when choosing the primary focus area.
   double get penaltyImpact => (1 - score);
+}
+
+enum _WidgetImplementationType { none, stateless, stateful }
+
+class _ClassInheritanceNode {
+  final String name;
+  final String? superName;
+
+  const _ClassInheritanceNode({required this.name, required this.superName});
 }

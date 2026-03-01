@@ -38,6 +38,12 @@ class MetricsAggregationResult {
   /// Per-file count of // ignore: fcheck_* directives.
   final Map<String, int> ignoreDirectiveCountsByFile;
 
+  /// Total number of widget implementations derived from StatelessWidget.
+  final int totalStatelessWidgetCount;
+
+  /// Total number of widget implementations derived from StatefulWidget.
+  final int totalStatefulWidgetCount;
+
   /// Creates a metrics aggregation result.
   const MetricsAggregationResult({
     required this.fileMetrics,
@@ -52,5 +58,7 @@ class MetricsAggregationResult {
     required this.numberLiteralFrequencies,
     required this.ignoreDirectivesCount,
     required this.ignoreDirectiveCountsByFile,
+    required this.totalStatelessWidgetCount,
+    required this.totalStatefulWidgetCount,
   });
 }

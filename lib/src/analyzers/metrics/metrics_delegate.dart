@@ -42,6 +42,7 @@ class MetricsDelegate implements AnalyzerDelegate {
         ),
         stringLiteralFrequencies: const <String, int>{},
         numberLiteralFrequencies: const <String, int>{},
+        classSuperTypes: const <String, String>{},
       );
     }
 
@@ -77,6 +78,9 @@ class MetricsDelegate implements AnalyzerDelegate {
       ),
       numberLiteralFrequencies: Map<String, int>.unmodifiable(
         visitor.numberLiteralFrequencies,
+      ),
+      classSuperTypes: Map<String, String>.unmodifiable(
+        visitor.classSuperTypes,
       ),
     );
   }

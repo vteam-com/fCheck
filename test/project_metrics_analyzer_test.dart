@@ -244,6 +244,42 @@ void main() {
       expect(aggregation.totalNumberLiteralCount, equals(8));
       expect(aggregation.duplicatedNumberLiteralCount, equals(2));
     });
+
+    test('aggregate counts direct and derived widget implementations', () {
+      final aggregation = analyzer.aggregate([
+        MetricsFileData(
+          metrics: FileMetrics(
+            path: 'lib/base.dart',
+            linesOfCode: 1,
+            commentLines: 0,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+          fcheckIgnoreDirectiveCount: 0,
+          classSuperTypes: const {
+            'BaseStateless': 'StatelessWidget',
+            'BaseStateful': 'StatefulWidget',
+          },
+        ),
+        MetricsFileData(
+          metrics: FileMetrics(
+            path: 'lib/derived.dart',
+            linesOfCode: 1,
+            commentLines: 0,
+            classCount: 1,
+            isStatefulWidget: false,
+          ),
+          fcheckIgnoreDirectiveCount: 0,
+          classSuperTypes: const {
+            'LeafStateless': 'BaseStateless',
+            'LeafStateful': 'BaseStateful',
+          },
+        ),
+      ]);
+
+      expect(aggregation.totalStatelessWidgetCount, equals(2));
+      expect(aggregation.totalStatefulWidgetCount, equals(2));
+    });
   });
 }
 

@@ -121,9 +121,10 @@ Dart Project       : fcheck (version: 1.0.0)
 Folders            :              21  |  Dependency         :               5
 Files              :             120  |  DevDependency      :               2
 Excluded Files     :              39  |  Classes            :              66
-Dart Files         :              91  |  Methods            :             357
-Lines of Code      :          15,022  |  Functions          :             179
-Comments           :     (14%) 2,145  |  Localization       :             OFF
+Dart Files         :              91  |  Stateless Widgets  :              40
+Lines of Code      :          15,022  |  Stateful Widgets   :              26
+Comments           :     (14%) 2,145  |  Methods            :             357
+Localization       :             OFF  |  Functions          :             179
 --------------------------------- Literals ----------------------------------
 Strings            : 1,203 (64% dupe), (31 hardcoded)
 Numbers            : 842, (74 hardcoded)

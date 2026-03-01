@@ -47,11 +47,6 @@ void _appendProjectHeader(List<String> lines, _ReportContext ctx) {
 
 /// Appends the two-column dashboard section with project stats and counts.
 void _appendDashboardSection(List<String> lines, _ReportContext ctx) {
-  final localizationCell = _gridCell(
-    label: AppStrings.localization,
-    value: ctx.usesLocalization ? AppStrings.on : AppStrings.off,
-  );
-
   lines.add(dividerLine(AppStrings.dashboardDivider));
   final leftDashboardRows = <String>[
     _gridCell(label: AppStrings.folders, value: formatCount(ctx.totalFolders)),
@@ -70,6 +65,10 @@ void _appendDashboardSection(List<String> lines, _ReportContext ctx) {
       value: ctx.commentSummary,
       valuePreAligned: true,
     ),
+    _gridCell(
+      label: AppStrings.localization,
+      value: ctx.usesLocalization ? AppStrings.on : AppStrings.off,
+    ),
   ];
   final rightDashboardRows = <String>[
     _gridCell(
@@ -81,20 +80,36 @@ void _appendDashboardSection(List<String> lines, _ReportContext ctx) {
       value: formatCount(ctx.devDependencyCount),
     ),
     _gridCell(label: AppStrings.classes, value: formatCount(ctx.classCount)),
+    _gridCell(
+      label: AppStrings.statefulWidgets,
+      value: formatCount(ctx.statefulWidgetCount),
+    ),
+    _gridCell(
+      label: AppStrings.statelessWidgets,
+      value: formatCount(ctx.statelessWidgetCount),
+    ),
     _gridCell(label: AppStrings.methods, value: formatCount(ctx.methodCount)),
     _gridCell(
       label: AppStrings.functions,
       value: formatCount(ctx.functionCount),
     ),
-    localizationCell,
   ];
-  for (var index = 0; index < leftDashboardRows.length; index++) {
+  final dashboardRowCount =
+      leftDashboardRows.length >= rightDashboardRows.length
+      ? leftDashboardRows.length
+      : rightDashboardRows.length;
+  for (var index = 0; index < dashboardRowCount; index++) {
+    final leftCell = index < leftDashboardRows.length
+        ? leftDashboardRows[index]
+        : ''.padRight(
+            _gridLabelWidth + _gridValueWidth + _emptyRightDashboardCellPadding,
+          );
     final rightCell = index < rightDashboardRows.length
         ? rightDashboardRows[index]
         : ''.padRight(
             _gridLabelWidth + _gridValueWidth + _emptyRightDashboardCellPadding,
           );
-    lines.add(_gridRow([leftDashboardRows[index], rightCell]));
+    lines.add(_gridRow([leftCell, rightCell]));
   }
 }
 

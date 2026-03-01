@@ -39,6 +39,8 @@ class AppStrings {
   static const String loc = 'Lines of Code';
   static const String comments = 'Comments';
   static const String classes = 'Classes';
+  static const String statelessWidgets = 'Widgets: Stateless';
+  static const String statefulWidgets = 'Widgets: Stateful';
   static const String methods = 'Methods';
   static const String functions = 'Functions';
   static const String stringLiterals = 'String Literals';

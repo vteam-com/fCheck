@@ -347,6 +347,8 @@ class AnalyzeFolder {
           metricsAggregation.duplicatedStringLiteralCount,
       duplicatedNumberLiteralCount:
           metricsAggregation.duplicatedNumberLiteralCount,
+      totalStatelessWidgetCount: metricsAggregation.totalStatelessWidgetCount,
+      totalStatefulWidgetCount: metricsAggregation.totalStatefulWidgetCount,
       stringLiteralFrequencies: metricsAggregation.stringLiteralFrequencies,
       numberLiteralFrequencies: metricsAggregation.numberLiteralFrequencies,
       fileMetrics: metricsAggregation.fileMetrics,
