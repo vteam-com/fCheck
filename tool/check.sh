@@ -10,10 +10,10 @@ echo --- Pub Upgrade
 flutter pub upgrade > /dev/null
 
 echo --- Pub Outdated
-flutter pub outdated
+flutter pub outdated > /dev/null
 
 echo --- Extract version
-./tool/generate_version.sh
+./tool/generate_version.sh > /dev/null
 
 echo --- Format sources
 dart format . | sed 's/^/    /'
@@ -23,8 +23,10 @@ echo --- Analyze
 flutter analyze lib test --no-pub | sed 's/^/    /'
 
 echo --- Test
-echo "    Running tests..."
-flutter test --reporter=compact --no-pub
+if ! flutter test --reporter=compact --no-pub; then
+  echo "Tests failed"
+  exit 1
+fi
 
 echo --- fCheck
 dart run ./bin/fcheck.dart --svg --mermaid --plantuml ./example > /dev/null 2>&1

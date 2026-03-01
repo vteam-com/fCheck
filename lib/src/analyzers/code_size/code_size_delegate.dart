@@ -39,8 +39,7 @@ class _CodeSizeVisitor extends RecursiveAstVisitor<void> {
   @override
   void visitClassDeclaration(ClassDeclaration node) {
     final previousClass = _currentClassName;
-    // ignore: deprecated_member_use
-    final className = node.name.lexeme;
+    final className = node.namePart.typeName.lexeme;
     _currentClassName = className;
     _addArtifact(
       kind: CodeSizeArtifactKind.classDeclaration,

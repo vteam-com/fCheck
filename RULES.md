@@ -83,7 +83,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - `dart format .` format all Dart files
 - `dart fix --apply` apply automated fixes
 - `flutter analyze lib test` run static analysis
-- `flutter test` run all tests
+- `dart test` run all tests
 - `./tool/check.sh` run format, analyze, tests, and fCheck on the example
 
 ## Key Files
@@ -128,7 +128,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
   - guard/skip paths
   - serialization/formatting paths (`toJson()`, `toString()`) for issue models
 - Prefer focused unit tests for small models/utilities and integration tests for CLI/report behavior.
-- Run the full test suite before merging: `dart test` (or `flutter test` if required by the task).
+- Run the full test suite before merging: `dart test`.
 - When validating coverage locally, generate coverage data with:
   - `dart test --coverage=coverage`
 

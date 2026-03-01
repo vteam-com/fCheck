@@ -332,7 +332,7 @@ jobs:
       - run: ./tool/generate_version.sh
       - run: dart format --output=none --set-exit-if-changed .
       - run: flutter analyze lib test --no-pub
-      - run: flutter test --reporter=compact --no-pub
+      - run: dart test --reporter=compact
       - run: dart run ./bin/fcheck.dart --json --exclude "**/example" . > fcheck-report.json
       - run: |
           score="$(grep -oE '"complianceScore"[[:space:]]*:[[:space:]]*[0-9]+([.][0-9]+)?' fcheck-report.json | head -n1 | sed -E 's/.*:[[:space:]]*//')"

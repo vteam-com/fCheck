@@ -475,10 +475,10 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     AstNode? current = node.parent;
     while (current != null) {
       if (current is ClassDeclaration) {
-        return current.name.lexeme;
+        return current.namePart.typeName.lexeme;
       }
       if (current is EnumDeclaration) {
-        return current.name.lexeme;
+        return current.namePart.typeName.lexeme;
       }
       if (current is MixinDeclaration) {
         return current.name.lexeme;

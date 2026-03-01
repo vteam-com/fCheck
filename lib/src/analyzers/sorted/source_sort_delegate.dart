@@ -69,8 +69,11 @@ class SourceSortDelegate implements AnalyzerDelegate {
       context.compilationUnit!.accept(classVisitor);
 
       for (final ClassDeclaration classNode in classVisitor.targetClasses) {
-        // ignore: deprecated_member_use
-        final NodeList<ClassMember> members = classNode.members;
+        final classBody = classNode.body;
+        if (classBody is! BlockClassBody) {
+          continue;
+        }
+        final NodeList<ClassMember> members = classBody.members;
         if (members.isEmpty) {
           continue;
         }
@@ -79,10 +82,8 @@ class SourceSortDelegate implements AnalyzerDelegate {
         final sortedBody = sorter.getSortedBody();
 
         // Find the body boundaries.
-        // ignore: deprecated_member_use
-        final classBodyStart = classNode.leftBracket.offset + 1;
-        // ignore: deprecated_member_use
-        final classBodyEnd = classNode.rightBracket.offset;
+        final classBodyStart = classBody.leftBracket.offset + 1;
+        final classBodyEnd = classBody.rightBracket.offset;
         final originalBody = context.content.substring(
           classBodyStart,
           classBodyEnd,
