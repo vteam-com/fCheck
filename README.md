@@ -114,15 +114,15 @@ fcheck --fix
 
 ```bash
 $ fcheck .
-↓------------------------------ fCheck 1.0.3 ------------------------------↓
+↓------------------------------ fCheck 1.0.4 ------------------------------↓
 Input              : /path/to/project
-Dart Project       : fcheck (version: 1.0.0)
+Dart Project       : fcheck (version: 1.0.4)
 --------------------------------- Dashboard ---------------------------------
 Folders            :              21  |  Dependency         :               5
 Files              :             120  |  DevDependency      :               2
 Excluded Files     :              39  |  Classes            :              66
-Dart Files         :              91  |  Stateless Widgets  :              40
-Lines of Code      :          15,022  |  Stateful Widgets   :              26
+Dart Files         :              91  |  Widgets: Stateful  :              26
+Lines of Code      :          15,022  |  Widgets: Stateless :              40
 Comments           :     (14%) 2,145  |  Methods            :             357
 Localization       :             OFF  |  Functions          :             179
 --------------------------------- Literals ----------------------------------

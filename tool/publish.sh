@@ -57,15 +57,19 @@ print_status "Checking package version..."
 VERSION=$(grep "^version:" pubspec.yaml | sed 's/version: //')
 print_status "Package version: $VERSION"
 
-print_status "Running tests..."
-if ! dart test; then
-    print_error "Tests failed. Please fix the issues before publishing."
+print_status "Synchronizing generated version file..."
+if ! ./tool/generate_version.sh; then
+    print_error "Version sync failed. Please fix the issues before publishing."
     exit 1
 fi
-print_success "All tests passed!"
+print_success "Version sync completed!"
 
-print_status "Running dart pub get..."
-dart pub get
+print_status "Running full quality checks..."
+if ! ./tool/check.sh; then
+    print_error "Quality checks failed. Please fix the issues before publishing."
+    exit 1
+fi
+print_success "All quality checks passed!"
 
 print_status "Running dry-run publish to check for issues..."
 if ! dart pub publish --dry-run; then
