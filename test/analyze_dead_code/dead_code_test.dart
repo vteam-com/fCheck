@@ -176,6 +176,7 @@ version: 0.0.1
 
       File(p.join(libDir.path, 'main.dart')).writeAsStringSync('''
 import 'a.dart';
+import 'artifact.dart';
 import 'methods.dart';
 import 'ignored_usage.dart';
 import 'operators.dart';
@@ -194,6 +195,9 @@ void main() {
   math - other;
   math.value = 5;
   math.value.toString();
+  final artifact = Artifact();
+  final text = 'Artifact \${artifact.matchingCharacterDescription}';
+  text.toString();
 }
 ''');
 
@@ -268,6 +272,12 @@ class MathBox {
   MathBox operator -(MathBox other) {
     return MathBox(_value - other._value);
   }
+}
+''');
+
+      File(p.join(libDir.path, 'artifact.dart')).writeAsStringSync('''
+class Artifact {
+  String get matchingCharacterDescription => 'A';
 }
 ''');
 
@@ -386,6 +396,16 @@ class PreviewHost {
         issues.where(
           (i) =>
               i.type == DeadCodeIssueType.deadFunction &&
+              i.name == 'matchingCharacterDescription' &&
+              i.owner == 'Artifact',
+        ),
+        isEmpty,
+      );
+
+      expect(
+        issues.where(
+          (i) =>
+              i.type == DeadCodeIssueType.deadFunction &&
               i.name == 'previewCard',
         ),
         isEmpty,
@@ -429,6 +449,93 @@ class PreviewHost {
         ),
         isEmpty,
       );
+    });
+
+    test(
+      'does not report public lib methods as dead in package mode without main',
+      () {
+        final packageDir = Directory.systemTemp.createTempSync(
+          'fcheck_dead_code_public_api_test',
+        );
+        try {
+          File(p.join(packageDir.path, 'pubspec.yaml')).writeAsStringSync('''
+name: sample_flutter_package
+version: 0.0.1
+dependencies:
+  flutter:
+    sdk: flutter
+''');
+
+          final libDir = Directory(p.join(packageDir.path, 'lib'))
+            ..createSync(recursive: true);
+          File(
+            p.join(libDir.path, 'sample_flutter_package.dart'),
+          ).writeAsStringSync('''
+export 'artifact.dart';
+''');
+          File(p.join(libDir.path, 'artifact.dart')).writeAsStringSync('''
+class Artifact {
+  String get matchingCharacterDescription => 'A';
+}
+''');
+
+          final relativePackagePath = p.relative(
+            packageDir.path,
+            from: Directory.current.path,
+          );
+          final metrics = AnalyzeFolder(
+            Directory(relativePackagePath),
+          ).analyze();
+          final issues = metrics.deadCodeIssues;
+
+          expect(
+            issues.where(
+              (i) =>
+                  i.type == DeadCodeIssueType.deadFunction &&
+                  i.name == 'matchingCharacterDescription' &&
+                  i.owner == 'Artifact',
+            ),
+            isEmpty,
+          );
+        } finally {
+          packageDir.deleteSync(recursive: true);
+        }
+      },
+    );
+
+    test('does not report function used in string interpolation as dead', () {
+      final projectDir = Directory.systemTemp.createTempSync(
+        'fcheck_dead_code_string_interpolation_test',
+      );
+      try {
+        File(p.join(projectDir.path, 'pubspec.yaml')).writeAsStringSync('''
+name: sample_string_interpolation
+version: 0.0.1
+''');
+        File(p.join(projectDir.path, 'main.dart')).writeAsStringSync('''
+String banana() {
+  return 'yellow';
+}
+
+void main() {
+  print("Color of banana is \${banana()}");
+}
+''');
+
+        final metrics = AnalyzeFolder(projectDir).analyze();
+        final issues = metrics.deadCodeIssues;
+
+        expect(
+          issues.where(
+            (i) =>
+                i.type == DeadCodeIssueType.deadFunction &&
+                i.name == 'banana',
+          ),
+          isEmpty,
+        );
+      } finally {
+        projectDir.deleteSync(recursive: true);
+      }
     });
   });
 }

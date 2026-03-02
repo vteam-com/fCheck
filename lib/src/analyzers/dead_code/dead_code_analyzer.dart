@@ -69,14 +69,21 @@ class DeadCodeAnalyzer {
     }
 
     final bool hasMainEntryPoint = fileData.any((data) => data.hasMain == true);
-    final bool treatPublicApiAsUsed =
-        !hasMainEntryPoint && projectType == ProjectType.dart;
+    final bool treatPublicApiAsUsed = !hasMainEntryPoint;
     final String libRoot = p.join(projectRoot.path, 'lib');
-
+    final String normalizedLibRoot = p.normalize(p.absolute(libRoot));
     for (final data in fileData) {
-      final bool isPublicLibFile =
-          data.filePath.startsWith(libRoot) &&
-          !data.filePath.contains('${p.separator}src${p.separator}');
+      final String normalizedFilePath = p.normalize(p.absolute(data.filePath));
+      final bool isWithinLibRoot =
+          normalizedFilePath == normalizedLibRoot ||
+          p.isWithin(normalizedLibRoot, normalizedFilePath);
+      final String relativeToLib = isWithinLibRoot
+          ? p.relative(normalizedFilePath, from: normalizedLibRoot)
+          : '';
+      final bool isLibSrcFile =
+          relativeToLib == 'src' ||
+          relativeToLib.startsWith('src${p.separator}');
+      final bool isPublicLibFile = isWithinLibRoot && !isLibSrcFile;
 
       for (final symbol in data.classes) {
         if (treatPublicApiAsUsed && isPublicLibFile) {
@@ -114,6 +121,9 @@ class DeadCodeAnalyzer {
       }
 
       for (final symbol in data.methods) {
+        if (treatPublicApiAsUsed && isPublicLibFile) {
+          continue;
+        }
         if (!usedIdentifiers.contains(symbol.name)) {
           issues.add(
             DeadCodeIssue(

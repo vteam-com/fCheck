@@ -58,9 +58,12 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 
 ## Public API Handling
 
-- For **Dart** projects with no `main()`, public files in `lib/` are treated as
-  used (to avoid flagging public API as dead).
-- For **Flutter** projects, public API is not auto-assumed.
+- For package-style analysis with no `main()`, public API in `lib/` is treated
+  as used to avoid false positives on externally consumed package members.
+- Public API handling applies to top-level classes/functions and class members
+  (methods/getters/setters/operators).
+- Internal implementation files under `lib/src/**` are excluded from this
+  public-API assumption.
 
 ## Output
 
