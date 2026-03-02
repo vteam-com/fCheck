@@ -516,6 +516,14 @@ void main() {
             'name': 'example_project',
             'version': '1.0.0',
             'type': 'Flutter',
+            'platforms': {
+              'android': false,
+              'ios': false,
+              'macos': false,
+              'windows': false,
+              'linux': false,
+              'web': false,
+            },
           },
           'stats': {
             'folders': 3,
@@ -739,6 +747,16 @@ void main() {
 
         expect(joined, contains(AppStrings.dependency));
         expect(joined, contains(AppStrings.devDependency));
+        expect(joined, contains(AppStrings.platforms));
+        expect(joined, contains(AppStrings.android));
+        expect(joined, contains(AppStrings.ios));
+        expect(joined, contains(AppStrings.macos));
+        expect(joined, contains(AppStrings.windows));
+        expect(joined, contains(AppStrings.linux));
+        expect(joined, contains(AppStrings.web));
+        expect(joined, contains('[-${AppStrings.android}]'));
+        expect(joined, contains('[-${AppStrings.ios}]'));
+        expect(joined, contains('[-${AppStrings.linux}]'));
         expect(joined, contains(RegExp(r'Dependencies\s+:.*3')));
         expect(joined, contains(RegExp(r'DevDependencies\s+:.*2')));
         expect(joined, contains(RegExp(r'Classes\s+:.*2')));

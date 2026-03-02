@@ -66,6 +66,12 @@ import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 const Set<String> _testCaseFunctionNames = {'test', 'testWidgets'};
+const String _androidPlatformFolder = 'android';
+const String _iosPlatformFolder = 'ios';
+const String _macosPlatformFolder = 'macos';
+const String _windowsPlatformFolder = 'windows';
+const String _linuxPlatformFolder = 'linux';
+const String _webPlatformFolder = 'web';
 
 /// The main engine for analyzing Flutter/Dart project quality.
 ///
@@ -208,6 +214,7 @@ class AnalyzeFolder {
     final projectVersion = pubspecInfo.version;
     final projectName = pubspecInfo.name;
     final projectType = pubspecInfo.projectType;
+    final supportedPlatforms = _detectSupportedPlatforms(projectRoot);
     final oneClassPerFileEnabled = _isAnalyzerEnabled(
       AnalyzerDomain.oneClassPerFile,
     );
@@ -386,6 +393,12 @@ class AnalyzeFolder {
       version: projectVersion,
       dependencyCount: pubspecInfo.dependencyCount,
       devDependencyCount: pubspecInfo.devDependencyCount,
+      supportsAndroid: supportedPlatforms.android,
+      supportsIos: supportedPlatforms.ios,
+      supportsMacos: supportedPlatforms.macos,
+      supportsWindows: supportedPlatforms.windows,
+      supportsLinux: supportedPlatforms.linux,
+      supportsWeb: supportedPlatforms.web,
       usesLocalization: usesLocalization,
       excludedFilesCount: excludedDartFilesCount,
       testDirectoriesCount: testDirectoriesCount,
@@ -639,6 +652,25 @@ class AnalyzeFolder {
       }
     }
     return files;
+  }
+
+  /// Detects supported platform folders in the effective project root.
+  ///
+  /// A platform is considered supported when its canonical directory exists:
+  /// `android/`, `ios/`, `macos/`, `windows/`, `web/`, `linux/`.
+  ({bool android, bool ios, bool macos, bool windows, bool web, bool linux})
+  _detectSupportedPlatforms(Directory root) {
+    bool hasFolder(String folderName) =>
+        Directory(p.join(root.path, folderName)).existsSync();
+
+    return (
+      android: hasFolder(_androidPlatformFolder),
+      ios: hasFolder(_iosPlatformFolder),
+      macos: hasFolder(_macosPlatformFolder),
+      windows: hasFolder(_windowsPlatformFolder),
+      linux: hasFolder(_linuxPlatformFolder),
+      web: hasFolder(_webPlatformFolder),
+    );
   }
 }
 

@@ -23,6 +23,12 @@ class _ReportContext {
   final double commentRatio;
   final int dependencyCount;
   final int devDependencyCount;
+  final bool supportsAndroid;
+  final bool supportsIos;
+  final bool supportsMacos;
+  final bool supportsWindows;
+  final bool supportsLinux;
+  final bool supportsWeb;
   final int classCount;
   final int statelessWidgetCount;
   final int statefulWidgetCount;
@@ -99,6 +105,12 @@ class _ReportContext {
     required this.commentRatio,
     required this.dependencyCount,
     required this.devDependencyCount,
+    required this.supportsAndroid,
+    required this.supportsIos,
+    required this.supportsMacos,
+    required this.supportsWindows,
+    required this.supportsLinux,
+    required this.supportsWeb,
     required this.classCount,
     required this.statelessWidgetCount,
     required this.statefulWidgetCount,
@@ -345,6 +357,12 @@ class _ReportContext {
       commentRatio: metrics.commentRatio,
       dependencyCount: metrics.dependencyCount,
       devDependencyCount: metrics.devDependencyCount,
+      supportsAndroid: metrics.supportsAndroid,
+      supportsIos: metrics.supportsIos,
+      supportsMacos: metrics.supportsMacos,
+      supportsWindows: metrics.supportsWindows,
+      supportsLinux: metrics.supportsLinux,
+      supportsWeb: metrics.supportsWeb,
       classCount: classCount,
       statelessWidgetCount: metrics.totalStatelessWidgetCount,
       statefulWidgetCount: metrics.totalStatefulWidgetCount,

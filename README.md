@@ -14,8 +14,8 @@ fCheck provides fast local quality checks for Flutter and Dart projects in one d
 
 ## Platform Scope (v1.0.0)
 
-- Supported scope: macOS and Linux
-- Windows is not in scope for `fCheck 1.0.0`
+- Supported scope varies by project structure; platform support is detected from
+  canonical folders (`android/`, `ios/`, `macos/`, `windows/`, `linux/`, `web/`).
 
 ## Checks Included
 
@@ -115,20 +115,19 @@ fcheck --fix
 
 ```bash
 $ fcheck .
-↓------------------------------ fCheck 1.0.4 ------------------------------↓
+↓------------------------------ fCheck 1.0.4 -------------------------------↓
 Input              : /path/to/project
 Dart Project       : fcheck (version: 1.0.4)
-Dependencies       :               5
-DevDependencies    :               2
+Platforms          : [-Android] [✓iOS] [✓MacOS] [✓Windows] [✓Linux]  [✓Web]
+Dependencies       :               5  |  DevDependencies    :               2
 --------------------------------- Dashboard ---------------------------------
 Folders            :              21  |  Classes            :              66
 Files              :             120  |  Widgets: Stateful  :              26
 Excluded Files     :              39  |  Widgets: Stateless :              40
 Dart Files         :              91  |  Methods            :             357
 Test Dart Files    :              35  |  Functions          :             179
-Test Cases         :             392  |
-Lines of Code      :          15,022  |
-Comments           :     (14%) 2,145  |
+Test Cases         :             392  |  Lines of Code      :          15,022
+                  :                  |  Comments           :     (14%) 2,145
 --------------------------------- Literals ----------------------------------
 Localization       :             OFF
 Strings            : 1,203 (64% dupe), (31 hardcoded)

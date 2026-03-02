@@ -2,7 +2,7 @@ part of 'console_output.dart';
 
 const int _percentageMultiplier = 100;
 const int _gridLabelWidth = 18;
-const int _gridValueWidth = 15;
+const int _gridValueWidth = 14;
 const int _perfectScoreThreshold = 95;
 const int _goodScoreThreshold = 85;
 const int _fairScoreThreshold = 70;

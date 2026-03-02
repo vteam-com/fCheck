@@ -9,7 +9,7 @@ void printAnalysisError(Object error, StackTrace stack) {
 }
 
 /// Length of the header and footer lines
-final int dividerLength = 37;
+final int dividerLength = 36;
 const int _halfTitleLengthDivisor = 2;
 
 const int _ansiGreen = 32;

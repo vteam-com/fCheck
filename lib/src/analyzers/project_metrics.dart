@@ -160,6 +160,24 @@ class ProjectMetrics {
   /// Number of entries in `dev_dependencies` from pubspec.yaml.
   final int devDependencyCount;
 
+  /// Whether Android platform support is present.
+  final bool supportsAndroid;
+
+  /// Whether iOS platform support is present.
+  final bool supportsIos;
+
+  /// Whether macOS platform support is present.
+  final bool supportsMacos;
+
+  /// Whether Windows platform support is present.
+  final bool supportsWindows;
+
+  /// Whether Linux platform support is present.
+  final bool supportsLinux;
+
+  /// Whether Web platform support is present.
+  final bool supportsWeb;
+
   /// Whether the code-size analyzer was enabled for this run.
   final bool codeSizeAnalyzerEnabled;
 
@@ -265,6 +283,12 @@ class ProjectMetrics {
     required this.projectType,
     this.dependencyCount = 0,
     this.devDependencyCount = 0,
+    this.supportsAndroid = false,
+    this.supportsIos = false,
+    this.supportsMacos = false,
+    this.supportsWindows = false,
+    this.supportsLinux = false,
+    this.supportsWeb = false,
     this.usesLocalization = false,
     this.excludedFilesCount = 0,
     this.testDirectoriesCount = 0,
@@ -327,6 +351,14 @@ class ProjectMetrics {
       'name': projectName,
       'version': version,
       'type': projectType.label,
+      'platforms': {
+        'android': supportsAndroid,
+        'ios': supportsIos,
+        'macos': supportsMacos,
+        'windows': supportsWindows,
+        'linux': supportsLinux,
+        'web': supportsWeb,
+      },
     },
     'stats': {
       'folders': totalFolders,

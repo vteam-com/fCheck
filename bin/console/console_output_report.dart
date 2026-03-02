@@ -45,21 +45,62 @@ void _appendProjectHeader(List<String> lines, _ReportContext ctx) {
   );
   lines.add(
     _labelValueLine(
-      label: AppStrings.dependency,
-      value: formatCount(ctx.dependencyCount).padLeft(_gridValueWidth),
+      label: AppStrings.platforms,
+      value: _platformsSupportSummary(ctx),
     ),
   );
-  lines.add(
-    _labelValueLine(
-      label: AppStrings.devDependency,
-      value: formatCount(ctx.devDependencyCount).padLeft(_gridValueWidth),
-    ),
-  );
+}
+
+/// Builds ordered platform support badges for header display.
+///
+/// Order is fixed to keep output stable: Android, iOS, MacOS, Windows,
+/// Linux, Web.
+String _platformsSupportSummary(_ReportContext ctx) {
+  final entries = [
+    (supported: ctx.supportsAndroid, label: AppStrings.android),
+    (supported: ctx.supportsIos, label: AppStrings.ios),
+    (supported: ctx.supportsMacos, label: AppStrings.macos),
+    (supported: ctx.supportsWindows, label: AppStrings.windows),
+    (supported: ctx.supportsLinux, label: AppStrings.linux),
+    (supported: ctx.supportsWeb, label: AppStrings.web),
+  ];
+  final buffer = StringBuffer();
+  for (var index = 0; index < entries.length; index++) {
+    buffer.write(_platformSupportTag(entries[index]));
+    if (index == entries.length - 1) {
+      continue;
+    }
+    final current = entries[index].label;
+    final next = entries[index + 1].label;
+    final isLinuxToWeb = current == AppStrings.linux && next == AppStrings.web;
+    buffer.write(isLinuxToWeb ? '  ' : ' ');
+  }
+  return buffer.toString();
+}
+
+String _platformSupportTag(({bool supported, String label}) entry) {
+  final marker = entry.supported ? '✓' : '-';
+  final tagText = '[$marker${entry.label}]';
+  return entry.supported
+      ? _colorize(tagText, _ansiGreen)
+      : _colorize(tagText, _ansiGray);
 }
 
 /// Appends the two-column dashboard section with project stats and counts.
 void _appendDashboardSection(List<String> lines, _ReportContext ctx) {
   lines.add(dividerLine(AppStrings.dashboardDivider));
+  lines.add(
+    _gridRow([
+      _gridCell(
+        label: AppStrings.dependency,
+        value: formatCount(ctx.dependencyCount),
+      ),
+      _gridCell(
+        label: AppStrings.devDependency,
+        value: formatCount(ctx.devDependencyCount),
+      ),
+    ]),
+  );
   final leftDashboardRows = <String>[
     _gridCell(label: AppStrings.folders, value: formatCount(ctx.totalFolders)),
     _gridCell(label: AppStrings.files, value: formatCount(ctx.totalFiles)),

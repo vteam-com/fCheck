@@ -34,6 +34,13 @@ class AppStrings {
   static const String excludedFiles = 'Excluded Files';
   static const String testDartFiles = 'Test Dart Files';
   static const String testCases = 'Test Cases';
+  static const String platforms = 'Platforms';
+  static const String android = 'Android';
+  static const String ios = 'iOS';
+  static const String macos = 'MacOS';
+  static const String windows = 'Windows';
+  static const String linux = 'Linux';
+  static const String web = 'Web';
   static const String customExcludes = 'Custom Excludes';
   static const String ignoreDirectives = 'Ignore Directives';
   static const String disabledRules = 'Disabled Rules';
