@@ -528,8 +528,7 @@ void main() {
         expect(
           issues.where(
             (i) =>
-                i.type == DeadCodeIssueType.deadFunction &&
-                i.name == 'banana',
+                i.type == DeadCodeIssueType.deadFunction && i.name == 'banana',
           ),
           isEmpty,
         );

@@ -12,6 +12,9 @@ import 'package:path/path.dart' as p;
 /// - Excluded files and directories listing
 /// - Hidden folder filtering
 class FileUtils {
+  static const String _testDirName = 'test';
+  static const String _integrationTestDirName = 'integration_test';
+
   /// Expands glob patterns to handle common use cases that the glob library
   /// doesn't handle intuitively.
   ///
@@ -60,6 +63,15 @@ class FileUtils {
   static bool _isDefaultExcludedPath(List<String> pathParts) =>
       pathParts.any((part) => defaultExcludedDirs.contains(part));
 
+  static bool _isTestPath(List<String> pathParts) => pathParts.any(
+    (part) => part == _testDirName || part == _integrationTestDirName,
+  );
+
+  static bool _isTestRootDirectory(Directory directory) {
+    final name = p.basename(directory.path);
+    return name == _testDirName || name == _integrationTestDirName;
+  }
+
   /// Returns true when [relativePath] matches at least one exclude glob.
   static bool _matchesAnyGlob(List<Glob> globs, String relativePath) {
     for (final glob in globs) {
@@ -100,8 +112,8 @@ class FileUtils {
   /// Default excluded directories.
   static const List<String> defaultExcludedDirs = [
     'example',
-    'test',
-    'integration_test',
+    _testDirName,
+    _integrationTestDirName,
     'tool',
     '.dart_tool',
     'build',
@@ -256,6 +268,9 @@ class FileUtils {
   /// - Excluded Dart files count
   /// - Excluded folders count
   /// - Excluded files count
+  /// - Test root directories count (`test`, `integration_test`)
+  /// - Test files count (all files under test roots)
+  /// - Test Dart files count (Dart files under test roots)
   static (
     List<File> dartFiles,
     int folderCount,
@@ -263,6 +278,9 @@ class FileUtils {
     int excludedDartFilesCount,
     int excludedFoldersCount,
     int excludedFilesCount,
+    int testDirectoriesCount,
+    int testFilesCount,
+    int testDartFilesCount,
   )
   scanDirectory(Directory dir, {List<String> excludePatterns = const []}) {
     final globs = _buildExcludeGlobs(excludePatterns);
@@ -280,6 +298,10 @@ class FileUtils {
       if (_isHiddenPath(pathParts)) {
         excludedCounts.addExcludedEntity(entity);
         return;
+      }
+
+      if (_isTestPath(pathParts)) {
+        excludedCounts.addTestEntity(entity);
       }
 
       // Check if entity is in default excluded directories
@@ -316,6 +338,9 @@ class FileUtils {
       excludedCounts.excludedDartFilesCount,
       excludedCounts.excludedFoldersCount,
       excludedCounts.excludedFilesCount,
+      excludedCounts.testDirectoriesCount,
+      excludedCounts.testFilesCount,
+      excludedCounts.testDartFilesCount,
     );
   }
 
@@ -365,6 +390,9 @@ class _ScanCounts {
   int excludedFoldersCount = 0;
   int excludedFilesCount = 0;
   int excludedDartFilesCount = 0;
+  int testDirectoriesCount = 0;
+  int testFilesCount = 0;
+  int testDartFilesCount = 0;
 
   /// Records one excluded entity and updates per-kind counters.
   ///
@@ -380,6 +408,20 @@ class _ScanCounts {
       excludedFilesCount++;
       if (p.extension(entity.path) == '.dart') {
         excludedDartFilesCount++;
+      }
+    }
+  }
+
+  /// Records test discovery counters for canonical test paths.
+  void addTestEntity(FileSystemEntity entity) {
+    if (entity is Directory && FileUtils._isTestRootDirectory(entity)) {
+      testDirectoriesCount++;
+      return;
+    }
+    if (entity is File) {
+      testFilesCount++;
+      if (p.extension(entity.path) == '.dart') {
+        testDartFilesCount++;
       }
     }
   }

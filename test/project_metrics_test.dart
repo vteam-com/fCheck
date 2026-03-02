@@ -148,6 +148,39 @@ void main() {
       expect(projectMetrics.numberLiteralDuplicateRatio, equals(0));
     });
 
+    test('should expose test discovery metrics', () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 1,
+        fileMetrics: const [],
+        secretIssues: const [],
+        hardcodedStringIssues: const [],
+        magicNumberIssues: const [],
+        sourceSortIssues: const [],
+        layersIssues: const [],
+        deadCodeIssues: const [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: const {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        testDirectoriesCount: 2,
+        testFilesCount: 3,
+        testDartFilesCount: 2,
+        testCaseCount: 4,
+      );
+
+      expect(projectMetrics.hasTests, isTrue);
+      expect(projectMetrics.testDirectoriesCount, equals(2));
+      expect(projectMetrics.testFilesCount, equals(3));
+      expect(projectMetrics.testDartFilesCount, equals(2));
+      expect(projectMetrics.testCaseCount, equals(4));
+    });
+
     test(
       'should not report 100 compliance score when there are open issues',
       () {
@@ -489,6 +522,11 @@ void main() {
             'files': 8,
             'dartFiles': 1,
             'excludedFiles': 5,
+            'hasTests': false,
+            'testDirectories': 0,
+            'testFiles': 0,
+            'testDartFiles': 0,
+            'testCases': 0,
             'customExcludedFiles': 0,
             'ignoreDirectives': 0,
             'disabledAnalyzers': 0,
@@ -661,7 +699,7 @@ void main() {
     });
 
     test(
-      'should show dependency and devDependency counts in the dashboard',
+      'should show dependencies and devDependencies counts in the report',
       () {
         final projectMetrics = ProjectMetrics(
           totalFolders: 1,
@@ -701,13 +739,15 @@ void main() {
 
         expect(joined, contains(AppStrings.dependency));
         expect(joined, contains(AppStrings.devDependency));
-        expect(joined, contains(RegExp(r'Dependency\s+:.*3')));
-        expect(joined, contains(RegExp(r'DevDependency\s+:.*2')));
+        expect(joined, contains(RegExp(r'Dependencies\s+:.*3')));
+        expect(joined, contains(RegExp(r'DevDependencies\s+:.*2')));
         expect(joined, contains(RegExp(r'Classes\s+:.*2')));
-        expect(joined, contains(RegExp(r'Widgets: Stateless\s+:.*0')));
-        expect(joined, contains(RegExp(r'Widgets: Stateful\s+:.*0')));
+        expect(joined, contains(RegExp(r'Widgets: Stateless\s+:.*-')));
+        expect(joined, contains(RegExp(r'Widgets: Stateful\s+:.*-')));
         expect(joined, contains(RegExp(r'Methods\s+:.*4')));
         expect(joined, contains(RegExp(r'Functions\s+:.*3')));
+        expect(joined, contains(RegExp(r'Test Cases\s+:.*-')));
+        expect(joined, contains(RegExp(r'Test Dart Files\s+:.*-')));
         expect(joined, isNot(contains(AppStrings.customExcludes)));
         expect(joined, isNot(contains(AppStrings.ignoreDirectives)));
         expect(joined, isNot(contains(AppStrings.disabledRules)));
@@ -985,6 +1025,45 @@ void main() {
         expect(joined, isNot(contains('"hello"')));
       },
     );
+
+    test('should show localization first in literals section', () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 10,
+        totalCommentLines: 0,
+        fileMetrics: const [],
+        secretIssues: const [],
+        hardcodedStringIssues: const [],
+        magicNumberIssues: const [],
+        sourceSortIssues: const [],
+        layersIssues: const [],
+        deadCodeIssues: const [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: const {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: false,
+      );
+
+      final output = buildReportLines(
+        projectMetrics,
+        listMode: ReportListMode.none,
+      );
+      final joined = output.join('\n');
+      final literalsIndex = joined.indexOf(AppStrings.literalsDivider);
+      final localizationIndex = joined.indexOf(AppStrings.localization);
+      final stringsIndex = joined.indexOf(AppStrings.strings);
+      final numbersIndex = joined.indexOf(AppStrings.numbers);
+
+      expect(literalsIndex, isNonNegative);
+      expect(localizationIndex, greaterThan(literalsIndex));
+      expect(stringsIndex, greaterThan(localizationIndex));
+      expect(numbersIndex, greaterThan(stringsIndex));
+    });
 
     test('should not truncate lists when listMode is full', () {
       final magicIssues = List.generate(

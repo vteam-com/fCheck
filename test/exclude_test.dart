@@ -159,6 +159,9 @@ void main() {
           excludedDartFilesCount,
           excludedFoldersCount,
           excludedFilesCount,
+          _,
+          _,
+          _,
         ) = FileUtils.scanDirectory(
           tempDir,
         );
@@ -200,6 +203,9 @@ void main() {
           excludedDartFilesCount,
           excludedFoldersCount,
           excludedFilesCount,
+          _,
+          _,
+          _,
         ) = FileUtils.scanDirectory(
           tempDir,
         );
@@ -427,6 +433,9 @@ void main() {
           excludedDartFilesCount,
           excludedFoldersCount,
           excludedFilesCount,
+          testDirectoriesCount,
+          testFilesCount,
+          testDartFilesCount,
         ) = FileUtils.scanDirectory(
           tempDir,
         );
@@ -437,6 +446,9 @@ void main() {
         expect(excludedDartFilesCount, equals(0));
         expect(excludedFoldersCount, equals(0));
         expect(excludedFilesCount, equals(0));
+        expect(testDirectoriesCount, equals(0));
+        expect(testFilesCount, equals(0));
+        expect(testDartFilesCount, equals(0));
 
         // Verify dart files
         expect(dartFiles.any((f) => f.path.contains('main.dart')), isTrue);
@@ -477,6 +489,9 @@ void main() {
           excludedDartFilesCount,
           excludedFoldersCount,
           excludedFilesCount,
+          testDirectoriesCount,
+          testFilesCount,
+          testDartFilesCount,
         ) = FileUtils.scanDirectory(
           tempDir,
           excludePatterns: ['test/*'],
@@ -500,6 +515,9 @@ void main() {
           excludedFilesCount,
           equals(2),
         ); // test_helper.dart and integration_test_helper.dart excluded
+        expect(testDirectoriesCount, equals(2));
+        expect(testFilesCount, equals(2));
+        expect(testDartFilesCount, equals(2));
 
         expect(dartFiles.any((f) => f.path.contains('main.dart')), isTrue);
         expect(dartFiles.any((f) => f.path.contains('service.dart')), isTrue);
@@ -535,6 +553,9 @@ void main() {
           excludedDartFilesCount,
           excludedFoldersCount,
           excludedFilesCount,
+          _,
+          _,
+          _,
         ) = FileUtils.scanDirectory(
           tempDir,
         );

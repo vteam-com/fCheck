@@ -19,6 +19,10 @@
 
 import 'dart:io';
 
+import 'package:analyzer/dart/analysis/features.dart';
+import 'package:analyzer/dart/analysis/utilities.dart';
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
@@ -60,6 +64,8 @@ import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
+
+const Set<String> _testCaseFunctionNames = {'test', 'testWidgets'};
 
 /// The main engine for analyzing Flutter/Dart project quality.
 ///
@@ -180,12 +186,25 @@ class AnalyzeFolder {
     final projectRoot = pubspecInfo.projectRoot ?? projectDir;
 
     // Perform unified directory scan to get all file system metrics in one pass
-    final (dartFiles, totalFolders, totalFiles, excludedDartFilesCount, _, _) =
-        FileUtils.scanDirectory(projectDir, excludePatterns: excludePatterns);
+    final (
+      dartFiles,
+      totalFolders,
+      totalFiles,
+      excludedDartFilesCount,
+      _,
+      _,
+      testDirectoriesCount,
+      testFilesCount,
+      testDartFilesCount,
+    ) = FileUtils.scanDirectory(
+      projectDir,
+      excludePatterns: excludePatterns,
+    );
     final customExcludedDartFilesCount = FileUtils.countCustomExcludedDartFiles(
       projectDir,
       excludePatterns: excludePatterns,
     );
+    final testCaseCount = _countTestCases();
     final projectVersion = pubspecInfo.version;
     final projectName = pubspecInfo.name;
     final projectType = pubspecInfo.projectType;
@@ -369,6 +388,10 @@ class AnalyzeFolder {
       devDependencyCount: pubspecInfo.devDependencyCount,
       usesLocalization: usesLocalization,
       excludedFilesCount: excludedDartFilesCount,
+      testDirectoriesCount: testDirectoriesCount,
+      testFilesCount: testFilesCount,
+      testDartFilesCount: testDartFilesCount,
+      testCaseCount: testCaseCount,
       customExcludedFilesCount: customExcludedDartFilesCount,
       ignoreDirectivesCount: metricsAggregation.ignoreDirectivesCount,
       ignoreDirectiveFiles: metricsAggregation.ignoreDirectiveCountsByFile.keys
@@ -573,6 +596,71 @@ class AnalyzeFolder {
       }
     }
     return false;
+  }
+
+  /// Counts project test cases by scanning `test` and `integration_test` Dart files.
+  int _countTestCases() {
+    var totalTestCases = 0;
+    for (final file in _listTestDartFiles(projectDir)) {
+      try {
+        final content = file.readAsStringSync();
+        final parseResult = parseString(
+          content: content,
+          featureSet: FeatureSet.latestLanguageVersion(),
+        );
+        final counter = _TestCaseVisitor();
+        parseResult.unit.accept(counter);
+        totalTestCases += counter.testCaseCount;
+      } catch (_) {
+        // Ignore unreadable/unparseable test files and continue.
+      }
+    }
+    return totalTestCases;
+  }
+
+  /// Lists Dart files located under canonical test directories.
+  List<File> _listTestDartFiles(Directory dir) {
+    final files = <File>[];
+    for (final entity in dir.listSync(recursive: true)) {
+      if (entity is! File || p.extension(entity.path) != '.dart') {
+        continue;
+      }
+      final relativePath = p.relative(entity.path, from: dir.path);
+      final pathParts = p.split(relativePath);
+      final isHidden = pathParts.any((part) => part.startsWith('.'));
+      if (isHidden) {
+        continue;
+      }
+      final isTestFile = pathParts.any(
+        (part) => part == 'test' || part == 'integration_test',
+      );
+      if (isTestFile) {
+        files.add(entity);
+      }
+    }
+    return files;
+  }
+}
+
+class _TestCaseVisitor extends RecursiveAstVisitor<void> {
+  int testCaseCount = 0;
+
+  @override
+  void visitFunctionExpressionInvocation(FunctionExpressionInvocation node) {
+    final function = node.function;
+    if (function is SimpleIdentifier &&
+        _testCaseFunctionNames.contains(function.name)) {
+      testCaseCount++;
+    }
+    super.visitFunctionExpressionInvocation(node);
+  }
+
+  @override
+  void visitMethodInvocation(MethodInvocation node) {
+    if (_testCaseFunctionNames.contains(node.methodName.name)) {
+      testCaseCount++;
+    }
+    super.visitMethodInvocation(node);
   }
 }
 

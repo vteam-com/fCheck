@@ -264,16 +264,18 @@
   <text x="1962" y="1328" class="note-text">Consistent post-processing for all complex domain analyzers.</text>
   <rect x="1950" y="1348" width="840" height="35" rx="4" class="note-box" />
   <text x="1962" y="1371" class="note-text">CodeSizeDelegate collects LOC for treemap/reporting; code_size scoring now uses configurable .fcheck LOC thresholds (file/class/function/method) and contributes deductions when exceeded.</text>
+  <rect x="1950" y="1391" width="760" height="35" rx="4" class="note-box" />
+  <text x="1962" y="1414" class="note-text">AnalyzeFolder also scans test/integration_test Dart files and parses AST calls to count test() and testWidgets() cases.</text>
 
   <!-- 5. Return -->
-  <text x="50" y="1415" class="section-label">5. Build ProjectMetrics &amp; Return</text>
+  <text x="50" y="1450" class="section-label">5. Build ProjectMetrics &amp; Return</text>
 
-  <rect x="2460" y="1430" width="20" height="45" class="activation" />
-  <line x1="290" y1="1440" x2="2460" y2="1440" class="message-arrow" />
-  <text x="1375" y="1434" text-anchor="middle" class="message-text">ProjectMetrics(results)</text>
-  <line x1="2460" y1="1475" x2="290" y2="1475" class="return-arrow" />
+  <rect x="2460" y="1465" width="20" height="45" class="activation" />
+  <line x1="290" y1="1475" x2="2460" y2="1475" class="message-arrow" />
+  <text x="1375" y="1469" text-anchor="middle" class="message-text">ProjectMetrics(results)</text>
+  <line x1="2460" y1="1510" x2="290" y2="1510" class="return-arrow" />
 
-  <line x1="270" y1="1510" x2="100" y2="1510" class="return-arrow" />
-  <text x="185" y="1526" text-anchor="middle" class="message-text">return ProjectMetrics</text>
+  <line x1="270" y1="1545" x2="100" y2="1545" class="return-arrow" />
+  <text x="185" y="1561" text-anchor="middle" class="message-text">return ProjectMetrics</text>
 
 </svg>

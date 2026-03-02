@@ -580,6 +580,11 @@ void main() {
       expect(json['project'], isNotNull);
       expect(json['stats'], isNotNull);
       expect(json['stats']['excludedFiles'], isNotNull);
+      expect(json['stats']['hasTests'], isNotNull);
+      expect(json['stats']['testDirectories'], isNotNull);
+      expect(json['stats']['testFiles'], isNotNull);
+      expect(json['stats']['testDartFiles'], isNotNull);
+      expect(json['stats']['testCases'], isNotNull);
       expect(json['stats']['duplicateCodeIssues'], isNotNull);
       expect(json['stats']['complianceScore'], isNotNull);
       expect(json['layers']['dependencies'], isNotNull);
@@ -590,6 +595,41 @@ void main() {
       final aKey = graph.keys.firstWhere((k) => k.endsWith('a.dart'));
       expect(graph[aKey], contains(contains('b.dart')));
       expect(json['magicNumbers'], isA<List<dynamic>>());
+    });
+
+    test('should report test discovery metrics in JSON stats', () async {
+      File('${tempDir.path}/lib_main.dart').writeAsStringSync('void main() {}');
+      final testDir = Directory('${tempDir.path}/test')..createSync();
+      final integrationTestDir = Directory('${tempDir.path}/integration_test')
+        ..createSync();
+
+      File('${testDir.path}/unit_test.dart').writeAsStringSync('''
+import 'package:test/test.dart';
+
+void main() {
+  test('unit', () {
+    expect(1, 1);
+  });
+}
+''');
+      File('${integrationTestDir.path}/app_test.dart').writeAsStringSync('''
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  testWidgets('app', (tester) async {});
+}
+''');
+
+      final result = await runCli(['--input', tempDir.path, '--json']);
+
+      expect(result.exitCode, equals(0));
+      final json = jsonDecode(result.stdout as String) as Map<String, dynamic>;
+      final stats = json['stats'] as Map<String, dynamic>;
+      expect(stats['hasTests'], isTrue);
+      expect(stats['testDirectories'], equals(2));
+      expect(stats['testFiles'], equals(2));
+      expect(stats['testDartFiles'], equals(2));
+      expect(stats['testCases'], equals(2));
     });
 
     test(

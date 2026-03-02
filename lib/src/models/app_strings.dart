@@ -32,6 +32,8 @@ class AppStrings {
   static const String analyzerSmall = 'analyzer';
   static const String analyzersSmall = 'analyzers';
   static const String excludedFiles = 'Excluded Files';
+  static const String testDartFiles = 'Test Dart Files';
+  static const String testCases = 'Test Cases';
   static const String customExcludes = 'Custom Excludes';
   static const String ignoreDirectives = 'Ignore Directives';
   static const String disabledRules = 'Disabled Rules';
@@ -56,8 +58,8 @@ class AppStrings {
   static const String deadCode = 'Dead Code';
   static const String layers = 'Layers';
   static const String sourceSorting = 'Source Sorting';
-  static const String dependency = 'Dependency';
-  static const String devDependency = 'DevDependency';
+  static const String dependency = 'Dependencies';
+  static const String devDependency = 'DevDependencies';
   static const String dependencies = 'Dependencies';
   static const String duplicateCode = 'Duplicate Code';
 

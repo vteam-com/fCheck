@@ -8,6 +8,7 @@ fCheck provides fast local quality checks for Flutter and Dart projects in one d
 - Deterministic output for CI and code review
 - 100% private local execution (no AI service, no code sent externally)
 - Console, JSON, and diagram outputs
+- Includes test discovery metrics (`hasTests`, `testDirectories`, `testFiles`, `testDartFiles`, `testCases`)
 - Works as a CLI tool
 - Works as a Dart package in your own app/tooling
 
@@ -117,15 +118,19 @@ $ fcheck .
 ↓------------------------------ fCheck 1.0.4 ------------------------------↓
 Input              : /path/to/project
 Dart Project       : fcheck (version: 1.0.4)
+Dependencies       :               5
+DevDependencies    :               2
 --------------------------------- Dashboard ---------------------------------
-Folders            :              21  |  Dependency         :               5
-Files              :             120  |  DevDependency      :               2
-Excluded Files     :              39  |  Classes            :              66
-Dart Files         :              91  |  Widgets: Stateful  :              26
-Lines of Code      :          15,022  |  Widgets: Stateless :              40
-Comments           :     (14%) 2,145  |  Methods            :             357
-Localization       :             OFF  |  Functions          :             179
+Folders            :              21  |  Classes            :              66
+Files              :             120  |  Widgets: Stateful  :              26
+Excluded Files     :              39  |  Widgets: Stateless :              40
+Dart Files         :              91  |  Methods            :             357
+Test Dart Files    :              35  |  Functions          :             179
+Test Cases         :             392  |
+Lines of Code      :          15,022  |
+Comments           :     (14%) 2,145  |
 --------------------------------- Literals ----------------------------------
+Localization       :             OFF
 Strings            : 1,203 (64% dupe), (31 hardcoded)
 Numbers            : 842, (74 hardcoded)
 --------------------------------- Analyzers ---------------------------------

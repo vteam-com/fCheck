@@ -43,6 +43,18 @@ void _appendProjectHeader(List<String> lines, _ReportContext ctx) {
       value: '${ctx.projectName} (${AppStrings.version} ${ctx.version})',
     ),
   );
+  lines.add(
+    _labelValueLine(
+      label: AppStrings.dependency,
+      value: formatCount(ctx.dependencyCount).padLeft(_gridValueWidth),
+    ),
+  );
+  lines.add(
+    _labelValueLine(
+      label: AppStrings.devDependency,
+      value: formatCount(ctx.devDependencyCount).padLeft(_gridValueWidth),
+    ),
+  );
 }
 
 /// Appends the two-column dashboard section with project stats and counts.
@@ -59,39 +71,39 @@ void _appendDashboardSection(List<String> lines, _ReportContext ctx) {
       label: AppStrings.dartFiles,
       value: formatCount(ctx.totalDartFiles),
     ),
-    _gridCell(label: AppStrings.loc, value: formatCount(ctx.totalLinesOfCode)),
     _gridCell(
-      label: AppStrings.comments,
-      value: ctx.commentSummary,
+      label: AppStrings.testDartFiles,
+      value: _dashboardCountOrDash(ctx.testDartFilesCount),
       valuePreAligned: true,
     ),
     _gridCell(
-      label: AppStrings.localization,
-      value: ctx.usesLocalization ? AppStrings.on : AppStrings.off,
+      label: AppStrings.testCases,
+      value: _dashboardCountOrDash(ctx.testCaseCount),
+      valuePreAligned: true,
     ),
   ];
   final rightDashboardRows = <String>[
-    _gridCell(
-      label: AppStrings.dependency,
-      value: formatCount(ctx.dependencyCount),
-    ),
-    _gridCell(
-      label: AppStrings.devDependency,
-      value: formatCount(ctx.devDependencyCount),
-    ),
     _gridCell(label: AppStrings.classes, value: formatCount(ctx.classCount)),
     _gridCell(
       label: AppStrings.statefulWidgets,
-      value: formatCount(ctx.statefulWidgetCount),
+      value: _dashboardCountOrDash(ctx.statefulWidgetCount),
+      valuePreAligned: true,
     ),
     _gridCell(
       label: AppStrings.statelessWidgets,
-      value: formatCount(ctx.statelessWidgetCount),
+      value: _dashboardCountOrDash(ctx.statelessWidgetCount),
+      valuePreAligned: true,
     ),
     _gridCell(label: AppStrings.methods, value: formatCount(ctx.methodCount)),
     _gridCell(
       label: AppStrings.functions,
       value: formatCount(ctx.functionCount),
+    ),
+    _gridCell(label: AppStrings.loc, value: formatCount(ctx.totalLinesOfCode)),
+    _gridCell(
+      label: AppStrings.comments,
+      value: ctx.commentSummary,
+      valuePreAligned: true,
     ),
   ];
   final dashboardRowCount =
@@ -127,6 +139,12 @@ void _appendLiteralsSection(List<String> lines, _ReportContext ctx) {
   }
 
   lines.add(dividerLine(AppStrings.literalsDivider));
+  lines.add(
+    _labelValueLine(
+      label: AppStrings.localization,
+      value: ctx.usesLocalization ? AppStrings.on : AppStrings.off,
+    ),
+  );
   lines.add(
     _labelValueLine(
       label: AppStrings.strings,

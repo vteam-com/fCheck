@@ -11,6 +11,8 @@ class _ReportContext {
   final int totalFiles;
   final int totalDartFiles;
   final int excludedFilesCount;
+  final int testDartFilesCount;
+  final int testCaseCount;
   final int customExcludedFilesCount;
   final int ignoreDirectivesCount;
   final List<MapEntry<String, int>> ignoreDirectiveEntries;
@@ -85,6 +87,8 @@ class _ReportContext {
     required this.totalFiles,
     required this.totalDartFiles,
     required this.excludedFilesCount,
+    required this.testDartFilesCount,
+    required this.testCaseCount,
     required this.customExcludedFilesCount,
     required this.ignoreDirectivesCount,
     required this.ignoreDirectiveEntries,
@@ -329,6 +333,8 @@ class _ReportContext {
       totalFiles: metrics.totalFiles,
       totalDartFiles: metrics.totalDartFiles,
       excludedFilesCount: metrics.excludedFilesCount,
+      testDartFilesCount: metrics.testDartFilesCount,
+      testCaseCount: metrics.testCaseCount,
       customExcludedFilesCount: metrics.customExcludedFilesCount,
       ignoreDirectivesCount: metrics.ignoreDirectivesCount,
       ignoreDirectiveEntries: ignoreDirectiveEntries,

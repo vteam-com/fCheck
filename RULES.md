@@ -14,7 +14,7 @@ fCheck is a Dart CLI tool for analyzing Flutter and Dart project quality. It pro
 - Flutter widget member sorting
 - Code size threshold analysis
 - Layer dependency analysis and visualization
-- Project metrics (files, folders, LOC, comment ratios, widget implementation counts, literal inventory with duplicate ratios)
+- Project metrics (files, folders, LOC, comment ratios, widget implementation counts, literal inventory with duplicate ratios, and test discovery counts including test case totals)
 
 ## Domain Rules (Start Here)
 

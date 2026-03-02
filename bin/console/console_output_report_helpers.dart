@@ -102,6 +102,14 @@ String _gridCell({
   );
 }
 
+/// Formats dashboard numeric counts, rendering zero as a gray dash.
+String _dashboardCountOrDash(int count, {int width = _gridValueWidth}) {
+  if (count == 0) {
+    return _colorize('-'.padLeft(width), _ansiGray);
+  }
+  return formatCount(count).padLeft(width);
+}
+
 /// Formats and colorizes the overall compliance score percentage.
 String _scoreValue(int score) {
   final text = '${formatCount(score)}%';

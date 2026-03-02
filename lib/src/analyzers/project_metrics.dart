@@ -121,6 +121,18 @@ class ProjectMetrics {
   /// Number of Dart files excluded by user-provided glob patterns.
   final int customExcludedFilesCount;
 
+  /// Number of canonical test directories found (`test`, `integration_test`).
+  final int testDirectoriesCount;
+
+  /// Number of files under canonical test directories.
+  final int testFilesCount;
+
+  /// Number of Dart files under canonical test directories.
+  final int testDartFilesCount;
+
+  /// Number of test case invocations found in test Dart files.
+  final int testCaseCount;
+
   /// Count of `// ignore: fcheck_*` directives found in analyzed Dart files.
   final int ignoreDirectivesCount;
 
@@ -210,6 +222,10 @@ class ProjectMetrics {
   /// [projectType] The detected project type (Flutter, Dart, or Unknown).
   /// [usesLocalization] Whether the project appears to be using Flutter localization.
   /// [excludedFilesCount] Number of files successfully skipped based on exclusion glob patterns.
+  /// [testDirectoriesCount] Number of `test`/`integration_test` directories found.
+  /// [testFilesCount] Number of files found under `test`/`integration_test`.
+  /// [testDartFilesCount] Number of Dart files found under `test`/`integration_test`.
+  /// [testCaseCount] Number of `test(...)` and `testWidgets(...)` invocations found.
   /// [customExcludedFilesCount] Number of Dart files excluded by custom glob patterns.
   /// [ignoreDirectivesCount] Number of `// ignore: fcheck_*` directives found.
   /// [ignoreDirectiveFiles] Unique file paths containing `// ignore: fcheck_*`.
@@ -251,6 +267,10 @@ class ProjectMetrics {
     this.devDependencyCount = 0,
     this.usesLocalization = false,
     this.excludedFilesCount = 0,
+    this.testDirectoriesCount = 0,
+    this.testFilesCount = 0,
+    this.testDartFilesCount = 0,
+    this.testCaseCount = 0,
     this.customExcludedFilesCount = 0,
     this.ignoreDirectivesCount = 0,
     this.ignoreDirectiveFiles = const [],
@@ -313,6 +333,11 @@ class ProjectMetrics {
       'files': totalFiles,
       'dartFiles': totalDartFiles,
       'excludedFiles': excludedFilesCount,
+      'hasTests': hasTests,
+      'testDirectories': testDirectoriesCount,
+      'testFiles': testFilesCount,
+      'testDartFiles': testDartFilesCount,
+      'testCases': testCaseCount,
       'customExcludedFiles': customExcludedFilesCount,
       'ignoreDirectives': ignoreDirectivesCount,
       'disabledAnalyzers': disabledAnalyzersCount,
@@ -384,6 +409,9 @@ class ProjectMetrics {
   double get numberLiteralDuplicateRatio => totalNumberLiteralCount == 0
       ? 0
       : duplicatedNumberLiteralCount / totalNumberLiteralCount;
+
+  /// Whether canonical test directories contain at least one Dart test file.
+  bool get hasTests => testDartFilesCount > 0;
 
   /// Number of analyzers disabled for this run.
   int get disabledAnalyzersCount => [
