@@ -7,6 +7,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2026-03-02
+
+### Added
+
+- Dashboard now reports test coverage discovery metrics (test directories/files/Dart files/cases).
+- Dashboard now reports detected platform support (`Android`, `iOS`, `macOS`, `Windows`, `Linux`, `Web`).
+
+### Changed
+
+- Reorganized dashboard layout to improve metrics readability.
+- Improved dead-code detection to better handle interpolation usage and reduce false positives for exported library APIs.
+
 ## [1.0.4] - 2026-03-01
 
 ### Added
