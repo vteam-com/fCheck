@@ -160,6 +160,7 @@ class TestClass {
       expect(result.stdout, contains('--fix'));
       expect(result.stdout, contains('--help'));
       expect(result.stdout, contains('--help-score'));
+      expect(result.stdout, contains('--ignores'));
       expect(result.stdout, contains('--no-colors'));
     });
 
@@ -245,6 +246,97 @@ class TestClass {
       expect(result.stdout, contains('Compliance score model from 0% to 100%'));
       expect(result.stdout, isNot(contains('does not exist')));
     });
+
+    test('should list ignore inventory with --ignores', () async {
+      const String configFileName = '.fcheck';
+      const String sourceFilePath = 'lib/main.dart';
+
+      Directory('${tempDir.path}/lib').createSync(recursive: true);
+      File('${tempDir.path}/$configFileName').writeAsStringSync('''
+input:
+  exclude:
+    - "**/generated/**"
+analyzers:
+  disabled:
+    - dead_code
+ignores:
+  magic_numbers: true
+''');
+      File('${tempDir.path}/$sourceFilePath').writeAsStringSync('''
+// ignore: fcheck_layers
+void main() {
+  final value = 42; // ignore: fcheck_magic_numbers
+  print(value);
+}
+''');
+
+      final result = await runCli(['--input', tempDir.path, '--ignores']);
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains('Ignore Inventory (grouped by type)'));
+      expect(result.stdout, contains('Type: Exclude patterns'));
+      expect(result.stdout, contains('.fcheck input.exclude (1):'));
+      expect(result.stdout, contains('**/generated/**'));
+      expect(
+        result.stdout,
+        contains('Type: Analyzer skips (analyzers.disabled)'),
+      );
+      expect(result.stdout, contains('dead_code'));
+      expect(
+        result.stdout,
+        contains('Type: Analyzer skips (legacy ignores.*: true)'),
+      );
+      expect(result.stdout, contains('magic_numbers'));
+      expect(result.stdout, contains('Type: Dart comment directives'));
+      expect(result.stdout, contains('fcheck_layers (1):'));
+      expect(result.stdout, contains('fcheck_magic_numbers (1):'));
+      expect(
+        result.stdout,
+        contains('$sourceFilePath:1 | // ignore: fcheck_layers'),
+      );
+      expect(
+        result.stdout,
+        contains(
+          '$sourceFilePath:3 | final value = 42; // ignore: fcheck_magic_numbers',
+        ),
+      );
+    });
+
+    test(
+      'should list ignore inventory as JSON with --ignores --json',
+      () async {
+        const String sourceFilePath = 'lib/main.dart';
+
+        Directory('${tempDir.path}/lib').createSync(recursive: true);
+        File('${tempDir.path}/$sourceFilePath').writeAsStringSync('''
+void main() {
+  final value = 42; // ignore: fcheck_magic_numbers
+  print(value);
+}
+''');
+
+        final result = await runCli([
+          '--input',
+          tempDir.path,
+          '--ignores',
+          '--json',
+        ]);
+
+        expect(result.exitCode, equals(0));
+        final decoded =
+            jsonDecode(result.stdout as String) as Map<String, dynamic>;
+        expect(decoded['dartCommentDirectives'] as List<dynamic>, isNotEmpty);
+        expect(decoded['groupedByType'], isA<Map<String, dynamic>>());
+        final directives = decoded['dartCommentDirectives'] as List<dynamic>;
+        final first = directives.first as Map<String, dynamic>;
+        expect(first['path'], equals(sourceFilePath));
+        expect(first['token'], equals('fcheck_magic_numbers'));
+        final groupedByType = decoded['groupedByType'] as Map<String, dynamic>;
+        final groupedDirectives =
+            groupedByType['dartCommentDirectives'] as Map<String, dynamic>;
+        expect(groupedDirectives['fcheck_magic_numbers'], isA<List<dynamic>>());
+      },
+    );
 
     test('should respect --list none flag', () async {
       File(

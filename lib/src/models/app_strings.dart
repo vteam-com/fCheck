@@ -124,6 +124,18 @@ class AppStrings {
   static const String showAllEntries = 'Show all list entries';
   static const String uniqueFileNamesOnly = 'Show unique file names only';
   static const String summaryOnly = 'Summary only (no Lists section)';
+  static const String ignoreInventoryGroupedByType =
+      'Ignore Inventory (grouped by type)';
+  static const String configFileLabel = 'Config file';
+  static const String typeExcludePatterns = 'Type: Exclude patterns';
+  static const String typeAnalyzerSkipsDisabled =
+      'Type: Analyzer skips (analyzers.disabled)';
+  static const String typeAnalyzerSkipsLegacy =
+      'Type: Analyzer skips (legacy ignores.*: true)';
+  static const String typeDartCommentDirectives =
+      'Type: Dart comment directives';
+  static const String entriesLabel = 'entries';
+  static const String totalLabel = 'total';
 
   // File Patterns
   static const String analysisError = 'Error during analysis:';
@@ -282,4 +294,20 @@ class AppStrings {
 
   /// Builds the analysis failure prefix line with the caught [error].
   static String analysisErrorLine(Object error) => '$analysisError $error';
+
+  /// Builds the config file line for ignore inventory output.
+  static String ignoreInventoryConfigFileLine(String configFilePathText) =>
+      '$configFileLabel: $configFilePathText';
+
+  /// Builds the `.fcheck input.exclude` section header line.
+  static String ignoreInventoryConfigExcludeLine(String count) =>
+      '  .fcheck input.exclude ($count):';
+
+  /// Builds the `entries` section header line.
+  static String ignoreInventoryEntriesLine(String count) =>
+      '  $entriesLabel ($count):';
+
+  /// Builds the `total` section header line.
+  static String ignoreInventoryTotalLine(String count) =>
+      '  $totalLabel ($count):';
 }

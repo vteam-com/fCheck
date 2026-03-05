@@ -163,6 +163,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - `fcheck --fix` auto-fix sorting issues (Flutter class members + import directive order)
 - `fcheck --exclude "**/generated/**"` exclude glob patterns
 - `fcheck --excluded` list excluded files and directories
+- `fcheck --ignores` list project ignore/suppression entries (`.fcheck` + Dart directives)
 - `fcheck --svg` generate SVG dependency graph
 - `fcheck --mermaid` generate Mermaid graph
 - `fcheck --plantuml` generate PlantUML graph

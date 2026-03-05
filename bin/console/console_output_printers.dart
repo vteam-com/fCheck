@@ -108,6 +108,83 @@ void printExcludedItems({
   }
 }
 
+/// Prints configured ignore/suppression sources in CLI text format.
+void printIgnoreInventory(IgnoreInventory inventory) {
+  print(AppStrings.ignoreInventoryGroupedByType);
+  final configFilePathText = inventory.configFilePath == null
+      ? '(none)'
+      : _pathText(inventory.configFilePath!);
+  print(AppStrings.ignoreInventoryConfigFileLine(configFilePathText));
+
+  print('');
+  print(AppStrings.typeExcludePatterns);
+  print(
+    AppStrings.ignoreInventoryConfigExcludeLine(
+      formatCount(inventory.configExcludePatterns.length),
+    ),
+  );
+  if (inventory.configExcludePatterns.isEmpty) {
+    print(_noneIndicator);
+  } else {
+    for (final pattern in inventory.configExcludePatterns) {
+      print('  - $pattern');
+    }
+  }
+
+  print('');
+  print(AppStrings.typeAnalyzerSkipsDisabled);
+  print(
+    AppStrings.ignoreInventoryEntriesLine(
+      formatCount(inventory.analyzersDisabled.length),
+    ),
+  );
+  if (inventory.analyzersDisabled.isEmpty) {
+    print(_noneIndicator);
+  } else {
+    for (final analyzer in inventory.analyzersDisabled) {
+      print('  - $analyzer');
+    }
+  }
+
+  print('');
+  print(AppStrings.typeAnalyzerSkipsLegacy);
+  print(
+    AppStrings.ignoreInventoryEntriesLine(
+      formatCount(inventory.analyzersIgnoredLegacy.length),
+    ),
+  );
+  if (inventory.analyzersIgnoredLegacy.isEmpty) {
+    print(_noneIndicator);
+  } else {
+    for (final analyzer in inventory.analyzersIgnoredLegacy) {
+      print('  - $analyzer');
+    }
+  }
+
+  print('');
+  print(AppStrings.typeDartCommentDirectives);
+  print(
+    AppStrings.ignoreInventoryTotalLine(
+      formatCount(inventory.dartCommentDirectives.length),
+    ),
+  );
+  final directivesByType = inventory.dartCommentDirectivesByType;
+  if (directivesByType.isEmpty) {
+    print(_noneIndicator);
+  } else {
+    final directiveTypes = directivesByType.keys.toList()..sort();
+    for (final token in directiveTypes) {
+      final entries = directivesByType[token]!;
+      print('  - $token (${formatCount(entries.length)}):');
+      for (final directive in entries) {
+        print(
+          '      ${_pathText('${directive.path}:${directive.line}')} | ${directive.rawLine}',
+        );
+      }
+    }
+  }
+}
+
 /// Prints literals inventory in CLI text format.
 void printLiteralsSummary({
   required int totalStringLiteralCount,

@@ -104,6 +104,12 @@ class FcheckConfig {
   /// Explicitly disabled analyzers from `analyzers.disabled` and legacy ignores.
   final Set<AnalyzerDomain> disabledAnalyzers;
 
+  /// Analyzers explicitly listed in `.fcheck` `analyzers.disabled`.
+  final Set<AnalyzerDomain> analyzersDisabledInConfig;
+
+  /// Analyzers disabled via legacy `.fcheck` `ignores.<name>: true`.
+  final Set<AnalyzerDomain> analyzersIgnoredLegacy;
+
   /// Duplicate-code similarity threshold.
   final double duplicateCodeSimilarityThreshold;
 
@@ -126,6 +132,8 @@ class FcheckConfig {
     required this.analyzerDefaultEnabled,
     required this.enabledAnalyzers,
     required this.disabledAnalyzers,
+    required this.analyzersDisabledInConfig,
+    required this.analyzersIgnoredLegacy,
     required this.duplicateCodeSimilarityThreshold,
     required this.duplicateCodeMinTokens,
     required this.duplicateCodeMinNonEmptyLines,
@@ -145,6 +153,8 @@ class FcheckConfig {
         analyzerDefaultEnabled: true,
         enabledAnalyzers: {},
         disabledAnalyzers: {},
+        analyzersDisabledInConfig: {},
+        analyzersIgnoredLegacy: {},
         duplicateCodeSimilarityThreshold:
             defaultDuplicateCodeSimilarityThreshold,
         duplicateCodeMinTokens: defaultDuplicateCodeMinTokens,
@@ -170,6 +180,8 @@ class FcheckConfig {
         analyzerDefaultEnabled: true,
         enabledAnalyzers: {},
         disabledAnalyzers: {},
+        analyzersDisabledInConfig: {},
+        analyzersIgnoredLegacy: {},
         duplicateCodeSimilarityThreshold:
             defaultDuplicateCodeSimilarityThreshold,
         duplicateCodeMinTokens: defaultDuplicateCodeMinTokens,
@@ -212,11 +224,17 @@ class FcheckConfig {
       'enabled',
       filePath: configFile.path,
     );
-    final disabled = _readAnalyzerSet(
+    final disabledInConfig = _readAnalyzerSet(
       analyzersSection,
       'disabled',
       filePath: configFile.path,
     );
+    final disabled = <AnalyzerDomain>{...disabledInConfig};
+    final legacyIgnores = _readLegacyIgnores(
+      ignoresSection,
+      filePath: configFile.path,
+    );
+    disabled.addAll(legacyIgnores);
     final duplicateCodeOptions = _readDuplicateCodeOptions(
       analyzersSection,
       filePath: configFile.path,
@@ -225,10 +243,6 @@ class FcheckConfig {
       analyzersSection,
       filePath: configFile.path,
     );
-    disabled.addAll(
-      _readLegacyIgnores(ignoresSection, filePath: configFile.path),
-    );
-
     return FcheckConfig(
       inputDirectory: inputDirectory,
       configDirectory: configFile.parent,
@@ -238,6 +252,8 @@ class FcheckConfig {
       analyzerDefaultEnabled: defaultEnabled,
       enabledAnalyzers: Set.unmodifiable(enabled),
       disabledAnalyzers: Set.unmodifiable(disabled),
+      analyzersDisabledInConfig: Set.unmodifiable(disabledInConfig),
+      analyzersIgnoredLegacy: Set.unmodifiable(legacyIgnores),
       duplicateCodeSimilarityThreshold:
           duplicateCodeOptions.similarityThreshold,
       duplicateCodeMinTokens: duplicateCodeOptions.minTokens,

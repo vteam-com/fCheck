@@ -308,10 +308,16 @@ fcheck --exclude "**/generated/**" --exclude "**/*.g.dart"
 fcheck --excluded
 fcheck --excluded --json
 
+# Inspect ignore/suppression inventory (.fcheck + Dart directives)
+fcheck --ignores
+fcheck --ignores --json
+
 # Inspect literals inventory only
 fcheck --literals
 fcheck --literals --json
 ```
+
+`--ignores` groups results by suppression type (`exclude`, analyzer skips, and Dart comment directive type) so cleanup work can be prioritized.
 
 Default exclusion behavior includes hidden folders and common non-analysis directories (`.git`, `.dart_tool`, `build`, `example`, `test`, `integration_test`, platform folders, etc.).
 

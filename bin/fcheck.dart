@@ -10,6 +10,7 @@ import 'package:fcheck/src/exports/svg/export_loc/export_svg_code_size.dart';
 import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
+import 'package:fcheck/src/models/ignore_inventory.dart';
 import 'package:fcheck/src/models/version.dart';
 import 'package:path/path.dart' as p;
 
@@ -138,6 +139,19 @@ void main(List<String> arguments) {
           excludedNonDartFiles: excludedNonDartFiles,
           excludedDirectories: excludedDirectories,
         );
+      }
+      return;
+    }
+
+    if (input.listIgnores) {
+      final ignoreInventory = collectIgnoreInventory(
+        rootDirectory: directory,
+        fcheckConfig: fcheckConfig,
+      );
+      if (input.outputJson) {
+        printJsonOutput(ignoreInventory.toJson());
+      } else {
+        printIgnoreInventory(ignoreInventory);
       }
       return;
     }

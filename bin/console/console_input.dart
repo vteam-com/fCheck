@@ -65,6 +65,9 @@ class ConsoleInput {
   /// Whether literals inventory listing is requested.
   final bool listLiterals;
 
+  /// Whether ignore directives inventory listing is requested.
+  final bool listIgnores;
+
   /// Exclusion globs passed through `--exclude`.
   final List<String> excludePatterns;
 
@@ -103,6 +106,7 @@ class ConsoleInput {
     required this.listItemLimit,
     required this.listExcluded,
     required this.listLiterals,
+    required this.listIgnores,
     required this.excludePatterns,
     required this.showHelp,
     required this.showVersion,
@@ -219,6 +223,12 @@ ArgParser createConsoleArgParser() => ArgParser()
     negatable: false,
   )
   ..addFlag(
+    'ignores',
+    help:
+        'List all project ignore directives and suppression entries (.fcheck + Dart comments)',
+    negatable: false,
+  )
+  ..addFlag(
     'no-colors',
     help: 'Disable ANSI colors in CLI output',
     negatable: false,
@@ -279,6 +289,7 @@ ConsoleInput parseConsoleInput(List<String> arguments, ArgParser parser) {
     listItemLimit: listOption.limit,
     listExcluded: argResults['excluded'] as bool,
     listLiterals: argResults['literals'] as bool,
+    listIgnores: argResults['ignores'] as bool,
     excludePatterns: argResults['exclude'] as List<String>,
     showHelp: argResults['help'] as bool,
     showVersion: argResults['version'] as bool,
