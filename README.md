@@ -1,6 +1,6 @@
 # fCheck
 
-fCheck provides fast local quality checks for Flutter and Dart projects in one deterministic analysis pass, reporting architecture, maintainability, and safety issues that default lints usually do not cover, with console/JSON/diagram outputs and fully private execution: it does not require any AI service, no network calls are needed, and no source code is sent to external services.
+fCheck provides fast local quality analysis for Flutter and Dart projects with 0-100% compliance scoring. Single analysis pass covering architecture, maintainability, and safety issues beyond standard linting, with deterministic CLI/JSON reports for CI/CD pipelines and fully private execution: it does not require any AI service, no network calls are needed, and no source code is sent to external services.
 
 ## Why fCheck
 
@@ -115,10 +115,10 @@ fcheck --fix
 
 ```bash
 $ fcheck .
-↓------------------------------ fCheck 1.0.5 -------------------------------↓
+↓------------------------------ fCheck 1.0.6 -------------------------------↓
 Input              : /path/to/project
-Dart Project       : fcheck (version: 1.0.5)
-Platforms          : [-Android] [✓iOS] [✓MacOS] [✓Windows] [✓Linux]  [✓Web]
+Dart Project       : my-cool-app (version: 9.0.0)
+Platforms          : [✓Android] [✓iOS]  [✓MacOS] [✓Windows] [✓Linux]   [✓Web]
 --------------------------------- Dashboard ---------------------------------
 Dependencies       :               5  |  DevDependencies    :               2
 Folders            :              21  |  Classes            :              66
@@ -127,11 +127,11 @@ Excluded Files     :              39  |  Widgets: Stateless :              40
 Dart Files         :              91  |  Methods            :             357
 Test Dart Files    :              35  |  Functions          :             179
 Test Cases         :             392  |  Lines of Code      :          15,022
-                  :                  |  Comments           :     (14%) 2,145
+                   :                  |  Comments           :     (14%) 2,145
 --------------------------------- Literals ----------------------------------
-Localization       :             OFF
-Strings            : 1,203 (64% dupe), (31 hardcoded)
-Numbers            : 842, (74 hardcoded)
+Localization       : ON
+Strings            : 1,203 (64% dupe)
+Numbers            :   842 (74 hardcoded)
 --------------------------------- Analyzers ---------------------------------
 [✓] Checks bypassed
 [✓] Code size
@@ -143,8 +143,7 @@ Numbers            : 842, (74 hardcoded)
 [✓] One class per file
 [✓] Secrets
 [✓] Source sorting
-[-] Hardcoded strings
-0 hardcoded strings detected (localization OFF).
+[✓] Hardcoded strings
 --------------------------------- Scorecard ---------------------------------
 Total Score        : 100%
 Invest Next        : Maintain this level by enforcing fcheck in CI on every pull request.

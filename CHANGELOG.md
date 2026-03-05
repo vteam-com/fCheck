@@ -7,6 +7,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2026-03-05
+
+### Changed
+
+- Updated README.md description to highlight 0-100% compliance scoring system and improve marketing appeal for Pub.dev
+- Enhanced main description to emphasize scoring system and CI/CD pipeline value for Flutter engineers
+
+### Added
+
+- **Ignore Inventory Analysis**: New `--ignores` CLI flag to inspect and analyze all ignore/suppression mechanisms in the project
+- **Comprehensive Suppression Reporting**: Groups results by suppression type (`exclude`, analyzer skips, and Dart comment directive type) for better cleanup prioritization
+- **JSON Support for Ignore Analysis**: Full JSON output support for ignore inventory with `--ignores --json`
+
 ## [1.0.5] - 2026-03-02
 
 ### Added

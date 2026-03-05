@@ -9,8 +9,8 @@ import 'package:fcheck/src/input_output/number_format_utils.dart';
 import 'package:fcheck/src/input_output/number_lexeme_utils.dart';
 import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
-import 'package:fcheck/src/models/ignore_inventory.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
+import 'package:fcheck/src/models/ignore_inventory.dart';
 import 'package:fcheck/src/models/project_type.dart';
 
 import 'console_common.dart';
