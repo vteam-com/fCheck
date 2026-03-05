@@ -30,6 +30,8 @@ class DocumentationDelegate implements AnalyzerDelegate {
   }
 
   bool _shouldSkipFile(String path) {
-    return isLibL10nPath(path) || isGeneratedDartFilePath(path);
+    return isLibL10nPath(path) ||
+        isGeneratedDartFilePath(path) ||
+        isGeneratedLocalizationDartFilePath(path);
   }
 }

@@ -284,7 +284,7 @@ void main() {
       expect(result.stdout, contains('dead_code'));
       expect(
         result.stdout,
-        contains('Type: Analyzer skips (legacy ignores.*: true)'),
+        isNot(contains('Type: Analyzer skips (legacy ignores.*: true)')),
       );
       expect(result.stdout, contains('magic_numbers'));
       expect(result.stdout, contains('Type: Dart comment directives'));
@@ -301,6 +301,32 @@ void main() {
         ),
       );
     });
+
+    test(
+      'should not include directives from default-excluded folders in --ignores',
+      () async {
+        const String sourceFilePath = 'lib/main.dart';
+        const String excludedSourceFilePath = '.dart_tool/ignored.dart';
+
+        Directory('${tempDir.path}/lib').createSync(recursive: true);
+        Directory('${tempDir.path}/.dart_tool').createSync(recursive: true);
+        File('${tempDir.path}/$sourceFilePath').writeAsStringSync('''
+// ignore: fcheck_layers
+void main() {}
+''');
+        File('${tempDir.path}/$excludedSourceFilePath').writeAsStringSync('''
+// ignore: fcheck_magic_numbers
+void ignored() {}
+''');
+
+        final result = await runCli(['--input', tempDir.path, '--ignores']);
+
+        expect(result.exitCode, equals(0));
+        expect(result.stdout, contains('fcheck_layers (1):'));
+        expect(result.stdout, isNot(contains('fcheck_magic_numbers')));
+        expect(result.stdout, isNot(contains(excludedSourceFilePath)));
+      },
+    );
 
     test(
       'should list ignore inventory as JSON with --ignores --json',

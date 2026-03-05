@@ -1044,6 +1044,49 @@ void main() {
       },
     );
 
+    test(
+      'should omit passive hardcoded summary when localization is off and count is zero',
+      () {
+        final projectMetrics = ProjectMetrics(
+          totalFolders: 1,
+          totalFiles: 1,
+          totalDartFiles: 1,
+          totalLinesOfCode: 10,
+          totalCommentLines: 0,
+          fileMetrics: const [],
+          secretIssues: const [],
+          hardcodedStringIssues: const [],
+          magicNumberIssues: const [],
+          sourceSortIssues: const [],
+          layersIssues: const [],
+          deadCodeIssues: const [],
+          duplicateCodeIssues: const [],
+          layersEdgeCount: 0,
+          layersCount: 0,
+          dependencyGraph: const {},
+          projectName: 'example_project',
+          version: '1.0.0',
+          projectType: ProjectType.dart,
+          usesLocalization: false,
+        );
+
+        final output = buildReportLines(
+          projectMetrics,
+          listMode: ReportListMode.full,
+        );
+        final joined = output.join('\n');
+
+        expect(
+          joined,
+          isNot(
+            contains(
+              '0 ${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}).',
+            ),
+          ),
+        );
+      },
+    );
+
     test('should show localization first in literals section', () {
       final projectMetrics = ProjectMetrics(
         totalFolders: 1,
@@ -1534,20 +1577,15 @@ void main() {
         expect(joined, contains(AppStrings.suppressionsSummary));
         expect(joined, contains('Ignore directives:'));
         expect(joined, contains('12'));
-        expect(joined, contains(AppStrings.ignoreDirectivesAcross));
-        expect(joined, contains('2'));
-        expect(joined, contains(AppStrings.file));
-        expect(joined, contains(AppStrings.filesSmall));
         expect(joined, contains(AppStrings.customExcludes));
         expect(joined, contains('4'));
         expect(joined, contains(AppStrings.dartFilesExcluded));
         expect(joined, contains(AppStrings.disabledRules));
         expect(joined, contains('1'));
         expect(joined, contains(AppStrings.analyzerSmall));
-        expect(joined, contains('lib/a.dart'));
-        expect(joined, contains('7'));
-        expect(joined, contains('lib/b.dart'));
-        expect(joined, contains('5'));
+        expect(joined, contains(AppStrings.ignoresDetailsHint));
+        expect(joined, isNot(contains('lib/a.dart')));
+        expect(joined, isNot(contains('lib/b.dart')));
         expect(joined, contains('hardcoded_strings'));
       },
     );

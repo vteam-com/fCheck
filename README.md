@@ -40,7 +40,7 @@ Hardcoded-strings note:
 
 Code-size LOC note:
 
-- Localization Dart files are excluded from LOC code-size evaluation (`lib/l10n/**`, `app_localizations.dart`, and generated locale variants such as `app_localizations_<locale>.dart`).
+- Localization Dart files are excluded from LOC code-size evaluation (`lib/l10n/**`, `app_localization.dart`, `app_localizations.dart`, and generated locale variants such as `app_localizations_<locale>.dart`).
 
 ## Install
 
@@ -115,7 +115,7 @@ fcheck --fix
 
 ```bash
 $ fcheck .
-↓------------------------------ fCheck 1.0.6 -------------------------------↓
+↓------------------------------ fCheck 1.0.7 -------------------------------↓
 Input              : /path/to/project
 Dart Project       : my-cool-app (version: 9.0.0)
 Platforms          : [✓Android] [✓iOS]  [✓MacOS] [✓Windows] [✓Linux]   [✓Web]

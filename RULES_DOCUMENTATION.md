@@ -30,7 +30,7 @@ Short, self-explanatory private functions are allowed without comments.
 - Files with top-of-file `// ignore: fcheck_documentation`
 - Nodes with `// ignore: fcheck_documentation` on the same line
 - Files with parse errors or missing compilation units
-- Generated and localization Dart files (`.g.dart`, `lib/l10n/`)
+- Generated and localization Dart files (`.g.dart`, `lib/l10n/`, `app_localization.dart`, `app_localizations.dart`, and locale variants)
 
 ## Output
 

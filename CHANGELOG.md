@@ -7,7 +7,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.6] - 2026-03-05
+## [1.0.7] 2026-03-05
+
+### Changed
+
+- Updated `pubspec.yaml` description to a search-friendly length.
+- Simplified ignore-inventory console formatting by replacing embedded newline literals with explicit blank-line prints.
+  - removed text block `Type: Analyzer skips (legacy ignores.*: true)`
+  - removed `legacyIgnores` from ignore-inventory JSON payload sections (`config`, `groupedByType`, `totals`)
+- Fixed `--ignores` file discovery to respect default analysis exclusions (for example `.dart_tool/`) and configured `.fcheck` excludes.
+- Auto-excluded generated localization root file `app_localizations.dart` from documentation and code-size analyzers.
+- Simplified suppressions console output for ignore directives:
+  - compact one-line output for ignore-only suppressions  
+  - added inline guidance: `use arg --ignores for details`
+- Suppressed passive hardcoded-strings summary when localization is `OFF` and detected count is `0` (omit `0 hardcoded strings detected ...` line).
+
+## [1.0.6] 2026-03-05
 
 ### Changed
 
@@ -20,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Comprehensive Suppression Reporting**: Groups results by suppression type (`exclude`, analyzer skips, and Dart comment directive type) for better cleanup prioritization
 - **JSON Support for Ignore Analysis**: Full JSON output support for ignore inventory with `--ignores --json`
 
-## [1.0.5] - 2026-03-02
+## [1.0.5] 2026-03-02
 
 ### Added
 
@@ -32,7 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reorganized dashboard layout to improve metrics readability.
 - Improved dead-code detection to better handle interpolation usage and reduce false positives for exported library APIs.
 
-## [1.0.4] - 2026-03-01
+## [1.0.4] 2026-03-01
 
 ### Added
 
@@ -44,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved parsing for `// ignore: ... fcheck_* ...` directives.
 - Increased overall automated test coverage.
 
-## [1.0.3] - 2026-02-27
+## [1.0.3] 2026-02-27
 
 ### Added
 
@@ -64,13 +79,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Discovers more cases of Magic Numbers
 
-## [1.0.2] - 2026-02-26
+## [1.0.2] 2026-02-26
 
 ### Changed
 
 - Dead code analyzer now treats Flutter `@Preview` functions/methods (including prefixed annotations like `@ui.Preview`) as externally used, so they are not reported as dead functions.
 
-## [1.0.1] - 2026-02-25
+## [1.0.1] 2026-02-25
 
 ### Changed
 
@@ -78,7 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Softer Orange and Red overlay in the SVG diagrams.
 - update package "analyzer 10.2.0"
 
-## [1.0.0] - 2026-02-24
+## [1.0.0] 2026-02-24
 
 ### Changed
 
@@ -100,14 +115,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `fcheck.puml`
 - 📝 **Docs/Tests Alignment**: Updated README, RULES docs, and CLI parsing tests for the v1.0.0 contract.
 
-## [0.9.17] - 2026-02-23
+## [0.9.17] 2026-02-23
 
 ### Changed
 
 - 📥 **Source Sorting Auto-fix**: Improved import directive normalization during `--fix` by rewriting relative imports under `lib/` to `package:<current-package>/...` before sorting, while preserving directive suffixes.
 - 🧭 **Layers Console Reporting**: Refined layers output so cycle issues remain failures while non-cycle folder-layer upward dependencies are reported as warnings with clearer, colorized path details.
 
-## [0.9.16] - 2026-02-21
+## [0.9.16] 2026-02-21
 
 ### Added
 
@@ -118,7 +133,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🚫 **Generated Dart Handling**: `*.g.dart` files are now automatically excluded from non-actionable analyzer findings while still contributing where required for project-wide analysis.
 - 📁 **Default Exclusions**: Added `integration_test` to default excluded directories for file discovery and metrics scanning.
 
-## [0.9.15] - 2026-02-19
+## [0.9.15] 2026-02-19
 
 ### Added
 
@@ -134,7 +149,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 📈 **Compliance Scoring**: Code size now contributes to analyzer scoring and focus area suggestions.
 
-## [0.9.14] - 2026-02-18
+## [0.9.14] 2026-02-18
 
 ### Added
 
@@ -152,7 +167,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🐛 Corrected line reporting in "one class per file" output.
 - 🧹 Resolved all fcheck warnings reported by fcheck on this codebase.
 
-## [0.9.13] - 2026-02-17
+## [0.9.13] 2026-02-17
 
 ### Added
 
@@ -163,7 +178,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 🖼️ **SVG Folder Improvements**: Enhanced folder dependency visualization with snug gutters and improved edge positioning for cleaner graphs.
 
-## [0.9.12] - 2026-02-16
+## [0.9.12] 2026-02-16
 
 ### Fixed
 
@@ -177,7 +192,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 📝 **Documentation**: Updated `RULES_LAYERS.md` to document the new folder layer assignment behavior and violation detection rules
 - 🔄 **Terminology**: Changed "higher/lower layers" to "above/below" for clearer understanding of layer hierarchy
 
-## [0.9.11] - 2026-02-16
+## [0.9.11] 2026-02-16
 
 ### Added
 
@@ -192,7 +207,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🛠️ **Publish Script**: Updated `tool/publish.sh` to use Flutter test instead of Dart test for better compatibility.
 - ✅ **Code Coverage**: Increased test coverage to 87%.
 
-## [0.9.10] - 2026-02-12
+## [0.9.10] 2026-02-12
 
 ### Added
 
@@ -202,7 +217,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 🎨 Updated dashboard ordering and styling, including swapped duplicate-code/dependencies columns and red rendering for comment ratios below 10%.
 
-## [0.9.9] - 2026-02-12
+## [0.9.9] 2026-02-12
 
 ### Added
 
@@ -219,7 +234,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 📝 Corrected the dashboard typos.
 
-## [0.9.8] - 2026-02-10
+## [0.9.8] 2026-02-10
 
 ### Added
 
@@ -233,7 +248,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - ⚡ Removed redundant CLI layers-analysis work during regular runs, reducing unnecessary overhead while preserving output behavior.
 
-## [0.9.7] - 2026-02-10
+## [0.9.7] 2026-02-10
 
 ### Added
 
@@ -249,7 +264,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🧭 Project metadata resolution now correctly infers package name/version/type when analyzing from folders without a root `pubspec.yaml`, and returns `unknown` for ambiguous multi-pubspec workspaces.
 - ✅ Updated duplicate-code output test expectations after formatting improvements.
 
-## [0.9.6] - 2026-02-10
+## [0.9.6] 2026-02-10
 
 ### Added
 
@@ -266,7 +281,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - removed remaining magic-number literals in duplicate-code analyzer utilities by introducing named constants
 
-## [0.9.5] - 2026-02-09
+## [0.9.5] 2026-02-09
 
 ### Added
 
@@ -276,7 +291,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - normalize input path
 
-## [0.9.4] - 2026-02-09
+## [0.9.4] 2026-02-09
 
 ### Added
 
@@ -289,7 +304,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🖥️ Refactored CLI console input/output into focused modules and simplified output rendering paths.
 - 🎨 SVG graph exports now use adaptive text sizing to keep labels and titles readable across different graph densities.
 
-## [0.9.3] - 2026-02-08
+## [0.9.3] 2026-02-08
 
 ### Added
 
@@ -306,20 +321,20 @@ fcheck --list filenames  # unique file names only
 
 - 📚 Test Code Coverage now at 76%
 
-## [0.9.2] - 2026-02-08
+## [0.9.2] 2026-02-08
 
 ### Fixed
 
 - 🧰 **Dead Code Analyzer**: Treat generic class declarations (e.g. `class Box<T>`) as their base class name so usages like `Box<int>` no longer get flagged as dead classes.
 
-## [0.9.1] - 2026-02-08
+## [0.9.1] 2026-02-08
 
 ### Fixed
 
 - 🧰 **Dead Code Analyzer**: Avoid flagging constructor field parameters (`this.foo`) as unused when they initialize class properties.
 - 🧩 **Dead Code Analyzer**: Avoid flagging parameters in `@override` methods or abstract/external signatures with empty bodies.
 
-## [0.9.0] - 2026-02-08
+## [0.9.0] 2026-02-08
 
 ### Added
 
@@ -332,7 +347,7 @@ fcheck --list filenames  # unique file names only
 - 🧩 **Layers Dependency Graph**: Conditional imports/exports (`if (dart.library...)`) are now included in dependency resolution.
 - 📊 **Metrics Output**: Added dead code counts and issue lists to CLI and JSON reports.
 
-## [0.8.6] - 2026-02-07
+## [0.8.6] 2026-02-07
 
 ### Added
 
@@ -342,7 +357,7 @@ fcheck --list filenames  # unique file names only
 
 - 🔢 **CLI Output**: Counts now use comma separators for thousands grouping.
 
-## [0.8.5] - 2026-02-06
+## [0.8.5] 2026-02-06
 
 ### Changed
 
@@ -355,7 +370,7 @@ fcheck --list filenames  # unique file names only
 
 - 🧹 **Dead Code**: Dropped legacy per-analyzer classes now superseded by the unified delegate-based analyzer runner.
 
-## [0.8.4] - 2026-02-06
+## [0.8.4] 2026-02-06
 
 ### Added
 
@@ -371,7 +386,7 @@ fcheck --list filenames  # unique file names only
 - 🧠 **Hardcoded String Detection**: Improved Flutter vs Dart project handling to make string detection rules project-aware
 - 🧹 **Analyzer Refactor**: Reduced duplication across analyzers and utilities.
 
-## [0.8.3] - 2026-02-04
+## [0.8.3] 2026-02-04
 
 ### Added
 
@@ -387,13 +402,13 @@ fcheck --list filenames  # unique file names only
 - 🏗️ **File Enumeration Logic**: Updated `listDartFiles` method to skip hidden directories consistently
 - 📊 **Performance Optimization**: Maintained 67-72% performance improvement while adding new exclusion tracking
 
-## [0.8.2] - 2026-02-03
+## [0.8.2] 2026-02-03
 
 ### Changed
 
 - 📘 Clarified the README "Magic Numbers" guidance so it now explains the new definition, outlines when literals are allowed (descriptive const/static/final declarations and annotations/const expressions), and shows how to fix detections by replacing inline literals with named constants before referencing the opt-out directive.
 
-## [0.8.1] - 2026-02-02
+## [0.8.1] 2026-02-02
 
 ### Added
 
@@ -401,7 +416,7 @@ fcheck --list filenames  # unique file names only
 - 📊 **Performance Visibility**: Footer now shows "fCheck completed (X.XXs)" to help users track analysis performance
 - 🎯 **JSON Compatibility**: Timing display is automatically suppressed in JSON output mode to maintain clean format
 
-## [0.8.0] - 2026-02-02
+## [0.8.0] 2026-02-02
 
 ### ⚡ **Major Performance Optimization**
 
@@ -437,7 +452,7 @@ fcheck --list filenames  # unique file names only
 
 ---
 
-## [0.7.3] - 2026-02-01
+## [0.7.3] 2026-02-01
 
 ### Added
 
@@ -450,14 +465,14 @@ fcheck --list filenames  # unique file names only
 - 📁 **Folder Name Extraction**: Improved folder name detection logic using proper path handling to ensure accurate folder names in SVG outputs
 - 🎯 **SVG Text Rendering**: Enhanced SVG text rendering with proper multi-line support using `<tspan>` elements for better visual hierarchy
 
-## [0.7.2] - 2026-01-31
+## [0.7.2] 2026-01-31
 
 ### Changed
 
 - 🛡️ **Default Localization Filtering**: Automatically hide generated localization files (`app_localizations_*.dart`) from analysis and dependency graphs by default while keeping the main entry point to avoid cyclic dependency noise.
 - 🧹 **Code Cleanup**: Removed magic number violations across the codebase by introducing named constants for better maintainability.
 
-## [0.7.1] - 2026-01-31
+## [0.7.1] 2026-01-31
 
 ### Added
 
@@ -466,7 +481,7 @@ fcheck --list filenames  # unique file names only
 - 📁 **Folder Layout**: Refined virtual sub-folder logic for folder dependency graphs
 - 📝 **Code Documentation**: Updated internal comments for better maintainability
 
-## [0.7.0] - 2026-01-30
+## [0.7.0] 2026-01-30
 
 ### Breaking change
 
@@ -481,13 +496,13 @@ fcheck --list filenames  # unique file names only
 - 🏗️ **Layers Ignore**: Added `// ignore: fcheck_layers` for layer architecture violations
 - 📚 **Comprehensive Documentation**: Updated all ignore directive examples and documentation
 
-## [0.6.2] - 2026-01-29
+## [0.6.2] 2026-01-29
 
 ### Added
 
 - 🧮 **Magic Number Ignore**: Support for `// fcheck - ignore magic numbers` comment directive to skip magic number analysis for individual files.
 
-## [0.6.1] - 2026-01-29
+## [0.6.1] 2026-01-29
 
 ### Added
 
@@ -497,7 +512,7 @@ fcheck --list filenames  # unique file names only
 
 - ⚡ **Performance**: Reduced code duplication and improved maintainability of edge rendering logic
 
-## [0.6.0] - 2026-01-29
+## [0.6.0] 2026-01-29
 
 ### Added
 
@@ -511,7 +526,7 @@ fcheck --list filenames  # unique file names only
 - 🎯 **Badge System Refactor**: Complete refactor from circular badges to directional triangular badges with improved visual design
 - ⚡ **Performance Improvements**: Optimized badge rendering and edge calculations for better SVG generation
 
-## [0.5.2] - 2026-01-29
+## [0.5.2] 2026-01-29
 
 ### Added
 
@@ -525,7 +540,7 @@ fcheck --list filenames  # unique file names only
 
 - you can optionally add  ```// fcheck: ignore-one-class-per-file``` to a file to ignore the one-class-per-file rule
 
-## [0.5.1] - 2026-01-28
+## [0.5.1] 2026-01-28
 
 ### Changed
 
@@ -535,7 +550,7 @@ fcheck --list filenames  # unique file names only
 
 - you can optionally add  ```// fcheck: ignore-one-class-per-file``` to a file to ignore the one-class-per-file rule
 
-## [0.5.0] - 2026-01-27
+## [0.5.0] 2026-01-27
 
 ### Breaking
 
@@ -546,7 +561,7 @@ fcheck --list filenames  # unique file names only
 - 📚 Docs updated to reflect the public API and current source layout.
 - 🧹 Shared SVG helpers consolidated in `svg_common.dart` for both SVG generators (no CLI impact).
 
-## [0.4.5] - 2026-01-27
+## [0.4.5] 2026-01-27
 
 ### Added
 
@@ -554,14 +569,14 @@ fcheck --list filenames  # unique file names only
 - 🏷️ **Project Metadata**: Analysis reports now include the project name and version from pubspec.yaml
 - 🎯 **Enhanced CLI**: Improved argument parsing with better positional vs named argument handling
 
-## [0.4.4] - 2026-01-27
+## [0.4.4] 2026-01-27
 
 ### Changed
 
 - ⚠️/❌ **Localization-Aware Hardcoded Strings**: Hardcoded strings now surface as errors (❌ with sample listings) only when a project uses localization (l10n/AppLocalizations/.arb). Non-localized projects show a caution count (⚠️) without listing individual strings.
 - 📄 **Docs**: README documents the new localization-aware hardcoded string behavior.
 
-## [0.4.3] - 2026-01-26
+## [0.4.3] 2026-01-26
 
 ### Added
 
@@ -572,7 +587,7 @@ fcheck --list filenames  # unique file names only
 - **Refactor**: Mermaid and PlantUML generators now consume the shared helpers, reducing duplication and keeping node IDs/counters consistent.
 - **Docs Refresh**: Update comments and README visualization options for Mermaid/PlantUML outputs.
 
-## [0.4.2] - 2026-01-24
+## [0.4.2] 2026-01-24
 
 ### Fixed
 
@@ -583,7 +598,7 @@ fcheck --list filenames  # unique file names only
 
 - 📦 **Import Structure**: Updated generator imports in `bin/fcheck.dart` to use proper package prefixes for better code organization and dependency tracking.
 
-## [0.4.1] - 2026-01-23
+## [0.4.1] 2026-01-23
 
 ### Fixed
 
@@ -606,7 +621,7 @@ fcheck --list filenames  # unique file names only
 - 📝 **Documentation**: Major improvements to layers layout documentation and `README.md`.
 - ⚡ **Model Updates**: Metrics and issues now support JSON serialization.
 
-## [0.3.5] - 2026-01-21
+## [0.3.5] 2026-01-21
 
 ### Added
 
@@ -616,7 +631,7 @@ fcheck --list filenames  # unique file names only
 - 🔧 Added explicit constructor documentation for hardcoded string analysis
 - 📋 Complete documentation for all `@override` methods across the codebase
 
-## [0.3.4] - 2026-01-21
+## [0.3.4] 2026-01-21
 
 ### Added
 
@@ -624,7 +639,7 @@ fcheck --list filenames  # unique file names only
 - 📦 Users can now install fcheck globally: `dart pub global activate fcheck`
 - 🖥️ Direct command execution: `fcheck ./path/` (after global activation)
 
-## [0.3.3] - 2026-01-20
+## [0.3.3] 2026-01-20
 
 ### Added
 
@@ -642,19 +657,19 @@ fcheck --list filenames  # unique file names only
 
 - 🐛 Positional arguments now work correctly (original issue resolved)
 
-## [0.3.2] - 2026-01-20
+## [0.3.2] 2026-01-20
 
 - ✨ Added `--fix` / `-f` flag for automatic sorting fixes
 - 🔧 Automatically fixes sorting issues by writing properly sorted code back to files
 - Refactored sort_source.dart into separate files: source_sort_issue.dart, class_visitor.dart, member_sorter.dart, source_sort_analyzer.dart
 - Added silent mode to ProjectMetrics.printReport() to suppress console output during testing
 
-## [0.3.1] - 2026-01-20
+## [0.3.1] 2026-01-20
 
 - Improved pubspec.yaml description with detailed package information (168 characters)
 - Added comprehensive documentation for all public APIs in sort_source.dart
 
-## [0.3.0] - 2026-01-20
+## [0.3.0] 2026-01-20
 
 ### Added
 
@@ -669,7 +684,7 @@ fcheck --list filenames  # unique file names only
 - Integrated sorting checks into the main analysis pipeline
 - Supports proper ordering: constructors → fields → getters/setters → methods → lifecycle methods
 
-## [0.2.0] - 2026-01-20
+## [0.2.0] 2026-01-20
 
 ### Changed
 
@@ -687,7 +702,7 @@ fcheck --list filenames  # unique file names only
 - Updated deprecated analyzer API usage in sort_source.dart with appropriate ignore comments
 - Fixed dangling library doc comments in bin/fcheck.dart and project_metrics.dart
 
-## [0.1.0] - 2026-01-20
+## [0.1.0] 2026-01-20
 
 ### Added
 

@@ -112,6 +112,7 @@ class AppStrings {
       'Flutter classes have unsorted members:';
   static const String suppressionsSummary = 'Suppressions summary';
   static const String ignoreDirectivesAcross = 'across';
+  static const String ignoresDetailsHint = 'use arg --ignores for details';
   static const String acrossFiles = 'across';
   static const String project = 'Project';
   static const String version = 'version:';
@@ -130,8 +131,6 @@ class AppStrings {
   static const String typeExcludePatterns = 'Type: Exclude patterns';
   static const String typeAnalyzerSkipsDisabled =
       'Type: Analyzer skips (analyzers.disabled)';
-  static const String typeAnalyzerSkipsLegacy =
-      'Type: Analyzer skips (legacy ignores.*: true)';
   static const String typeDartCommentDirectives =
       'Type: Dart comment directives';
   static const String entriesLabel = 'entries';

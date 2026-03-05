@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/ignore_directive_location.dart';
 import 'package:fcheck/src/models/ignore_inventory_model.dart';
@@ -10,7 +11,6 @@ export 'package:fcheck/src/models/ignore_inventory_model.dart';
 
 const int _lineCommentPrefixLength = 2;
 const int _lineNumberStart = 1;
-const bool _doNotFollowLinks = false;
 
 final RegExp _lineIgnorePattern = RegExp(
   r'^\s*ignore\s*:\s*(.+)$',
@@ -34,11 +34,10 @@ IgnoreInventory collectIgnoreInventory({
   required Directory rootDirectory,
   required FcheckConfig fcheckConfig,
 }) {
-  final dartFiles = rootDirectory
-      .listSync(recursive: true, followLinks: _doNotFollowLinks)
-      .whereType<File>()
-      .where((file) => p.extension(file.path) == '.dart')
-      .toList(growable: false);
+  final dartFiles = FileUtils.listDartFiles(
+    rootDirectory,
+    excludePatterns: fcheckConfig.excludePatterns,
+  );
 
   final directives = <IgnoreDirectiveLocation>[];
   for (final file in dartFiles) {

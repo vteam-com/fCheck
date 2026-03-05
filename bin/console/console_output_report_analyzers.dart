@@ -138,8 +138,11 @@ void _appendOrderedAnalyzerBlocks(
         deductionPercent: analyzerDeductionPercent,
       ),
     );
-    if (!hidePassedSummaryLine) {
-      lines.add(_withoutLeadingStatusTag(block.lines.first).trimLeft());
+    final firstSummaryLine = _withoutLeadingStatusTag(
+      block.lines.first,
+    ).trimLeft();
+    if (!hidePassedSummaryLine && firstSummaryLine.isNotEmpty) {
+      lines.add(firstSummaryLine);
     }
     if (ctx.listMode != ReportListMode.none) {
       for (final blockLine in block.lines.skip(1)) {
@@ -250,44 +253,40 @@ void _addSuppressionsBlock(_ReportContext ctx, List<_ListBlock> listBlocks) {
   final suffix = ctx.suppressionPenaltyPoints > 0
       ? '(score deduction applied: ${_suppressionPenaltyValue(penaltyPoints: ctx.suppressionPenaltyPoints)})'
       : '(within budget, no score deduction)';
+  final hasIgnoreDirectives = ctx.ignoreDirectivesCount > 0;
+  final hasCustomExcludes = ctx.customExcludedFilesCount > 0;
+  final hasDisabledAnalyzers = ctx.disabledAnalyzersCount > 0;
+  final hasOnlyIgnoreDirectives =
+      hasIgnoreDirectives && !hasCustomExcludes && !hasDisabledAnalyzers;
+
+  if (hasOnlyIgnoreDirectives) {
+    _addListBlock(
+      listBlocks,
+      status: ctx.suppressionPenaltyPoints > 0
+          ? _ListBlockStatus.failure
+          : _ListBlockStatus.warning,
+      sortKey: 'suppressions',
+      blockLines: <String>[
+        '$suppressionTag Ignore directives: ${_suppressionCountValue(count: ctx.ignoreDirectivesCount)} (${AppStrings.ignoresDetailsHint})',
+        '',
+      ],
+    );
+    return;
+  }
+
   final blockLines = <String>[
     '$suppressionTag ${AppStrings.suppressionsSummary} $suffix:',
   ];
-  if (ctx.ignoreDirectivesCount > 0) {
-    final fileLabel = ctx.ignoreDirectiveFileCount == 1
-        ? AppStrings.file
-        : AppStrings.filesSmall;
+  if (hasIgnoreDirectives) {
     blockLines.add(
-      '  - Ignore directives: ${_suppressionCountValue(count: ctx.ignoreDirectivesCount)} ${AppStrings.ignoreDirectivesAcross} ${_suppressionCountValue(count: ctx.ignoreDirectiveFileCount)} $fileLabel',
+      '  - Ignore directives: ${_suppressionCountValue(count: ctx.ignoreDirectivesCount)} (${AppStrings.ignoresDetailsHint})',
     );
-    if (ctx.ignoreDirectiveEntries.isNotEmpty) {
-      final visibleIgnoreDirectiveEntries = _issuesForMode(
-        ctx.ignoreDirectiveEntries,
-        ctx.listMode,
-        ctx.effectiveListItemLimit,
-      ).toList();
-      for (final entry in visibleIgnoreDirectiveEntries) {
-        if (ctx.filenamesOnly) {
-          blockLines.add('    - ${_pathText(entry.key)}');
-          continue;
-        }
-        blockLines.add(
-          '    - ${_pathText(entry.key)} (${_suppressionCountValue(count: entry.value)})',
-        );
-      }
-      if (ctx.listMode == ReportListMode.partial &&
-          ctx.ignoreDirectiveEntries.length > ctx.effectiveListItemLimit) {
-        blockLines.add(
-          '    ... ${AppStrings.and} ${formatCount(ctx.ignoreDirectiveEntries.length - ctx.effectiveListItemLimit)} ${AppStrings.more}',
-        );
-      }
-    }
   } else {
     blockLines.add(
       '  - Ignore directives: ${_suppressionCountValue(count: ctx.ignoreDirectivesCount)}',
     );
   }
-  if (ctx.customExcludedFilesCount > 0) {
+  if (hasCustomExcludes) {
     final customExcludeFileLabel = ctx.customExcludedFilesCount == 1
         ? AppStrings.dartFileExcluded
         : AppStrings.dartFilesExcluded;
@@ -295,7 +294,7 @@ void _addSuppressionsBlock(_ReportContext ctx, List<_ListBlock> listBlocks) {
       '  - ${AppStrings.customExcludes}: ${_suppressionCountValue(count: ctx.customExcludedFilesCount)} $customExcludeFileLabel (file count; from .fcheck input.exclude or --exclude)',
     );
   }
-  if (ctx.disabledAnalyzersCount > 0) {
+  if (hasDisabledAnalyzers) {
     final analyzerLabel = ctx.disabledAnalyzersCount == 1
         ? AppStrings.analyzerSmall
         : AppStrings.analyzersSmall;
@@ -402,6 +401,15 @@ void _addHardcodedStringsBlock(
     return;
   }
   if (!ctx.usesLocalization) {
+    if (ctx.hardcodedStringIssues.isEmpty) {
+      _addListBlock(
+        listBlocks,
+        status: _ListBlockStatus.disabled,
+        sortKey: 'hardcoded strings',
+        blockLines: [''],
+      );
+      return;
+    }
     _addListBlock(
       listBlocks,
       status: _ListBlockStatus.disabled,

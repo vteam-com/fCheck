@@ -147,21 +147,6 @@ void printIgnoreInventory(IgnoreInventory inventory) {
   }
 
   print('');
-  print(AppStrings.typeAnalyzerSkipsLegacy);
-  print(
-    AppStrings.ignoreInventoryEntriesLine(
-      formatCount(inventory.analyzersIgnoredLegacy.length),
-    ),
-  );
-  if (inventory.analyzersIgnoredLegacy.isEmpty) {
-    print(_noneIndicator);
-  } else {
-    for (final analyzer in inventory.analyzersIgnoredLegacy) {
-      print('  - $analyzer');
-    }
-  }
-
-  print('');
   print(AppStrings.typeDartCommentDirectives);
   print(
     AppStrings.ignoreInventoryTotalLine(

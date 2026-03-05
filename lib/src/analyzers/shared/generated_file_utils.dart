@@ -11,12 +11,14 @@ bool isGeneratedDartFilePath(String path) {
 /// Returns true when [path] is a generated Flutter localization Dart file.
 ///
 /// Matches:
+/// - `app_localization.dart`
 /// - `app_localizations.dart`
 /// - `app_localizations_<locale>.dart`
 /// - `app_localization_<locale>.dart`
 bool isGeneratedLocalizationDartFilePath(String path) {
   final fileName = p.basename(path);
-  if (fileName == 'app_localizations.dart') {
+  if (fileName == 'app_localization.dart' ||
+      fileName == 'app_localizations.dart') {
     return true;
   }
   return (fileName.startsWith('app_localizations_') ||

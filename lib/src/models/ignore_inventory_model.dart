@@ -58,7 +58,6 @@ class IgnoreInventory {
     'config': {
       'excludePatterns': configExcludePatterns,
       'analyzersDisabled': analyzersDisabled,
-      'legacyIgnores': analyzersIgnoredLegacy,
     },
     'dartCommentDirectives': dartCommentDirectives
         .map((directive) => directive.toJson())
@@ -66,7 +65,6 @@ class IgnoreInventory {
     'groupedByType': {
       'excludePatterns': configExcludePatterns,
       'analyzersDisabled': analyzersDisabled,
-      'legacyIgnores': analyzersIgnoredLegacy,
       'dartCommentDirectives': dartCommentDirectivesByType.map(
         (token, entries) => MapEntry(
           token,
@@ -79,7 +77,6 @@ class IgnoreInventory {
     'totals': {
       'configExcludePatterns': configExcludePatterns.length,
       'analyzersDisabled': analyzersDisabled.length,
-      'legacyIgnores': analyzersIgnoredLegacy.length,
       'dartCommentDirectives': dartCommentDirectives.length,
     },
   };

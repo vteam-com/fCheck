@@ -250,6 +250,18 @@ void runApp() {} // ignore: fcheck_documentation
       final issues = _analyzeFile(delegate, file);
       expect(issues, isEmpty);
     });
+
+    test('skips generated localization root file app_localization.dart', () {
+      final file = File('${tempDir.path}/app_localization.dart')
+        ..writeAsStringSync('''
+class GeneratedLocalization {
+  void call() {}
+}
+''');
+
+      final issues = _analyzeFile(delegate, file);
+      expect(issues, isEmpty);
+    });
   });
 
   group('DocumentationAnalyzer', () {
