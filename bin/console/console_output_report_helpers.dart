@@ -10,10 +10,15 @@ const int _minHealthyCommentRatioPercent = 10;
 const int _compactDecimalPlaces = 2;
 const int _percentMultiplier = 100;
 const int _emptyRightDashboardCellPadding = 3;
+const int _klocDivisor = 1000;
+const int _minimumKlocFractionDigits = 1;
+const int _expandedKlocFractionDigits = 2;
+const int _smallKlocThreshold = 10;
 const int _minorSuppressionPenaltyUpperBound = 3;
 const int _moderateSuppressionPenaltyUpperBound = 7;
 const int _maxSuppressionPenaltyPoints = 25;
 const int _analyzerHeaderTitleWidth = 22;
+const int _ratioPercentMultiplier = 100;
 const int _cleanAnalyzerSortGroup = 0;
 const int _warningAnalyzerSortGroup = 1;
 const int _disabledAnalyzerSortGroup = 2;
@@ -110,6 +115,36 @@ String _dashboardCountOrDash(int count, {int width = _gridValueWidth}) {
   return formatCount(count).padLeft(width);
 }
 
+/// Formats a consumed summary with a percentage suffix.
+String _dashboardRatioOrDash({
+  required int consumed,
+  required int total,
+  int width = _gridValueWidth,
+}) {
+  if (consumed == 0 || total == 0) {
+    return _colorize('-'.padLeft(width), _ansiGray);
+  }
+  final percent = ((consumed / total) * _ratioPercentMultiplier).round();
+  return '${formatCount(consumed)} (${formatCount(percent)}%)'.padLeft(width);
+}
+
+/// Formats lines of code as compact KLoC text.
+String _formatKloc(int linesOfCode) {
+  final kloc = linesOfCode / _klocDivisor;
+  final fractionDigits = kloc < _smallKlocThreshold
+      ? _expandedKlocFractionDigits
+      : _minimumKlocFractionDigits;
+  return '${kloc.toStringAsFixed(fractionDigits)} KLoC';
+}
+
+/// Formats a KLoC dashboard value or a dash when empty.
+String _dashboardKlocOrDash(int linesOfCode, {int width = _gridValueWidth}) {
+  if (linesOfCode == 0) {
+    return _colorize('-'.padLeft(width), _ansiGray);
+  }
+  return _formatKloc(linesOfCode).padLeft(width);
+}
+
 /// Formats and colorizes the overall compliance score percentage.
 String _scoreValue(int score) {
   final text = '${formatCount(score)}%';
@@ -188,7 +223,7 @@ String _analyzerDeductionValue({
   return _colorize('$deductionText ($issueText)', _ansiYellow);
 }
 
-/// Formats the comment summary as percent and absolute line count.
+/// Formats the comment summary as absolute line count and percent.
 String _commentSummary({
   required int totalCommentLines,
   required double commentRatio,
@@ -196,7 +231,7 @@ String _commentSummary({
 }) {
   final ratioPercent = (commentRatio * _percentageMultiplier).round();
   final summary =
-      '(${formatCount(ratioPercent)}%) ${formatCount(totalCommentLines)}';
+      '${formatCount(totalCommentLines)} (${formatCount(ratioPercent)}%)';
   final text = width <= 0 ? summary : summary.padLeft(width);
   if (ratioPercent < _minHealthyCommentRatioPercent) {
     return _colorize(text, _ansiRed);

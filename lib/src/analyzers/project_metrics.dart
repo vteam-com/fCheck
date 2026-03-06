@@ -133,6 +133,30 @@ class ProjectMetrics {
   /// Number of test case invocations found in test Dart files.
   final int testCaseCount;
 
+  /// Number of unique project Dart files directly imported by tests.
+  final int testImportCount;
+
+  /// Number of unique analyzed project Dart files statically reachable from tests.
+  final int testConsumedFilesCount;
+
+  /// Total lines of code in project Dart files statically reachable from tests.
+  final int testConsumedLinesOfCode;
+
+  /// Total classes declared in project Dart files statically reachable from tests.
+  final int testConsumedClassCount;
+
+  /// Total methods declared in project Dart files statically reachable from tests.
+  final int testConsumedMethodCount;
+
+  /// Total top-level functions declared in project Dart files statically reachable from tests.
+  final int testConsumedTopLevelFunctionCount;
+
+  /// Normalized project-relative or analysis-root-relative paths directly imported by tests.
+  final List<String> testImportedPaths;
+
+  /// Normalized project-relative or analysis-root-relative paths statically reachable from tests.
+  final List<String> testConsumedPaths;
+
   /// Count of `// ignore: fcheck_*` directives found in analyzed Dart files.
   final int ignoreDirectivesCount;
 
@@ -244,6 +268,14 @@ class ProjectMetrics {
   /// [testFilesCount] Number of files found under `test`/`integration_test`.
   /// [testDartFilesCount] Number of Dart files found under `test`/`integration_test`.
   /// [testCaseCount] Number of `test(...)` and `testWidgets(...)` invocations found.
+  /// [testImportCount] Number of unique project Dart files directly imported by tests.
+  /// [testConsumedFilesCount] Number of unique analyzed project Dart files statically reachable from tests.
+  /// [testConsumedLinesOfCode] Total LOC in project Dart files statically reachable from tests.
+  /// [testConsumedClassCount] Total classes in project Dart files statically reachable from tests.
+  /// [testConsumedMethodCount] Total methods in project Dart files statically reachable from tests.
+  /// [testConsumedTopLevelFunctionCount] Total top-level functions in project Dart files statically reachable from tests.
+  /// [testImportedPaths] Normalized paths directly imported by tests.
+  /// [testConsumedPaths] Normalized paths statically reachable from tests.
   /// [customExcludedFilesCount] Number of Dart files excluded by custom glob patterns.
   /// [ignoreDirectivesCount] Number of `// ignore: fcheck_*` directives found.
   /// [ignoreDirectiveFiles] Unique file paths containing `// ignore: fcheck_*`.
@@ -295,6 +327,14 @@ class ProjectMetrics {
     this.testFilesCount = 0,
     this.testDartFilesCount = 0,
     this.testCaseCount = 0,
+    this.testImportCount = 0,
+    this.testConsumedFilesCount = 0,
+    this.testConsumedLinesOfCode = 0,
+    this.testConsumedClassCount = 0,
+    this.testConsumedMethodCount = 0,
+    this.testConsumedTopLevelFunctionCount = 0,
+    this.testImportedPaths = const [],
+    this.testConsumedPaths = const [],
     this.customExcludedFilesCount = 0,
     this.ignoreDirectivesCount = 0,
     this.ignoreDirectiveFiles = const [],
@@ -370,6 +410,12 @@ class ProjectMetrics {
       'testFiles': testFilesCount,
       'testDartFiles': testDartFilesCount,
       'testCases': testCaseCount,
+      'testImports': testImportCount,
+      'testConsumedFiles': testConsumedFilesCount,
+      'testConsumedLinesOfCode': testConsumedLinesOfCode,
+      'testConsumedClasses': testConsumedClassCount,
+      'testConsumedMethods': testConsumedMethodCount,
+      'testConsumedTopLevelFunctions': testConsumedTopLevelFunctionCount,
       'customExcludedFiles': customExcludedFilesCount,
       'ignoreDirectives': ignoreDirectivesCount,
       'disabledAnalyzers': disabledAnalyzersCount,
@@ -415,6 +461,16 @@ class ProjectMetrics {
     'deadCodeIssues': deadCodeIssues.map((i) => i.toJson()).toList(),
     'duplicateCodeIssues': duplicateCodeIssues.map((i) => i.toJson()).toList(),
     'documentationIssues': documentationIssues.map((i) => i.toJson()).toList(),
+    'tests': {
+      'imports': testImportCount,
+      'consumedFiles': testConsumedFilesCount,
+      'consumedLinesOfCode': testConsumedLinesOfCode,
+      'consumedClasses': testConsumedClassCount,
+      'consumedMethods': testConsumedMethodCount,
+      'consumedTopLevelFunctions': testConsumedTopLevelFunctionCount,
+      'importedPaths': testImportedPaths,
+      'consumedPaths': testConsumedPaths,
+    },
     'localization': {'usesLocalization': usesLocalization},
     'compliance': {
       'score': complianceScore,

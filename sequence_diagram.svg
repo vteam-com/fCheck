@@ -264,8 +264,8 @@
   <text x="1962" y="1328" class="note-text">Consistent post-processing for all complex domain analyzers.</text>
   <rect x="1950" y="1348" width="840" height="35" rx="4" class="note-box" />
   <text x="1962" y="1371" class="note-text">CodeSizeDelegate collects LOC for treemap/reporting; code_size scoring now uses configurable .fcheck LOC thresholds (file/class/function/method) and contributes deductions when exceeded.</text>
-  <rect x="1950" y="1391" width="760" height="35" rx="4" class="note-box" />
-  <text x="1962" y="1414" class="note-text">AnalyzeFolder also scans test/integration_test Dart files and parses AST calls to count test() and testWidgets() cases.</text>
+  <rect x="1950" y="1391" width="930" height="35" rx="4" class="note-box" />
+  <text x="1962" y="1414" class="note-text">AnalyzeFolder also scans test/integration_test Dart files to count test() and testWidgets() cases and to inventory project-local imports plus statically consumed files/artifacts.</text>
   <rect x="1950" y="1426" width="700" height="20" rx="4" class="note-box" />
   <text x="1962" y="1440" class="note-text">CLI includes fast-path inventory modes: --excluded, --literals, and --ignores.</text>
 

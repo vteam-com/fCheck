@@ -216,6 +216,59 @@ class ScreenB extends BaseStateful {}
       expect(metrics.totalStatefulWidgetCount, equals(2));
     });
 
+    test('should inventory project artifacts statically consumed by tests', () {
+      final libDir = Directory(p.join(tempDir.path, 'lib'))..createSync();
+      final srcDir = Directory(p.join(libDir.path, 'src'))..createSync();
+      final testDir = Directory(p.join(tempDir.path, 'test'))..createSync();
+      File(p.join(tempDir.path, 'pubspec.yaml')).writeAsStringSync('''
+name: sample_project
+version: 1.0.0
+''');
+      File(p.join(libDir.path, 'sample_project.dart')).writeAsStringSync('''
+export 'src/api.dart';
+''');
+      File(p.join(srcDir.path, 'api.dart')).writeAsStringSync('''
+import 'helper.dart';
+
+class ApiService {
+  void run() {}
+}
+
+void exposedFunction() {
+  helper();
+}
+''');
+      File(p.join(srcDir.path, 'helper.dart')).writeAsStringSync('''
+class Helper {
+  void work() {}
+}
+
+void helper() {}
+''');
+      File(p.join(testDir.path, 'api_test.dart')).writeAsStringSync('''
+import 'package:sample_project/sample_project.dart';
+import 'package:test/test.dart';
+
+void main() {
+  test('uses api', () {
+    expect(1, 1);
+  });
+}
+''');
+
+      final metrics = analyzer.analyze();
+
+      expect(metrics.testImportCount, equals(1));
+      expect(metrics.testConsumedFilesCount, equals(3));
+      expect(metrics.testConsumedLinesOfCode, greaterThan(0));
+      expect(metrics.testConsumedClassCount, equals(2));
+      expect(metrics.testConsumedMethodCount, equals(2));
+      expect(metrics.testConsumedTopLevelFunctionCount, equals(2));
+      expect(metrics.testImportedPaths, contains('lib/sample_project.dart'));
+      expect(metrics.testConsumedPaths, contains('lib/src/api.dart'));
+      expect(metrics.testConsumedPaths, contains('lib/src/helper.dart'));
+    });
+
     test(
       'should report documentation issue paths relative to analysis root',
       () {

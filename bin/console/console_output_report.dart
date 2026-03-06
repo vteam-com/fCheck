@@ -5,6 +5,7 @@ part of 'console_output.dart';
 /// The output is grouped into:
 /// - Scorecard (overall compliance + next investment)
 /// - Dashboard (compact project and analyzer snapshot)
+/// - Tests (static test discovery and consumption inventory)
 /// - Analyzers (grouped per analyzer with score, summary, and optional details)
 ///
 /// [listMode] controls detail level for issue sections and can render
@@ -23,6 +24,7 @@ List<String> buildReportLines(
 
   _appendProjectHeader(lines, ctx);
   _appendDashboardSection(lines, ctx);
+  _appendTestsSection(lines, ctx);
   _appendLiteralsSection(lines, ctx);
 
   lines.add(dividerLine('Analyzers'));
@@ -113,13 +115,13 @@ void _appendDashboardSection(List<String> lines, _ReportContext ctx) {
       value: formatCount(ctx.totalDartFiles),
     ),
     _gridCell(
-      label: AppStrings.testDartFiles,
-      value: _dashboardCountOrDash(ctx.testDartFilesCount),
+      label: AppStrings.loc,
+      value: _dashboardKlocOrDash(ctx.totalLinesOfCode),
       valuePreAligned: true,
     ),
     _gridCell(
-      label: AppStrings.testCases,
-      value: _dashboardCountOrDash(ctx.testCaseCount),
+      label: AppStrings.comments,
+      value: ctx.commentSummary,
       valuePreAligned: true,
     ),
   ];
@@ -140,12 +142,6 @@ void _appendDashboardSection(List<String> lines, _ReportContext ctx) {
       label: AppStrings.functions,
       value: formatCount(ctx.functionCount),
     ),
-    _gridCell(label: AppStrings.loc, value: formatCount(ctx.totalLinesOfCode)),
-    _gridCell(
-      label: AppStrings.comments,
-      value: ctx.commentSummary,
-      valuePreAligned: true,
-    ),
   ];
   final dashboardRowCount =
       leftDashboardRows.length >= rightDashboardRows.length
@@ -164,6 +160,76 @@ void _appendDashboardSection(List<String> lines, _ReportContext ctx) {
           );
     lines.add(_gridRow([leftCell, rightCell]));
   }
+}
+
+/// Appends the two-column tests section with discovery and import-based touch
+/// inventory.
+void _appendTestsSection(List<String> lines, _ReportContext ctx) {
+  lines.add(dividerLine(AppStrings.testsDivider));
+  final discoveryRows = <String>[
+    _gridCell(
+      label: AppStrings.testDartFiles,
+      value: _dashboardCountOrDash(ctx.testDartFilesCount),
+      valuePreAligned: true,
+    ),
+    _gridCell(
+      label: AppStrings.testCases,
+      value: _dashboardCountOrDash(ctx.testCaseCount),
+      valuePreAligned: true,
+    ),
+    ''.padRight(
+      _gridLabelWidth + _gridValueWidth + _emptyRightDashboardCellPadding,
+    ),
+  ];
+  final inventoryRows = <String>[
+    _gridCell(
+      label: AppStrings.testConsumedFiles,
+      value: _dashboardRatioOrDash(
+        consumed: ctx.testConsumedFilesCount,
+        total: ctx.totalDartFiles,
+      ),
+      valuePreAligned: true,
+    ),
+    _gridCell(
+      label: AppStrings.testConsumedClasses,
+      value: _dashboardRatioOrDash(
+        consumed: ctx.testConsumedClassCount,
+        total: ctx.classCount,
+      ),
+      valuePreAligned: true,
+    ),
+    _gridCell(
+      label: AppStrings.testConsumedMethods,
+      value: _dashboardRatioOrDash(
+        consumed: ctx.testConsumedMethodCount,
+        total: ctx.methodCount,
+      ),
+      valuePreAligned: true,
+    ),
+  ];
+  for (var index = 0; index < discoveryRows.length; index++) {
+    final rightCell = index < inventoryRows.length
+        ? inventoryRows[index]
+        : ''.padRight(
+            _gridLabelWidth + _gridValueWidth + _emptyRightDashboardCellPadding,
+          );
+    lines.add(_gridRow([discoveryRows[index], rightCell]));
+  }
+  lines.add(
+    _gridRow([
+      ''.padRight(
+        _gridLabelWidth + _gridValueWidth + _emptyRightDashboardCellPadding,
+      ),
+      _gridCell(
+        label: AppStrings.testConsumedFunctions,
+        value: _dashboardRatioOrDash(
+          consumed: ctx.testConsumedTopLevelFunctionCount,
+          total: ctx.functionCount,
+        ),
+        valuePreAligned: true,
+      ),
+    ]),
+  );
 }
 
 /// Appends a compact literals inventory block.

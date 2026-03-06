@@ -13,6 +13,12 @@ class _ReportContext {
   final int excludedFilesCount;
   final int testDartFilesCount;
   final int testCaseCount;
+  final int testImportCount;
+  final int testConsumedFilesCount;
+  final int testConsumedLinesOfCode;
+  final int testConsumedClassCount;
+  final int testConsumedMethodCount;
+  final int testConsumedTopLevelFunctionCount;
   final int customExcludedFilesCount;
   final int ignoreDirectivesCount;
   final List<MapEntry<String, int>> ignoreDirectiveEntries;
@@ -95,6 +101,12 @@ class _ReportContext {
     required this.excludedFilesCount,
     required this.testDartFilesCount,
     required this.testCaseCount,
+    required this.testImportCount,
+    required this.testConsumedFilesCount,
+    required this.testConsumedLinesOfCode,
+    required this.testConsumedClassCount,
+    required this.testConsumedMethodCount,
+    required this.testConsumedTopLevelFunctionCount,
     required this.customExcludedFilesCount,
     required this.ignoreDirectivesCount,
     required this.ignoreDirectiveEntries,
@@ -347,6 +359,13 @@ class _ReportContext {
       excludedFilesCount: metrics.excludedFilesCount,
       testDartFilesCount: metrics.testDartFilesCount,
       testCaseCount: metrics.testCaseCount,
+      testImportCount: metrics.testImportCount,
+      testConsumedFilesCount: metrics.testConsumedFilesCount,
+      testConsumedLinesOfCode: metrics.testConsumedLinesOfCode,
+      testConsumedClassCount: metrics.testConsumedClassCount,
+      testConsumedMethodCount: metrics.testConsumedMethodCount,
+      testConsumedTopLevelFunctionCount:
+          metrics.testConsumedTopLevelFunctionCount,
       customExcludedFilesCount: metrics.customExcludedFilesCount,
       ignoreDirectivesCount: metrics.ignoreDirectivesCount,
       ignoreDirectiveEntries: ignoreDirectiveEntries,

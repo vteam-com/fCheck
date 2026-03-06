@@ -15,6 +15,7 @@ class AppStrings {
   // Report Sections
   static const String scorecardDivider = 'Scorecard';
   static const String dashboardDivider = 'Dashboard';
+  static const String testsDivider = 'Tests';
   static const String literalsDivider = 'Literals';
   static const String listsDivider = 'Lists';
 
@@ -34,6 +35,11 @@ class AppStrings {
   static const String excludedFiles = 'Excluded Files';
   static const String testDartFiles = 'Test Dart Files';
   static const String testCases = 'Test Cases';
+  static const String testImports = 'Test Imports';
+  static const String testConsumedFiles = 'Touched Dart Files';
+  static const String testConsumedClasses = 'Touched Classes';
+  static const String testConsumedMethods = 'Touched Methods';
+  static const String testConsumedFunctions = 'Touched Functions';
   static const String platforms = 'Platforms';
   static const String android = 'Android';
   static const String ios = 'iOS';

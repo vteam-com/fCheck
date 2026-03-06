@@ -535,6 +535,12 @@ void main() {
             'testFiles': 0,
             'testDartFiles': 0,
             'testCases': 0,
+            'testImports': 0,
+            'testConsumedFiles': 0,
+            'testConsumedLinesOfCode': 0,
+            'testConsumedClasses': 0,
+            'testConsumedMethods': 0,
+            'testConsumedTopLevelFunctions': 0,
             'customExcludedFiles': 0,
             'ignoreDirectives': 0,
             'disabledAnalyzers': 0,
@@ -643,6 +649,16 @@ void main() {
             },
           ],
           'documentationIssues': [],
+          'tests': {
+            'imports': 0,
+            'consumedFiles': 0,
+            'consumedLinesOfCode': 0,
+            'consumedClasses': 0,
+            'consumedMethods': 0,
+            'consumedTopLevelFunctions': 0,
+            'importedPaths': [],
+            'consumedPaths': [],
+          },
           'localization': {'usesLocalization': true},
           'compliance': {
             'score': 54,
@@ -771,6 +787,111 @@ void main() {
         expect(joined, isNot(contains(AppStrings.disabledRules)));
       },
     );
+
+    test('should show static test consumption summary in dashboard', () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 2,
+        totalDartFiles: 2,
+        totalLinesOfCode: 20,
+        totalCommentLines: 0,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/a.dart',
+            linesOfCode: 8,
+            commentLines: 0,
+            classCount: 1,
+            methodCount: 2,
+            topLevelFunctionCount: 1,
+            isStatefulWidget: false,
+          ),
+          FileMetrics(
+            path: 'lib/b.dart',
+            linesOfCode: 12,
+            commentLines: 0,
+            classCount: 1,
+            methodCount: 1,
+            topLevelFunctionCount: 2,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: const [],
+        hardcodedStringIssues: const [],
+        magicNumberIssues: const [],
+        sourceSortIssues: const [],
+        layersIssues: const [],
+        deadCodeIssues: const [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: const {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        testImportCount: 1,
+        testConsumedFilesCount: 1,
+        testConsumedLinesOfCode: 8,
+        testConsumedClassCount: 1,
+        testConsumedMethodCount: 2,
+        testConsumedTopLevelFunctionCount: 1,
+      );
+
+      final joined = buildReportLines(projectMetrics).join('\n');
+
+      expect(joined, contains(dividerLine(AppStrings.testsDivider)));
+      expect(joined, isNot(contains(RegExp(r'Test Imports\s+:.*1'))));
+      expect(joined, contains(RegExp(r'Touched Dart Files\s+:.*1 \(50%\)')));
+      expect(joined, isNot(contains(RegExp(r'Tested LOC\s+:.*40%'))));
+      expect(joined, contains(RegExp(r'Touched Classes\s+:.*1 \(50%\)')));
+      expect(joined, contains(RegExp(r'Touched Methods\s+:.*2 \(67%\)')));
+      expect(joined, contains(RegExp(r'Touched Functions\s+:.*1 \(33%\)')));
+      expect(joined, contains(RegExp(r'Comments\s+:.*0 \(0%\)')));
+      expect(joined, contains(RegExp(r'Lines of Code\s+:.*0\.02 KLoC')));
+    });
+
+    test('should render comments below lines of code in the left column', () {
+      final projectMetrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 20,
+        totalCommentLines: 3,
+        fileMetrics: [
+          FileMetrics(
+            path: 'lib/main.dart',
+            linesOfCode: 20,
+            commentLines: 3,
+            classCount: 1,
+            methodCount: 2,
+            topLevelFunctionCount: 1,
+            isStatefulWidget: false,
+          ),
+        ],
+        secretIssues: const [],
+        hardcodedStringIssues: const [],
+        magicNumberIssues: const [],
+        sourceSortIssues: const [],
+        layersIssues: const [],
+        deadCodeIssues: const [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: const {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+      );
+
+      final joined = buildReportLines(projectMetrics).join('\n');
+
+      expect(
+        joined,
+        contains(
+          RegExp(
+            r'Lines of Code\s+:.*0\.02 KLoC.*\|\s+Functions\s+:.*1'
+            r'.*\nComments\s+:.*3\s+\(15%\)\s+\|',
+          ),
+        ),
+      );
+    });
 
     test('should omit Lists section when listMode is none', () {
       final projectMetrics = ProjectMetrics(

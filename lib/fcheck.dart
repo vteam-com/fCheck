@@ -17,12 +17,12 @@
 // final metrics = engine.analyze();
 // ```
 
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
@@ -54,18 +54,21 @@ import 'package:fcheck/src/analyzers/metrics/metrics_file_data.dart';
 import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_delegate.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
+import 'package:fcheck/src/analyzers/shared/dependency_uri_utils.dart';
 import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/source_sort_delegate.dart';
+import 'package:fcheck/src/fcheck_pubspec_info.dart';
+import 'package:fcheck/src/fcheck_test_summary.dart';
+import 'package:fcheck/src/fcheck_test_visitor.dart';
 import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:path/path.dart' as p;
-import 'package:yaml/yaml.dart';
 
-const Set<String> _testCaseFunctionNames = {'test', 'testWidgets'};
+const Set<String> _testDirectoryNames = {'test', 'integration_test'};
 const String _androidPlatformFolder = 'android';
 const String _iosPlatformFolder = 'ios';
 const String _macosPlatformFolder = 'macos';
@@ -137,7 +140,7 @@ class AnalyzeFolder {
   final Set<AnalyzerDomain>? enabledAnalyzers;
 
   /// Cached pubspec.yaml metadata for this analysis session.
-  late final _PubspecInfo _pubspecInfo = _PubspecInfo.load(projectDir);
+  late final PubspecInfo _pubspecInfo = PubspecInfo.load(projectDir);
 
   /// Resolves whether [analyzer] should run for this analysis pass.
   ///
@@ -191,7 +194,6 @@ class AnalyzeFolder {
     final pubspecInfo = _pubspecInfo;
     final projectRoot = pubspecInfo.projectRoot ?? projectDir;
 
-    // Perform unified directory scan to get all file system metrics in one pass
     final (
       dartFiles,
       totalFolders,
@@ -242,8 +244,6 @@ class AnalyzeFolder {
         : HardcodedStringFocus.general;
 
     final usesLocalization = detectLocalization(dartFiles);
-
-    // Build delegates for unified analysis
     final delegates = <AnalyzerDelegate>[
       MetricsDelegate(globallyIgnoreOneClassPerFile: !oneClassPerFileEnabled),
       if (codeSizeEnabled) CodeSizeDelegate(),
@@ -270,7 +270,6 @@ class AnalyzeFolder {
       if (documentationEnabled) DocumentationDelegate(),
     ];
 
-    // Perform unified analysis
     final unifiedAnalyzer = AnalyzerRunner(
       projectDir: projectDir,
       excludePatterns: excludePatterns,
@@ -278,12 +277,9 @@ class AnalyzeFolder {
     );
 
     final unifiedResult = unifiedAnalyzer.analyzeAll();
-
-    // Extract results from unified analysis
     final allListResults =
         unifiedResult.getResults<List<dynamic>>() ?? <List<dynamic>>[];
 
-    // Separate results by type
     final hardcodedStringIssues = allListResults
         .whereType<HardcodedStringIssue>()
         .toList();
@@ -346,12 +342,23 @@ class AnalyzeFolder {
           )
         : LayersAnalysisResult(issues: [], layers: {}, dependencyGraph: {});
 
-    // Extract file metrics from unified results using metrics analyzer
     final metricsAggregation = MetricsAnalyzer().aggregate(
       unifiedResult.resultsByType[MetricsFileData]
               ?.cast<MetricsFileData>()
               .toList() ??
           [],
+    );
+    final projectDependencyGraph = _buildProjectDependencyGraph(
+      dartFiles,
+      rootPath: projectRoot.path,
+      packageName: pubspecInfo.packageName,
+    );
+    final testConsumption = _analyzeTestConsumption(
+      dependencyGraph: projectDependencyGraph,
+      fileMetrics: metricsAggregation.fileMetrics,
+      rootPath: projectRoot.path,
+      packageName: pubspecInfo.packageName,
+      analysisRootPath: projectDir.path,
     );
     final codeSizeArtifacts = codeSizeEnabled
         ? _collectCodeSizeArtifacts(
@@ -405,6 +412,14 @@ class AnalyzeFolder {
       testFilesCount: testFilesCount,
       testDartFilesCount: testDartFilesCount,
       testCaseCount: testCaseCount,
+      testImportCount: testConsumption.importedPaths.length,
+      testConsumedFilesCount: testConsumption.consumedPaths.length,
+      testConsumedLinesOfCode: testConsumption.linesOfCode,
+      testConsumedClassCount: testConsumption.classCount,
+      testConsumedMethodCount: testConsumption.methodCount,
+      testConsumedTopLevelFunctionCount: testConsumption.topLevelFunctionCount,
+      testImportedPaths: testConsumption.importedPaths,
+      testConsumedPaths: testConsumption.consumedPaths,
       customExcludedFilesCount: customExcludedDartFilesCount,
       ignoreDirectivesCount: metricsAggregation.ignoreDirectivesCount,
       ignoreDirectiveFiles: metricsAggregation.ignoreDirectiveCountsByFile.keys
@@ -579,7 +594,7 @@ class AnalyzeFolder {
       final hasArb = l10nDir
           .listSync(recursive: true)
           .whereType<File>()
-          .any((f) => f.path.endsWith('.arb'));
+          .any((file) => file.path.endsWith('.arb'));
       if (hasArb) {
         return true;
       }
@@ -588,7 +603,7 @@ class AnalyzeFolder {
     final arbAnywhere = projectDir
         .listSync(recursive: true)
         .whereType<File>()
-        .any((f) => f.path.endsWith('.arb'));
+        .any((file) => file.path.endsWith('.arb'));
     if (arbAnywhere) {
       return true;
     }
@@ -621,7 +636,7 @@ class AnalyzeFolder {
           content: content,
           featureSet: FeatureSet.latestLanguageVersion(),
         );
-        final counter = _TestCaseVisitor();
+        final counter = TestCaseVisitor();
         parseResult.unit.accept(counter);
         totalTestCases += counter.testCaseCount;
       } catch (_) {
@@ -644,14 +659,192 @@ class AnalyzeFolder {
       if (isHidden) {
         continue;
       }
-      final isTestFile = pathParts.any(
-        (part) => part == 'test' || part == 'integration_test',
-      );
+      final isTestFile = pathParts.any(_testDirectoryNames.contains);
       if (isTestFile) {
         files.add(entity);
       }
     }
     return files;
+  }
+
+  /// Builds a normalized project-only dependency graph for analyzed Dart files.
+  ///
+  /// Each key is the normalized absolute path of an analyzed file and each
+  /// value contains the normalized project dependencies referenced from that
+  /// file through imports, exports, and parts.
+  Map<String, List<String>> _buildProjectDependencyGraph(
+    List<File> dartFiles, {
+    required String rootPath,
+    required String packageName,
+  }) {
+    final dependencyGraph = <String, List<String>>{};
+    for (final file in dartFiles) {
+      final normalizedPath = p.normalize(file.path);
+      dependencyGraph[normalizedPath] = _collectProjectDependenciesFromFile(
+        file,
+        rootPath: rootPath,
+        packageName: packageName,
+      );
+    }
+    return Map<String, List<String>>.unmodifiable(dependencyGraph);
+  }
+
+  /// Resolves which analyzed files are statically exercised by test imports.
+  ///
+  /// The analysis starts from project files imported by test files, then walks
+  /// the dependency graph transitively to estimate consumed files, LOC,
+  /// classes, methods, and top-level functions.
+  TestConsumptionSummary _analyzeTestConsumption({
+    required Map<String, List<String>> dependencyGraph,
+    required List<FileMetrics> fileMetrics,
+    required String rootPath,
+    required String packageName,
+    required String analysisRootPath,
+  }) {
+    if (dependencyGraph.isEmpty) {
+      return const TestConsumptionSummary.empty();
+    }
+
+    final analyzedPaths = dependencyGraph.keys.toSet();
+    final importedPathsSet = <String>{};
+    for (final testFile in _listTestDartFiles(projectDir)) {
+      importedPathsSet.addAll(
+        _collectProjectDependenciesFromFile(
+          testFile,
+          rootPath: rootPath,
+          packageName: packageName,
+        ).where(analyzedPaths.contains),
+      );
+    }
+
+    if (importedPathsSet.isEmpty) {
+      return const TestConsumptionSummary.empty();
+    }
+
+    final queue = Queue<String>()..addAll(importedPathsSet);
+    final consumedPathsSet = <String>{};
+    while (queue.isNotEmpty) {
+      final currentPath = queue.removeFirst();
+      if (!consumedPathsSet.add(currentPath)) {
+        continue;
+      }
+      for (final dependency
+          in dependencyGraph[currentPath] ?? const <String>[]) {
+        if (!analyzedPaths.contains(dependency) ||
+            consumedPathsSet.contains(dependency)) {
+          continue;
+        }
+        queue.add(dependency);
+      }
+    }
+
+    final metricsByPath = <String, FileMetrics>{
+      for (final metric in fileMetrics) p.normalize(metric.path): metric,
+    };
+    var linesOfCode = 0;
+    var classCount = 0;
+    var methodCount = 0;
+    var topLevelFunctionCount = 0;
+    for (final path in consumedPathsSet) {
+      final metric = metricsByPath[path];
+      if (metric == null) {
+        continue;
+      }
+      linesOfCode += metric.linesOfCode;
+      classCount += metric.classCount;
+      methodCount += metric.methodCount;
+      topLevelFunctionCount += metric.topLevelFunctionCount;
+    }
+
+    final normalizedAnalysisRoot = p.normalize(
+      Directory(analysisRootPath).absolute.path,
+    );
+    final importedPaths =
+        importedPathsSet
+            .map(
+              (path) => _toRelativePathForDisplay(
+                path,
+                normalizedRootPath: normalizedAnalysisRoot,
+              ),
+            )
+            .toList(growable: false)
+          ..sort();
+    final consumedPaths =
+        consumedPathsSet
+            .map(
+              (path) => _toRelativePathForDisplay(
+                path,
+                normalizedRootPath: normalizedAnalysisRoot,
+              ),
+            )
+            .toList(growable: false)
+          ..sort();
+
+    return TestConsumptionSummary(
+      importedPaths: importedPaths,
+      consumedPaths: consumedPaths,
+      linesOfCode: linesOfCode,
+      classCount: classCount,
+      methodCount: methodCount,
+      topLevelFunctionCount: topLevelFunctionCount,
+    );
+  }
+
+  /// Collects normalized in-project Dart dependencies declared by [file].
+  ///
+  /// Only project-resolvable imports, exports, and part directives are
+  /// returned. Unreadable or unparsable files fall back to an empty list.
+  List<String> _collectProjectDependenciesFromFile(
+    File file, {
+    required String rootPath,
+    required String packageName,
+  }) {
+    try {
+      final content = file.readAsStringSync();
+      final parseResult = parseString(
+        content: content,
+        featureSet: FeatureSet.latestLanguageVersion(),
+      );
+      final dependencies = <String>[];
+      for (final directive in parseResult.unit.directives) {
+        if (directive is ImportDirective) {
+          addDirectiveDartDependencies(
+            uri: directive.uri.stringValue,
+            configurations: directive.configurations,
+            packageName: packageName,
+            filePath: p.normalize(file.path),
+            rootPath: p.normalize(rootPath),
+            dependencies: dependencies,
+          );
+          continue;
+        }
+        if (directive is ExportDirective) {
+          addDirectiveDartDependencies(
+            uri: directive.uri.stringValue,
+            configurations: directive.configurations,
+            packageName: packageName,
+            filePath: p.normalize(file.path),
+            rootPath: p.normalize(rootPath),
+            dependencies: dependencies,
+          );
+          continue;
+        }
+        if (directive is PartDirective) {
+          addResolvedProjectDartDependency(
+            uri: directive.uri.stringValue,
+            packageName: packageName,
+            filePath: p.normalize(file.path),
+            rootPath: p.normalize(rootPath),
+            dependencies: dependencies,
+          );
+        }
+      }
+      final uniqueDependencies =
+          dependencies.map(p.normalize).toSet().toList(growable: false)..sort();
+      return uniqueDependencies;
+    } catch (_) {
+      return const <String>[];
+    }
   }
 
   /// Detects supported platform folders in the effective project root.
@@ -671,253 +864,5 @@ class AnalyzeFolder {
       linux: hasFolder(_linuxPlatformFolder),
       web: hasFolder(_webPlatformFolder),
     );
-  }
-}
-
-class _TestCaseVisitor extends RecursiveAstVisitor<void> {
-  int testCaseCount = 0;
-
-  @override
-  void visitFunctionExpressionInvocation(FunctionExpressionInvocation node) {
-    final function = node.function;
-    if (function is SimpleIdentifier &&
-        _testCaseFunctionNames.contains(function.name)) {
-      testCaseCount++;
-    }
-    super.visitFunctionExpressionInvocation(node);
-  }
-
-  @override
-  void visitMethodInvocation(MethodInvocation node) {
-    if (_testCaseFunctionNames.contains(node.methodName.name)) {
-      testCaseCount++;
-    }
-    super.visitMethodInvocation(node);
-  }
-}
-
-/// Parsed pubspec.yaml metadata for a project.
-class _PubspecInfo {
-  final Directory? projectRoot;
-  final String name;
-  final String version;
-  final ProjectType projectType;
-  final int dependencyCount;
-  final int devDependencyCount;
-
-  const _PubspecInfo({
-    required this.projectRoot,
-    required this.name,
-    required this.version,
-    required this.projectType,
-    required this.dependencyCount,
-    required this.devDependencyCount,
-  });
-
-  /// Package identifier resolved from `pubspec.yaml`.
-  ///
-  /// This alias keeps call sites explicit when they need a package-style name
-  /// instead of the generic project [name] field.
-  String get packageName => name;
-
-  /// Resolves project metadata from `pubspec.yaml` for [startDir].
-  ///
-  /// Resolution order:
-  /// 1. Normalize [startDir] to an absolute path.
-  /// 2. Walk upward from [startDir] to the filesystem root and use the first
-  ///    `pubspec.yaml` found.
-  /// 3. If no ancestor pubspec exists, inspect Dart files under [startDir] and
-  ///    resolve each file to its nearest ancestor `pubspec.yaml` inside
-  ///    [startDir].
-  /// 4. If all Dart files map to one unique descendant pubspec, use that
-  ///    metadata.
-  ///
-  /// Returns `unknown` metadata when no pubspec can be resolved or when
-  /// multiple descendant pubspecs are discovered (ambiguous/monorepo layout).
-  static _PubspecInfo load(Directory startDir) {
-    final normalizedStartDir = Directory(p.normalize(startDir.absolute.path));
-    Directory? currentDir = normalizedStartDir;
-
-    while (currentDir != null) {
-      final pubspecFile = File(p.join(currentDir.path, 'pubspec.yaml'));
-      if (pubspecFile.existsSync()) {
-        return _loadFromPubspecFile(pubspecFile, currentDir);
-      }
-
-      final parent = currentDir.parent;
-      if (parent.path == currentDir.path) {
-        break;
-      }
-      currentDir = parent;
-    }
-
-    final descendantPubspecInfo = _loadFromSingleDescendantPubspec(
-      normalizedStartDir,
-    );
-    if (descendantPubspecInfo != null) {
-      return descendantPubspecInfo;
-    }
-
-    return _unknown();
-  }
-
-  /// Attempts to resolve pubspec metadata from a single descendant package.
-  ///
-  /// Returns `null` when no Dart files exist, any Dart file cannot be mapped
-  /// to a pubspec under [startDir], or multiple pubspec roots are discovered.
-  static _PubspecInfo? _loadFromSingleDescendantPubspec(Directory startDir) {
-    final dartFiles = FileUtils.listDartFiles(startDir);
-    if (dartFiles.isEmpty) {
-      return null;
-    }
-
-    final Set<String> pubspecPaths = <String>{};
-    final Map<String, File> pubspecByPath = <String, File>{};
-    for (final dartFile in dartFiles) {
-      final pubspecFile = _findNearestPubspecForFile(
-        dartFile: dartFile,
-        rootDirectory: startDir,
-      );
-      if (pubspecFile == null) {
-        return null;
-      }
-
-      final pubspecPath = p.normalize(pubspecFile.absolute.path);
-      pubspecPaths.add(pubspecPath);
-      pubspecByPath[pubspecPath] = pubspecFile;
-
-      if (pubspecPaths.length > 1) {
-        return null;
-      }
-    }
-
-    if (pubspecPaths.length != 1) {
-      return null;
-    }
-
-    final pubspecFile = pubspecByPath[pubspecPaths.single];
-    if (pubspecFile == null) {
-      return null;
-    }
-
-    return _loadFromPubspecFile(pubspecFile, pubspecFile.parent);
-  }
-
-  /// Finds the closest ancestor `pubspec.yaml` for a Dart file inside root.
-  static File? _findNearestPubspecForFile({
-    required File dartFile,
-    required Directory rootDirectory,
-  }) {
-    final normalizedRootPath = p.normalize(rootDirectory.absolute.path);
-    Directory currentDir = dartFile.parent;
-
-    while (_isSameOrWithin(normalizedRootPath, currentDir.absolute.path)) {
-      final pubspecFile = File(p.join(currentDir.path, 'pubspec.yaml'));
-      if (pubspecFile.existsSync()) {
-        return pubspecFile;
-      }
-
-      final parent = currentDir.parent;
-      if (parent.path == currentDir.path) {
-        break;
-      }
-      currentDir = parent;
-    }
-
-    return null;
-  }
-
-  /// Internal helper used by fcheck analysis and reporting.
-  static bool _isSameOrWithin(String rootPath, String candidatePath) {
-    final normalizedRootPath = p.normalize(rootPath);
-    final normalizedCandidatePath = p.normalize(candidatePath);
-    return normalizedRootPath == normalizedCandidatePath ||
-        p.isWithin(normalizedRootPath, normalizedCandidatePath);
-  }
-
-  /// Parses project metadata from a concrete `pubspec.yaml` file.
-  static _PubspecInfo _loadFromPubspecFile(
-    File pubspecFile,
-    Directory projectRoot,
-  ) {
-    try {
-      final yaml = loadYaml(pubspecFile.readAsStringSync());
-      if (yaml is YamlMap) {
-        final name = _readStringField(yaml, 'name');
-        final version = _readStringField(yaml, 'version');
-        final projectType = _detectProjectType(yaml);
-        return _PubspecInfo(
-          projectRoot: projectRoot,
-          name: name,
-          version: version,
-          projectType: projectType,
-          dependencyCount: _readMapEntryCount(yaml, 'dependencies'),
-          devDependencyCount: _readMapEntryCount(yaml, 'dev_dependencies'),
-        );
-      }
-      return _PubspecInfo(
-        projectRoot: projectRoot,
-        name: 'unknown',
-        version: 'unknown',
-        projectType: ProjectType.dart,
-        dependencyCount: 0,
-        devDependencyCount: 0,
-      );
-    } catch (_) {
-      return _PubspecInfo(
-        projectRoot: projectRoot,
-        name: 'unknown',
-        version: 'unknown',
-        projectType: ProjectType.unknown,
-        dependencyCount: 0,
-        devDependencyCount: 0,
-      );
-    }
-  }
-
-  /// Internal helper used by fcheck analysis and reporting.
-  static _PubspecInfo _unknown() {
-    return const _PubspecInfo(
-      projectRoot: null,
-      name: 'unknown',
-      version: 'unknown',
-      projectType: ProjectType.unknown,
-      dependencyCount: 0,
-      devDependencyCount: 0,
-    );
-  }
-
-  /// Internal helper used by fcheck analysis and reporting.
-  static String _readStringField(YamlMap yaml, String field) {
-    final value = yaml[field];
-    if (value == null) {
-      return 'unknown';
-    }
-    if (value is String) {
-      return value;
-    }
-    return value.toString();
-  }
-
-  /// Internal helper used by fcheck analysis and reporting.
-  static int _readMapEntryCount(YamlMap yaml, String field) {
-    final value = yaml[field];
-    if (value is YamlMap) {
-      return value.length;
-    }
-    return 0;
-  }
-
-  /// Internal helper used by fcheck analysis and reporting.
-  static ProjectType _detectProjectType(YamlMap yaml) {
-    final dependencies = yaml['dependencies'];
-    if (dependencies is YamlMap && dependencies.containsKey('flutter')) {
-      return ProjectType.flutter;
-    }
-    final devDependencies = yaml['dev_dependencies'];
-    if (devDependencies is YamlMap && devDependencies.containsKey('flutter')) {
-      return ProjectType.flutter;
-    }
-    return ProjectType.dart;
   }
 }

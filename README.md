@@ -120,9 +120,13 @@ Folders            :              21  |  Classes            :              66
 Files              :             120  |  Widgets: Stateful  :              26
 Excluded Files     :              39  |  Widgets: Stateless :              40
 Dart Files         :              91  |  Methods            :             357
-Test Dart Files    :              35  |  Functions          :             179
-Test Cases         :             392  |  Lines of Code      :          15,022
-                   :                  |  Comments           :     (14%) 2,145
+Lines of Code      :       15.0 KLoC  |  Functions          :             179
+Comments           :     (14%) 2,145  |
+----------------------------------- Tests -----------------------------------
+Test Dart Files    :              35  |  Tested Classes     :        31/66 (47%)
+Test Cases         :             392  |  Tested Methods     :     144/357 (40%)
+Test Imports       :              18  |  Tested Functions   :      73/179 (41%)
+Tested Dart Files  :    41/91 (45%)  |  Tested LOC         :            46%
 --------------------------------- Literals ----------------------------------
 Localization       : ON
 Strings            : 1,203 (64% dupe)
@@ -144,6 +148,8 @@ Total Score        : 100%
 Invest Next        : Maintain this level by enforcing fcheck in CI on every pull request.
 ↑------------------------ fCheck completed (1.73s) -------------------------↑
 ```
+
+`Test Imports`, `Tested Dart Files`, `Tested LOC`, and the tested class/method/function rows are a static inventory derived from test-file imports plus transitive project-local Dart dependencies. They are not runtime coverage percentages.
 
 ## Configuration (`.fcheck`)
 
