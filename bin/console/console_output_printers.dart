@@ -279,7 +279,7 @@ void printLiteralsSummary({
         rawPath: filePath,
         lineNumber: lineNumber,
       );
-      print('  - ${_pathText(location)}: ${jsonEncode(value)}');
+      print('  - ${_pathText(location)}: ${_formatStringLiteral(value)}');
     }
     if (listMode == ReportListMode.partial &&
         sortedHardcodedEntries.length > visibleHardcodedEntries.length) {
@@ -300,7 +300,9 @@ void printLiteralsSummary({
     print(_noneIndicator);
   } else {
     for (final entry in visibleStringEntries) {
-      print('  - ${jsonEncode(entry.key)} (${formatCount(entry.value)})');
+      print(
+        '  - ${_formatStringLiteral(entry.key)} ${_formatLiteralOccurrenceCount(entry.value)}',
+      );
     }
     if (listMode == ReportListMode.partial &&
         stringEntries.length > visibleStringEntries.length) {
@@ -321,7 +323,7 @@ void printLiteralsSummary({
     print(_noneIndicator);
   } else {
     for (final entry in visibleNumberEntries) {
-      print('  - ${entry.key} (${formatCount(entry.value)})');
+      print('  - ${entry.key} ${_formatLiteralOccurrenceCount(entry.value)}');
     }
     if (listMode == ReportListMode.partial &&
         numberEntries.length > visibleNumberEntries.length) {
@@ -342,6 +344,42 @@ List<Map<String, Object?>> _hardcodedEntriesForMode({
   }
   final safeLimit = listItemLimit > 0 ? listItemLimit : 1;
   return entries.take(safeLimit).toList(growable: false);
+}
+
+/// Formats a string literal using Dart-style quoting with minimal escaping.
+String _formatStringLiteral(String value) {
+  final singleQuoted = _singleQuotedLiteral(value);
+  final doubleQuoted = _doubleQuotedLiteral(value);
+  return singleQuoted.length <= doubleQuoted.length
+      ? singleQuoted
+      : doubleQuoted;
+}
+
+/// Formats a literal occurrence count with severity coloring.
+///
+/// `(1)` is gray and any count above 1 is yellow.
+String _formatLiteralOccurrenceCount(int count) {
+  final countText = '(${formatCount(count)})';
+  if (count <= 1) {
+    return _colorize(countText, _ansiGray);
+  }
+  return _colorize(countText, _ansiYellow);
+}
+
+String _singleQuotedLiteral(String value) =>
+    "'${_escapeForQuote(value, quoteDelimiter: "'")}'";
+
+String _doubleQuotedLiteral(String value) =>
+    '"${_escapeForQuote(value, quoteDelimiter: '"')}"';
+
+/// Escapes [value] to be embedded inside the selected quote delimiter.
+String _escapeForQuote(String value, {required String quoteDelimiter}) {
+  final normalized = jsonEncode(value);
+  final body = normalized.substring(1, normalized.length - 1);
+  if (quoteDelimiter == '"') {
+    return body;
+  }
+  return body.replaceAll(r'\"', '"').replaceAll("'", r"\'");
 }
 
 /// Returns literal frequency entries sorted by count, then by literal value.

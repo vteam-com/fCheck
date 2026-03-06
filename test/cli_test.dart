@@ -418,8 +418,8 @@ void main() {
       expect(result.stdout, contains('Hardcoded Strings found'));
       expect(result.stdout, contains('Unique strings found'));
       expect(result.stdout, contains('Unique numbers found'));
-      expect(result.stdout, contains('"hello"'));
-      expect(result.stdout, contains('"bye"'));
+      expect(result.stdout, contains("'hello'"));
+      expect(result.stdout, contains("'bye'"));
       expect(result.stdout, contains('42 (2)'));
       expect(result.stdout, isNot(contains('package:path/path.dart')));
       final hardcodedIndex = result.stdout.indexOf('Hardcoded Strings found');
@@ -455,6 +455,60 @@ void main() {
       },
     );
 
+    test(
+      'should ignore --list mode and print full literals inventory',
+      () async {
+        File('${tempDir.path}/literals_full_mode.dart').writeAsStringSync('''
+void main() {
+  print("a");
+  print("b");
+  print("c");
+  print("d");
+  print("e");
+  print("f");
+  print("g");
+  print("h");
+  print("i");
+  print("j");
+  print("k");
+}
+''');
+
+        final result = await runCli([
+          '--input',
+          tempDir.path,
+          '--literals',
+          '--list',
+          'none',
+        ]);
+
+        expect(result.exitCode, equals(0));
+        expect(result.stdout, contains('Unique strings found'));
+        expect(result.stdout, contains("'k'"));
+        expect(result.stdout, isNot(contains('... and')));
+      },
+    );
+
+    test('should render literals with Dart-style quote delimiters', () async {
+      File('${tempDir.path}/literals_quote_style.dart').writeAsStringSync('''
+void main() {
+  print("plain");
+  print("it's");
+}
+''');
+
+      final result = await runCli([
+        '--input',
+        tempDir.path,
+        '--literals',
+        '--no-colors',
+      ]);
+
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains("  - 'plain' (1)"));
+      expect(result.stdout, contains('  - "it\'s" (1)'));
+    });
+
     test('should print literals JSON with --literals --json', () async {
       File('${tempDir.path}/literals_json.dart').writeAsStringSync('''
 void main() {
@@ -487,6 +541,38 @@ void main() {
         isA<List<dynamic>>(),
       );
     });
+
+    test(
+      'should not count empty interpolation segments as empty string literals',
+      () async {
+        File('${tempDir.path}/literals_interpolation.dart').writeAsStringSync(
+          '''
+void main() {
+  final name = "n";
+  print("prefix_\${name}");
+}
+''',
+        );
+
+        final result = await runCli([
+          '--input',
+          tempDir.path,
+          '--literals',
+          '--json',
+        ]);
+
+        expect(result.exitCode, equals(0));
+        final json = jsonDecode(result.stdout) as Map<String, dynamic>;
+        final stringEntries =
+            ((json['strings'] as Map<String, dynamic>)['entries']
+                    as List<dynamic>)
+                .cast<Map<String, dynamic>>();
+        final hasEmptyStringEntry = stringEntries.any(
+          (entry) => entry['value'] == '',
+        );
+        expect(hasEmptyStringEntry, isFalse);
+      },
+    );
 
     test('should detect class violations', () async {
       // Create a file with multiple classes (violates one class per file rule)

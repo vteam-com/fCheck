@@ -317,6 +317,9 @@ fcheck --literals --json
 ```
 
 `--ignores` groups results by suppression type (`exclude`, analyzer skips, and Dart comment directive type) so cleanup work can be prioritized.
+`--literals` text output always prints full lists and ignores `--list`.
+`--literals` ignores synthetic empty interpolation segments (for example boundary fragments from `"prefix_${value}"`), so `""` is reported only when explicitly present in source.
+`--literals` renders string values with Dart-style quote selection (single or double, whichever minimizes escaping) and colors occurrence counts as gray for `(1)` and yellow for `(>1)` when ANSI colors are enabled.
 
 Default exclusion behavior includes hidden folders and common non-analysis directories (`.git`, `.dart_tool`, `build`, `example`, `test`, `integration_test`, platform folders, etc.).
 

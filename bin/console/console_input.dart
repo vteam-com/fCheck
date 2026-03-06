@@ -219,7 +219,7 @@ ArgParser createConsoleArgParser() => ArgParser()
   ..addFlag(
     'literals',
     help:
-        'List literals inventory only (strings/numbers, duplicate ratio, hardcoded counts)',
+        'List literals inventory (strings/numbers, duplicate ratio, hardcoded counts).',
     negatable: false,
   )
   ..addFlag(

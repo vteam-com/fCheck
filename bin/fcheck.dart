@@ -212,7 +212,8 @@ void main(List<String> arguments) {
                 },
               )
               .toList(growable: false),
-          listMode: input.listMode,
+          // Literals mode always shows full inventories.
+          listMode: ReportListMode.full,
           listItemLimit: input.listItemLimit,
         );
       }

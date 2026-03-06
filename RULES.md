@@ -168,6 +168,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - `fcheck --mermaid` generate Mermaid graph
 - `fcheck --plantuml` generate PlantUML graph
 - `fcheck --json` output results as JSON
+- `fcheck --literals` always prints full text literal inventories (not affected by `--list`)
 
 ## Output Formatting
 
@@ -176,6 +177,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - When displaying source locations, always format as `relative_file_path:line_number` with no space after `:`.
 - In ANSI-capable terminals, colorize the `filename:line_number` segment in blue while keeping directory prefixes uncolored.
 - In ANSI-capable terminals, colorize right-side symbol names in orange (for example `"MyClass.myMethod"` or `"myVariable"` in issue details).
+- In literals inventory text output, render string literals with Dart-style quote selection (single or double with minimal escaping), color `(1)` counts in gray, and color counts above `1` in yellow.
 - Analyzer report output must be grouped by analyzer (not by status), and each analyzer block should include:
   - status icon on the left (`[✓]`, `[!]`, `[x]`, or `[-]` when disabled)
   - score percentage from `0%` to `100%` with threshold-based ANSI coloring on the right

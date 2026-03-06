@@ -94,6 +94,10 @@ class MetricsQualityVisitor extends RecursiveAstVisitor<void> {
       super.visitInterpolationString(node);
       return;
     }
+    if (node.value.isEmpty) {
+      super.visitInterpolationString(node);
+      return;
+    }
     stringLiteralCount++;
     _incrementFrequency(stringLiteralFrequencies, node.value);
     super.visitInterpolationString(node);
