@@ -12,11 +12,6 @@ fCheck provides fast local quality analysis for Flutter and Dart projects with 0
 - Works as a CLI tool
 - Works as a Dart package in your own app/tooling
 
-## Platform Scope (v1.0.0)
-
-- Supported scope varies by project structure; platform support is detected from
-  canonical folders (`android/`, `ios/`, `macos/`, `windows/`, `linux/`, `web/`).
-
 ## Checks Included
 
 - `code_size`
@@ -91,7 +86,7 @@ fcheck --json
 fcheck --list full
 
 # Generate diagrams
-fcheck --svg --svg-folders --svg-loc --mermaid --plantuml
+fcheck --svg --mermaid --plantuml
 
 # Auto-fix source sorting issues (class members + import directives)
 fcheck --fix
@@ -195,15 +190,6 @@ analyzers:
 - `input.root` is resolved relative to the `.fcheck` file location
 - `--exclude` adds patterns on top of `.fcheck` `input.exclude`
 
-Legacy compatibility is supported:
-
-```yaml
-ignores:
-  hardcoded_strings: true
-  layers: true
-  magic_numbers: true
-```
-
 ## Ignore Directives
 
 Use top-of-file or line-level ignore directives:
@@ -220,9 +206,7 @@ Use top-of-file or line-level ignore directives:
 // ignore: fcheck_secrets
 ```
 
-Spacing around `ignore` and `:` is flexible (for example `//ignore:fcheck_magic_numbers` also works).
-
-For generated guidance:
+CLI help to guide you on how to exclude some of checks
 
 ```bash
 fcheck --help-ignore
@@ -237,15 +221,15 @@ Dead-code note:
 ## Visual Outputs
 
 ```bash
-fcheck --svg        # shortcut: fcheck_files.svg + fcheck_folders.svg + fcheck_loc.svg
-fcheck --svg-files   # fcheck_files.svg
+fcheck --svg          # shortcut: fcheck_files.svg + fcheck_folders.svg + fcheck_loc.svg
+fcheck --svg-files    # fcheck_files.svg
 fcheck --svg-folders  # fcheck_folders.svg
-fcheck --svg-loc     # fcheck_loc.svg
-fcheck --mermaid    # fcheck.mmd
-fcheck --plantuml   # fcheck.puml
+fcheck --svg-loc      # fcheck_loc.svg
+fcheck --mermaid      # fcheck.mmd
+fcheck --plantuml     # fcheck.puml
 
 # Custom output base directory
-fcheck --svg --svg-folders --svg-loc --mermaid --plantuml --output ./reports/fcheck
+fcheck --svg --mermaid --plantuml --output ./reports/fcheck
 
 # Per-artifact file overrides
 fcheck --svg --output-svg-files ./artifacts/graph/files.svg
@@ -254,21 +238,6 @@ fcheck --svg-loc --output-svg-loc ./artifacts/graph/loc.svg
 fcheck --mermaid --output-mermaid ./artifacts/graph/fcheck.mmd
 fcheck --plantuml --output-plantuml ./artifacts/graph/fcheck.puml
 ```
-
-### Breaking Changes (1.0.0)
-
-- CLI flags renamed:
-  - `--svgfiles` -> `--svg-files`
-  - `--svgfolder` -> `--svg-folders`
-  - `--svgloc` -> `--svg-loc`
-  - `--out` -> `--output`
-  - `--out-*` -> `--output-*`
-- Default output file names are unchanged:
-  - `fcheck_files.svg`
-  - `fcheck_folders.svg`
-  - `fcheck_loc.svg`
-  - `fcheck.mmd`
-  - `fcheck.puml`
 
 ### Layers Files diagram
 
@@ -317,9 +286,7 @@ fcheck --literals --json
 ```
 
 `--ignores` groups results by suppression type (`exclude`, analyzer skips, and Dart comment directive type) so cleanup work can be prioritized.
-`--literals` text output always prints full lists and ignores `--list`.
-`--literals` ignores synthetic empty interpolation segments (for example boundary fragments from `"prefix_${value}"`), so `""` is reported only when explicitly present in source.
-`--literals` renders string values with Dart-style quote selection (single or double, whichever minimizes escaping) and colors occurrence counts as gray for `(1)` and yellow for `(>1)` when ANSI colors are enabled.
+`--literals` full list text output od all the literals in your project.
 
 Default exclusion behavior includes hidden folders and common non-analysis directories (`.git`, `.dart_tool`, `build`, `example`, `test`, `integration_test`, platform folders, etc.).
 
@@ -361,14 +328,6 @@ jobs:
 
 This repository already includes this workflow at `.github/workflows/ci.yml`.
 The CI gate fails unless fcheck's self-analysis score is exactly `100%`.
-
-## Contributing
-
-1. Fork the repo
-2. Create a branch
-3. Implement changes
-4. Run `./tool/check.sh`
-5. Open a pull request
 
 ## License
 
