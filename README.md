@@ -110,7 +110,7 @@ fcheck --fix
 
 ```bash
 $ fcheck .
-↓------------------------------ fCheck 1.0.7 -------------------------------↓
+↓------------------------------ fCheck 1.0.8 -------------------------------↓
 Input              : /path/to/project
 Dart Project       : my-cool-app (version: 9.0.0)
 Platforms          : [✓Android] [✓iOS]  [✓MacOS] [✓Windows] [✓Linux]   [✓Web]
@@ -121,12 +121,12 @@ Files              :             120  |  Widgets: Stateful  :              26
 Excluded Files     :              39  |  Widgets: Stateless :              40
 Dart Files         :              91  |  Methods            :             357
 Lines of Code      :       15.0 KLoC  |  Functions          :             179
-Comments           :     (14%) 2,145  |
+Comments           :     2,145 (14%)  |
 ----------------------------------- Tests -----------------------------------
-Test Dart Files    :              35  |  Tested Classes     :        31/66 (47%)
-Test Cases         :             392  |  Tested Methods     :     144/357 (40%)
-Test Imports       :              18  |  Tested Functions   :      73/179 (41%)
-Tested Dart Files  :    41/91 (45%)  |  Tested LOC         :            46%
+Test Dart Files    :              35  |  Touched Dart Files :         41 (45%)
+Test Cases         :             392  |  Touched Classes    :         31 (47%)
+                                      |  Touched Methods    :        144 (40%)
+                                      |  Touched Functions  :         73 (41%)
 --------------------------------- Literals ----------------------------------
 Localization       : ON
 Strings            : 1,203 (64% dupe)
@@ -149,7 +149,7 @@ Invest Next        : Maintain this level by enforcing fcheck in CI on every pull
 ↑------------------------ fCheck completed (1.73s) -------------------------↑
 ```
 
-`Test Imports`, `Tested Dart Files`, `Tested LOC`, and the tested class/method/function rows are a static inventory derived from test-file imports plus transitive project-local Dart dependencies. They are not runtime coverage percentages.
+The `Touched ...` rows are a static inventory derived from test-file imports plus transitive project-local Dart dependencies. They indicate source reached by test dependency graphs, not code coverage.
 
 ## Configuration (`.fcheck`)
 

@@ -7,6 +7,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.8] 2026-03-06
+
+### Added
+
+- Dashboard now reports test inventory metrics including touched app souce targets, test cases.
+
+### Changed
+
+- Reworked dashboard presentation to include platform support and test-metrics sections with clearer report grouping.
+- Expanded literals reporting and console formatting for `--literals`, including full listing support and improved colorized output readability.
+- Refined project metrics and pubspec parsing to improve release-facing report accuracy.
+
 ## [1.0.7] 2026-03-05
 
 ### Changed
