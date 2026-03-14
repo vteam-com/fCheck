@@ -89,13 +89,11 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
       return;
     }
 
+    final bool isWidgetOutputString = _isWidgetOutputString(node);
+
     // Flutter-only additional filters.
     if (focus == HardcodedStringFocus.flutterWidgets) {
       if (_hasWidgetLintIgnoreComment(node)) {
-        return;
-      }
-
-      if (issueValue.length <= _maxShortWidgetStringLength) {
         return;
       }
 
@@ -104,6 +102,13 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
       }
 
       if (_isTechnicalString(issueValue)) {
+        return;
+      }
+    }
+
+    // Flutter-only additional filters for widget-adjacent strings.
+    if (focus == HardcodedStringFocus.flutterWidgets && isWidgetOutputString) {
+      if (issueValue.length <= _maxShortWidgetStringLength) {
         return;
       }
     }
@@ -154,6 +159,21 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
       return;
     }
 
+    // Skip strings thrown as exception/error diagnostics.
+    if (_isThrownDiagnosticString(node)) {
+      return;
+    }
+
+    // Skip strings returned from toString() overrides.
+    if (_isInToStringMethod(node)) {
+      return;
+    }
+
+    // Skip sentinel/status strings used in direct equality comparisons.
+    if (_isEqualityComparisonOperand(node)) {
+      return;
+    }
+
     // Skip strings in ignored sections
     if (IgnoreConfig.isNodeIgnored(node, content, 'hardcoded_strings')) {
       return;
@@ -177,10 +197,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
       case HardcodedStringFocus.general:
         return true;
       case HardcodedStringFocus.flutterWidgets:
-        if (_isInPrintOrLoggerCall(node)) {
-          return false;
-        }
-        return _isWidgetOutputString(node);
+        return !_isInPrintOrLoggerCall(node);
       case HardcodedStringFocus.dartPrint:
         return _isInPrintCall(node);
     }
@@ -357,15 +374,27 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     final StringLiteral node,
     final ArgumentList argumentList,
   ) {
+    final AstNode directExpression = _getDirectArgumentExpression(node);
     for (final arg in argumentList.arguments) {
-      if (identical(arg, node)) {
+      if (identical(arg, directExpression)) {
         return true;
       }
-      if (arg is NamedExpression && identical(arg.expression, node)) {
+      if (arg is NamedExpression &&
+          identical(arg.expression, directExpression)) {
         return true;
       }
     }
     return false;
+  }
+
+  /// Returns the expression that is passed directly as an argument.
+  AstNode _getDirectArgumentExpression(final StringLiteral node) {
+    final AdjacentStrings? adjacentStrings = node
+        .thisOrAncestorOfType<AdjacentStrings>();
+    if (adjacentStrings != null) {
+      return adjacentStrings;
+    }
+    return node;
   }
 
   /// Detects nested function boundaries between a literal and argument list.
@@ -477,7 +506,8 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   /// Checks if a string literal is within a const declaration.
   ///
   /// This also considers `static final` fields in dedicated string files
-  /// when localization is not enabled.
+  /// when localization is not enabled, plus explicit typed `String`
+  /// declarations used as reusable identifiers/constants.
   bool _isInConstDeclaration(final AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
@@ -490,11 +520,15 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
             return true;
           }
 
+          if (_isExplicitStringDeclaration(varList)) {
+            return true;
+          }
+
+          final parent = varList.parent;
           // Also allow static final in dedicated string files
           if (!usesLocalization &&
               varList.isFinal &&
               _isDedicatedStringFile(filePath)) {
-            final parent = varList.parent;
             if (parent is FieldDeclaration && parent.isStatic) {
               return true;
             }
@@ -506,6 +540,12 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
       current = current.parent;
     }
     return false;
+  }
+
+  /// Returns true when a declaration explicitly types the variable as String.
+  bool _isExplicitStringDeclaration(VariableDeclarationList varList) {
+    final String typeName = varList.type?.toString() ?? '';
+    return typeName == 'String' || typeName == 'String?';
   }
 
   /// Returns true if the file path suggests it's a dedicated string/constant file.
@@ -578,11 +618,76 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
 
   /// Checks if a string literal is used as an index in a collection.
   bool _isIndex(final AstNode node) {
-    final AstNode? parent = node.parent;
-    if (parent is IndexExpression) {
-      return parent.index == node;
+    AstNode? current = node.parent;
+    while (current != null) {
+      if (current is IndexExpression) {
+        return node.thisOrAncestorOfType<Expression>() == current.index;
+      }
+      if (current is ArgumentList ||
+          current is VariableDeclaration ||
+          current is MapLiteralEntry) {
+        return false;
+      }
+      current = current.parent;
     }
     return false;
+  }
+
+  /// Checks if a string literal is compared directly in ==/!= expressions.
+  bool _isEqualityComparisonOperand(final AstNode node) {
+    final BinaryExpression? binary = node
+        .thisOrAncestorOfType<BinaryExpression>();
+    if (binary == null) {
+      return false;
+    }
+
+    final String operatorLexeme = binary.operator.lexeme;
+    if (operatorLexeme != '==' && operatorLexeme != '!=') {
+      return false;
+    }
+
+    final Expression expressionNode =
+        node.thisOrAncestorOfType<Expression>() ?? node as Expression;
+    return identical(binary.leftOperand, expressionNode) ||
+        identical(binary.rightOperand, expressionNode);
+  }
+
+  /// Checks if a string literal is part of a thrown exception/error message.
+  bool _isThrownDiagnosticString(final AstNode node) {
+    AstNode? current = node.parent;
+    while (current != null) {
+      if (current is ThrowExpression) {
+        return true;
+      }
+      if (current is FunctionBody ||
+          current is MethodDeclaration ||
+          current is FunctionDeclaration ||
+          current is VariableDeclaration) {
+        return false;
+      }
+      current = current.parent;
+    }
+    return false;
+  }
+
+  /// Checks if a string literal is inside a toString() implementation.
+  bool _isInToStringMethod(final AstNode node) {
+    final MethodDeclaration? method = node
+        .thisOrAncestorOfType<MethodDeclaration>();
+    if (method == null) {
+      return false;
+    }
+
+    if (method.name.lexeme != 'toString') {
+      return false;
+    }
+
+    if (method.parameters != null && method.parameters!.parameters.isNotEmpty) {
+      return false;
+    }
+
+    final TypeAnnotation? returnType = method.returnType;
+    return returnType == null || returnType.toString() == 'String';
   }
 
   /// Internal helper used by fcheck analysis and reporting.

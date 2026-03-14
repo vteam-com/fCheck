@@ -1,5 +1,8 @@
 part of 'export_svg_folders.dart';
 
+/// File edges that point upward on the rendered right lane should be warned.
+const bool _warnOnUpwardRenderedFileEdges = true;
+
 /// Draw hierarchical edges between parent and child folders.
 void _drawEdgeHorizontalCurve(
   StringBuffer buffer,
@@ -59,11 +62,17 @@ String _getEdgeCssClass(
   Set<String> violationEdges,
 ) {
   final edgeKey = '$sourceFile->$targetFile';
+  final isRenderedUpward = startY > endY;
 
-  // Priority rule: Red (cycle) > Orange (reported upward violation) > Default
-  if (cycleEdges.contains(edgeKey)) {
+  // In the folders SVG, right-lane file edges that visually point upward are
+  // always highlighted so developers can spot the offending consumers quickly,
+  // even when the surrounding folders are cyclic and no wrongFolderLayer issue
+  // is emitted.
+  if (_warnOnUpwardRenderedFileEdges && isRenderedUpward) {
+    return 'warningEdge';
+  } else if (cycleEdges.contains(edgeKey)) {
     return 'cycleEdge';
-  } else if (violationEdges.contains(edgeKey) && startY > endY) {
+  } else if (violationEdges.contains(edgeKey) && isRenderedUpward) {
     return 'warningEdge';
   } else {
     return 'edgeVertical';

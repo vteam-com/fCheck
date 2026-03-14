@@ -7,11 +7,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.9] – 2026-03-14
+
+### Changed
+
+- Broaden hardcoded-string detection:
+  - Switch from a narrow, widget-text heuristic to a default opt-out model.
+  - Surface many more inline string literals across app code, including those routed through helpers and wrappers.
+  - Keep auto-skipping technical/diagnostic strings such as log/debug output, exception messages, `toString()` content, lookup keys, paths, URLs, query strings, and typed reusable `String` declarations.
+  - Best practice: extract constants, localize user-facing copy, and treat the analyzer output as a clean-code quality pass.
+
+### Added
+
+- Orange right side edges when importing files in upper layers
+
 ## [1.0.8] 2026-03-06
 
 ### Added
 
-- Dashboard now reports test inventory metrics including touched app souce targets, test cases.
+- Dashboard now reports test inventory metrics including touched app source targets, test cases.
 
 ### Changed
 

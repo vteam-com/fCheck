@@ -27,11 +27,62 @@ fCheck provides fast local quality analysis for Flutter and Dart projects with 0
 
 Detailed behavior and edge cases are documented in `RULES*.md`.
 
-Hardcoded-strings note:
+### Hardcoded strings: how it works
 
+- Flutter projects use opt-out hardcoded-string detection: most string literals are analyzed by default, then technical, diagnostic, declaration, and framework-specific cases are excluded.
 - If project localization is `OFF`, hardcoded-strings runs in passive mode (`[-]`), reports only the total count, and does not affect compliance score/focus area.
 - If project localization is `OFF`, hardcoded-string findings are also excluded from SVG warning tint/counters (`fcheck_files.svg`, `fcheck_folders.svg`, `fcheck_loc.svg`).
 - If localization is `ON`, hardcoded-strings is active and reports detailed issue entries.
+
+- Flutter projects: fcheck scans most string literals, then skips known non-user-facing categories such as imports, annotations, const declarations, explicit typed `String` declarations used as reusable identifiers/constants, localization calls, generated files, logger/debug output, `throw` diagnostics, `toString()` bodies, technical strings, paths, URLs, query strings, lookup keys, and similar infrastructure values.
+- Dart projects: fcheck keeps a narrower focus and primarily reports strings passed to `print()`.
+- Localization-aware behavior still applies:
+  - localization `OFF`: summary count only, passive mode
+  - localization `ON`: detailed issue list
+
+### Hardcoded strings: what to do with findings
+
+- Move repeated UI copy into named constants when the text is internal to the codebase and not part of a localization workflow.
+- Move user-facing product text into your localization system (`.arb`, `AppLocalizations`, or equivalent) when the app already supports localization or is expected to.
+- Keep technical strings technical: paths, route fragments, query strings, identifiers, analytics keys, backend field names, logger text, exception diagnostics, and reusable typed declarations should remain non-user-facing and are increasingly auto-excluded by fcheck.
+- Prefer a named constant even when localization is not needed. A constant gives one source of truth, reduces typo drift, simplifies refactors, and makes intent obvious during review.
+
+### Hardcoded strings: industry best practice
+
+- Avoid scattering raw literals through business logic, widgets, services, and backend adapters.
+- Use `const` where possible for stable reusable values.
+- Use typed named declarations for reusable non-localized identifiers.
+- Use localization for customer-facing copy instead of embedding text inline.
+- Treat every new hardcoded-string finding as a clean-code prompt: either extract it, localize it, or explicitly justify and suppress it.
+
+### Hardcoded strings: opt out and suppression
+
+- Disable the analyzer globally in `.fcheck`:
+
+```yaml
+analyzers:
+  disabled:
+    - hardcoded_strings
+```
+
+- Use opt-in mode and omit `hardcoded_strings`:
+
+```yaml
+analyzers:
+  default: off
+  enabled:
+    - magic_numbers
+    - secrets
+```
+
+- Suppress a specific source line or file only when the literal is intentionally technical/non-user-facing:
+
+```dart
+// ignore: fcheck_hardcoded_strings
+final debugLabel = 'ContactsNotifier';
+```
+
+Use suppression sparingly. The preferred path is to extract or localize the string rather than silence the rule.
 
 Code-size LOC note:
 
@@ -253,7 +304,7 @@ fcheck --plantuml --output-plantuml ./artifacts/graph/fcheck.puml
 
 ![fcheck Layer folders diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_folders.svg)
 
-Orange upward folder dependencies in `fcheck_folders.svg` are also emitted in CLI report output as layers warnings (`wrongFolderLayer`) with the source Dart file path.
+Orange upward dependencies in `fcheck_folders.svg` are rendered from the final visual direction. Folder-level upward edges are also emitted in CLI report output as layers warnings (`wrongFolderLayer`) with the source Dart file path. File-level upward edges on the right lane stay orange even inside folder cycles so the culprit consuming files remain easy to spot.
 
 Warning/error-highlighted file and folder nodes in layers SVGs now use a softer transparent gradient tint (instead of opaque flat fills) to preserve node text/details readability.
 

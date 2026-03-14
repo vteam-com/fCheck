@@ -83,6 +83,32 @@ void main() {
       );
     });
 
+    test('should not crash on files with parse errors', () {
+      File('${tempDir.path}/broken.dart').writeAsStringSync('''
+class Broken {
+  String badMethod() {
+return "hello"
+  static
+}
+''');
+
+      File('${tempDir.path}/valid.dart').writeAsStringSync('''
+void main() {
+  print("Still analyzed");
+}
+''');
+
+      final metrics = analyzer.analyze();
+
+      expect(metrics.totalDartFiles, equals(2));
+      expect(
+        metrics.hardcodedStringIssues.any(
+          (issue) => issue.value == 'Still analyzed',
+        ),
+        isTrue,
+      );
+    });
+
     test('should detect magic numbers in analyzed files', () {
       File('${tempDir.path}/magic.dart').writeAsStringSync('''
 void main() {

@@ -94,6 +94,7 @@ class AnalyzerRunner {
     final parseResult = parseString(
       content: content,
       featureSet: FeatureSet.latestLanguageVersion(),
+      throwIfDiagnostics: false,
     );
 
     final context = AnalysisFileContext(

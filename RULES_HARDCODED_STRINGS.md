@@ -7,9 +7,16 @@ This repo includes the CLI hardcoded-strings analysis, implemented by
 
 Shared analysis/exclusion conventions are defined in `RULES.md`.
 
+## Release Communication
+
+- This analyzer is intentionally broader in the current patch release.
+- Flutter projects moved from an almost opt-in model to an opt-out model.
+- Upgrading can reveal a large backlog of existing hardcoded strings that older versions did not report.
+- This is intentional and is meant to improve project-local clean code quality by pushing teams toward reusable constants and proper localization.
+
 ## Project-Type Focus
 
-- Flutter app projects: prioritize widget output strings and ignore `print()` / `logger()` / debug output.
+- Flutter app projects: use opt-out detection for string literals and ignore `print()` / `logger()` / debug output plus the standard skip rules below.
 - Pure Dart projects: prioritize `print()` output strings and ignore logger/debug output.
 
 ## Localization Support
@@ -40,14 +47,14 @@ In non-localized projects, it is common to centralize user-facing strings in ded
 #### Localization is ON (Localized Project)
 
 - **Stricter Checks**: Centralized string files are no longer automatically skipped.
-- **Refactoring Encouraged**: Strings in `strings.dart` or `constants.dart` that are not `const` (e.g., `final` or direct literals) will be flagged to encourage moving them to the formal localization framework (`.arb` files).
+- **Refactoring Encouraged**: User-facing strings that remain inline should be moved to the formal localization framework (`.arb` files) or extracted to a named constant when localization is not appropriate.
 - **CLI Output**: A detailed list of all hardcoded string issues is shown in the "Lists" section.
 
 ### How Focus Is Determined
 
 - The CLI detects Flutter projects by checking for a `flutter` dependency in `pubspec.yaml` **once** in `AnalyzeFolder`.
 - The hardcoded-strings analyzer receives the precomputed focus mode from the top-level entry point (see `RULES.md` for the project metadata contract).
-- Flutter projects use a widget-output-only filter (heuristic, see below).
+- Flutter projects use broad opt-out detection with heuristic skips for technical and diagnostic cases.
 - Non-Flutter projects use a print-only filter.
 
 ## CLI Analyzer (General Purpose)
@@ -56,6 +63,14 @@ In non-localized projects, it is common to centralize user-facing strings in ded
 
 - Any string literal (`SimpleStringLiteral` or `StringInterpolation`) that matches
   the focus mode and is not excluded by the skip rules.
+- In Flutter projects, this now means most string literals are included by
+  default, not just direct widget constructor text.
+
+### Why It Is Broad
+
+- Inline literals spread product copy across widgets, services, adapters, and state code.
+- That makes refactors harder, translation harder, review harder, and consistency weaker.
+- The analyzer therefore prefers surfacing too much first, then carving out well-defined technical exceptions.
 
 ### Skips (CLI)
 
@@ -65,6 +80,7 @@ In non-localized projects, it is common to centralize user-facing strings in ded
 - Strings in annotations.
 - Map keys (but not map values).
 - Strings in const declarations or const fields.
+- Strings in explicit typed `String` declarations (for example reusable fields or top-level variables).
 - Strings in `static final` fields within "dedicated string files" (when localization is OFF).
 - All strings in "dedicated string files" (when localization is OFF).
 - Strings in `AppLocalizations` calls.
@@ -76,18 +92,22 @@ In non-localized projects, it is common to centralize user-facing strings in ded
 - Files with a top-of-file `// ignore: fcheck_hardcoded_strings` directive.
 - Files with a top-of-file `// ignore_for_file: avoid_hardcoded_strings_in_widgets` directive (third-party custom_lint).
 - Parse errors do not prevent scanning; the AST may be partial.
-- Flutter focus only: strings with length <= 2.
-- Flutter focus only: strings on lines with any of these comment forms: `// ignore: avoid_hardcoded_strings_in_widgets`, `// ignore_for_file: avoid_hardcoded_strings_in_widgets`, `// ignore: hardcoded.string`, or `// hardcoded.ok`.
-- Flutter focus only: strings passed to acceptable widget properties (e.g., `key`, `asset`, `fontFamily`, `semanticsLabel`).
-- Flutter focus only: strings that look technical/config-like (URLs, emails, hex colors, file paths, identifiers).
+- Flutter focus only: widget output strings with length <= 2.
+- Flutter focus only: widget output strings on lines with any of these comment forms: `// ignore: avoid_hardcoded_strings_in_widgets`, `// ignore_for_file: avoid_hardcoded_strings_in_widgets`, `// ignore: hardcoded.string`, or `// hardcoded.ok`.
+- Flutter focus only: widget output strings passed to acceptable widget properties (e.g., `key`, `asset`, `fontFamily`, `semanticsLabel`).
+- Flutter focus only: strings that look technical/config-like (URLs, emails, hex colors, file paths, query strings, identifiers).
 - Flutter focus only: interpolation-only strings with no literal text (e.g., `"$secondsRemaining"` or `"${date.day}"`).
+- Flutter focus only: strings inside `print()` / `debugPrint()` / logger-style calls.
+- Flutter focus only: strings inside thrown exceptions/errors.
+- Flutter focus only: strings inside `toString()` implementations.
+- Flutter focus only: strings used in equality comparisons such as status or sentinel checks.
 
 ### How It Works
 
 - `HardcodedStringDelegate` uses the pre-parsed AST and runs `HardcodedStringVisitor`.
 - The visitor walks the AST and emits `HardcodedStringIssue` for any literal that survives the skip rules.
 - Focus mode details:
-  - Flutter: only string literals used as constructor arguments inside widget/build contexts, and not inside print/logger calls.
+  - Flutter: opt-out detection for string literals, excluding print/logger/debug output and the documented skip cases.
   - Dart: only string literals passed to `print()`.
 - In Flutter focus, a fallback scan looks for `Text("...")` literals in the raw source to catch parse-error or AST edge cases.
 
@@ -104,6 +124,20 @@ In non-localized projects, it is common to centralize user-facing strings in ded
   - Line-level: `// ignore: fcheck_hardcoded_strings`
   - File-level: `// ignore: fcheck_hardcoded_strings` at the top of the file.
 
+## Recommended Cleanup
+
+- If the string is customer-facing copy, localize it.
+- If the string is reused internal copy or configuration, extract it to a named constant or typed declaration.
+- If the string is technical and intentionally inline, prefer a narrowly scoped suppression only when the auto-skip rules do not already cover it.
+- Avoid keeping literals inline just because they are short or currently used once. Reuse and intent are more important than size.
+
+## Best Practices
+
+- Prefer `const` for reusable stable values.
+- Prefer named typed declarations over repeating literal values in multiple files.
+- Prefer localization for visible UI text, error text shown to users, prompts, labels, and marketing/product copy.
+- Avoid embedding literals in business logic because it weakens maintainability and makes later localization expensive.
+
 ## Related Files
 
 - `lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart`
@@ -115,5 +149,5 @@ In non-localized projects, it is common to centralize user-facing strings in ded
 
 ## Notes
 
-- The CLI analyzer is general-purpose and not widget-specific unless focus mode is set to Flutter.
-- Widget-only filtering in the CLI is heuristic (no type resolution). It relies on widget class inheritance (`StatelessWidget`, `StatefulWidget`, `State<...>`) and `build`-method/return-type hints.
+- The CLI analyzer is general-purpose and not widget-specific unless focus mode is set to Dart `print()`.
+- Flutter mode still applies extra heuristics for widget-specific false-positive reduction, but no longer requires widget constructor context before a string can be reported.

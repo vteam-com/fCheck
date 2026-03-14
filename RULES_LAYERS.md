@@ -1256,9 +1256,11 @@ This highlights boundary inversions like:
 
 - “lower layer consuming higher layer”
 
+For `fcheck_folders.svg`, right-lane file edges keep this orange upward warning even when the same file edge is also part of a cycle. That preserves the fastest visual cue for locating the lower file that consumes upward.
+
 ### 7.3 Cycle Highlight (Red)
 
-If an edge is part of a detected cycle, render it in **Red** (overrides orange).
+If an edge is part of a detected cycle, render it in **Red**.
 
 - Style: **Red** stroke for cycle edges
 - Purpose: make cycles immediately visible for refactoring
@@ -1266,9 +1268,9 @@ If an edge is part of a detected cycle, render it in **Red** (overrides orange).
 Applies to:
 
 - Folder graph cycles (derived from rolled-up folder edges)
-- File graph cycles (raw)
+- File graph cycles (raw), except upward-rendered file edges in `fcheck_folders.svg`, which remain orange for diagnostics
 
-**Priority rule:** `Red (cycle) > Orange (upward) > Default (gradient)`
+**Priority rule:** `Red (cycle) > Orange (upward) > Default (gradient)`, except for upward-rendered file edges in `fcheck_folders.svg`, where `Orange (upward) > Red (cycle)`.
 
 ---
 

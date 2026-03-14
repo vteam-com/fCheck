@@ -19,6 +19,12 @@ import 'package:test/test.dart';
 void main() {
   int warningPathCount(String svg) =>
       RegExp(r'<path[^>]*class="warningEdge"').allMatches(svg).length;
+  bool hasEdgeWithClass(String svg, String cssClass, String title) {
+    final pattern = RegExp(
+      '<g>\\s*<path[^>]*class="$cssClass"\\/>\\s*<title>${RegExp.escape(title)}</title>\\s*</g>',
+    );
+    return pattern.hasMatch(svg);
+  }
 
   group('graph exporters', () {
     test('return empty outputs for empty graphs', () {
@@ -553,6 +559,43 @@ void main() {
       final withViolationSvg = exportGraphSvgFolders(withViolation);
       expect(warningPathCount(withViolationSvg), equals(0));
     });
+
+    test(
+      'colors upward file edges orange in folder cycles to expose culprit files',
+      () {
+        final result = LayersAnalysisResult(
+          issues: [
+            LayersIssue(
+              type: LayersIssueType.cyclicDependency,
+              filePath: 'lib/a/a.dart',
+              message: 'cycle',
+            ),
+            LayersIssue(
+              type: LayersIssueType.folderCycle,
+              filePath: 'lib/a',
+              message: 'folder cycle',
+            ),
+            LayersIssue(
+              type: LayersIssueType.folderCycle,
+              filePath: 'lib/b',
+              message: 'folder cycle',
+            ),
+          ],
+          layers: const {},
+          dependencyGraph: const {
+            'lib/a/a.dart': ['lib/b/b.dart'],
+            'lib/b/b.dart': ['lib/a/a.dart'],
+          },
+        );
+
+        final folderSvg = exportGraphSvgFolders(result);
+
+        expect(
+          hasEdgeWithClass(folderSvg, 'warningEdge', 'b/b.dart ▶ a/a.dart'),
+          isTrue,
+        );
+      },
+    );
 
     test('handles deeply nested folders with mixed files and subfolders', () {
       // More complex scenario: nested folders with files at multiple levels

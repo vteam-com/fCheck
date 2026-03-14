@@ -24,6 +24,30 @@ class HardcodedStringUtils {
   /// ASCII code end for lowercase letters.
   static const int asciiLowerEnd = 122;
 
+  static final RegExp _lowerCamelIdentifierPattern = RegExp(
+    r'^[a-z]+(?:[A-Z][a-z0-9]*)+$',
+  );
+
+  static final List<RegExp> _technicalPatterns = <RegExp>[
+    RegExp(r'^\w+://'),
+    RegExp(r'^[\w\-\.]+@[\w\-\.]+\.\w+'),
+    RegExp(r'^#[0-9A-Fa-f]{3,8}'),
+    RegExp(r'^\d+(\.\d+)?[a-zA-Z]*'),
+    RegExp(r'^[A-Z][A-Z0-9]*_[A-Z0-9_]*'),
+    RegExp(r'^[a-z]+_[a-z_]+'),
+    _lowerCamelIdentifierPattern,
+    RegExp(r'^/[\w/\-\.]*'),
+    RegExp(r'^[A-Za-z]:\\[\w\\\-. ]*'),
+    RegExp(r'^(?:\.{1,2}/)?[\w\-.]+(?:/[\w\-.]+)+$'),
+    RegExp(r'^[\w\-.]+(?:/+(?:[\w\-.]+)?)+$'),
+    RegExp(r'^(?:\.{1,2}\\)?[\w\-.]+(?:\\[\w\-.]+)+$'),
+    RegExp(r'^[\w\-.]+(?:\\+(?:[\w\-.]+)?)+$'),
+    RegExp(r'^[?#][^ ]*[=&/][^ ]*$'),
+    RegExp(r'^\w+\.\w+'),
+    RegExp(r'^[\w\-]+\.[\w]+'),
+    RegExp(r'^[a-zA-Z0-9]*[_\-0-9]+[a-zA-Z0-9_\-]*'),
+  ];
+
   /// Removes interpolation segments from a string literal's content.
   static String removeInterpolations(String source) {
     final buffer = StringBuffer();
@@ -87,19 +111,40 @@ class HardcodedStringUtils {
 
   /// Returns true if [value] matches common technical string patterns.
   static bool isTechnicalString(String value) {
-    final technicalPatterns = [
-      RegExp(r'^\w+://'),
-      RegExp(r'^[\w\-\.]+@[\w\-\.]+\.\w+'),
-      RegExp(r'^#[0-9A-Fa-f]{3,8}'),
-      RegExp(r'^\d+(\.\d+)?[a-zA-Z]*'),
-      RegExp(r'^[A-Z][A-Z0-9]*_[A-Z0-9_]*'),
-      RegExp(r'^[a-z]+_[a-z_]+'),
-      RegExp(r'^/[\w/\-\.]*'),
-      RegExp(r'^\w+\.\w+'),
-      RegExp(r'^[\w\-]+\.[\w]+'),
-      RegExp(r'^[a-zA-Z0-9]*[_\-0-9]+[a-zA-Z0-9_\-]*'),
-    ];
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) {
+      return false;
+    }
 
-    return technicalPatterns.any((pattern) => pattern.hasMatch(value.trim()));
+    if (!_containsTechnicalMarker(trimmed)) {
+      return _lowerCamelIdentifierPattern.hasMatch(trimmed);
+    }
+
+    return _technicalPatterns.any((pattern) => pattern.hasMatch(trimmed));
+  }
+
+  /// Fast pre-filter to avoid regex checks for plain sentence-like text.
+  static bool _containsTechnicalMarker(String value) {
+    return value.contains('/') ||
+        value.contains(r'\') ||
+        value.contains('.') ||
+        value.contains('_') ||
+        value.contains('-') ||
+        value.contains(':') ||
+        value.contains('?') ||
+        value.contains('#') ||
+        value.contains('@') ||
+        _containsDigit(value);
+  }
+
+  /// Returns true if [value] contains any ASCII digit.
+  static bool _containsDigit(String value) {
+    for (var i = 0; i < value.length; i++) {
+      final code = value.codeUnitAt(i);
+      if (code >= asciiDigitStart && code <= asciiDigitEnd) {
+        return true;
+      }
+    }
+    return false;
   }
 }
