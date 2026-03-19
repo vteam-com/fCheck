@@ -162,6 +162,7 @@ void main() {
           _,
           _,
           _,
+          _,
         ) = FileUtils.scanDirectory(
           tempDir,
         );
@@ -203,6 +204,7 @@ void main() {
           excludedDartFilesCount,
           excludedFoldersCount,
           excludedFilesCount,
+          _,
           _,
           _,
           _,
@@ -436,6 +438,7 @@ void main() {
           testDirectoriesCount,
           testFilesCount,
           testDartFilesCount,
+          _,
         ) = FileUtils.scanDirectory(
           tempDir,
         );
@@ -492,6 +495,7 @@ void main() {
           testDirectoriesCount,
           testFilesCount,
           testDartFilesCount,
+          customExcludedDartFilesCount,
         ) = FileUtils.scanDirectory(
           tempDir,
           excludePatterns: ['test/*'],
@@ -518,6 +522,7 @@ void main() {
         expect(testDirectoriesCount, equals(2));
         expect(testFilesCount, equals(2));
         expect(testDartFilesCount, equals(2));
+        expect(customExcludedDartFilesCount, equals(0));
 
         expect(dartFiles.any((f) => f.path.contains('main.dart')), isTrue);
         expect(dartFiles.any((f) => f.path.contains('service.dart')), isTrue);
@@ -556,6 +561,7 @@ void main() {
           _,
           _,
           _,
+          _,
         ) = FileUtils.scanDirectory(
           tempDir,
         );
@@ -573,7 +579,7 @@ void main() {
       });
     });
 
-    group('Custom exclusion counting', () {
+    group('Unified custom exclusion counting', () {
       test('counts only glob-excluded Dart files beyond defaults', () {
         final helpersDir = Directory('${tempDir.path}/helpers')..createSync();
         final hiddenDir = Directory('${tempDir.path}/.hidden')..createSync();
@@ -589,7 +595,7 @@ void main() {
           '${integrationTestDir.path}/integration_test_file.dart',
         ).writeAsStringSync('class IT {}');
 
-        final count = FileUtils.countCustomExcludedDartFiles(
+        final (_, _, _, _, _, _, _, _, _, count) = FileUtils.scanDirectory(
           tempDir,
           excludePatterns: ['helpers/*'],
         );
@@ -599,7 +605,9 @@ void main() {
 
       test('returns zero when no custom patterns are provided', () {
         File('${tempDir.path}/main.dart').writeAsStringSync('void main() {}');
-        final count = FileUtils.countCustomExcludedDartFiles(tempDir);
+        final (_, _, _, _, _, _, _, _, _, count) = FileUtils.scanDirectory(
+          tempDir,
+        );
         expect(count, equals(0));
       });
     });

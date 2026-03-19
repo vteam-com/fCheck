@@ -35,15 +35,8 @@ class AnalysisFileContext {
   });
 
   /// Gets line number for a given character offset.
-  int getLineNumber(int offset) {
-    int lineNumber = 1;
-    for (int i = 0; i < offset && i < content.length; i++) {
-      if (content[i] == '\n') {
-        lineNumber++;
-      }
-    }
-    return lineNumber;
-  }
+  int getLineNumber(int offset) =>
+      parseResult.lineInfo.getLocation(offset).lineNumber;
 
   /// Checks if file has a top-of-file ignore directive that matches the line.
   bool hasIgnoreForFileDirective(String expectedComment) {

@@ -18,6 +18,9 @@ class AnalyzerRunner {
   /// List of analyzer delegates to run on each file.
   final List<AnalyzerDelegate> delegates;
 
+  /// Pre-discovered Dart files to analyze.
+  final List<File>? dartFiles;
+
   /// Whether to enable file context caching.
   final bool enableCaching;
 
@@ -29,23 +32,24 @@ class AnalyzerRunner {
     required this.projectDir,
     this.excludePatterns = const [],
     this.delegates = const [],
+    this.dartFiles,
     this.enableCaching = true,
   });
 
   /// Performs unified analysis of all files with single traversal.
   AnalysisRunnerResult analyzeAll() {
-    // Single file discovery
-    final dartFiles = FileUtils.listDartFiles(
-      projectDir,
-      excludePatterns: excludePatterns,
-    );
+    final filesToAnalyze =
+        dartFiles ??
+        FileUtils.listDartFiles(projectDir, excludePatterns: excludePatterns);
 
     final Map<Type, List<dynamic>> allResults = {};
     final Map<Type, int> analyzerStats = {};
+    final contextsByPath = <String, AnalysisFileContext>{};
 
     // Process each file once, delegating to all analyzers
-    for (final file in dartFiles) {
+    for (final file in filesToAnalyze) {
       final context = _getOrCreateContext(file);
+      contextsByPath[file.path] = context;
 
       // Run all delegates on this file
       for (final delegate in delegates) {
@@ -76,9 +80,10 @@ class AnalyzerRunner {
     }
 
     return AnalysisRunnerResult(
-      totalFiles: dartFiles.length,
+      totalFiles: filesToAnalyze.length,
       resultsByType: allResults,
       analyzerStats: analyzerStats,
+      contextsByPath: contextsByPath,
     );
   }
 

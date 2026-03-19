@@ -271,6 +271,7 @@ class FileUtils {
   /// - Test root directories count (`test`, `integration_test`)
   /// - Test files count (all files under test roots)
   /// - Test Dart files count (Dart files under test roots)
+  /// - Custom excluded Dart files count (matched by user-provided globs only)
   static (
     List<File> dartFiles,
     int folderCount,
@@ -281,6 +282,7 @@ class FileUtils {
     int testDirectoriesCount,
     int testFilesCount,
     int testDartFilesCount,
+    int customExcludedDartFilesCount,
   )
   scanDirectory(Directory dir, {List<String> excludePatterns = const []}) {
     final globs = _buildExcludeGlobs(excludePatterns);
@@ -313,6 +315,7 @@ class FileUtils {
       // Check glob patterns - only exclude files, not directories
       if (entity is File && _matchesAnyGlob(globs, relativePath)) {
         excludedCounts.addExcludedEntity(entity);
+        excludedCounts.addCustomExcludedEntity(entity);
         return;
       }
 
@@ -341,48 +344,8 @@ class FileUtils {
       excludedCounts.testDirectoriesCount,
       excludedCounts.testFilesCount,
       excludedCounts.testDartFilesCount,
+      excludedCounts.customExcludedDartFilesCount,
     );
-  }
-
-  /// Counts Dart files excluded specifically by user-provided glob patterns.
-  ///
-  /// Unlike [scanDirectory], this excludes only files matched by
-  /// [excludePatterns] after default hidden/system exclusions are removed.
-  /// This is intended for suppression scoring and reflects user-configured
-  /// skip behavior only.
-  static int countCustomExcludedDartFiles(
-    Directory dir, {
-    List<String> excludePatterns = const [],
-  }) {
-    if (excludePatterns.isEmpty) {
-      return 0;
-    }
-
-    final globs = _buildExcludeGlobs(excludePatterns);
-    var count = 0;
-
-    dir.listSync(recursive: true).forEach((entity) {
-      if (entity is! File || p.extension(entity.path) != '.dart') {
-        return;
-      }
-
-      final relativePath = p.relative(entity.path, from: dir.path);
-      final pathParts = p.split(relativePath);
-
-      if (_isHiddenPath(pathParts) || _isDefaultExcludedPath(pathParts)) {
-        return;
-      }
-
-      if (_isGeneratedLocalizationDartFile(entity)) {
-        return;
-      }
-
-      if (_matchesAnyGlob(globs, relativePath)) {
-        count++;
-      }
-    });
-
-    return count;
   }
 }
 
@@ -393,6 +356,7 @@ class _ScanCounts {
   int testDirectoriesCount = 0;
   int testFilesCount = 0;
   int testDartFilesCount = 0;
+  int customExcludedDartFilesCount = 0;
 
   /// Records one excluded entity and updates per-kind counters.
   ///
@@ -423,6 +387,13 @@ class _ScanCounts {
       if (p.extension(entity.path) == '.dart') {
         testDartFilesCount++;
       }
+    }
+  }
+
+  /// Records one user-glob excluded Dart file.
+  void addCustomExcludedEntity(FileSystemEntity entity) {
+    if (entity is File && p.extension(entity.path) == '.dart') {
+      customExcludedDartFilesCount++;
     }
   }
 }

@@ -154,7 +154,7 @@
   <!-- 1. Initialization and scan -->
   <text x="50" y="155" class="section-label">1. Initialization and directory scan</text>
 
-  <rect x="270" y="170" width="20" height="120" class="activation" />
+  <rect x="270" y="170" width="20" height="110" class="activation" />
   <line x1="100" y1="180" x2="270" y2="180" class="message-arrow" />
   <text x="185" y="174" text-anchor="middle" class="message-text">analyze()</text>
 
@@ -162,21 +162,21 @@
   <line x1="290" y1="205" x2="430" y2="205" class="message-arrow" />
   <text x="360" y="199" text-anchor="middle" class="message-text">scanDirectory()</text>
   <line x1="430" y1="230" x2="290" y2="230" class="return-arrow" />
-  <text x="360" y="246" text-anchor="middle" class="message-text">dartFiles + counters</text>
+  <text x="360" y="246" text-anchor="middle" class="message-text">dartFiles + counters + customExcludedCount</text>
 
-  <rect x="430" y="242" width="20" height="28" class="activation" />
-  <line x1="290" y1="250" x2="430" y2="250" class="message-arrow" />
-  <text x="360" y="267" text-anchor="middle" class="message-text">countCustomExcludedDartFiles()</text>
-  <line x1="430" y1="270" x2="290" y2="270" class="return-arrow" />
+  <rect x="470" y="242" width="250" height="36" rx="4" class="note-box" />
+  <text x="482" y="260" class="note-text">Single directory scan now returns all counters used later.</text>
+  <text x="482" y="274" class="note-text">No follow-up custom-exclude traversal.</text>
 
   <!-- 2. Configuration and delegates -->
   <text x="50" y="305" class="section-label">2. Project config and analyzer assembly</text>
   <rect x="270" y="315" width="20" height="110" class="activation" />
 
-  <rect x="300" y="325" width="260" height="70" rx="4" class="note-box" />
+  <rect x="300" y="325" width="320" height="84" rx="4" class="note-box" />
   <text x="312" y="343" class="note-text">- resolve project type &amp; localization</text>
   <text x="312" y="359" class="note-text">- evaluate enabled analyzers (including code_size)</text>
   <text x="312" y="375" class="note-text">- instantiate Delegates for Runner</text>
+  <text x="312" y="391" class="note-text">- pass scanned dartFiles into AnalyzerRunner</text>
 
   <!-- 3. Unified single-pass analysis -->
   <text x="50" y="455" class="section-label">3. Unified single-pass data collection (Delegate Pattern)</text>
@@ -186,7 +186,10 @@
 
   <rect x="590" y="465" width="20" height="420" class="activation" />
 
-  <text x="614" y="495" class="section-label">For EACH file, calls EVERY enabled delegate:</text>
+  <text x="614" y="495" class="section-label">For EACH file, build shared context once, then call EVERY enabled delegate:</text>
+
+  <rect x="622" y="505" width="275" height="34" rx="4" class="note-box" />
+  <text x="634" y="524" class="note-text">Runner caches content, AST, lines, and lineInfo per file.</text>
 
   <!-- Delegate calls -->
   <rect x="790" y="510" width="20" height="20" class="activation" />
@@ -229,7 +232,7 @@
   <text x="1455" y="755" text-anchor="middle" class="message-text">analyzeFileWithContext()</text>
 
   <line x1="590" y1="870" x2="290" y2="870" class="return-arrow" />
-  <text x="440" y="865" text-anchor="middle" class="message-text">AnalysisRunnerResult</text>
+  <text x="440" y="865" text-anchor="middle" class="message-text">AnalysisRunnerResult + contextsByPath</text>
 
   <!-- 4. Post-processing -->
   <text x="50" y="925" class="section-label">4. Post-processing: Multi-file Analysis &amp; Aggregation</text>
@@ -260,24 +263,26 @@
   <text x="1295" y="1249" text-anchor="middle" class="message-text">aggregate(metricsData)</text>
   <line x1="2300" y1="1280" x2="290" y2="1280" class="return-arrow" />
 
-  <rect x="1950" y="1305" width="460" height="35" rx="4" class="note-box" />
-  <text x="1962" y="1328" class="note-text">Consistent post-processing for all complex domain analyzers.</text>
-  <rect x="1950" y="1348" width="840" height="35" rx="4" class="note-box" />
-  <text x="1962" y="1371" class="note-text">CodeSizeDelegate collects LOC for treemap/reporting; code_size scoring now uses configurable .fcheck LOC thresholds (file/class/function/method) and contributes deductions when exceeded.</text>
-  <rect x="1950" y="1391" width="930" height="35" rx="4" class="note-box" />
-  <text x="1962" y="1414" class="note-text">AnalyzeFolder also scans test/integration_test Dart files to count test() and testWidgets() cases and to inventory project-local imports plus statically consumed files/artifacts.</text>
-  <rect x="1950" y="1426" width="700" height="20" rx="4" class="note-box" />
-  <text x="1962" y="1440" class="note-text">CLI includes fast-path inventory modes: --excluded, --literals, and --ignores.</text>
+  <rect x="1950" y="1305" width="590" height="35" rx="4" class="note-box" />
+  <text x="1962" y="1328" class="note-text">Consistent post-processing for all complex domain analyzers, reusing Runner contexts where possible.</text>
+  <rect x="1950" y="1348" width="860" height="35" rx="4" class="note-box" />
+  <text x="1962" y="1371" class="note-text">Project dependency graph now reuses shared parse results instead of reparsing analyzed source files.</text>
+  <rect x="1950" y="1391" width="920" height="35" rx="4" class="note-box" />
+  <text x="1962" y="1414" class="note-text">Dead-code delegate caches ignore-line sets per file and uses analyzer lineInfo for fast node-to-line resolution during visitor checks.</text>
+  <rect x="1950" y="1426" width="900" height="35" rx="4" class="note-box" />
+  <text x="1962" y="1449" class="note-text">AnalyzeFolder still scans test/integration_test Dart files for test counts/import reachability, but now combines those reads into one pass.</text>
+  <rect x="1950" y="1461" width="700" height="20" rx="4" class="note-box" />
+  <text x="1962" y="1475" class="note-text">CLI includes fast-path inventory modes: --excluded, --literals, and --ignores.</text>
 
   <!-- 5. Return -->
-  <text x="50" y="1450" class="section-label">5. Build ProjectMetrics &amp; Return</text>
+  <text x="50" y="1490" class="section-label">5. Build ProjectMetrics &amp; Return</text>
 
-  <rect x="2460" y="1465" width="20" height="45" class="activation" />
-  <line x1="290" y1="1475" x2="2460" y2="1475" class="message-arrow" />
-  <text x="1375" y="1469" text-anchor="middle" class="message-text">ProjectMetrics(results)</text>
-  <line x1="2460" y1="1510" x2="290" y2="1510" class="return-arrow" />
+  <rect x="2460" y="1505" width="20" height="45" class="activation" />
+  <line x1="290" y1="1515" x2="2460" y2="1515" class="message-arrow" />
+  <text x="1375" y="1509" text-anchor="middle" class="message-text">ProjectMetrics(results)</text>
+  <line x1="2460" y1="1550" x2="290" y2="1550" class="return-arrow" />
 
-  <line x1="270" y1="1545" x2="100" y2="1545" class="return-arrow" />
-  <text x="185" y="1561" text-anchor="middle" class="message-text">return ProjectMetrics</text>
+  <line x1="270" y1="1585" x2="100" y2="1585" class="return-arrow" />
+  <text x="185" y="1601" text-anchor="middle" class="message-text">return ProjectMetrics</text>
 
 </svg>

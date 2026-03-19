@@ -23,6 +23,7 @@ import 'dart:io';
 import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
@@ -77,6 +78,16 @@ const String _macosPlatformFolder = 'macos';
 const String _windowsPlatformFolder = 'windows';
 const String _linuxPlatformFolder = 'linux';
 const String _webPlatformFolder = 'web';
+
+class _TestAnalysisSummary {
+  const _TestAnalysisSummary({
+    required this.testCaseCount,
+    required this.importedPaths,
+  });
+
+  final int testCaseCount;
+  final Set<String> importedPaths;
+}
 
 /// The main engine for analyzing Flutter/Dart project quality.
 ///
@@ -206,15 +217,11 @@ class AnalyzeFolder {
       testDirectoriesCount,
       testFilesCount,
       testDartFilesCount,
+      customExcludedDartFilesCount,
     ) = FileUtils.scanDirectory(
       projectDir,
       excludePatterns: excludePatterns,
     );
-    final customExcludedDartFilesCount = FileUtils.countCustomExcludedDartFiles(
-      projectDir,
-      excludePatterns: excludePatterns,
-    );
-    final testCaseCount = _countTestCases();
     final projectVersion = pubspecInfo.version;
     final projectName = pubspecInfo.name;
     final projectType = pubspecInfo.projectType;
@@ -278,9 +285,13 @@ class AnalyzeFolder {
       projectDir: projectDir,
       excludePatterns: excludePatterns,
       delegates: delegates,
+      dartFiles: dartFiles,
     );
 
     final unifiedResult = unifiedAnalyzer.analyzeAll();
+    final analyzedContexts = unifiedResult.contextsByPath.values.toList(
+      growable: false,
+    );
     final allListResults =
         unifiedResult.getResults<List<dynamic>>() ?? <List<dynamic>>[];
 
@@ -353,16 +364,20 @@ class AnalyzeFolder {
           [],
     );
     final projectDependencyGraph = _buildProjectDependencyGraph(
-      dartFiles,
+      analyzedContexts,
       rootPath: projectRoot.path,
       packageName: pubspecInfo.packageName,
+    );
+    final testAnalysisSummary = _analyzeTestFiles(
+      rootPath: projectRoot.path,
+      packageName: pubspecInfo.packageName,
+      analyzedPaths: projectDependencyGraph.keys.toSet(),
     );
     final testConsumption = _analyzeTestConsumption(
       dependencyGraph: projectDependencyGraph,
       fileMetrics: metricsAggregation.fileMetrics,
-      rootPath: projectRoot.path,
-      packageName: pubspecInfo.packageName,
       analysisRootPath: projectDir.path,
+      importedPathsSet: testAnalysisSummary.importedPaths,
     );
     final codeSizeArtifacts = codeSizeEnabled
         ? _collectCodeSizeArtifacts(
@@ -373,7 +388,10 @@ class AnalyzeFolder {
 
     // Perform project-wide localization analysis
     final localizationIssues = localizationEnabled
-        ? LocalizationDelegate().analyzeProject(projectDir)
+        ? LocalizationDelegate().analyzeProject(
+            projectDir,
+            analyzedContexts: analyzedContexts,
+          )
         : <LocalizationIssue>[];
 
     return ProjectMetrics(
@@ -421,7 +439,7 @@ class AnalyzeFolder {
       testDirectoriesCount: testDirectoriesCount,
       testFilesCount: testFilesCount,
       testDartFilesCount: testDartFilesCount,
-      testCaseCount: testCaseCount,
+      testCaseCount: testAnalysisSummary.testCaseCount,
       testImportCount: testConsumption.importedPaths.length,
       testConsumedFilesCount: testConsumption.consumedPaths.length,
       testConsumedLinesOfCode: testConsumption.linesOfCode,
@@ -638,9 +656,15 @@ class AnalyzeFolder {
     return false;
   }
 
-  /// Counts project test cases by scanning `test` and `integration_test` Dart files.
-  int _countTestCases() {
+  /// Counts test cases and collects project imports from test sources in one pass.
+  _TestAnalysisSummary _analyzeTestFiles({
+    required String rootPath,
+    required String packageName,
+    required Set<String> analyzedPaths,
+  }) {
     var totalTestCases = 0;
+    final importedPaths = <String>{};
+
     for (final file in _listTestDartFiles(projectDir)) {
       try {
         final content = file.readAsStringSync();
@@ -648,14 +672,33 @@ class AnalyzeFolder {
           content: content,
           featureSet: FeatureSet.latestLanguageVersion(),
         );
+        final context = AnalysisFileContext(
+          file: file,
+          content: content,
+          parseResult: parseResult,
+          lines: content.split('\n'),
+          compilationUnit: parseResult.unit,
+          hasParseErrors: parseResult.errors.isNotEmpty,
+        );
         final counter = TestCaseVisitor();
         parseResult.unit.accept(counter);
         totalTestCases += counter.testCaseCount;
+        importedPaths.addAll(
+          _collectProjectDependenciesFromContext(
+            context,
+            rootPath: rootPath,
+            packageName: packageName,
+          ).where(analyzedPaths.contains),
+        );
       } catch (_) {
         // Ignore unreadable/unparseable test files and continue.
       }
     }
-    return totalTestCases;
+
+    return _TestAnalysisSummary(
+      testCaseCount: totalTestCases,
+      importedPaths: importedPaths,
+    );
   }
 
   /// Lists Dart files located under canonical test directories.
@@ -685,15 +728,15 @@ class AnalyzeFolder {
   /// value contains the normalized project dependencies referenced from that
   /// file through imports, exports, and parts.
   Map<String, List<String>> _buildProjectDependencyGraph(
-    List<File> dartFiles, {
+    List<AnalysisFileContext> contexts, {
     required String rootPath,
     required String packageName,
   }) {
     final dependencyGraph = <String, List<String>>{};
-    for (final file in dartFiles) {
-      final normalizedPath = p.normalize(file.path);
-      dependencyGraph[normalizedPath] = _collectProjectDependenciesFromFile(
-        file,
+    for (final context in contexts) {
+      final normalizedPath = p.normalize(context.file.path);
+      dependencyGraph[normalizedPath] = _collectProjectDependenciesFromContext(
+        context,
         rootPath: rootPath,
         packageName: packageName,
       );
@@ -709,30 +752,14 @@ class AnalyzeFolder {
   TestConsumptionSummary _analyzeTestConsumption({
     required Map<String, List<String>> dependencyGraph,
     required List<FileMetrics> fileMetrics,
-    required String rootPath,
-    required String packageName,
     required String analysisRootPath,
+    required Set<String> importedPathsSet,
   }) {
-    if (dependencyGraph.isEmpty) {
+    if (dependencyGraph.isEmpty || importedPathsSet.isEmpty) {
       return const TestConsumptionSummary.empty();
     }
 
     final analyzedPaths = dependencyGraph.keys.toSet();
-    final importedPathsSet = <String>{};
-    for (final testFile in _listTestDartFiles(projectDir)) {
-      importedPathsSet.addAll(
-        _collectProjectDependenciesFromFile(
-          testFile,
-          rootPath: rootPath,
-          packageName: packageName,
-        ).where(analyzedPaths.contains),
-      );
-    }
-
-    if (importedPathsSet.isEmpty) {
-      return const TestConsumptionSummary.empty();
-    }
-
     final queue = Queue<String>()..addAll(importedPathsSet);
     final consumedPathsSet = <String>{};
     while (queue.isNotEmpty) {
@@ -802,29 +829,24 @@ class AnalyzeFolder {
     );
   }
 
-  /// Collects normalized in-project Dart dependencies declared by [file].
+  /// Collects normalized in-project Dart dependencies declared by [context].
   ///
   /// Only project-resolvable imports, exports, and part directives are
   /// returned. Unreadable or unparsable files fall back to an empty list.
-  List<String> _collectProjectDependenciesFromFile(
-    File file, {
+  List<String> _collectProjectDependenciesFromContext(
+    AnalysisFileContext context, {
     required String rootPath,
     required String packageName,
   }) {
     try {
-      final content = file.readAsStringSync();
-      final parseResult = parseString(
-        content: content,
-        featureSet: FeatureSet.latestLanguageVersion(),
-      );
       final dependencies = <String>[];
-      for (final directive in parseResult.unit.directives) {
+      for (final directive in context.parseResult.unit.directives) {
         if (directive is ImportDirective) {
           addDirectiveDartDependencies(
             uri: directive.uri.stringValue,
             configurations: directive.configurations,
             packageName: packageName,
-            filePath: p.normalize(file.path),
+            filePath: p.normalize(context.file.path),
             rootPath: p.normalize(rootPath),
             dependencies: dependencies,
           );
@@ -835,7 +857,7 @@ class AnalyzeFolder {
             uri: directive.uri.stringValue,
             configurations: directive.configurations,
             packageName: packageName,
-            filePath: p.normalize(file.path),
+            filePath: p.normalize(context.file.path),
             rootPath: p.normalize(rootPath),
             dependencies: dependencies,
           );
@@ -845,7 +867,7 @@ class AnalyzeFolder {
           addResolvedProjectDartDependency(
             uri: directive.uri.stringValue,
             packageName: packageName,
-            filePath: p.normalize(file.path),
+            filePath: p.normalize(context.file.path),
             rootPath: p.normalize(rootPath),
             dependencies: dependencies,
           );

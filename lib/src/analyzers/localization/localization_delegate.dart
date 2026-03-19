@@ -84,7 +84,10 @@ class LocalizationDelegate implements AnalyzerDelegate {
   ///
   /// Returns a list of [LocalizationIssue] objects representing
   /// missing translations for each language.
-  List<LocalizationIssue> analyzeProject(Directory projectDir) {
+  List<LocalizationIssue> analyzeProject(
+    Directory projectDir, {
+    List<AnalysisFileContext> analyzedContexts = const [],
+  }) {
     final issues = <LocalizationIssue>[];
 
     final l10nDir = Directory(p.join(projectDir.path, 'lib', 'l10n'));
@@ -98,7 +101,11 @@ class LocalizationDelegate implements AnalyzerDelegate {
       return issues;
     }
 
-    return _analyzeArbFiles(projectDir, arbFiles);
+    return _analyzeArbFiles(
+      projectDir,
+      arbFiles,
+      analyzedContexts: analyzedContexts,
+    );
   }
 
   // /// Performs detailed localization analysis with locale statistics.
@@ -282,8 +289,9 @@ class LocalizationDelegate implements AnalyzerDelegate {
   /// translations as incomplete for the target locale.
   List<LocalizationIssue> _analyzeParsedArbFiles(
     Directory projectDir,
-    List<_ParsedLocalizationArbFile> parsedArbFiles,
-  ) {
+    List<_ParsedLocalizationArbFile> parsedArbFiles, {
+    List<AnalysisFileContext> analyzedContexts = const [],
+  }) {
     final issues = <LocalizationIssue>[];
     final parsedFilesByPath = {
       for (final parsedFile in parsedArbFiles) parsedFile.filePath: parsedFile,
@@ -324,6 +332,7 @@ class LocalizationDelegate implements AnalyzerDelegate {
         ? _collectUsedLocalizationKeys(
             projectDir: projectDir,
             candidateKeys: translatableBaseKeys.toSet(),
+            analyzedContexts: analyzedContexts,
           )
         : const _LocalizationKeyUsageScanResult(
             hasLocalizationAccess: false,
@@ -496,8 +505,9 @@ class LocalizationDelegate implements AnalyzerDelegate {
   /// Parses ARB files and delegates to the parsed-file comparison routine.
   List<LocalizationIssue> _analyzeArbFiles(
     Directory projectDir,
-    List<File> arbFiles,
-  ) {
+    List<File> arbFiles, {
+    List<AnalysisFileContext> analyzedContexts = const [],
+  }) {
     final parsedArbFiles = <_ParsedLocalizationArbFile>[];
     for (final arbFile in arbFiles) {
       try {
@@ -521,13 +531,18 @@ class LocalizationDelegate implements AnalyzerDelegate {
     if (parsedArbFiles.isEmpty) {
       return <LocalizationIssue>[];
     }
-    return _analyzeParsedArbFiles(projectDir, parsedArbFiles);
+    return _analyzeParsedArbFiles(
+      projectDir,
+      parsedArbFiles,
+      analyzedContexts: analyzedContexts,
+    );
   }
 
   /// Finds base-locale keys that appear in app Dart source files.
   _LocalizationKeyUsageScanResult _collectUsedLocalizationKeys({
     required Directory projectDir,
     required Set<String> candidateKeys,
+    required List<AnalysisFileContext> analyzedContexts,
   }) {
     if (candidateKeys.isEmpty) {
       return const _LocalizationKeyUsageScanResult(
@@ -546,6 +561,32 @@ class LocalizationDelegate implements AnalyzerDelegate {
 
     final usedKeys = <String>{};
     var hasLocalizationAccess = false;
+    if (analyzedContexts.isNotEmpty) {
+      for (final context in analyzedContexts) {
+        if (!p.isWithin(libDir.path, context.file.path)) {
+          continue;
+        }
+        if (isGeneratedLocalizationDartFilePath(context.file.path)) {
+          continue;
+        }
+        if (_isLocalizationSupportSourceFile(context.file.path, libDir.path)) {
+          continue;
+        }
+        final content = context.content;
+        hasLocalizationAccess =
+            _scanLocalizationContent(
+              content: content,
+              candidateKeys: candidateKeys,
+              usedKeys: usedKeys,
+            ) ||
+            hasLocalizationAccess;
+      }
+      return _LocalizationKeyUsageScanResult(
+        hasLocalizationAccess: hasLocalizationAccess,
+        usedKeys: usedKeys,
+      );
+    }
+
     for (final entity in libDir.listSync(recursive: true)) {
       if (entity is! File || !entity.path.endsWith('.dart')) {
         continue;
@@ -558,48 +599,65 @@ class LocalizationDelegate implements AnalyzerDelegate {
       }
       final content = entity.readAsStringSync();
       hasLocalizationAccess =
-          _addUsedKeysFromMatches(
-            pattern: _localizationMemberAccessPattern,
+          _scanLocalizationContent(
             content: content,
             candidateKeys: candidateKeys,
             usedKeys: usedKeys,
           ) ||
           hasLocalizationAccess;
-      hasLocalizationAccess =
-          _addUsedKeysFromMatches(
-            pattern: _currentLocalizationMemberAccessPattern,
-            content: content,
-            candidateKeys: candidateKeys,
-            usedKeys: usedKeys,
-          ) ||
-          hasLocalizationAccess;
-      hasLocalizationAccess =
-          _addUsedKeysFromMatches(
-            pattern: _contextL10nMemberAccessPattern,
-            content: content,
-            candidateKeys: candidateKeys,
-            usedKeys: usedKeys,
-          ) ||
-          hasLocalizationAccess;
-      final accessorNames = _extractLocalizationAccessorNames(content);
-      for (final accessorName in accessorNames) {
-        final memberPattern = RegExp(
-          '\\b${RegExp.escape(accessorName)}\\.([A-Za-z_][A-Za-z0-9_]*)\\s*(?:\\(|\\b)',
-        );
-        hasLocalizationAccess =
-            _addUsedKeysFromMatches(
-              pattern: memberPattern,
-              content: content,
-              candidateKeys: candidateKeys,
-              usedKeys: usedKeys,
-            ) ||
-            hasLocalizationAccess;
-      }
     }
     return _LocalizationKeyUsageScanResult(
       hasLocalizationAccess: hasLocalizationAccess,
       usedKeys: usedKeys,
     );
+  }
+
+  /// Scans one source file content for localization key usage.
+  bool _scanLocalizationContent({
+    required String content,
+    required Set<String> candidateKeys,
+    required Set<String> usedKeys,
+  }) {
+    var hasLocalizationAccess = false;
+    hasLocalizationAccess =
+        _addUsedKeysFromMatches(
+          pattern: _localizationMemberAccessPattern,
+          content: content,
+          candidateKeys: candidateKeys,
+          usedKeys: usedKeys,
+        ) ||
+        hasLocalizationAccess;
+    hasLocalizationAccess =
+        _addUsedKeysFromMatches(
+          pattern: _currentLocalizationMemberAccessPattern,
+          content: content,
+          candidateKeys: candidateKeys,
+          usedKeys: usedKeys,
+        ) ||
+        hasLocalizationAccess;
+    hasLocalizationAccess =
+        _addUsedKeysFromMatches(
+          pattern: _contextL10nMemberAccessPattern,
+          content: content,
+          candidateKeys: candidateKeys,
+          usedKeys: usedKeys,
+        ) ||
+        hasLocalizationAccess;
+    final accessorNames = _extractLocalizationAccessorNames(content);
+    for (final accessorName in accessorNames) {
+      final memberPattern = RegExp(
+        '\\b${RegExp.escape(accessorName)}\\.([A-Za-z_][A-Za-z0-9_]*)\\s*(?:\\(|\\b)',
+      );
+      hasLocalizationAccess =
+          _addUsedKeysFromMatches(
+            pattern: memberPattern,
+            content: content,
+            candidateKeys: candidateKeys,
+            usedKeys: usedKeys,
+          ) ||
+          hasLocalizationAccess;
+    }
+    return hasLocalizationAccess;
   }
 
   /// Returns true for Dart files that define localization plumbing, not app use.

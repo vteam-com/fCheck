@@ -235,13 +235,16 @@ class IgnoreConfig {
   ///
   /// Returns true if the node or any of its parents are within an ignored section.
   static bool isNodeIgnored(AstNode node, String content, String domain) {
+    final lines = content.split('\n');
+    final ignoredLineNumbers = collectIgnoredLineNumbers(lines, domain);
+    if (ignoredLineNumbers.isEmpty) {
+      return false;
+    }
     AstNode? current = node;
     while (current != null) {
       final offset = current.offset;
       final lineNumber = _getLineNumber(content, offset);
-      final lineContent = _getLineContent(content, lineNumber);
-
-      if (_lineHasDomainIgnoreDirective(lineContent, domain)) {
+      if (ignoredLineNumbers.contains(lineNumber)) {
         return true;
       }
 
@@ -276,18 +279,40 @@ class IgnoreConfig {
     return domainDirectivePattern.hasMatch(directives);
   }
 
+  /// Collects 1-based line numbers with `// ignore: fcheck_<domain>`.
+  static Set<int> collectIgnoredLineNumbers(List<String> lines, String domain) {
+    final ignoredLineNumbers = <int>{};
+    for (var index = 0; index < lines.length; index++) {
+      if (_lineHasDomainIgnoreDirective(lines[index], domain)) {
+        ignoredLineNumbers.add(index + 1);
+      }
+    }
+    return ignoredLineNumbers;
+  }
+
+  /// Checks whether [node] or an ancestor is covered by cached ignore lines.
+  static bool isNodeIgnoredWithLines(
+    AstNode node, {
+    required Set<int> ignoredLineNumbers,
+    required int Function(int) lineNumberForOffset,
+  }) {
+    if (ignoredLineNumbers.isEmpty) {
+      return false;
+    }
+
+    AstNode? current = node;
+    while (current != null) {
+      if (ignoredLineNumbers.contains(lineNumberForOffset(current.offset))) {
+        return true;
+      }
+      current = current.parent;
+    }
+    return false;
+  }
+
   /// Calculates the 1-based line number for a given character offset.
   static int _getLineNumber(String content, int offset) {
     final lines = content.substring(0, offset).split('\n');
     return lines.length;
-  }
-
-  /// Retrieves the content of a specific line number.
-  static String _getLineContent(String content, int lineNumber) {
-    final lines = content.split('\n');
-    if (lineNumber > 0 && lineNumber <= lines.length) {
-      return lines[lineNumber - 1];
-    }
-    return '';
   }
 }

@@ -14,8 +14,8 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     required this.filePath,
     required this.rootPath,
     required this.packageName,
-    required this.content,
     required this.lineNumberForOffset,
+    required this.ignoredLineNumbers,
   });
 
   /// Absolute path of the file being analyzed.
@@ -27,11 +27,11 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
   /// Package name used to resolve package: imports.
   final String packageName;
 
-  /// File contents for ignore configuration checks.
-  final String content;
-
   /// Maps AST offsets to 1-based line numbers.
   final int Function(int offset) lineNumberForOffset;
+
+  /// Cached line numbers containing `// ignore: fcheck_dead_code`.
+  final Set<int> ignoredLineNumbers;
 
   /// Resolved Dart file dependencies for this file.
   final List<String> dependencies = <String>[];
@@ -82,7 +82,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     }
 
     if (node.parent is CompilationUnit &&
-        !IgnoreConfig.isNodeIgnored(node, content, 'dead_code') &&
+        !_isNodeIgnored(node) &&
         !_hasPreviewAnnotation(node.metadata)) {
       functions.add(
         DeadCodeSymbol(
@@ -101,7 +101,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
 
   @override
   void visitMethodDeclaration(MethodDeclaration node) {
-    if (!IgnoreConfig.isNodeIgnored(node, content, 'dead_code') &&
+    if (!_isNodeIgnored(node) &&
         !_hasOverrideAnnotation(node.metadata) &&
         !_hasPreviewAnnotation(node.metadata) &&
         !_isAbstractMethod(node)) {
@@ -170,7 +170,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
 
   @override
   void visitClassDeclaration(ClassDeclaration node) {
-    if (!IgnoreConfig.isNodeIgnored(node, content, 'dead_code')) {
+    if (!_isNodeIgnored(node)) {
       final className = _stripTypeParameters(node.namePart.toString());
       classes.add(
         DeadCodeSymbol(
@@ -184,8 +184,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
 
   @override
   void visitVariableDeclaration(VariableDeclaration node) {
-    if (_isLocalVariable(node) &&
-        !IgnoreConfig.isNodeIgnored(node, content, 'dead_code')) {
+    if (_isLocalVariable(node) && !_isNodeIgnored(node)) {
       _declareVariable(node.name.lexeme, node);
     }
     super.visitVariableDeclaration(node);
@@ -193,7 +192,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
 
   @override
   void visitDeclaredIdentifier(DeclaredIdentifier node) {
-    if (!IgnoreConfig.isNodeIgnored(node, content, 'dead_code')) {
+    if (!_isNodeIgnored(node)) {
       _declareVariable(node.name.lexeme, node);
     }
     super.visitDeclaredIdentifier(node);
@@ -202,8 +201,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
   @override
   void visitSimpleFormalParameter(SimpleFormalParameter node) {
     final identifier = node.name;
-    if (identifier != null &&
-        !IgnoreConfig.isNodeIgnored(node, content, 'dead_code')) {
+    if (identifier != null && !_isNodeIgnored(node)) {
       _declareVariable(identifier.lexeme, node, isParameter: true);
     }
     super.visitSimpleFormalParameter(node);
@@ -211,7 +209,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
 
   @override
   void visitFieldFormalParameter(FieldFormalParameter node) {
-    if (!IgnoreConfig.isNodeIgnored(node, content, 'dead_code')) {
+    if (!_isNodeIgnored(node)) {
       _declareVariable(
         node.name.lexeme,
         node,
@@ -224,7 +222,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
 
   @override
   void visitFunctionTypedFormalParameter(FunctionTypedFormalParameter node) {
-    if (!IgnoreConfig.isNodeIgnored(node, content, 'dead_code')) {
+    if (!_isNodeIgnored(node)) {
       _declareVariable(node.name.lexeme, node, isParameter: true);
     }
     super.visitFunctionTypedFormalParameter(node);
@@ -232,7 +230,7 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
 
   @override
   void visitSuperFormalParameter(SuperFormalParameter node) {
-    if (!IgnoreConfig.isNodeIgnored(node, content, 'dead_code')) {
+    if (!_isNodeIgnored(node)) {
       _declareVariable(
         node.name.lexeme,
         node,
@@ -439,6 +437,13 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
     }
     return false;
   }
+
+  /// Returns whether the node or an ancestor is covered by a dead-code ignore.
+  bool _isNodeIgnored(AstNode node) => IgnoreConfig.isNodeIgnoredWithLines(
+    node,
+    ignoredLineNumbers: ignoredLineNumbers,
+    lineNumberForOffset: lineNumberForOffset,
+  );
 
   /// Internal helper used by fcheck analysis and reporting.
   bool _hasOverrideAnnotation(List<Annotation> metadata) {

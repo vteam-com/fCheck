@@ -36,8 +36,11 @@ class DeadCodeDelegate implements AnalyzerDelegate {
       filePath: context.file.path,
       rootPath: projectRoot.path,
       packageName: packageName,
-      content: context.content,
       lineNumberForOffset: context.getLineNumber,
+      ignoredLineNumbers: IgnoreConfig.collectIgnoredLineNumbers(
+        context.lines,
+        'dead_code',
+      ),
     );
 
     context.compilationUnit!.accept(visitor);
