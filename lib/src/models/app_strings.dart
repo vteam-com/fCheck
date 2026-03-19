@@ -180,6 +180,14 @@ class AppStrings {
   static const String exampleMaxFunctionLoc = '        max_function_loc: 700';
   static const String exampleMaxMethodLoc = '        max_method_loc: 500';
   static const String availableAnalyzerNames = 'Available analyzer names:';
+  static const String localizationFalsePositives =
+      'Localization false positives:';
+  static const String localizationReviewedOrDoNotTranslate =
+      '  - Mark intentional identical text or brand names with `@key.description: "reviewed"` or `DO NOT TRANSLATE` in the ARB metadata.';
+  static const String localizationCheckDuplicatesPlaceholdersAndEmpty =
+      '  - Check for duplicate top-level ARB keys, placeholder mismatches, and empty strings before suppressing a finding.';
+  static const String localizationRemoveUnusedEnglishKeys =
+      '  - Remove English ARB keys that are no longer referenced from app code; unused base keys are reported as orphan strings.';
 
   // Scoring Guide
   static const String complianceScoreModel =

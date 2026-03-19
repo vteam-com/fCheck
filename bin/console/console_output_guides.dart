@@ -93,16 +93,10 @@ void printIgnoreSetupGuide() {
   }
 
   print('');
-  print('Localization false positives:');
-  print(
-    '  - Mark intentional identical text or brand names with `@key.description: "reviewed"` or `DO NOT TRANSLATE` in the ARB metadata.',
-  );
-  print(
-    '  - Check for duplicate top-level ARB keys, placeholder mismatches, and empty strings before suppressing a finding.',
-  );
-  print(
-    '  - Remove English ARB keys that are no longer referenced from app code; unused base keys are reported as orphan strings.',
-  );
+  print(AppStrings.localizationFalsePositives);
+  print(AppStrings.localizationReviewedOrDoNotTranslate);
+  print(AppStrings.localizationCheckDuplicatesPlaceholdersAndEmpty);
+  print(AppStrings.localizationRemoveUnusedEnglishKeys);
 }
 
 /// Prints scoring model guidance for compliance score calculation.

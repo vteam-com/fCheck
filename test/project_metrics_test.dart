@@ -1884,7 +1884,7 @@ void main() {
     );
 
     test(
-      'should order analyzer blocks with clean first, then warning/failing by score and title',
+      'should order analyzer blocks with clean first, then disabled, then warning/failing by score and title',
       () {
         final projectMetrics = ProjectMetrics(
           totalFolders: 1,
@@ -1986,10 +1986,13 @@ void main() {
           if (status == '[✓]') {
             return 0;
           }
-          if (status == '[!]' || status == '[x]') {
+          if (status == '[-]') {
             return 1;
           }
-          return 2;
+          if (status == '[!]' || status == '[x]') {
+            return 2;
+          }
+          return 3;
         }
 
         expect(headerRows, isNotEmpty);
@@ -2002,12 +2005,12 @@ void main() {
             previousGroup <= currentGroup,
             isTrue,
             reason:
-                'Expected clean first, warnings/failures second, disabled last.',
+                'Expected clean first, disabled second, warnings/failures last.',
           );
           if (previousGroup != currentGroup) {
             continue;
           }
-          if (currentGroup == 1 &&
+          if (currentGroup == 2 &&
               previous.deduction != current.deduction &&
               previous.issueCount > 0 &&
               current.issueCount > 0) {

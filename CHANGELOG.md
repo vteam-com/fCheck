@@ -7,6 +7,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] – 2026-03-19
+
+### Added
+
+- Flutter localization coverage analysis based on ARB files under `lib/l10n/` or project-local ARB fallbacks.
+- Detection for missing translations, duplicate top-level ARB keys, placeholder mismatches, empty translations, untranslated copies, and unused English base-locale keys.
+- Dedicated localization console reporting with language coverage details and guidance for reviewed or intentionally untranslated entries.
+
 ## [1.0.9] – 2026-03-14
 
 ### Changed

@@ -41,6 +41,12 @@ After updating the version in `pubspec.yaml`, you must:
    ./tool/check.sh
    ```
 
+3. **Run fcheck on the fcheck repo itself** and clear every warning before publishing:
+
+   ```bash
+   dart run bin/fcheck.dart .
+   ```
+
 This ensures:
 
 - ✅ `version.dart` is synchronized with `pubspec.yaml`
@@ -48,6 +54,7 @@ This ensures:
 - ✅ Code formatting is applied
 - ✅ Static analysis passes
 - ✅ No lint warnings or errors
+- ✅ The repository is clean under its own fcheck rules
 
 ## 4. Update the Changelog
 

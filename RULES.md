@@ -46,20 +46,28 @@ All analyzers must follow these strict naming and sorting conventions:
 - **Sort Key Consistency**: Sort keys must match the analyzer title mapping in `console_output_report_helpers.dart`
 - **Underscore Format**: Sort keys use underscores (e.g., 'hardcoded_strings') while display names use spaces
 
-### Analyzer Display Order (Current)
+### Analyzer Display Order
+
+Display order is not a fixed hardcoded list across all runs:
+
+1. Clean analyzers (`[✓]`) sorted by analyzer title ascending
+2. Disabled analyzers (`[-]`) sorted by analyzer title ascending
+3. Warning/failing analyzers (`[!]`, `[x]`) sorted by score descending, then analyzer title ascending
+
+When titles are compared alphabetically, the current analyzer names are:
 
 1. Checks bypassed
-2. Code size  
+2. Code size
 3. Dead code
 4. Documentation
 5. Duplicate code
-6. Layers architecture
-7. Localization
-8. Magic numbers
-9. One class per file
-10. Secrets
-11. Source sorting
-12. Hardcoded strings
+6. Hardcoded strings
+7. Layers architecture
+8. Localization
+9. Magic numbers
+10. One class per file
+11. Secrets
+12. Source sorting
 
 - `RULES_LOC.md` for code-size thresholds, scoring, and reporting.
 - `RULE_METRICS.md` for project metrics analyzer architecture.
@@ -221,7 +229,8 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
   - details list (except when `--list none` is active)
 - Analyzer report block order must be:
   - first group: no-warning analyzers (`[✓]`) sorted by analyzer title ascending
-  - second group: warning/failing analyzers (`[!]` and `[x]`) sorted by score descending, then analyzer title ascending
+  - second group: disabled analyzers (`[-]`) sorted by analyzer title ascending
+  - third group: warning/failing analyzers (`[!]` and `[x]`) sorted by score descending, then analyzer title ascending
 
 ## Configuration
 
@@ -235,7 +244,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
   - `analyzers.disabled`: explicit opt-out list
   - `analyzers.options.duplicate_code`: threshold/size tuning for duplicate-code analysis
   - `analyzers.options.code_size`: LOC threshold tuning (`max_file_loc`, `max_class_loc`, `max_function_loc`, `max_method_loc`)
-- Supported analyzer keys: `code_size`, `one_class_per_file`, `hardcoded_strings`, `magic_numbers`, `source_sorting`, `layers`, `secrets`, `dead_code`, `duplicate_code`, `documentation`.
+- Supported analyzer keys: `code_size`, `one_class_per_file`, `hardcoded_strings`, `magic_numbers`, `source_sorting`, `layers`, `secrets`, `dead_code`, `duplicate_code`, `documentation`, `localization`.
 - Legacy `ignores.<analyzer>: true` remains supported as a compatibility alias for disabling analyzers.
 - Precedence: built-in defaults < `.fcheck` < CLI flags.
 - File-level ignore: `// ignore: fcheck_<domain>` at the top of a Dart file.

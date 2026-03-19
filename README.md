@@ -214,7 +214,7 @@ fcheck --fix
 
 ```bash
 $ fcheck .
-↓------------------------------ fCheck 1.0.8 -------------------------------↓
+↓------------------------------ fCheck 1.1.0 -------------------------------↓
 Input              : /path/to/project
 Dart Project       : my-cool-app (version: 9.0.0)
 Platforms          : [✓Android] [✓iOS]  [✓MacOS] [✓Windows] [✓Linux]   [✓Web]
@@ -232,7 +232,6 @@ Test Cases         :             392  |  Touched Classes    :         31 (47%)
                                       |  Touched Methods    :        144 (40%)
                                       |  Touched Functions  :         73 (41%)
 --------------------------------- Literals ----------------------------------
-Localization       : ON
 Strings            : 1,203 (64% dupe)
 Numbers            :   842 (74 hardcoded)
 --------------------------------- Analyzers ---------------------------------
@@ -241,12 +240,13 @@ Numbers            :   842 (74 hardcoded)
 [✓] Dead code
 [✓] Documentation
 [✓] Duplicate code
+[✓] Hardcoded strings
 [✓] Layers architecture
+[✓] Localization  : OFF
 [✓] Magic numbers
 [✓] One class per file
 [✓] Secrets
 [✓] Source sorting
-[✓] Hardcoded strings
 --------------------------------- Scorecard ---------------------------------
 Total Score        : 100%
 Invest Next        : Maintain this level by enforcing fcheck in CI on every pull request.

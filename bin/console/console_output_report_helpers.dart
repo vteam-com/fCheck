@@ -20,8 +20,8 @@ const int _maxSuppressionPenaltyPoints = 25;
 const int _analyzerHeaderTitleWidth = 22;
 const int _ratioPercentMultiplier = 100;
 const int _cleanAnalyzerSortGroup = 0;
-const int _warningAnalyzerSortGroup = 1;
-const int _disabledAnalyzerSortGroup = 2;
+const int _disabledAnalyzerSortGroup = 1;
+const int _warningAnalyzerSortGroup = 2;
 const String _noneIndicator = AppStrings.noneIndicator;
 const Map<String, String> _analyzerTitleByKey = {
   'code_size': 'Code size',
