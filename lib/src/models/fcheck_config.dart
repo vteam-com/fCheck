@@ -35,6 +35,9 @@ enum AnalyzerDomain {
 
   /// Documentation coverage and policy checks.
   documentation,
+
+  /// Localization coverage and translation completeness analysis.
+  localization,
 }
 
 /// Helpers for mapping analyzer domains to configuration keys.
@@ -62,6 +65,8 @@ extension AnalyzerDomainName on AnalyzerDomain {
         return 'duplicate_code';
       case AnalyzerDomain.documentation:
         return 'documentation';
+      case AnalyzerDomain.localization:
+        return 'localization';
     }
   }
 }
@@ -710,6 +715,7 @@ class FcheckConfig {
     'dead_code': AnalyzerDomain.deadCode,
     'duplicate_code': AnalyzerDomain.duplicateCode,
     'documentation': AnalyzerDomain.documentation,
+    'localization': AnalyzerDomain.localization,
   };
 }
 

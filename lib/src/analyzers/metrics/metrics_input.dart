@@ -4,6 +4,7 @@ import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
+import 'package:fcheck/src/analyzers/localization/localization_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
@@ -27,6 +28,7 @@ class ProjectMetricsAnalysisInput {
     required this.deadCodeIssues,
     required this.duplicateCodeIssues,
     required this.documentationIssues,
+    required this.localizationIssues,
     required this.layersEdgeCount,
     required this.usesLocalization,
     required this.ignoreDirectivesCount,
@@ -42,6 +44,7 @@ class ProjectMetricsAnalysisInput {
     required this.deadCodeAnalyzerEnabled,
     required this.duplicateCodeAnalyzerEnabled,
     required this.documentationAnalyzerEnabled,
+    required this.localizationAnalyzerEnabled,
   });
 
   /// Total number of analyzed Dart files.
@@ -82,6 +85,9 @@ class ProjectMetricsAnalysisInput {
 
   /// Documentation issues.
   final List<DocumentationIssue> documentationIssues;
+
+  /// Localization coverage issues.
+  final List<LocalizationIssue> localizationIssues;
 
   /// Total dependency edges discovered by layers analysis.
   final int layersEdgeCount;
@@ -127,4 +133,7 @@ class ProjectMetricsAnalysisInput {
 
   /// Whether documentation analyzer is enabled.
   final bool documentationAnalyzerEnabled;
+
+  /// Whether localization analyzer is enabled.
+  final bool localizationAnalyzerEnabled;
 }

@@ -187,10 +187,10 @@ class TestClass {
       expect(
         result.stdout,
         contains(
-          '8. one_class_per_file | // ignore: fcheck_one_class_per_file',
+          '9. one_class_per_file | // ignore: fcheck_one_class_per_file',
         ),
       );
-      expect(result.stdout, contains('10. source_sorting'));
+      expect(result.stdout, contains('11. source_sorting'));
       expect(result.stdout, contains('| (no comment ignore support)'));
       expect(result.stdout, contains('Setup using the .fcheck file'));
       expect(result.stdout, contains('input:'));
@@ -203,6 +203,12 @@ class TestClass {
       expect(result.stdout, contains('min_tokens: 20'));
       expect(result.stdout, contains('min_non_empty_lines: 8'));
       expect(result.stdout, contains('code_size:'));
+      expect(result.stdout, contains('Localization false positives:'));
+      expect(result.stdout, contains('reviewed'));
+      expect(
+        result.stdout,
+        contains('unused base keys are reported as orphan strings'),
+      );
       expect(result.stdout, contains('max_file_loc: 900'));
       expect(result.stdout, contains('max_class_loc: 800'));
       expect(result.stdout, contains('max_function_loc: 700'));

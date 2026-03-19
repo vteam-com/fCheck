@@ -25,6 +25,8 @@ class MetricsAnalyzer {
   static const double _deadCodeBudgetPerFile = 0.8;
   static const double _minDocumentationBudget = 2.0;
   static const double _documentationBudgetPerFile = 0.6;
+  static const double _minLocalizationBudget = 1.0;
+  static const double _localizationBudgetPerFile = 0.3;
   static const double _duplicateRatioPenaltyMultiplier = 2.5;
   static const double _minIgnoreDirectiveBudget = 3.0;
   static const double _ignoreDirectiveBudgetPerFile = 0.12;
@@ -140,6 +142,10 @@ class MetricsAnalyzer {
       _minDocumentationBudget,
       safeDartFileCount * _documentationBudgetPerFile,
     );
+    final localizationBudget = math.max(
+      _minLocalizationBudget,
+      safeDartFileCount * _localizationBudgetPerFile,
+    );
     final duplicateImpactLines = input.duplicateCodeIssues.fold<double>(
       0,
       (sum, issue) => sum + (issue.lineCount * issue.similarity),
@@ -244,6 +250,16 @@ class MetricsAnalyzer {
         score: _budgetScore(
           issues: input.documentationIssues.length,
           budget: documentationBudget,
+        ),
+      ),
+      _ComplianceAreaScore(
+        key: 'localization',
+        label: 'Localization',
+        enabled: input.localizationAnalyzerEnabled,
+        issueCount: input.localizationIssues.length,
+        score: _budgetScore(
+          issues: input.localizationIssues.length,
+          budget: localizationBudget,
         ),
       ),
     ];

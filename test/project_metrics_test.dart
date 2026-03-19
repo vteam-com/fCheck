@@ -7,6 +7,9 @@ import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
+import 'package:fcheck/src/analyzers/localization/localization_issue.dart';
+import 'package:fcheck/src/analyzers/localization/localization_issue_detail.dart';
+import 'package:fcheck/src/analyzers/localization/localization_utils.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
@@ -415,7 +418,7 @@ void main() {
           projectType: ProjectType.dart,
         );
 
-        expect(projectMetrics.complianceScore, equals(89));
+        expect(projectMetrics.complianceScore, equals(90));
         expect(
           projectMetrics.complianceFocusAreaLabel,
           equals('Magic numbers'),
@@ -563,7 +566,8 @@ void main() {
             'deadCodeIssues': 1,
             'duplicateCodeIssues': 1,
             'documentationIssues': 0,
-            'complianceScore': 54,
+            'localizationIssues': 0,
+            'complianceScore': 58,
           },
           'layers': {
             'count': 4,
@@ -649,6 +653,7 @@ void main() {
             },
           ],
           'documentationIssues': [],
+          'localizationIssues': [],
           'tests': {
             'imports': 0,
             'consumedFiles': 0,
@@ -661,7 +666,7 @@ void main() {
           },
           'localization': {'usesLocalization': true},
           'compliance': {
-            'score': 54,
+            'score': 58,
             'suppressionPenalty': 0,
             'focusArea': 'one_class_per_file',
             'focusAreaLabel': 'One class per file',
@@ -1237,15 +1242,139 @@ void main() {
       );
       final joined = output.join('\n');
       final literalsIndex = joined.indexOf(AppStrings.literalsDivider);
-      final localizationIndex = joined.indexOf(AppStrings.localization);
       final stringsIndex = joined.indexOf(AppStrings.strings);
       final numbersIndex = joined.indexOf(AppStrings.numbers);
+      final analyzersIndex = joined.indexOf('Analyzers');
+      final localizationIndex = joined.indexOf(AppStrings.localization);
 
       expect(literalsIndex, isNonNegative);
-      expect(localizationIndex, greaterThan(literalsIndex));
-      expect(stringsIndex, greaterThan(localizationIndex));
+      expect(stringsIndex, greaterThan(literalsIndex));
       expect(numbersIndex, greaterThan(stringsIndex));
+
+      expect(analyzersIndex, greaterThan(literalsIndex));
+      expect(localizationIndex, greaterThan(analyzersIndex));
     });
+
+    test(
+      'should render localization issue reasons with aligned dash bullets and file locations',
+      () async {
+        final tempDir = await Directory.systemTemp.createTemp(
+          'fcheck_localization_report_',
+        );
+        try {
+          final l10nDir = Directory('${tempDir.path}/lib/l10n');
+          await l10nDir.create(recursive: true);
+
+          await File('${l10nDir.path}/app_en.arb').writeAsString('''
+{
+  "@@locale": "en",
+  "hello": "Hello",
+  "welcome": "Welcome {name}",
+  "greeting": "Greeting",
+  "title": "Title"
+}
+''');
+          await File('${l10nDir.path}/app_es.arb').writeAsString('''
+{
+  "@@locale": "es",
+  "hello": "Hello",
+  "welcome": "",
+  "greeting": "Hola",
+  "@greeting": {
+    "description": "Spanish greeting"
+  }
+}
+''');
+
+          final projectMetrics = ProjectMetrics(
+            totalFolders: 2,
+            totalFiles: 2,
+            totalDartFiles: 0,
+            totalLinesOfCode: 0,
+            totalCommentLines: 0,
+            fileMetrics: const [],
+            secretIssues: const [],
+            hardcodedStringIssues: const [],
+            magicNumberIssues: const [],
+            sourceSortIssues: const [],
+            layersIssues: const [],
+            deadCodeIssues: const [],
+            layersEdgeCount: 0,
+            layersCount: 0,
+            dependencyGraph: const {},
+            projectName: 'example_project',
+            version: '1.0.0',
+            projectType: ProjectType.dart,
+            usesLocalization: true,
+            analysisRootPath: tempDir.path,
+            localizationIssues: [
+              LocalizationIssue(
+                languageCode: 'es',
+                languageName: 'Spanish',
+                missingCount: 3,
+                totalCount: 4,
+                problemCounts: {
+                  LocalizationTranslationProblemType.missing: 1,
+                  LocalizationTranslationProblemType.empty: 1,
+                  LocalizationTranslationProblemType.unchanged: 1,
+                  LocalizationTranslationProblemType.unusedKey: 1,
+                },
+                details: [
+                  LocalizationIssueDetail(
+                    filePath: '${l10nDir.path}/app_en.arb',
+                    lineNumber: 4,
+                    key: 'welcome',
+                    problemType: LocalizationTranslationProblemType.missing,
+                  ),
+                  LocalizationIssueDetail(
+                    filePath: '${l10nDir.path}/app_es.arb',
+                    lineNumber: 3,
+                    key: 'hello',
+                    problemType: LocalizationTranslationProblemType.unchanged,
+                  ),
+                  LocalizationIssueDetail(
+                    filePath: '${l10nDir.path}/app_es.arb',
+                    lineNumber: 4,
+                    key: 'welcome',
+                    problemType: LocalizationTranslationProblemType.empty,
+                  ),
+                  LocalizationIssueDetail(
+                    filePath: '${l10nDir.path}/app_en.arb',
+                    lineNumber: 5,
+                    key: 'orphanTitle',
+                    problemType: LocalizationTranslationProblemType.unusedKey,
+                  ),
+                ],
+              ),
+            ],
+          );
+
+          final output = buildReportLines(
+            projectMetrics,
+            listMode: ReportListMode.full,
+          );
+          final joined = output.join('\n');
+
+          expect(joined, contains('Localization Summary:'));
+          expect(joined, contains('- Base language: English (en)'));
+          expect(joined, contains('- Total translation keys: 4'));
+          expect(joined, contains('- Supported languages: 2'));
+          expect(joined, contains('- Problem locales: 1'));
+          expect(joined, contains('- Spanish (es):'));
+          expect(joined, contains('25% coverage'));
+          expect(joined, contains('app_en.arb:4'));
+          expect(joined, contains('app_en.arb:5'));
+          expect(joined, contains('app_es.arb:3'));
+          expect(joined, contains('app_es.arb:4'));
+          expect(joined, contains('unused key orphanTitle in app source'));
+          expect(joined, isNot(contains('•')));
+        } finally {
+          if (await tempDir.exists()) {
+            await tempDir.delete(recursive: true);
+          }
+        }
+      },
+    );
 
     test('should not truncate lists when listMode is full', () {
       final magicIssues = List.generate(

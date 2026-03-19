@@ -167,7 +167,7 @@ void main() {
           ),
         );
 
-        expect(result.complianceScore, equals(88));
+        expect(result.complianceScore, equals(92));
       },
     );
 
@@ -349,6 +349,7 @@ ProjectMetricsAnalysisInput _buildInput({
     deadCodeIssues: const [],
     duplicateCodeIssues: const [],
     documentationIssues: const [],
+    localizationIssues: const [],
     layersEdgeCount: layersEdgeCount,
     usesLocalization: usesLocalization,
     ignoreDirectivesCount: ignoreDirectivesCount,
@@ -364,5 +365,6 @@ ProjectMetricsAnalysisInput _buildInput({
     deadCodeAnalyzerEnabled: deadCodeAnalyzerEnabled,
     duplicateCodeAnalyzerEnabled: duplicateCodeAnalyzerEnabled,
     documentationAnalyzerEnabled: documentationAnalyzerEnabled,
+    localizationAnalyzerEnabled: documentationAnalyzerEnabled,
   );
 }

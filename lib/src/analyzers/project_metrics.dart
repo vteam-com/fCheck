@@ -4,6 +4,7 @@ import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
 import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
+import 'package:fcheck/src/analyzers/localization/localization_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_input.dart';
@@ -73,6 +74,9 @@ class ProjectMetrics {
 
   /// List of documentation issues found in the project.
   final List<DocumentationIssue> documentationIssues;
+
+  /// List of localization coverage issues found in the project.
+  final List<LocalizationIssue> localizationIssues;
 
   /// Total number of dependency edges in the layers graph.
   final int layersEdgeCount;
@@ -172,6 +176,9 @@ class ProjectMetrics {
   /// or imports of generated localization files.
   final bool usesLocalization;
 
+  /// Absolute path to the analysis root directory.
+  final String analysisRootPath;
+
   /// The version of the analyzed project as defined in its pubspec.yaml.
   final String version;
 
@@ -231,6 +238,9 @@ class ProjectMetrics {
 
   /// Whether the documentation analyzer was enabled for this run.
   final bool documentationAnalyzerEnabled;
+
+  /// Whether the localization analyzer was enabled for this run.
+  final bool localizationAnalyzerEnabled;
 
   /// Creates a new ProjectMetrics instance.
   ///
@@ -306,6 +316,7 @@ class ProjectMetrics {
     required this.deadCodeIssues,
     this.duplicateCodeIssues = const [],
     this.documentationIssues = const [],
+    this.localizationIssues = const [],
     required this.layersEdgeCount,
     required this.layersCount,
     required this.dependencyGraph,
@@ -322,6 +333,7 @@ class ProjectMetrics {
     this.supportsLinux = false,
     this.supportsWeb = false,
     this.usesLocalization = false,
+    this.analysisRootPath = '',
     this.excludedFilesCount = 0,
     this.testDirectoriesCount = 0,
     this.testFilesCount = 0,
@@ -349,6 +361,7 @@ class ProjectMetrics {
     this.deadCodeAnalyzerEnabled = true,
     this.duplicateCodeAnalyzerEnabled = true,
     this.documentationAnalyzerEnabled = true,
+    this.localizationAnalyzerEnabled = true,
   });
 
   late final ProjectMetricsAnalysisResult _analysisResult = _metricsAnalyzer
@@ -367,6 +380,7 @@ class ProjectMetrics {
           deadCodeIssues: deadCodeIssues,
           duplicateCodeIssues: duplicateCodeIssues,
           documentationIssues: documentationIssues,
+          localizationIssues: localizationIssues,
           layersEdgeCount: layersEdgeCount,
           usesLocalization: usesLocalization,
           ignoreDirectivesCount: ignoreDirectivesCount,
@@ -382,6 +396,7 @@ class ProjectMetrics {
           deadCodeAnalyzerEnabled: deadCodeAnalyzerEnabled,
           duplicateCodeAnalyzerEnabled: duplicateCodeAnalyzerEnabled,
           documentationAnalyzerEnabled: documentationAnalyzerEnabled,
+          localizationAnalyzerEnabled: localizationAnalyzerEnabled,
         ),
       );
 
@@ -438,6 +453,7 @@ class ProjectMetrics {
       'deadCodeIssues': deadCodeIssues.length,
       'duplicateCodeIssues': duplicateCodeIssues.length,
       'documentationIssues': documentationIssues.length,
+      'localizationIssues': localizationIssues.length,
       'complianceScore': complianceScore,
     },
     'layers': {
@@ -461,6 +477,7 @@ class ProjectMetrics {
     'deadCodeIssues': deadCodeIssues.map((i) => i.toJson()).toList(),
     'duplicateCodeIssues': duplicateCodeIssues.map((i) => i.toJson()).toList(),
     'documentationIssues': documentationIssues.map((i) => i.toJson()).toList(),
+    'localizationIssues': localizationIssues.map((i) => i.toJson()).toList(),
     'tests': {
       'imports': testImportCount,
       'consumedFiles': testConsumedFilesCount,

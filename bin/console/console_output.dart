@@ -3,6 +3,9 @@ import 'dart:io';
 
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
+import 'package:fcheck/src/analyzers/localization/localization_delegate.dart';
+import 'package:fcheck/src/analyzers/localization/localization_issue.dart';
+import 'package:fcheck/src/analyzers/localization/localization_report_scanner.dart';
 import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:fcheck/src/input_output/number_format_utils.dart';
@@ -14,6 +17,7 @@ import 'package:fcheck/src/models/ignore_inventory.dart';
 import 'package:fcheck/src/models/project_type.dart';
 
 import 'console_common.dart';
+import 'console_output_localization_report.dart';
 
 part 'console_output_report.dart';
 part 'console_output_report_helpers.dart';

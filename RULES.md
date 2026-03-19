@@ -14,6 +14,7 @@ fCheck is a Dart CLI tool for analyzing Flutter and Dart project quality. It pro
 - Flutter widget member sorting
 - Code size threshold analysis
 - Layer dependency analysis and visualization
+- Localization coverage and translation completeness analysis
 - Project metrics (files, folders, LOC, comment ratios, widget implementation counts, literal inventory with duplicate ratios, and test discovery counts including test case totals)
 
 ## Domain Rules (Start Here)
@@ -24,8 +25,42 @@ fCheck is a Dart CLI tool for analyzing Flutter and Dart project quality. It pro
 - `RULES_SECRETS.md` for secret/PII detection rules.
 - `RULES_DUPLICATE_CODE.md` for duplicate code detection rules.
 - `RULES_DOCUMENTATION.md` for README/API documentation quality rules.
+- `RULES_LOCALIZATION.md` for localization coverage and translation completeness rules.
+- Localization rules also include orphan English ARB key detection based on actual app-source usage under `lib/`.
 - `RULES_SORTING.md` for Flutter widget member ordering rules.
 - `RULES_LAYERS.md` for dependency graph and layer analysis rules.
+
+## Analyzer Naming and Sorting Conventions
+
+All analyzers must follow these strict naming and sorting conventions:
+
+### Display Naming Rules
+
+- **First Letter Uppercase**: All analyzer display names must start with an uppercase letter
+- **Title Case**: Use title case for multi-word analyzer names (e.g., "One class per file", "Source sorting")
+- **Consistent Capitalization**: Maintain consistent capitalization patterns across all analyzers
+
+### Sorting Rules
+
+- **Alphabetical Order**: Analyzers must be displayed in strict alphabetical order by their display names
+- **Sort Key Consistency**: Sort keys must match the analyzer title mapping in `console_output_report_helpers.dart`
+- **Underscore Format**: Sort keys use underscores (e.g., 'hardcoded_strings') while display names use spaces
+
+### Analyzer Display Order (Current)
+
+1. Checks bypassed
+2. Code size  
+3. Dead code
+4. Documentation
+5. Duplicate code
+6. Layers architecture
+7. Localization
+8. Magic numbers
+9. One class per file
+10. Secrets
+11. Source sorting
+12. Hardcoded strings
+
 - `RULES_LOC.md` for code-size thresholds, scoring, and reporting.
 - `RULE_METRICS.md` for project metrics analyzer architecture.
 - `RULE_SCORE.md` for overall compliance scoring rules.

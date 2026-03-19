@@ -75,6 +75,7 @@ void _populateAnalyzerBlocks(_ReportContext ctx, List<_ListBlock> listBlocks) {
     detailFormatter: (issue) => issue.format() as String,
     moreConnector: AppStrings.and,
   );
+  _addCustomLocalizationBlock(ctx, listBlocks);
   _addLayersBlock(ctx, listBlocks);
 }
 
@@ -121,7 +122,9 @@ void _appendOrderedAnalyzerBlocks(
     final block = orderedBlocks[index];
     final analyzerScore = ctx.analyzerScoresByKey[block.analyzerKey] ?? 0;
     final analyzerIssueCount =
-        ctx.analyzerIssueCountsByKey[block.analyzerKey] ?? 0;
+        block.issueCountOverride ??
+        ctx.analyzerIssueCountsByKey[block.analyzerKey] ??
+        0;
     final analyzerEnabled =
         ctx.analyzerEnabledByKey[block.analyzerKey] ?? false;
     final analyzerDeductionPercent =
@@ -129,13 +132,21 @@ void _appendOrderedAnalyzerBlocks(
     final hidePassedSummaryLine =
         analyzerEnabled &&
         analyzerScore == _percentageMultiplier &&
-        analyzerIssueCount == 0;
+        analyzerIssueCount == 0 &&
+        block.analyzerKey != 'localization'; // Don't hide for localization
+
     lines.add(
       _analyzerSectionHeader(
         title: block.analyzerTitle,
+        analyzerKey: block.analyzerKey,
         enabled: analyzerEnabled,
         issueCount: analyzerIssueCount,
         deductionPercent: analyzerDeductionPercent,
+        trailingLabel:
+            block.trailingLabel ??
+            (block.analyzerKey == 'localization' && !ctx.usesLocalization
+                ? ': ${AppStrings.off}'
+                : null),
       ),
     );
     final firstSummaryLine = _withoutLeadingStatusTag(
@@ -761,5 +772,103 @@ void _addIssueListAnalyzerBlock(
     status: status,
     sortKey: sortKey,
     blockLines: blockLines,
+  );
+}
+
+/// Adds a localization analyzer block.
+///
+/// When localization is disabled, it shows a skipped line.
+/// When localization is not used by the project, it reports `OFF`.
+/// When localization is used and there are no issues, it lists supported
+/// locales.
+/// When issues exist, it prints a detailed summary and per-locale stats.
+void _addCustomLocalizationBlock(
+  _ReportContext ctx,
+  List<_ListBlock> listBlocks,
+) {
+  if (!ctx.localizationAnalyzerEnabled) {
+    _addListBlock(
+      listBlocks,
+      status: _ListBlockStatus.disabled,
+      sortKey: 'localization',
+      blockLines: [
+        '${skipTag()} Localization check skipped (${AppStrings.disabled}).',
+      ],
+    );
+    return;
+  }
+
+  // Check if the project actually uses localization
+  if (!ctx.usesLocalization) {
+    _addListBlock(
+      listBlocks,
+      status: _ListBlockStatus.disabled,
+      sortKey: 'localization',
+      trailingLabel: ': ${AppStrings.off}',
+      blockLines: [''],
+    );
+    return;
+  }
+
+  final scanResult = scanLocalizationLocales(ctx.analysisRootPath);
+  final localizationIssues = ctx.localizationIssues.isNotEmpty
+      ? List<LocalizationIssue>.from(ctx.localizationIssues)
+      : (ctx.analysisRootPath.trim().isEmpty
+            ? buildLocalizationIssuesFromScanResult(scanResult)
+            : LocalizationDelegate().analyzeProject(
+                Directory(ctx.analysisRootPath),
+              ));
+  final localeStats = scanResult.localeStats;
+  final sortedCodes = localeStats.keys.toList()..sort();
+  final supportedLocalesLabel = sortedCodes.isEmpty
+      ? ''
+      : sortedCodes
+            .map((code) {
+              final stat = localeStats[code];
+              final translationCount = code == scanResult.baseLocaleCode
+                  ? scanResult.baseTranslationCount
+                  : (stat?.translationCount ?? 0);
+              final brightCode = _colorizeBold(
+                code.toUpperCase(),
+                _ansiBlueBright,
+              );
+              return '$brightCode(${formatCount(translationCount)})';
+            })
+            .join(', ');
+  final hasLocalizationGaps =
+      scanResult.baseTranslationCount > 0 &&
+      localeStats.values.any(
+        (stat) =>
+            stat.translationCount < scanResult.baseTranslationCount &&
+            stat.languageCode != scanResult.baseLocaleCode,
+      );
+
+  if (!hasLocalizationGaps && localizationIssues.isEmpty) {
+    _addListBlock(
+      listBlocks,
+      status: _ListBlockStatus.success,
+      sortKey: 'localization',
+      trailingLabel: supportedLocalesLabel.isEmpty
+          ? null
+          : ' $supportedLocalesLabel',
+      blockLines: [''],
+    );
+    return;
+  }
+
+  final lines = buildLocalizationWarningLines(
+    analysisRootPath: ctx.analysisRootPath,
+    localizationIssues: localizationIssues,
+    listMode: ctx.listMode,
+    effectiveListItemLimit: ctx.effectiveListItemLimit,
+    filenamesOnly: ctx.filenamesOnly,
+  );
+
+  _addListBlock(
+    listBlocks,
+    status: _ListBlockStatus.warning,
+    sortKey: 'localization',
+    blockLines: lines,
+    issueCountOverride: localizationIssues.length,
   );
 }

@@ -20,6 +20,7 @@ const int _ansiOrange = 33;
 const String _ansiOrangeCode = '38;5;208';
 const int _ansiRed = 31;
 const int _ansiRedBright = 91;
+const int _ansiBlueBright = 94;
 const int _ansiGray = 90;
 const int _ansiWhiteBright = 97;
 final RegExp _leadingStatusTagPattern = RegExp(

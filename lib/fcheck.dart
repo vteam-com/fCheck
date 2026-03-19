@@ -46,6 +46,8 @@ import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_visitor.
 import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
 import 'package:fcheck/src/analyzers/layers/layers_delegate.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
+import 'package:fcheck/src/analyzers/localization/localization_delegate.dart';
+import 'package:fcheck/src/analyzers/localization/localization_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_delegate.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
@@ -237,6 +239,7 @@ class AnalyzeFolder {
     final documentationEnabled = _isAnalyzerEnabled(
       AnalyzerDomain.documentation,
     );
+    final localizationEnabled = _isAnalyzerEnabled(AnalyzerDomain.localization);
     final hardcodedStringsFocus = projectType == ProjectType.flutter
         ? HardcodedStringFocus.flutterWidgets
         : projectType == ProjectType.dart
@@ -268,6 +271,7 @@ class AnalyzeFolder {
           packageName: pubspecInfo.packageName,
         ),
       if (documentationEnabled) DocumentationDelegate(),
+      if (localizationEnabled) LocalizationDelegate(),
     ];
 
     final unifiedAnalyzer = AnalyzerRunner(
@@ -367,12 +371,18 @@ class AnalyzeFolder {
           )
         : <CodeSizeArtifact>[];
 
+    // Perform project-wide localization analysis
+    final localizationIssues = localizationEnabled
+        ? LocalizationDelegate().analyzeProject(projectDir)
+        : <LocalizationIssue>[];
+
     return ProjectMetrics(
       totalFolders: totalFolders,
       totalFiles: totalFiles,
       totalDartFiles: dartFiles.length,
       totalLinesOfCode: metricsAggregation.totalLinesOfCode,
       totalCommentLines: metricsAggregation.totalCommentLines,
+      analysisRootPath: projectDir.path,
       totalFunctionCount: metricsAggregation.totalFunctionCount,
       totalStringLiteralCount: metricsAggregation.totalStringLiteralCount,
       totalNumberLiteralCount: metricsAggregation.totalNumberLiteralCount,
@@ -428,6 +438,7 @@ class AnalyzeFolder {
           metricsAggregation.ignoreDirectiveCountsByFile,
       secretIssues: secretIssues,
       documentationIssues: documentationIssues,
+      localizationIssues: localizationIssues,
       duplicateCodeIssues: duplicateCodeIssues,
       deadCodeIssues: deadCodeIssues,
       oneClassPerFileAnalyzerEnabled: oneClassPerFileEnabled,
@@ -440,6 +451,7 @@ class AnalyzeFolder {
       deadCodeAnalyzerEnabled: deadCodeEnabled,
       duplicateCodeAnalyzerEnabled: duplicateCodeEnabled,
       documentationAnalyzerEnabled: documentationEnabled,
+      localizationAnalyzerEnabled: localizationEnabled,
     );
   }
 

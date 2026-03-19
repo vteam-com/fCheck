@@ -248,12 +248,6 @@ void _appendLiteralsSection(List<String> lines, _ReportContext ctx) {
   lines.add(dividerLine(AppStrings.literalsDivider));
   lines.add(
     _labelValueLine(
-      label: AppStrings.localization,
-      value: ctx.usesLocalization ? AppStrings.on : AppStrings.off,
-    ),
-  );
-  lines.add(
-    _labelValueLine(
       label: AppStrings.strings,
       value: _literalInventorySummary(
         totalCount: ctx.totalStringLiteralCount,

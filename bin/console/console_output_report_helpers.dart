@@ -34,6 +34,7 @@ const Map<String, String> _analyzerTitleByKey = {
   'dead_code': 'Dead code',
   'duplicate_code': 'Duplicate code',
   'documentation': 'Documentation',
+  'localization': 'Localization',
   'suppression_hygiene': 'Checks bypassed',
 };
 
@@ -181,9 +182,11 @@ String _analyzerStatusIndicator({
 /// Builds an analyzer header line with title, status, and deduction.
 String _analyzerSectionHeader({
   required String title,
+  required String analyzerKey,
   required bool enabled,
   required int issueCount,
   required double deductionPercent,
+  String? trailingLabel,
 }) {
   final titleColor = enabled ? _ansiWhiteBright : _ansiGray;
   final headerTitle = _colorizeBold(
@@ -195,15 +198,27 @@ String _analyzerSectionHeader({
     scorePercent: _percentageMultiplier - deductionPercent.round(),
     issueCount: issueCount,
   );
+  final trailingText = trailingLabel == null
+      ? ''
+      : _colorize(
+          trailingLabel,
+          analyzerKey == 'localization' ? _ansiGray : _ansiWhiteBright,
+        );
   final deductionText = _analyzerDeductionValue(
     enabled: enabled,
     issueCount: issueCount,
     deductionPercent: deductionPercent,
   );
-  if (deductionText.isEmpty) {
+  if (deductionText.isEmpty && trailingText.isEmpty) {
     return '$statusText $headerTitle';
   }
-  return '$statusText $headerTitle $deductionText';
+  if (deductionText.isEmpty) {
+    return '$statusText $headerTitle $trailingText';
+  }
+  if (trailingText.isEmpty) {
+    return '$statusText $headerTitle $deductionText';
+  }
+  return '$statusText $headerTitle $deductionText $trailingText';
 }
 
 /// Formats the deduction suffix shown in analyzer section headers.
@@ -316,12 +331,16 @@ class _ListBlock {
   final String analyzerKey;
   final String analyzerTitle;
   final List<String> lines;
+  final String? trailingLabel;
+  final int? issueCountOverride;
 
   const _ListBlock({
     required this.status,
     required this.analyzerKey,
     required this.analyzerTitle,
     required this.lines,
+    this.trailingLabel,
+    this.issueCountOverride,
   });
 }
 
@@ -331,6 +350,8 @@ void _addListBlock(
   required _ListBlockStatus status,
   required String sortKey,
   required List<String> blockLines,
+  String? trailingLabel,
+  int? issueCountOverride,
 }) {
   if (blockLines.isEmpty) {
     return;
@@ -342,6 +363,8 @@ void _addListBlock(
       analyzerKey: analyzerKey,
       analyzerTitle: _analyzerTitleForKey(analyzerKey),
       lines: blockLines,
+      trailingLabel: trailingLabel,
+      issueCountOverride: issueCountOverride,
     ),
   );
 }

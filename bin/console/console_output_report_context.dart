@@ -51,6 +51,7 @@ class _ReportContext {
 
   final List hardcodedStringIssues;
   final bool usesLocalization;
+  final String analysisRootPath;
   final List magicNumberIssues;
   final List secretIssues;
   final List deadCodeIssues;
@@ -59,6 +60,7 @@ class _ReportContext {
   final List deadFunctionIssues;
   final List unusedVariableIssues;
   final List documentationIssues;
+  final List localizationIssues;
   final List duplicateCodeIssues;
   final List sourceSortIssues;
   final List layersIssues;
@@ -73,6 +75,7 @@ class _ReportContext {
   final bool deadCodeAnalyzerEnabled;
   final bool duplicateCodeAnalyzerEnabled;
   final bool documentationAnalyzerEnabled;
+  final bool localizationAnalyzerEnabled;
   final bool layersAnalyzerEnabled;
 
   final List<({String title, int threshold, List<CodeSizeArtifact> artifacts})>
@@ -138,6 +141,7 @@ class _ReportContext {
     required this.projectType,
     required this.hardcodedStringIssues,
     required this.usesLocalization,
+    required this.analysisRootPath,
     required this.magicNumberIssues,
     required this.secretIssues,
     required this.deadCodeIssues,
@@ -146,6 +150,7 @@ class _ReportContext {
     required this.deadFunctionIssues,
     required this.unusedVariableIssues,
     required this.documentationIssues,
+    required this.localizationIssues,
     required this.duplicateCodeIssues,
     required this.sourceSortIssues,
     required this.layersIssues,
@@ -159,6 +164,7 @@ class _ReportContext {
     required this.deadCodeAnalyzerEnabled,
     required this.duplicateCodeAnalyzerEnabled,
     required this.documentationAnalyzerEnabled,
+    required this.localizationAnalyzerEnabled,
     required this.layersAnalyzerEnabled,
     required this.codeSizeSections,
     required this.disabledAnalyzerKeys,
@@ -292,6 +298,8 @@ class _ReportContext {
         AnalyzerDomain.duplicateCode.configName,
       if (!metrics.documentationAnalyzerEnabled)
         AnalyzerDomain.documentation.configName,
+      if (!metrics.localizationAnalyzerEnabled)
+        AnalyzerDomain.localization.configName,
     ]..sort();
 
     final suppressionPenaltyPoints = metrics.suppressionPenaltyPoints;
@@ -315,6 +323,9 @@ class _ReportContext {
       for (final score in metrics.analyzerScores) score.key: score.enabled,
       'suppression_hygiene': true,
     };
+    if (!metrics.usesLocalization) {
+      analyzerEnabledByKey[AnalyzerDomain.localization.configName] = false;
+    }
     final enabledScoredAnalyzerCount = metrics.analyzerScores
         .where((score) => score.enabled)
         .where(
@@ -409,6 +420,7 @@ class _ReportContext {
       projectType: metrics.projectType,
       hardcodedStringIssues: metrics.hardcodedStringIssues,
       usesLocalization: metrics.usesLocalization,
+      analysisRootPath: metrics.analysisRootPath,
       magicNumberIssues: metrics.magicNumberIssues,
       secretIssues: metrics.secretIssues,
       deadCodeIssues: metrics.deadCodeIssues,
@@ -417,6 +429,7 @@ class _ReportContext {
       deadFunctionIssues: metrics.deadFunctionIssues,
       unusedVariableIssues: metrics.unusedVariableIssues,
       documentationIssues: metrics.documentationIssues,
+      localizationIssues: metrics.localizationIssues,
       duplicateCodeIssues: duplicateCodeIssues,
       sourceSortIssues: metrics.sourceSortIssues,
       layersIssues: metrics.layersIssues,
@@ -432,6 +445,7 @@ class _ReportContext {
       deadCodeAnalyzerEnabled: metrics.deadCodeAnalyzerEnabled,
       duplicateCodeAnalyzerEnabled: metrics.duplicateCodeAnalyzerEnabled,
       documentationAnalyzerEnabled: metrics.documentationAnalyzerEnabled,
+      localizationAnalyzerEnabled: metrics.localizationAnalyzerEnabled,
       layersAnalyzerEnabled: metrics.layersAnalyzerEnabled,
       codeSizeSections: codeSizeSections,
       disabledAnalyzerKeys: disabledAnalyzerKeys,

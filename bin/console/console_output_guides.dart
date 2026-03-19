@@ -26,6 +26,8 @@ String? _ignoreDirectiveForAnalyzer(AnalyzerDomain analyzer) {
       return IgnoreConfig.ignoreDirectiveForDeadCode;
     case AnalyzerDomain.duplicateCode:
       return IgnoreConfig.ignoreDirectiveForDuplicateCode;
+    case AnalyzerDomain.localization:
+      return null;
   }
 }
 
@@ -89,6 +91,18 @@ void printIgnoreSetupGuide() {
   for (final analyzer in sortedAnalyzers) {
     print('      - ${analyzer.configName}');
   }
+
+  print('');
+  print('Localization false positives:');
+  print(
+    '  - Mark intentional identical text or brand names with `@key.description: "reviewed"` or `DO NOT TRANSLATE` in the ARB metadata.',
+  );
+  print(
+    '  - Check for duplicate top-level ARB keys, placeholder mismatches, and empty strings before suppressing a finding.',
+  );
+  print(
+    '  - Remove English ARB keys that are no longer referenced from app code; unused base keys are reported as orphan strings.',
+  );
 }
 
 /// Prints scoring model guidance for compliance score calculation.

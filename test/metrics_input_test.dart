@@ -19,6 +19,7 @@ void main() {
         deadCodeIssues: [],
         duplicateCodeIssues: [],
         documentationIssues: [],
+        localizationIssues: [],
         layersEdgeCount: 5,
         usesLocalization: true,
         ignoreDirectivesCount: 3,
@@ -34,6 +35,7 @@ void main() {
         deadCodeAnalyzerEnabled: true,
         duplicateCodeAnalyzerEnabled: true,
         documentationAnalyzerEnabled: true,
+        localizationAnalyzerEnabled: true,
       );
 
       expect(input.totalDartFiles, equals(10));
@@ -68,6 +70,7 @@ void main() {
         deadCodeIssues: [],
         duplicateCodeIssues: [],
         documentationIssues: [],
+        localizationIssues: [],
         layersEdgeCount: 0,
         usesLocalization: false,
         ignoreDirectivesCount: 0,
@@ -83,6 +86,7 @@ void main() {
         deadCodeAnalyzerEnabled: false,
         duplicateCodeAnalyzerEnabled: false,
         documentationAnalyzerEnabled: false,
+        localizationAnalyzerEnabled: false,
       );
 
       expect(input.disabledAnalyzersCount, equals(5));

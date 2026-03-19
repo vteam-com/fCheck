@@ -20,6 +20,7 @@ fCheck provides fast local quality analysis for Flutter and Dart projects with 0
 - `duplicate_code`
 - `hardcoded_strings`
 - `layers`
+- `localization`
 - `magic_numbers`
 - `one_class_per_file`
 - `secrets`
@@ -83,6 +84,58 @@ final debugLabel = 'ContactsNotifier';
 ```
 
 Use suppression sparingly. The preferred path is to extract or localize the string rather than silence the rule.
+
+### Localization: how it works
+
+- fCheck automatically detects when a project uses Flutter localization and analyzes translation completeness.
+- Scans for ARB files (`.arb`) in `lib/l10n/` directory and analyzes translation coverage across all supported languages.
+- Falls back to any project ARB files when `lib/l10n/` has none, and prefers English as the base language when available.
+- Identifies missing translations by comparing each language file against the base language.
+- Reports coverage percentage and missing translation count for each incomplete language.
+- Supports common ARB file naming patterns: `app_en.arb`, `messages_es.arb`, `l10n_fr.arb`, etc.
+- Supports locale variants such as `app_pt_BR.arb` and `app_zh_Hans.arb`.
+- Handles metadata keys (starting with `@` or `@@`) appropriately by excluding them from translation analysis.
+- Respects `@key.description` hints such as `DO NOT TRANSLATE`, `ignore`, or `reviewed` in either the base ARB or translated ARB and excludes those keys from coverage checks.
+- Treats empty strings, untranslated copies, and placeholder mismatches as incomplete translations.
+- Warns on duplicate top-level ARB keys so overwritten entries do not go unnoticed.
+- Warns when an English base-locale key exists in ARB but is never referenced from app Dart source under `lib/`, helping catch orphan/dead strings.
+
+### Localization: what it reports
+
+For each language with incomplete translations:
+
+- Language code (e.g., 'es', 'fr', 'de')
+- Language display name (e.g., 'Spanish', 'French', 'German')
+- Number of missing translations
+- Total number of strings in base language
+- Coverage percentage (0.0% to 100.0%)
+
+### Localization: best practices
+
+- Ensure all user-facing strings are translated before releasing new features.
+- Use descriptive keys in ARB files to maintain translation context.
+- Regularly review translation completeness, especially when adding new features.
+- Consider using translation management tools for large-scale projects.
+- Test your app with different locales to ensure proper fallback behavior.
+
+### Localization false positives
+
+Use the localization guidance from `fcheck --help-ignore` to handle findings that are intentional or project-specific:
+
+- Intentional identical text or brand names: add ARB metadata such as `@key.description: "reviewed"` or `DO NOT TRANSLATE`
+- Expected non-translations: use `ignore` in the key description when you want fCheck to skip the entry
+- Duplicate keys: fix the ARB file so each top-level key appears only once; the analyzer warns because later entries overwrite earlier ones
+- Placeholder drift or empty strings: correct the translation, do not suppress unless the value is intentionally exempted
+- Unused English keys: remove orphan ARB entries that are no longer referenced from app code, or wire the key back into the UI if it is still needed
+
+Example:
+
+```arb
+"anapayTitle": "anapay",
+"@anapayTitle": {
+  "description": "reviewed"
+}
+```
 
 Code-size LOC note:
 
