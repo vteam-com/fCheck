@@ -9,16 +9,6 @@ class TestCaseVisitor extends RecursiveAstVisitor<void> {
   int testCaseCount = 0;
 
   @override
-  void visitFunctionExpressionInvocation(FunctionExpressionInvocation node) {
-    final function = node.function;
-    if (function is SimpleIdentifier &&
-        _testCaseFunctionNames.contains(function.name)) {
-      testCaseCount++;
-    }
-    super.visitFunctionExpressionInvocation(node);
-  }
-
-  @override
   void visitMethodInvocation(MethodInvocation node) {
     if (_testCaseFunctionNames.contains(node.methodName.name)) {
       testCaseCount++;

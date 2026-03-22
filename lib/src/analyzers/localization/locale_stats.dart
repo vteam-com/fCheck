@@ -1,5 +1,3 @@
-import 'package:fcheck/src/analyzers/localization/localization_issue.dart';
-
 /// Represents localization statistics for a supported locale.
 class LocaleStats {
   /// Constant for 100% coverage percentage.
@@ -34,17 +32,6 @@ class LocaleStats {
 
   /// Whether this locale has any translations at all.
   bool get hasTranslations => translationCount > 0;
-
-  /// Creates a locale stats from a localization issue.
-  factory LocaleStats.fromIssue(LocalizationIssue issue, int translationCount) {
-    return LocaleStats(
-      languageCode: issue.languageCode,
-      languageName: issue.languageName,
-      translationCount: translationCount,
-      missingCount: issue.missingCount,
-      coveragePercentage: issue.coveragePercentage,
-    );
-  }
 
   /// Converts this locale stats to a JSON-compatible map.
   Map<String, dynamic> toJson() => {

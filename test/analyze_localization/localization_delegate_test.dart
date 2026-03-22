@@ -661,6 +661,38 @@ class AppLocalizations {
       expect(issue2.coveragePercentage, equals(_fiftyPercent));
     });
 
+    test('issue details toJson() returns correct structure', () async {
+      final l10nDir = Directory(p.join(tempDir.path, _l10nRelativePath));
+      await l10nDir.create(recursive: true);
+
+      await _writeArbFile(l10nDir, _englishArb, {
+        '@@locale': 'en',
+        _helloKey: 'Hello',
+      });
+      await _writeArbFile(l10nDir, _spanishArb, {
+        '@@locale': 'es',
+        _helloKey: 'Hello', // same value → flagged as untranslated
+      });
+
+      final result = delegate.analyzeProject(tempDir);
+
+      expect(result, hasLength(_one));
+      final issue = result.first;
+      expect(issue.details, isNotEmpty);
+
+      final detail = issue.details.first;
+      final json = detail.toJson();
+
+      expect(json['filePath'], isA<String>());
+      expect(json['lineNumber'], isA<int>());
+      expect(json['key'], equals(_helloKey));
+      expect(json['problemType'], isA<String>());
+      expect(
+        json.keys,
+        containsAll(['filePath', 'lineNumber', 'key', 'problemType']),
+      );
+    });
+
     group('fix mode', () {
       late Directory fixTempDir;
 
