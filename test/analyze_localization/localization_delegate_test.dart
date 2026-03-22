@@ -579,6 +579,45 @@ class AppLocalizations {
       },
     );
 
+    test(
+      'analyzeProject does not flag key used via AppLocalizations.of()!.key',
+      () async {
+        final l10nDir = Directory(p.join(tempDir.path, _l10nRelativePath));
+        final libDir = Directory(p.join(tempDir.path, 'lib'));
+        await l10nDir.create(recursive: true);
+        await libDir.create(recursive: true);
+
+        await _writeArbFile(l10nDir, _englishArb, {
+          '@@locale': 'en',
+          _helloKey: 'Hello',
+        });
+        await File(p.join(libDir.path, 'main.dart')).writeAsString('''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+void useKey(BuildContext context) {
+  // null-assertion on a multi-line call
+  final msg = AppLocalizations.of(
+    // ignore: use_build_context_synchronously
+    context,
+  )!.$_helloKey;
+  print(msg);
+}
+''');
+        await File(
+          p.join(l10nDir.path, 'app_localizations.dart'),
+        ).writeAsString('''
+class AppLocalizations {
+  String get $_helloKey => 'Hello';
+}
+''');
+
+        final result = delegate.analyzeProject(tempDir);
+
+        expect(result, isEmpty);
+      },
+    );
+
     test('analyzeProject flags placeholder drift as missing', () async {
       final l10nDir = Directory(p.join(tempDir.path, _l10nRelativePath));
       await l10nDir.create(recursive: true);

@@ -18,7 +18,7 @@ const Set<String> _knownLocalizationAccessorNames = {
 };
 
 final RegExp _localizationMemberAccessPattern = RegExp(
-  r'\b(?:AppLocalizations|S)\.of\([^)]*\)\.([A-Za-z_][A-Za-z0-9_]*)\s*(?:\(|\b)',
+  r'\b(?:AppLocalizations|S)\.of\([^)]*\)[!?]?\.([A-Za-z_][A-Za-z0-9_]*)\s*(?:\(|\b)',
 );
 final RegExp _currentLocalizationMemberAccessPattern = RegExp(
   r'\b(?:AppLocalizations|S)\.current\.([A-Za-z_][A-Za-z0-9_]*)\s*(?:\(|\b)',
