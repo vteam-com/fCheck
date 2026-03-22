@@ -728,8 +728,15 @@ class LocalizationDelegate implements AnalyzerDelegate {
         hasLocalizationAccess;
     final accessorNames = _extractLocalizationAccessorNames(content);
     for (final accessorName in accessorNames) {
+      // This pattern matches dynamic localization member access such as
+      //   <accessorName>[!|?].memberName(…)
+      // It starts at a word boundary, then the escaped accessor name, then an
+      // optional Dart null-assertion or null-safe access operator (`!` or `?`)
+      // expressed as a non-capturing group `(?:!|\?)?`, followed by a dot,
+      // the member identifier, and finally either an opening parenthesis or
+      // a word boundary (to cover properties as well as method calls).
       final memberPattern = RegExp(
-        '\\b${RegExp.escape(accessorName)}\\.([A-Za-z_][A-Za-z0-9_]*)\\s*(?:\\(|\\b)',
+        '\\b${RegExp.escape(accessorName)}(?:!|\\?)?\\.([A-Za-z_][A-Za-z0-9_]*)\\s*(?:\\(|\\b)',
       );
       hasLocalizationAccess =
           _addUsedKeysFromMatches(

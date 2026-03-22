@@ -618,6 +618,86 @@ class AppLocalizations {
       },
     );
 
+    test(
+      'analyzeProject does not flag key used via l10n!.key (null assertion)',
+      () async {
+        final l10nDir = Directory(p.join(tempDir.path, _l10nRelativePath));
+        final libDir = Directory(p.join(tempDir.path, 'lib'));
+        await l10nDir.create(recursive: true);
+        await libDir.create(recursive: true);
+
+        await _writeArbFile(l10nDir, _englishArb, {
+          '@@locale': 'en',
+          _helloKey: 'Hello',
+        });
+        await File(p.join(libDir.path, 'main.dart')).writeAsString('''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+class SampleWidget extends StatelessWidget {
+  final AppLocalizations? l10n;
+  const SampleWidget({super.key, required this.l10n});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(l10n!.$_helloKey);
+  }
+}
+''');
+        await File(
+          p.join(l10nDir.path, 'app_localizations.dart'),
+        ).writeAsString('''
+class AppLocalizations {
+  String get $_helloKey => 'Hello';
+}
+''');
+
+        final result = delegate.analyzeProject(tempDir);
+
+        expect(result, isEmpty);
+      },
+    );
+
+    test(
+      'analyzeProject does not flag key used via loc?.key (null-safe access)',
+      () async {
+        final l10nDir = Directory(p.join(tempDir.path, _l10nRelativePath));
+        final libDir = Directory(p.join(tempDir.path, 'lib'));
+        await l10nDir.create(recursive: true);
+        await libDir.create(recursive: true);
+
+        await _writeArbFile(l10nDir, _englishArb, {
+          '@@locale': 'en',
+          _helloKey: 'Hello',
+        });
+        await File(p.join(libDir.path, 'main.dart')).writeAsString('''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+class SampleWidget extends StatelessWidget {
+  final AppLocalizations? loc;
+  const SampleWidget({super.key, required this.loc});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(loc?.$_helloKey ?? '');
+  }
+}
+''');
+        await File(
+          p.join(l10nDir.path, 'app_localizations.dart'),
+        ).writeAsString('''
+class AppLocalizations {
+  String get $_helloKey => 'Hello';
+}
+''');
+
+        final result = delegate.analyzeProject(tempDir);
+
+        expect(result, isEmpty);
+      },
+    );
+
     test('analyzeProject flags placeholder drift as missing', () async {
       final l10nDir = Directory(p.join(tempDir.path, _l10nRelativePath));
       await l10nDir.create(recursive: true);
