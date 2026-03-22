@@ -59,8 +59,16 @@ class _LocalizationKeyUsageScanResult {
 
 /// Delegate adapter for localization coverage analysis.
 class LocalizationDelegate implements AnalyzerDelegate {
+  /// Whether to automatically fix ARB files by sorting keys and removing
+  /// duplicate entries.
+  final bool fix;
+
   /// Creates a delegate for localization analysis.
-  LocalizationDelegate();
+  ///
+  /// When [fix] is true, [analyzeProject] will rewrite each ARB file with
+  /// its keys sorted alphabetically (keeping each `key` / `@key` pair
+  /// together) and any duplicate keys removed.
+  LocalizationDelegate({this.fix = false});
 
   /// Analyzes a project for localization coverage.
   ///
@@ -502,12 +510,87 @@ class LocalizationDelegate implements AnalyzerDelegate {
     return issues;
   }
 
+  /// Sorts and deduplicates a single ARB file, writing the result back to
+  /// disk when changes are needed.
+  ///
+  /// Keys are sorted alphabetically (case-insensitive). For each translatable
+  /// key, its corresponding `@key` metadata entry is placed immediately after
+  /// it. File-level `@@...` entries (e.g. `@@locale`) are preserved at the
+  /// top. Duplicate keys are collapsed to their first decoded occurrence.
+  void _fixArbFile(File arbFile) {
+    final String rawContent;
+    try {
+      rawContent = arbFile.readAsStringSync();
+    } catch (_) {
+      return;
+    }
+
+    final Object? decoded;
+    try {
+      decoded = jsonDecode(rawContent);
+    } catch (_) {
+      return;
+    }
+    if (decoded is! Map) {
+      return;
+    }
+    final arbMap = Map<String, dynamic>.from(decoded);
+
+    final headerEntries = <MapEntry<String, dynamic>>[];
+    final metaByKey = <String, dynamic>{};
+    final translationKeys = <String>[];
+    final translationValues = <String, dynamic>{};
+
+    for (final entry in arbMap.entries) {
+      if (entry.key.startsWith('@@')) {
+        headerEntries.add(entry);
+      } else if (entry.key.startsWith('@')) {
+        metaByKey[entry.key] = entry.value;
+      } else {
+        translationKeys.add(entry.key);
+        translationValues[entry.key] = entry.value;
+      }
+    }
+
+    translationKeys.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+
+    final sortedMap = <String, dynamic>{};
+    for (final entry in headerEntries) {
+      sortedMap[entry.key] = entry.value;
+    }
+    for (final key in translationKeys) {
+      sortedMap[key] = translationValues[key];
+      final metaKey = '@$key';
+      if (metaByKey.containsKey(metaKey)) {
+        sortedMap[metaKey] = metaByKey[metaKey];
+      }
+    }
+    // Append orphan @key entries (metadata without a corresponding key).
+    for (final entry in metaByKey.entries) {
+      if (!translationValues.containsKey(entry.key.substring(1))) {
+        sortedMap[entry.key] = entry.value;
+      }
+    }
+
+    final newContent =
+        '${const JsonEncoder.withIndent('  ').convert(sortedMap)}\n';
+    if (newContent == rawContent) {
+      return;
+    }
+    arbFile.writeAsStringSync(newContent);
+  }
+
   /// Parses ARB files and delegates to the parsed-file comparison routine.
   List<LocalizationIssue> _analyzeArbFiles(
     Directory projectDir,
     List<File> arbFiles, {
     List<AnalysisFileContext> analyzedContexts = const [],
   }) {
+    if (fix) {
+      for (final arbFile in arbFiles) {
+        _fixArbFile(arbFile);
+      }
+    }
     final parsedArbFiles = <_ParsedLocalizationArbFile>[];
     for (final arbFile in arbFiles) {
       try {

@@ -278,7 +278,7 @@ class AnalyzeFolder {
           packageName: pubspecInfo.packageName,
         ),
       if (documentationEnabled) DocumentationDelegate(),
-      if (localizationEnabled) LocalizationDelegate(),
+      if (localizationEnabled) LocalizationDelegate(fix: fix),
     ];
 
     final unifiedAnalyzer = AnalyzerRunner(
@@ -388,10 +388,9 @@ class AnalyzeFolder {
 
     // Perform project-wide localization analysis
     final localizationIssues = localizationEnabled
-        ? LocalizationDelegate().analyzeProject(
-            projectDir,
-            analyzedContexts: analyzedContexts,
-          )
+        ? LocalizationDelegate(
+            fix: fix,
+          ).analyzeProject(projectDir, analyzedContexts: analyzedContexts)
         : <LocalizationIssue>[];
 
     return ProjectMetrics(

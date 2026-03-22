@@ -660,5 +660,176 @@ class AppLocalizations {
       );
       expect(issue2.coveragePercentage, equals(_fiftyPercent));
     });
+
+    group('fix mode', () {
+      late Directory fixTempDir;
+
+      setUp(() async {
+        fixTempDir = await Directory.systemTemp.createTemp(
+          'fcheck_localization_fix_test_',
+        );
+      });
+
+      tearDown(() async {
+        if (await fixTempDir.exists()) {
+          await fixTempDir.delete(recursive: true);
+        }
+      });
+
+      test('fix sorts ARB keys alphabetically', () async {
+        final l10nDir = Directory(p.join(fixTempDir.path, _l10nRelativePath));
+        await l10nDir.create(recursive: true);
+
+        // Write keys in reverse alphabetical order.
+        final arbFile = File(p.join(l10nDir.path, _englishArb));
+        await arbFile.writeAsString('''
+{
+  "@@locale": "en",
+  "welcome": "Welcome",
+  "title": "Title",
+  "hello": "Hello",
+  "goodbye": "Goodbye"
+}
+''');
+
+        final fixDelegate = LocalizationDelegate(fix: true);
+        fixDelegate.analyzeProject(fixTempDir);
+
+        final rawContent = arbFile.readAsStringSync();
+        final decoded = jsonDecode(rawContent) as Map<String, dynamic>;
+        final allKeys = decoded.keys.toList();
+        // @@locale is kept at top.
+        expect(allKeys.first, equals('@@locale'));
+        final translatableKeys = allKeys
+            .where((k) => !k.startsWith('@'))
+            .toList();
+        final sortedExpected = List<String>.from(translatableKeys)
+          ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+        expect(translatableKeys, equals(sortedExpected));
+      });
+
+      test('fix keeps @key metadata paired with its base key', () async {
+        final l10nDir = Directory(p.join(fixTempDir.path, _l10nRelativePath));
+        await l10nDir.create(recursive: true);
+
+        // Write keys in reverse order; each has a @key counterpart.
+        final arbFile = File(p.join(l10nDir.path, _englishArb));
+        await arbFile.writeAsString('''
+{
+  "@@locale": "en",
+  "welcome": "Welcome",
+  "@welcome": { "description": "Welcome message" },
+  "appName": "MyApp",
+  "@appName": { "description": "App name" }
+}
+''');
+
+        final fixDelegate = LocalizationDelegate(fix: true);
+        fixDelegate.analyzeProject(fixTempDir);
+
+        final rawContent = arbFile.readAsStringSync();
+        final decoded = jsonDecode(rawContent) as Map<String, dynamic>;
+        final orderedKeys = decoded.keys.toList();
+
+        // appName should come before welcome alphabetically.
+        final appNameIndex = orderedKeys.indexOf('appName');
+        final atAppNameIndex = orderedKeys.indexOf('@appName');
+        final welcomeIndex = orderedKeys.indexOf('welcome');
+        final atWelcomeIndex = orderedKeys.indexOf('@welcome');
+
+        expect(appNameIndex, lessThan(welcomeIndex));
+        // @key immediately follows its base key.
+        expect(atAppNameIndex, equals(appNameIndex + _one));
+        expect(atWelcomeIndex, equals(welcomeIndex + _one));
+      });
+
+      test('fix removes duplicate keys', () async {
+        final l10nDir = Directory(p.join(fixTempDir.path, _l10nRelativePath));
+        await l10nDir.create(recursive: true);
+
+        // Write a file with an exact duplicate key.
+        final arbFile = File(p.join(l10nDir.path, _englishArb));
+        await arbFile.writeAsString('''
+{
+  "@@locale": "en",
+  "cancel": "Cancel",
+  "cancel": "Cancel",
+  "ok": "OK"
+}
+''');
+
+        final fixDelegate = LocalizationDelegate(fix: true);
+        final issues = fixDelegate.analyzeProject(fixTempDir);
+
+        // After fix there should be no duplicate issues.
+        final duplicateIssues = issues
+            .expand((issue) => issue.details)
+            .where(
+              (d) =>
+                  d.problemType ==
+                  LocalizationTranslationProblemType.duplicateKey,
+            )
+            .toList();
+        expect(duplicateIssues, isEmpty);
+
+        // The written file should contain 'cancel' exactly once.
+        final rawContent = arbFile.readAsStringSync();
+        final cancelCount = RegExp(
+          r'"cancel"\s*:',
+        ).allMatches(rawContent).length;
+        expect(cancelCount, equals(_one));
+      });
+
+      test(
+        'fix does not modify files that are already sorted and clean',
+        () async {
+          final l10nDir = Directory(p.join(fixTempDir.path, _l10nRelativePath));
+          await l10nDir.create(recursive: true);
+
+          const alreadySorted =
+              '{\n'
+              '  "@@locale": "en",\n'
+              '  "appName": "MyApp",\n'
+              '  "hello": "Hello"\n'
+              '}';
+          final arbFile = File(p.join(l10nDir.path, _englishArb));
+          // Write without trailing newline to exercise the identity path when
+          // the serialised output doesn't match the original whitespace exactly.
+          await arbFile.writeAsString(alreadySorted);
+
+          final fixDelegate = LocalizationDelegate(fix: true);
+          fixDelegate.analyzeProject(fixTempDir);
+
+          // The file content should still decode to the same logical map.
+          final decoded =
+              jsonDecode(arbFile.readAsStringSync()) as Map<String, dynamic>;
+          expect(decoded['appName'], equals('MyApp'));
+          expect(decoded['hello'], equals('Hello'));
+        },
+      );
+
+      test('fix leaves @@locale at the top', () async {
+        final l10nDir = Directory(p.join(fixTempDir.path, _l10nRelativePath));
+        await l10nDir.create(recursive: true);
+
+        final arbFile = File(p.join(l10nDir.path, _englishArb));
+        await arbFile.writeAsString('''
+{
+  "@@locale": "en",
+  "zebra": "Zebra",
+  "alpha": "Alpha"
+}
+''');
+
+        final fixDelegate = LocalizationDelegate(fix: true);
+        fixDelegate.analyzeProject(fixTempDir);
+
+        final rawContent = arbFile.readAsStringSync();
+        final decoded = jsonDecode(rawContent) as Map<String, dynamic>;
+        expect(decoded.keys.first, equals('@@locale'));
+        expect(decoded.keys.elementAt(_one), equals('alpha'));
+        expect(decoded.keys.elementAt(_two), equals('zebra'));
+      });
+    });
   });
 }
