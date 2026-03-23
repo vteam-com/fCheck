@@ -789,6 +789,185 @@ void main() {
       expect(outerIndex, greaterThanOrEqualTo(0));
       expect(innerIndex, lessThan(outerIndex));
     });
+
+    test(
+      'adjacent same-row forward edges use near-straight Bezier routing',
+      () {
+        // Single node in each column → same Y → near-straight 1px-belly Bezier.
+        final result = LayersAnalysisResult(
+          issues: const [],
+          layers: const {'lib/src/a.dart': 0, 'lib/src/b.dart': 1},
+          dependencyGraph: const {
+            'lib/src/a.dart': ['lib/src/b.dart'],
+            'lib/src/b.dart': [],
+          },
+        );
+
+        final svg = exportGraphSvgFiles(result);
+
+        // Near-straight edge uses a cubic Bezier C command.
+        expect(
+          RegExp(r'<path d="M [^"]*C ').hasMatch(svg),
+          isTrue,
+          reason:
+              'adjacent same-row edge should use a near-straight Bezier C path',
+        );
+        // Should not use elbow Q commands on edge-class paths.
+        expect(
+          RegExp(r'<path d="M [^"]*H [^"]*Q [^"]*" class="edge').hasMatch(svg),
+          isFalse,
+          reason: 'adjacent same-row edge should not use elbow routing',
+        );
+      },
+    );
+
+    test('non-same-row forward edges use elbow H-V-H routing', () {
+      // a (col0 row0) and b (col0 row1) both point to c (col1 row0).
+      // b → c crosses rows (row1 → row0) so it must use elbow routing.
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/src/a.dart': 0, // row 0, col 0 (a < b alphabetically)
+          'lib/src/b.dart': 0, // row 1, col 0
+          'lib/src/c.dart': 1, // row 0, col 1 (2 incoming → highest priority)
+        },
+        dependencyGraph: const {
+          'lib/src/a.dart': ['lib/src/c.dart'], // row0 → row0: straight
+          'lib/src/b.dart': ['lib/src/c.dart'], // row1 → row0: elbow
+          'lib/src/c.dart': [],
+        },
+      );
+
+      final svg = exportGraphSvgFiles(result);
+
+      // b→c is an elbow edge: _extractFilesEdgeLaneX finds it via Q command.
+      final laneX = _extractFilesEdgeLaneX(
+        svg,
+        'lib/src/b.dart',
+        'lib/src/c.dart',
+      );
+      expect(
+        laneX,
+        isNotNull,
+        reason: 'non-same-row edge b→c should use elbow routing (Q command)',
+      );
+    });
+
+    test('parallel forward edges through same gap are staggered by 2px', () {
+      // Two crossing edges through the same gap (col 0 → col 1):
+      //   a (row 0) → d (row 1)  and  b (row 1) → c (row 0).
+      // Both are non-same-row adjacent → elbow routing with staggered laneX.
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/src/a.dart': 0,
+          'lib/src/b.dart': 0,
+          'lib/src/c.dart': 1,
+          'lib/src/d.dart': 1,
+        },
+        dependencyGraph: const {
+          'lib/src/a.dart': ['lib/src/d.dart'],
+          'lib/src/b.dart': ['lib/src/c.dart'],
+          'lib/src/c.dart': [],
+          'lib/src/d.dart': [],
+        },
+      );
+
+      final svg = exportGraphSvgFiles(result);
+
+      final laneXAD = _extractFilesEdgeLaneX(
+        svg,
+        'lib/src/a.dart',
+        'lib/src/d.dart',
+      );
+      final laneXBC = _extractFilesEdgeLaneX(
+        svg,
+        'lib/src/b.dart',
+        'lib/src/c.dart',
+      );
+
+      expect(laneXAD, isNotNull, reason: 'edge a→d should have a lane X');
+      expect(laneXBC, isNotNull, reason: 'edge b→c should have a lane X');
+      expect(
+        laneXAD,
+        isNot(equals(laneXBC)),
+        reason: 'lanes should be staggered',
+      );
+      expect(
+        (laneXAD! - laneXBC!).abs(),
+        closeTo(2.0, 0.01),
+        reason: 'stagger should be exactly 2 px',
+      );
+    });
+
+    test('backward edges in files SVG use Bezier routing', () {
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {'lib/src/a.dart': 0, 'lib/src/b.dart': 1},
+        dependencyGraph: const {
+          'lib/src/a.dart': [],
+          'lib/src/b.dart': ['lib/src/a.dart'],
+        },
+      );
+
+      final svg = exportGraphSvgFiles(result);
+
+      // Backward edge (col 1 → col 0) should use cubic Bezier C command.
+      expect(
+        RegExp(r'<path d="M [^"]*C ').hasMatch(svg),
+        isTrue,
+        reason: 'backward edge should use Bezier C routing',
+      );
+    });
+
+    test('skip edges route through intermediate column passage gaps', () {
+      // a (col 0) → d (col 2), crossing col 1 which has two nodes (top, bot).
+      // The multi-hop elbow must place its vertical transition in the gap
+      // to the left of col 1, then traverse col 1 horizontally at the
+      // passage Y (between the two col-1 nodes), then do the final elbow
+      // at laneX in the gap between col 1 and col 2.
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/src/a.dart': 0,
+          'lib/src/top.dart': 1,
+          'lib/src/bot.dart': 1,
+          'lib/src/d.dart': 2,
+        },
+        dependencyGraph: const {
+          'lib/src/a.dart': ['lib/src/d.dart'],
+          'lib/src/top.dart': [],
+          'lib/src/bot.dart': [],
+          'lib/src/d.dart': [],
+        },
+      );
+
+      final svg = exportGraphSvgFiles(result);
+
+      // Find the skip-edge path.
+      const title = 'lib/src/a.dart ▶ lib/src/d.dart';
+      final pathMatch = RegExp(
+        '<path d="([^"]+)" class="edge[^"]*"/>\\s*<title>${RegExp.escape(title)}</title>',
+      ).firstMatch(svg);
+      expect(pathMatch, isNotNull, reason: 'skip edge a→d should be present');
+      final pathData = pathMatch!.group(1)!;
+
+      // Multi-hop path must contain at least 4 Q corners:
+      //   2 for the intermediate col 1 entry/exit + 2 for the final laneX elbow.
+      final qCount = RegExp(r' Q ').allMatches(pathData).length;
+      expect(
+        qCount,
+        greaterThanOrEqualTo(4),
+        reason: 'skip edge should use multi-hop routing with ≥4 Q corners',
+      );
+      // Must have at least 3 H segments (to col-1 gap, across col 1, to laneX).
+      final hCount = RegExp(r' H ').allMatches(pathData).length;
+      expect(
+        hCount,
+        greaterThanOrEqualTo(3),
+        reason: 'skip edge should have ≥3 H segments',
+      );
+    });
   });
 }
 
@@ -799,4 +978,21 @@ double? _extractFolderEdgeColumnX(String svg, String titlePayload) {
   final match = pattern.firstMatch(svg);
   if (match == null) return null;
   return double.tryParse(match.group(1)!);
+}
+
+/// Extracts the lane X coordinate from an elbow edge in the files SVG.
+///
+/// Elbow path format: `M startX startY H h1End Q laneX startY laneX v1Start V ...`
+/// Returns the laneX value from the first Q command in the path.
+double? _extractFilesEdgeLaneX(String svg, String source, String target) {
+  final title = '$source ▶ $target';
+  final pattern = RegExp(
+    '<path d="([^"]+)" class="edge[^"]*"/>\\s*<title>${RegExp.escape(title)}</title>',
+  );
+  final match = pattern.firstMatch(svg);
+  if (match == null) return null;
+  final pathData = match.group(1)!;
+  final qPattern = RegExp(r'Q ([0-9]+(?:\.[0-9]+)?)');
+  final qMatch = qPattern.firstMatch(pathData);
+  return qMatch != null ? double.tryParse(qMatch.group(1)!) : null;
 }

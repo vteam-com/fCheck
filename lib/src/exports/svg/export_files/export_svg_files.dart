@@ -143,6 +143,7 @@ String exportGraphSvgFiles(
 
   // 1. Calculate positions
   final nodePositions = <String, Point<double>>{};
+  final colIndexByFile = <String, int>{};
 
   for (var colIndex = 0; colIndex < sortedLayers.length; colIndex++) {
     final layerNum = sortedLayers[colIndex];
@@ -153,9 +154,16 @@ String exportGraphSvgFiles(
 
     for (final file in files) {
       nodePositions[file] = Point(x.toDouble(), y.toDouble());
+      colIndexByFile[file] = colIndex;
       y += nodeHeight + nodeVerticalSpacing;
     }
   }
+
+  // Maps column index → list of files in that column (same order as layout).
+  final colFilesByIndex = <int, List<String>>{
+    for (var i = 0; i < sortedLayers.length; i++)
+      i: cleanedLayerGroups[sortedLayers[i]]!,
+  };
 
   // 2. Draw Layer Columns (Backgrounds)
   for (var colIndex = 0; colIndex < sortedLayers.length; colIndex++) {
@@ -202,49 +210,189 @@ String exportGraphSvgFiles(
     );
   }
 
-  // 4. Draw Edges
+  // Pre-compute lane slots for forward (sourceCol < targetCol) edges.
+  // Edges are grouped by the column gap they route through — the gap just
+  // before the target column (gapKey = targetColIdx - 1). All edges entering
+  // the same target column share the same stagger pool so their vertical
+  // segments are separated by _edgeLaneOffset pixels.
+  final forwardEdgesByTargetGap = <int, List<(String, String)>>{};
+  for (final fwdEntry in dependencyGraph.entries) {
+    final src = fwdEntry.key;
+    if (!nodePositions.containsKey(src)) continue;
+    final srcCol = colIndexByFile[src] ?? 0;
+    for (final tgt in fwdEntry.value) {
+      if (!nodePositions.containsKey(tgt)) continue;
+      final tgtCol = colIndexByFile[tgt] ?? 0;
+      if (srcCol < tgtCol) {
+        forwardEdgesByTargetGap.putIfAbsent(tgtCol - 1, () => []).add((
+          src,
+          tgt,
+        ));
+      }
+    }
+  }
+  final edgeLaneIndices = <String, int>{};
+  for (final gapEntry in forwardEdgesByTargetGap.entries) {
+    // Sort descending by Y-span: longest (farthest target) gets laneIdx 0
+    // → the leftmost (outermost) lane.  Shortest (nearest target) gets the
+    // rightmost (innermost) lane.  This ensures that no horizontal exit
+    // segment ever crosses the vertical segment of another edge in the same
+    // bundle — the classic "no-crossing fan-out" assignment.
+    final gapEdges = List<(String, String)>.from(gapEntry.value)
+      ..sort((a, b) {
+        final aSpan = _edgeYSpan(a.$1, a.$2, nodePositions, nodeHeight);
+        final bSpan = _edgeYSpan(b.$1, b.$2, nodePositions, nodeHeight);
+        return bSpan.compareTo(
+          aSpan,
+        ); // descending: longest → index 0 → leftmost
+      });
+    for (var i = 0; i < gapEdges.length; i++) {
+      edgeLaneIndices['${gapEdges[i].$1}|${gapEdges[i].$2}'] = i;
+    }
+  }
+
+  // 4. Build and sort all edges by Y-span descending, then render.
+  // Painting longest-span edges first (deepest vertical reach) puts them
+  // behind shorter edges.  Shorter-span and near-straight edges are painted
+  // last, on top, so the close connections always appear clean and unobscured.
+  final edgeRenderList =
+      <
+        ({
+          String source,
+          String target,
+          String pathData,
+          String cssClass,
+          double span,
+        })
+      >[];
+
   for (final entry in dependencyGraph.entries) {
     final source = entry.key;
     final targets = entry.value;
 
     if (!nodePositions.containsKey(source)) continue;
     final sourcePos = nodePositions[source]!;
+    final sourceColIdx = colIndexByFile[source] ?? 0;
 
     for (final target in targets) {
       if (!nodePositions.containsKey(target)) continue;
       final targetPos = nodePositions[target]!;
+      final targetColIdx = colIndexByFile[target] ?? 0;
 
-      // Anchor points: Source outgoing badge -> Target incoming badge
+      // Anchor points: vertically centred on the source/target node.
       /// Divisor for halving dimensions.
       const double halfDivisor = 2.0;
 
-      /// Factor for Bezier curve control points.
-      const double controlPointFactor = 0.5;
-
       final startX = sourcePos.x + nodeWidth; // Outgoing badge position
-      final startY = sourcePos.y + nodeHeight - badgeOffset;
+      final startY = sourcePos.y + nodeHeight / halfDivisor; // Vertical center
 
       final endX =
           targetPos.x + (badgeOffset / halfDivisor); // Incoming badge position
-      final endY = targetPos.y + badgeOffset;
-
-      // Bezier curve control points for smooth flow
-      final controlX1 = startX + (columnSpacing * controlPointFactor);
-      final controlX2 = endX - (columnSpacing * controlPointFactor);
+      final endY = targetPos.y + nodeHeight / halfDivisor; // Vertical center
 
       final isCycle = cyclicEdges.contains('$source|$target');
       final extraClass = isCycle ? ' cycleEdge' : '';
-      final pathData =
-          'M $startX $startY C $controlX1 $startY, $controlX2 $endY, $endX $endY';
+      final span = (endY - startY).abs();
 
-      renderEdgeWithTooltip(
-        buffer,
-        pathData: pathData,
+      final String pathData;
+      if (sourceColIdx < targetColIdx) {
+        final colDiff = targetColIdx - sourceColIdx;
+        if (colDiff == 1 && span < 1.0) {
+          // Adjacent column, same row: near-straight 1px-belly Bezier.
+          // A pure H path produces a zero-height bounding box which causes
+          // SVG objectBoundingBox gradients to render as invisible.
+          final midX = (startX + endX) / halfDivisor;
+          pathData =
+              'M $startX $startY '
+              'C $midX ${startY - _edgeStraightBellyHeight}, '
+              '$midX ${startY - _edgeStraightBellyHeight}, '
+              '$endX $endY';
+        } else {
+          // Elbow routing through the gap just before the target column.
+          final gapKey = targetColIdx - 1;
+          final laneIdx = edgeLaneIndices['$source|$target'] ?? 0;
+          final gapLeftX =
+              (margin + gapKey * (nodeWidth + columnSpacing) + nodeWidth)
+                  .toDouble();
+          final targetLeftX =
+              (margin + targetColIdx * (nodeWidth + columnSpacing)).toDouble();
+          // Anchor lanes from the left edge of the gap and grow rightward.
+          // This guarantees laneX is always inside the gap [gapLeftX, targetLeftX]
+          // regardless of how many edges share the same pool — preventing the
+          // backward H that occurs when a centered pool overflows into the
+          // preceding column.
+          final minLaneX = gapLeftX + _fileEdgeCornerRadius;
+          final maxLaneX = targetLeftX - _fileEdgeCornerRadius;
+          final laneX = (minLaneX + laneIdx * _edgeLaneOffset).clamp(
+            minLaneX,
+            maxLaneX,
+          );
+
+          if (colDiff == 1) {
+            // Adjacent columns: single H-V-H elbow.
+            pathData = _buildElbowEdgePath(startX, startY, endX, endY, laneX);
+          } else {
+            // Skip edge: route through intermediate column passage gaps so the
+            // horizontal traversal never overlaps intermediate node boxes.
+            final passageYs = <double>[];
+            final gapCenterXsList = <double>[];
+            final colRightXsList = <double>[];
+            for (var c = sourceColIdx + 1; c < targetColIdx; c++) {
+              final colLeftX = (margin + c * (nodeWidth + columnSpacing))
+                  .toDouble();
+              gapCenterXsList.add(colLeftX - columnSpacing / halfDivisor);
+              colRightXsList.add(colLeftX + nodeWidth);
+              final fraction =
+                  (c - sourceColIdx) / (targetColIdx - sourceColIdx);
+              final directY = startY + (endY - startY) * fraction;
+              passageYs.add(
+                _findBestPassageY(
+                  colFilesByIndex[c] ?? const [],
+                  nodePositions,
+                  nodeHeight,
+                  nodeVerticalSpacing,
+                  directY,
+                ),
+              );
+            }
+            pathData = _buildMultiHopElbowPath(
+              startX,
+              startY,
+              endX,
+              endY,
+              laneX,
+              passageYs: passageYs,
+              gapCenterXs: gapCenterXsList,
+              colRightXs: colRightXsList,
+            );
+          }
+        }
+      } else {
+        // Same-column or backward (cycle) edge: Bezier arcing downward.
+        pathData = _buildBezierEdgePath(startX, startY, endX, endY);
+      }
+
+      edgeRenderList.add((
         source: source,
         target: target,
+        pathData: pathData,
         cssClass: 'edge$extraClass',
-      );
+        span: span,
+      ));
     }
+  }
+
+  // Sort: longest span first (painted behind), shortest last (painted in front).
+  edgeRenderList.sort((a, b) => b.span.compareTo(a.span));
+
+  for (final edge in edgeRenderList) {
+    renderEdgeWithTooltip(
+      buffer,
+      pathData: edge.pathData,
+      source: edge.source,
+      target: edge.target,
+      cssClass: edge.cssClass,
+    );
   }
 
   // 5. Draw Node Content (Counters and Labels)
@@ -264,20 +412,20 @@ String exportGraphSvgFiles(
     final inCount = incomingCounts[file] ?? 0;
     final outCount = outgoingCounts[file] ?? 0;
 
-    // Render incoming badge (top-left, pointing west)
+    // Render incoming badge (left edge, vertically centred)
     final incomingBadge = BadgeModel.incoming(
       cx: pos.x + (badgeOffset / halfDivisor0),
-      cy: pos.y + badgeOffset,
+      cy: pos.y + nodeHeight / halfDivisor0,
       count: inCount,
       peers: incomingNodes[file] ?? const [],
       direction: BadgeDirection.east,
     );
     renderTriangularBadge(buffer, incomingBadge);
 
-    // Render outgoing badge (bottom-right, pointing east)
+    // Render outgoing badge (right edge, vertically centred)
     final outgoingBadge = BadgeModel.outgoing(
-      cx: pos.x + nodeWidth, // - badgeOffset,
-      cy: pos.y + nodeHeight - badgeOffset,
+      cx: pos.x + nodeWidth,
+      cy: pos.y + nodeHeight / halfDivisor0,
       count: outCount,
       peers: outgoingNodes[file] ?? const [],
       direction: BadgeDirection.east,
@@ -436,4 +584,174 @@ Map<String, Map<String, int>> _buildFileWarningsByPath(
 
 String _buildNodeTitle(String filePath, Map<String, int>? warnings) {
   return buildWarningTooltipTitle('File: $filePath', warnings);
+}
+
+/// Pixel increment between parallel edge lanes in the same column gap.
+const double _edgeLaneOffset = 2.0;
+
+/// Minimum belly applied to same-row adjacent edges.
+///
+/// A pure horizontal `H` path has a zero-height bounding box which causes
+/// SVG `objectBoundingBox` gradients to render as invisible. A 1 px upward
+/// arc is imperceptible to the eye but gives the path a non-zero height.
+const double _edgeStraightBellyHeight = 1.0;
+
+/// Reusable divisor for halving a dimension at file scope.
+const double _halfDivisor = 2.0;
+
+/// Downward arc applied to backward/cycle Bezier control points.
+///
+/// Ensures the path bounding box is never zero-height even when source and
+/// target nodes share the same Y (which would break the horizontal SVG gradient).
+const double _bezierBellyHeight = 16.0;
+
+/// Corner radius for elbow turns in edge paths.
+const double _fileEdgeCornerRadius = 6.0;
+
+/// Builds a multi-hop elbow path through one or more intermediate column
+/// passage gaps so the edge never visually crosses an intermediate node box.
+///
+/// For each intermediate column the vertical transition runs at [gapCenterXs[i]]
+/// (centre of the gap to the left of the column), and the horizontal traversal
+/// crosses the column at [passageYs[i]] (nearest inter-node gap centre).
+/// The final vertical uses the staggered [laneX] in the gap before the target.
+String _buildMultiHopElbowPath(
+  double startX,
+  double startY,
+  double endX,
+  double endY,
+  double laneX, {
+  required List<double> passageYs,
+  required List<double> gapCenterXs,
+  required List<double> colRightXs,
+}) {
+  const double r = _fileEdgeCornerRadius;
+  final buf = StringBuffer();
+  buf.write('M $startX $startY ');
+  double currentY = startY;
+
+  for (var i = 0; i < passageYs.length; i++) {
+    final gcX = gapCenterXs[i];
+    final crX = colRightXs[i];
+    final py = passageYs[i];
+    final dy = py - currentY;
+    final dirY = dy >= 0 ? 1.0 : -1.0;
+
+    if (dy.abs() < r * _halfDivisor) {
+      buf.write('H $crX ');
+    } else {
+      buf.write('H ${gcX - r} ');
+      buf.write('Q $gcX $currentY $gcX ${currentY + dirY * r} ');
+      buf.write('V ${py - dirY * r} ');
+      buf.write('Q $gcX $py ${gcX + r} $py ');
+      buf.write('H $crX ');
+      currentY = py;
+    }
+  }
+
+  // Final elbow at laneX in the gap before the target column.
+  final finalDy = endY - currentY;
+  final finalDirY = finalDy >= 0 ? 1.0 : -1.0;
+  if (finalDy.abs() < r * _halfDivisor) {
+    buf.write('H $laneX V $endY H $endX');
+  } else {
+    buf.write('H ${laneX - r} ');
+    buf.write('Q $laneX $currentY $laneX ${currentY + finalDirY * r} ');
+    buf.write('V ${endY - finalDirY * r} ');
+    buf.write('Q $laneX $endY ${laneX + r} $endY ');
+    buf.write('H $endX');
+  }
+  return buf.toString();
+}
+
+/// Returns the Y-centre of the inter-node gap in [files] that is nearest to
+/// [targetY], used to route skip edges through intermediate columns without
+/// visually crossing node boxes.
+double _findBestPassageY(
+  List<String> files,
+  Map<String, Point<double>> nodePositions,
+  int nodeHeight,
+  int nodeVerticalSpacing,
+  double targetY,
+) {
+  if (files.isEmpty) return targetY;
+  final sortedNodeYs =
+      files.map((f) => nodePositions[f]?.y).whereType<double>().toList()
+        ..sort();
+  if (sortedNodeYs.isEmpty) return targetY;
+  final halfSpacing = nodeVerticalSpacing / _halfDivisor;
+  final candidates = [
+    sortedNodeYs.first - halfSpacing,
+    for (var i = 0; i < sortedNodeYs.length - 1; i++)
+      sortedNodeYs[i] + nodeHeight + halfSpacing,
+    sortedNodeYs.last + nodeHeight + halfSpacing,
+  ];
+  return candidates.reduce(
+    (best, c) => (c - targetY).abs() < (best - targetY).abs() ? c : best,
+  );
+}
+
+/// Builds an orthogonal H-V-H elbow path with rounded corners.
+///
+/// Routes from ([startX], [startY]) horizontally to [laneX], then
+/// vertically to [endY], then horizontally to ([endX], [endY]).
+String _buildElbowEdgePath(
+  double startX,
+  double startY,
+  double endX,
+  double endY,
+  double laneX,
+) {
+  final dirY = endY >= startY ? 1.0 : -1.0;
+  final h1End = laneX - _fileEdgeCornerRadius;
+  final v1Start = startY + dirY * _fileEdgeCornerRadius;
+  final v2End = endY - dirY * _fileEdgeCornerRadius;
+  final h2Start = laneX + _fileEdgeCornerRadius;
+  // Guard against a near-zero vertical span (two nodes at nearly the same Y).
+  if ((endY - startY).abs() < _fileEdgeCornerRadius * _halfDivisor) {
+    return 'M $startX $startY H $laneX V $endY H $endX';
+  }
+  return 'M $startX $startY '
+      'H $h1End '
+      'Q $laneX $startY $laneX $v1Start '
+      'V $v2End '
+      'Q $laneX $endY $h2Start $endY '
+      'H $endX';
+}
+
+/// Builds a smooth cubic Bezier path for backward or same-column edges.
+///
+/// Control points spread horizontally so the edge forms a visible arc.
+/// Both control points are offset downward by [_bezierBellyHeight] so the
+/// path never has a zero-height bounding box (which would break the
+/// horizontal SVG gradient) even when source and target share the same Y.
+String _buildBezierEdgePath(
+  double startX,
+  double startY,
+  double endX,
+  double endY,
+) {
+  const double controlPointFactor = 0.5;
+  final dx = (endX - startX).abs();
+  final controlX1 = startX + dx * controlPointFactor;
+  final controlX2 = endX - dx * controlPointFactor;
+  final cy1 = startY + _bezierBellyHeight;
+  final cy2 = endY + _bezierBellyHeight;
+  return 'M $startX $startY C $controlX1 $cy1, $controlX2 $cy2, $endX $endY';
+}
+
+/// Returns the absolute Y distance between edge anchor points (badge centres).
+double _edgeYSpan(
+  String source,
+  String target,
+  Map<String, Point<double>> nodePositions,
+  int nodeHeight,
+) {
+  final sourcePos = nodePositions[source];
+  final targetPos = nodePositions[target];
+  if (sourcePos == null || targetPos == null) return double.infinity;
+  const double halfDivisor = 2.0;
+  final startY = sourcePos.y + nodeHeight / halfDivisor;
+  final endY = targetPos.y + nodeHeight / halfDivisor;
+  return (endY - startY).abs();
 }
