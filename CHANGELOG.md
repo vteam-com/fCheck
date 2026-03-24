@@ -12,7 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Improved localization key-usage detection to reduce false positives.
+- Localization member access pattern now supports null assertions (`!`) and null-safe access (`?`).
 - `--fix` mode now sorts ARB file content by keys for consistent formatting.
+
+### Improved
+
+- SVG file-dependency graph edge routing: elbow paths, lane staggering, and depth-sorted rendering for cleaner diagrams.
 
 ### Added
 

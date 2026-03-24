@@ -35,6 +35,9 @@ const double _badgeSpanXPerExtraChar = 4.0;
 const double _badgeBaseSpanY = 14.0;
 const double _badgeSpanYPerExtraChar = 1.2;
 const double _badgeCornerRadius = 3.0;
+
+/// Divisor for halving a dimension.
+const double _badgeHalfDivisor = 2.0;
 const int _badgeSmallFontThresholdDigits = 4;
 const int _badgeMediumFontThresholdDigits = 3;
 const double _badgeSmallFontSize = 6.2;
@@ -185,16 +188,13 @@ class BadgeModel {
     final badgeSize = geometry.spanY;
     final badgeRadius = geometry.radius;
 
-    /// Divisor used to calculate half dimensions.
-    const double halfDivisor = 2.0;
-
     switch (direction) {
       case BadgeDirection.west:
         // Triangle pointing left (incoming) with rounded corners
-        final left = cx - badgeHeight / halfDivisor;
-        final right = cx + badgeHeight / halfDivisor;
-        final top = cy - badgeSize / halfDivisor;
-        final bottom = cy + badgeSize / halfDivisor;
+        final left = cx - badgeHeight / _badgeHalfDivisor;
+        final right = cx + badgeHeight / _badgeHalfDivisor;
+        final top = cy - badgeSize / _badgeHalfDivisor;
+        final bottom = cy + badgeSize / _badgeHalfDivisor;
 
         return 'M ${left + badgeRadius},$cy '
             'L ${right - badgeRadius},$top '
@@ -205,10 +205,10 @@ class BadgeModel {
 
       case BadgeDirection.east:
         // Triangle pointing right (outgoing) with rounded corners
-        final left = cx - badgeHeight / halfDivisor;
-        final right = cx + badgeHeight / halfDivisor;
-        final top = cy - badgeSize / halfDivisor;
-        final bottom = cy + badgeSize / halfDivisor;
+        final left = cx - badgeHeight / _badgeHalfDivisor;
+        final right = cx + badgeHeight / _badgeHalfDivisor;
+        final top = cy - badgeSize / _badgeHalfDivisor;
+        final bottom = cy + badgeSize / _badgeHalfDivisor;
 
         return 'M ${right - badgeRadius},$cy '
             'L ${left + badgeRadius},$top '
@@ -217,6 +217,32 @@ class BadgeModel {
             'Q $left,$bottom ${left + badgeRadius},$bottom '
             'Z';
     }
+  }
+
+  /// Returns the horizontal distance from the badge center to the triangle tip.
+  ///
+  /// For an east-pointing badge the tip is at `cx + tipOffsetFromCenter(count)`.
+  /// For a west-pointing badge the tip is at `cx - tipOffsetFromCenter(count)`.
+  /// Returns `0` when [count] is non-positive (no badge rendered).
+  static double tipOffsetFromCenter(int count) {
+    if (count <= 0) return 0;
+    final digits = '$count'.length;
+    final extraChars = (digits - 1).clamp(0, _badgeExtraCharsMax).toDouble();
+    final spanX = _badgeBaseSpanX + (extraChars * _badgeSpanXPerExtraChar);
+    return spanX / _badgeHalfDivisor - _badgeCornerRadius;
+  }
+
+  /// Returns the horizontal distance from the badge center to the flat base.
+  ///
+  /// For an east-pointing badge the base (left edge) is at
+  /// `cx - baseOffsetFromCenter(count)`.
+  /// Returns `0` when [count] is non-positive (no badge rendered).
+  static double baseOffsetFromCenter(int count) {
+    if (count <= 0) return 0;
+    final digits = '$count'.length;
+    final extraChars = (digits - 1).clamp(0, _badgeExtraCharsMax).toDouble();
+    final spanX = _badgeBaseSpanX + (extraChars * _badgeSpanXPerExtraChar);
+    return spanX / _badgeHalfDivisor;
   }
 
   /// Creates an incoming badge pointing in the specified direction.

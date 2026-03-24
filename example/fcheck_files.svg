@@ -250,19 +250,19 @@
 
 3 Dead Code warnings</title></rect>
 <g>
-  <path d="M 590.0 115.0 H 590.0 Q 596.0 115.0 596.0 121.0 V 179.0 Q 596.0 185.0 602.0 185.0 H 696.0" class="edge"/>
+  <path d="M 596.0 115.0 L 598.0 115.0 Q 604.0 115.0 604.0 121.0 V 179.0 Q 604.0 185.0 610.0 185.0 L 687.0 185.0 L 696.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/example/lib/home_page.dart ▶ /Users/jp/src/github/vteam/fcheck/example/lib/models.dart</title>
 </g>
 <g>
-  <path d="M 270.0 115.0 C 323.0 114.0, 323.0 114.0, 376.0 115.0" class="edge"/>
+  <path d="M 276.0 115.0 C 326.0 114.0, 326.0 114.0, 376.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/example/lib/main.dart ▶ /Users/jp/src/github/vteam/fcheck/example/lib/home_page.dart</title>
 </g>
 <g>
-  <path d="M 910.0 115.0 C 963.0 114.0, 963.0 114.0, 1016.0 115.0" class="edge"/>
+  <path d="M 916.0 115.0 C 966.0 114.0, 966.0 114.0, 1016.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/example/lib/counter_widget.dart ▶ /Users/jp/src/github/vteam/fcheck/example/lib/utils.dart</title>
 </g>
 <g>
-  <path d="M 590.0 115.0 C 643.0 114.0, 643.0 114.0, 696.0 115.0" class="edge"/>
+  <path d="M 596.0 115.0 C 646.0 114.0, 646.0 114.0, 696.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/example/lib/home_page.dart ▶ /Users/jp/src/github/vteam/fcheck/example/lib/counter_widget.dart</title>
 </g>
 <g class="badge outgoingBadge">

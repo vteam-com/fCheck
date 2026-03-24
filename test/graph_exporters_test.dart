@@ -790,36 +790,149 @@ void main() {
       expect(innerIndex, lessThan(outerIndex));
     });
 
-    test(
-      'adjacent same-row forward edges use near-straight Bezier routing',
-      () {
-        // Single node in each column → same Y → near-straight 1px-belly Bezier.
-        final result = LayersAnalysisResult(
-          issues: const [],
-          layers: const {'lib/src/a.dart': 0, 'lib/src/b.dart': 1},
-          dependencyGraph: const {
-            'lib/src/a.dart': ['lib/src/b.dart'],
-            'lib/src/b.dart': [],
-          },
-        );
+    test('adjacent same-row forward edges use a near-straight cubic', () {
+      // Single node in each column → same Y → near-straight cubic routing.
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {'lib/src/a.dart': 0, 'lib/src/b.dart': 1},
+        dependencyGraph: const {
+          'lib/src/a.dart': ['lib/src/b.dart'],
+          'lib/src/b.dart': [],
+        },
+      );
 
-        final svg = exportGraphSvgFiles(result);
+      final svg = exportGraphSvgFiles(result);
 
-        // Near-straight edge uses a cubic Bezier C command.
+      // Same-row adjacent edge uses a tiny-belly cubic to preserve visibility.
+      expect(
+        RegExp(r'<path d="M [^"]*C ').hasMatch(svg),
+        isTrue,
+        reason: 'adjacent same-row edge should use near-straight cubic routing',
+      );
+      // Should not use elbow Q commands on edge-class paths.
+      expect(
+        RegExp(r'<path d="M [^"]*Q [^"]*" class="edge').hasMatch(svg),
+        isFalse,
+        reason: 'adjacent same-row edge should not use elbow routing',
+      );
+    });
+
+    test('draws far file edge after near file edge', () {
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/src/root.dart': 0,
+          'lib/src/near.dart': 1,
+          'lib/src/far.dart': 2,
+        },
+        dependencyGraph: const {
+          'lib/src/root.dart': ['lib/src/near.dart', 'lib/src/far.dart'],
+          'lib/src/near.dart': [],
+          'lib/src/far.dart': [],
+        },
+      );
+
+      final svg = exportGraphSvgFiles(result);
+      final nearIndex = svg.indexOf(
+        '<title>lib/src/root.dart ▶ lib/src/near.dart</title>',
+      );
+      final farIndex = svg.indexOf(
+        '<title>lib/src/root.dart ▶ lib/src/far.dart</title>',
+      );
+
+      expect(nearIndex, greaterThanOrEqualTo(0));
+      expect(farIndex, greaterThanOrEqualTo(0));
+      expect(nearIndex, lessThan(farIndex));
+    });
+
+    test('draws longer-span adjacent file edge before shorter-span one', () {
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/src/root.dart': 0,
+          'lib/src/a_top.dart': 1,
+          'lib/src/z_bottom.dart': 1,
+        },
+        dependencyGraph: const {
+          'lib/src/root.dart': ['lib/src/a_top.dart', 'lib/src/z_bottom.dart'],
+          'lib/src/a_top.dart': [],
+          'lib/src/z_bottom.dart': [],
+        },
+      );
+
+      final svg = exportGraphSvgFiles(result);
+      final shortIndex = svg.indexOf(
+        '<title>lib/src/root.dart ▶ lib/src/a_top.dart</title>',
+      );
+      final longIndex = svg.indexOf(
+        '<title>lib/src/root.dart ▶ lib/src/z_bottom.dart</title>',
+      );
+
+      expect(shortIndex, greaterThanOrEqualTo(0));
+      expect(longIndex, greaterThanOrEqualTo(0));
+      expect(longIndex, lessThan(shortIndex));
+    });
+
+    test('same-source vertical fan-out lanes do not overlap', () {
+      // One source fans to three targets in the adjacent column at different rows.
+      // The non-straight edges should each get unique laneX values spaced by 2px.
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/src/a.dart': 0,
+          'lib/src/b.dart': 1,
+          'lib/src/c.dart': 1,
+          'lib/src/d.dart': 1,
+        },
+        dependencyGraph: const {
+          'lib/src/a.dart': [
+            'lib/src/b.dart',
+            'lib/src/c.dart',
+            'lib/src/d.dart',
+          ],
+          'lib/src/b.dart': [],
+          'lib/src/c.dart': [],
+          'lib/src/d.dart': [],
+        },
+      );
+
+      final svg = exportGraphSvgFiles(result);
+
+      final laneXAB = _extractFilesEdgeLaneX(
+        svg,
+        'lib/src/a.dart',
+        'lib/src/b.dart',
+      );
+      final laneXAC = _extractFilesEdgeLaneX(
+        svg,
+        'lib/src/a.dart',
+        'lib/src/c.dart',
+      );
+      final laneXAD = _extractFilesEdgeLaneX(
+        svg,
+        'lib/src/a.dart',
+        'lib/src/d.dart',
+      );
+
+      // One edge may be straight (same-row) and therefore have no Q/laneX.
+      final laneXs = [laneXAB, laneXAC, laneXAD].whereType<double>().toList()
+        ..sort();
+
+      expect(
+        laneXs.length,
+        greaterThanOrEqualTo(2),
+        reason: 'at least two fan-out edges should use elbow lanes',
+      );
+
+      for (var i = 1; i < laneXs.length; i++) {
         expect(
-          RegExp(r'<path d="M [^"]*C ').hasMatch(svg),
-          isTrue,
+          laneXs[i] - laneXs[i - 1],
+          closeTo(2.0, 0.01),
           reason:
-              'adjacent same-row edge should use a near-straight Bezier C path',
+              'vertical fan-out lanes should be spaced by 2 px and not overlap',
         );
-        // Should not use elbow Q commands on edge-class paths.
-        expect(
-          RegExp(r'<path d="M [^"]*H [^"]*Q [^"]*" class="edge').hasMatch(svg),
-          isFalse,
-          reason: 'adjacent same-row edge should not use elbow routing',
-        );
-      },
-    );
+      }
+    });
 
     test('non-same-row forward edges use elbow H-V-H routing', () {
       // a (col0 row0) and b (col0 row1) both point to c (col1 row0).
@@ -850,6 +963,23 @@ void main() {
         laneX,
         isNotNull,
         reason: 'non-same-row edge b→c should use elbow routing (Q command)',
+      );
+
+      final preCornerX = _extractFilesEdgeFirstPreCornerX(
+        svg,
+        'lib/src/b.dart',
+        'lib/src/c.dart',
+      );
+      expect(
+        preCornerX,
+        isNotNull,
+        reason: 'elbow edge b→c should include a horizontal pre-corner segment',
+      );
+      expect(
+        laneX! - preCornerX!,
+        closeTo(_testFilesEdgeCornerRadius, 0.01),
+        reason:
+            'forward elbow pre-corner distance should match the fixed radius',
       );
     });
 
@@ -960,12 +1090,13 @@ void main() {
         greaterThanOrEqualTo(4),
         reason: 'skip edge should use multi-hop routing with ≥4 Q corners',
       );
-      // Must have at least 3 H segments (to col-1 gap, across col 1, to laneX).
-      final hCount = RegExp(r' H ').allMatches(pathData).length;
+      // Must have at least 3 line segments (to col-1 gap, across col 1, to laneX).
+      // The implementation uses L commands for all horizontal lines.
+      final lCount = RegExp(r' L ').allMatches(pathData).length;
       expect(
-        hCount,
+        lCount,
         greaterThanOrEqualTo(3),
-        reason: 'skip edge should have ≥3 H segments',
+        reason: 'skip edge should have ≥3 L segments',
       );
     });
   });
@@ -980,19 +1111,39 @@ double? _extractFolderEdgeColumnX(String svg, String titlePayload) {
   return double.tryParse(match.group(1)!);
 }
 
+const double _testFilesEdgeCornerRadius = 6.0;
+
 /// Extracts the lane X coordinate from an elbow edge in the files SVG.
 ///
-/// Elbow path format: `M startX startY H h1End Q laneX startY laneX v1Start V ...`
+/// Elbow path format: `M startX startY L preCornerX startY Q laneX startY laneX v1Start V ...`
 /// Returns the laneX value from the first Q command in the path.
 double? _extractFilesEdgeLaneX(String svg, String source, String target) {
+  final pathData = _extractFilesEdgePathData(svg, source, target);
+  if (pathData == null) return null;
+  final qPattern = RegExp(r'Q ([0-9]+(?:\.[0-9]+)?)');
+  final qMatch = qPattern.firstMatch(pathData);
+  return qMatch != null ? double.tryParse(qMatch.group(1)!) : null;
+}
+
+double? _extractFilesEdgeFirstPreCornerX(
+  String svg,
+  String source,
+  String target,
+) {
+  final pathData = _extractFilesEdgePathData(svg, source, target);
+  if (pathData == null) return null;
+  final linePattern = RegExp(
+    r'^M [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)? L ([0-9]+(?:\.[0-9]+)?) [0-9]+(?:\.[0-9]+)? Q ',
+  );
+  final lineMatch = linePattern.firstMatch(pathData);
+  return lineMatch != null ? double.tryParse(lineMatch.group(1)!) : null;
+}
+
+String? _extractFilesEdgePathData(String svg, String source, String target) {
   final title = '$source ▶ $target';
   final pattern = RegExp(
     '<path d="([^"]+)" class="edge[^"]*"/>\\s*<title>${RegExp.escape(title)}</title>',
   );
   final match = pattern.firstMatch(svg);
-  if (match == null) return null;
-  final pathData = match.group(1)!;
-  final qPattern = RegExp(r'Q ([0-9]+(?:\.[0-9]+)?)');
-  final qMatch = qPattern.firstMatch(pathData);
-  return qMatch != null ? double.tryParse(qMatch.group(1)!) : null;
+  return match?.group(1);
 }

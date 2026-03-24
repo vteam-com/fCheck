@@ -547,6 +547,19 @@ def escape_xml(text):
 
 Render edges as curved paths. **All edges should flow downward** from higher layers to lower layers in a properly architected system.
 
+Forward edge elbows must use a **uniform fixed radius** at every turn. Do not draw long free-form quadratic sweeps from the source tip to the lane column, because that makes some elbows visibly larger than others. The required shape is:
+
+- horizontal pre-corner segment
+- one quarter-turn into the vertical lane
+- vertical run
+- one quarter-turn back to the horizontal run
+
+The same radius must be used for adjacent-column elbows and every intermediate/final elbow in multi-hop routes.
+
+All incoming edges arrive flat at the target badge centre Y.  There is no target-side Y fanning — overlap at the target is prevented by the staggered source-side lane X positions.
+
+For files SVG paint order, sort all edges globally by vertical span descending. Long-reach edges are painted first (behind), short-reach edges last (on top). This keeps the vertical lane bundle ordered so that the outermost (longest) edges sit behind the innermost (shortest) edges, producing a clean nested visual.
+
 ```python
 def render_edge(source, target):
     # Classify edge type
@@ -567,14 +580,24 @@ def render_edge(source, target):
     end_x = target.centerX
     end_y = target.top
     
-    # Calculate quadratic bezier control point for smooth curve
-    control_x = (start_x + end_x) / 2
-    control_y = (start_y + end_y) / 2
-    
-    # Generate SVG path with quadratic curve
-    path_data = f"M {start_x},{start_y} Q {control_x},{control_y} {end_x},{end_y}"
+    corner_radius = EDGE_CORNER_RADIUS
+    lane_x = resolve_lane_x(source, target)
+    direction = 1 if end_y > start_y else -1
+
+    # Generate SVG path with a fixed-radius elbow.
+    path_data = (
+        f"M {start_x},{start_y} "
+        f"L {lane_x - corner_radius},{start_y} "
+        f"Q {lane_x},{start_y} {lane_x},{start_y + direction * corner_radius} "
+        f"V {end_y - direction * corner_radius} "
+        f"Q {lane_x},{end_y} {lane_x + corner_radius},{end_y} "
+        f"L {end_x},{end_y}"
+    )
     
     return f'<path d="{path_data}" class="{css_class}"/>'
+
+def sort_edges_for_painting(edges):
+    return sorted(edges, key=lambda edge: edge.vertical_span, reverse=True)
 
 def classify_edge(source, target):
     """
