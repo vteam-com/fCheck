@@ -558,7 +558,9 @@ The same radius must be used for adjacent-column elbows and every intermediate/f
 
 All incoming edges arrive flat at the target badge centre Y.  There is no target-side Y fanning — overlap at the target is prevented by the staggered source-side lane X positions.
 
-For files SVG paint order, sort all edges globally by vertical span descending. Long-reach edges are painted first (behind), short-reach edges last (on top). This keeps the vertical lane bundle ordered so that the outermost (longest) edges sit behind the innermost (shortest) edges, producing a clean nested visual.
+Special case for long top-row hops: when both source and target are the first (top) node in their columns and the target is 2+ columns to the right, route the edge up above the first row, then horizontally right, then vertically down in front of the destination column, then horizontally into the target badge.
+
+For files SVG paint order, sort edges by forward column distance (`colDiff`) ascending so 1-column edges paint first, then 2-column, then 3-column, etc. Within the same `colDiff`, sort by vertical span descending.
 
 ```python
 def render_edge(source, target):
@@ -597,7 +599,10 @@ def render_edge(source, target):
     return f'<path d="{path_data}" class="{css_class}"/>'
 
 def sort_edges_for_painting(edges):
-    return sorted(edges, key=lambda edge: edge.vertical_span, reverse=True)
+    return sorted(
+        edges,
+        key=lambda edge: (edge.col_diff, -edge.vertical_span),
+    )
 
 def classify_edge(source, target):
     """
