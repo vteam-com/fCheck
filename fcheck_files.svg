@@ -826,255 +826,255 @@
   <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/bin/fcheck_cli_runner.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 1165.0 L 1506.0 1165.0 Q 1512.0 1165.0 1512.0 1159.0 V 856.0 Q 1512.0 850.0 1518.0 850.0 L 1890.0 850.0 L 2066.0 850.0 Q 2072.0 850.0 2072.0 844.0 V 121.0 Q 2072.0 115.0 2078.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
+  <path d="M 1330.0 1165.0 L 1506.0 1165.0 Q 1512.0 1165.0 1512.0 1159.0 V 86.0 Q 1512.0 80.0 1518.0 80.0 L 1890.0 80.0 L 2066.0 80.0 Q 2072.0 80.0 2072.0 86.0 V 109.0 Q 2072.0 115.0 2078.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/secrets/secret_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_delegate_abstract.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 970.0 115.0 Q 976.0 115.0 976.0 121.0 V 188.0 Q 976.0 194.0 982.0 194.0 L 1324.0 194.0 L 1376.0 194.0 Q 1382.0 194.0 1382.0 200.0 V 1089.0 Q 1382.0 1095.0 1388.0 1095.0 L 1670.0 1095.0 L 1676.0 1095.0" class="edge"/>
+  <path d="M 918.0 115.0 L 970.0 115.0 Q 976.0 115.0 976.0 121.0 V 1028.0 Q 976.0 1034.0 982.0 1034.0 L 1324.0 1034.0 L 1376.0 1034.0 Q 1382.0 1034.0 1382.0 1040.0 V 1089.0 Q 1382.0 1095.0 1388.0 1095.0 L 1670.0 1095.0 L 1676.0 1095.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_file_data.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 1095.0 L 1440.0 1095.0 Q 1446.0 1095.0 1446.0 1089.0 V 856.0 Q 1446.0 850.0 1452.0 850.0 L 1890.0 850.0 L 2000.0 850.0 Q 2006.0 850.0 2006.0 844.0 V 121.0 Q 2006.0 115.0 2012.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
+  <path d="M 1330.0 1095.0 L 1440.0 1095.0 Q 1446.0 1095.0 1446.0 1089.0 V 86.0 Q 1446.0 80.0 1452.0 80.0 L 1890.0 80.0 L 2000.0 80.0 Q 2006.0 80.0 2006.0 86.0 V 109.0 Q 2006.0 115.0 2012.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_delegate_abstract.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 1235.0 L 1910.0 1235.0 Q 1916.0 1235.0 1916.0 1229.0 V 927.0 Q 1916.0 921.0 1922.0 921.0 L 2412.0 921.0 L 2426.0 921.0 Q 2432.0 921.0 2432.0 915.0 V 331.0 Q 2432.0 325.0 2438.0 325.0 L 2642.0 325.0 L 2648.0 325.0" class="edge"/>
+  <path d="M 1896.0 1235.0 L 1910.0 1235.0 Q 1916.0 1235.0 1916.0 1229.0 V 297.0 Q 1916.0 291.0 1922.0 291.0 L 2412.0 291.0 L 2426.0 291.0 Q 2432.0 291.0 2432.0 297.0 V 319.0 Q 2432.0 325.0 2438.0 325.0 L 2642.0 325.0 L 2648.0 325.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_visitor.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 1025.0 L 1900.0 1025.0 Q 1906.0 1025.0 1906.0 1019.0 V 576.0 Q 1906.0 570.0 1912.0 570.0 L 2412.0 570.0 L 2416.0 570.0 Q 2422.0 570.0 2422.0 564.0 V 121.0 Q 2422.0 115.0 2428.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 1896.0 1025.0 L 1900.0 1025.0 Q 1906.0 1025.0 1906.0 1019.0 V 86.0 Q 1906.0 80.0 1912.0 80.0 L 2412.0 80.0 L 2416.0 80.0 Q 2422.0 80.0 2422.0 86.0 V 109.0 Q 2422.0 115.0 2428.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_runner_result.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 974.0 115.0 Q 980.0 115.0 980.0 121.0 V 190.0 Q 980.0 196.0 986.0 196.0 L 1324.0 196.0 L 1380.0 196.0 Q 1386.0 196.0 1386.0 202.0 V 1019.0 Q 1386.0 1025.0 1392.0 1025.0 L 1670.0 1025.0 L 1676.0 1025.0" class="edge"/>
+  <path d="M 918.0 115.0 L 974.0 115.0 Q 980.0 115.0 980.0 121.0 V 960.0 Q 980.0 966.0 986.0 966.0 L 1324.0 966.0 L 1380.0 966.0 Q 1386.0 966.0 1386.0 972.0 V 1019.0 Q 1386.0 1025.0 1392.0 1025.0 L 1670.0 1025.0 L 1676.0 1025.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_runner_result.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 1025.0 L 1352.0 1025.0 Q 1358.0 1025.0 1358.0 1019.0 V 717.0 Q 1358.0 711.0 1364.0 711.0 L 1890.0 711.0 L 1912.0 711.0 Q 1918.0 711.0 1918.0 705.0 V 121.0 Q 1918.0 115.0 1924.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
+  <path d="M 1330.0 1025.0 L 1352.0 1025.0 Q 1358.0 1025.0 1358.0 1019.0 V 87.0 Q 1358.0 81.0 1364.0 81.0 L 1890.0 81.0 L 1912.0 81.0 Q 1918.0 81.0 1918.0 87.0 V 109.0 Q 1918.0 115.0 1924.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_runner.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_delegate_abstract.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 955.0 L 1360.0 955.0 Q 1366.0 955.0 1366.0 949.0 V 715.0 Q 1366.0 709.0 1372.0 709.0 L 1890.0 709.0 L 1920.0 709.0 Q 1926.0 709.0 1926.0 703.0 V 121.0 Q 1926.0 115.0 1932.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
+  <path d="M 1330.0 955.0 L 1360.0 955.0 Q 1366.0 955.0 1366.0 949.0 V 85.0 Q 1366.0 79.0 1372.0 79.0 L 1890.0 79.0 L 1920.0 79.0 Q 1926.0 79.0 1926.0 85.0 V 109.0 Q 1926.0 115.0 1932.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_delegate_abstract.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 1095.0 L 1902.0 1095.0 Q 1908.0 1095.0 1908.0 1089.0 V 646.0 Q 1908.0 640.0 1914.0 640.0 L 2412.0 640.0 L 2418.0 640.0 Q 2424.0 640.0 2424.0 634.0 V 261.0 Q 2424.0 255.0 2430.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
+  <path d="M 1896.0 1095.0 L 1902.0 1095.0 Q 1908.0 1095.0 1908.0 1089.0 V 226.0 Q 1908.0 220.0 1914.0 220.0 L 2412.0 220.0 L 2418.0 220.0 Q 2424.0 220.0 2424.0 226.0 V 249.0 Q 2424.0 255.0 2430.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_file_data.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_artifact.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 1305.0 L 1400.0 1305.0 Q 1406.0 1305.0 1406.0 1299.0 V 1065.0 Q 1406.0 1059.0 1412.0 1059.0 L 1890.0 1059.0 L 1960.0 1059.0 Q 1966.0 1059.0 1966.0 1053.0 V 471.0 Q 1966.0 465.0 1972.0 465.0 L 2192.0 465.0 L 2198.0 465.0" class="edge"/>
+  <path d="M 1330.0 1305.0 L 1400.0 1305.0 Q 1406.0 1305.0 1406.0 1299.0 V 435.0 Q 1406.0 429.0 1412.0 429.0 L 1890.0 429.0 L 1960.0 429.0 Q 1966.0 429.0 1966.0 435.0 V 459.0 Q 1966.0 465.0 1972.0 465.0 L 2192.0 465.0 L 2198.0 465.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/duplicate_code/duplicate_code_analyzer.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/duplicate_code/duplicate_code_file_snippet.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 955.0 L 1362.0 955.0 Q 1368.0 955.0 1368.0 949.0 V 717.0 Q 1368.0 711.0 1374.0 711.0 L 1890.0 711.0 L 1922.0 711.0 Q 1928.0 711.0 1928.0 705.0 V 191.0 Q 1928.0 185.0 1934.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
+  <path d="M 1330.0 955.0 L 1362.0 955.0 Q 1368.0 955.0 1368.0 949.0 V 157.0 Q 1368.0 151.0 1374.0 151.0 L 1890.0 151.0 L 1922.0 151.0 Q 1928.0 151.0 1928.0 157.0 V 179.0 Q 1928.0 185.0 1934.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/shared/generated_file_utils.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 1305.0 L 1918.0 1305.0 Q 1924.0 1305.0 1924.0 1299.0 V 997.0 Q 1924.0 991.0 1930.0 991.0 L 2412.0 991.0 L 2434.0 991.0 Q 2440.0 991.0 2440.0 985.0 V 541.0 Q 2440.0 535.0 2446.0 535.0 L 2642.0 535.0 L 2648.0 535.0" class="edge"/>
+  <path d="M 1896.0 1305.0 L 1918.0 1305.0 Q 1924.0 1305.0 1924.0 1299.0 V 507.0 Q 1924.0 501.0 1930.0 501.0 L 2412.0 501.0 L 2434.0 501.0 Q 2440.0 501.0 2440.0 507.0 V 529.0 Q 2440.0 535.0 2446.0 535.0 L 2642.0 535.0 L 2648.0 535.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/documentation/documentation_visitor.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/documentation/documentation_issue.dart</title>
 </g>
 <g>
-  <path d="M 918.0 185.0 L 922.0 185.0 Q 928.0 185.0 928.0 191.0 V 202.0 Q 928.0 208.0 934.0 208.0 L 1324.0 208.0 L 1328.0 208.0 Q 1334.0 208.0 1334.0 214.0 V 949.0 Q 1334.0 955.0 1340.0 955.0 L 1670.0 955.0 L 1676.0 955.0" class="edge"/>
+  <path d="M 918.0 185.0 L 922.0 185.0 Q 928.0 185.0 928.0 191.0 V 902.0 Q 928.0 908.0 934.0 908.0 L 1324.0 908.0 L 1328.0 908.0 Q 1334.0 908.0 1334.0 914.0 V 949.0 Q 1334.0 955.0 1340.0 955.0 L 1670.0 955.0 L 1676.0 955.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_report_scanner.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 885.0 L 1448.0 885.0 Q 1454.0 885.0 1454.0 879.0 V 714.0 Q 1454.0 708.0 1460.0 708.0 L 1890.0 708.0 L 2008.0 708.0 Q 2014.0 708.0 2014.0 702.0 V 121.0 Q 2014.0 115.0 2020.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
+  <path d="M 1330.0 885.0 L 1448.0 885.0 Q 1454.0 885.0 1454.0 879.0 V 84.0 Q 1454.0 78.0 1460.0 78.0 L 1890.0 78.0 L 2008.0 78.0 Q 2014.0 78.0 2014.0 84.0 V 109.0 Q 2014.0 115.0 2020.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/magic_numbers/magic_number_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_delegate_abstract.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 984.0 115.0 Q 990.0 115.0 990.0 121.0 V 194.0 Q 990.0 200.0 996.0 200.0 L 1324.0 200.0 L 1390.0 200.0 Q 1396.0 200.0 1396.0 206.0 V 879.0 Q 1396.0 885.0 1402.0 885.0 L 1670.0 885.0 L 1676.0 885.0" class="edge"/>
+  <path d="M 918.0 115.0 L 984.0 115.0 Q 990.0 115.0 990.0 121.0 V 824.0 Q 990.0 830.0 996.0 830.0 L 1324.0 830.0 L 1390.0 830.0 Q 1396.0 830.0 1396.0 836.0 V 879.0 Q 1396.0 885.0 1402.0 885.0 L 1670.0 885.0 L 1676.0 885.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 885.0 L 1450.0 885.0 Q 1456.0 885.0 1456.0 879.0 V 718.0 Q 1456.0 712.0 1462.0 712.0 L 1890.0 712.0 L 2010.0 712.0 Q 2016.0 712.0 2016.0 706.0 V 191.0 Q 2016.0 185.0 2022.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
+  <path d="M 1330.0 885.0 L 1450.0 885.0 Q 1456.0 885.0 1456.0 879.0 V 158.0 Q 1456.0 152.0 1462.0 152.0 L 1890.0 152.0 L 2010.0 152.0 Q 2016.0 152.0 2016.0 158.0 V 179.0 Q 2016.0 185.0 2022.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/magic_numbers/magic_number_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/shared/generated_file_utils.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 990.0 115.0 Q 996.0 115.0 996.0 121.0 V 200.0 Q 996.0 206.0 1002.0 206.0 L 1324.0 206.0 L 1396.0 206.0 Q 1402.0 206.0 1402.0 212.0 V 809.0 Q 1402.0 815.0 1408.0 815.0 L 1670.0 815.0 L 1676.0 815.0" class="edge"/>
+  <path d="M 918.0 115.0 L 990.0 115.0 Q 996.0 115.0 996.0 121.0 V 760.0 Q 996.0 766.0 1002.0 766.0 L 1324.0 766.0 L 1396.0 766.0 Q 1402.0 766.0 1402.0 772.0 V 809.0 Q 1402.0 815.0 1408.0 815.0 L 1670.0 815.0 L 1676.0 815.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_analyzer.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 1445.0 L 1974.0 1445.0 Q 1980.0 1445.0 1980.0 1439.0 V 1137.0 Q 1980.0 1131.0 1986.0 1131.0 L 2412.0 1131.0 L 2490.0 1131.0 Q 2496.0 1131.0 2496.0 1125.0 V 751.0 Q 2496.0 745.0 2502.0 745.0 L 2642.0 745.0 L 2648.0 745.0" class="edge"/>
+  <path d="M 1896.0 1445.0 L 1974.0 1445.0 Q 1980.0 1445.0 1980.0 1439.0 V 717.0 Q 1980.0 711.0 1986.0 711.0 L 2412.0 711.0 L 2490.0 711.0 Q 2496.0 711.0 2496.0 717.0 V 739.0 Q 2496.0 745.0 2502.0 745.0 L 2642.0 745.0 L 2648.0 745.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/secrets/secret_scanner.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/secrets/secret_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 815.0 L 1410.0 815.0 Q 1416.0 815.0 1416.0 809.0 V 645.0 Q 1416.0 639.0 1422.0 639.0 L 1890.0 639.0 L 1970.0 639.0 Q 1976.0 639.0 1976.0 633.0 V 121.0 Q 1976.0 115.0 1982.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
+  <path d="M 1330.0 815.0 L 1410.0 815.0 Q 1416.0 815.0 1416.0 809.0 V 85.0 Q 1416.0 79.0 1422.0 79.0 L 1890.0 79.0 L 1970.0 79.0 Q 1976.0 79.0 1976.0 85.0 V 109.0 Q 1976.0 115.0 1982.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/duplicate_code/duplicate_code_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_delegate_abstract.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 1375.0 L 1954.0 1375.0 Q 1960.0 1375.0 1960.0 1369.0 V 1067.0 Q 1960.0 1061.0 1966.0 1061.0 L 2412.0 1061.0 L 2470.0 1061.0 Q 2476.0 1061.0 2476.0 1055.0 V 681.0 Q 2476.0 675.0 2482.0 675.0 L 2642.0 675.0 L 2648.0 675.0" class="edge"/>
+  <path d="M 1896.0 1375.0 L 1954.0 1375.0 Q 1960.0 1375.0 1960.0 1369.0 V 647.0 Q 1960.0 641.0 1966.0 641.0 L 2412.0 641.0 L 2470.0 641.0 Q 2476.0 641.0 2476.0 647.0 V 669.0 Q 2476.0 675.0 2482.0 675.0 L 2642.0 675.0 L 2648.0 675.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/magic_numbers/magic_number_visitor.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/magic_numbers/magic_number_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 745.0 L 1392.0 745.0 Q 1398.0 745.0 1398.0 739.0 V 644.0 Q 1398.0 638.0 1404.0 638.0 L 1890.0 638.0 L 1952.0 638.0 Q 1958.0 638.0 1958.0 632.0 V 121.0 Q 1958.0 115.0 1964.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
+  <path d="M 1330.0 745.0 L 1392.0 745.0 Q 1398.0 745.0 1398.0 739.0 V 84.0 Q 1398.0 78.0 1404.0 78.0 L 1890.0 78.0 L 1952.0 78.0 Q 1958.0 78.0 1958.0 84.0 V 109.0 Q 1958.0 115.0 1964.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/documentation/documentation_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_delegate_abstract.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 815.0 L 1414.0 815.0 Q 1420.0 815.0 1420.0 809.0 V 649.0 Q 1420.0 643.0 1426.0 643.0 L 1890.0 643.0 L 1974.0 643.0 Q 1980.0 643.0 1980.0 637.0 V 191.0 Q 1980.0 185.0 1986.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
+  <path d="M 1330.0 815.0 L 1414.0 815.0 Q 1420.0 815.0 1420.0 809.0 V 159.0 Q 1420.0 153.0 1426.0 153.0 L 1890.0 153.0 L 1974.0 153.0 Q 1980.0 153.0 1980.0 159.0 V 179.0 Q 1980.0 185.0 1986.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/duplicate_code/duplicate_code_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/shared/generated_file_utils.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 325.0 L 1976.0 325.0 Q 1982.0 325.0 1982.0 331.0 V 634.0 Q 1982.0 640.0 1988.0 640.0 L 2412.0 640.0 L 2492.0 640.0 Q 2498.0 640.0 2498.0 646.0 V 949.0 Q 2498.0 955.0 2504.0 955.0 L 2642.0 955.0 L 2648.0 955.0" class="edge"/>
+  <path d="M 1896.0 325.0 L 1976.0 325.0 Q 1982.0 325.0 1982.0 331.0 V 914.0 Q 1982.0 920.0 1988.0 920.0 L 2412.0 920.0 L 2492.0 920.0 Q 2498.0 920.0 2498.0 926.0 V 949.0 Q 2498.0 955.0 2504.0 955.0 L 2642.0 955.0 L 2648.0 955.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/models/fcheck_config.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/code_size_thresholds.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 745.0 L 1394.0 745.0 Q 1400.0 745.0 1400.0 739.0 V 648.0 Q 1400.0 642.0 1406.0 642.0 L 1890.0 642.0 L 1954.0 642.0 Q 1960.0 642.0 1960.0 636.0 V 191.0 Q 1960.0 185.0 1966.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
+  <path d="M 1330.0 745.0 L 1394.0 745.0 Q 1400.0 745.0 1400.0 739.0 V 158.0 Q 1400.0 152.0 1406.0 152.0 L 1890.0 152.0 L 1954.0 152.0 Q 1960.0 152.0 1960.0 158.0 V 179.0 Q 1960.0 185.0 1966.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/documentation/documentation_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/shared/generated_file_utils.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 675.0 L 1378.0 675.0 Q 1384.0 675.0 1384.0 669.0 V 575.0 Q 1384.0 569.0 1390.0 569.0 L 1890.0 569.0 L 1938.0 569.0 Q 1944.0 569.0 1944.0 563.0 V 121.0 Q 1944.0 115.0 1950.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
+  <path d="M 1330.0 675.0 L 1378.0 675.0 Q 1384.0 675.0 1384.0 669.0 V 85.0 Q 1384.0 79.0 1390.0 79.0 L 1890.0 79.0 L 1938.0 79.0 Q 1944.0 79.0 1944.0 85.0 V 109.0 Q 1944.0 115.0 1950.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_delegate_abstract.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 815.0 L 1956.0 815.0 Q 1962.0 815.0 1962.0 809.0 V 714.0 Q 1962.0 708.0 1968.0 708.0 L 2412.0 708.0 L 2472.0 708.0 Q 2478.0 708.0 2478.0 702.0 V 261.0 Q 2478.0 255.0 2484.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
+  <path d="M 1896.0 815.0 L 1956.0 815.0 Q 1962.0 815.0 1962.0 809.0 V 224.0 Q 1962.0 218.0 1968.0 218.0 L 2412.0 218.0 L 2472.0 218.0 Q 2478.0 218.0 2478.0 224.0 V 249.0 Q 2478.0 255.0 2484.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_analyzer.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_artifact.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1486.0 115.0 Q 1492.0 115.0 1492.0 121.0 V 282.0 Q 1492.0 288.0 1498.0 288.0 L 1890.0 288.0 L 2044.0 288.0 Q 2050.0 288.0 2050.0 294.0 V 669.0 Q 2050.0 675.0 2056.0 675.0 L 2192.0 675.0 L 2198.0 675.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1486.0 115.0 Q 1492.0 115.0 1492.0 121.0 V 632.0 Q 1492.0 638.0 1498.0 638.0 L 1890.0 638.0 L 2044.0 638.0 Q 2050.0 638.0 2050.0 644.0 V 669.0 Q 2050.0 675.0 2056.0 675.0 L 2192.0 675.0 L 2198.0 675.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/project_results.dart</title>
 </g>
 <g>
-  <path d="M 918.0 185.0 L 926.0 185.0 Q 932.0 185.0 932.0 191.0 V 206.0 Q 932.0 212.0 938.0 212.0 L 1324.0 212.0 L 1332.0 212.0 Q 1338.0 212.0 1338.0 218.0 V 739.0 Q 1338.0 745.0 1344.0 745.0 L 1670.0 745.0 L 1676.0 745.0" class="edge"/>
+  <path d="M 918.0 185.0 L 926.0 185.0 Q 932.0 185.0 932.0 191.0 V 696.0 Q 932.0 702.0 938.0 702.0 L 1324.0 702.0 L 1332.0 702.0 Q 1338.0 702.0 1338.0 708.0 V 739.0 Q 1338.0 745.0 1344.0 745.0 L 1670.0 745.0 L 1676.0 745.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/input_output/number_format_utils.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1004.0 115.0 Q 1010.0 115.0 1010.0 121.0 V 206.0 Q 1010.0 212.0 1016.0 212.0 L 1324.0 212.0 L 1410.0 212.0 Q 1416.0 212.0 1416.0 218.0 V 599.0 Q 1416.0 605.0 1422.0 605.0 L 1670.0 605.0 L 1676.0 605.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1004.0 115.0 Q 1010.0 115.0 1010.0 121.0 V 556.0 Q 1010.0 562.0 1016.0 562.0 L 1324.0 562.0 L 1410.0 562.0 Q 1416.0 562.0 1416.0 568.0 V 599.0 Q 1416.0 605.0 1422.0 605.0 L 1670.0 605.0 L 1676.0 605.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/duplicate_code/duplicate_code_file_data.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 675.0 L 1382.0 675.0 Q 1388.0 675.0 1388.0 669.0 V 579.0 Q 1388.0 573.0 1394.0 573.0 L 1890.0 573.0 L 1942.0 573.0 Q 1948.0 573.0 1948.0 567.0 V 191.0 Q 1948.0 185.0 1954.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
+  <path d="M 1330.0 675.0 L 1382.0 675.0 Q 1388.0 675.0 1388.0 669.0 V 159.0 Q 1388.0 153.0 1394.0 153.0 L 1890.0 153.0 L 1942.0 153.0 Q 1948.0 153.0 1948.0 159.0 V 179.0 Q 1948.0 185.0 1954.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/shared/generated_file_utils.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1490.0 115.0 Q 1496.0 115.0 1496.0 121.0 V 286.0 Q 1496.0 292.0 1502.0 292.0 L 1890.0 292.0 L 2048.0 292.0 Q 2054.0 292.0 2054.0 298.0 V 599.0 Q 2054.0 605.0 2060.0 605.0 L 2192.0 605.0 L 2198.0 605.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1490.0 115.0 Q 1496.0 115.0 1496.0 121.0 V 566.0 Q 1496.0 572.0 1502.0 572.0 L 1890.0 572.0 L 2048.0 572.0 Q 2054.0 572.0 2054.0 578.0 V 599.0 Q 2054.0 605.0 2060.0 605.0 L 2192.0 605.0 L 2198.0 605.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_input.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 605.0 L 1520.0 605.0 Q 1526.0 605.0 1526.0 599.0 V 505.0 Q 1526.0 499.0 1532.0 499.0 L 1890.0 499.0 L 2080.0 499.0 Q 2086.0 499.0 2086.0 493.0 V 121.0 Q 2086.0 115.0 2092.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
+  <path d="M 1330.0 605.0 L 1520.0 605.0 Q 1526.0 605.0 1526.0 599.0 V 85.0 Q 1526.0 79.0 1532.0 79.0 L 1890.0 79.0 L 2080.0 79.0 Q 2086.0 79.0 2086.0 85.0 V 109.0 Q 2086.0 115.0 2092.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/sorted/source_sort_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_delegate_abstract.dart</title>
 </g>
 <g>
-  <path d="M 916.0 535.0 L 1048.0 535.0 Q 1054.0 535.0 1054.0 529.0 V 296.0 Q 1054.0 290.0 1060.0 290.0 L 1324.0 290.0 L 1456.0 290.0 Q 1462.0 290.0 1462.0 284.0 V 121.0 Q 1462.0 115.0 1468.0 115.0 L 1670.0 115.0 L 1676.0 115.0" class="edge"/>
+  <path d="M 916.0 535.0 L 1048.0 535.0 Q 1054.0 535.0 1054.0 529.0 V 86.0 Q 1054.0 80.0 1060.0 80.0 L 1324.0 80.0 L 1456.0 80.0 Q 1462.0 80.0 1462.0 86.0 V 109.0 Q 1462.0 115.0 1468.0 115.0 L 1670.0 115.0 L 1676.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/exports/externals/export_plantuml.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 916.0 255.0 L 1064.0 255.0 Q 1070.0 255.0 1070.0 261.0 V 282.0 Q 1070.0 288.0 1076.0 288.0 L 1324.0 288.0 L 1472.0 288.0 Q 1478.0 288.0 1478.0 294.0 V 669.0 Q 1478.0 675.0 1484.0 675.0 L 1670.0 675.0 L 1676.0 675.0" class="edge"/>
+  <path d="M 916.0 255.0 L 1064.0 255.0 Q 1070.0 255.0 1070.0 261.0 V 632.0 Q 1070.0 638.0 1076.0 638.0 L 1324.0 638.0 L 1472.0 638.0 Q 1478.0 638.0 1478.0 644.0 V 669.0 Q 1478.0 675.0 1484.0 675.0 L 1670.0 675.0 L 1676.0 675.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_folders/export_svg_folders.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/shared/badge_model.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 815.0 L 1960.0 815.0 Q 1966.0 815.0 1966.0 809.0 V 716.0 Q 1966.0 710.0 1972.0 710.0 L 2412.0 710.0 L 2476.0 710.0 Q 2482.0 710.0 2482.0 704.0 V 401.0 Q 2482.0 395.0 2488.0 395.0 L 2642.0 395.0 L 2648.0 395.0" class="edge"/>
+  <path d="M 1896.0 815.0 L 1960.0 815.0 Q 1966.0 815.0 1966.0 809.0 V 366.0 Q 1966.0 360.0 1972.0 360.0 L 2412.0 360.0 L 2476.0 360.0 Q 2482.0 360.0 2482.0 366.0 V 389.0 Q 2482.0 395.0 2488.0 395.0 L 2642.0 395.0 L 2648.0 395.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_analyzer.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/file_metrics.dart</title>
 </g>
 <g>
-  <path d="M 916.0 325.0 L 1074.0 325.0 Q 1080.0 325.0 1080.0 331.0 V 352.0 Q 1080.0 358.0 1086.0 358.0 L 1324.0 358.0 L 1482.0 358.0 Q 1488.0 358.0 1488.0 364.0 V 739.0 Q 1488.0 745.0 1494.0 745.0 L 1670.0 745.0 L 1676.0 745.0" class="edge"/>
+  <path d="M 916.0 325.0 L 1074.0 325.0 Q 1080.0 325.0 1080.0 331.0 V 702.0 Q 1080.0 708.0 1086.0 708.0 L 1324.0 708.0 L 1482.0 708.0 Q 1488.0 708.0 1488.0 714.0 V 739.0 Q 1488.0 745.0 1494.0 745.0 L 1670.0 745.0 L 1676.0 745.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_loc/export_svg_code_size.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/input_output/number_format_utils.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1010.0 115.0 Q 1016.0 115.0 1016.0 121.0 V 210.0 Q 1016.0 216.0 1022.0 216.0 L 1324.0 216.0 L 1416.0 216.0 Q 1422.0 216.0 1422.0 222.0 V 529.0 Q 1422.0 535.0 1428.0 535.0 L 1670.0 535.0 L 1676.0 535.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1010.0 115.0 Q 1016.0 115.0 1016.0 121.0 V 490.0 Q 1016.0 496.0 1022.0 496.0 L 1324.0 496.0 L 1416.0 496.0 Q 1422.0 496.0 1422.0 502.0 V 529.0 Q 1422.0 535.0 1428.0 535.0 L 1670.0 535.0 L 1676.0 535.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_file_data.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 605.0 L 1522.0 605.0 Q 1528.0 605.0 1528.0 599.0 V 507.0 Q 1528.0 501.0 1534.0 501.0 L 1890.0 501.0 L 2082.0 501.0 Q 2088.0 501.0 2088.0 495.0 V 191.0 Q 2088.0 185.0 2094.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
+  <path d="M 1330.0 605.0 L 1522.0 605.0 Q 1528.0 605.0 1528.0 599.0 V 157.0 Q 1528.0 151.0 1534.0 151.0 L 1890.0 151.0 L 2082.0 151.0 Q 2088.0 151.0 2088.0 157.0 V 179.0 Q 2088.0 185.0 2094.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/sorted/source_sort_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/shared/generated_file_utils.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 535.0 L 1462.0 535.0 Q 1468.0 535.0 1468.0 529.0 V 433.0 Q 1468.0 427.0 1474.0 427.0 L 1890.0 427.0 L 2022.0 427.0 Q 2028.0 427.0 2028.0 421.0 V 121.0 Q 2028.0 115.0 2034.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
+  <path d="M 1330.0 535.0 L 1462.0 535.0 Q 1468.0 535.0 1468.0 529.0 V 83.0 Q 1468.0 77.0 1474.0 77.0 L 1890.0 77.0 L 2022.0 77.0 Q 2028.0 77.0 2028.0 83.0 V 109.0 Q 2028.0 115.0 2034.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_delegate_abstract.dart</title>
 </g>
 <g>
-  <path d="M 2868.0 465.0 L 2882.0 465.0 Q 2888.0 465.0 2888.0 459.0 V 296.0 Q 2888.0 290.0 2894.0 290.0 L 3182.0 290.0 L 3196.0 290.0 Q 3202.0 290.0 3202.0 284.0 V 121.0 Q 3202.0 115.0 3208.0 115.0 L 3282.0 115.0 L 3288.0 115.0" class="edge"/>
+  <path d="M 2868.0 465.0 L 2882.0 465.0 Q 2888.0 465.0 2888.0 459.0 V 86.0 Q 2888.0 80.0 2894.0 80.0 L 3182.0 80.0 L 3196.0 80.0 Q 3202.0 80.0 3202.0 86.0 V 109.0 Q 3202.0 115.0 3208.0 115.0 L 3282.0 115.0 L 3288.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_issue.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_utils.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 535.0 L 1464.0 535.0 Q 1470.0 535.0 1470.0 529.0 V 437.0 Q 1470.0 431.0 1476.0 431.0 L 1890.0 431.0 L 2024.0 431.0 Q 2030.0 431.0 2030.0 425.0 V 191.0 Q 2030.0 185.0 2036.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
+  <path d="M 1330.0 535.0 L 1464.0 535.0 Q 1470.0 535.0 1470.0 529.0 V 157.0 Q 1470.0 151.0 1476.0 151.0 L 1890.0 151.0 L 2024.0 151.0 Q 2030.0 151.0 2030.0 157.0 V 179.0 Q 2030.0 185.0 2036.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/shared/generated_file_utils.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 465.0 L 1426.0 465.0 Q 1432.0 465.0 1432.0 459.0 V 433.0 Q 1432.0 427.0 1438.0 427.0 L 1890.0 427.0 L 1986.0 427.0 Q 1992.0 427.0 1992.0 421.0 V 121.0 Q 1992.0 115.0 1998.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
+  <path d="M 1330.0 465.0 L 1426.0 465.0 Q 1432.0 465.0 1432.0 459.0 V 83.0 Q 1432.0 77.0 1438.0 77.0 L 1890.0 77.0 L 1986.0 77.0 Q 1992.0 77.0 1992.0 83.0 V 109.0 Q 1992.0 115.0 1998.0 115.0 L 2192.0 115.0 L 2198.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_delegate_abstract.dart</title>
 </g>
 <g>
-  <path d="M 916.0 605.0 L 918.0 605.0 Q 924.0 605.0 924.0 599.0 V 436.0 Q 924.0 430.0 930.0 430.0 L 1324.0 430.0 L 1326.0 430.0 Q 1332.0 430.0 1332.0 424.0 V 261.0 Q 1332.0 255.0 1338.0 255.0 L 1670.0 255.0 L 1676.0 255.0" class="edge"/>
+  <path d="M 916.0 605.0 L 918.0 605.0 Q 924.0 605.0 924.0 599.0 V 226.0 Q 924.0 220.0 930.0 220.0 L 1324.0 220.0 L 1326.0 220.0 Q 1332.0 220.0 1332.0 226.0 V 249.0 Q 1332.0 255.0 1338.0 255.0 L 1670.0 255.0 L 1676.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_input.dart ▶ /Users/jp/src/github/vteam/fcheck/bin/console/console_common.dart</title>
 </g>
 <g>
-  <path d="M 916.0 465.0 L 1044.0 465.0 Q 1050.0 465.0 1050.0 459.0 V 296.0 Q 1050.0 290.0 1056.0 290.0 L 1324.0 290.0 L 1452.0 290.0 Q 1458.0 290.0 1458.0 284.0 V 121.0 Q 1458.0 115.0 1464.0 115.0 L 1670.0 115.0 L 1676.0 115.0" class="edge"/>
+  <path d="M 916.0 465.0 L 1044.0 465.0 Q 1050.0 465.0 1050.0 459.0 V 86.0 Q 1050.0 80.0 1056.0 80.0 L 1324.0 80.0 L 1452.0 80.0 Q 1458.0 80.0 1458.0 86.0 V 109.0 Q 1458.0 115.0 1464.0 115.0 L 1670.0 115.0 L 1676.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/exports/externals/export_mermaid.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1016.0 115.0 Q 1022.0 115.0 1022.0 121.0 V 214.0 Q 1022.0 220.0 1028.0 220.0 L 1324.0 220.0 L 1422.0 220.0 Q 1428.0 220.0 1428.0 226.0 V 459.0 Q 1428.0 465.0 1434.0 465.0 L 1670.0 465.0 L 1676.0 465.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1016.0 115.0 Q 1022.0 115.0 1022.0 121.0 V 424.0 Q 1022.0 430.0 1028.0 430.0 L 1324.0 430.0 L 1422.0 430.0 Q 1428.0 430.0 1428.0 436.0 V 459.0 Q 1428.0 465.0 1434.0 465.0 L 1670.0 465.0 L 1676.0 465.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_delegate.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 465.0 L 1424.0 465.0 Q 1430.0 465.0 1430.0 459.0 V 435.0 Q 1430.0 429.0 1436.0 429.0 L 1890.0 429.0 L 1984.0 429.0 Q 1990.0 429.0 1990.0 435.0 V 809.0 Q 1990.0 815.0 1996.0 815.0 L 2192.0 815.0 L 2198.0 815.0" class="edge"/>
+  <path d="M 1330.0 465.0 L 1424.0 465.0 Q 1430.0 465.0 1430.0 471.0 V 773.0 Q 1430.0 779.0 1436.0 779.0 L 1890.0 779.0 L 1984.0 779.0 Q 1990.0 779.0 1990.0 785.0 V 809.0 Q 1990.0 815.0 1996.0 815.0 L 2192.0 815.0 L 2198.0 815.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_utils.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 465.0 L 1936.0 465.0 Q 1942.0 465.0 1942.0 459.0 V 433.0 Q 1942.0 427.0 1948.0 427.0 L 2412.0 427.0 L 2452.0 427.0 Q 2458.0 427.0 2458.0 421.0 V 121.0 Q 2458.0 115.0 2464.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 1896.0 465.0 L 1936.0 465.0 Q 1942.0 465.0 1942.0 459.0 V 83.0 Q 1942.0 77.0 1948.0 77.0 L 2412.0 77.0 L 2452.0 77.0 Q 2458.0 77.0 2458.0 83.0 V 109.0 Q 2458.0 115.0 2464.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1024.0 115.0 Q 1030.0 115.0 1030.0 121.0 V 220.0 Q 1030.0 226.0 1036.0 226.0 L 1324.0 226.0 L 1430.0 226.0 Q 1436.0 226.0 1436.0 232.0 V 389.0 Q 1436.0 395.0 1442.0 395.0 L 1670.0 395.0 L 1676.0 395.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1024.0 115.0 Q 1030.0 115.0 1030.0 121.0 V 360.0 Q 1030.0 366.0 1036.0 366.0 L 1324.0 366.0 L 1430.0 366.0 Q 1436.0 366.0 1436.0 372.0 V 389.0 Q 1436.0 395.0 1442.0 395.0 L 1670.0 395.0 L 1676.0 395.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/input_output/file_utils.dart</title>
 </g>
 <g>
-  <path d="M 916.0 395.0 L 1052.0 395.0 Q 1058.0 395.0 1058.0 389.0 V 366.0 Q 1058.0 360.0 1064.0 360.0 L 1324.0 360.0 L 1460.0 360.0 Q 1466.0 360.0 1466.0 366.0 V 669.0 Q 1466.0 675.0 1472.0 675.0 L 1670.0 675.0 L 1676.0 675.0" class="edge"/>
+  <path d="M 916.0 395.0 L 1052.0 395.0 Q 1058.0 395.0 1058.0 401.0 V 634.0 Q 1058.0 640.0 1064.0 640.0 L 1324.0 640.0 L 1460.0 640.0 Q 1466.0 640.0 1466.0 646.0 V 669.0 Q 1466.0 675.0 1472.0 675.0 L 1670.0 675.0 L 1676.0 675.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_files/export_svg_files.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/shared/badge_model.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 255.0 L 1544.0 255.0 Q 1550.0 255.0 1550.0 261.0 V 355.0 Q 1550.0 361.0 1556.0 361.0 L 1890.0 361.0 L 2104.0 361.0 Q 2110.0 361.0 2110.0 367.0 V 529.0 Q 2110.0 535.0 2116.0 535.0 L 2192.0 535.0 L 2198.0 535.0" class="edge"/>
+  <path d="M 1330.0 255.0 L 1544.0 255.0 Q 1550.0 255.0 1550.0 261.0 V 495.0 Q 1550.0 501.0 1556.0 501.0 L 1890.0 501.0 L 2104.0 501.0 Q 2110.0 501.0 2110.0 507.0 V 529.0 Q 2110.0 535.0 2116.0 535.0 L 2192.0 535.0 L 2198.0 535.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_inventory.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_directive_location.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 885.0 L 1926.0 885.0 Q 1932.0 885.0 1932.0 879.0 V 717.0 Q 1932.0 711.0 1938.0 711.0 L 2412.0 711.0 L 2442.0 711.0 Q 2448.0 711.0 2448.0 705.0 V 611.0 Q 2448.0 605.0 2454.0 605.0 L 2642.0 605.0 L 2648.0 605.0" class="edge"/>
+  <path d="M 1896.0 885.0 L 1926.0 885.0 Q 1932.0 885.0 1932.0 879.0 V 577.0 Q 1932.0 571.0 1938.0 571.0 L 2412.0 571.0 L 2442.0 571.0 Q 2448.0 571.0 2448.0 577.0 V 599.0 Q 2448.0 605.0 2454.0 605.0 L 2642.0 605.0 L 2648.0 605.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart</title>
 </g>
 <g>
-  <path d="M 916.0 395.0 L 1054.0 395.0 Q 1060.0 395.0 1060.0 389.0 V 364.0 Q 1060.0 358.0 1066.0 358.0 L 1324.0 358.0 L 1462.0 358.0 Q 1468.0 358.0 1468.0 352.0 V 121.0 Q 1468.0 115.0 1474.0 115.0 L 1670.0 115.0 L 1676.0 115.0" class="edge"/>
+  <path d="M 916.0 395.0 L 1054.0 395.0 Q 1060.0 395.0 1060.0 389.0 V 84.0 Q 1060.0 78.0 1066.0 78.0 L 1324.0 78.0 L 1462.0 78.0 Q 1468.0 78.0 1468.0 84.0 V 109.0 Q 1468.0 115.0 1474.0 115.0 L 1670.0 115.0 L 1676.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_files/export_svg_files.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 465.0 L 1428.0 465.0 Q 1434.0 465.0 1434.0 459.0 V 439.0 Q 1434.0 433.0 1440.0 433.0 L 1890.0 433.0 L 1988.0 433.0 Q 1994.0 433.0 1994.0 427.0 V 191.0 Q 1994.0 185.0 2000.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
+  <path d="M 1330.0 465.0 L 1428.0 465.0 Q 1434.0 465.0 1434.0 459.0 V 159.0 Q 1434.0 153.0 1440.0 153.0 L 1890.0 153.0 L 1988.0 153.0 Q 1994.0 153.0 1994.0 159.0 V 179.0 Q 1994.0 185.0 2000.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/shared/generated_file_utils.dart</title>
 </g>
 <g>
-  <path d="M 918.0 185.0 L 930.0 185.0 Q 936.0 185.0 936.0 191.0 V 208.0 Q 936.0 214.0 942.0 214.0 L 1324.0 214.0 L 1336.0 214.0 Q 1342.0 214.0 1342.0 220.0 V 459.0 Q 1342.0 465.0 1348.0 465.0 L 1670.0 465.0 L 1676.0 465.0" class="edge"/>
+  <path d="M 918.0 185.0 L 930.0 185.0 Q 936.0 185.0 936.0 191.0 V 418.0 Q 936.0 424.0 942.0 424.0 L 1324.0 424.0 L 1336.0 424.0 Q 1342.0 424.0 1342.0 430.0 V 459.0 Q 1342.0 465.0 1348.0 465.0 L 1670.0 465.0 L 1676.0 465.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_delegate.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 255.0 L 1544.0 255.0 Q 1550.0 255.0 1550.0 261.0 V 355.0 Q 1550.0 361.0 1556.0 361.0 L 1890.0 361.0 L 2104.0 361.0 Q 2110.0 361.0 2110.0 367.0 V 529.0 Q 2110.0 535.0 2116.0 535.0 L 2192.0 535.0 L 2198.0 535.0" class="edge"/>
+  <path d="M 1330.0 255.0 L 1544.0 255.0 Q 1550.0 255.0 1550.0 261.0 V 495.0 Q 1550.0 501.0 1556.0 501.0 L 1890.0 501.0 L 2104.0 501.0 Q 2110.0 501.0 2110.0 507.0 V 529.0 Q 2110.0 535.0 2116.0 535.0 L 2192.0 535.0 L 2198.0 535.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_inventory.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_directive_location.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 535.0 L 1904.0 535.0 Q 1910.0 535.0 1910.0 529.0 V 436.0 Q 1910.0 430.0 1916.0 430.0 L 2412.0 430.0 L 2420.0 430.0 Q 2426.0 430.0 2426.0 424.0 V 331.0 Q 2426.0 325.0 2432.0 325.0 L 2642.0 325.0 L 2648.0 325.0" class="edge"/>
+  <path d="M 1896.0 535.0 L 1904.0 535.0 Q 1910.0 535.0 1910.0 529.0 V 296.0 Q 1910.0 290.0 1916.0 290.0 L 2412.0 290.0 L 2420.0 290.0 Q 2426.0 290.0 2426.0 296.0 V 319.0 Q 2426.0 325.0 2432.0 325.0 L 2642.0 325.0 L 2648.0 325.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_file_data.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 535.0 L 1466.0 535.0 Q 1472.0 535.0 1472.0 529.0 V 439.0 Q 1472.0 433.0 1478.0 433.0 L 1890.0 433.0 L 2026.0 433.0 Q 2032.0 433.0 2032.0 427.0 V 331.0 Q 2032.0 325.0 2038.0 325.0 L 2192.0 325.0 L 2198.0 325.0" class="edge"/>
+  <path d="M 1330.0 535.0 L 1466.0 535.0 Q 1472.0 535.0 1472.0 529.0 V 299.0 Q 1472.0 293.0 1478.0 293.0 L 1890.0 293.0 L 2026.0 293.0 Q 2032.0 293.0 2032.0 299.0 V 319.0 Q 2032.0 325.0 2038.0 325.0 L 2192.0 325.0 L 2198.0 325.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_file_data.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 815.0 L 1962.0 815.0 Q 1968.0 815.0 1968.0 809.0 V 718.0 Q 1968.0 712.0 1974.0 712.0 L 2412.0 712.0 L 2478.0 712.0 Q 2484.0 712.0 2484.0 718.0 V 1019.0 Q 2484.0 1025.0 2490.0 1025.0 L 2642.0 1025.0 L 2648.0 1025.0" class="edge"/>
+  <path d="M 1896.0 815.0 L 1962.0 815.0 Q 1968.0 815.0 1968.0 821.0 V 986.0 Q 1968.0 992.0 1974.0 992.0 L 2412.0 992.0 L 2478.0 992.0 Q 2484.0 992.0 2484.0 998.0 V 1019.0 Q 2484.0 1025.0 2490.0 1025.0 L 2642.0 1025.0 L 2648.0 1025.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_analyzer.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/project_results_breakdown.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1030.0 115.0 Q 1036.0 115.0 1036.0 121.0 V 228.0 Q 1036.0 234.0 1042.0 234.0 L 1324.0 234.0 L 1436.0 234.0 Q 1442.0 234.0 1442.0 240.0 V 319.0 Q 1442.0 325.0 1448.0 325.0 L 1670.0 325.0 L 1676.0 325.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1030.0 115.0 Q 1036.0 115.0 1036.0 121.0 V 298.0 Q 1036.0 304.0 1042.0 304.0 L 1324.0 304.0 L 1436.0 304.0 Q 1442.0 304.0 1442.0 310.0 V 319.0 Q 1442.0 325.0 1448.0 325.0 L 1670.0 325.0 L 1676.0 325.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/fcheck_config.dart</title>
 </g>
 <g>
-  <path d="M 918.0 185.0 L 934.0 185.0 Q 940.0 185.0 940.0 191.0 V 212.0 Q 940.0 218.0 946.0 218.0 L 1324.0 218.0 L 1340.0 218.0 Q 1346.0 218.0 1346.0 224.0 V 319.0 Q 1346.0 325.0 1352.0 325.0 L 1670.0 325.0 L 1676.0 325.0" class="edge"/>
+  <path d="M 918.0 185.0 L 934.0 185.0 Q 940.0 185.0 940.0 191.0 V 282.0 Q 940.0 288.0 946.0 288.0 L 1324.0 288.0 L 1340.0 288.0 Q 1346.0 288.0 1346.0 294.0 V 319.0 Q 1346.0 325.0 1352.0 325.0 L 1670.0 325.0 L 1676.0 325.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/fcheck_config.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 395.0 L 1342.0 395.0 Q 1348.0 395.0 1348.0 389.0 V 368.0 Q 1348.0 362.0 1354.0 362.0 L 1890.0 362.0 L 1902.0 362.0 Q 1908.0 362.0 1908.0 356.0 V 261.0 Q 1908.0 255.0 1914.0 255.0 L 2192.0 255.0 L 2198.0 255.0" class="edge"/>
+  <path d="M 1330.0 395.0 L 1342.0 395.0 Q 1348.0 395.0 1348.0 389.0 V 228.0 Q 1348.0 222.0 1354.0 222.0 L 1890.0 222.0 L 1902.0 222.0 Q 1908.0 222.0 1908.0 228.0 V 249.0 Q 1908.0 255.0 1914.0 255.0 L 2192.0 255.0 L 2198.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output_localization_report.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/app_strings.dart</title>
 </g>
 <g>
-  <path d="M 916.0 255.0 L 1066.0 255.0 Q 1072.0 255.0 1072.0 261.0 V 284.0 Q 1072.0 290.0 1078.0 290.0 L 1324.0 290.0 L 1474.0 290.0 Q 1480.0 290.0 1480.0 284.0 V 121.0 Q 1480.0 115.0 1486.0 115.0 L 1670.0 115.0 L 1676.0 115.0" class="edge"/>
+  <path d="M 916.0 255.0 L 1066.0 255.0 Q 1072.0 255.0 1072.0 249.0 V 86.0 Q 1072.0 80.0 1078.0 80.0 L 1324.0 80.0 L 1474.0 80.0 Q 1480.0 80.0 1480.0 86.0 V 109.0 Q 1480.0 115.0 1486.0 115.0 L 1670.0 115.0 L 1676.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_folders/export_svg_folders.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 598.0 115.0 L 618.0 115.0 Q 624.0 115.0 624.0 121.0 V 144.0 Q 624.0 150.0 630.0 150.0 L 910.0 150.0 L 930.0 150.0 Q 936.0 150.0 936.0 156.0 V 249.0 Q 936.0 255.0 942.0 255.0 L 1104.0 255.0 L 1110.0 255.0" class="edge"/>
+  <path d="M 598.0 115.0 L 618.0 115.0 Q 624.0 115.0 624.0 121.0 V 214.0 Q 624.0 220.0 630.0 220.0 L 910.0 220.0 L 930.0 220.0 Q 936.0 220.0 936.0 226.0 V 249.0 Q 936.0 255.0 942.0 255.0 L 1104.0 255.0 L 1110.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck_cli_runner.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_inventory.dart</title>
 </g>
 <g>
@@ -1082,7 +1082,7 @@
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_results.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_issue.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1036.0 115.0 Q 1042.0 115.0 1042.0 121.0 V 234.0 Q 1042.0 240.0 1048.0 240.0 L 1324.0 240.0 L 1442.0 240.0 Q 1448.0 240.0 1448.0 234.0 V 191.0 Q 1448.0 185.0 1454.0 185.0 L 1670.0 185.0 L 1676.0 185.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1036.0 115.0 Q 1042.0 115.0 1042.0 121.0 V 164.0 Q 1042.0 170.0 1048.0 170.0 L 1324.0 170.0 L 1442.0 170.0 Q 1448.0 170.0 1448.0 176.0 V 179.0 Q 1448.0 185.0 1454.0 185.0 L 1670.0 185.0 L 1676.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/project_type.dart</title>
 </g>
 <g>
@@ -1090,11 +1090,11 @@
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/bin/console/console_common.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1042.0 115.0 Q 1048.0 115.0 1048.0 109.0 V 80.0 Q 1048.0 74.0 1054.0 74.0 L 1448.0 74.0 Q 1454.0 74.0 1454.0 80.0 V 109.0 Q 1454.0 115.0 1460.0 115.0 L 1667.0 115.0 L 1676.0 115.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1042.0 115.0 Q 1048.0 115.0 1048.0 109.0 V 88.0 Q 1048.0 82.0 1054.0 82.0 L 1448.0 82.0 Q 1454.0 82.0 1454.0 88.0 V 109.0 Q 1454.0 115.0 1460.0 115.0 L 1667.0 115.0 L 1676.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
-  <path d="M 598.0 115.0 L 628.0 115.0 Q 634.0 115.0 634.0 109.0 V 84.0 Q 634.0 78.0 640.0 78.0 L 940.0 78.0 Q 946.0 78.0 946.0 84.0 V 109.0 Q 946.0 115.0 952.0 115.0 L 1101.0 115.0 L 1110.0 115.0" class="edge"/>
+  <path d="M 598.0 115.0 L 628.0 115.0 Q 634.0 115.0 634.0 109.0 V 88.0 Q 634.0 82.0 640.0 82.0 L 940.0 82.0 Q 946.0 82.0 946.0 88.0 V 109.0 Q 946.0 115.0 952.0 115.0 L 1101.0 115.0 L 1110.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck_cli_runner.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart</title>
 </g>
 <g>
@@ -1102,207 +1102,207 @@
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_issue.dart</title>
 </g>
 <g>
-  <path d="M 918.0 185.0 L 952.0 185.0 Q 958.0 185.0 958.0 191.0 V 226.0 Q 958.0 232.0 964.0 232.0 L 1324.0 232.0 L 1358.0 232.0 Q 1364.0 232.0 1364.0 226.0 V 191.0 Q 1364.0 185.0 1370.0 185.0 L 1670.0 185.0 L 1676.0 185.0" class="edge"/>
+  <path d="M 918.0 185.0 L 952.0 185.0 Q 958.0 185.0 958.0 179.0 V 168.0 Q 958.0 162.0 964.0 162.0 L 1324.0 162.0 L 1358.0 162.0 Q 1364.0 162.0 1364.0 168.0 V 179.0 Q 1364.0 185.0 1370.0 185.0 L 1670.0 185.0 L 1676.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/project_type.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 1445.0 L 1972.0 1445.0 Q 1978.0 1445.0 1978.0 1439.0 V 1135.0 Q 1978.0 1129.0 1984.0 1129.0 L 2412.0 1129.0 L 2595.0 1129.0 Q 2601.0 1129.0 2601.0 1123.0 V 785.0 Q 2601.0 779.0 2607.0 779.0 L 2862.0 779.0 L 2938.0 779.0 Q 2944.0 779.0 2944.0 773.0 V 121.0 Q 2944.0 115.0 2950.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
+  <path d="M 1896.0 1445.0 L 1972.0 1445.0 Q 1978.0 1445.0 1978.0 1439.0 V 85.0 Q 1978.0 79.0 1984.0 79.0 L 2412.0 79.0 L 2862.0 79.0 L 2938.0 79.0 Q 2944.0 79.0 2944.0 85.0 V 109.0 Q 2944.0 115.0 2950.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/secrets/secret_scanner.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 1375.0 L 1952.0 1375.0 Q 1958.0 1375.0 1958.0 1369.0 V 1065.0 Q 1958.0 1059.0 1964.0 1059.0 L 2412.0 1059.0 L 2575.0 1059.0 Q 2581.0 1059.0 2581.0 1053.0 V 715.0 Q 2581.0 709.0 2587.0 709.0 L 2862.0 709.0 L 2918.0 709.0 Q 2924.0 709.0 2924.0 703.0 V 121.0 Q 2924.0 115.0 2930.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
+  <path d="M 1896.0 1375.0 L 1952.0 1375.0 Q 1958.0 1375.0 1958.0 1369.0 V 85.0 Q 1958.0 79.0 1964.0 79.0 L 2412.0 79.0 L 2862.0 79.0 L 2918.0 79.0 Q 2924.0 79.0 2924.0 85.0 V 109.0 Q 2924.0 115.0 2930.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/magic_numbers/magic_number_visitor.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 1445.0 L 1434.0 1445.0 Q 1440.0 1445.0 1440.0 1439.0 V 996.0 Q 1440.0 990.0 1446.0 990.0 L 1890.0 990.0 L 2137.0 990.0 Q 2143.0 990.0 2143.0 984.0 V 576.0 Q 2143.0 570.0 2149.0 570.0 L 2412.0 570.0 L 2516.0 570.0 Q 2522.0 570.0 2522.0 564.0 V 191.0 Q 2522.0 185.0 2528.0 185.0 L 2642.0 185.0 L 2648.0 185.0" class="edge"/>
+  <path d="M 1330.0 1445.0 L 1434.0 1445.0 Q 1440.0 1445.0 1440.0 1439.0 V 156.0 Q 1440.0 150.0 1446.0 150.0 L 1890.0 150.0 L 2412.0 150.0 L 2516.0 150.0 Q 2522.0 150.0 2522.0 156.0 V 179.0 Q 2522.0 185.0 2528.0 185.0 L 2642.0 185.0 L 2648.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_analyzer.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_issue.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 1305.0 L 1916.0 1305.0 Q 1922.0 1305.0 1922.0 1299.0 V 995.0 Q 1922.0 989.0 1928.0 989.0 L 2412.0 989.0 L 2539.0 989.0 Q 2545.0 989.0 2545.0 983.0 V 645.0 Q 2545.0 639.0 2551.0 639.0 L 2862.0 639.0 L 2882.0 639.0 Q 2888.0 639.0 2888.0 633.0 V 121.0 Q 2888.0 115.0 2894.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
+  <path d="M 1896.0 1305.0 L 1916.0 1305.0 Q 1922.0 1305.0 1922.0 1299.0 V 85.0 Q 1922.0 79.0 1928.0 79.0 L 2412.0 79.0 L 2862.0 79.0 L 2882.0 79.0 Q 2888.0 79.0 2888.0 85.0 V 109.0 Q 2888.0 115.0 2894.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/documentation/documentation_visitor.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 1235.0 L 1908.0 1235.0 Q 1914.0 1235.0 1914.0 1229.0 V 925.0 Q 1914.0 919.0 1920.0 919.0 L 2412.0 919.0 L 2531.0 919.0 Q 2537.0 919.0 2537.0 913.0 V 575.0 Q 2537.0 569.0 2543.0 569.0 L 2862.0 569.0 L 2874.0 569.0 Q 2880.0 569.0 2880.0 563.0 V 121.0 Q 2880.0 115.0 2886.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
+  <path d="M 1896.0 1235.0 L 1908.0 1235.0 Q 1914.0 1235.0 1914.0 1229.0 V 85.0 Q 1914.0 79.0 1920.0 79.0 L 2412.0 79.0 L 2862.0 79.0 L 2874.0 79.0 Q 2880.0 79.0 2880.0 85.0 V 109.0 Q 2880.0 115.0 2886.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_visitor.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 1165.0 L 1504.0 1165.0 Q 1510.0 1165.0 1510.0 1159.0 V 854.0 Q 1510.0 848.0 1516.0 848.0 L 1890.0 848.0 L 2207.0 848.0 Q 2213.0 848.0 2213.0 842.0 V 574.0 Q 2213.0 568.0 2219.0 568.0 L 2412.0 568.0 L 2586.0 568.0 Q 2592.0 568.0 2592.0 562.0 V 121.0 Q 2592.0 115.0 2598.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 1330.0 1165.0 L 1504.0 1165.0 Q 1510.0 1165.0 1510.0 1159.0 V 84.0 Q 1510.0 78.0 1516.0 78.0 L 1890.0 78.0 L 2412.0 78.0 L 2586.0 78.0 Q 2592.0 78.0 2592.0 84.0 V 109.0 Q 2592.0 115.0 2598.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/secrets/secret_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 1515.0 L 1386.0 1515.0 Q 1392.0 1515.0 1392.0 1509.0 V 1206.0 Q 1392.0 1200.0 1398.0 1200.0 L 1890.0 1200.0 L 2089.0 1200.0 Q 2095.0 1200.0 2095.0 1194.0 V 856.0 Q 2095.0 850.0 2101.0 850.0 L 2412.0 850.0 L 2468.0 850.0 Q 2474.0 850.0 2474.0 844.0 V 541.0 Q 2474.0 535.0 2480.0 535.0 L 2642.0 535.0 L 2648.0 535.0" class="edge"/>
+  <path d="M 1330.0 1515.0 L 1386.0 1515.0 Q 1392.0 1515.0 1392.0 1509.0 V 506.0 Q 1392.0 500.0 1398.0 500.0 L 1890.0 500.0 L 2412.0 500.0 L 2468.0 500.0 Q 2474.0 500.0 2474.0 506.0 V 529.0 Q 2474.0 535.0 2480.0 535.0 L 2642.0 535.0 L 2648.0 535.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/documentation/documentation_analyzer.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/documentation/documentation_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 1095.0 L 1438.0 1095.0 Q 1444.0 1095.0 1444.0 1089.0 V 854.0 Q 1444.0 848.0 1450.0 848.0 L 1890.0 848.0 L 2141.0 848.0 Q 2147.0 848.0 2147.0 842.0 V 574.0 Q 2147.0 568.0 2153.0 568.0 L 2412.0 568.0 L 2520.0 568.0 Q 2526.0 568.0 2526.0 562.0 V 121.0 Q 2526.0 115.0 2532.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 1330.0 1095.0 L 1438.0 1095.0 Q 1444.0 1095.0 1444.0 1089.0 V 84.0 Q 1444.0 78.0 1450.0 78.0 L 1890.0 78.0 L 2412.0 78.0 L 2520.0 78.0 Q 2526.0 78.0 2526.0 84.0 V 109.0 Q 2526.0 115.0 2532.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1472.0 115.0 Q 1478.0 115.0 1478.0 121.0 V 270.0 Q 1478.0 276.0 1484.0 276.0 L 1890.0 276.0 L 2173.0 276.0 Q 2179.0 276.0 2179.0 282.0 V 410.0 Q 2179.0 416.0 2185.0 416.0 L 2412.0 416.0 L 2552.0 416.0 Q 2558.0 416.0 2558.0 422.0 V 1019.0 Q 2558.0 1025.0 2564.0 1025.0 L 2642.0 1025.0 L 2648.0 1025.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1472.0 115.0 Q 1478.0 115.0 1478.0 121.0 V 970.0 Q 1478.0 976.0 1484.0 976.0 L 1890.0 976.0 L 2412.0 976.0 L 2552.0 976.0 Q 2558.0 976.0 2558.0 982.0 V 1019.0 Q 2558.0 1025.0 2564.0 1025.0 L 2642.0 1025.0 L 2648.0 1025.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/project_results_breakdown.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 1235.0 L 1370.0 1235.0 Q 1376.0 1235.0 1376.0 1229.0 V 926.0 Q 1376.0 920.0 1382.0 920.0 L 1890.0 920.0 L 2073.0 920.0 Q 2079.0 920.0 2079.0 914.0 V 646.0 Q 2079.0 640.0 2085.0 640.0 L 2412.0 640.0 L 2452.0 640.0 Q 2458.0 640.0 2458.0 634.0 V 331.0 Q 2458.0 325.0 2464.0 325.0 L 2642.0 325.0 L 2648.0 325.0" class="edge"/>
+  <path d="M 1330.0 1235.0 L 1370.0 1235.0 Q 1376.0 1235.0 1376.0 1229.0 V 296.0 Q 1376.0 290.0 1382.0 290.0 L 1890.0 290.0 L 2412.0 290.0 L 2452.0 290.0 Q 2458.0 290.0 2458.0 296.0 V 319.0 Q 2458.0 325.0 2464.0 325.0 L 2642.0 325.0 L 2648.0 325.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_analyzer.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 1025.0 L 1350.0 1025.0 Q 1356.0 1025.0 1356.0 1019.0 V 715.0 Q 1356.0 709.0 1362.0 709.0 L 1890.0 709.0 L 2053.0 709.0 Q 2059.0 709.0 2059.0 703.0 V 435.0 Q 2059.0 429.0 2065.0 429.0 L 2412.0 429.0 L 2432.0 429.0 Q 2438.0 429.0 2438.0 423.0 V 121.0 Q 2438.0 115.0 2444.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 1330.0 1025.0 L 1350.0 1025.0 Q 1356.0 1025.0 1356.0 1019.0 V 85.0 Q 1356.0 79.0 1362.0 79.0 L 1890.0 79.0 L 2412.0 79.0 L 2432.0 79.0 Q 2438.0 79.0 2438.0 85.0 V 109.0 Q 2438.0 115.0 2444.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_runner.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 955.0 L 1358.0 955.0 Q 1364.0 955.0 1364.0 949.0 V 713.0 Q 1364.0 707.0 1370.0 707.0 L 1890.0 707.0 L 2061.0 707.0 Q 2067.0 707.0 2067.0 701.0 V 433.0 Q 2067.0 427.0 2073.0 427.0 L 2412.0 427.0 L 2440.0 427.0 Q 2446.0 427.0 2446.0 421.0 V 121.0 Q 2446.0 115.0 2452.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 1330.0 955.0 L 1358.0 955.0 Q 1364.0 955.0 1364.0 949.0 V 83.0 Q 1364.0 77.0 1370.0 77.0 L 1890.0 77.0 L 2412.0 77.0 L 2440.0 77.0 Q 2446.0 77.0 2446.0 83.0 V 109.0 Q 2446.0 115.0 2452.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1474.0 115.0 Q 1480.0 115.0 1480.0 121.0 V 272.0 Q 1480.0 278.0 1486.0 278.0 L 1890.0 278.0 L 2175.0 278.0 Q 2181.0 278.0 2181.0 284.0 V 412.0 Q 2181.0 418.0 2187.0 418.0 L 2412.0 418.0 L 2554.0 418.0 Q 2560.0 418.0 2560.0 424.0 V 949.0 Q 2560.0 955.0 2566.0 955.0 L 2642.0 955.0 L 2648.0 955.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1474.0 115.0 Q 1480.0 115.0 1480.0 121.0 V 902.0 Q 1480.0 908.0 1486.0 908.0 L 1890.0 908.0 L 2412.0 908.0 L 2554.0 908.0 Q 2560.0 908.0 2560.0 914.0 V 949.0 Q 2560.0 955.0 2566.0 955.0 L 2642.0 955.0 L 2648.0 955.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/code_size_thresholds.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1476.0 115.0 Q 1482.0 115.0 1482.0 121.0 V 274.0 Q 1482.0 280.0 1488.0 280.0 L 1890.0 280.0 L 2177.0 280.0 Q 2183.0 280.0 2183.0 286.0 V 414.0 Q 2183.0 420.0 2189.0 420.0 L 2412.0 420.0 L 2556.0 420.0 Q 2562.0 420.0 2562.0 426.0 V 879.0 Q 2562.0 885.0 2568.0 885.0 L 2642.0 885.0 L 2648.0 885.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1476.0 115.0 Q 1482.0 115.0 1482.0 121.0 V 834.0 Q 1482.0 840.0 1488.0 840.0 L 1890.0 840.0 L 2412.0 840.0 L 2556.0 840.0 Q 2562.0 840.0 2562.0 846.0 V 879.0 Q 2562.0 885.0 2568.0 885.0 L 2642.0 885.0 L 2648.0 885.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/sorted/sort_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 885.0 L 1446.0 885.0 Q 1452.0 885.0 1452.0 879.0 V 712.0 Q 1452.0 706.0 1458.0 706.0 L 1890.0 706.0 L 2149.0 706.0 Q 2155.0 706.0 2155.0 700.0 V 572.0 Q 2155.0 566.0 2161.0 566.0 L 2412.0 566.0 L 2528.0 566.0 Q 2534.0 566.0 2534.0 560.0 V 121.0 Q 2534.0 115.0 2540.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 1330.0 885.0 L 1446.0 885.0 Q 1452.0 885.0 1452.0 879.0 V 82.0 Q 1452.0 76.0 1458.0 76.0 L 1890.0 76.0 L 2412.0 76.0 L 2528.0 76.0 Q 2534.0 76.0 2534.0 82.0 V 109.0 Q 2534.0 115.0 2540.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/magic_numbers/magic_number_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 885.0 L 1924.0 885.0 Q 1930.0 885.0 1930.0 879.0 V 715.0 Q 1930.0 709.0 1936.0 709.0 L 2412.0 709.0 L 2547.0 709.0 Q 2553.0 709.0 2553.0 703.0 V 505.0 Q 2553.0 499.0 2559.0 499.0 L 2862.0 499.0 L 2890.0 499.0 Q 2896.0 499.0 2896.0 493.0 V 121.0 Q 2896.0 115.0 2902.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
+  <path d="M 1896.0 885.0 L 1924.0 885.0 Q 1930.0 885.0 1930.0 879.0 V 85.0 Q 1930.0 79.0 1936.0 79.0 L 2412.0 79.0 L 2862.0 79.0 L 2890.0 79.0 Q 2896.0 79.0 2896.0 85.0 V 109.0 Q 2896.0 115.0 2902.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 955.0 L 1364.0 955.0 Q 1370.0 955.0 1370.0 949.0 V 719.0 Q 1370.0 713.0 1376.0 713.0 L 1890.0 713.0 L 2067.0 713.0 Q 2073.0 713.0 2073.0 707.0 V 439.0 Q 2073.0 433.0 2079.0 433.0 L 2412.0 433.0 L 2446.0 433.0 Q 2452.0 433.0 2452.0 427.0 V 261.0 Q 2452.0 255.0 2458.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
+  <path d="M 1330.0 955.0 L 1364.0 955.0 Q 1370.0 955.0 1370.0 949.0 V 229.0 Q 1370.0 223.0 1376.0 223.0 L 1890.0 223.0 L 2412.0 223.0 L 2446.0 223.0 Q 2452.0 223.0 2452.0 229.0 V 249.0 Q 2452.0 255.0 2458.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_artifact.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1478.0 115.0 Q 1484.0 115.0 1484.0 121.0 V 276.0 Q 1484.0 282.0 1490.0 282.0 L 1890.0 282.0 L 2179.0 282.0 Q 2185.0 282.0 2185.0 288.0 V 416.0 Q 2185.0 422.0 2191.0 422.0 L 2412.0 422.0 L 2558.0 422.0 Q 2564.0 422.0 2564.0 428.0 V 809.0 Q 2564.0 815.0 2570.0 815.0 L 2642.0 815.0 L 2648.0 815.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1478.0 115.0 Q 1484.0 115.0 1484.0 121.0 V 766.0 Q 1484.0 772.0 1490.0 772.0 L 1890.0 772.0 L 2412.0 772.0 L 2558.0 772.0 Q 2564.0 772.0 2564.0 778.0 V 809.0 Q 2564.0 815.0 2570.0 815.0 L 2642.0 815.0 L 2648.0 815.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/duplicate_code/duplicate_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 815.0 L 1408.0 815.0 Q 1414.0 815.0 1414.0 809.0 V 643.0 Q 1414.0 637.0 1420.0 637.0 L 1890.0 637.0 L 2111.0 637.0 Q 2117.0 637.0 2117.0 631.0 V 503.0 Q 2117.0 497.0 2123.0 497.0 L 2412.0 497.0 L 2490.0 497.0 Q 2496.0 497.0 2496.0 491.0 V 121.0 Q 2496.0 115.0 2502.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 1330.0 815.0 L 1408.0 815.0 Q 1414.0 815.0 1414.0 809.0 V 83.0 Q 1414.0 77.0 1420.0 77.0 L 1890.0 77.0 L 2412.0 77.0 L 2490.0 77.0 Q 2496.0 77.0 2496.0 83.0 V 109.0 Q 2496.0 115.0 2502.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/duplicate_code/duplicate_code_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 918.0 185.0 L 924.0 185.0 Q 930.0 185.0 930.0 191.0 V 204.0 Q 930.0 210.0 936.0 210.0 L 1324.0 210.0 L 1495.0 210.0 Q 1501.0 210.0 1501.0 216.0 V 274.0 Q 1501.0 280.0 1507.0 280.0 L 1890.0 280.0 L 1896.0 280.0 Q 1902.0 280.0 1902.0 286.0 V 879.0 Q 1902.0 885.0 1908.0 885.0 L 2192.0 885.0 L 2198.0 885.0" class="edge"/>
+  <path d="M 918.0 185.0 L 924.0 185.0 Q 930.0 185.0 930.0 191.0 V 834.0 Q 930.0 840.0 936.0 840.0 L 1324.0 840.0 L 1890.0 840.0 L 1896.0 840.0 Q 1902.0 840.0 1902.0 846.0 V 879.0 Q 1902.0 885.0 1908.0 885.0 L 2192.0 885.0 L 2198.0 885.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/input_output/number_lexeme_utils.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 745.0 L 1390.0 745.0 Q 1396.0 745.0 1396.0 739.0 V 642.0 Q 1396.0 636.0 1402.0 636.0 L 1890.0 636.0 L 2093.0 636.0 Q 2099.0 636.0 2099.0 630.0 V 502.0 Q 2099.0 496.0 2105.0 496.0 L 2412.0 496.0 L 2472.0 496.0 Q 2478.0 496.0 2478.0 490.0 V 121.0 Q 2478.0 115.0 2484.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 1330.0 745.0 L 1390.0 745.0 Q 1396.0 745.0 1396.0 739.0 V 82.0 Q 1396.0 76.0 1402.0 76.0 L 1890.0 76.0 L 2412.0 76.0 L 2472.0 76.0 Q 2478.0 76.0 2478.0 82.0 V 109.0 Q 2478.0 115.0 2484.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/documentation/documentation_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1482.0 115.0 Q 1488.0 115.0 1488.0 121.0 V 278.0 Q 1488.0 284.0 1494.0 284.0 L 1890.0 284.0 L 2183.0 284.0 Q 2189.0 284.0 2189.0 290.0 V 418.0 Q 2189.0 424.0 2195.0 424.0 L 2412.0 424.0 L 2562.0 424.0 Q 2568.0 424.0 2568.0 430.0 V 739.0 Q 2568.0 745.0 2574.0 745.0 L 2642.0 745.0 L 2648.0 745.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1482.0 115.0 Q 1488.0 115.0 1488.0 121.0 V 698.0 Q 1488.0 704.0 1494.0 704.0 L 1890.0 704.0 L 2412.0 704.0 L 2562.0 704.0 Q 2568.0 704.0 2568.0 710.0 V 739.0 Q 2568.0 745.0 2574.0 745.0 L 2642.0 745.0 L 2648.0 745.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/secrets/secret_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 675.0 L 1376.0 675.0 Q 1382.0 675.0 1382.0 669.0 V 573.0 Q 1382.0 567.0 1388.0 567.0 L 1890.0 567.0 L 2079.0 567.0 Q 2085.0 567.0 2085.0 561.0 V 433.0 Q 2085.0 427.0 2091.0 427.0 L 2412.0 427.0 L 2458.0 427.0 Q 2464.0 427.0 2464.0 421.0 V 121.0 Q 2464.0 115.0 2470.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 1330.0 675.0 L 1376.0 675.0 Q 1382.0 675.0 1382.0 669.0 V 83.0 Q 1382.0 77.0 1388.0 77.0 L 1890.0 77.0 L 2412.0 77.0 L 2458.0 77.0 Q 2464.0 77.0 2464.0 83.0 V 109.0 Q 2464.0 115.0 2470.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1484.0 115.0 Q 1490.0 115.0 1490.0 121.0 V 280.0 Q 1490.0 286.0 1496.0 286.0 L 1890.0 286.0 L 2185.0 286.0 Q 2191.0 286.0 2191.0 292.0 V 420.0 Q 2191.0 426.0 2197.0 426.0 L 2412.0 426.0 L 2564.0 426.0 Q 2570.0 426.0 2570.0 432.0 V 669.0 Q 2570.0 675.0 2576.0 675.0 L 2642.0 675.0 L 2648.0 675.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1484.0 115.0 Q 1490.0 115.0 1490.0 121.0 V 630.0 Q 1490.0 636.0 1496.0 636.0 L 1890.0 636.0 L 2412.0 636.0 L 2564.0 636.0 Q 2570.0 636.0 2570.0 642.0 V 669.0 Q 2570.0 675.0 2576.0 675.0 L 2642.0 675.0 L 2648.0 675.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/magic_numbers/magic_number_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 605.0 L 1518.0 605.0 Q 1524.0 605.0 1524.0 599.0 V 503.0 Q 1524.0 497.0 1530.0 497.0 L 1890.0 497.0 L 2221.0 497.0 Q 2227.0 497.0 2227.0 491.0 V 433.0 Q 2227.0 427.0 2233.0 427.0 L 2412.0 427.0 L 2600.0 427.0 Q 2606.0 427.0 2606.0 421.0 V 121.0 Q 2606.0 115.0 2612.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 1330.0 605.0 L 1518.0 605.0 Q 1524.0 605.0 1524.0 599.0 V 83.0 Q 1524.0 77.0 1530.0 77.0 L 1890.0 77.0 L 2412.0 77.0 L 2600.0 77.0 Q 2606.0 77.0 2606.0 83.0 V 109.0 Q 2606.0 115.0 2612.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/sorted/source_sort_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1488.0 115.0 Q 1494.0 115.0 1494.0 121.0 V 284.0 Q 1494.0 290.0 1500.0 290.0 L 1890.0 290.0 L 2189.0 290.0 Q 2195.0 290.0 2195.0 296.0 V 424.0 Q 2195.0 430.0 2201.0 430.0 L 2412.0 430.0 L 2568.0 430.0 Q 2574.0 430.0 2574.0 436.0 V 599.0 Q 2574.0 605.0 2580.0 605.0 L 2642.0 605.0 L 2648.0 605.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1488.0 115.0 Q 1494.0 115.0 1494.0 121.0 V 564.0 Q 1494.0 570.0 1500.0 570.0 L 1890.0 570.0 L 2412.0 570.0 L 2568.0 570.0 Q 2574.0 570.0 2574.0 576.0 V 599.0 Q 2574.0 605.0 2580.0 605.0 L 2642.0 605.0 L 2648.0 605.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 1305.0 L 1404.0 1305.0 Q 1410.0 1305.0 1410.0 1299.0 V 1067.0 Q 1410.0 1061.0 1416.0 1061.0 L 1890.0 1061.0 L 2107.0 1061.0 Q 2113.0 1061.0 2113.0 1055.0 V 857.0 Q 2113.0 851.0 2119.0 851.0 L 2412.0 851.0 L 2486.0 851.0 Q 2492.0 851.0 2492.0 845.0 V 821.0 Q 2492.0 815.0 2498.0 815.0 L 2642.0 815.0 L 2648.0 815.0" class="edge"/>
+  <path d="M 1330.0 1305.0 L 1404.0 1305.0 Q 1410.0 1305.0 1410.0 1299.0 V 787.0 Q 1410.0 781.0 1416.0 781.0 L 1890.0 781.0 L 2412.0 781.0 L 2486.0 781.0 Q 2492.0 781.0 2492.0 787.0 V 809.0 Q 2492.0 815.0 2498.0 815.0 L 2642.0 815.0 L 2648.0 815.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/duplicate_code/duplicate_code_analyzer.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/duplicate_code/duplicate_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 1165.0 L 1508.0 1165.0 Q 1514.0 1165.0 1514.0 1159.0 V 858.0 Q 1514.0 852.0 1520.0 852.0 L 1890.0 852.0 L 2211.0 852.0 Q 2217.0 852.0 2217.0 846.0 V 578.0 Q 2217.0 572.0 2223.0 572.0 L 2412.0 572.0 L 2590.0 572.0 Q 2596.0 572.0 2596.0 578.0 V 739.0 Q 2596.0 745.0 2602.0 745.0 L 2642.0 745.0 L 2648.0 745.0" class="edge"/>
+  <path d="M 1330.0 1165.0 L 1508.0 1165.0 Q 1514.0 1165.0 1514.0 1159.0 V 718.0 Q 1514.0 712.0 1520.0 712.0 L 1890.0 712.0 L 2412.0 712.0 L 2590.0 712.0 Q 2596.0 712.0 2596.0 718.0 V 739.0 Q 2596.0 745.0 2602.0 745.0 L 2642.0 745.0 L 2648.0 745.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/secrets/secret_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/secrets/secret_issue.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1492.0 115.0 Q 1498.0 115.0 1498.0 121.0 V 288.0 Q 1498.0 294.0 1504.0 294.0 L 1890.0 294.0 L 2193.0 294.0 Q 2199.0 294.0 2199.0 300.0 V 428.0 Q 2199.0 434.0 2205.0 434.0 L 2412.0 434.0 L 2572.0 434.0 Q 2578.0 434.0 2578.0 440.0 V 529.0 Q 2578.0 535.0 2584.0 535.0 L 2642.0 535.0 L 2648.0 535.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1492.0 115.0 Q 1498.0 115.0 1498.0 121.0 V 498.0 Q 1498.0 504.0 1504.0 504.0 L 1890.0 504.0 L 2412.0 504.0 L 2572.0 504.0 Q 2578.0 504.0 2578.0 510.0 V 529.0 Q 2578.0 535.0 2584.0 535.0 L 2642.0 535.0 L 2648.0 535.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/documentation/documentation_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 535.0 L 1460.0 535.0 Q 1466.0 535.0 1466.0 529.0 V 431.0 Q 1466.0 425.0 1472.0 425.0 L 1890.0 425.0 L 2163.0 425.0 Q 2169.0 425.0 2169.0 419.0 V 361.0 Q 2169.0 355.0 2175.0 355.0 L 2412.0 355.0 L 2542.0 355.0 Q 2548.0 355.0 2548.0 349.0 V 121.0 Q 2548.0 115.0 2554.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 1330.0 535.0 L 1460.0 535.0 Q 1466.0 535.0 1466.0 529.0 V 81.0 Q 1466.0 75.0 1472.0 75.0 L 1890.0 75.0 L 2412.0 75.0 L 2542.0 75.0 Q 2548.0 75.0 2548.0 81.0 V 109.0 Q 2548.0 115.0 2554.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1494.0 115.0 Q 1500.0 115.0 1500.0 121.0 V 290.0 Q 1500.0 296.0 1506.0 296.0 L 1890.0 296.0 L 2195.0 296.0 Q 2201.0 296.0 2201.0 302.0 V 430.0 Q 2201.0 436.0 2207.0 436.0 L 2412.0 436.0 L 2574.0 436.0 Q 2580.0 436.0 2580.0 442.0 V 459.0 Q 2580.0 465.0 2586.0 465.0 L 2642.0 465.0 L 2648.0 465.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1494.0 115.0 Q 1500.0 115.0 1500.0 121.0 V 430.0 Q 1500.0 436.0 1506.0 436.0 L 1890.0 436.0 L 2412.0 436.0 L 2574.0 436.0 Q 2580.0 436.0 2580.0 442.0 V 459.0 Q 2580.0 465.0 2586.0 465.0 L 2642.0 465.0 L 2648.0 465.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 465.0 L 1422.0 465.0 Q 1428.0 465.0 1428.0 459.0 V 431.0 Q 1428.0 425.0 1434.0 425.0 L 1890.0 425.0 L 2125.0 425.0 Q 2131.0 425.0 2131.0 419.0 V 361.0 Q 2131.0 355.0 2137.0 355.0 L 2412.0 355.0 L 2504.0 355.0 Q 2510.0 355.0 2510.0 349.0 V 121.0 Q 2510.0 115.0 2516.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 1330.0 465.0 L 1422.0 465.0 Q 1428.0 465.0 1428.0 459.0 V 81.0 Q 1428.0 75.0 1434.0 75.0 L 1890.0 75.0 L 2412.0 75.0 L 2504.0 75.0 Q 2510.0 75.0 2510.0 81.0 V 109.0 Q 2510.0 115.0 2516.0 115.0 L 2642.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 605.0 L 1524.0 605.0 Q 1530.0 605.0 1530.0 599.0 V 509.0 Q 1530.0 503.0 1536.0 503.0 L 1890.0 503.0 L 2227.0 503.0 Q 2233.0 503.0 2233.0 497.0 V 439.0 Q 2233.0 433.0 2239.0 433.0 L 2412.0 433.0 L 2606.0 433.0 Q 2612.0 433.0 2612.0 439.0 V 879.0 Q 2612.0 885.0 2618.0 885.0 L 2642.0 885.0 L 2648.0 885.0" class="edge"/>
+  <path d="M 1330.0 605.0 L 1524.0 605.0 Q 1530.0 605.0 1530.0 611.0 V 847.0 Q 1530.0 853.0 1536.0 853.0 L 1890.0 853.0 L 2412.0 853.0 L 2606.0 853.0 Q 2612.0 853.0 2612.0 859.0 V 879.0 Q 2612.0 885.0 2618.0 885.0 L 2642.0 885.0 L 2648.0 885.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/sorted/source_sort_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/sorted/sort_issue.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1022.0 115.0 Q 1028.0 115.0 1028.0 121.0 V 218.0 Q 1028.0 224.0 1034.0 224.0 L 1324.0 224.0 L 1593.0 224.0 Q 1599.0 224.0 1599.0 230.0 V 288.0 Q 1599.0 294.0 1605.0 294.0 L 1890.0 294.0 L 1994.0 294.0 Q 2000.0 294.0 2000.0 300.0 V 389.0 Q 2000.0 395.0 2006.0 395.0 L 2192.0 395.0 L 2198.0 395.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1022.0 115.0 Q 1028.0 115.0 1028.0 121.0 V 358.0 Q 1028.0 364.0 1034.0 364.0 L 1324.0 364.0 L 1890.0 364.0 L 1994.0 364.0 Q 2000.0 364.0 2000.0 370.0 V 389.0 Q 2000.0 395.0 2006.0 395.0 L 2192.0 395.0 L 2198.0 395.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/shared/dependency_uri_utils.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1496.0 115.0 Q 1502.0 115.0 1502.0 121.0 V 292.0 Q 1502.0 298.0 1508.0 298.0 L 1890.0 298.0 L 2197.0 298.0 Q 2203.0 298.0 2203.0 304.0 V 432.0 Q 2203.0 438.0 2209.0 438.0 L 2412.0 438.0 L 2576.0 438.0 Q 2582.0 438.0 2582.0 432.0 V 401.0 Q 2582.0 395.0 2588.0 395.0 L 2642.0 395.0 L 2648.0 395.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1496.0 115.0 Q 1502.0 115.0 1502.0 121.0 V 362.0 Q 1502.0 368.0 1508.0 368.0 L 1890.0 368.0 L 2412.0 368.0 L 2576.0 368.0 Q 2582.0 368.0 2582.0 374.0 V 389.0 Q 2582.0 395.0 2588.0 395.0 L 2642.0 395.0 L 2648.0 395.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/file_metrics.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1498.0 115.0 Q 1504.0 115.0 1504.0 121.0 V 294.0 Q 1504.0 300.0 1510.0 300.0 L 1890.0 300.0 L 2199.0 300.0 Q 2205.0 300.0 2205.0 306.0 V 434.0 Q 2205.0 440.0 2211.0 440.0 L 2412.0 440.0 L 2578.0 440.0 Q 2584.0 440.0 2584.0 434.0 V 331.0 Q 2584.0 325.0 2590.0 325.0 L 2642.0 325.0 L 2648.0 325.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1498.0 115.0 Q 1504.0 115.0 1504.0 121.0 V 294.0 Q 1504.0 300.0 1510.0 300.0 L 1890.0 300.0 L 2412.0 300.0 L 2578.0 300.0 Q 2584.0 300.0 2584.0 306.0 V 319.0 Q 2584.0 325.0 2590.0 325.0 L 2642.0 325.0 L 2648.0 325.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 465.0 L 1942.0 465.0 Q 1948.0 465.0 1948.0 459.0 V 437.0 Q 1948.0 431.0 1954.0 431.0 L 2412.0 431.0 L 2565.0 431.0 Q 2571.0 431.0 2571.0 425.0 V 367.0 Q 2571.0 361.0 2577.0 361.0 L 2862.0 361.0 L 2908.0 361.0 Q 2914.0 361.0 2914.0 355.0 V 261.0 Q 2914.0 255.0 2920.0 255.0 L 2962.0 255.0 L 2968.0 255.0" class="edge"/>
+  <path d="M 1896.0 465.0 L 1942.0 465.0 Q 1948.0 465.0 1948.0 459.0 V 227.0 Q 1948.0 221.0 1954.0 221.0 L 2412.0 221.0 L 2862.0 221.0 L 2908.0 221.0 Q 2914.0 221.0 2914.0 227.0 V 249.0 Q 2914.0 255.0 2920.0 255.0 L 2962.0 255.0 L 2968.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_issue_detail.dart</title>
 </g>
 <g>
-  <path d="M 598.0 115.0 L 610.0 115.0 Q 616.0 115.0 616.0 121.0 V 138.0 Q 616.0 144.0 622.0 144.0 L 910.0 144.0 L 1324.0 144.0 L 1336.0 144.0 Q 1342.0 144.0 1342.0 150.0 V 319.0 Q 1342.0 325.0 1348.0 325.0 L 1670.0 325.0 L 1676.0 325.0" class="edge"/>
+  <path d="M 598.0 115.0 L 610.0 115.0 Q 616.0 115.0 616.0 121.0 V 278.0 Q 616.0 284.0 622.0 284.0 L 910.0 284.0 L 1324.0 284.0 L 1336.0 284.0 Q 1342.0 284.0 1342.0 290.0 V 319.0 Q 1342.0 325.0 1348.0 325.0 L 1670.0 325.0 L 1676.0 325.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck_cli_runner.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/fcheck_config.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1028.0 115.0 Q 1034.0 115.0 1034.0 121.0 V 226.0 Q 1034.0 232.0 1040.0 232.0 L 1324.0 232.0 L 1599.0 232.0 Q 1605.0 232.0 1605.0 238.0 V 296.0 Q 1605.0 302.0 1611.0 302.0 L 1890.0 302.0 L 2000.0 302.0 Q 2006.0 302.0 2006.0 308.0 V 319.0 Q 2006.0 325.0 2012.0 325.0 L 2192.0 325.0 L 2198.0 325.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1028.0 115.0 Q 1034.0 115.0 1034.0 121.0 V 296.0 Q 1034.0 302.0 1040.0 302.0 L 1324.0 302.0 L 1890.0 302.0 L 2000.0 302.0 Q 2006.0 302.0 2006.0 308.0 V 319.0 Q 2006.0 325.0 2012.0 325.0 L 2192.0 325.0 L 2198.0 325.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_file_data.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 745.0 L 1398.0 745.0 Q 1404.0 745.0 1404.0 739.0 V 650.0 Q 1404.0 644.0 1410.0 644.0 L 1890.0 644.0 L 2101.0 644.0 Q 2107.0 644.0 2107.0 638.0 V 510.0 Q 2107.0 504.0 2113.0 504.0 L 2412.0 504.0 L 2480.0 504.0 Q 2486.0 504.0 2486.0 510.0 V 529.0 Q 2486.0 535.0 2492.0 535.0 L 2642.0 535.0 L 2648.0 535.0" class="edge"/>
+  <path d="M 1330.0 745.0 L 1398.0 745.0 Q 1404.0 745.0 1404.0 739.0 V 510.0 Q 1404.0 504.0 1410.0 504.0 L 1890.0 504.0 L 2412.0 504.0 L 2480.0 504.0 Q 2486.0 504.0 2486.0 510.0 V 529.0 Q 2486.0 535.0 2492.0 535.0 L 2642.0 535.0 L 2648.0 535.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/documentation/documentation_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/documentation/documentation_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 885.0 L 1454.0 885.0 Q 1460.0 885.0 1460.0 879.0 V 720.0 Q 1460.0 714.0 1466.0 714.0 L 1890.0 714.0 L 2157.0 714.0 Q 2163.0 714.0 2163.0 708.0 V 580.0 Q 2163.0 574.0 2169.0 574.0 L 2412.0 574.0 L 2536.0 574.0 Q 2542.0 574.0 2542.0 580.0 V 669.0 Q 2542.0 675.0 2548.0 675.0 L 2642.0 675.0 L 2648.0 675.0" class="edge"/>
+  <path d="M 1330.0 885.0 L 1454.0 885.0 Q 1460.0 885.0 1460.0 879.0 V 650.0 Q 1460.0 644.0 1466.0 644.0 L 1890.0 644.0 L 2412.0 644.0 L 2536.0 644.0 Q 2542.0 644.0 2542.0 650.0 V 669.0 Q 2542.0 675.0 2548.0 675.0 L 2642.0 675.0 L 2648.0 675.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/magic_numbers/magic_number_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/magic_numbers/magic_number_issue.dart</title>
 </g>
 <g>
-  <path d="M 598.0 115.0 L 616.0 115.0 Q 622.0 115.0 622.0 121.0 V 140.0 Q 622.0 146.0 628.0 146.0 L 910.0 146.0 L 1324.0 146.0 L 1342.0 146.0 Q 1348.0 146.0 1348.0 152.0 V 249.0 Q 1348.0 255.0 1354.0 255.0 L 1670.0 255.0 L 1676.0 255.0" class="edge"/>
+  <path d="M 598.0 115.0 L 616.0 115.0 Q 622.0 115.0 622.0 121.0 V 210.0 Q 622.0 216.0 628.0 216.0 L 910.0 216.0 L 1324.0 216.0 L 1342.0 216.0 Q 1348.0 216.0 1348.0 222.0 V 249.0 Q 1348.0 255.0 1354.0 255.0 L 1670.0 255.0 L 1676.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck_cli_runner.dart ▶ /Users/jp/src/github/vteam/fcheck/bin/console/console_common.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 535.0 L 1468.0 535.0 Q 1474.0 535.0 1474.0 529.0 V 441.0 Q 1474.0 435.0 1480.0 435.0 L 1890.0 435.0 L 2171.0 435.0 Q 2177.0 435.0 2177.0 429.0 V 371.0 Q 2177.0 365.0 2183.0 365.0 L 2412.0 365.0 L 2550.0 365.0 Q 2556.0 365.0 2556.0 371.0 V 389.0 Q 2556.0 395.0 2562.0 395.0 L 2642.0 395.0 L 2648.0 395.0" class="edge"/>
+  <path d="M 1330.0 535.0 L 1468.0 535.0 Q 1474.0 535.0 1474.0 529.0 V 371.0 Q 1474.0 365.0 1480.0 365.0 L 1890.0 365.0 L 2412.0 365.0 L 2550.0 365.0 Q 2556.0 365.0 2556.0 371.0 V 389.0 Q 2556.0 395.0 2562.0 395.0 L 2642.0 395.0 L 2648.0 395.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/file_metrics.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 465.0 L 1430.0 465.0 Q 1436.0 465.0 1436.0 459.0 V 441.0 Q 1436.0 435.0 1442.0 435.0 L 1890.0 435.0 L 2133.0 435.0 Q 2139.0 435.0 2139.0 429.0 V 371.0 Q 2139.0 365.0 2145.0 365.0 L 2412.0 365.0 L 2512.0 365.0 Q 2518.0 365.0 2518.0 371.0 V 599.0 Q 2518.0 605.0 2524.0 605.0 L 2642.0 605.0 L 2648.0 605.0" class="edge"/>
+  <path d="M 1330.0 465.0 L 1430.0 465.0 Q 1436.0 465.0 1436.0 471.0 V 569.0 Q 1436.0 575.0 1442.0 575.0 L 1890.0 575.0 L 2412.0 575.0 L 2512.0 575.0 Q 2518.0 575.0 2518.0 581.0 V 599.0 Q 2518.0 605.0 2524.0 605.0 L 2642.0 605.0 L 2648.0 605.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1500.0 115.0 Q 1506.0 115.0 1506.0 121.0 V 296.0 Q 1506.0 302.0 1512.0 302.0 L 1890.0 302.0 L 2201.0 302.0 Q 2207.0 302.0 2207.0 308.0 V 436.0 Q 2207.0 442.0 2213.0 442.0 L 2412.0 442.0 L 2580.0 442.0 Q 2586.0 442.0 2586.0 436.0 V 261.0 Q 2586.0 255.0 2592.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1500.0 115.0 Q 1506.0 115.0 1506.0 121.0 V 226.0 Q 1506.0 232.0 1512.0 232.0 L 1890.0 232.0 L 2412.0 232.0 L 2580.0 232.0 Q 2586.0 232.0 2586.0 238.0 V 249.0 Q 2586.0 255.0 2592.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_artifact.dart</title>
 </g>
 <g>
-  <path d="M 918.0 185.0 L 940.0 185.0 Q 946.0 185.0 946.0 191.0 V 218.0 Q 946.0 224.0 952.0 224.0 L 1324.0 224.0 L 1511.0 224.0 Q 1517.0 224.0 1517.0 230.0 V 288.0 Q 1517.0 294.0 1523.0 294.0 L 1890.0 294.0 L 1912.0 294.0 Q 1918.0 294.0 1918.0 288.0 V 261.0 Q 1918.0 255.0 1924.0 255.0 L 2192.0 255.0 L 2198.0 255.0" class="edge"/>
+  <path d="M 918.0 185.0 L 940.0 185.0 Q 946.0 185.0 946.0 191.0 V 218.0 Q 946.0 224.0 952.0 224.0 L 1324.0 224.0 L 1890.0 224.0 L 1912.0 224.0 Q 1918.0 224.0 1918.0 230.0 V 249.0 Q 1918.0 255.0 1924.0 255.0 L 2192.0 255.0 L 2198.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/app_strings.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1034.0 115.0 Q 1040.0 115.0 1040.0 121.0 V 232.0 Q 1040.0 238.0 1046.0 238.0 L 1324.0 238.0 L 1605.0 238.0 Q 1611.0 238.0 1611.0 244.0 V 302.0 Q 1611.0 308.0 1617.0 308.0 L 1890.0 308.0 L 2006.0 308.0 Q 2012.0 308.0 2012.0 302.0 V 191.0 Q 2012.0 185.0 2018.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1034.0 115.0 Q 1040.0 115.0 1040.0 121.0 V 162.0 Q 1040.0 168.0 1046.0 168.0 L 1324.0 168.0 L 1890.0 168.0 L 2006.0 168.0 Q 2012.0 168.0 2012.0 174.0 V 179.0 Q 2012.0 185.0 2018.0 185.0 L 2192.0 185.0 L 2198.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/shared/generated_file_utils.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 395.0 L 1346.0 395.0 Q 1352.0 395.0 1352.0 389.0 V 370.0 Q 1352.0 364.0 1358.0 364.0 L 1890.0 364.0 L 2412.0 364.0 L 2428.0 364.0 Q 2434.0 364.0 2434.0 370.0 V 459.0 Q 2434.0 465.0 2440.0 465.0 L 2642.0 465.0 L 2648.0 465.0" class="edge"/>
+  <path d="M 1330.0 395.0 L 1346.0 395.0 Q 1352.0 395.0 1352.0 401.0 V 428.0 Q 1352.0 434.0 1358.0 434.0 L 1890.0 434.0 L 2412.0 434.0 L 2428.0 434.0 Q 2434.0 434.0 2434.0 440.0 V 459.0 Q 2434.0 465.0 2440.0 465.0 L 2642.0 465.0 L 2648.0 465.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output_localization_report.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_issue.dart</title>
 </g>
 <g>
-  <path d="M 1332.0 115.0 L 1502.0 115.0 Q 1508.0 115.0 1508.0 121.0 V 298.0 Q 1508.0 304.0 1514.0 304.0 L 1890.0 304.0 L 2203.0 304.0 Q 2209.0 304.0 2209.0 310.0 V 438.0 Q 2209.0 444.0 2215.0 444.0 L 2412.0 444.0 L 2582.0 444.0 Q 2588.0 444.0 2588.0 438.0 V 191.0 Q 2588.0 185.0 2594.0 185.0 L 2642.0 185.0 L 2648.0 185.0" class="edge"/>
+  <path d="M 1332.0 115.0 L 1502.0 115.0 Q 1508.0 115.0 1508.0 121.0 V 158.0 Q 1508.0 164.0 1514.0 164.0 L 1890.0 164.0 L 2412.0 164.0 L 2582.0 164.0 Q 2588.0 164.0 2588.0 170.0 V 179.0 Q 2588.0 185.0 2594.0 185.0 L 2642.0 185.0 L 2648.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/project_metrics.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_issue.dart</title>
 </g>
 <g>
-  <path d="M 598.0 115.0 L 626.0 115.0 Q 632.0 115.0 632.0 109.0 V 88.0 Q 632.0 82.0 638.0 82.0 L 1352.0 82.0 Q 1358.0 82.0 1358.0 88.0 V 109.0 Q 1358.0 115.0 1364.0 115.0 L 1667.0 115.0 L 1676.0 115.0" class="edge"/>
+  <path d="M 598.0 115.0 L 626.0 115.0 Q 632.0 115.0 632.0 109.0 V 84.0 Q 632.0 78.0 638.0 78.0 L 1352.0 78.0 Q 1358.0 78.0 1358.0 84.0 V 109.0 Q 1358.0 115.0 1364.0 115.0 L 1667.0 115.0 L 1676.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck_cli_runner.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_results.dart</title>
 </g>
 <g>
@@ -1314,143 +1314,143 @@
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analyzer_delegate_abstract.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 1095.0 L 1436.0 1095.0 Q 1442.0 1095.0 1442.0 1089.0 V 858.0 Q 1442.0 852.0 1448.0 852.0 L 1890.0 852.0 L 2139.0 852.0 Q 2145.0 852.0 2145.0 846.0 V 578.0 Q 2145.0 572.0 2151.0 572.0 L 2412.0 572.0 L 2625.0 572.0 Q 2631.0 572.0 2631.0 566.0 V 368.0 Q 2631.0 362.0 2637.0 362.0 L 2862.0 362.0 L 2950.0 362.0 Q 2956.0 362.0 2956.0 356.0 V 121.0 Q 2956.0 115.0 2962.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
+  <path d="M 1330.0 1095.0 L 1436.0 1095.0 Q 1442.0 1095.0 1442.0 1089.0 V 88.0 Q 1442.0 82.0 1448.0 82.0 L 1890.0 82.0 L 2412.0 82.0 L 2862.0 82.0 L 2950.0 82.0 Q 2956.0 82.0 2956.0 88.0 V 109.0 Q 2956.0 115.0 2962.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 978.0 115.0 Q 984.0 115.0 984.0 121.0 V 192.0 Q 984.0 198.0 990.0 198.0 L 1324.0 198.0 L 1549.0 198.0 Q 1555.0 198.0 1555.0 204.0 V 262.0 Q 1555.0 268.0 1561.0 268.0 L 1890.0 268.0 L 2093.0 268.0 Q 2099.0 268.0 2099.0 274.0 V 402.0 Q 2099.0 408.0 2105.0 408.0 L 2412.0 408.0 L 2472.0 408.0 Q 2478.0 408.0 2478.0 414.0 V 949.0 Q 2478.0 955.0 2484.0 955.0 L 2642.0 955.0 L 2648.0 955.0" class="edge"/>
+  <path d="M 918.0 115.0 L 978.0 115.0 Q 984.0 115.0 984.0 121.0 V 892.0 Q 984.0 898.0 990.0 898.0 L 1324.0 898.0 L 1890.0 898.0 L 2412.0 898.0 L 2472.0 898.0 Q 2478.0 898.0 2478.0 904.0 V 949.0 Q 2478.0 955.0 2484.0 955.0 L 2642.0 955.0 L 2648.0 955.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/code_size_thresholds.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 955.0 L 1946.0 955.0 Q 1952.0 955.0 1952.0 949.0 V 716.0 Q 1952.0 710.0 1958.0 710.0 L 2412.0 710.0 L 2569.0 710.0 Q 2575.0 710.0 2575.0 704.0 V 506.0 Q 2575.0 500.0 2581.0 500.0 L 2862.0 500.0 L 2954.0 500.0 Q 2960.0 500.0 2960.0 494.0 V 296.0 Q 2960.0 290.0 2966.0 290.0 L 3182.0 290.0 L 3232.0 290.0 Q 3238.0 290.0 3238.0 284.0 V 121.0 Q 3238.0 115.0 3244.0 115.0 L 3282.0 115.0 L 3288.0 115.0" class="edge"/>
+  <path d="M 1896.0 955.0 L 1946.0 955.0 Q 1952.0 955.0 1952.0 949.0 V 86.0 Q 1952.0 80.0 1958.0 80.0 L 2412.0 80.0 L 2862.0 80.0 L 3182.0 80.0 L 3232.0 80.0 Q 3238.0 80.0 3238.0 86.0 V 109.0 Q 3238.0 115.0 3244.0 115.0 L 3282.0 115.0 L 3288.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_report_scanner.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_utils.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 982.0 115.0 Q 988.0 115.0 988.0 121.0 V 196.0 Q 988.0 202.0 994.0 202.0 L 1324.0 202.0 L 1553.0 202.0 Q 1559.0 202.0 1559.0 208.0 V 266.0 Q 1559.0 272.0 1565.0 272.0 L 1890.0 272.0 L 2097.0 272.0 Q 2103.0 272.0 2103.0 278.0 V 406.0 Q 2103.0 412.0 2109.0 412.0 L 2412.0 412.0 L 2476.0 412.0 Q 2482.0 412.0 2482.0 418.0 V 879.0 Q 2482.0 885.0 2488.0 885.0 L 2642.0 885.0 L 2648.0 885.0" class="edge"/>
+  <path d="M 918.0 115.0 L 982.0 115.0 Q 988.0 115.0 988.0 121.0 V 826.0 Q 988.0 832.0 994.0 832.0 L 1324.0 832.0 L 1890.0 832.0 L 2412.0 832.0 L 2476.0 832.0 Q 2482.0 832.0 2482.0 838.0 V 879.0 Q 2482.0 885.0 2488.0 885.0 L 2642.0 885.0 L 2648.0 885.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/sorted/sort_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 885.0 L 1444.0 885.0 Q 1450.0 885.0 1450.0 879.0 V 716.0 Q 1450.0 710.0 1456.0 710.0 L 1890.0 710.0 L 2147.0 710.0 Q 2153.0 710.0 2153.0 704.0 V 576.0 Q 2153.0 570.0 2159.0 570.0 L 2412.0 570.0 L 2633.0 570.0 Q 2639.0 570.0 2639.0 564.0 V 436.0 Q 2639.0 430.0 2645.0 430.0 L 2862.0 430.0 L 2950.0 430.0 Q 2956.0 430.0 2956.0 424.0 V 121.0 Q 2956.0 115.0 2962.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
+  <path d="M 1330.0 885.0 L 1444.0 885.0 Q 1450.0 885.0 1450.0 879.0 V 86.0 Q 1450.0 80.0 1456.0 80.0 L 1890.0 80.0 L 2412.0 80.0 L 2862.0 80.0 L 2950.0 80.0 Q 2956.0 80.0 2956.0 86.0 V 109.0 Q 2956.0 115.0 2962.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/magic_numbers/magic_number_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 988.0 115.0 Q 994.0 115.0 994.0 121.0 V 198.0 Q 994.0 204.0 1000.0 204.0 L 1324.0 204.0 L 1559.0 204.0 Q 1565.0 204.0 1565.0 210.0 V 268.0 Q 1565.0 274.0 1571.0 274.0 L 1890.0 274.0 L 2103.0 274.0 Q 2109.0 274.0 2109.0 280.0 V 408.0 Q 2109.0 414.0 2115.0 414.0 L 2412.0 414.0 L 2482.0 414.0 Q 2488.0 414.0 2488.0 420.0 V 809.0 Q 2488.0 815.0 2494.0 815.0 L 2642.0 815.0 L 2648.0 815.0" class="edge"/>
+  <path d="M 918.0 115.0 L 988.0 115.0 Q 994.0 115.0 994.0 121.0 V 758.0 Q 994.0 764.0 1000.0 764.0 L 1324.0 764.0 L 1890.0 764.0 L 2412.0 764.0 L 2482.0 764.0 Q 2488.0 764.0 2488.0 770.0 V 809.0 Q 2488.0 815.0 2494.0 815.0 L 2642.0 815.0 L 2648.0 815.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/duplicate_code/duplicate_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 815.0 L 1406.0 815.0 Q 1412.0 815.0 1412.0 809.0 V 647.0 Q 1412.0 641.0 1418.0 641.0 L 1890.0 641.0 L 2109.0 641.0 Q 2115.0 641.0 2115.0 635.0 V 507.0 Q 2115.0 501.0 2121.0 501.0 L 2412.0 501.0 L 2595.0 501.0 Q 2601.0 501.0 2601.0 495.0 V 297.0 Q 2601.0 291.0 2607.0 291.0 L 2862.0 291.0 L 2938.0 291.0 Q 2944.0 291.0 2944.0 285.0 V 121.0 Q 2944.0 115.0 2950.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
+  <path d="M 1330.0 815.0 L 1406.0 815.0 Q 1412.0 815.0 1412.0 809.0 V 87.0 Q 1412.0 81.0 1418.0 81.0 L 1890.0 81.0 L 2412.0 81.0 L 2862.0 81.0 L 2938.0 81.0 Q 2944.0 81.0 2944.0 87.0 V 109.0 Q 2944.0 115.0 2950.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/duplicate_code/duplicate_code_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 745.0 L 1388.0 745.0 Q 1394.0 745.0 1394.0 739.0 V 646.0 Q 1394.0 640.0 1400.0 640.0 L 1890.0 640.0 L 2091.0 640.0 Q 2097.0 640.0 2097.0 634.0 V 506.0 Q 2097.0 500.0 2103.0 500.0 L 2412.0 500.0 L 2577.0 500.0 Q 2583.0 500.0 2583.0 494.0 V 366.0 Q 2583.0 360.0 2589.0 360.0 L 2862.0 360.0 L 2920.0 360.0 Q 2926.0 360.0 2926.0 354.0 V 121.0 Q 2926.0 115.0 2932.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
+  <path d="M 1330.0 745.0 L 1388.0 745.0 Q 1394.0 745.0 1394.0 739.0 V 86.0 Q 1394.0 80.0 1400.0 80.0 L 1890.0 80.0 L 2412.0 80.0 L 2862.0 80.0 L 2920.0 80.0 Q 2926.0 80.0 2926.0 86.0 V 109.0 Q 2926.0 115.0 2932.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/documentation/documentation_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 994.0 115.0 Q 1000.0 115.0 1000.0 121.0 V 202.0 Q 1000.0 208.0 1006.0 208.0 L 1324.0 208.0 L 1565.0 208.0 Q 1571.0 208.0 1571.0 214.0 V 272.0 Q 1571.0 278.0 1577.0 278.0 L 1890.0 278.0 L 2109.0 278.0 Q 2115.0 278.0 2115.0 284.0 V 412.0 Q 2115.0 418.0 2121.0 418.0 L 2412.0 418.0 L 2488.0 418.0 Q 2494.0 418.0 2494.0 424.0 V 739.0 Q 2494.0 745.0 2500.0 745.0 L 2642.0 745.0 L 2648.0 745.0" class="edge"/>
+  <path d="M 918.0 115.0 L 994.0 115.0 Q 1000.0 115.0 1000.0 121.0 V 692.0 Q 1000.0 698.0 1006.0 698.0 L 1324.0 698.0 L 1890.0 698.0 L 2412.0 698.0 L 2488.0 698.0 Q 2494.0 698.0 2494.0 704.0 V 739.0 Q 2494.0 745.0 2500.0 745.0 L 2642.0 745.0 L 2648.0 745.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/secrets/secret_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 675.0 L 1374.0 675.0 Q 1380.0 675.0 1380.0 669.0 V 577.0 Q 1380.0 571.0 1386.0 571.0 L 1890.0 571.0 L 2077.0 571.0 Q 2083.0 571.0 2083.0 565.0 V 437.0 Q 2083.0 431.0 2089.0 431.0 L 2412.0 431.0 L 2563.0 431.0 Q 2569.0 431.0 2569.0 425.0 V 297.0 Q 2569.0 291.0 2575.0 291.0 L 2862.0 291.0 L 2906.0 291.0 Q 2912.0 291.0 2912.0 285.0 V 121.0 Q 2912.0 115.0 2918.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
+  <path d="M 1330.0 675.0 L 1374.0 675.0 Q 1380.0 675.0 1380.0 669.0 V 87.0 Q 1380.0 81.0 1386.0 81.0 L 1890.0 81.0 L 2412.0 81.0 L 2862.0 81.0 L 2906.0 81.0 Q 2912.0 81.0 2912.0 87.0 V 109.0 Q 2912.0 115.0 2918.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 998.0 115.0 Q 1004.0 115.0 1004.0 121.0 V 204.0 Q 1004.0 210.0 1010.0 210.0 L 1324.0 210.0 L 1569.0 210.0 Q 1575.0 210.0 1575.0 216.0 V 274.0 Q 1575.0 280.0 1581.0 280.0 L 1890.0 280.0 L 2113.0 280.0 Q 2119.0 280.0 2119.0 286.0 V 414.0 Q 2119.0 420.0 2125.0 420.0 L 2412.0 420.0 L 2492.0 420.0 Q 2498.0 420.0 2498.0 426.0 V 669.0 Q 2498.0 675.0 2504.0 675.0 L 2642.0 675.0 L 2648.0 675.0" class="edge"/>
+  <path d="M 918.0 115.0 L 998.0 115.0 Q 1004.0 115.0 1004.0 121.0 V 624.0 Q 1004.0 630.0 1010.0 630.0 L 1324.0 630.0 L 1890.0 630.0 L 2412.0 630.0 L 2492.0 630.0 Q 2498.0 630.0 2498.0 636.0 V 669.0 Q 2498.0 675.0 2504.0 675.0 L 2642.0 675.0 L 2648.0 675.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/magic_numbers/magic_number_issue.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1002.0 115.0 Q 1008.0 115.0 1008.0 121.0 V 208.0 Q 1008.0 214.0 1014.0 214.0 L 1324.0 214.0 L 1573.0 214.0 Q 1579.0 214.0 1579.0 220.0 V 278.0 Q 1579.0 284.0 1585.0 284.0 L 1890.0 284.0 L 2117.0 284.0 Q 2123.0 284.0 2123.0 290.0 V 418.0 Q 2123.0 424.0 2129.0 424.0 L 2412.0 424.0 L 2496.0 424.0 Q 2502.0 424.0 2502.0 430.0 V 599.0 Q 2502.0 605.0 2508.0 605.0 L 2642.0 605.0 L 2648.0 605.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1002.0 115.0 Q 1008.0 115.0 1008.0 121.0 V 558.0 Q 1008.0 564.0 1014.0 564.0 L 1324.0 564.0 L 1890.0 564.0 L 2412.0 564.0 L 2496.0 564.0 Q 2502.0 564.0 2502.0 570.0 V 599.0 Q 2502.0 605.0 2508.0 605.0 L 2642.0 605.0 L 2648.0 605.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1008.0 115.0 Q 1014.0 115.0 1014.0 121.0 V 212.0 Q 1014.0 218.0 1020.0 218.0 L 1324.0 218.0 L 1579.0 218.0 Q 1585.0 218.0 1585.0 224.0 V 282.0 Q 1585.0 288.0 1591.0 288.0 L 1890.0 288.0 L 2123.0 288.0 Q 2129.0 288.0 2129.0 294.0 V 422.0 Q 2129.0 428.0 2135.0 428.0 L 2412.0 428.0 L 2502.0 428.0 Q 2508.0 428.0 2508.0 434.0 V 529.0 Q 2508.0 535.0 2514.0 535.0 L 2642.0 535.0 L 2648.0 535.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1008.0 115.0 Q 1014.0 115.0 1014.0 121.0 V 492.0 Q 1014.0 498.0 1020.0 498.0 L 1324.0 498.0 L 1890.0 498.0 L 2412.0 498.0 L 2502.0 498.0 Q 2508.0 498.0 2508.0 504.0 V 529.0 Q 2508.0 535.0 2514.0 535.0 L 2642.0 535.0 L 2648.0 535.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/documentation/documentation_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 535.0 L 1458.0 535.0 Q 1464.0 535.0 1464.0 529.0 V 435.0 Q 1464.0 429.0 1470.0 429.0 L 1890.0 429.0 L 2161.0 429.0 Q 2167.0 429.0 2167.0 423.0 V 365.0 Q 2167.0 359.0 2173.0 359.0 L 2412.0 359.0 L 2647.0 359.0 Q 2653.0 359.0 2653.0 353.0 V 295.0 Q 2653.0 289.0 2659.0 289.0 L 2862.0 289.0 L 2950.0 289.0 Q 2956.0 289.0 2956.0 283.0 V 121.0 Q 2956.0 115.0 2962.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
+  <path d="M 1330.0 535.0 L 1458.0 535.0 Q 1464.0 535.0 1464.0 529.0 V 85.0 Q 1464.0 79.0 1470.0 79.0 L 1890.0 79.0 L 2412.0 79.0 L 2862.0 79.0 L 2950.0 79.0 Q 2956.0 79.0 2956.0 85.0 V 109.0 Q 2956.0 115.0 2962.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/metrics/metrics_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1014.0 115.0 Q 1020.0 115.0 1020.0 121.0 V 216.0 Q 1020.0 222.0 1026.0 222.0 L 1324.0 222.0 L 1585.0 222.0 Q 1591.0 222.0 1591.0 228.0 V 286.0 Q 1591.0 292.0 1597.0 292.0 L 1890.0 292.0 L 2129.0 292.0 Q 2135.0 292.0 2135.0 298.0 V 426.0 Q 2135.0 432.0 2141.0 432.0 L 2412.0 432.0 L 2508.0 432.0 Q 2514.0 432.0 2514.0 438.0 V 459.0 Q 2514.0 465.0 2520.0 465.0 L 2642.0 465.0 L 2648.0 465.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1014.0 115.0 Q 1020.0 115.0 1020.0 121.0 V 426.0 Q 1020.0 432.0 1026.0 432.0 L 1324.0 432.0 L 1890.0 432.0 L 2412.0 432.0 L 2508.0 432.0 Q 2514.0 432.0 2514.0 438.0 V 459.0 Q 2514.0 465.0 2520.0 465.0 L 2642.0 465.0 L 2648.0 465.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 465.0 L 1420.0 465.0 Q 1426.0 465.0 1426.0 459.0 V 437.0 Q 1426.0 431.0 1432.0 431.0 L 1890.0 431.0 L 2123.0 431.0 Q 2129.0 431.0 2129.0 425.0 V 367.0 Q 2129.0 361.0 2135.0 361.0 L 2412.0 361.0 L 2862.0 361.0 L 2950.0 361.0 Q 2956.0 361.0 2956.0 355.0 V 121.0 Q 2956.0 115.0 2962.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
+  <path d="M 1330.0 465.0 L 1420.0 465.0 Q 1426.0 465.0 1426.0 459.0 V 87.0 Q 1426.0 81.0 1432.0 81.0 L 1890.0 81.0 L 2412.0 81.0 L 2862.0 81.0 L 2950.0 81.0 Q 2956.0 81.0 2956.0 87.0 V 109.0 Q 2956.0 115.0 2962.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/hardcoded_strings/hardcoded_string_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 1896.0 465.0 L 1934.0 465.0 Q 1940.0 465.0 1940.0 459.0 V 435.0 Q 1940.0 429.0 1946.0 429.0 L 2412.0 429.0 L 2557.0 429.0 Q 2563.0 429.0 2563.0 423.0 V 365.0 Q 2563.0 359.0 2569.0 359.0 L 2862.0 359.0 L 2942.0 359.0 Q 2948.0 359.0 2948.0 353.0 V 295.0 Q 2948.0 289.0 2954.0 289.0 L 3182.0 289.0 L 3220.0 289.0 Q 3226.0 289.0 3226.0 283.0 V 121.0 Q 3226.0 115.0 3232.0 115.0 L 3282.0 115.0 L 3288.0 115.0" class="edge"/>
+  <path d="M 1896.0 465.0 L 1934.0 465.0 Q 1940.0 465.0 1940.0 459.0 V 85.0 Q 1940.0 79.0 1946.0 79.0 L 2412.0 79.0 L 2862.0 79.0 L 3182.0 79.0 L 3220.0 79.0 Q 3226.0 79.0 3226.0 85.0 V 109.0 Q 3226.0 115.0 3232.0 115.0 L 3282.0 115.0 L 3288.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_delegate.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_utils.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1020.0 115.0 Q 1026.0 115.0 1026.0 121.0 V 222.0 Q 1026.0 228.0 1032.0 228.0 L 1324.0 228.0 L 1591.0 228.0 Q 1597.0 228.0 1597.0 234.0 V 292.0 Q 1597.0 298.0 1603.0 298.0 L 1890.0 298.0 L 2135.0 298.0 Q 2141.0 298.0 2141.0 304.0 V 432.0 Q 2141.0 438.0 2147.0 438.0 L 2412.0 438.0 L 2514.0 438.0 Q 2520.0 438.0 2520.0 432.0 V 401.0 Q 2520.0 395.0 2526.0 395.0 L 2642.0 395.0 L 2648.0 395.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1020.0 115.0 Q 1026.0 115.0 1026.0 121.0 V 362.0 Q 1026.0 368.0 1032.0 368.0 L 1324.0 368.0 L 1890.0 368.0 L 2412.0 368.0 L 2514.0 368.0 Q 2520.0 368.0 2520.0 374.0 V 389.0 Q 2520.0 395.0 2526.0 395.0 L 2642.0 395.0 L 2648.0 395.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/file_metrics.dart</title>
 </g>
 <g>
-  <path d="M 918.0 185.0 L 928.0 185.0 Q 934.0 185.0 934.0 191.0 V 210.0 Q 934.0 216.0 940.0 216.0 L 1324.0 216.0 L 1499.0 216.0 Q 1505.0 216.0 1505.0 222.0 V 280.0 Q 1505.0 286.0 1511.0 286.0 L 1890.0 286.0 L 2412.0 286.0 L 2422.0 286.0 Q 2428.0 286.0 2428.0 292.0 V 459.0 Q 2428.0 465.0 2434.0 465.0 L 2642.0 465.0 L 2648.0 465.0" class="edge"/>
+  <path d="M 918.0 185.0 L 928.0 185.0 Q 934.0 185.0 934.0 191.0 V 420.0 Q 934.0 426.0 940.0 426.0 L 1324.0 426.0 L 1890.0 426.0 L 2412.0 426.0 L 2422.0 426.0 Q 2428.0 426.0 2428.0 432.0 V 459.0 Q 2428.0 465.0 2434.0 465.0 L 2642.0 465.0 L 2648.0 465.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 395.0 L 1338.0 395.0 Q 1344.0 395.0 1344.0 389.0 V 364.0 Q 1344.0 358.0 1350.0 358.0 L 1890.0 358.0 L 2412.0 358.0 L 2527.0 358.0 Q 2533.0 358.0 2533.0 352.0 V 294.0 Q 2533.0 288.0 2539.0 288.0 L 2862.0 288.0 L 2870.0 288.0 Q 2876.0 288.0 2876.0 282.0 V 191.0 Q 2876.0 185.0 2882.0 185.0 L 2962.0 185.0 L 2968.0 185.0" class="edge"/>
+  <path d="M 1330.0 395.0 L 1338.0 395.0 Q 1344.0 395.0 1344.0 389.0 V 154.0 Q 1344.0 148.0 1350.0 148.0 L 1890.0 148.0 L 2412.0 148.0 L 2862.0 148.0 L 2870.0 148.0 Q 2876.0 148.0 2876.0 154.0 V 179.0 Q 2876.0 185.0 2882.0 185.0 L 2962.0 185.0 L 2968.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output_localization_report.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/input_output/issue_location_utils.dart</title>
 </g>
 <g>
-  <path d="M 916.0 395.0 L 1058.0 395.0 Q 1064.0 395.0 1064.0 389.0 V 368.0 Q 1064.0 362.0 1070.0 362.0 L 1324.0 362.0 L 1890.0 362.0 L 2412.0 362.0 L 2554.0 362.0 Q 2560.0 362.0 2560.0 356.0 V 191.0 Q 2560.0 185.0 2566.0 185.0 L 2642.0 185.0 L 2648.0 185.0" class="edge"/>
+  <path d="M 916.0 395.0 L 1058.0 395.0 Q 1064.0 395.0 1064.0 389.0 V 158.0 Q 1064.0 152.0 1070.0 152.0 L 1324.0 152.0 L 1890.0 152.0 L 2412.0 152.0 L 2554.0 152.0 Q 2560.0 152.0 2560.0 158.0 V 179.0 Q 2560.0 185.0 2566.0 185.0 L 2642.0 185.0 L 2648.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_files/export_svg_files.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_issue.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1026.0 115.0 Q 1032.0 115.0 1032.0 121.0 V 224.0 Q 1032.0 230.0 1038.0 230.0 L 1324.0 230.0 L 1597.0 230.0 Q 1603.0 230.0 1603.0 236.0 V 294.0 Q 1603.0 300.0 1609.0 300.0 L 1890.0 300.0 L 2141.0 300.0 Q 2147.0 300.0 2147.0 306.0 V 434.0 Q 2147.0 440.0 2153.0 440.0 L 2412.0 440.0 L 2520.0 440.0 Q 2526.0 440.0 2526.0 434.0 V 331.0 Q 2526.0 325.0 2532.0 325.0 L 2642.0 325.0 L 2648.0 325.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1026.0 115.0 Q 1032.0 115.0 1032.0 121.0 V 294.0 Q 1032.0 300.0 1038.0 300.0 L 1324.0 300.0 L 1890.0 300.0 L 2412.0 300.0 L 2520.0 300.0 Q 2526.0 300.0 2526.0 306.0 V 319.0 Q 2526.0 325.0 2532.0 325.0 L 2642.0 325.0 L 2648.0 325.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 395.0 L 1340.0 395.0 Q 1346.0 395.0 1346.0 389.0 V 366.0 Q 1346.0 360.0 1352.0 360.0 L 1890.0 360.0 L 2412.0 360.0 L 2529.0 360.0 Q 2535.0 360.0 2535.0 354.0 V 296.0 Q 2535.0 290.0 2541.0 290.0 L 2862.0 290.0 L 2872.0 290.0 Q 2878.0 290.0 2878.0 284.0 V 261.0 Q 2878.0 255.0 2884.0 255.0 L 2962.0 255.0 L 2968.0 255.0" class="edge"/>
+  <path d="M 1330.0 395.0 L 1340.0 395.0 Q 1346.0 395.0 1346.0 389.0 V 226.0 Q 1346.0 220.0 1352.0 220.0 L 1890.0 220.0 L 2412.0 220.0 L 2862.0 220.0 L 2872.0 220.0 Q 2878.0 220.0 2878.0 226.0 V 249.0 Q 2878.0 255.0 2884.0 255.0 L 2962.0 255.0 L 2968.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output_localization_report.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_issue_detail.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1032.0 115.0 Q 1038.0 115.0 1038.0 121.0 V 230.0 Q 1038.0 236.0 1044.0 236.0 L 1324.0 236.0 L 1603.0 236.0 Q 1609.0 236.0 1609.0 242.0 V 300.0 Q 1609.0 306.0 1615.0 306.0 L 1890.0 306.0 L 2147.0 306.0 Q 2153.0 306.0 2153.0 312.0 V 440.0 Q 2153.0 446.0 2159.0 446.0 L 2412.0 446.0 L 2526.0 446.0 Q 2532.0 446.0 2532.0 440.0 V 261.0 Q 2532.0 255.0 2538.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1032.0 115.0 Q 1038.0 115.0 1038.0 121.0 V 230.0 Q 1038.0 236.0 1044.0 236.0 L 1324.0 236.0 L 1890.0 236.0 L 2412.0 236.0 L 2526.0 236.0 Q 2532.0 236.0 2532.0 242.0 V 249.0 Q 2532.0 255.0 2538.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_artifact.dart</title>
 </g>
 <g>
-  <path d="M 598.0 115.0 L 614.0 115.0 Q 620.0 115.0 620.0 121.0 V 142.0 Q 620.0 148.0 626.0 148.0 L 910.0 148.0 L 1324.0 148.0 L 1890.0 148.0 L 1906.0 148.0 Q 1912.0 148.0 1912.0 154.0 V 249.0 Q 1912.0 255.0 1918.0 255.0 L 2192.0 255.0 L 2198.0 255.0" class="edge"/>
+  <path d="M 598.0 115.0 L 614.0 115.0 Q 620.0 115.0 620.0 121.0 V 212.0 Q 620.0 218.0 626.0 218.0 L 910.0 218.0 L 1324.0 218.0 L 1890.0 218.0 L 1906.0 218.0 Q 1912.0 218.0 1912.0 224.0 V 249.0 Q 1912.0 255.0 1918.0 255.0 L 2192.0 255.0 L 2198.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck_cli_runner.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/app_strings.dart</title>
 </g>
 <g>
-  <path d="M 916.0 325.0 L 1080.0 325.0 Q 1086.0 325.0 1086.0 331.0 V 354.0 Q 1086.0 360.0 1092.0 360.0 L 1324.0 360.0 L 1890.0 360.0 L 2197.0 360.0 Q 2203.0 360.0 2203.0 366.0 V 424.0 Q 2203.0 430.0 2209.0 430.0 L 2412.0 430.0 L 2576.0 430.0 Q 2582.0 430.0 2582.0 424.0 V 261.0 Q 2582.0 255.0 2588.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
+  <path d="M 916.0 325.0 L 1080.0 325.0 Q 1086.0 325.0 1086.0 319.0 V 226.0 Q 1086.0 220.0 1092.0 220.0 L 1324.0 220.0 L 1890.0 220.0 L 2412.0 220.0 L 2576.0 220.0 Q 2582.0 220.0 2582.0 226.0 V 249.0 Q 2582.0 255.0 2588.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_loc/export_svg_code_size.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_artifact.dart</title>
 </g>
 <g>
-  <path d="M 918.0 185.0 L 938.0 185.0 Q 944.0 185.0 944.0 191.0 V 216.0 Q 944.0 222.0 950.0 222.0 L 1324.0 222.0 L 1509.0 222.0 Q 1515.0 222.0 1515.0 228.0 V 286.0 Q 1515.0 292.0 1521.0 292.0 L 1890.0 292.0 L 2412.0 292.0 L 2432.0 292.0 Q 2438.0 292.0 2438.0 286.0 V 261.0 Q 2438.0 255.0 2444.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
+  <path d="M 918.0 185.0 L 938.0 185.0 Q 944.0 185.0 944.0 191.0 V 216.0 Q 944.0 222.0 950.0 222.0 L 1324.0 222.0 L 1890.0 222.0 L 2412.0 222.0 L 2432.0 222.0 Q 2438.0 222.0 2438.0 228.0 V 249.0 Q 2438.0 255.0 2444.0 255.0 L 2642.0 255.0 L 2648.0 255.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/code_size/code_size_artifact.dart</title>
 </g>
 <g>
-  <path d="M 916.0 255.0 L 1070.0 255.0 Q 1076.0 255.0 1076.0 261.0 V 286.0 Q 1076.0 292.0 1082.0 292.0 L 1324.0 292.0 L 1890.0 292.0 L 2412.0 292.0 L 2566.0 292.0 Q 2572.0 292.0 2572.0 286.0 V 191.0 Q 2572.0 185.0 2578.0 185.0 L 2642.0 185.0 L 2648.0 185.0" class="edge"/>
+  <path d="M 916.0 255.0 L 1070.0 255.0 Q 1076.0 255.0 1076.0 249.0 V 158.0 Q 1076.0 152.0 1082.0 152.0 L 1324.0 152.0 L 1890.0 152.0 L 2412.0 152.0 L 2566.0 152.0 Q 2572.0 152.0 2572.0 158.0 V 179.0 Q 2572.0 185.0 2578.0 185.0 L 2642.0 185.0 L 2648.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_folders/export_svg_folders.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_issue.dart</title>
 </g>
 <g>
-  <path d="M 916.0 325.0 L 1082.0 325.0 Q 1088.0 325.0 1088.0 331.0 V 356.0 Q 1088.0 362.0 1094.0 362.0 L 1324.0 362.0 L 1890.0 362.0 L 2199.0 362.0 Q 2205.0 362.0 2205.0 368.0 V 426.0 Q 2205.0 432.0 2211.0 432.0 L 2412.0 432.0 L 2578.0 432.0 Q 2584.0 432.0 2584.0 426.0 V 331.0 Q 2584.0 325.0 2590.0 325.0 L 2642.0 325.0 L 2648.0 325.0" class="edge"/>
+  <path d="M 916.0 325.0 L 1082.0 325.0 Q 1088.0 325.0 1088.0 319.0 V 298.0 Q 1088.0 292.0 1094.0 292.0 L 1324.0 292.0 L 1890.0 292.0 L 2412.0 292.0 L 2578.0 292.0 Q 2584.0 292.0 2584.0 298.0 V 319.0 Q 2584.0 325.0 2590.0 325.0 L 2642.0 325.0 L 2648.0 325.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_loc/export_svg_code_size.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/dead_code/dead_code_issue.dart</title>
 </g>
 <g>
-  <path d="M 918.0 115.0 L 1038.0 115.0 Q 1044.0 115.0 1044.0 109.0 V 88.0 Q 1044.0 82.0 1050.0 82.0 L 2532.0 82.0 Q 2538.0 82.0 2538.0 88.0 V 109.0 Q 2538.0 115.0 2544.0 115.0 L 2637.0 115.0 L 2648.0 115.0" class="edge"/>
+  <path d="M 918.0 115.0 L 1038.0 115.0 Q 1044.0 115.0 1044.0 109.0 V 80.0 Q 1044.0 74.0 1050.0 74.0 L 2532.0 74.0 Q 2538.0 74.0 2538.0 80.0 V 109.0 Q 2538.0 115.0 2544.0 115.0 L 2637.0 115.0 L 2648.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/lib/fcheck.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzer_runner/analysis_file_context.dart</title>
 </g>
 <g>
-  <path d="M 918.0 185.0 L 950.0 185.0 Q 956.0 185.0 956.0 191.0 V 222.0 Q 956.0 228.0 962.0 228.0 L 1324.0 228.0 L 1521.0 228.0 Q 1527.0 228.0 1527.0 234.0 V 292.0 Q 1527.0 298.0 1533.0 298.0 L 1890.0 298.0 L 2412.0 298.0 L 2444.0 298.0 Q 2450.0 298.0 2450.0 292.0 V 191.0 Q 2450.0 185.0 2456.0 185.0 L 2642.0 185.0 L 2648.0 185.0" class="edge"/>
+  <path d="M 918.0 185.0 L 950.0 185.0 Q 956.0 185.0 956.0 179.0 V 164.0 Q 956.0 158.0 962.0 158.0 L 1324.0 158.0 L 1890.0 158.0 L 2412.0 158.0 L 2444.0 158.0 Q 2450.0 158.0 2450.0 164.0 V 179.0 Q 2450.0 185.0 2456.0 185.0 L 2642.0 185.0 L 2648.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/layers/layers_issue.dart</title>
 </g>
 <g>
-  <path d="M 1330.0 395.0 L 1336.0 395.0 Q 1342.0 395.0 1342.0 389.0 V 362.0 Q 1342.0 356.0 1348.0 356.0 L 1890.0 356.0 L 2412.0 356.0 L 2525.0 356.0 Q 2531.0 356.0 2531.0 350.0 V 292.0 Q 2531.0 286.0 2537.0 286.0 L 2862.0 286.0 L 3182.0 286.0 L 3188.0 286.0 Q 3194.0 286.0 3194.0 280.0 V 121.0 Q 3194.0 115.0 3200.0 115.0 L 3282.0 115.0 L 3288.0 115.0" class="edge"/>
+  <path d="M 1330.0 395.0 L 1336.0 395.0 Q 1342.0 395.0 1342.0 389.0 V 82.0 Q 1342.0 76.0 1348.0 76.0 L 1890.0 76.0 L 2412.0 76.0 L 2862.0 76.0 L 3182.0 76.0 L 3188.0 76.0 Q 3194.0 76.0 3194.0 82.0 V 109.0 Q 3194.0 115.0 3200.0 115.0 L 3282.0 115.0 L 3288.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output_localization_report.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/analyzers/localization/localization_utils.dart</title>
 </g>
 <g>
-  <path d="M 918.0 185.0 L 936.0 185.0 Q 942.0 185.0 942.0 191.0 V 220.0 Q 942.0 226.0 948.0 226.0 L 1324.0 226.0 L 1507.0 226.0 Q 1513.0 226.0 1513.0 232.0 V 290.0 Q 1513.0 296.0 1519.0 296.0 L 1890.0 296.0 L 2412.0 296.0 L 2537.0 296.0 Q 2543.0 296.0 2543.0 302.0 V 360.0 Q 2543.0 366.0 2549.0 366.0 L 2862.0 366.0 L 2880.0 366.0 Q 2886.0 366.0 2886.0 360.0 V 121.0 Q 2886.0 115.0 2892.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
+  <path d="M 918.0 185.0 L 936.0 185.0 Q 942.0 185.0 942.0 179.0 V 92.0 Q 942.0 86.0 948.0 86.0 L 1324.0 86.0 L 1890.0 86.0 L 2412.0 86.0 L 2862.0 86.0 L 2880.0 86.0 Q 2886.0 86.0 2886.0 92.0 V 109.0 Q 2886.0 115.0 2892.0 115.0 L 2962.0 115.0 L 2968.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/models/ignore_config.dart</title>
 </g>
 <g>
-  <path d="M 918.0 185.0 L 948.0 185.0 Q 954.0 185.0 954.0 191.0 V 224.0 Q 954.0 230.0 960.0 230.0 L 1324.0 230.0 L 1519.0 230.0 Q 1525.0 230.0 1525.0 236.0 V 294.0 Q 1525.0 300.0 1531.0 300.0 L 1890.0 300.0 L 2412.0 300.0 L 2549.0 300.0 Q 2555.0 300.0 2555.0 306.0 V 364.0 Q 2555.0 370.0 2561.0 370.0 L 2862.0 370.0 L 2892.0 370.0 Q 2898.0 370.0 2898.0 364.0 V 191.0 Q 2898.0 185.0 2904.0 185.0 L 2962.0 185.0 L 2968.0 185.0" class="edge"/>
+  <path d="M 918.0 185.0 L 948.0 185.0 Q 954.0 185.0 954.0 179.0 V 166.0 Q 954.0 160.0 960.0 160.0 L 1324.0 160.0 L 1890.0 160.0 L 2412.0 160.0 L 2862.0 160.0 L 2892.0 160.0 Q 2898.0 160.0 2898.0 166.0 V 179.0 Q 2898.0 185.0 2904.0 185.0 L 2962.0 185.0 L 2968.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/input_output/issue_location_utils.dart</title>
 </g>
 <g>
-  <path d="M 598.0 115.0 L 622.0 115.0 Q 628.0 115.0 628.0 121.0 V 146.0 Q 628.0 152.0 634.0 152.0 L 910.0 152.0 L 1324.0 152.0 L 1890.0 152.0 L 2412.0 152.0 L 2543.0 152.0 Q 2549.0 152.0 2549.0 158.0 V 216.0 Q 2549.0 222.0 2555.0 222.0 L 2862.0 222.0 L 2886.0 222.0 Q 2892.0 222.0 2892.0 216.0 V 191.0 Q 2892.0 185.0 2898.0 185.0 L 2962.0 185.0 L 2968.0 185.0" class="edge"/>
+  <path d="M 598.0 115.0 L 622.0 115.0 Q 628.0 115.0 628.0 121.0 V 146.0 Q 628.0 152.0 634.0 152.0 L 910.0 152.0 L 1324.0 152.0 L 1890.0 152.0 L 2412.0 152.0 L 2862.0 152.0 L 2886.0 152.0 Q 2892.0 152.0 2892.0 158.0 V 179.0 Q 2892.0 185.0 2898.0 185.0 L 2962.0 185.0 L 2968.0 185.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/bin/fcheck_cli_runner.dart ▶ /Users/jp/src/github/vteam/fcheck/lib/src/input_output/issue_location_utils.dart</title>
 </g>
 <g class="badge outgoingBadge">

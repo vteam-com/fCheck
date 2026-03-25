@@ -560,6 +560,8 @@ All incoming edges arrive flat at the target badge centre Y.  There is no target
 
 Special case for long top-row hops: when both source and target are the first (top) node in their columns and the target is 2+ columns to the right, route the edge up above the first row, then horizontally right, then vertically down in front of the destination column, then horizontally into the target badge.
 
+For this top-bypass special case, when multiple peers share the same source, shorter cross-column routes must be ordered first (smaller `colDiff` first) so they render before longer peers and avoid visual crossings.
+
 For files SVG paint order, sort edges by forward column distance (`colDiff`) ascending so 1-column edges paint first, then 2-column, then 3-column, etc. Within the same `colDiff`, sort by vertical span descending.
 
 ```python

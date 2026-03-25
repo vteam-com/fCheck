@@ -352,38 +352,6 @@ String exportGraphSvgFiles(
     }
     skipPassageLaneCount[src] = sorted.length;
   }
-  // Map key: '$source|$intermediateCol' → base passage Y.
-  final precomputedPassageY = <String, double>{};
-  for (final srcEntry in skipEdgesBySource.entries) {
-    final src = srcEntry.key;
-    final srcCol = colIndexByFile[src] ?? 0;
-    final srcCenterY = (nodePositions[src]?.y ?? 0) + nodeHeight / _halfDivisor;
-    // Compute the average target centre Y for all skip targets from this source.
-    var sumTargetY = 0.0;
-    for (final tgt in srcEntry.value) {
-      sumTargetY += (nodePositions[tgt]?.y ?? 0) + nodeHeight / _halfDivisor;
-    }
-    final avgTargetY = sumTargetY / srcEntry.value.length;
-    // For each intermediate column, pick the best passage using a directY
-    // interpolated between the source and the average target.
-    final maxColDiff = srcEntry.value.fold<int>(0, (mx, tgt) {
-      final tgtCol = colIndexByFile[tgt] ?? 0;
-      return tgtCol - srcCol > mx ? tgtCol - srcCol : mx;
-    });
-    for (var c = srcCol + 1; c < srcCol + maxColDiff; c++) {
-      final fraction = (c - srcCol) / maxColDiff;
-      final representativeY = srcCenterY + (avgTargetY - srcCenterY) * fraction;
-      final py = _findBestPassageY(
-        colFilesByIndex[c] ?? const [],
-        nodePositions,
-        nodeHeight,
-        nodeVerticalSpacing,
-        representativeY,
-      );
-      precomputedPassageY['$src|$c'] = py;
-    }
-  }
-
   // Lane indices for top-bypass special-case edges.
   final topBypassLaneIndex = <String, int>{};
   final topBypassLaneCountBySource = <String, int>{};
@@ -418,7 +386,7 @@ String exportGraphSvgFiles(
       ..sort((a, b) {
         final aColDiff = (colIndexByFile[a] ?? 0) - sourceColIdx;
         final bColDiff = (colIndexByFile[b] ?? 0) - sourceColIdx;
-        final colDiffCompare = bColDiff.compareTo(aColDiff);
+        final colDiffCompare = aColDiff.compareTo(bColDiff);
         if (colDiffCompare != 0) return colDiffCompare;
         return a.compareTo(b);
       });
@@ -579,9 +547,14 @@ String exportGraphSvgFiles(
               final gapBeforeC = gapSpacings[c - 1];
               gapCenterXsList.add(colLeftX - gapBeforeC / _halfDivisor);
               colRightXsList.add(colLeftX + nodeWidth);
-              // Use the precomputed base passage Y so all skip edges from the
-              // same source through this column share one gap.
-              final basePassageY = precomputedPassageY['$source|$c'] ?? startY;
+              // Use the open gap closest to the destination node Y.
+              final basePassageY = _findBestPassageY(
+                colFilesByIndex[c] ?? const [],
+                nodePositions,
+                nodeHeight,
+                nodeVerticalSpacing,
+                endY,
+              );
               passageYs.add(basePassageY + passageYOffset);
             }
             // Build multi-hop path from source badge tip to target badge tip.
