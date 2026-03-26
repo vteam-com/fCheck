@@ -790,32 +790,95 @@ void main() {
       expect(innerIndex, lessThan(outerIndex));
     });
 
-    test('adjacent same-row forward edges use a near-straight cubic', () {
-      // Single node in each column → same Y → near-straight cubic routing.
-      final result = LayersAnalysisResult(
-        issues: const [],
-        layers: const {'lib/src/a.dart': 0, 'lib/src/b.dart': 1},
-        dependencyGraph: const {
-          'lib/src/a.dart': ['lib/src/b.dart'],
-          'lib/src/b.dart': [],
-        },
-      );
+    test(
+      'adjacent same-row forward edge uses straight line when single outgoing',
+      () {
+        // Single node in each column and one outgoing edge from source.
+        final result = LayersAnalysisResult(
+          issues: const [],
+          layers: const {'lib/src/a.dart': 0, 'lib/src/b.dart': 1},
+          dependencyGraph: const {
+            'lib/src/a.dart': ['lib/src/b.dart'],
+            'lib/src/b.dart': [],
+          },
+        );
 
-      final svg = exportGraphSvgFiles(result);
+        final svg = exportGraphSvgFiles(result);
+        final pathData = _extractFilesEdgePathData(
+          svg,
+          'lib/src/a.dart',
+          'lib/src/b.dart',
+        );
 
-      // Same-row adjacent edge uses a tiny-belly cubic to preserve visibility.
-      expect(
-        RegExp(r'<path d="M [^"]*C ').hasMatch(svg),
-        isTrue,
-        reason: 'adjacent same-row edge should use near-straight cubic routing',
-      );
-      // Should not use elbow Q commands on edge-class paths.
-      expect(
-        RegExp(r'<path d="M [^"]*Q [^"]*" class="edge').hasMatch(svg),
-        isFalse,
-        reason: 'adjacent same-row edge should not use elbow routing',
-      );
-    });
+        expect(pathData, isNotNull);
+        expect(
+          svg.contains('class="edge edgeFlat"'),
+          isTrue,
+          reason:
+              'single-outgoing adjacent same-row edge should use edgeFlat class',
+        );
+        // Must be one straight segment with no arch/elbow commands.
+        expect(
+          RegExp(
+            r'^M [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)? L [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)?$',
+          ).hasMatch(pathData!),
+          isTrue,
+          reason: 'single-outgoing adjacent same-row edge should be straight',
+        );
+      },
+    );
+
+    test(
+      'adjacent same-row forward edge uses single arch when source has multiple outgoing',
+      () {
+        final result = LayersAnalysisResult(
+          issues: const [],
+          layers: const {
+            'lib/src/a.dart': 0,
+            'lib/src/b.dart': 1,
+            'lib/src/c.dart': 1,
+          },
+          dependencyGraph: const {
+            'lib/src/a.dart': ['lib/src/b.dart', 'lib/src/c.dart'],
+            'lib/src/b.dart': [],
+            'lib/src/c.dart': [],
+          },
+        );
+
+        final svg = exportGraphSvgFiles(result);
+        final pathData = _extractFilesEdgePathData(
+          svg,
+          'lib/src/a.dart',
+          'lib/src/b.dart',
+        );
+
+        expect(pathData, isNotNull);
+        expect(
+          svg.contains('class="edge edgeFlat"'),
+          isFalse,
+          reason:
+              'multi-outgoing adjacent same-row edge should not use edgeFlat class',
+        );
+        expect(
+          RegExp(
+            r'^M [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)? Q [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)?$',
+          ).hasMatch(pathData!),
+          isTrue,
+          reason:
+              'multi-outgoing adjacent same-row edge should be a single-arch path',
+        );
+        expect(
+          pathData.contains(' V '),
+          isFalse,
+          reason: 'arch path must not use elbow turns',
+        );
+        expect(
+          pathData.contains(' C '),
+          isFalse,
+          reason: 'arch path should be quadratic, not cubic',
+        );
+      },
+    );
 
     test('draws far file edge after near file edge', () {
       final result = LayersAnalysisResult(
@@ -845,7 +908,7 @@ void main() {
       expect(nearIndex, lessThan(farIndex));
     });
 
-    test('draws longer-span adjacent file edge before shorter-span one', () {
+    test('draws shorter-span adjacent file edge before longer-span one', () {
       final result = LayersAnalysisResult(
         issues: const [],
         layers: const {
@@ -870,7 +933,7 @@ void main() {
 
       expect(shortIndex, greaterThanOrEqualTo(0));
       expect(longIndex, greaterThanOrEqualTo(0));
-      expect(longIndex, lessThan(shortIndex));
+      expect(shortIndex, lessThan(longIndex));
     });
 
     test('same-source vertical fan-out lanes do not overlap', () {
@@ -1120,7 +1183,11 @@ const double _testFilesEdgeCornerRadius = 6.0;
 double? _extractFilesEdgeLaneX(String svg, String source, String target) {
   final pathData = _extractFilesEdgePathData(svg, source, target);
   if (pathData == null) return null;
-  final qPattern = RegExp(r'Q ([0-9]+(?:\.[0-9]+)?)');
+  // Elbow path has laneX duplicated in the first Q command and followed by V.
+  // Example: Q laneX startY laneX v1Start V ...
+  final qPattern = RegExp(
+    r'Q ([0-9]+(?:\.[0-9]+)?) [0-9]+(?:\.[0-9]+)? \1 [0-9]+(?:\.[0-9]+)? V ',
+  );
   final qMatch = qPattern.firstMatch(pathData);
   return qMatch != null ? double.tryParse(qMatch.group(1)!) : null;
 }
@@ -1142,7 +1209,7 @@ double? _extractFilesEdgeFirstPreCornerX(
 String? _extractFilesEdgePathData(String svg, String source, String target) {
   final title = '$source ▶ $target';
   final pattern = RegExp(
-    '<path d="([^"]+)" class="edge[^"]*"/>\\s*<title>${RegExp.escape(title)}</title>',
+    '<path d="([^"]+)" class="edge[^"]*"[^>]*/>\\s*<title>${RegExp.escape(title)}</title>',
   );
   final match = pattern.firstMatch(svg);
   return match?.group(1);

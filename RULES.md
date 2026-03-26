@@ -215,6 +215,11 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 
 ## Output Formatting
 
+- In file-level SVG edge rendering, when source/target are in adjacent columns at the same level:
+  - render a straight line only when the source has exactly one outgoing edge,
+  - otherwise render a single arch line,
+  - and do not introduce elbow turns for this case.
+
 - When displaying counts or other numbers `>= 1,000` in CLI output or documentation examples, use comma separators (e.g., `1,234`, `12,345`, `1,234,567`).
 - When displaying file paths in CLI output, reports, or examples, always use paths relative to the effective analysis root (the input folder after applying `input.root`).
 - When displaying source locations, always format as `relative_file_path:line_number` with no space after `:`.

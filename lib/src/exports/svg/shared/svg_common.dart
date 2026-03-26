@@ -97,10 +97,12 @@ void renderEdgeWithTooltip(
   required String source,
   required String target,
   required String cssClass,
+  String? pathStyle,
   String separator = '▶',
 }) {
+  final styleAttr = pathStyle == null ? '' : ' style="$pathStyle"';
   buffer.writeln('<g>');
-  buffer.writeln('  <path d="$pathData" class="$cssClass"/>');
+  buffer.writeln('  <path d="$pathData" class="$cssClass"$styleAttr/>');
   buffer.writeln('  <title>$source $separator $target</title>');
   buffer.writeln('</g>');
 }

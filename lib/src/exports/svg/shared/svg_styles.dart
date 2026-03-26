@@ -56,6 +56,14 @@ class SvgDefinitions {
     <stop offset="100%" stop-color="#007bff"/>
   </linearGradient>''';
 
+  /// Horizontal gradient in user space for perfectly flat edges.
+  /// This avoids object-bounding-box gradient collapse on zero-height paths.
+  static const String horizontalGradientFlat = '''
+  <linearGradient id="horizontalGradientFlat" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100%" y2="0">
+    <stop offset="0%" stop-color="#28a745"/>
+    <stop offset="100%" stop-color="#007bff"/>
+  </linearGradient>''';
+
   /// Generic vertical gradient (top green to bottom blue).
   /// Used for vertical dependency arrows and edges.
   static const String verticalGradient = '''
@@ -96,6 +104,7 @@ $whiteShadowFilter
 $hierarchicalShadowFilter
 $outlineWhiteFilter
 $horizontalGradient
+$horizontalGradientFlat
 $verticalGradient
 $warningNodeGradient
 $errorNodeGradient
@@ -220,6 +229,19 @@ $errorNodeGradient
     stroke: url(#horizontalGradient); 
     stroke-width: 3; 
     opacity: 1.0; 
+  }
+
+  .edgeFlat {
+    stroke: url(#horizontalGradient);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    opacity: 0.95;
+  }
+
+  .edgeFlat:hover {
+    stroke: url(#horizontalGradient);
+    stroke-width: 3;
+    opacity: 1.0;
   }
   
   .edgeVertical { 

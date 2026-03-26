@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/analyzers/project_metrics.dart';
+import 'package:fcheck/src/exports/svg/export_files/source_gap_lane_ordering.dart';
 import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
 
@@ -274,48 +275,28 @@ String exportGraphSvgFiles(
     }
   }
   for (final gapEntry in edgesBySourceGap.entries) {
-    final edgesBySource = <String, List<(String, String)>>{};
-    for (final edge in gapEntry.value) {
-      edgesBySource.putIfAbsent(edge.$1, () => []).add(edge);
-    }
+    final sortedForGap = orderSourceGapEdgesByCrossingCost(
+      gapEntry.value,
+      nodePositions: nodePositions,
+      nodeHeight: nodeHeight,
+      colIndexByFile: colIndexByFile,
+    );
 
-    final orderedSources = edgesBySource.keys.toList()..sort();
     var laneIdx = 0;
-    for (final src in orderedSources) {
-      final srcCenterY =
-          (nodePositions[src]?.y ?? 0) + nodeHeight / _halfDivisor;
-      final sortedForSource =
-          List<(String, String)>.from(edgesBySource[src] ?? const [])
-            ..sort((a, b) {
-              final aTargetCenterY =
-                  (nodePositions[a.$2]?.y ?? 0) + nodeHeight / _halfDivisor;
-              final bTargetCenterY =
-                  (nodePositions[b.$2]?.y ?? 0) + nodeHeight / _halfDivisor;
-              final aDeltaAbs = (aTargetCenterY - srcCenterY).abs();
-              final bDeltaAbs = (bTargetCenterY - srcCenterY).abs();
-              // Taller routes first (leftmost lanes), shorter routes later
-              // (rightward lanes). This minimizes branch crossings.
-              final deltaCompare = bDeltaAbs.compareTo(aDeltaAbs);
-              if (deltaCompare != 0) return deltaCompare;
-
-              final aColDiff =
-                  (colIndexByFile[a.$2] ?? 0) - (colIndexByFile[a.$1] ?? 0);
-              final bColDiff =
-                  (colIndexByFile[b.$2] ?? 0) - (colIndexByFile[b.$1] ?? 0);
-              final colDiffCompare = bColDiff.compareTo(aColDiff);
-              if (colDiffCompare != 0) return colDiffCompare;
-
-              final targetYCompare = bTargetCenterY.compareTo(aTargetCenterY);
-              if (targetYCompare != 0) return targetYCompare;
-
-              return '${a.$1}|${a.$2}'.compareTo('${b.$1}|${b.$2}');
-            });
-
-      for (final edge in sortedForSource) {
-        sourceGapLaneIndices['${edge.$1}|${edge.$2}'] = laneIdx;
-        laneIdx++;
-      }
+    for (final edge in sortedForGap) {
+      sourceGapLaneIndices['${edge.$1}|${edge.$2}'] = laneIdx;
+      laneIdx++;
     }
+  }
+
+  // Track the total number of elbow lanes each source uses in its gap so
+  // that the same-row direct Bezier can be routed past the vertical bundle.
+  final sourceLaneCount = <String, int>{};
+  for (final entry in sourceGapLaneIndices.entries) {
+    final src = entry.key.split('|').first;
+    final lane = entry.value;
+    final prev = sourceLaneCount[src] ?? 0;
+    if (lane + 1 > prev) sourceLaneCount[src] = lane + 1;
   }
 
   // Pre-compute skip-edge passage Y and lane indices.
@@ -337,15 +318,17 @@ String exportGraphSvgFiles(
   // Assign contiguous passage lane indices per source for skip edges only.
   for (final srcEntry in skipEdgesBySource.entries) {
     final src = srcEntry.key;
-    final srcCenterY = (nodePositions[src]?.y ?? 0) + nodeHeight / _halfDivisor;
     final sorted = List<String>.from(srcEntry.value)
       ..sort((a, b) {
+        final aColDiff = (colIndexByFile[a] ?? 0) - (colIndexByFile[src] ?? 0);
+        final bColDiff = (colIndexByFile[b] ?? 0) - (colIndexByFile[src] ?? 0);
+        final colCompare = aColDiff.compareTo(bColDiff);
+        if (colCompare != 0) return colCompare;
+
         final aY = (nodePositions[a]?.y ?? 0) + nodeHeight / _halfDivisor;
         final bY = (nodePositions[b]?.y ?? 0) + nodeHeight / _halfDivisor;
-        final aDelta = (aY - srcCenterY).abs();
-        final bDelta = (bY - srcCenterY).abs();
-        final cmp = bDelta.compareTo(aDelta);
-        return cmp != 0 ? cmp : a.compareTo(b);
+        final yCompare = aY.compareTo(bY);
+        return yCompare != 0 ? yCompare : a.compareTo(b);
       });
     for (var i = 0; i < sorted.length; i++) {
       skipPassageLaneIndex['$src|${sorted[i]}'] = i;
@@ -354,7 +337,6 @@ String exportGraphSvgFiles(
   }
   // Lane indices for top-bypass special-case edges.
   final topBypassLaneIndex = <String, int>{};
-  final topBypassLaneCountBySource = <String, int>{};
   final topBypassTargetsBySource = <String, List<String>>{};
   for (final entry in dependencyGraph.entries) {
     final source = entry.key;
@@ -379,27 +361,74 @@ String exportGraphSvgFiles(
       topBypassTargetsBySource.putIfAbsent(source, () => []).add(target);
     }
   }
+  // Global lane assignment: edges with the same column span share one lane
+  // (same bypass Y) regardless of source.  Shorter spans get lane 0 (highest
+  // Y, closest to nodes = visually "inside") and longer spans get higher lane
+  // indices (lower Y, further from nodes = visually "outside").
+  final allBypassColDiffs = <String, int>{};
+  for (final srcEntry in topBypassTargetsBySource.entries) {
+    final sourceColIdx = colIndexByFile[srcEntry.key] ?? 0;
+    for (final target in srcEntry.value) {
+      final diff = (colIndexByFile[target] ?? 0) - sourceColIdx;
+      allBypassColDiffs['${srcEntry.key}|$target'] = diff;
+    }
+  }
+  final uniqueColDiffs = allBypassColDiffs.values.toSet().toList()..sort();
+  for (final entry in allBypassColDiffs.entries) {
+    topBypassLaneIndex[entry.key] = uniqueColDiffs.indexOf(entry.value);
+  }
+
+  // Pre-compute topBypassY for every bypass edge using global lane count.
+  final topBypassY = <String, double>{};
+  {
+    final firstRowTopY = (margin + layerHeaderHeight).toDouble();
+    final topBypassBaseOffset = _fileEdgeCornerRadius + _edgeLaneOffset;
+    final minTopBypassY = margin / _halfDivisor;
+    final globalLaneCount = uniqueColDiffs.length;
+    final availableTopBand = firstRowTopY - minTopBypassY - topBypassBaseOffset;
+    final safeTopBand = availableTopBand > 0 ? availableTopBand : 0.0;
+    final topBypassLaneGap = globalLaneCount <= 1
+        ? 0.0
+        : min(_topBypassPreferredLaneGap, safeTopBand / (globalLaneCount - 1));
+    for (final entry in allBypassColDiffs.entries) {
+      final laneIdx = topBypassLaneIndex[entry.key] ?? 0;
+      final raw =
+          firstRowTopY - topBypassBaseOffset - laneIdx * topBypassLaneGap;
+      topBypassY[entry.key] = raw < minTopBypassY ? minTopBypassY : raw;
+    }
+  }
+
+  // Reverse source-side lane X for bypass edges: the longest bypass
+  // (outermost/lowest Y) must get the innermost (leftmost) source-side X
+  // so its tall vertical doesn't cross shorter bypasses' horizontals.
+  final bypassSourceSideLaneIdx = <String, int>{};
   for (final srcEntry in topBypassTargetsBySource.entries) {
     final source = srcEntry.key;
     final sourceColIdx = colIndexByFile[source] ?? 0;
-    final sortedTargets = List<String>.from(srcEntry.value)
-      ..sort((a, b) {
-        final aColDiff = (colIndexByFile[a] ?? 0) - sourceColIdx;
-        final bColDiff = (colIndexByFile[b] ?? 0) - sourceColIdx;
-        final colDiffCompare = aColDiff.compareTo(bColDiff);
-        if (colDiffCompare != 0) return colDiffCompare;
-        return a.compareTo(b);
-      });
-    for (var i = 0; i < sortedTargets.length; i++) {
-      topBypassLaneIndex['$source|${sortedTargets[i]}'] = i;
+    final targets = List<String>.from(srcEntry.value);
+    if (targets.length < _minBypassEdgesForReorder) continue;
+
+    // Sort by ascending colDiff (matches gap-ordering tiebreak for same-Y).
+    targets.sort((a, b) {
+      final aDiff = (colIndexByFile[a] ?? 0) - sourceColIdx;
+      final bDiff = (colIndexByFile[b] ?? 0) - sourceColIdx;
+      return aDiff.compareTo(bDiff);
+    });
+
+    // Collect their current gap lane indices and sort ascending.
+    final currentLanes = <int>[
+      for (final t in targets) sourceGapLaneIndices['$source|$t'] ?? 0,
+    ]..sort();
+
+    // Reverse: smallest colDiff → highest lane index (outermost X),
+    // largest colDiff → lowest lane index (innermost X).
+    for (var i = 0; i < targets.length; i++) {
+      bypassSourceSideLaneIdx['$source|${targets[i]}'] =
+          currentLanes[targets.length - 1 - i];
     }
-    topBypassLaneCountBySource[source] = sortedTargets.length;
   }
 
-  // 4. Build and sort all edges by Y-span descending, then render.
-  // Painting longest-span edges first (deepest vertical reach) puts them
-  // behind shorter edges.  Shorter-span and straight/near-straight edges are painted
-  // last, on top, so the close connections always appear clean and unobscured.
+  // 4. Build and sort edges, then render.
   final edgeRenderList =
       <
         ({
@@ -407,10 +436,13 @@ String exportGraphSvgFiles(
           String target,
           String pathData,
           String cssClass,
+          String? pathStyle,
           double span,
           int colDiff,
         })
       >[];
+  final flatEdgeGradientDefs = <String>[];
+  var flatEdgeGradientCounter = 0;
 
   for (final entry in dependencyGraph.entries) {
     final source = entry.key;
@@ -436,17 +468,18 @@ String exportGraphSvgFiles(
       final isCycle = cyclicEdges.contains('$source|$target');
       final extraClass = isCycle ? ' cycleEdge' : '';
       final span = (endY - startY).abs();
+      var isFlatStraightAdjacentEdge = false;
+      String? edgePathStyle;
 
       final String pathData;
       final int colDiff;
       if (sourceColIdx < targetColIdx) {
         colDiff = targetColIdx - sourceColIdx;
 
-        // The left edge of the target column box — used for lane gap bounds.
+        // Left edge of target column box for lane bounds.
         final targetLeftX = colLeftXPositions[targetColIdx];
 
-        // Actual triangle tip positions computed from badge geometry so the
-        // edge path visually touches each badge's pointed tip.
+        // Triangle tip positions from badge geometry.
         final sourceBadgeTipX =
             startX +
             BadgeModel.tipOffsetFromCenter(outgoingCounts[source] ?? 0);
@@ -454,27 +487,34 @@ String exportGraphSvgFiles(
             endX - BadgeModel.baseOffsetFromCenter(incomingCounts[target] ?? 0);
 
         if (colDiff == 1 && span < 1.0) {
-          // Adjacent column, same row: use a near-straight cubic with a tiny
-          // belly so the path has non-zero height and remains visible with
-          // objectBoundingBox gradients.
-          final midX = (sourceBadgeTipX + endX) / _halfDivisor;
-          pathData =
-              'M $sourceBadgeTipX $startY '
-              'C $midX ${startY - _edgeStraightBellyHeight}, '
-              '$midX ${endY - _edgeStraightBellyHeight}, '
-              '$endX $endY';
+          // Adjacent same-level edge:
+          // - exactly one outgoing edge from source => straight line
+          // - more than one outgoing edge from source => single arch
+          final sourceOutgoingCount = outgoingCounts[source] ?? 0;
+          if (sourceOutgoingCount <= 1) {
+            isFlatStraightAdjacentEdge = true;
+            flatEdgeGradientCounter++;
+            final flatGradientId = 'flatEdgeGradient$flatEdgeGradientCounter';
+            flatEdgeGradientDefs.add(
+              '<linearGradient id="$flatGradientId" gradientUnits="userSpaceOnUse" x1="$sourceBadgeTipX" y1="$startY" x2="$endX" y2="$endY">'
+              '<stop offset="0%" stop-color="#28a745"/>'
+              '<stop offset="100%" stop-color="#007bff"/>'
+              '</linearGradient>',
+            );
+            edgePathStyle = 'stroke:url(#$flatGradientId);';
+            pathData = 'M $sourceBadgeTipX $startY L $endX $endY';
+          } else {
+            final midX = (sourceBadgeTipX + endX) / _halfDivisor;
+            pathData =
+                'M $sourceBadgeTipX $startY '
+                'Q $midX ${startY - _edgeStraightBellyHeight} $endX $endY';
+          }
         } else {
           // Elbow routing through the gap just before the target column.
           final gapKey = targetColIdx - 1;
           final laneIdx = sourceGapLaneIndices['$source|$target'] ?? 0;
           final gapLeftX = colLeftXPositions[gapKey] + nodeWidth;
-          // minLaneX must be past the outgoing badge tip so that the exit
-          // horizontal (badge tip → laneX-r, startY) always travels rightward.
-          // For colDiff==1 gapLeftX == startX (the badge sits inside the gap),
-          // so we clamp to sourceBadgeTipX.  For colDiff>1 gapLeftX is already
-          // far past the badge, so the max() has no effect.
-          // Reserve the source tip column for the direct edge so routed lanes
-          // never start on the same pixel column at the badge tip.
+          // Keep lane start past outgoing badge tip.
           final minLaneX =
               (sourceBadgeTipX > gapLeftX ? sourceBadgeTipX : gapLeftX) +
               _fileEdgeCornerRadius +
@@ -485,11 +525,7 @@ String exportGraphSvgFiles(
             maxLaneX,
           );
 
-          // Source-side lane X: the X column used for the FIRST vertical turn
-          // for every forward edge from this source (adjacent AND skip alike).
-          // Anchored to the gap immediately right of the source badge so that
-          // all outgoing edges share one compact continuous incremental band
-          // with no gap between adjacent-column and skip edges.
+          // Source-side X for first vertical turn from this source.
           final srcImmGapLeftX = colLeftXPositions[sourceColIdx] + nodeWidth;
           final srcMinLaneX =
               (sourceBadgeTipX > srcImmGapLeftX
@@ -531,14 +567,20 @@ String exportGraphSvgFiles(
             // Skip edge: route through intermediate passage gaps.
             final edgeKey = '$source|$target';
             final laneIdx = sourceGapLaneIndices[edgeKey] ?? 0;
-            // Use per-source skip-edge lane indices for passage Y stagger,
-            // not the global gap lane index. This keeps the Y offsets
-            // contiguous (no gaps from adjacent-edge indices in between).
+            // Use per-source skip-edge lane index for passage Y stagger.
             final skipLaneIdx = skipPassageLaneIndex[edgeKey] ?? 0;
             final skipTotal = skipPassageLaneCount[source] ?? 1;
-            final passageYOffset =
+            final rawPassageYOffset =
                 (skipLaneIdx - (skipTotal - 1) / _halfDivisor) *
                 _edgeLaneOffset;
+            final maxPassageYOffset = max(
+              0.0,
+              nodeVerticalSpacing / _halfDivisor - _fileEdgeCornerRadius,
+            );
+            final passageYOffset = rawPassageYOffset.clamp(
+              -maxPassageYOffset,
+              maxPassageYOffset,
+            );
             final passageYs = <double>[];
             final gapCenterXsList = <double>[];
             final colRightXsList = <double>[];
@@ -547,7 +589,6 @@ String exportGraphSvgFiles(
               final gapBeforeC = gapSpacings[c - 1];
               gapCenterXsList.add(colLeftX - gapBeforeC / _halfDivisor);
               colRightXsList.add(colLeftX + nodeWidth);
-              // Use the open gap closest to the destination node Y.
               final basePassageY = _findBestPassageY(
                 colFilesByIndex[c] ?? const [],
                 nodePositions,
@@ -557,12 +598,10 @@ String exportGraphSvgFiles(
               );
               passageYs.add(basePassageY + passageYOffset);
             }
-            // Build multi-hop path from source badge tip to target badge tip.
             final laneOffset = laneIdx * _edgeLaneOffset;
             final gapOffsets = <double>[
               if (gapCenterXsList.isNotEmpty)
-                sourceSideLaneX -
-                    gapCenterXsList[0], // align 1st passage to shared source band
+                sourceSideLaneX - gapCenterXsList[0],
               for (var i = 1; i < gapCenterXsList.length; i++) laneOffset,
             ];
             final sourceColumnFiles = colFilesByIndex[sourceColIdx] ?? const [];
@@ -577,39 +616,23 @@ String exportGraphSvgFiles(
             if (sourceIsFirstInColumn &&
                 targetIsFirstInColumn &&
                 colDiff >= _minTopBypassColDiff) {
-              // Special case: top-node long hop via top bypass lane.
               final r = _fileEdgeCornerRadius;
-              final firstRowTopY = (margin + layerHeaderHeight).toDouble();
-              final topBypassLaneIdx = topBypassLaneIndex[edgeKey] ?? 0;
-              final topBypassLaneCount =
-                  topBypassLaneCountBySource[source] ?? 1;
-              final topBypassBaseOffset =
-                  _fileEdgeCornerRadius + _edgeLaneOffset;
-              final minTopBypassY = margin / _halfDivisor;
-              final availableTopBand =
-                  firstRowTopY - minTopBypassY - topBypassBaseOffset;
-              final safeTopBand = availableTopBand > 0 ? availableTopBand : 0.0;
-              final topBypassLaneGap = topBypassLaneCount <= 1
-                  ? 0.0
-                  : min(
-                      _topBypassPreferredLaneGap,
-                      safeTopBand / (topBypassLaneCount - 1),
-                    );
-              final rawTopBypassY =
-                  firstRowTopY -
-                  topBypassBaseOffset -
-                  topBypassLaneIdx * topBypassLaneGap;
-              final topBypassY = rawTopBypassY < minTopBypassY
-                  ? minTopBypassY
-                  : rawTopBypassY;
+              final bypassY =
+                  topBypassY[edgeKey] ??
+                  (margin + layerHeaderHeight).toDouble() -
+                      _fileEdgeCornerRadius -
+                      _edgeLaneOffset;
+              final bypassSrcIdx = bypassSourceSideLaneIdx[edgeKey] ?? laneIdx;
+              final bypassSrcLaneX =
+                  srcMinLaneX + bypassSrcIdx * _edgeLaneOffset;
               pathData =
                   'M $sourceBadgeTipX $startY '
-                  'L ${sourceSideLaneX - r} $startY '
-                  'Q $sourceSideLaneX $startY $sourceSideLaneX ${startY - r} '
-                  'V ${topBypassY + r} '
-                  'Q $sourceSideLaneX $topBypassY ${sourceSideLaneX + r} $topBypassY '
-                  'L ${laneX - r} $topBypassY '
-                  'Q $laneX $topBypassY $laneX ${topBypassY + r} '
+                  'L ${bypassSrcLaneX - r} $startY '
+                  'Q $bypassSrcLaneX $startY $bypassSrcLaneX ${startY - r} '
+                  'V ${bypassY + r} '
+                  'Q $bypassSrcLaneX $bypassY ${bypassSrcLaneX + r} $bypassY '
+                  'L ${laneX - r} $bypassY '
+                  'Q $laneX $bypassY $laneX ${bypassY + r} '
                   'V ${endY - r} '
                   'Q $laneX $endY ${laneX + r} $endY '
                   'L $targetBadgeTipX $endY '
@@ -630,19 +653,31 @@ String exportGraphSvgFiles(
         source: source,
         target: target,
         pathData: pathData,
-        cssClass: 'edge$extraClass',
+        cssClass:
+            'edge${isFlatStraightAdjacentEdge ? ' edgeFlat' : ''}$extraClass',
+        pathStyle: edgePathStyle,
         span: span,
         colDiff: colDiff,
       ));
     }
   }
 
-  // Sort by colDiff ascending; within same colDiff, longer span first.
+  // Sort by colDiff ascending; within same colDiff, shorter span first.
+  // This paints taller/longer vertical runs later so they remain visually on
+  // top of horizontal peel-offs, reducing apparent crossings.
   edgeRenderList.sort((a, b) {
     final colCmp = a.colDiff.compareTo(b.colDiff);
     if (colCmp != 0) return colCmp;
-    return b.span.compareTo(a.span);
+    return a.span.compareTo(b.span);
   });
+
+  if (flatEdgeGradientDefs.isNotEmpty) {
+    buffer.writeln('<defs>');
+    for (final gradient in flatEdgeGradientDefs) {
+      buffer.writeln(gradient);
+    }
+    buffer.writeln('</defs>');
+  }
 
   for (final edge in edgeRenderList) {
     renderEdgeWithTooltip(
@@ -651,6 +686,7 @@ String exportGraphSvgFiles(
       source: edge.source,
       target: edge.target,
       cssClass: edge.cssClass,
+      pathStyle: edge.pathStyle,
     );
   }
 
@@ -848,13 +884,17 @@ const double _halfDivisor = 2.0;
 
 const double _bezierBellyHeight = 16.0;
 
-const double _edgeStraightBellyHeight = 1.0;
+const double _edgeStraightBellyHeight = 6.0;
 
 const double _fileEdgeCornerRadius = 6.0;
 
 const int _minTopBypassColDiff = 2;
 
 const double _topBypassPreferredLaneGap = 4.0;
+
+/// Minimum number of bypass edges from one source before lane reordering
+/// applies.
+const int _minBypassEdgesForReorder = 2;
 
 /// Builds a multi-hop elbow path through intermediate passage gaps.
 String _buildMultiHopElbowPath(

@@ -34,6 +34,10 @@
     <stop offset="0%" stop-color="#28a745"/>
     <stop offset="100%" stop-color="#007bff"/>
   </linearGradient>
+  <linearGradient id="horizontalGradientFlat" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100%" y2="0">
+    <stop offset="0%" stop-color="#28a745"/>
+    <stop offset="100%" stop-color="#007bff"/>
+  </linearGradient>
   <linearGradient id="verticalGradient" x1="0%" y1="0%" x2="0%" y2="100%">
     <stop offset="0%" stop-color="#28a745"/>
     <stop offset="100%" stop-color="#007bff"/>
@@ -149,6 +153,19 @@
     stroke-width: 3; 
     opacity: 1.0; 
   }
+
+  .edgeFlat {
+    stroke: url(#horizontalGradient);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    opacity: 0.95;
+  }
+
+  .edgeFlat:hover {
+    stroke: url(#horizontalGradient);
+    stroke-width: 3;
+    opacity: 1.0;
+  }
   
   .edgeVertical { 
     fill: none; 
@@ -249,21 +266,25 @@
 <rect x="1010.0" y="90.0" width="220" height="50" class="fileNode fileNodeError"><title>File: /Users/jp/src/github/vteam/fcheck/example/lib/utils.dart
 
 3 Dead Code warnings</title></rect>
+<defs>
+<linearGradient id="flatEdgeGradient1" gradientUnits="userSpaceOnUse" x1="276.0" y1="115.0" x2="376.0" y2="115.0"><stop offset="0%" stop-color="#28a745"/><stop offset="100%" stop-color="#007bff"/></linearGradient>
+<linearGradient id="flatEdgeGradient2" gradientUnits="userSpaceOnUse" x1="916.0" y1="115.0" x2="1016.0" y2="115.0"><stop offset="0%" stop-color="#28a745"/><stop offset="100%" stop-color="#007bff"/></linearGradient>
+</defs>
 <g>
-  <path d="M 596.0 115.0 L 598.0 115.0 Q 604.0 115.0 604.0 121.0 V 179.0 Q 604.0 185.0 610.0 185.0 L 687.0 185.0 L 696.0 185.0" class="edge"/>
-  <title>/Users/jp/src/github/vteam/fcheck/example/lib/home_page.dart ▶ /Users/jp/src/github/vteam/fcheck/example/lib/models.dart</title>
-</g>
-<g>
-  <path d="M 276.0 115.0 C 326.0 114.0, 326.0 114.0, 376.0 115.0" class="edge"/>
+  <path d="M 276.0 115.0 L 376.0 115.0" class="edge edgeFlat" style="stroke:url(#flatEdgeGradient1);"/>
   <title>/Users/jp/src/github/vteam/fcheck/example/lib/main.dart ▶ /Users/jp/src/github/vteam/fcheck/example/lib/home_page.dart</title>
 </g>
 <g>
-  <path d="M 916.0 115.0 C 966.0 114.0, 966.0 114.0, 1016.0 115.0" class="edge"/>
+  <path d="M 916.0 115.0 L 1016.0 115.0" class="edge edgeFlat" style="stroke:url(#flatEdgeGradient2);"/>
   <title>/Users/jp/src/github/vteam/fcheck/example/lib/counter_widget.dart ▶ /Users/jp/src/github/vteam/fcheck/example/lib/utils.dart</title>
 </g>
 <g>
-  <path d="M 596.0 115.0 C 646.0 114.0, 646.0 114.0, 696.0 115.0" class="edge"/>
+  <path d="M 596.0 115.0 Q 646.0 109.0 696.0 115.0" class="edge"/>
   <title>/Users/jp/src/github/vteam/fcheck/example/lib/home_page.dart ▶ /Users/jp/src/github/vteam/fcheck/example/lib/counter_widget.dart</title>
+</g>
+<g>
+  <path d="M 596.0 115.0 L 598.0 115.0 Q 604.0 115.0 604.0 121.0 V 179.0 Q 604.0 185.0 610.0 185.0 L 687.0 185.0 L 696.0 185.0" class="edge"/>
+  <title>/Users/jp/src/github/vteam/fcheck/example/lib/home_page.dart ▶ /Users/jp/src/github/vteam/fcheck/example/lib/models.dart</title>
 </g>
 <g class="badge outgoingBadge">
   <path d="M 276.0,115.0 L 264.0,108.0 Q 261.0,108.0 261.0,111.0 L 261.0,119.0 Q 261.0,122.0 264.0,122.0 Z" fill="#10b981"/>

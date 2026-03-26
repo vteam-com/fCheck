@@ -330,6 +330,11 @@ Dead-code note:
 
 ## Visual Outputs
 
+Adjacent file-level SVG routing rule for nodes on the same row in adjacent columns:
+
+- If the source node has exactly one outgoing edge, the edge is rendered as a straight line.
+- If the source node has multiple outgoing edges, the same-row adjacent edge is rendered as a single arch (no elbows).
+
 ```bash
 fcheck --svg          # shortcut: fcheck_files.svg + fcheck_folders.svg + fcheck_loc.svg
 fcheck --svg-files    # fcheck_files.svg

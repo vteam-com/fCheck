@@ -558,11 +558,15 @@ The same radius must be used for adjacent-column elbows and every intermediate/f
 
 All incoming edges arrive flat at the target badge centre Y.  There is no target-side Y fanning — overlap at the target is prevented by the staggered source-side lane X positions.
 
+For files SVG source-side lane assignment within the same column gap, edges are assigned in contiguous source blocks: sources sorted by source Y (top-to-bottom). Within each source block, edges are sorted by absolute vertical distance from source **descending** so the farthest-reach edge gets the leftmost lane and shorter-reach edges nest inside it.
+
+For multi-column skip routes from the same source, passage lane indices are assigned with shorter column distance first (`colDiff` ascending), then target Y, then filename.
+
 Special case for long top-row hops: when both source and target are the first (top) node in their columns and the target is 2+ columns to the right, route the edge up above the first row, then horizontally right, then vertically down in front of the destination column, then horizontally into the target badge.
 
 For this top-bypass special case, when multiple peers share the same source, shorter cross-column routes must be ordered first (smaller `colDiff` first) so they render before longer peers and avoid visual crossings.
 
-For files SVG paint order, sort edges by forward column distance (`colDiff`) ascending so 1-column edges paint first, then 2-column, then 3-column, etc. Within the same `colDiff`, sort by vertical span descending.
+For files SVG paint order, sort edges by forward column distance (`colDiff`) ascending so 1-column edges paint first, then 2-column, then 3-column, etc. Within the same `colDiff`, sort by vertical span ascending so taller vertical runs are painted later and stay on top of horizontal peel-offs.
 
 ```python
 def render_edge(source, target):
@@ -603,7 +607,7 @@ def render_edge(source, target):
 def sort_edges_for_painting(edges):
     return sorted(
         edges,
-        key=lambda edge: (edge.col_diff, -edge.vertical_span),
+        key=lambda edge: (edge.col_diff, edge.vertical_span),
     )
 
 def classify_edge(source, target):
