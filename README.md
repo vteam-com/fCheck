@@ -214,7 +214,7 @@ fcheck --fix
 
 ```bash
 $ fcheck .
-↓------------------------------ fCheck 1.1.0 -------------------------------↓
+↓------------------------------ fCheck 1.1.2 -------------------------------↓
 Input              : /path/to/project
 Dart Project       : my-cool-app (version: 9.0.0)
 Platforms          : [✓Android] [✓iOS]  [✓MacOS] [✓Windows] [✓Linux]   [✓Web]
