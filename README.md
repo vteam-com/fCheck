@@ -88,8 +88,9 @@ Use suppression sparingly. The preferred path is to extract or localize the stri
 ### Localization: how it works
 
 - fCheck automatically detects when a project uses Flutter localization and analyzes translation completeness.
-- Scans for ARB files (`.arb`) in `lib/l10n/` directory and analyzes translation coverage across all supported languages.
-- Falls back to any project ARB files when `lib/l10n/` has none, and prefers English as the base language when available.
+- Reads `arb-dir` from `l10n.yaml` configuration to locate ARB files (defaults to `lib/l10n/` when not specified).
+- Scans for ARB files (`.arb`) in the configured directory and analyzes translation coverage across all supported languages.
+- Falls back to project-wide ARB file search when the configured directory has none, and prefers English as the base language when available.
 - Identifies missing translations by comparing each language file against the base language.
 - Reports coverage percentage and missing translation count for each incomplete language.
 - Supports common ARB file naming patterns: `app_en.arb`, `messages_es.arb`, `l10n_fr.arb`, etc.
