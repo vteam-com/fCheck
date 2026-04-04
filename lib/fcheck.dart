@@ -609,18 +609,36 @@ class AnalyzeFolder {
   /// Heuristically detects whether the project uses Flutter localization.
   ///
   /// Signals localization when:
-  /// - `l10n.yaml` exists, or
-  /// - `.arb` files are present (commonly under lib/l10n), or
+  /// - `l10n.yaml` exists (and optionally specifies arb-dir), or
+  /// - `.arb` files are present (in configured or default locations), or
   /// - Source files reference `AppLocalizations` / `flutter_gen/gen_l10n`.
   bool detectLocalization(List<File> dartFiles) {
-    final l10nConfig = File(p.join(projectDir.path, 'l10n.yaml'));
+    final l10nConfigPath = p.join(projectDir.path, 'l10n.yaml');
+    final l10nConfig = File(l10nConfigPath);
     if (l10nConfig.existsSync()) {
+      // Parse l10n.yaml to get the configured arb-dir
+      final arbDir = _extractArbDirFromL10nConfig(l10nConfigPath);
+      if (arbDir != null) {
+        final customL10nDir = Directory(p.join(projectDir.path, arbDir));
+        if (customL10nDir.existsSync()) {
+          final hasArb = customL10nDir
+              .listSync(recursive: true)
+              .whereType<File>()
+              .any((file) => file.path.endsWith('.arb'));
+          if (hasArb) {
+            return true;
+          }
+        }
+      }
+      // l10n.yaml exists but no arb-dir specified or dir not found
+      // still consider it localized if the file exists
       return true;
     }
 
-    final l10nDir = Directory(p.join(projectDir.path, 'lib', 'l10n'));
-    if (l10nDir.existsSync()) {
-      final hasArb = l10nDir
+    // Fallback: check default location
+    final defaultL10nDir = Directory(p.join(projectDir.path, 'lib', 'l10n'));
+    if (defaultL10nDir.existsSync()) {
+      final hasArb = defaultL10nDir
           .listSync(recursive: true)
           .whereType<File>()
           .any((file) => file.path.endsWith('.arb'));
@@ -653,6 +671,23 @@ class AnalyzeFolder {
       }
     }
     return false;
+  }
+
+  /// Extracts the arb-dir value from l10n.yaml configuration file.
+  String? _extractArbDirFromL10nConfig(String configPath) {
+    try {
+      final content = File(configPath).readAsStringSync();
+      final arbDirMatch = RegExp(
+        r'^arb-dir:\s*(.+)$',
+        multiLine: true,
+      ).firstMatch(content);
+      if (arbDirMatch != null) {
+        return arbDirMatch.group(1)?.trim();
+      }
+    } catch (_) {
+      // Failed to read or parse config file
+    }
+    return null;
   }
 
   /// Counts test cases and collects project imports from test sources in one pass.

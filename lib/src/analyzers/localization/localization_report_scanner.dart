@@ -25,7 +25,7 @@ class LocalizationReportScanResult {
   final int baseTranslationCount;
 }
 
-/// Scans ARB files under `lib/l10n` and returns locale coverage statistics.
+/// Scans ARB files under the configured or default localization directory.
 LocalizationReportScanResult scanLocalizationLocales(String analysisRootPath) {
   final localeStats = <String, LocaleStats>{};
   if (analysisRootPath.trim().isEmpty) {
@@ -36,8 +36,9 @@ LocalizationReportScanResult scanLocalizationLocales(String analysisRootPath) {
     );
   }
 
-  final l10nDir = Directory(p.join(analysisRootPath, 'lib', 'l10n'));
-  if (!l10nDir.existsSync()) {
+  // Determine the ARB directory from l10n.yaml or use default
+  final l10nDir = _resolveArbDirectory(analysisRootPath);
+  if (l10nDir == null) {
     return const LocalizationReportScanResult(
       localeStats: {},
       baseLocaleCode: null,
@@ -146,4 +147,33 @@ LocalizationReportScanResult scanLocalizationLocales(String analysisRootPath) {
     baseLocaleCode: baseLocaleCode,
     baseTranslationCount: baseTranslationCount,
   );
+}
+
+/// Resolves the ARB directory from l10n.yaml or returns the default.
+Directory? _resolveArbDirectory(String analysisRootPath) {
+  final l10nConfigPath = p.join(analysisRootPath, 'l10n.yaml');
+  final configFile = File(l10nConfigPath);
+
+  String arbDirRelative = 'lib/l10n'; // default
+
+  if (configFile.existsSync()) {
+    try {
+      final content = configFile.readAsStringSync();
+      final arbDirMatch = RegExp(
+        r'^arb-dir:\s*(.+)$',
+        multiLine: true,
+      ).firstMatch(content);
+      if (arbDirMatch != null) {
+        final configuredDir = arbDirMatch.group(1)?.trim();
+        if (configuredDir != null && configuredDir.isNotEmpty) {
+          arbDirRelative = configuredDir;
+        }
+      }
+    } catch (_) {
+      // Failed to read or parse config file
+    }
+  }
+
+  final l10nDir = Directory(p.join(analysisRootPath, arbDirRelative));
+  return l10nDir.existsSync() ? l10nDir : null;
 }

@@ -98,7 +98,9 @@ class LocalizationDelegate implements AnalyzerDelegate {
   }) {
     final issues = <LocalizationIssue>[];
 
-    final l10nDir = Directory(p.join(projectDir.path, 'lib', 'l10n'));
+    // Determine the ARB directory from l10n.yaml or use default
+    final arbDirPath = _resolveArbDirectory(projectDir);
+    final l10nDir = Directory(arbDirPath);
     final primaryArbFiles = l10nDir.existsSync()
         ? _findArbFiles(l10nDir)
         : <File>[];
@@ -114,6 +116,31 @@ class LocalizationDelegate implements AnalyzerDelegate {
       arbFiles,
       analyzedContexts: analyzedContexts,
     );
+  }
+
+  /// Resolves the ARB directory path from l10n.yaml or returns the default.
+  String _resolveArbDirectory(Directory projectDir) {
+    final l10nConfigPath = p.join(projectDir.path, 'l10n.yaml');
+    final configFile = File(l10nConfigPath);
+    if (configFile.existsSync()) {
+      try {
+        final content = configFile.readAsStringSync();
+        final arbDirMatch = RegExp(
+          r'^arb-dir:\s*(.+)$',
+          multiLine: true,
+        ).firstMatch(content);
+        if (arbDirMatch != null) {
+          final configuredDir = arbDirMatch.group(1)?.trim();
+          if (configuredDir != null && configuredDir.isNotEmpty) {
+            return p.join(projectDir.path, configuredDir);
+          }
+        }
+      } catch (_) {
+        // Failed to read or parse config file
+      }
+    }
+    // Default location
+    return p.join(projectDir.path, 'lib', 'l10n');
   }
 
   // /// Performs detailed localization analysis with locale statistics.
