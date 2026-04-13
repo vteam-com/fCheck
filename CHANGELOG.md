@@ -7,6 +7,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] – 2026-04-13
+
+### Added
+
+- New CLI flag `--strict` to enforce 100% compliance in CI/CD pipeline environments.
+- Score-based magnitude exit codes in strict mode: exits with `(100 - score)` for scores below 100%.
+- Dynamic scorecard highlights: the score is rendered in bold bright red when `--strict` is active and the requirement is not met.
+
+### Changed
+
+- Simplified GitHub Actions CI integration documentation by replacing manual JSON grepping with the new `--strict` flag.
+- Improved CLI help descriptions and scoring documentation for better clarity and professionalism.
+
 ## [1.1.3] – 2026-04-04
 
 ### Fixed

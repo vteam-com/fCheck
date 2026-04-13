@@ -2852,7 +2852,7 @@
   <path d="M 882.0,5618.0 L 870.0,5611.0 Q 867.0,5611.0 867.0,5614.0 L 867.0,5622.0 Q 867.0,5625.0 870.0,5625.0 Z" fill="#10b981"/>
   <text x="871.68" y="5619.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. lib/src/models/ignore_config.dart</title></g><text x="644.0" y="5612.0" text-anchor="middle" dominant-baseline="middle" class="textNormal">analysis_file_context.dart</text>
 <g class="folderTitleLayer">
-<text x="592.0" y="105.0" class="layerTitle">fcheck v1.1.3</text>
+<text x="592.0" y="105.0" class="layerTitle">fcheck v1.2.0</text>
 <text x="612.0" y="157.0" class="layerTitle">  bin</text>
 <text x="500.0" y="209.0" class="layerTitle">    ...</text>
 <text x="500.0" y="363.0" class="layerTitle">    console</text>

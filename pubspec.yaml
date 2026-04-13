@@ -2,7 +2,7 @@ name: fcheck
 
 description: Code quality analysis for Flutter and Dart projects with architecture, maintainability, and safety checks, deterministic reports, and compliance scoring.
 
-version: 1.1.3
+version: 1.2.0
 
 repository: https://github.com/vteam-com/fCheck
 
