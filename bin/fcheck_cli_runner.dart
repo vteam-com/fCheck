@@ -11,6 +11,7 @@ import 'package:fcheck/src/exports/svg/export_folders/export_svg_folders.dart';
 import 'package:fcheck/src/exports/svg/export_loc/export_svg_code_size.dart';
 import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:fcheck/src/models/app_strings.dart';
+import 'package:fcheck/src/models/constants.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/ignore_inventory.dart';
 import 'package:fcheck/src/models/version.dart';
@@ -169,6 +170,10 @@ void _executeCliRun(ConsoleInput input, _CliContext context) {
   if (!input.outputJson && deferredScorecardLines.isNotEmpty) {
     printReportLines(deferredScorecardLines);
   }
+
+  if (input.strict && metrics.complianceScore < AppConstants.maxScore) {
+    exit(AppConstants.maxScore - metrics.complianceScore);
+  }
 }
 
 /// Prints or serializes excluded items and reports whether the request was handled.
@@ -309,6 +314,7 @@ List<String> _printAnalysisOutput({
     metrics,
     listMode: input.listMode,
     listItemLimit: input.listItemLimit,
+    strict: input.strict,
   );
   if (!shouldWriteArtifacts) {
     printReportLines(reportLines);

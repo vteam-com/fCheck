@@ -11,6 +11,8 @@ class AppStrings {
       'Analyze Flutter/Dart code quality and provide metrics.';
   static const String invalidArgumentsLine =
       'Error: Invalid arguments provided.';
+  static const String strictHelp =
+      'Exit with code (100 - score) if compliance score is below 100%.';
 
   // Report Sections
   static const String scorecardDivider = 'Scorecard';

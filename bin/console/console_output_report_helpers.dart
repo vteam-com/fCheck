@@ -147,8 +147,11 @@ String _dashboardKlocOrDash(int linesOfCode, {int width = _gridValueWidth}) {
 }
 
 /// Formats and colorizes the overall compliance score percentage.
-String _scoreValue(int score) {
+String _scoreValue(int score, {bool strict = false}) {
   final text = '${formatCount(score)}%';
+  if (strict && score < AppConstants.maxScore) {
+    return _colorizeBold(text, _ansiRedBright);
+  }
   if (score >= _perfectScoreThreshold) {
     return _colorizeBold(text, _ansiGreenBright);
   }

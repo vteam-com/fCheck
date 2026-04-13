@@ -190,8 +190,19 @@ Dashboard domain values use ANSI colors (when terminal supports them):
 The CLI prints a domain-specific recommendation for the selected focus area.
 This text is deterministic and mapped by domain key.
 
+## CLI Integration (Exit Codes)
+
+By default, `fcheck` exits with code `0` unless an internal error occurs.
+
+Use the `--strict` flag to enforce compliance in CI/CD pipelines:
+- If score is `100%`, `fcheck` exits with `0` (success).
+- If score is `< 100%`, `fcheck` exits with `(100 - score)`.
+
+Example: a score of `94%` with `--strict` results in exit code `6`.
+
 ## Source of Truth
 
 - Implementation: `lib/src/analyzers/metrics/project_metrics_analyzer.dart`
 - Output model: `lib/src/metrics/project_metrics.dart`
-- Console rendering: `bin/console_output.dart`
+- Console rendering: `bin/console/console_output.dart`
+- CLI runner: `bin/fcheck_cli_runner.dart` (exit code logic)

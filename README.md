@@ -195,6 +195,9 @@ fcheck --svg --mermaid --plantuml
 
 # Auto-fix source sorting issues (class members + import directives)
 fcheck --fix
+
+# Enforce 100% compliance (exits with non-zero code if score < 100)
+fcheck --strict
 ```
 
 ### What `--fix` does
@@ -431,11 +434,7 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed .
       - run: flutter analyze lib test --no-pub
       - run: dart test --reporter=compact
-      - run: dart run ./bin/fcheck.dart --json --exclude "**/example" . > fcheck-report.json
-      - run: |
-          score="$(grep -oE '"complianceScore"[[:space:]]*:[[:space:]]*[0-9]+([.][0-9]+)?' fcheck-report.json | head -n1 | sed -E 's/.*:[[:space:]]*//')"
-          score_int="$(awk "BEGIN { printf \"%d\", ${score} }")"
-          test "$score_int" -eq 100
+      - run: dart run ./bin/fcheck.dart --strict --exclude "**/example" .
       - uses: actions/upload-artifact@v4
         with:
           name: fcheck-report

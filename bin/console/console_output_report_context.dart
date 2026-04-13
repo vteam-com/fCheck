@@ -91,6 +91,7 @@ class _ReportContext {
   final Map<String, int> analyzerIssueCountsByKey;
   final Map<String, bool> analyzerEnabledByKey;
   final Map<String, double> analyzerDeductionPercentByKey;
+  final bool strict;
 
   const _ReportContext({
     required this.listMode,
@@ -177,12 +178,14 @@ class _ReportContext {
     required this.analyzerIssueCountsByKey,
     required this.analyzerEnabledByKey,
     required this.analyzerDeductionPercentByKey,
+    required this.strict,
   });
 
   factory _ReportContext.fromMetrics(
     ProjectMetrics metrics, {
     required ReportListMode listMode,
     required int listItemLimit,
+    bool strict = false,
   }) {
     final effectiveListItemLimit = listItemLimit > 0 ? listItemLimit : 1;
     final ignoreDirectiveCountsByFile =
@@ -458,6 +461,7 @@ class _ReportContext {
       analyzerIssueCountsByKey: analyzerIssueCountsByKey,
       analyzerEnabledByKey: analyzerEnabledByKey,
       analyzerDeductionPercentByKey: analyzerDeductionPercentByKey,
+      strict: strict,
     );
   }
 }

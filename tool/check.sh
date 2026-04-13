@@ -29,5 +29,8 @@ if ! flutter test --reporter=compact --no-pub; then
 fi
 
 echo --- fCheck
+# on the ./example
 dart run ./bin/fcheck.dart --svg --mermaid --plantuml ./example > /dev/null 2>&1
+
+# on the main app
 dart run ./bin/fcheck.dart --list full --svg --fix --exclude "**/example"

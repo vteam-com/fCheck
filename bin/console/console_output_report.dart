@@ -14,11 +14,13 @@ List<String> buildReportLines(
   ProjectMetrics metrics, {
   ReportListMode listMode = ReportListMode.partial,
   int listItemLimit = defaultListItemLimit,
+  bool strict = false,
 }) {
   final ctx = _ReportContext.fromMetrics(
     metrics,
     listMode: listMode,
     listItemLimit: listItemLimit,
+    strict: strict,
   );
   final lines = <String>[];
 
@@ -276,7 +278,7 @@ void _appendScorecardSection(List<String> lines, _ReportContext ctx) {
   lines.add(
     _labelValueLine(
       label: 'Total Score',
-      value: _scoreValue(ctx.complianceScore),
+      value: _scoreValue(ctx.complianceScore, strict: ctx.strict),
     ),
   );
   if (ctx.suppressionPenaltyPoints > 0) {

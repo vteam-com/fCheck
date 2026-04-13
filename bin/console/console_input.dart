@@ -1,4 +1,5 @@
 import 'package:args/args.dart';
+import 'package:fcheck/src/models/app_strings.dart';
 
 import 'console_common.dart';
 
@@ -83,6 +84,9 @@ class ConsoleInput {
   /// Whether `--help-score` is set.
   final bool showScoreInstructions;
 
+  /// Whether the process should exit with a non-zero code if score < AppConstants.maxScore.
+  final bool strict;
+
   /// Whether ANSI colors are disabled for CLI output.
   final bool noColors;
 
@@ -112,6 +116,7 @@ class ConsoleInput {
     required this.showVersion,
     required this.showIgnoresInstructions,
     required this.showScoreInstructions,
+    required this.strict,
     required this.noColors,
   });
 }
@@ -233,6 +238,7 @@ ArgParser createConsoleArgParser() => ArgParser()
     help: 'Disable ANSI colors in CLI output',
     negatable: false,
   )
+  ..addFlag('strict', help: AppStrings.strictHelp, negatable: false)
   ..addFlag('help', abbr: 'h', help: 'Show usage information', negatable: false)
   ..addFlag(
     'help-ignore',
@@ -295,6 +301,7 @@ ConsoleInput parseConsoleInput(List<String> arguments, ArgParser parser) {
     showVersion: argResults['version'] as bool,
     showIgnoresInstructions: argResults['help-ignore'] as bool,
     showScoreInstructions: argResults['help-score'] as bool,
+    strict: argResults['strict'] as bool,
     noColors: argResults['no-colors'] as bool,
   );
 }
