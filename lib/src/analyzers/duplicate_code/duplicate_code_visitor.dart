@@ -245,16 +245,10 @@ class DuplicateCodeVisitor extends RecursiveAstVisitor<void> {
   /// Internal helper used by fcheck analysis and reporting.
   String _buildParameterDescriptor(FormalParameter parameter) {
     final kind = _parameterKindLabel(parameter);
-    var current = parameter;
-    var hasDefaultValue = false;
-
-    if (current is DefaultFormalParameter) {
-      hasDefaultValue = current.defaultValue != null;
-      current = current.parameter;
-    }
+    var hasDefaultValue = parameter.defaultClause != null;
 
     final defaultMarker = hasDefaultValue ? '=default' : '';
-    return '$kind:${_describeParameter(current)}$defaultMarker';
+    return '$kind:${_describeParameter(parameter)}$defaultMarker';
   }
 
   /// Internal helper used by fcheck analysis and reporting.
@@ -273,26 +267,39 @@ class DuplicateCodeVisitor extends RecursiveAstVisitor<void> {
 
   /// Internal helper used by fcheck analysis and reporting.
   String _describeParameter(FormalParameter parameter) {
-    if (parameter is SimpleFormalParameter) {
-      return 'simple:${parameter.keyword?.lexeme ?? ''}:${_compactSource(parameter.type)}';
+    if (parameter is RegularFormalParameter) {
+      final suffix = parameter.functionTypedSuffix;
+      if (suffix is FunctionTypedFormalParameterSuffix) {
+        // This is a function-typed regular parameter
+        return 'function_typed:${parameter.constFinalOrVarKeyword?.lexeme ?? ''}:${_compactSource(parameter.type)}:'
+            '${_compactSource(suffix.typeParameters)}:${_buildParameterSignature(suffix.formalParameters)}'
+            '${suffix.question == null ? '' : '?'}';
+      } else {
+        // This is a simple regular parameter
+        return 'simple:${parameter.constFinalOrVarKeyword?.lexeme ?? ''}:${_compactSource(parameter.type)}';
+      }
     }
 
     if (parameter is FieldFormalParameter) {
-      return 'field:${parameter.keyword?.lexeme ?? ''}:${_compactSource(parameter.type)}:'
-          '${_compactSource(parameter.typeParameters)}:${_buildParameterSignature(parameter.parameters)}'
-          '${parameter.question == null ? '' : '?'}';
+      final suffix = parameter.functionTypedSuffix;
+      if (suffix is FunctionTypedFormalParameterSuffix) {
+        return 'field:${parameter.constFinalOrVarKeyword?.lexeme ?? ''}:${_compactSource(parameter.type)}:'
+            '${_compactSource(suffix.typeParameters)}:${_buildParameterSignature(suffix.formalParameters)}'
+            '${suffix.question == null ? '' : '?'}';
+      } else {
+        return 'field:${parameter.constFinalOrVarKeyword?.lexeme ?? ''}:${_compactSource(parameter.type)}';
+      }
     }
 
     if (parameter is SuperFormalParameter) {
-      return 'super:${parameter.keyword?.lexeme ?? ''}:${_compactSource(parameter.type)}:'
-          '${_compactSource(parameter.typeParameters)}:${_buildParameterSignature(parameter.parameters)}'
-          '${parameter.question == null ? '' : '?'}';
-    }
-
-    if (parameter is FunctionTypedFormalParameter) {
-      return 'function_typed:${parameter.keyword?.lexeme ?? ''}:${_compactSource(parameter.returnType)}:'
-          '${_compactSource(parameter.typeParameters)}:${_buildParameterSignature(parameter.parameters)}'
-          '${parameter.question == null ? '' : '?'}';
+      final suffix = parameter.functionTypedSuffix;
+      if (suffix is FunctionTypedFormalParameterSuffix) {
+        return 'super:${parameter.constFinalOrVarKeyword?.lexeme ?? ''}:${_compactSource(parameter.type)}:'
+            '${_compactSource(suffix.typeParameters)}:${_buildParameterSignature(suffix.formalParameters)}'
+            '${suffix.question == null ? '' : '?'}';
+      } else {
+        return 'super:${parameter.constFinalOrVarKeyword?.lexeme ?? ''}:${_compactSource(parameter.type)}';
+      }
     }
 
     return parameter.runtimeType.toString();

@@ -199,12 +199,12 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
   }
 
   @override
-  void visitSimpleFormalParameter(SimpleFormalParameter node) {
+  void visitRegularFormalParameter(RegularFormalParameter node) {
     final identifier = node.name;
     if (identifier != null && !_isNodeIgnored(node)) {
       _declareVariable(identifier.lexeme, node, isParameter: true);
     }
-    super.visitSimpleFormalParameter(node);
+    super.visitRegularFormalParameter(node);
   }
 
   @override
@@ -218,14 +218,6 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
       );
     }
     super.visitFieldFormalParameter(node);
-  }
-
-  @override
-  void visitFunctionTypedFormalParameter(FunctionTypedFormalParameter node) {
-    if (!_isNodeIgnored(node)) {
-      _declareVariable(node.name.lexeme, node, isParameter: true);
-    }
-    super.visitFunctionTypedFormalParameter(node);
   }
 
   @override
@@ -399,9 +391,6 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
   bool _isVariableUsage(SimpleIdentifier node) {
     final parent = node.parent;
     if (parent is Label) {
-      return false;
-    }
-    if (parent is NamedExpression && parent.name.label == node) {
       return false;
     }
     if (parent is PrefixedIdentifier && parent.identifier == node) {

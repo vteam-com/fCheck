@@ -330,11 +330,11 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   /// Internal helper used by fcheck analysis and reporting.
   bool _isAcceptableWidgetProperty(final StringLiteral node) {
     final AstNode? parent = node.parent;
-    if (parent is! NamedExpression) {
+    if (parent is! NamedArgument) {
       return false;
     }
 
-    final String propertyName = parent.name.label.name;
+    final String propertyName = parent.name.lexeme;
 
     const acceptableProperties = {
       'semanticsLabel',
@@ -379,8 +379,8 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
       if (identical(arg, directExpression)) {
         return true;
       }
-      if (arg is NamedExpression &&
-          identical(arg.expression, directExpression)) {
+      if (arg is NamedArgument &&
+          identical(arg.argumentExpression, directExpression)) {
         return true;
       }
     }
@@ -597,8 +597,8 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   bool _isInKey(final AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
-      if (current is NamedExpression) {
-        if (current.name.label.name == 'key') {
+      if (current is NamedArgument) {
+        if (current.name.lexeme == 'key') {
           return true;
         }
       }
