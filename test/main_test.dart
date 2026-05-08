@@ -68,13 +68,23 @@ void main() {
 
     test('should parse --svg-files flag correctly', () {
       final input = parseConsoleInput(['--svg-files'], parser);
+      expect(input.generateDependencySvg, isFalse);
       expect(input.generateSvg, isTrue);
+      expect(input.generateFolderSvg, isFalse);
+      expect(input.generateSizeSvg, isFalse);
+    });
+
+    test('should parse --svg-dependency flag correctly', () {
+      final input = parseConsoleInput(['--svg-dependency'], parser);
+      expect(input.generateDependencySvg, isTrue);
+      expect(input.generateSvg, isFalse);
       expect(input.generateFolderSvg, isFalse);
       expect(input.generateSizeSvg, isFalse);
     });
 
     test('should parse --svg shortcut correctly', () {
       final input = parseConsoleInput(['--svg'], parser);
+      expect(input.generateDependencySvg, isTrue);
       expect(input.generateSvg, isTrue);
       expect(input.generateFolderSvg, isTrue);
       expect(input.generateSizeSvg, isTrue);
@@ -112,6 +122,8 @@ void main() {
 
     test('should parse per-output path flags correctly', () {
       final input = parseConsoleInput([
+        '--output-svg-dependency',
+        'dependency.svg',
         '--output-svg-files',
         'a.svg',
         '--output-svg-folders',
@@ -123,6 +135,7 @@ void main() {
         '--output-plantuml',
         'e.puml',
       ], parser);
+      expect(input.outputSvgDependencyPath, equals('dependency.svg'));
       expect(input.outputSvgFilesPath, equals('a.svg'));
       expect(input.outputSvgFoldersPath, equals('b.svg'));
       expect(input.outputSvgLocPath, equals('c.svg'));
@@ -189,12 +202,14 @@ void main() {
       final input = parseConsoleInput([], parser);
       expect(input.path, equals('.'));
       expect(input.fix, isFalse);
+      expect(input.generateDependencySvg, isFalse);
       expect(input.generateSvg, isFalse);
       expect(input.generateMermaid, isFalse);
       expect(input.generatePlantUML, isFalse);
       expect(input.generateFolderSvg, isFalse);
       expect(input.generateSizeSvg, isFalse);
       expect(input.outputDirectory, isNull);
+      expect(input.outputSvgDependencyPath, isNull);
       expect(input.outputSvgFilesPath, isNull);
       expect(input.outputSvgFoldersPath, isNull);
       expect(input.outputSvgLocPath, isNull);
@@ -252,12 +267,14 @@ void main() {
       expect(parser.options, contains('input'));
       expect(parser.options, contains('fix'));
       expect(parser.options, contains('svg'));
+      expect(parser.options, contains('svg-dependency'));
       expect(parser.options, contains('svg-files'));
       expect(parser.options, contains('mermaid'));
       expect(parser.options, contains('plantuml'));
       expect(parser.options, contains('svg-folders'));
       expect(parser.options, contains('svg-loc'));
       expect(parser.options, contains('output'));
+      expect(parser.options, contains('output-svg-dependency'));
       expect(parser.options, contains('output-svg-files'));
       expect(parser.options, contains('output-svg-folders'));
       expect(parser.options, contains('output-svg-loc'));
@@ -283,12 +300,14 @@ void main() {
       expect(argResults['input'], equals('.'));
       expect(argResults['fix'], isFalse);
       expect(argResults['svg'], isFalse);
+      expect(argResults['svg-dependency'], isFalse);
       expect(argResults['svg-files'], isFalse);
       expect(argResults['mermaid'], isFalse);
       expect(argResults['plantuml'], isFalse);
       expect(argResults['svg-folders'], isFalse);
       expect(argResults['svg-loc'], isFalse);
       expect(argResults['output'], isNull);
+      expect(argResults['output-svg-dependency'], isNull);
       expect(argResults['output-svg-files'], isNull);
       expect(argResults['output-svg-folders'], isNull);
       expect(argResults['output-svg-loc'], isNull);

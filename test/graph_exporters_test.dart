@@ -10,6 +10,7 @@ import 'package:fcheck/src/exports/externals/export_plantuml.dart';
 import 'package:fcheck/src/exports/svg/export_files/export_svg_files.dart';
 import 'package:fcheck/src/exports/svg/export_folders/export_svg_folders.dart';
 import 'package:fcheck/src/exports/svg/export_loc/export_svg_code_size.dart';
+import 'package:fcheck/src/exports/svg/export_packages/export_svg_package_dependencies.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:fcheck/src/exports/externals/graph_format_utils.dart';
@@ -19,6 +20,8 @@ import 'package:test/test.dart';
 void main() {
   int warningPathCount(String svg) =>
       RegExp(r'<path[^>]*class="warningEdge"').allMatches(svg).length;
+  int badgeCount(String svg, String cssClass) =>
+      RegExp('class="badge $cssClass"').allMatches(svg).length;
   bool hasEdgeWithClass(String svg, String cssClass, String title) {
     final pattern = RegExp(
       '<g>\\s*<path[^>]*class="$cssClass"\\/>\\s*<title>${RegExp.escape(title)}</title>\\s*</g>',
@@ -27,6 +30,123 @@ void main() {
   }
 
   group('graph exporters', () {
+    test('return empty package dependency SVG for empty pubspec sections', () {
+      final svg = exportSvgPackageDependencies(
+        const PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: 'unknown',
+          dependencies: <PackageDependencyNode>[],
+          devDependencies: <PackageDependencyNode>[],
+        ),
+      );
+
+      expect(svg, contains('No package dependencies found'));
+    });
+
+    test('render package dependency SVG with dependency sections', () {
+      final svg = exportSvgPackageDependencies(
+        const PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: 'unknown',
+          dependencies: <PackageDependencyNode>[
+            (name: 'http', version: '1.2.3'),
+            (name: 'provider', version: '6.0.0'),
+          ],
+          devDependencies: <PackageDependencyNode>[
+            (name: 'flutter_test', version: '0.0.0'),
+            (name: 'mocktail', version: '1.0.0'),
+          ],
+          derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+            'http': <PackageDependencyNode>[
+              (name: 'http_parser', version: '4.1.2'),
+              (name: 'collection', version: '1.19.1'),
+            ],
+            'flutter_test': <PackageDependencyNode>[
+              (name: 'async', version: '2.13.1'),
+            ],
+          },
+        ),
+      );
+
+      expect(svg, contains('<svg'));
+      expect(svg, contains('demo_app vunknown'));
+      expect(svg, contains('dependencies (2 items)'));
+      expect(svg, contains('dev_dependencies (2 items)'));
+      expect(svg, contains('http'));
+      expect(svg, contains('provider'));
+      expect(svg, contains('flutter_test'));
+      expect(svg, contains('mocktail'));
+      expect(svg, contains('v1.2.3'));
+      expect(svg, contains('v6.0.0'));
+      expect(svg, contains('http_parser'));
+      expect(svg, contains('collection'));
+      expect(svg, contains('async'));
+      expect(svg, contains('v4.1.2'));
+      expect(svg, contains('http -> http_parser v4.1.2'));
+      expect(svg, contains('flutter_test -> async v2.13.1'));
+    });
+
+    test('render package dependency badges from visible edges only', () {
+      final svg = exportSvgPackageDependencies(
+        const PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: 'unknown',
+          dependencies: <PackageDependencyNode>[
+            (name: 'http', version: '1.2.3'),
+            (name: 'provider', version: '6.0.0'),
+          ],
+          devDependencies: <PackageDependencyNode>[],
+          derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+            'http': <PackageDependencyNode>[
+              (name: 'collection', version: '1.19.1'),
+            ],
+            'provider': <PackageDependencyNode>[
+              (name: 'collection', version: '1.19.1'),
+            ],
+          },
+          outgoingDepCounts: <String, int>{
+            'http': 8,
+            'provider': 5,
+            'collection': 11,
+          },
+          reverseDepCounts: <String, int>{'collection': 99},
+        ),
+      );
+
+      expect(badgeCount(svg, 'outgoingBadge'), equals(2));
+      expect(badgeCount(svg, 'incomingBadge'), equals(1));
+      expect(svg, contains('>2</text>'));
+      expect(svg, isNot(contains('>11</text>')));
+      expect(svg, isNot(contains('>99</text>')));
+    });
+
+    test('render separate derived incoming badges per source column', () {
+      final svg = exportSvgPackageDependencies(
+        const PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: 'unknown',
+          dependencies: <PackageDependencyNode>[
+            (name: 'http', version: '1.2.3'),
+          ],
+          devDependencies: <PackageDependencyNode>[
+            (name: 'flutter_test', version: '0.0.0'),
+          ],
+          derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+            'http': <PackageDependencyNode>[
+              (name: 'collection', version: '1.19.1'),
+            ],
+            'flutter_test': <PackageDependencyNode>[
+              (name: 'collection', version: '1.19.1'),
+            ],
+          },
+        ),
+      );
+
+      expect(badgeCount(svg, 'outgoingBadge'), equals(2));
+      expect(badgeCount(svg, 'incomingBadge'), equals(2));
+      expect(svg, isNot(contains('>2</text>')));
+    });
+
     test('return empty outputs for empty graphs', () {
       final result = LayersAnalysisResult(
         issues: const [],

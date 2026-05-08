@@ -412,3 +412,49 @@ Set<String> findCycleEdges(
 
   return cycleEdges;
 }
+
+/// Vertical offset for Bezier curve "belly" creating smooth curved paths.
+/// Used to route edges with a gentle arc, improving visual clarity and avoiding
+/// sharp angles. Applied to both control points equally for symmetric curves.
+const double bezierBellyHeight = 16.0;
+
+/// Builds a cubic Bezier path connecting two points with a smooth curve.
+///
+/// Creates a curved path from [startX], [startY] to [endX], [endY] by
+/// interpolating control points that are offset by [bezierBellyHeight] from
+/// the start and end Y positions. This produces a gentle arc that looks
+/// natural and avoids overlapping with nearby elements.
+///
+/// The control point X coordinates are positioned at half the horizontal
+/// distance to distribute the curve evenly across the path.
+/// For left-exit edges (isLeftExit=true), the curve bulges outward to the left
+/// first before curving down and toward the end point. For right-exit edges
+/// (isLeftExit=false), the curve bulges outward to the right.
+/// This directional routing makes left/right column edges visually distinct.
+String buildBezierEdgePath(
+  double startX,
+  double startY,
+  double endX,
+  double endY, {
+  required bool isLeftExit,
+  bool isLeftArrival = true,
+}) {
+  const double controlPointFactor = 0.5;
+  final dx = (endX - startX).abs();
+
+  // First control point: extends outward based on exit direction
+  final controlX1 = isLeftExit
+      ? startX -
+            dx *
+                controlPointFactor // Left exits go further left
+      : startX + dx * controlPointFactor; // Right exits go further right
+
+  // Second control point: approaches end point from the selected side.
+  final controlX2 = isLeftArrival
+      ? endX - dx * controlPointFactor
+      : endX + dx * controlPointFactor;
+
+  final cy1 = startY + bezierBellyHeight;
+  final cy2 = endY + bezierBellyHeight;
+  return 'M $startX $startY C $controlX1 $cy1, $controlX2 $cy2, $endX $endY';
+}

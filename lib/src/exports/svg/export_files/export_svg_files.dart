@@ -646,7 +646,13 @@ String exportGraphSvgFiles(
       } else {
         // Same-column or backward (cycle) edge: Bezier arcing downward.
         colDiff = 0;
-        pathData = _buildBezierEdgePath(startX, startY, endX, endY);
+        pathData = buildBezierEdgePath(
+          startX,
+          startY,
+          endX,
+          endY,
+          isLeftExit: false,
+        );
       }
 
       edgeRenderList.add((
@@ -882,8 +888,6 @@ const int _bothSides = 2;
 
 const double _halfDivisor = 2.0;
 
-const double _bezierBellyHeight = 16.0;
-
 const double _edgeStraightBellyHeight = 6.0;
 
 const double _fileEdgeCornerRadius = 6.0;
@@ -972,19 +976,4 @@ double _findBestPassageY(
   return candidates.reduce(
     (best, c) => (c - targetY).abs() < (best - targetY).abs() ? c : best,
   );
-}
-
-String _buildBezierEdgePath(
-  double startX,
-  double startY,
-  double endX,
-  double endY,
-) {
-  const double controlPointFactor = 0.5;
-  final dx = (endX - startX).abs();
-  final controlX1 = startX + dx * controlPointFactor;
-  final controlX2 = endX - dx * controlPointFactor;
-  final cy1 = startY + _bezierBellyHeight;
-  final cy2 = endY + _bezierBellyHeight;
-  return 'M $startX $startY C $controlX1 $cy1, $controlX2 $cy2, $endX $endY';
 }

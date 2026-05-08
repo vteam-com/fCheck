@@ -9,6 +9,7 @@ import 'package:fcheck/src/exports/externals/export_plantuml.dart';
 import 'package:fcheck/src/exports/svg/export_files/export_svg_files.dart';
 import 'package:fcheck/src/exports/svg/export_folders/export_svg_folders.dart';
 import 'package:fcheck/src/exports/svg/export_loc/export_svg_code_size.dart';
+import 'package:fcheck/src/exports/svg/export_packages/export_svg_package_dependencies.dart';
 import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/models/constants.dart';
@@ -292,7 +293,8 @@ List<Map<String, dynamic>> _buildLiteralEntries(Map<String, int> frequencies) {
 }
 
 bool _shouldWriteArtifacts(ConsoleInput input) {
-  return input.generateSvg ||
+  return input.generateDependencySvg ||
+      input.generateSvg ||
       input.generateMermaid ||
       input.generatePlantUML ||
       input.generateFolderSvg ||
@@ -351,6 +353,22 @@ void _writeOutputArtifacts({
 
   if (!input.outputJson) {
     printOutputFilesHeader();
+  }
+
+  if (input.generateDependencySvg) {
+    final dependencySvgFile = outputResolver.prepareOutputFile(
+      defaultFileName: 'fcheck_packages.svg',
+      overridePath: input.outputSvgDependencyPath,
+    );
+    dependencySvgFile.writeAsStringSync(
+      exportSvgPackageDependencies(loadPackageDependencyGraphData(directory)),
+    );
+    if (!input.outputJson) {
+      printOutputFileLine(
+        label: AppStrings.svgPackageDependencies,
+        path: dependencySvgFile.path,
+      );
+    }
   }
 
   if (input.generateSvg) {

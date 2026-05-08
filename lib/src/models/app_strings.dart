@@ -13,6 +13,30 @@ class AppStrings {
       'Error: Invalid arguments provided.';
   static const String strictHelp =
       'Exit with code (100 - score) if compliance score is below 100%.';
+  static const String svgShortcutHelp =
+      'Shortcut to generate all SVG outputs (packages, files, folders, and LOC treemap)';
+  static const String svgDependencyGraphHelp =
+      'Generate package dependency SVG from pubspec (dependencies + dev_dependencies)';
+  static const String svgFilesAliasHelp =
+      'Generate files SVG visualization of the architecture dependency graph';
+  static const String svgFoldersHelp =
+      'Generate folder-based SVG visualization of the dependency graph';
+  static const String svgLocHelp =
+      'Generate treemap SVG visualization of code size';
+  static const String outputDirectoryHelp =
+      'Output directory for generated files. Default is the analyzed directory.';
+  static const String outputSvgDependencyHelp =
+      'Custom output file path for package dependency SVG export.';
+  static const String outputSvgFilesAliasHelp =
+      'Custom output file path for files architecture SVG export.';
+  static const String outputSvgFoldersHelp =
+      'Custom output file path for folders SVG export.';
+  static const String outputSvgLocHelp =
+      'Custom output file path for LOC treemap SVG export.';
+  static const String outputMermaidHelp =
+      'Custom output file path for Mermaid export.';
+  static const String outputPlantUmlHelp =
+      'Custom output file path for PlantUML export.';
 
   // Report Sections
   static const String scorecardDivider = 'Scorecard';
@@ -107,6 +131,7 @@ class AppStrings {
   static const String deadFunctions = 'Dead functions';
   static const String unusedVariables = 'Unused variables';
   static const String svgLayers = 'SVG Files';
+  static const String svgPackageDependencies = 'SVG Packages';
   static const String svgLayersFolder = 'SVG Folders';
   static const String svgCodeSizeTreemap = 'SVG Lines of Code';
   static const String mermaidLayers = 'Mermaid layers';

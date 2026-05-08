@@ -340,8 +340,9 @@ Adjacent file-level SVG routing rule for nodes on the same row in adjacent colum
 - If the source node has multiple outgoing edges, the same-row adjacent edge is rendered as a single arch (no elbows).
 
 ```bash
-fcheck --svg          # shortcut: fcheck_files.svg + fcheck_folders.svg + fcheck_loc.svg
-fcheck --svg-files    # fcheck_files.svg
+fcheck --svg            # shortcut: fcheck_packages.svg + fcheck_files.svg + fcheck_folders.svg + fcheck_loc.svg
+fcheck --svg-dependency # fcheck_packages.svg (pubspec dependencies + dev_dependencies)
+fcheck --svg-files      # fcheck_files.svg (file architecture graph)
 fcheck --svg-folders  # fcheck_folders.svg
 fcheck --svg-loc      # fcheck_loc.svg
 fcheck --mermaid      # fcheck.mmd
@@ -351,12 +352,18 @@ fcheck --plantuml     # fcheck.puml
 fcheck --svg --mermaid --plantuml --output ./reports/fcheck
 
 # Per-artifact file overrides
+fcheck --svg --output-svg-dependency ./artifacts/graph/dependencies.svg
 fcheck --svg --output-svg-files ./artifacts/graph/files.svg
 fcheck --svg-folders --output-svg-folders ./artifacts/graph/folders.svg
 fcheck --svg-loc --output-svg-loc ./artifacts/graph/loc.svg
 fcheck --mermaid --output-mermaid ./artifacts/graph/fcheck.mmd
 fcheck --plantuml --output-plantuml ./artifacts/graph/fcheck.puml
 ```
+
+`fcheck_packages.svg` visualizes package edges from your `pubspec.yaml`:
+project -> `dependencies` and project -> `dev_dependencies`.
+Each package node includes the resolved lockfile version in smaller text and
+an extended one-hop derived dependency preview sourced from `dart pub deps`.
 
 ### Layers Files diagram
 

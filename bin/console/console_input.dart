@@ -21,6 +21,9 @@ class ConsoleInput {
   /// Whether SVG graph output should be generated.
   final bool generateSvg;
 
+  /// Whether package dependency SVG output should be generated.
+  final bool generateDependencySvg;
+
   /// Whether Mermaid graph output should be generated.
   final bool generateMermaid;
 
@@ -38,6 +41,9 @@ class ConsoleInput {
 
   /// Optional override path for files SVG export.
   final String? outputSvgFilesPath;
+
+  /// Optional override path for package dependency SVG export.
+  final String? outputSvgDependencyPath;
 
   /// Optional override path for folders SVG export.
   final String? outputSvgFoldersPath;
@@ -95,12 +101,14 @@ class ConsoleInput {
     required this.path,
     required this.fix,
     required this.generateSvg,
+    required this.generateDependencySvg,
     required this.generateMermaid,
     required this.generatePlantUML,
     required this.generateFolderSvg,
     required this.generateSizeSvg,
     required this.outputDirectory,
     required this.outputSvgFilesPath,
+    required this.outputSvgDependencyPath,
     required this.outputSvgFoldersPath,
     required this.outputSvgLocPath,
     required this.outputMermaidPath,
@@ -139,17 +147,13 @@ ArgParser createConsoleArgParser() => ArgParser()
         'Automatically fix sorting issues by writing sorted code back to files',
     negatable: false,
   )
+  ..addFlag('svg', help: AppStrings.svgShortcutHelp, negatable: false)
   ..addFlag(
-    'svg',
-    help:
-        'Shortcut to generate all SVG outputs (files, folders, and LOC treemap)',
+    'svg-dependency',
+    help: AppStrings.svgDependencyGraphHelp,
     negatable: false,
   )
-  ..addFlag(
-    'svg-files',
-    help: 'Generate files SVG visualization of the dependency graph',
-    negatable: false,
-  )
+  ..addFlag('svg-files', help: AppStrings.svgFilesAliasHelp, negatable: false)
   ..addFlag(
     'mermaid',
     help: 'Generate Mermaid file for dependency graph visualization',
@@ -160,41 +164,15 @@ ArgParser createConsoleArgParser() => ArgParser()
     help: 'Generate PlantUML file for dependency graph visualization',
     negatable: false,
   )
-  ..addFlag(
-    'svg-folders',
-    help: 'Generate folder-based SVG visualization of the dependency graph',
-    negatable: false,
-  )
-  ..addFlag(
-    'svg-loc',
-    help: 'Generate treemap SVG visualization of code size',
-    negatable: false,
-  )
-  ..addOption(
-    'output',
-    help:
-        'Output directory for generated files. Default is the analyzed directory.',
-  )
-  ..addOption(
-    'output-svg-files',
-    help: 'Custom output file path for files SVG export.',
-  )
-  ..addOption(
-    'output-svg-folders',
-    help: 'Custom output file path for folders SVG export.',
-  )
-  ..addOption(
-    'output-svg-loc',
-    help: 'Custom output file path for LOC treemap SVG export.',
-  )
-  ..addOption(
-    'output-mermaid',
-    help: 'Custom output file path for Mermaid export.',
-  )
-  ..addOption(
-    'output-plantuml',
-    help: 'Custom output file path for PlantUML export.',
-  )
+  ..addFlag('svg-folders', help: AppStrings.svgFoldersHelp, negatable: false)
+  ..addFlag('svg-loc', help: AppStrings.svgLocHelp, negatable: false)
+  ..addOption('output', help: AppStrings.outputDirectoryHelp)
+  ..addOption('output-svg-dependency', help: AppStrings.outputSvgDependencyHelp)
+  ..addOption('output-svg-files', help: AppStrings.outputSvgFilesAliasHelp)
+  ..addOption('output-svg-folders', help: AppStrings.outputSvgFoldersHelp)
+  ..addOption('output-svg-loc', help: AppStrings.outputSvgLocHelp)
+  ..addOption('output-mermaid', help: AppStrings.outputMermaidHelp)
+  ..addOption('output-plantuml', help: AppStrings.outputPlantUmlHelp)
   ..addFlag(
     'json',
     help: 'Output results in structured JSON format',
@@ -262,6 +240,9 @@ ConsoleInput parseConsoleInput(List<String> arguments, ArgParser parser) {
   final explicitPath = argResults['input'] as String;
   final listOption = _parseListOption(argResults['list'] as String);
   final svgShortcut = argResults['svg'] as bool;
+  final dependencySvgRequested =
+      (argResults['svg-dependency'] as bool) || svgShortcut;
+  final filesSvgRequested = (argResults['svg-files'] as bool) || svgShortcut;
   final path = explicitPath != '.'
       ? explicitPath
       : argResults.rest.isNotEmpty
@@ -271,12 +252,16 @@ ConsoleInput parseConsoleInput(List<String> arguments, ArgParser parser) {
   return ConsoleInput(
     path: path,
     fix: argResults['fix'] as bool,
+    generateDependencySvg: dependencySvgRequested,
     generateMermaid: argResults['mermaid'] as bool,
     generatePlantUML: argResults['plantuml'] as bool,
-    generateSvg: (argResults['svg-files'] as bool) || svgShortcut,
+    generateSvg: filesSvgRequested,
     generateFolderSvg: (argResults['svg-folders'] as bool) || svgShortcut,
     generateSizeSvg: (argResults['svg-loc'] as bool) || svgShortcut,
     outputDirectory: _optionalTrimmed(argResults['output'] as String?),
+    outputSvgDependencyPath: _optionalTrimmed(
+      argResults['output-svg-dependency'] as String?,
+    ),
     outputSvgFilesPath: _optionalTrimmed(
       argResults['output-svg-files'] as String?,
     ),
