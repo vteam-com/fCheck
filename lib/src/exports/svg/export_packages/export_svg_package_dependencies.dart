@@ -58,7 +58,6 @@ const double _derivedGroupTopMargin = 48;
 const double _derivedGroupLabelFontSize = 13;
 const double _derivedGroupLabelY = 20;
 const double _derivedNodeTextPadding = 8;
-const double _badgeOffset = 12;
 
 const String _derivedNodeDashArray = '4,2';
 const String _backgroundColor = '#f8fafc';

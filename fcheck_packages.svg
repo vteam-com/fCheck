@@ -280,7 +280,7 @@
     isolation: isolate; 
   }
 </style>
-<text x="600.0" y="28.0" text-anchor="middle" fill="#0f172a" font-size="22.0" font-weight="700">fcheck v1.2.1</text>
+<text x="600.0" y="28.0" text-anchor="middle" fill="#0f172a" font-size="22.0" font-weight="700">fcheck v1.3.0</text>
 <text x="280.0" y="70.0" fill="#1e293b" font-size="15.0" font-weight="700">dependencies (5 items)</text>
 <line x1="280.0" y1="76.0" x2="480.0" y2="76.0" stroke="#1d4ed8" stroke-width="2.0" opacity="0.9"/>
 <text x="720.0" y="70.0" fill="#1e293b" font-size="15.0" font-weight="700">dev_dependencies (2 items)</text>

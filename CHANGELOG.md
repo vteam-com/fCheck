@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `--svg-files` and `--output-svg-files` remain dedicated to file-level architecture graph SVG output.
 - `fcheck_packages.svg` now renders package versions (smaller labels) and one-hop derived dependency previews from `dart pub deps`.
+- `fcheck_packages.svg` badge counts now reflect only visible one-hop edges in the rendered diagram.
+- Derived package badges in `fcheck_packages.svg` are now split by source side: left for `dependencies`, right for `dev_dependencies`.
 
 ## [1.2.1] – 2026-05-01
 

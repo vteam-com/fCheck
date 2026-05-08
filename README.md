@@ -365,6 +365,22 @@ project -> `dependencies` and project -> `dev_dependencies`.
 Each package node includes the resolved lockfile version in smaller text and
 an extended one-hop derived dependency preview sourced from `dart pub deps`.
 
+Package dependency badge rules:
+
+- Direct package badges show the number of visible one-hop derived packages
+  connected in this diagram.
+- Derived package badges show incoming counts only for visible edges rendered in
+  this diagram, not full-tree totals from `dart pub deps`.
+- Derived package badges are split by source column:
+  - left badge = incoming edges from `dependencies`
+  - right badge = incoming edges from `dev_dependencies`
+- Shared derived packages can therefore render two separate incoming badges,
+  one on each side, when both columns depend on the same package.
+
+### Package Dependencies diagram
+
+![fcheck package dependencies diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_packages.svg)
+
 ### Layers Files diagram
 
 ![fcheck layers files diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_files.svg)
