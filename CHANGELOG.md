@@ -7,16 +7,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] – 2026-05-28
+
+### Changed
+
+- Improved `fcheck_packages.svg`
+  - Edge routing with lane-based paths for clearer dependency graphs.
+  - Render one additional dependency hop below the existing derived package tier.
+  - Display package supported platforms
+  - Display package supported versions of Dart and Flutter
+  - Render package and root-project Dart/Flutter SDK constraints as separate black outlined pills using the `Dart ...` and `Flutter ...` labels.
+  - Highlighted Flutter plugin packages that are still rely on legacy CocoaPods iOS.
+
 ## [1.3.0]
 
 ### Added
 
 - New package dependency SVG export from `pubspec.yaml` via `--svg-dependency` and `--output-svg-dependency`.
-
-### Changed
-
-- Extended `fcheck_packages.svg` to render one additional dependency hop below the existing derived package tier.
-- Added centered footer runtime badges to `fcheck_packages.svg` package nodes, including Flutter platform markers and a `Dart` badge for pure Dart packages.
 
 ## [1.2.1] – 2026-05-01
 

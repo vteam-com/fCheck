@@ -30,12 +30,22 @@ const double _platformBadgeGap = 4;
 const double _platformBadgeCornerRadius = 6.5;
 const double _platformBadgeFontSize = 7;
 const double _platformBadgeStrokeWidth = 0.6;
+const double _platformBadgeSingleLetterLabelYOffset = 1;
 const double _platformMetadataGap = 3;
 const double _platformMetadataFontSize = 7;
-const double _platformMetadataBottomInset = 5;
+const double _platformMetadataBottomInset = 4;
+const double _platformMetadataPillHeight = 9;
+const double _platformMetadataPillGap = 6;
+const double _platformMetadataPillHorizontalPadding = 6;
+const double _platformMetadataPillCornerRadius = 4.5;
+const double _platformMetadataPillStrokeWidth = 0.8;
+const double _platformMetadataPillWidthPerCharacter = 4.1;
+const double _platformMetadataPillPaddingSideCount = 2;
 
 const String _platformBadgeTextColor = '#ffffff';
-const String _platformMetadataTextColor = '#334155';
+const String _platformMetadataTextColor = '#000000';
+const String _platformMetadataPillFillColor = '#ffffff';
+const String _platformMetadataPillStrokeColor = '#000000';
 const String _platformDartFillColor = '#0175c2';
 const String _platformDartStrokeColor = '#0369a1';
 const String _warningNodeGradientFill = 'url(#warningNodeGradient)';
@@ -66,6 +76,8 @@ const String _packageNodeVersionLabelClass = 'packageLabelNodeVersion';
 const String _packageDerivedNameLabelClass = 'packageLabelDerivedName';
 const String _packageDerivedVersionLabelClass = 'packageLabelDerivedVersion';
 const String _packageMetadataLabelClass = 'packageLabelMetadata';
+const String _packageMetadataPillGroupClass = 'packageMetadataPill';
+const String _packageMetadataPillShapeClass = 'packageMetadataPillShape';
 const String _packagePlatformBadgeLabelClass = 'packageLabelPlatformBadge';
 const String _packageWarningLabelClass = 'packageLabelWarning';
 
@@ -125,6 +137,12 @@ String _buildPackageLabelStyles() =>
     fill: $_platformMetadataTextColor;
     font-size: ${_platformMetadataFontSize}px;
     font-weight: 600;
+  }
+
+  .$_packageMetadataPillShapeClass {
+    fill: $_platformMetadataPillFillColor;
+    stroke: $_platformMetadataPillStrokeColor;
+    stroke-width: $_platformMetadataPillStrokeWidth;
   }
 
   .$_packagePlatformBadgeLabelClass {
@@ -341,6 +359,11 @@ bool _supportsDart(PackagePlatformSupport support) => support.isPureDart;
 
 String _badgeLabel(_PlatformBadgeDefinition badge) => badge.label;
 
+double _platformBadgeLabelYOffset(String badgeLabel) =>
+    badgeLabel.length == _platformBadgeBaseLabelLength
+    ? _platformBadgeSingleLetterLabelYOffset
+    : 0;
+
 String _badgeTitle(
   _PlatformBadgeDefinition badge,
   PackagePlatformSupport support,
@@ -355,10 +378,25 @@ String _badgeTitle(
 List<String> _platformMetadataLabels(PackagePlatformSupport support) {
   final labels = <String>[];
   if (support.isPureDart && support.dartSdkConstraint.isNotEmpty) {
-    labels.add('D:${support.dartSdkConstraint}');
+    labels.add(_sdkMetadataLabel('Dart', support.dartSdkConstraint));
   }
   if (support.flutterSdkConstraint.isNotEmpty) {
-    labels.add('F:${support.flutterSdkConstraint}');
+    labels.add(_sdkMetadataLabel('Flutter', support.flutterSdkConstraint));
+  }
+  return labels;
+}
+
+/// Builds the SDK metadata labels rendered below the root project title.
+///
+/// The project header should show both Dart and Flutter constraints when they
+/// are declared, even when the project is not a pure Dart package.
+List<String> projectSdkMetadataLabels(PackagePlatformSupport support) {
+  final labels = <String>[];
+  if (support.dartSdkConstraint.isNotEmpty) {
+    labels.add(_sdkMetadataLabel('Dart', support.dartSdkConstraint));
+  }
+  if (support.flutterSdkConstraint.isNotEmpty) {
+    labels.add(_sdkMetadataLabel('Flutter', support.flutterSdkConstraint));
   }
   return labels;
 }
@@ -486,6 +524,8 @@ PackagePlatformSupport readPackagePlatformSupportFromPubspec(File pubspecFile) {
       return const PackagePlatformSupport();
     }
 
+    final dartSdkConstraint = _readDartSdkConstraint(yaml);
+    final flutterSdkConstraint = _readFlutterSdkConstraint(yaml);
     final declaredPlatforms = _parsePackagePlatformSupport(yaml[_platformsKey]);
     final flutterPlatforms = _parseFlutterPluginPlatformSupport(
       yaml[_flutterKey],
@@ -502,14 +542,20 @@ PackagePlatformSupport readPackagePlatformSupportFromPubspec(File pubspecFile) {
         supportsMacos: mergedPlatformSupport.supportsMacos,
         supportsLinux: mergedPlatformSupport.supportsLinux,
         supportsWeb: mergedPlatformSupport.supportsWeb,
-        dartSdkConstraint: _readDartSdkConstraint(yaml),
-        flutterSdkConstraint: _readFlutterSdkConstraint(yaml),
+        dartSdkConstraint: dartSdkConstraint,
+        flutterSdkConstraint: flutterSdkConstraint,
+      );
+    }
+    if (flutterSdkConstraint.isNotEmpty) {
+      return PackagePlatformSupport(
+        dartSdkConstraint: dartSdkConstraint,
+        flutterSdkConstraint: flutterSdkConstraint,
       );
     }
     if (_isPureDartPackage(yaml)) {
       return PackagePlatformSupport(
         isPureDart: true,
-        dartSdkConstraint: _readDartSdkConstraint(yaml),
+        dartSdkConstraint: dartSdkConstraint,
       );
     }
     return const PackagePlatformSupport();
@@ -564,6 +610,9 @@ String _readPackageName(YamlMap yaml) {
 /// on the Flutter SDK in their runtime dependencies.
 bool _isPureDartPackage(YamlMap yaml) {
   if (yaml[_flutterKey] is YamlMap) {
+    return false;
+  }
+  if (_readFlutterSdkConstraint(yaml).isNotEmpty) {
     return false;
   }
   return !_hasDependencyKey(yaml[_dependenciesKey], _flutterKey);
@@ -769,10 +818,10 @@ void writePlatformBadges(
     return;
   }
 
-  final enabledBadges = _platformBadgeDefinitions
+  final List<_PlatformBadgeDefinition> enabledBadges = _platformBadgeDefinitions
       .where((definition) => definition.isEnabled(platformSupport))
       .toList(growable: false);
-  final metadataLabels = _platformMetadataLabels(platformSupport);
+  final List<String> metadataLabels = _platformMetadataLabels(platformSupport);
   if (enabledBadges.isEmpty && metadataLabels.isEmpty) {
     return;
   }
@@ -789,22 +838,22 @@ void writePlatformBadges(
   final totalWidth =
       badgesWidth + ((enabledBadges.length - 1) * _platformBadgeGap);
   final startX = x + ((nodeWidth - totalWidth) / _halfDivisor);
-  final metadataY = y + nodeHeight - _platformMetadataBottomInset;
-  final badgeY =
+  final metadataPillY =
       y +
       nodeHeight -
       _platformMetadataBottomInset -
-      _platformMetadataFontSize -
-      _platformMetadataGap -
-      _platformBadgeHeight;
+      _platformMetadataPillHeight;
+  final badgeY = metadataLabels.isEmpty
+      ? y + nodeHeight - _platformMetadataBottomInset - _platformBadgeHeight
+      : metadataPillY - _platformMetadataGap - _platformBadgeHeight;
 
   if (metadataLabels.isNotEmpty) {
-    final metadataClass = _buildPackageLabelClasses(
-      _packageMetadataLabelClass,
-      warning: highlightCaptions,
-    );
-    buffer.writeln(
-      '<text x="${x + (nodeWidth / _halfDivisor)}" y="$metadataY" class="$metadataClass" text-anchor="middle">${escapeXml(metadataLabels.join('   '))}</text>',
+    _writeMetadataPills(
+      buffer,
+      centerX: x + (nodeWidth / _halfDivisor),
+      topY: metadataPillY,
+      labels: metadataLabels,
+      highlightCaptions: highlightCaptions,
     );
   }
 
@@ -821,7 +870,10 @@ void writePlatformBadges(
     final badgeWidth = badgeWidths[index];
     final badgeX = currentX;
     final badgeCenterX = badgeX + (badgeWidth / _halfDivisor);
-    final badgeCenterY = badgeY + (_platformBadgeHeight / _halfDivisor);
+    final badgeCenterY =
+        badgeY +
+        (_platformBadgeHeight / _halfDivisor) +
+        _platformBadgeLabelYOffset(badgeLabel);
     final isLegacyIosBadge =
         badge.cssSuffix == _iosPlatformKey &&
         platformSupport.hasLegacyIosWarning;

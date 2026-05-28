@@ -106,6 +106,30 @@ void main() {
     return matches.map((match) => match.group(1)!).toList(growable: false);
   }
 
+  double platformBadgeTextY(String svg, String cssClass) {
+    final match = RegExp(
+      '<g class="platformBadge platformBadge--$cssClass"><title>[^<]+</title>(?:<rect[^>]+/>|<path[^>]+/>)<text x="[^"]+" y="([^"]+)"[^>]*>[^<]+</text></g>',
+    ).firstMatch(svg);
+    expect(match, isNotNull);
+    return double.parse(match!.group(1)!);
+  }
+
+  ({double x, double y, double width, double height}) metadataPillRect(
+    String svg,
+    String label,
+  ) {
+    final match = RegExp(
+      '<g class="packageMetadataPill"><title>${RegExp.escape(label)}</title><rect x="([^"]+)" y="([^"]+)" width="([^"]+)" height="([^"]+)" rx="[^"]+" ry="[^"]+" class="packageMetadataPillShape"/><text x="[^"]+" y="[^"]+" class="[^"]+" text-anchor="middle" dominant-baseline="middle">${RegExp.escape(label)}</text></g>',
+    ).firstMatch(svg);
+    expect(match, isNotNull);
+    return (
+      x: double.parse(match!.group(1)!),
+      y: double.parse(match.group(2)!),
+      width: double.parse(match.group(3)!),
+      height: double.parse(match.group(4)!),
+    );
+  }
+
   String legacyPackageNodeSnippet(String svg) {
     final markerIndex = svg.indexOf('packageNode packageNode--legacyIos');
     expect(markerIndex, isNonNegative);
@@ -265,18 +289,26 @@ void main() {
       expect(platformBadgeCount(svg, 'linux'), equals(1));
       expect(platformBadgeCount(svg, 'dart'), equals(1));
       expect(svg, contains('Browser'));
-      expect(svg, contains('D:&gt;=3.3.0 &lt;4.0.0</text>'));
+      expect(svg, contains('Dart &gt;=3.3.0 &lt;4.0.0</text>'));
       expect(svg, contains('Dart SDK &gt;=3.3.0 &lt;4.0.0'));
-      expect(svg, contains('F:&gt;=3.22.0</text>'));
+      expect(svg, contains('Flutter &gt;=3.22.0</text>'));
       expect(svg, contains('.packageLabelMetadata {'));
+      expect(svg, contains('.packageMetadataPillShape {'));
       expect(svg, contains('.packageLabelPlatformBadge {'));
       expect(svg, contains('class="packageLabelMetadata"'));
+      expect(svg, contains('class="packageMetadataPillShape"'));
       expect(svg, contains('class="packageLabelPlatformBadge"'));
+      expect(svg, contains('stroke: #000000;'));
+      expect(svg, contains('fill: #ffffff;'));
       expect(svg, isNot(contains('platformBadgeAlert')));
       expect(svg, isNot(contains('platformBadge--windows')));
 
       final flutterVersion = textPosition(svg, 'v9.2.4');
-      final flutterConstraint = textPosition(svg, 'F:&gt;=3.22.0');
+      final flutterConstraint = textPosition(svg, 'Flutter &gt;=3.22.0');
+      final flutterConstraintPill = metadataPillRect(
+        svg,
+        'Flutter &gt;=3.22.0',
+      );
       final legacyNodeSnippet = legacyPackageNodeSnippet(svg);
       final iosBadge = platformBadgeRect(svg, 'ios');
       final androidBadge = platformBadgeRect(svg, 'android');
@@ -311,15 +343,81 @@ void main() {
       expect(iosBadge.element, equals('path'));
       expect(iosBadge.fill, equals('#e05545'));
       expect(iosBadge.stroke, equals('#b91c1c'));
+      expect(
+        platformBadgeTextY(svg, 'android'),
+        closeTo(androidBadge.y + (androidBadge.height / 2) + 1, 0.1),
+      );
 
       final dartVersion = textPosition(svg, 'v1.2.3');
-      final dartConstraint = textPosition(svg, 'D:&gt;=3.3.0 &lt;4.0.0');
+      final dartConstraint = textPosition(svg, 'Dart &gt;=3.3.0 &lt;4.0.0');
+      final dartConstraintPill = metadataPillRect(
+        svg,
+        'Dart &gt;=3.3.0 &lt;4.0.0',
+      );
       final dartBadge = platformBadgeRect(svg, 'dart');
       final dartBadgeCenter = dartBadge.x + (dartBadge.width / 2);
       expect(dartBadgeCenter, closeTo(dartVersion.x, 0.1));
       expect(dartBadge.y, greaterThan(dartVersion.y));
+      expect(
+        platformBadgeTextY(svg, 'dart'),
+        closeTo(dartBadge.y + (dartBadge.height / 2), 0.1),
+      );
+      expect(dartConstraint.x, closeTo(dartVersion.x, 0.1));
+      expect(dartConstraintPill.x, lessThan(dartVersion.x));
+      expect(
+        dartConstraintPill.x + dartConstraintPill.width,
+        greaterThan(dartVersion.x),
+      );
       expect(dartConstraint.y, greaterThan(dartBadge.y + dartBadge.height));
+      expect(flutterConstraint.x, closeTo(flutterVersion.x, 0.1));
+      expect(flutterConstraintPill.x, lessThan(flutterVersion.x));
+      expect(
+        flutterConstraintPill.x + flutterConstraintPill.width,
+        greaterThan(flutterVersion.x),
+      );
       expect(flutterConstraint.y, greaterThan(iosBadge.y + iosBadge.height));
+    });
+
+    test('render project SDK metadata below the package SVG title', () {
+      final svg = exportSvgPackageDependencies(
+        const PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: '1.0.0',
+          projectPlatformSupport: PackagePlatformSupport(
+            dartSdkConstraint: '>=3.3.0 <4.0.0',
+            flutterSdkConstraint: '>=3.22.0',
+          ),
+          dependencies: <PackageDependencyNode>[
+            (name: 'http', version: '1.2.3'),
+          ],
+          devDependencies: <PackageDependencyNode>[],
+        ),
+      );
+
+      expect(svg, contains('demo_app v1.0.0'));
+      expect(svg, contains('Dart &gt;=3.3.0 &lt;4.0.0</text>'));
+      expect(svg, contains('Flutter &gt;=3.22.0</text>'));
+
+      final projectTitle = textPosition(svg, 'demo_app v1.0.0');
+      final projectDartMetadata = textPosition(
+        svg,
+        'Dart &gt;=3.3.0 &lt;4.0.0',
+      );
+      final projectDartPill = metadataPillRect(
+        svg,
+        'Dart &gt;=3.3.0 &lt;4.0.0',
+      );
+      final projectFlutterPill = metadataPillRect(svg, 'Flutter &gt;=3.22.0');
+      final projectPillsCenter =
+          projectDartPill.x +
+          ((projectFlutterPill.x +
+                  projectFlutterPill.width -
+                  projectDartPill.x) /
+              2);
+
+      expect(projectDartMetadata.y, greaterThan(projectTitle.y));
+      expect(projectPillsCenter, closeTo(projectTitle.x, 0.1));
+      expect(projectDartPill.x, lessThan(projectFlutterPill.x));
     });
 
     test(
@@ -663,6 +761,9 @@ void main() {
       File(p.join(tempDir.path, 'pubspec.yaml')).writeAsStringSync('''
 name: demo_app
 version: 1.0.0
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: '>=3.22.0'
 dependencies:
   flutter_plugin: ^1.0.0
   pure_dart: ^1.0.0
@@ -774,6 +875,15 @@ platforms:
 ''');
 
       final graphData = loadPackageDependencyGraphData(tempDir);
+
+      expect(
+        graphData.projectPlatformSupport.dartSdkConstraint,
+        equals('>=3.3.0 <4.0.0'),
+      );
+      expect(
+        graphData.projectPlatformSupport.flutterSdkConstraint,
+        equals('>=3.22.0'),
+      );
 
       expect(graphData.platformSupportByPackage['flutter_plugin'], isNotNull);
       expect(

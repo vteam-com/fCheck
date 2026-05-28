@@ -11,6 +11,7 @@ import 'package:yaml/yaml.dart';
 
 part 'export_svg_package_dependencies_routing.dart';
 part 'export_svg_package_dependencies_layout.dart';
+part 'export_svg_package_dependencies_metadata.dart';
 part 'export_svg_package_dependencies_platforms.dart';
 
 const String _defaultProjectName = 'project';
@@ -49,6 +50,7 @@ const int _singleDerivedColumnCount = 1;
 const double _columnCount = 2;
 const double _halfDivisor = 2;
 const double _titleY = 28;
+const double _projectMetadataPillY = 36;
 const double _sectionUnderlineOffset = 6;
 const double _nodeNameYOffset = 20;
 const double _nodeVersionYOffset = 33;
@@ -115,6 +117,9 @@ class PackageDependencyGraphData {
   /// Project/package version from `pubspec.yaml`.
   final String version;
 
+  /// Root project SDK/platform metadata from `pubspec.yaml`.
+  final PackagePlatformSupport projectPlatformSupport;
+
   /// Regular dependencies from `dependencies`.
   final List<PackageDependencyNode> dependencies;
 
@@ -144,6 +149,7 @@ class PackageDependencyGraphData {
   const PackageDependencyGraphData({
     required this.projectName,
     required this.version,
+    this.projectPlatformSupport = const PackagePlatformSupport(),
     required this.dependencies,
     required this.devDependencies,
     this.derivedDependenciesByPackage =
@@ -181,6 +187,9 @@ PackageDependencyGraphData loadPackageDependencyGraphData(Directory directory) {
 
     final projectName = readProjectName(yaml);
     final version = readProjectVersion(yaml);
+    final projectPlatformSupport = readPackagePlatformSupportFromPubspec(
+      pubspecFile,
+    );
     final dependencyNames = readDependencyKeys(yaml, _dependenciesKey);
     final devDependencyNames = readDependencyKeys(yaml, _devDependenciesKey);
     final packageVersions = readPackageVersionsFromLockfile(directory);
@@ -207,6 +216,7 @@ PackageDependencyGraphData loadPackageDependencyGraphData(Directory directory) {
     return PackageDependencyGraphData(
       projectName: projectName,
       version: version,
+      projectPlatformSupport: projectPlatformSupport,
       dependencies: dependencies,
       devDependencies: devDependencies,
       derivedDependenciesByPackage: derivedData.derivedByPackage,
@@ -636,6 +646,17 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
   buffer.writeln(
     '<text x="${width / _halfDivisor}" y="$_titleY" class="$_packageTitleLabelClass" text-anchor="middle">${escapeXml(graphData.projectName)} v${escapeXml(graphData.version)}</text>',
   );
+  final projectMetadataLabels = projectSdkMetadataLabels(
+    graphData.projectPlatformSupport,
+  );
+  if (projectMetadataLabels.isNotEmpty) {
+    _writeMetadataPills(
+      buffer,
+      centerX: width / _halfDivisor,
+      topY: _projectMetadataPillY,
+      labels: projectMetadataLabels,
+    );
+  }
 
   writeSectionHeader(
     buffer,
