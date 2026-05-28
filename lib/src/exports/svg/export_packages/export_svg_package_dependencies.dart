@@ -5,10 +5,12 @@ import 'dart:math';
 import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_styles.dart';
+import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 part 'export_svg_package_dependencies_routing.dart';
 part 'export_svg_package_dependencies_layout.dart';
+part 'export_svg_package_dependencies_platforms.dart';
 
 const String _defaultProjectName = 'project';
 const String _pubspecFileName = 'pubspec.yaml';
@@ -32,7 +34,7 @@ const double _canvasPadding = 40;
 const double _canvasExtraWidth = 240;
 const double _headerHeight = 70;
 const double _nodeWidth = 200;
-const double _nodeHeight = 46;
+const double _nodeHeight = 58;
 const double _columnGap = 240;
 const double _titleFontSize = 22;
 const double _sectionFontSize = 15;
@@ -53,7 +55,7 @@ const double _packageSlotSpacing = 20;
 const double _sectionHeaderHeight = 26;
 const double _sectionToNodesGap = 12;
 const double _derivedNodeWidth = 280;
-const double _derivedNodeHeight = 28;
+const double _derivedNodeHeight = 42;
 const double _derivedNodeNameFontSize = 12;
 const double _derivedNameYOffset = 18;
 const double _derivedColumnSpacing = 12;
@@ -108,6 +110,12 @@ class PackageDependencyGraphData {
   /// Outgoing dependency counts: for each package, how many packages it depends on.
   final Map<String, int> outgoingDepCounts;
 
+  /// Runtime badge metadata keyed by package name.
+  ///
+  /// Packages without declared platforms and without pure-Dart classification
+  /// are omitted from this map.
+  final Map<String, PackagePlatformSupport> platformSupportByPackage;
+
   /// Creates package dependency graph data.
   const PackageDependencyGraphData({
     required this.projectName,
@@ -120,6 +128,7 @@ class PackageDependencyGraphData {
         const <String, List<PackageDependencyNode>>{},
     this.reverseDepCounts = const <String, int>{},
     this.outgoingDepCounts = const <String, int>{},
+    this.platformSupportByPackage = const <String, PackagePlatformSupport>{},
   });
 }
 
@@ -161,6 +170,15 @@ PackageDependencyGraphData loadPackageDependencyGraphData(Directory directory) {
       rootPackageNames: allDirectPackageNames,
       packageVersions: packageVersions,
     );
+    final platformSupportByPackage = readPackagePlatformSupportByPackage(
+      directory,
+      collectVisiblePackageNames(
+        dependencies: dependencies,
+        devDependencies: devDependencies,
+        derivedDependenciesByPackage: derivedData.derivedByPackage,
+        nestedDerivedDependenciesByPackage: derivedData.nestedDerivedByPackage,
+      ),
+    );
 
     return PackageDependencyGraphData(
       projectName: projectName,
@@ -171,6 +189,7 @@ PackageDependencyGraphData loadPackageDependencyGraphData(Directory directory) {
       nestedDerivedDependenciesByPackage: derivedData.nestedDerivedByPackage,
       reverseDepCounts: derivedData.reverseDepCounts,
       outgoingDepCounts: derivedData.outgoingDepCounts,
+      platformSupportByPackage: platformSupportByPackage,
     );
   } catch (_) {
     return const PackageDependencyGraphData(
@@ -573,6 +592,7 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
     nestedDerivedMap,
     sourcePackageNames: derivedPackageNames,
   );
+  final platformSupportByPackage = graphData.platformSupportByPackage;
 
   final buffer = StringBuffer();
   writeSvgDocumentStart(
@@ -668,6 +688,7 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
     outgoingCounts: visibleDirectOutgoingCounts,
     nodeWidth: _nodeWidth,
     isLeftColumn: true,
+    platformSupportByPackage: platformSupportByPackage,
   );
   writeDirectColumn(
     buffer,
@@ -679,6 +700,7 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
     outgoingCounts: visibleDirectOutgoingCounts,
     nodeWidth: _nodeWidth,
     isLeftColumn: false,
+    platformSupportByPackage: platformSupportByPackage,
   );
 
   // Draw derived nodes inside group
@@ -690,6 +712,7 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
       leftIncomingCounts: visibleLeftIncomingCounts,
       rightIncomingCounts: visibleRightIncomingCounts,
       nodeWidth: _derivedNodeWidth,
+      platformSupportByPackage: platformSupportByPackage,
     );
   }
   if (uniqueNestedDerived.isNotEmpty) {
@@ -700,6 +723,7 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
       leftIncomingCounts: const <String, int>{},
       rightIncomingCounts: visibleTransitiveIncomingCounts,
       nodeWidth: _derivedNodeWidth,
+      platformSupportByPackage: platformSupportByPackage,
     );
   }
 
@@ -718,6 +742,7 @@ void writeDirectColumn(
   required Map<String, int> outgoingCounts,
   required double nodeWidth,
   required bool isLeftColumn,
+  required Map<String, PackagePlatformSupport> platformSupportByPackage,
 }) {
   for (var i = 0; i < packages.length; i++) {
     final y = startY + i * (_nodeHeight + _packageSlotSpacing);
@@ -736,6 +761,7 @@ void writeDirectColumn(
       node: package,
       fillColor: fillColor,
       strokeColor: strokeColor,
+      platformSupport: platformSupportByPackage[package.name],
     );
 
     // Render badges
@@ -783,6 +809,7 @@ void writeDerivedNodes(
   required Map<String, int> leftIncomingCounts,
   required Map<String, int> rightIncomingCounts,
   required double nodeWidth,
+  required Map<String, PackagePlatformSupport> platformSupportByPackage,
 }) {
   for (final node in uniqueDerived) {
     final pos = derivedPositions[node.name];
@@ -804,6 +831,7 @@ void writeDerivedNodes(
       strokeColor: _derivedNodeStrokeColor,
       strokeDashArray: _derivedNodeDashArray,
       inlineVersion: true,
+      platformSupport: platformSupportByPackage[node.name],
     );
 
     // Render badges
@@ -871,12 +899,21 @@ void writePackageNodeSvg(
   required String strokeColor,
   String strokeDashArray = '',
   bool inlineVersion = false,
+  PackagePlatformSupport? platformSupport,
 }) {
   final dashAttr = strokeDashArray.isNotEmpty
       ? ' stroke-dasharray="$strokeDashArray"'
       : '';
   buffer.writeln(
     '<rect x="$x" y="$y" width="$nodeWidth" height="$nodeHeight" rx="$_cornerRadius" ry="$_cornerRadius" fill="$fillColor" stroke="$strokeColor" stroke-width="1"$dashAttr/>',
+  );
+  writePlatformBadges(
+    buffer,
+    x: x,
+    y: y,
+    nodeWidth: nodeWidth,
+    nodeHeight: nodeHeight,
+    platformSupport: platformSupport,
   );
   if (inlineVersion) {
     // Render name on left and version on right with gray styling.

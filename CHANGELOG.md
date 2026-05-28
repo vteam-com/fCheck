@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Extended `fcheck_packages.svg` to render one additional dependency hop below the existing derived package tier.
+- Added centered footer runtime badges to `fcheck_packages.svg` package nodes, including Flutter platform markers and a `Dart` badge for pure Dart packages.
 
 ## [1.2.1] – 2026-05-01
 

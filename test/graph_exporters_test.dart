@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
@@ -22,6 +25,36 @@ void main() {
       RegExp(r'<path[^>]*class="warningEdge"').allMatches(svg).length;
   int badgeCount(String svg, String cssClass) =>
       RegExp('class="badge $cssClass"').allMatches(svg).length;
+  int platformBadgeCount(String svg, String cssClass) => RegExp(
+    'class="platformBadge platformBadge--$cssClass"',
+  ).allMatches(svg).length;
+  ({double x, double y}) textPosition(String svg, String text) {
+    final match = RegExp(
+      '<text x="([^"]+)" y="([^"]+)"[^>]*>${RegExp.escape(text)}</text>',
+    ).firstMatch(svg);
+    expect(match, isNotNull);
+    return (
+      x: double.parse(match!.group(1)!),
+      y: double.parse(match.group(2)!),
+    );
+  }
+
+  ({double x, double y, double width, double height}) platformBadgeRect(
+    String svg,
+    String cssClass,
+  ) {
+    final match = RegExp(
+      '<g class="platformBadge platformBadge--$cssClass"><title>[^<]+</title><rect x="([^"]+)" y="([^"]+)" width="([^"]+)" height="([^"]+)"',
+    ).firstMatch(svg);
+    expect(match, isNotNull);
+    return (
+      x: double.parse(match!.group(1)!),
+      y: double.parse(match.group(2)!),
+      width: double.parse(match.group(3)!),
+      height: double.parse(match.group(4)!),
+    );
+  }
+
   List<double> incomingBadgeTextPositions(String svg) {
     final matches = RegExp(
       r'<g class="badge incomingBadge">\s*<path d="[^"]*" fill="#3b82f6"/>\s*<text x="([^"]+)"[^>]*>\d+</text>',
@@ -93,6 +126,75 @@ void main() {
       expect(svg, contains('v4.1.2'));
       expect(svg, contains('http -> http_parser v4.1.2'));
       expect(svg, contains('flutter_test -> async v2.13.1'));
+    });
+
+    test('render centered platform badges and a pure Dart badge', () {
+      final svg = exportSvgPackageDependencies(
+        const PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: 'unknown',
+          dependencies: <PackageDependencyNode>[
+            (name: 'http', version: '1.2.3'),
+            (name: 'flutter_secure_storage', version: '9.2.4'),
+          ],
+          devDependencies: <PackageDependencyNode>[],
+          derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+            'flutter_secure_storage': <PackageDependencyNode>[
+              (
+                name: 'flutter_secure_storage_platform_interface',
+                version: '2.0.1',
+              ),
+            ],
+          },
+          platformSupportByPackage: <String, PackagePlatformSupport>{
+            'http': PackagePlatformSupport(isPureDart: true),
+            'flutter_secure_storage': PackagePlatformSupport(
+              supportsIos: true,
+              supportsAndroid: true,
+              supportsWeb: true,
+            ),
+            'flutter_secure_storage_platform_interface': PackagePlatformSupport(
+              supportsMacos: true,
+              supportsLinux: true,
+            ),
+          },
+        ),
+      );
+
+      expect(platformBadgeCount(svg, 'ios'), equals(1));
+      expect(platformBadgeCount(svg, 'android'), equals(1));
+      expect(platformBadgeCount(svg, 'web'), equals(1));
+      expect(platformBadgeCount(svg, 'macos'), equals(1));
+      expect(platformBadgeCount(svg, 'linux'), equals(1));
+      expect(platformBadgeCount(svg, 'dart'), equals(1));
+      expect(svg, contains('Browser'));
+      expect(svg, contains('>Dart</text>'));
+      expect(svg, isNot(contains('platformBadge--windows')));
+
+      final flutterVersion = textPosition(svg, 'v9.2.4');
+      final iosBadge = platformBadgeRect(svg, 'ios');
+      final androidBadge = platformBadgeRect(svg, 'android');
+      final webBadge = platformBadgeRect(svg, 'web');
+      final flutterBadgesLeft = [
+        iosBadge.x,
+        androidBadge.x,
+        webBadge.x,
+      ].reduce(min);
+      final flutterBadgesRight = [
+        iosBadge.x + iosBadge.width,
+        androidBadge.x + androidBadge.width,
+        webBadge.x + webBadge.width,
+      ].reduce(max);
+      final flutterBadgesCenter =
+          flutterBadgesLeft + ((flutterBadgesRight - flutterBadgesLeft) / 2);
+      expect(flutterBadgesCenter, closeTo(flutterVersion.x, 0.1));
+      expect(iosBadge.y, greaterThan(flutterVersion.y));
+
+      final dartVersion = textPosition(svg, 'v1.2.3');
+      final dartBadge = platformBadgeRect(svg, 'dart');
+      final dartBadgeCenter = dartBadge.x + (dartBadge.width / 2);
+      expect(dartBadgeCenter, closeTo(dartVersion.x, 0.1));
+      expect(dartBadge.y, greaterThan(dartVersion.y));
     });
 
     test('render package dependency SVG with transitive sections', () {
@@ -301,6 +403,132 @@ void main() {
         expect(svg, contains('flutter_test -> async v2.13.1'));
       },
     );
+
+    test('load package platform support from package_config pubspec roots', () {
+      final tempDir = Directory.systemTemp.createTempSync(
+        'fcheck_package_platforms_',
+      );
+      addTearDown(() {
+        if (tempDir.existsSync()) {
+          tempDir.deleteSync(recursive: true);
+        }
+      });
+
+      final dartToolDir = Directory(p.join(tempDir.path, '.dart_tool'));
+      dartToolDir.createSync(recursive: true);
+      final packagesDir = Directory(p.join(tempDir.path, 'packages'));
+      packagesDir.createSync(recursive: true);
+
+      File(p.join(tempDir.path, 'pubspec.yaml')).writeAsStringSync('''
+name: demo_app
+version: 1.0.0
+dependencies:
+  flutter_plugin: ^1.0.0
+  pure_dart: ^1.0.0
+dev_dependencies:
+  desktop_browser_plugin: ^1.0.0
+''');
+
+      File(p.join(tempDir.path, 'pubspec.lock')).writeAsStringSync('''
+packages:
+  flutter_plugin:
+    version: "1.0.0"
+  pure_dart:
+    version: "1.1.0"
+  desktop_browser_plugin:
+    version: "2.0.0"
+''');
+
+      File(p.join(dartToolDir.path, 'package_config.json')).writeAsStringSync(
+        '''
+{
+  "configVersion": 2,
+  "packages": [
+    {
+      "name": "flutter_plugin",
+      "rootUri": "../packages/flutter_plugin/",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "pure_dart",
+      "rootUri": "../packages/pure_dart/",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "desktop_browser_plugin",
+      "rootUri": "../packages/desktop_browser_plugin/",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    }
+  ]
+}
+''',
+      );
+
+      final flutterPluginDir = Directory(
+        p.join(packagesDir.path, 'flutter_plugin'),
+      )..createSync(recursive: true);
+      File(p.join(flutterPluginDir.path, 'pubspec.yaml')).writeAsStringSync('''
+name: flutter_plugin
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: demo.plugin
+      ios:
+        pluginClass: DemoPlugin
+''');
+
+      final pureDartDir = Directory(p.join(packagesDir.path, 'pure_dart'))
+        ..createSync(recursive: true);
+      File(p.join(pureDartDir.path, 'pubspec.yaml')).writeAsStringSync('''
+name: pure_dart
+''');
+
+      final desktopBrowserPluginDir = Directory(
+        p.join(packagesDir.path, 'desktop_browser_plugin'),
+      )..createSync(recursive: true);
+      File(
+        p.join(desktopBrowserPluginDir.path, 'pubspec.yaml'),
+      ).writeAsStringSync('''
+name: desktop_browser_plugin
+platforms:
+  windows:
+    default_package: desktop_browser_plugin
+  web:
+    default_package: desktop_browser_plugin
+''');
+
+      final graphData = loadPackageDependencyGraphData(tempDir);
+
+      expect(graphData.platformSupportByPackage['flutter_plugin'], isNotNull);
+      expect(
+        graphData.platformSupportByPackage['flutter_plugin']?.supportsAndroid,
+        isTrue,
+      );
+      expect(
+        graphData.platformSupportByPackage['flutter_plugin']?.supportsIos,
+        isTrue,
+      );
+      expect(
+        graphData
+            .platformSupportByPackage['desktop_browser_plugin']
+            ?.supportsWindows,
+        isTrue,
+      );
+      expect(
+        graphData
+            .platformSupportByPackage['desktop_browser_plugin']
+            ?.supportsWeb,
+        isTrue,
+      );
+      expect(
+        graphData.platformSupportByPackage['pure_dart']?.isPureDart,
+        isTrue,
+      );
+    });
 
     test('return empty outputs for empty graphs', () {
       final result = LayersAnalysisResult(

@@ -378,6 +378,14 @@ Package dependency badge rules:
   badges, one on each side, when both columns depend on the same package.
 - First-hop derived packages now connect to an additional transitive package
   tier below them using the same routed SVG edge style.
+- Runtime badges are centered in the node footer below the version label.
+- Flutter packages that declare platform metadata render compact node badges:
+  `I` = iOS, `A` = Android, `W` = Windows, `M` = macOS, `L` = Linux,
+  `B` = Browser.
+- Pure Dart packages render a `Dart` badge instead of platform letters.
+- The exporter reads package declarations from `platforms:` and
+  `flutter.plugin.platforms`, and falls back to `Dart` when a package pubspec
+  is runtime-agnostic and does not depend on the Flutter SDK.
 
 ### Package Dependencies diagram
 

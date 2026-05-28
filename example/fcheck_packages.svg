@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1200.0" height="1288.0" viewBox="0 0 1200.0 1288.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+<svg width="1200.0" height="1620.0" viewBox="0 0 1200.0 1620.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
 <defs>
   <filter id="whiteShadow" x="-20%" y="-20%" width="140%" height="140%">
     <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
@@ -285,307 +285,330 @@
 <line x1="280.0" y1="76.0" x2="480.0" y2="76.0" stroke="#1d4ed8" stroke-width="2.0" opacity="0.9"/>
 <text x="720.0" y="70.0" fill="#1e293b" font-size="15.0" font-weight="700">dev_dependencies (2 items)</text>
 <line x1="720.0" y1="76.0" x2="920.0" y2="76.0" stroke="#166534" stroke-width="2.0" opacity="0.9"/>
-<text x="600.0" y="288.0" text-anchor="middle" fill="#475569" font-size="13.0" font-weight="700">Derived packages (15 items)</text>
-<line x1="40.0" y1="294.0" x2="1160.0" y2="294.0" stroke="#64748b" stroke-width="1" opacity="0.35"/>
-<text x="600.0" y="962.0" text-anchor="middle" fill="#475569" font-size="13.0" font-weight="700">Transitive packages (7 items)</text>
-<line x1="40.0" y1="968.0" x2="1160.0" y2="968.0" stroke="#64748b" stroke-width="1" opacity="0.35"/>
+<text x="600.0" y="312.0" text-anchor="middle" fill="#475569" font-size="13.0" font-weight="700">Derived packages (15 items)</text>
+<line x1="40.0" y1="318.0" x2="1160.0" y2="318.0" stroke="#64748b" stroke-width="1" opacity="0.35"/>
+<text x="600.0" y="1196.0" text-anchor="middle" fill="#475569" font-size="13.0" font-weight="700">Transitive packages (7 items)</text>
+<line x1="40.0" y1="1202.0" x2="1160.0" y2="1202.0" stroke="#64748b" stroke-width="1" opacity="0.35"/>
 <g>
-  <path d="M 280.0 131.0 H 268.0 Q 262.0 131.0 262.0 137.0 V 314.0 Q 262.0 320.0 268.0 320.0 H 460.0" class="edgeVertical"/>
+  <path d="M 280.0 137.0 H 268.0 Q 262.0 137.0 262.0 143.0 V 345.0 Q 262.0 351.0 268.0 351.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter -> characters v1.4.1</title>
 <g>
-  <path d="M 280.0 131.0 H 265.0 Q 259.0 131.0 259.0 137.0 V 394.0 Q 259.0 400.0 265.0 400.0 H 460.0" class="edgeVertical"/>
+  <path d="M 280.0 137.0 H 265.0 Q 259.0 137.0 259.0 143.0 V 453.0 Q 259.0 459.0 265.0 459.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter -> collection v1.19.1</title>
 <g>
-  <path d="M 280.0 131.0 H 262.0 Q 256.0 131.0 256.0 137.0 V 594.0 Q 256.0 600.0 262.0 600.0 H 460.0" class="edgeVertical"/>
+  <path d="M 280.0 137.0 H 262.0 Q 256.0 137.0 256.0 143.0 V 723.0 Q 256.0 729.0 262.0 729.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter -> material_color_utilities v0.13.0</title>
 <g>
-  <path d="M 280.0 131.0 H 259.0 Q 253.0 131.0 253.0 137.0 V 634.0 Q 253.0 640.0 259.0 640.0 H 460.0" class="edgeVertical"/>
+  <path d="M 280.0 137.0 H 259.0 Q 253.0 137.0 253.0 143.0 V 777.0 Q 253.0 783.0 259.0 783.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter -> meta v1.18.0</title>
 <g>
-  <path d="M 280.0 131.0 H 256.0 Q 250.0 131.0 250.0 137.0 V 714.0 Q 250.0 720.0 256.0 720.0 H 460.0" class="edgeVertical"/>
+  <path d="M 280.0 137.0 H 256.0 Q 250.0 137.0 250.0 143.0 V 885.0 Q 250.0 891.0 256.0 891.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter -> sky_engine v0.0.0</title>
 <g>
-  <path d="M 280.0 131.0 H 253.0 Q 247.0 131.0 247.0 137.0 V 874.0 Q 247.0 880.0 253.0 880.0 H 460.0" class="edgeVertical"/>
+  <path d="M 280.0 137.0 H 253.0 Q 247.0 137.0 247.0 143.0 V 1101.0 Q 247.0 1107.0 253.0 1107.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter -> vector_math v2.2.0</title>
 <g>
-  <path d="M 920.0 197.0 H 932.0 Q 938.0 197.0 938.0 203.0 V 354.0 Q 938.0 360.0 932.0 360.0 H 740.0" class="edgeVertical"/>
+  <path d="M 920.0 215.0 H 932.0 Q 938.0 215.0 938.0 221.0 V 399.0 Q 938.0 405.0 932.0 405.0 H 740.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter_test -> clock v1.1.2</title>
 <g>
-  <path d="M 920.0 197.0 H 935.0 Q 941.0 197.0 941.0 203.0 V 394.0 Q 941.0 400.0 935.0 400.0 H 740.0" class="edgeVertical"/>
+  <path d="M 920.0 215.0 H 935.0 Q 941.0 215.0 941.0 221.0 V 453.0 Q 941.0 459.0 935.0 459.0 H 740.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter_test -> collection v1.19.1</title>
 <g>
-  <path d="M 920.0 197.0 H 938.0 Q 944.0 197.0 944.0 203.0 V 434.0 Q 944.0 440.0 938.0 440.0 H 740.0" class="edgeVertical"/>
+  <path d="M 920.0 215.0 H 938.0 Q 944.0 215.0 944.0 221.0 V 507.0 Q 944.0 513.0 938.0 513.0 H 740.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter_test -> fake_async v1.3.3</title>
 <g>
-  <path d="M 920.0 197.0 H 941.0 Q 947.0 197.0 947.0 203.0 V 474.0 Q 947.0 480.0 941.0 480.0 H 740.0" class="edgeVertical"/>
+  <path d="M 920.0 215.0 H 941.0 Q 947.0 215.0 947.0 221.0 V 561.0 Q 947.0 567.0 941.0 567.0 H 740.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter_test -> leak_tracker_flutter_testing v3.0.10</title>
 <g>
-  <path d="M 920.0 197.0 H 944.0 Q 950.0 197.0 950.0 203.0 V 554.0 Q 950.0 560.0 944.0 560.0 H 740.0" class="edgeVertical"/>
+  <path d="M 920.0 215.0 H 944.0 Q 950.0 215.0 950.0 221.0 V 669.0 Q 950.0 675.0 944.0 675.0 H 740.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter_test -> matcher v0.12.19</title>
 <g>
-  <path d="M 920.0 131.0 H 947.0 Q 953.0 131.0 953.0 137.0 V 514.0 Q 953.0 520.0 947.0 520.0 H 740.0" class="edgeVertical"/>
+  <path d="M 920.0 137.0 H 947.0 Q 953.0 137.0 953.0 143.0 V 615.0 Q 953.0 621.0 947.0 621.0 H 740.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter_lints -> lints v3.0.0</title>
 <g>
-  <path d="M 920.0 197.0 H 950.0 Q 956.0 197.0 956.0 203.0 V 634.0 Q 956.0 640.0 950.0 640.0 H 740.0" class="edgeVertical"/>
+  <path d="M 920.0 215.0 H 950.0 Q 956.0 215.0 956.0 221.0 V 777.0 Q 956.0 783.0 950.0 783.0 H 740.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter_test -> meta v1.18.0</title>
 <g>
-  <path d="M 920.0 197.0 H 953.0 Q 959.0 197.0 959.0 203.0 V 674.0 Q 959.0 680.0 953.0 680.0 H 740.0" class="edgeVertical"/>
+  <path d="M 920.0 215.0 H 953.0 Q 959.0 215.0 959.0 221.0 V 831.0 Q 959.0 837.0 953.0 837.0 H 740.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter_test -> path v1.9.1</title>
 <g>
-  <path d="M 920.0 197.0 H 956.0 Q 962.0 197.0 962.0 203.0 V 754.0 Q 962.0 760.0 956.0 760.0 H 740.0" class="edgeVertical"/>
+  <path d="M 920.0 215.0 H 956.0 Q 962.0 215.0 962.0 221.0 V 939.0 Q 962.0 945.0 956.0 945.0 H 740.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter_test -> stack_trace v1.12.1</title>
 <g>
-  <path d="M 920.0 197.0 H 959.0 Q 965.0 197.0 965.0 203.0 V 794.0 Q 965.0 800.0 959.0 800.0 H 740.0" class="edgeVertical"/>
+  <path d="M 920.0 215.0 H 959.0 Q 965.0 215.0 965.0 221.0 V 993.0 Q 965.0 999.0 959.0 999.0 H 740.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter_test -> stream_channel v2.1.4</title>
 <g>
-  <path d="M 920.0 197.0 H 962.0 Q 968.0 197.0 968.0 203.0 V 834.0 Q 968.0 840.0 962.0 840.0 H 740.0" class="edgeVertical"/>
+  <path d="M 920.0 215.0 H 962.0 Q 968.0 215.0 968.0 221.0 V 1047.0 Q 968.0 1053.0 962.0 1053.0 H 740.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter_test -> test_api v0.7.11</title>
 <g>
-  <path d="M 920.0 197.0 H 965.0 Q 971.0 197.0 971.0 203.0 V 874.0 Q 971.0 880.0 965.0 880.0 H 740.0" class="edgeVertical"/>
+  <path d="M 920.0 215.0 H 965.0 Q 971.0 215.0 971.0 221.0 V 1101.0 Q 971.0 1107.0 965.0 1107.0 H 740.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>flutter_test -> vector_math v2.2.0</title>
 <g>
-  <path d="M 740.0 840.0 H 752.0 Q 758.0 840.0 758.0 846.0 V 988.0 Q 758.0 994.0 752.0 994.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 1053.0 H 752.0 Q 758.0 1053.0 758.0 1059.0 V 1229.0 Q 758.0 1235.0 752.0 1235.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>test_api -> async v2.13.1</title>
 <g>
-  <path d="M 740.0 800.0 H 755.0 Q 761.0 800.0 761.0 806.0 V 988.0 Q 761.0 994.0 755.0 994.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 999.0 H 755.0 Q 761.0 999.0 761.0 1005.0 V 1229.0 Q 761.0 1235.0 755.0 1235.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>stream_channel -> async v2.13.1</title>
 <g>
-  <path d="M 740.0 840.0 H 758.0 Q 764.0 840.0 764.0 846.0 V 1028.0 Q 764.0 1034.0 758.0 1034.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 1053.0 H 758.0 Q 764.0 1053.0 764.0 1059.0 V 1283.0 Q 764.0 1289.0 758.0 1289.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>test_api -> boolean_selector v2.1.2</title>
 <g>
-  <path d="M 740.0 840.0 H 761.0 Q 767.0 840.0 767.0 846.0 V 1148.0 Q 767.0 1154.0 761.0 1154.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 1053.0 H 761.0 Q 767.0 1053.0 767.0 1059.0 V 1445.0 Q 767.0 1451.0 761.0 1451.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>test_api -> source_span v1.10.2</title>
 <g>
-  <path d="M 740.0 840.0 H 764.0 Q 770.0 840.0 770.0 846.0 V 1188.0 Q 770.0 1194.0 764.0 1194.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 1053.0 H 764.0 Q 770.0 1053.0 770.0 1059.0 V 1499.0 Q 770.0 1505.0 764.0 1505.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>test_api -> string_scanner v1.4.1</title>
 <g>
-  <path d="M 740.0 840.0 H 767.0 Q 773.0 840.0 773.0 846.0 V 1228.0 Q 773.0 1234.0 767.0 1234.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 1053.0 H 767.0 Q 773.0 1053.0 773.0 1059.0 V 1553.0 Q 773.0 1559.0 767.0 1559.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>test_api -> term_glyph v1.2.2</title>
 <g>
-  <path d="M 740.0 560.0 H 770.0 Q 776.0 560.0 776.0 566.0 V 988.0 Q 776.0 994.0 770.0 994.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 675.0 H 770.0 Q 776.0 675.0 776.0 681.0 V 1229.0 Q 776.0 1235.0 770.0 1235.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>matcher -> async v2.13.1</title>
 <g>
-  <path d="M 740.0 480.0 H 773.0 Q 779.0 480.0 779.0 486.0 V 1068.0 Q 779.0 1074.0 773.0 1074.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 567.0 H 773.0 Q 779.0 567.0 779.0 573.0 V 1337.0 Q 779.0 1343.0 773.0 1343.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>leak_tracker_flutter_testing -> leak_tracker v11.0.2</title>
 <g>
-  <path d="M 740.0 480.0 H 776.0 Q 782.0 480.0 782.0 486.0 V 1108.0 Q 782.0 1114.0 776.0 1114.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 567.0 H 776.0 Q 782.0 567.0 782.0 573.0 V 1391.0 Q 782.0 1397.0 776.0 1397.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>leak_tracker_flutter_testing -> leak_tracker_testing v3.0.2</title>
 <g>
-  <path d="M 740.0 560.0 H 779.0 Q 785.0 560.0 785.0 566.0 V 1228.0 Q 785.0 1234.0 779.0 1234.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 675.0 H 779.0 Q 785.0 675.0 785.0 681.0 V 1553.0 Q 785.0 1559.0 779.0 1559.0 H 460.0" class="edgeVertical"/>
   <title> ▶ </title>
 </g>
 <title>matcher -> term_glyph v1.2.2</title>
-<rect x="280.0" y="108.0" width="200.0" height="46.0" rx="8.0" ry="8.0" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1"/>
+<rect x="280.0" y="108.0" width="200.0" height="58.0" rx="8.0" ry="8.0" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="366.0" y="148.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="380.0" y="154.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
 <text x="380.0" y="128.0" text-anchor="middle" fill="#0f172a" font-size="13.0">flutter</text>
 <text x="380.0" y="141.0" text-anchor="middle" fill="#334155" font-size="10.0">v0.0.0</text>
 <g class="badge outgoingBadge">
-  <path d="M 274.0,131.0 L 286.0,124.0 Q 289.0,124.0 289.0,127.0 L 289.0,135.0 Q 289.0,138.0 286.0,138.0 Z" fill="#10b981"/>
-  <text x="284.32" y="132.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">6</text></g>
-<rect x="720.0" y="108.0" width="200.0" height="46.0" rx="8.0" ry="8.0" fill="#dcfce7" stroke="#166534" stroke-width="1"/>
+  <path d="M 274.0,137.0 L 286.0,130.0 Q 289.0,130.0 289.0,133.0 L 289.0,141.0 Q 289.0,144.0 286.0,144.0 Z" fill="#10b981"/>
+  <text x="284.32" y="138.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">6</text></g>
+<rect x="720.0" y="108.0" width="200.0" height="58.0" rx="8.0" ry="8.0" fill="#dcfce7" stroke="#166534" stroke-width="1"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="806.0" y="148.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="820.0" y="154.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
 <text x="820.0" y="128.0" text-anchor="middle" fill="#0f172a" font-size="13.0">flutter_lints</text>
 <text x="820.0" y="141.0" text-anchor="middle" fill="#334155" font-size="10.0">v3.0.2</text>
 <g class="badge outgoingBadge">
-  <path d="M 926.0,131.0 L 914.0,124.0 Q 911.0,124.0 911.0,127.0 L 911.0,135.0 Q 911.0,138.0 914.0,138.0 Z" fill="#10b981"/>
-  <text x="915.68" y="132.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="720.0" y="174.0" width="200.0" height="46.0" rx="8.0" ry="8.0" fill="#dcfce7" stroke="#166534" stroke-width="1"/>
-<text x="820.0" y="194.0" text-anchor="middle" fill="#0f172a" font-size="13.0">flutter_test</text>
-<text x="820.0" y="207.0" text-anchor="middle" fill="#334155" font-size="10.0">v0.0.0</text>
+  <path d="M 926.0,137.0 L 914.0,130.0 Q 911.0,130.0 911.0,133.0 L 911.0,141.0 Q 911.0,144.0 914.0,144.0 Z" fill="#10b981"/>
+  <text x="915.68" y="138.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="720.0" y="186.0" width="200.0" height="58.0" rx="8.0" ry="8.0" fill="#dcfce7" stroke="#166534" stroke-width="1"/>
+<text x="820.0" y="206.0" text-anchor="middle" fill="#0f172a" font-size="13.0">flutter_test</text>
+<text x="820.0" y="219.0" text-anchor="middle" fill="#334155" font-size="10.0">v0.0.0</text>
 <g class="badge outgoingBadge">
-  <path d="M 928.0,197.0 L 912.0,189.4 Q 909.0,189.4 909.0,192.4 L 909.0,201.6 Q 909.0,204.6 912.0,204.6 Z" fill="#10b981"/>
-  <text x="914.72" y="198.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold" textLength="10.120000000000001" lengthAdjust="spacingAndGlyphs">11</text></g>
-<rect x="460.0" y="306.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="324.0" text-anchor="start" fill="#0f172a" font-size="12.0">characters</text>
-<text x="732.0" y="324.0" text-anchor="end" fill="#334155" font-size="12.0">^1.4.1</text>
+  <path d="M 928.0,215.0 L 912.0,207.4 Q 909.0,207.4 909.0,210.4 L 909.0,219.6 Q 909.0,222.6 912.0,222.6 Z" fill="#10b981"/>
+  <text x="914.72" y="216.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold" textLength="10.120000000000001" lengthAdjust="spacingAndGlyphs">11</text></g>
+<rect x="460.0" y="330.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="354.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="360.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="348.0" text-anchor="start" fill="#0f172a" font-size="12.0">characters</text>
+<text x="732.0" y="348.0" text-anchor="end" fill="#334155" font-size="12.0">^1.4.1</text>
 <g class="badge incomingBadge">
-  <path d="M 466.0,320.0 L 454.0,313.0 Q 451.0,313.0 451.0,316.0 L 451.0,324.0 Q 451.0,327.0 454.0,327.0 Z" fill="#3b82f6"/>
-  <text x="455.68" y="321.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="346.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="364.0" text-anchor="start" fill="#0f172a" font-size="12.0">clock</text>
-<text x="732.0" y="364.0" text-anchor="end" fill="#334155" font-size="12.0">^1.1.2</text>
+  <path d="M 466.0,351.0 L 454.0,344.0 Q 451.0,344.0 451.0,347.0 L 451.0,355.0 Q 451.0,358.0 454.0,358.0 Z" fill="#3b82f6"/>
+  <text x="455.68" y="352.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="384.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="408.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="414.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="402.0" text-anchor="start" fill="#0f172a" font-size="12.0">clock</text>
+<text x="732.0" y="402.0" text-anchor="end" fill="#334155" font-size="12.0">^1.1.2</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,360.0 L 746.0,353.0 Q 749.0,353.0 749.0,356.0 L 749.0,364.0 Q 749.0,367.0 746.0,367.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="361.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="386.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="404.0" text-anchor="start" fill="#0f172a" font-size="12.0">collection</text>
-<text x="732.0" y="404.0" text-anchor="end" fill="#334155" font-size="12.0">^1.19.1</text>
+  <path d="M 734.0,405.0 L 746.0,398.0 Q 749.0,398.0 749.0,401.0 L 749.0,409.0 Q 749.0,412.0 746.0,412.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="406.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="438.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="462.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="468.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="456.0" text-anchor="start" fill="#0f172a" font-size="12.0">collection</text>
+<text x="732.0" y="456.0" text-anchor="end" fill="#334155" font-size="12.0">^1.19.1</text>
 <g class="badge incomingBadge">
-  <path d="M 466.0,400.0 L 454.0,393.0 Q 451.0,393.0 451.0,396.0 L 451.0,404.0 Q 451.0,407.0 454.0,407.0 Z" fill="#3b82f6"/>
-  <text x="455.68" y="401.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+  <path d="M 466.0,459.0 L 454.0,452.0 Q 451.0,452.0 451.0,455.0 L 451.0,463.0 Q 451.0,466.0 454.0,466.0 Z" fill="#3b82f6"/>
+  <text x="455.68" y="460.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
 <g class="badge incomingBadge">
-  <path d="M 734.0,400.0 L 746.0,393.0 Q 749.0,393.0 749.0,396.0 L 749.0,404.0 Q 749.0,407.0 746.0,407.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="401.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="426.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="444.0" text-anchor="start" fill="#0f172a" font-size="12.0">fake_async</text>
-<text x="732.0" y="444.0" text-anchor="end" fill="#334155" font-size="12.0">^1.3.3</text>
+  <path d="M 734.0,459.0 L 746.0,452.0 Q 749.0,452.0 749.0,455.0 L 749.0,463.0 Q 749.0,466.0 746.0,466.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="460.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="492.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="516.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="522.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="510.0" text-anchor="start" fill="#0f172a" font-size="12.0">fake_async</text>
+<text x="732.0" y="510.0" text-anchor="end" fill="#334155" font-size="12.0">^1.3.3</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,440.0 L 746.0,433.0 Q 749.0,433.0 749.0,436.0 L 749.0,444.0 Q 749.0,447.0 746.0,447.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="441.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="466.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="484.0" text-anchor="start" fill="#0f172a" font-size="12.0">leak_tracker_flutter_testing</text>
-<text x="732.0" y="484.0" text-anchor="end" fill="#334155" font-size="12.0">^3.0.10</text>
+  <path d="M 734.0,513.0 L 746.0,506.0 Q 749.0,506.0 749.0,509.0 L 749.0,517.0 Q 749.0,520.0 746.0,520.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="514.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="546.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<text x="468.0" y="564.0" text-anchor="start" fill="#0f172a" font-size="12.0">leak_tracker_flutter_testing</text>
+<text x="732.0" y="564.0" text-anchor="end" fill="#334155" font-size="12.0">^3.0.10</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,480.0 L 746.0,473.0 Q 749.0,473.0 749.0,476.0 L 749.0,484.0 Q 749.0,487.0 746.0,487.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="481.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="506.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="524.0" text-anchor="start" fill="#0f172a" font-size="12.0">lints</text>
-<text x="732.0" y="524.0" text-anchor="end" fill="#334155" font-size="12.0">^3.0.0</text>
+  <path d="M 734.0,567.0 L 746.0,560.0 Q 749.0,560.0 749.0,563.0 L 749.0,571.0 Q 749.0,574.0 746.0,574.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="568.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="600.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="624.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="630.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="618.0" text-anchor="start" fill="#0f172a" font-size="12.0">lints</text>
+<text x="732.0" y="618.0" text-anchor="end" fill="#334155" font-size="12.0">^3.0.0</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,520.0 L 746.0,513.0 Q 749.0,513.0 749.0,516.0 L 749.0,524.0 Q 749.0,527.0 746.0,527.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="521.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="546.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="564.0" text-anchor="start" fill="#0f172a" font-size="12.0">matcher</text>
-<text x="732.0" y="564.0" text-anchor="end" fill="#334155" font-size="12.0">^0.12.19</text>
+  <path d="M 734.0,621.0 L 746.0,614.0 Q 749.0,614.0 749.0,617.0 L 749.0,625.0 Q 749.0,628.0 746.0,628.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="622.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="654.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="678.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="684.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="672.0" text-anchor="start" fill="#0f172a" font-size="12.0">matcher</text>
+<text x="732.0" y="672.0" text-anchor="end" fill="#334155" font-size="12.0">^0.12.19</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,560.0 L 746.0,553.0 Q 749.0,553.0 749.0,556.0 L 749.0,564.0 Q 749.0,567.0 746.0,567.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="561.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="586.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="604.0" text-anchor="start" fill="#0f172a" font-size="12.0">material_color_utilities</text>
-<text x="732.0" y="604.0" text-anchor="end" fill="#334155" font-size="12.0">^0.13.0</text>
+  <path d="M 734.0,675.0 L 746.0,668.0 Q 749.0,668.0 749.0,671.0 L 749.0,679.0 Q 749.0,682.0 746.0,682.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="676.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="708.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="732.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="738.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="726.0" text-anchor="start" fill="#0f172a" font-size="12.0">material_color_utilities</text>
+<text x="732.0" y="726.0" text-anchor="end" fill="#334155" font-size="12.0">^0.13.0</text>
 <g class="badge incomingBadge">
-  <path d="M 466.0,600.0 L 454.0,593.0 Q 451.0,593.0 451.0,596.0 L 451.0,604.0 Q 451.0,607.0 454.0,607.0 Z" fill="#3b82f6"/>
-  <text x="455.68" y="601.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="626.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="644.0" text-anchor="start" fill="#0f172a" font-size="12.0">meta</text>
-<text x="732.0" y="644.0" text-anchor="end" fill="#334155" font-size="12.0">^1.18.0</text>
+  <path d="M 466.0,729.0 L 454.0,722.0 Q 451.0,722.0 451.0,725.0 L 451.0,733.0 Q 451.0,736.0 454.0,736.0 Z" fill="#3b82f6"/>
+  <text x="455.68" y="730.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="762.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="786.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="792.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="780.0" text-anchor="start" fill="#0f172a" font-size="12.0">meta</text>
+<text x="732.0" y="780.0" text-anchor="end" fill="#334155" font-size="12.0">^1.18.0</text>
 <g class="badge incomingBadge">
-  <path d="M 466.0,640.0 L 454.0,633.0 Q 451.0,633.0 451.0,636.0 L 451.0,644.0 Q 451.0,647.0 454.0,647.0 Z" fill="#3b82f6"/>
-  <text x="455.68" y="641.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+  <path d="M 466.0,783.0 L 454.0,776.0 Q 451.0,776.0 451.0,779.0 L 451.0,787.0 Q 451.0,790.0 454.0,790.0 Z" fill="#3b82f6"/>
+  <text x="455.68" y="784.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
 <g class="badge incomingBadge">
-  <path d="M 734.0,640.0 L 746.0,633.0 Q 749.0,633.0 749.0,636.0 L 749.0,644.0 Q 749.0,647.0 746.0,647.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="641.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="666.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="684.0" text-anchor="start" fill="#0f172a" font-size="12.0">path</text>
-<text x="732.0" y="684.0" text-anchor="end" fill="#334155" font-size="12.0">^1.9.1</text>
+  <path d="M 734.0,783.0 L 746.0,776.0 Q 749.0,776.0 749.0,779.0 L 749.0,787.0 Q 749.0,790.0 746.0,790.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="784.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="816.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="840.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="846.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="834.0" text-anchor="start" fill="#0f172a" font-size="12.0">path</text>
+<text x="732.0" y="834.0" text-anchor="end" fill="#334155" font-size="12.0">^1.9.1</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,680.0 L 746.0,673.0 Q 749.0,673.0 749.0,676.0 L 749.0,684.0 Q 749.0,687.0 746.0,687.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="681.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="706.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="724.0" text-anchor="start" fill="#0f172a" font-size="12.0">sky_engine</text>
-<text x="732.0" y="724.0" text-anchor="end" fill="#334155" font-size="12.0">^0.0.0</text>
+  <path d="M 734.0,837.0 L 746.0,830.0 Q 749.0,830.0 749.0,833.0 L 749.0,841.0 Q 749.0,844.0 746.0,844.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="838.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="870.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="894.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="900.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="888.0" text-anchor="start" fill="#0f172a" font-size="12.0">sky_engine</text>
+<text x="732.0" y="888.0" text-anchor="end" fill="#334155" font-size="12.0">^0.0.0</text>
 <g class="badge incomingBadge">
-  <path d="M 466.0,720.0 L 454.0,713.0 Q 451.0,713.0 451.0,716.0 L 451.0,724.0 Q 451.0,727.0 454.0,727.0 Z" fill="#3b82f6"/>
-  <text x="455.68" y="721.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="746.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="764.0" text-anchor="start" fill="#0f172a" font-size="12.0">stack_trace</text>
-<text x="732.0" y="764.0" text-anchor="end" fill="#334155" font-size="12.0">^1.12.1</text>
+  <path d="M 466.0,891.0 L 454.0,884.0 Q 451.0,884.0 451.0,887.0 L 451.0,895.0 Q 451.0,898.0 454.0,898.0 Z" fill="#3b82f6"/>
+  <text x="455.68" y="892.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="924.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="948.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="954.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="942.0" text-anchor="start" fill="#0f172a" font-size="12.0">stack_trace</text>
+<text x="732.0" y="942.0" text-anchor="end" fill="#334155" font-size="12.0">^1.12.1</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,760.0 L 746.0,753.0 Q 749.0,753.0 749.0,756.0 L 749.0,764.0 Q 749.0,767.0 746.0,767.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="761.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="786.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="804.0" text-anchor="start" fill="#0f172a" font-size="12.0">stream_channel</text>
-<text x="732.0" y="804.0" text-anchor="end" fill="#334155" font-size="12.0">^2.1.4</text>
+  <path d="M 734.0,945.0 L 746.0,938.0 Q 749.0,938.0 749.0,941.0 L 749.0,949.0 Q 749.0,952.0 746.0,952.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="946.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="978.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="1002.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1008.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="996.0" text-anchor="start" fill="#0f172a" font-size="12.0">stream_channel</text>
+<text x="732.0" y="996.0" text-anchor="end" fill="#334155" font-size="12.0">^2.1.4</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,800.0 L 746.0,793.0 Q 749.0,793.0 749.0,796.0 L 749.0,804.0 Q 749.0,807.0 746.0,807.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="801.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="826.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="844.0" text-anchor="start" fill="#0f172a" font-size="12.0">test_api</text>
-<text x="732.0" y="844.0" text-anchor="end" fill="#334155" font-size="12.0">^0.7.11</text>
+  <path d="M 734.0,999.0 L 746.0,992.0 Q 749.0,992.0 749.0,995.0 L 749.0,1003.0 Q 749.0,1006.0 746.0,1006.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="1000.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="1032.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="1056.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1062.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="1050.0" text-anchor="start" fill="#0f172a" font-size="12.0">test_api</text>
+<text x="732.0" y="1050.0" text-anchor="end" fill="#334155" font-size="12.0">^0.7.11</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,840.0 L 746.0,833.0 Q 749.0,833.0 749.0,836.0 L 749.0,844.0 Q 749.0,847.0 746.0,847.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="841.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="866.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="884.0" text-anchor="start" fill="#0f172a" font-size="12.0">vector_math</text>
-<text x="732.0" y="884.0" text-anchor="end" fill="#334155" font-size="12.0">^2.2.0</text>
+  <path d="M 734.0,1053.0 L 746.0,1046.0 Q 749.0,1046.0 749.0,1049.0 L 749.0,1057.0 Q 749.0,1060.0 746.0,1060.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="1054.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="1086.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="1110.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1116.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="1104.0" text-anchor="start" fill="#0f172a" font-size="12.0">vector_math</text>
+<text x="732.0" y="1104.0" text-anchor="end" fill="#334155" font-size="12.0">^2.2.0</text>
 <g class="badge incomingBadge">
-  <path d="M 466.0,880.0 L 454.0,873.0 Q 451.0,873.0 451.0,876.0 L 451.0,884.0 Q 451.0,887.0 454.0,887.0 Z" fill="#3b82f6"/>
-  <text x="455.68" y="881.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+  <path d="M 466.0,1107.0 L 454.0,1100.0 Q 451.0,1100.0 451.0,1103.0 L 451.0,1111.0 Q 451.0,1114.0 454.0,1114.0 Z" fill="#3b82f6"/>
+  <text x="455.68" y="1108.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
 <g class="badge incomingBadge">
-  <path d="M 734.0,880.0 L 746.0,873.0 Q 749.0,873.0 749.0,876.0 L 749.0,884.0 Q 749.0,887.0 746.0,887.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="881.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="980.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="998.0" text-anchor="start" fill="#0f172a" font-size="12.0">async</text>
-<text x="732.0" y="998.0" text-anchor="end" fill="#334155" font-size="12.0">^2.13.1</text>
+  <path d="M 734.0,1107.0 L 746.0,1100.0 Q 749.0,1100.0 749.0,1103.0 L 749.0,1111.0 Q 749.0,1114.0 746.0,1114.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="1108.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="1214.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="1238.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1244.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="1232.0" text-anchor="start" fill="#0f172a" font-size="12.0">async</text>
+<text x="732.0" y="1232.0" text-anchor="end" fill="#334155" font-size="12.0">^2.13.1</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,994.0 L 746.0,987.0 Q 749.0,987.0 749.0,990.0 L 749.0,998.0 Q 749.0,1001.0 746.0,1001.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="995.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text></g>
-<rect x="460.0" y="1020.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="1038.0" text-anchor="start" fill="#0f172a" font-size="12.0">boolean_selector</text>
-<text x="732.0" y="1038.0" text-anchor="end" fill="#334155" font-size="12.0">^2.1.2</text>
+  <path d="M 734.0,1235.0 L 746.0,1228.0 Q 749.0,1228.0 749.0,1231.0 L 749.0,1239.0 Q 749.0,1242.0 746.0,1242.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="1236.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text></g>
+<rect x="460.0" y="1268.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="1292.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1298.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="1286.0" text-anchor="start" fill="#0f172a" font-size="12.0">boolean_selector</text>
+<text x="732.0" y="1286.0" text-anchor="end" fill="#334155" font-size="12.0">^2.1.2</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,1034.0 L 746.0,1027.0 Q 749.0,1027.0 749.0,1030.0 L 749.0,1038.0 Q 749.0,1041.0 746.0,1041.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="1035.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="1060.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="1078.0" text-anchor="start" fill="#0f172a" font-size="12.0">leak_tracker</text>
-<text x="732.0" y="1078.0" text-anchor="end" fill="#334155" font-size="12.0">^11.0.2</text>
+  <path d="M 734.0,1289.0 L 746.0,1282.0 Q 749.0,1282.0 749.0,1285.0 L 749.0,1293.0 Q 749.0,1296.0 746.0,1296.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="1290.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="1322.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="1346.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1352.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="1340.0" text-anchor="start" fill="#0f172a" font-size="12.0">leak_tracker</text>
+<text x="732.0" y="1340.0" text-anchor="end" fill="#334155" font-size="12.0">^11.0.2</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,1074.0 L 746.0,1067.0 Q 749.0,1067.0 749.0,1070.0 L 749.0,1078.0 Q 749.0,1081.0 746.0,1081.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="1075.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="1100.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="1118.0" text-anchor="start" fill="#0f172a" font-size="12.0">leak_tracker_testing</text>
-<text x="732.0" y="1118.0" text-anchor="end" fill="#334155" font-size="12.0">^3.0.2</text>
+  <path d="M 734.0,1343.0 L 746.0,1336.0 Q 749.0,1336.0 749.0,1339.0 L 749.0,1347.0 Q 749.0,1350.0 746.0,1350.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="1344.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="1376.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="1400.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1406.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="1394.0" text-anchor="start" fill="#0f172a" font-size="12.0">leak_tracker_testing</text>
+<text x="732.0" y="1394.0" text-anchor="end" fill="#334155" font-size="12.0">^3.0.2</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,1114.0 L 746.0,1107.0 Q 749.0,1107.0 749.0,1110.0 L 749.0,1118.0 Q 749.0,1121.0 746.0,1121.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="1115.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="1140.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="1158.0" text-anchor="start" fill="#0f172a" font-size="12.0">source_span</text>
-<text x="732.0" y="1158.0" text-anchor="end" fill="#334155" font-size="12.0">^1.10.2</text>
+  <path d="M 734.0,1397.0 L 746.0,1390.0 Q 749.0,1390.0 749.0,1393.0 L 749.0,1401.0 Q 749.0,1404.0 746.0,1404.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="1398.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="1430.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="1454.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1460.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="1448.0" text-anchor="start" fill="#0f172a" font-size="12.0">source_span</text>
+<text x="732.0" y="1448.0" text-anchor="end" fill="#334155" font-size="12.0">^1.10.2</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,1154.0 L 746.0,1147.0 Q 749.0,1147.0 749.0,1150.0 L 749.0,1158.0 Q 749.0,1161.0 746.0,1161.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="1155.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="1180.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="1198.0" text-anchor="start" fill="#0f172a" font-size="12.0">string_scanner</text>
-<text x="732.0" y="1198.0" text-anchor="end" fill="#334155" font-size="12.0">^1.4.1</text>
+  <path d="M 734.0,1451.0 L 746.0,1444.0 Q 749.0,1444.0 749.0,1447.0 L 749.0,1455.0 Q 749.0,1458.0 746.0,1458.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="1452.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="1484.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="1508.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1514.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="1502.0" text-anchor="start" fill="#0f172a" font-size="12.0">string_scanner</text>
+<text x="732.0" y="1502.0" text-anchor="end" fill="#334155" font-size="12.0">^1.4.1</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,1194.0 L 746.0,1187.0 Q 749.0,1187.0 749.0,1190.0 L 749.0,1198.0 Q 749.0,1201.0 746.0,1201.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="1195.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
-<rect x="460.0" y="1220.0" width="280.0" height="28.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<text x="468.0" y="1238.0" text-anchor="start" fill="#0f172a" font-size="12.0">term_glyph</text>
-<text x="732.0" y="1238.0" text-anchor="end" fill="#334155" font-size="12.0">^1.2.2</text>
+  <path d="M 734.0,1505.0 L 746.0,1498.0 Q 749.0,1498.0 749.0,1501.0 L 749.0,1509.0 Q 749.0,1512.0 746.0,1512.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="1506.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text></g>
+<rect x="460.0" y="1538.0" width="280.0" height="42.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="platformBadge platformBadge--dart"><title>Dart</title><rect x="586.0" y="1562.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1568.5" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="7.0" font-weight="700">Dart</text></g>
+<text x="468.0" y="1556.0" text-anchor="start" fill="#0f172a" font-size="12.0">term_glyph</text>
+<text x="732.0" y="1556.0" text-anchor="end" fill="#334155" font-size="12.0">^1.2.2</text>
 <g class="badge incomingBadge">
-  <path d="M 734.0,1234.0 L 746.0,1227.0 Q 749.0,1227.0 749.0,1230.0 L 749.0,1238.0 Q 749.0,1241.0 746.0,1241.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="1235.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text></g>
+  <path d="M 734.0,1559.0 L 746.0,1552.0 Q 749.0,1552.0 749.0,1555.0 L 749.0,1563.0 Q 749.0,1566.0 746.0,1566.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="1560.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text></g>
 </svg>
