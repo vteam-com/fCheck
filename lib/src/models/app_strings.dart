@@ -69,6 +69,8 @@ class AppStrings {
   static const String platforms = 'Platforms';
   static const String android = 'Android';
   static const String ios = 'iOS';
+  static const String legacyIosCocoaPods =
+      'Orange highlight: this package declares native iOS support but does not expose a Swift Package Manager manifest, so it still falls back to legacy CocoaPods.';
   static const String macos = 'MacOS';
   static const String windows = 'Windows';
   static const String linux = 'Linux';

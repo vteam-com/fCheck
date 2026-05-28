@@ -15,6 +15,7 @@ import 'package:fcheck/src/exports/svg/export_folders/export_svg_folders.dart';
 import 'package:fcheck/src/exports/svg/export_loc/export_svg_code_size.dart';
 import 'package:fcheck/src/exports/svg/export_packages/export_svg_package_dependencies.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
+import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:fcheck/src/exports/externals/graph_format_utils.dart';
 import 'package:path/path.dart' as p;
@@ -39,20 +40,77 @@ void main() {
     );
   }
 
-  ({double x, double y, double width, double height}) platformBadgeRect(
-    String svg,
-    String cssClass,
-  ) {
-    final match = RegExp(
-      '<g class="platformBadge platformBadge--$cssClass"><title>[^<]+</title><rect x="([^"]+)" y="([^"]+)" width="([^"]+)" height="([^"]+)"',
+  ({
+    double x,
+    double y,
+    double width,
+    double height,
+    String fill,
+    String stroke,
+    String element,
+    String? pathData,
+  })
+  platformBadgeRect(String svg, String cssClass) {
+    final rectMatch = RegExp(
+      '<g class="platformBadge platformBadge--$cssClass"><title>[^<]+</title><rect x="([^"]+)" y="([^"]+)" width="([^"]+)" height="([^"]+)" rx="[^"]+" ry="[^"]+" fill="([^"]+)" stroke="([^"]+)"',
     ).firstMatch(svg);
-    expect(match, isNotNull);
+    if (rectMatch != null) {
+      return (
+        x: double.parse(rectMatch.group(1)!),
+        y: double.parse(rectMatch.group(2)!),
+        width: double.parse(rectMatch.group(3)!),
+        height: double.parse(rectMatch.group(4)!),
+        fill: rectMatch.group(5)!,
+        stroke: rectMatch.group(6)!,
+        element: 'rect',
+        pathData: null,
+      );
+    }
+
+    final pathMatch = RegExp(
+      '<g class="platformBadge platformBadge--$cssClass"><title>[^<]+</title><path d="([^"]+)" fill="([^"]+)" stroke="([^"]+)"',
+    ).firstMatch(svg);
+    expect(pathMatch, isNotNull);
+    final pathData = pathMatch!.group(1)!;
+    final coordinates = RegExp(
+      r'(-?[0-9]+(?:\.[0-9]+)?) (-?[0-9]+(?:\.[0-9]+)?)',
+    ).allMatches(pathData);
+    final xs = coordinates
+        .map((match) => double.parse(match.group(1)!))
+        .toList(growable: false);
+    final ys = coordinates
+        .map((match) => double.parse(match.group(2)!))
+        .toList(growable: false);
+    expect(xs, isNotEmpty);
+    expect(ys, isNotEmpty);
+    final minX = xs.reduce(min);
+    final maxX = xs.reduce(max);
+    final minY = ys.reduce(min);
+    final maxY = ys.reduce(max);
     return (
-      x: double.parse(match!.group(1)!),
-      y: double.parse(match.group(2)!),
-      width: double.parse(match.group(3)!),
-      height: double.parse(match.group(4)!),
+      x: minX,
+      y: minY,
+      width: maxX - minX,
+      height: maxY - minY,
+      fill: pathMatch.group(2)!,
+      stroke: pathMatch.group(3)!,
+      element: 'path',
+      pathData: pathData,
     );
+  }
+
+  List<String> platformBadgeLabels(String svg) {
+    final matches = RegExp(
+      '<g class="platformBadge platformBadge--[^"]+"><title>[^<]+</title><rect[^>]+/><text[^>]*>([^<]+)</text></g>',
+    ).allMatches(svg);
+    return matches.map((match) => match.group(1)!).toList(growable: false);
+  }
+
+  String legacyPackageNodeSnippet(String svg) {
+    final markerIndex = svg.indexOf('packageNode packageNode--legacyIos');
+    expect(markerIndex, isNonNegative);
+    final snippetEnd = min(svg.length, markerIndex + 1000);
+    return svg.substring(markerIndex, snippetEnd);
   }
 
   List<double> incomingBadgeTextPositions(String svg) {
@@ -62,6 +120,22 @@ void main() {
     return matches
         .map((match) => double.parse(match.group(1)!))
         .toList(growable: false);
+  }
+
+  double outgoingBadgeTextYByCount(String svg, int count) {
+    final matches = RegExp(
+      '<g class="badge outgoingBadge">\\s*<path d="[^"]*" fill="#10b981"/>\\s*<text x="[^"]+" y="([^"]+)"[^>]*>$count</text>',
+    ).allMatches(svg).toList(growable: false);
+    expect(matches, hasLength(1));
+    return double.parse(matches.single.group(1)!);
+  }
+
+  double edgeStartY(String svg, String title) {
+    final match = RegExp(
+      '<g>\\s*<path d="M [^ ]+ ([^ ]+) [^"]*" class="edgeVertical"/>\\s*<title>\\s*▶\\s*</title>\\s*</g>\\s*<title>${RegExp.escape(title)}</title>',
+    ).firstMatch(svg);
+    expect(match, isNotNull);
+    return double.parse(match!.group(1)!);
   }
 
   bool hasEdgeWithClass(String svg, String cssClass, String title) {
@@ -124,6 +198,24 @@ void main() {
       expect(svg, contains('collection'));
       expect(svg, contains('async'));
       expect(svg, contains('v4.1.2'));
+      expect(svg, contains('.packageLabelTitle {'));
+      expect(svg, contains('.packageLabelSection {'));
+      expect(svg, contains('.packageLabelDerivedSection {'));
+      expect(svg, contains('.packageLabelCaption {'));
+      expect(svg, contains('.packageLabelNodeName {'));
+      expect(svg, contains('.packageLabelNodeVersion {'));
+      expect(svg, contains('.packageLabelDerivedName {'));
+      expect(svg, contains('.packageLabelDerivedVersion {'));
+      expect(svg, contains('class="packageLabelTitle"'));
+      expect(svg, contains('class="packageLabelSection"'));
+      expect(svg, contains('class="packageLabelDerivedSection"'));
+      expect(svg, contains('class="packageLabelNodeName packageLabelCaption"'));
+      expect(svg, contains('class="packageLabelNodeVersion"'));
+      expect(
+        svg,
+        contains('class="packageLabelDerivedName packageLabelCaption"'),
+      );
+      expect(svg, contains('class="packageLabelDerivedVersion"'));
       expect(svg, contains('http -> http_parser v4.1.2'));
       expect(svg, contains('flutter_test -> async v2.13.1'));
     });
@@ -147,11 +239,16 @@ void main() {
             ],
           },
           platformSupportByPackage: <String, PackagePlatformSupport>{
-            'http': PackagePlatformSupport(isPureDart: true),
+            'http': PackagePlatformSupport(
+              isPureDart: true,
+              dartSdkConstraint: '>=3.3.0 <4.0.0',
+            ),
             'flutter_secure_storage': PackagePlatformSupport(
               supportsIos: true,
+              usesLegacyIosCocoaPods: true,
               supportsAndroid: true,
               supportsWeb: true,
+              flutterSdkConstraint: '>=3.22.0',
             ),
             'flutter_secure_storage_platform_interface': PackagePlatformSupport(
               supportsMacos: true,
@@ -168,10 +265,19 @@ void main() {
       expect(platformBadgeCount(svg, 'linux'), equals(1));
       expect(platformBadgeCount(svg, 'dart'), equals(1));
       expect(svg, contains('Browser'));
-      expect(svg, contains('>Dart</text>'));
+      expect(svg, contains('D:&gt;=3.3.0 &lt;4.0.0</text>'));
+      expect(svg, contains('Dart SDK &gt;=3.3.0 &lt;4.0.0'));
+      expect(svg, contains('F:&gt;=3.22.0</text>'));
+      expect(svg, contains('.packageLabelMetadata {'));
+      expect(svg, contains('.packageLabelPlatformBadge {'));
+      expect(svg, contains('class="packageLabelMetadata"'));
+      expect(svg, contains('class="packageLabelPlatformBadge"'));
+      expect(svg, isNot(contains('platformBadgeAlert')));
       expect(svg, isNot(contains('platformBadge--windows')));
 
       final flutterVersion = textPosition(svg, 'v9.2.4');
+      final flutterConstraint = textPosition(svg, 'F:&gt;=3.22.0');
+      final legacyNodeSnippet = legacyPackageNodeSnippet(svg);
       final iosBadge = platformBadgeRect(svg, 'ios');
       final androidBadge = platformBadgeRect(svg, 'android');
       final webBadge = platformBadgeRect(svg, 'web');
@@ -189,13 +295,79 @@ void main() {
           flutterBadgesLeft + ((flutterBadgesRight - flutterBadgesLeft) / 2);
       expect(flutterBadgesCenter, closeTo(flutterVersion.x, 0.1));
       expect(iosBadge.y, greaterThan(flutterVersion.y));
+      expect(
+        legacyNodeSnippet,
+        contains('<title>${AppStrings.legacyIosCocoaPods}</title>'),
+      );
+      expect(legacyNodeSnippet, contains('fill="url(#warningNodeGradient)"'));
+      expect(legacyNodeSnippet, contains('fill-opacity="0.68"'));
+      expect(legacyNodeSnippet, contains('stroke="gray"'));
+      expect(svg, contains('.packageLabelWarning {'));
+      expect(
+        legacyNodeSnippet,
+        contains('class="packageLabelMetadata packageLabelWarning"'),
+      );
+      expect(svg, contains('class="packageLabelNodeName packageLabelCaption"'));
+      expect(iosBadge.element, equals('path'));
+      expect(iosBadge.fill, equals('#e05545'));
+      expect(iosBadge.stroke, equals('#b91c1c'));
 
       final dartVersion = textPosition(svg, 'v1.2.3');
+      final dartConstraint = textPosition(svg, 'D:&gt;=3.3.0 &lt;4.0.0');
       final dartBadge = platformBadgeRect(svg, 'dart');
       final dartBadgeCenter = dartBadge.x + (dartBadge.width / 2);
       expect(dartBadgeCenter, closeTo(dartVersion.x, 0.1));
       expect(dartBadge.y, greaterThan(dartVersion.y));
+      expect(dartConstraint.y, greaterThan(dartBadge.y + dartBadge.height));
+      expect(flutterConstraint.y, greaterThan(iosBadge.y + iosBadge.height));
     });
+
+    test(
+      'render platform badges in requested order with purple Linux badge',
+      () {
+        final svg = exportSvgPackageDependencies(
+          const PackageDependencyGraphData(
+            projectName: 'demo_app',
+            version: 'unknown',
+            dependencies: <PackageDependencyNode>[
+              (name: 'all_platforms_plugin', version: '1.0.0'),
+            ],
+            devDependencies: <PackageDependencyNode>[],
+            platformSupportByPackage: <String, PackagePlatformSupport>{
+              'all_platforms_plugin': PackagePlatformSupport(
+                supportsAndroid: true,
+                supportsIos: true,
+                supportsLinux: true,
+                supportsMacos: true,
+                supportsWindows: true,
+                supportsWeb: true,
+              ),
+            },
+          ),
+        );
+
+        final badgeLabels = platformBadgeLabels(svg);
+        expect(
+          badgeLabels,
+          containsAllInOrder(<String>['A', 'I', 'L', 'M', 'W', 'B']),
+        );
+
+        final androidBadge = platformBadgeRect(svg, 'android');
+        final iosBadge = platformBadgeRect(svg, 'ios');
+        final linuxBadge = platformBadgeRect(svg, 'linux');
+        final macosBadge = platformBadgeRect(svg, 'macos');
+        final windowsBadge = platformBadgeRect(svg, 'windows');
+        final webBadge = platformBadgeRect(svg, 'web');
+
+        expect(androidBadge.x, lessThan(iosBadge.x));
+        expect(iosBadge.x, lessThan(linuxBadge.x));
+        expect(linuxBadge.x, lessThan(macosBadge.x));
+        expect(macosBadge.x, lessThan(windowsBadge.x));
+        expect(windowsBadge.x, lessThan(webBadge.x));
+        expect(linuxBadge.fill, equals('#7c3aed'));
+        expect(linuxBadge.stroke, equals('#6d28d9'));
+      },
+    );
 
     test('render package dependency SVG with transitive sections', () {
       final svg = exportSvgPackageDependencies(
@@ -273,6 +445,75 @@ void main() {
       expect(svg, contains('>2</text>'));
       expect(svg, contains('http_parser -> collection v1.19.1'));
       expect(svg, contains('source_span -> collection v1.19.1'));
+    });
+
+    test(
+      'render outgoing badges for derived packages with transitive edges',
+      () {
+        final svg = exportSvgPackageDependencies(
+          const PackageDependencyGraphData(
+            projectName: 'demo_app',
+            version: 'unknown',
+            dependencies: <PackageDependencyNode>[
+              (name: 'http', version: '1.2.3'),
+            ],
+            devDependencies: <PackageDependencyNode>[],
+            derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+              'http': <PackageDependencyNode>[
+                (name: 'http_parser', version: '4.1.2'),
+              ],
+            },
+            nestedDerivedDependenciesByPackage:
+                <String, List<PackageDependencyNode>>{
+                  'http_parser': <PackageDependencyNode>[
+                    (name: 'source_span', version: '1.10.1'),
+                  ],
+                },
+          ),
+        );
+
+        expect(badgeCount(svg, 'outgoingBadge'), equals(2));
+        expect(badgeCount(svg, 'incomingBadge'), equals(2));
+        expect(svg, contains('http_parser -> source_span v1.10.1'));
+      },
+    );
+
+    test('align derived transitive edges with the outgoing badge', () {
+      final svg = exportSvgPackageDependencies(
+        const PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: 'unknown',
+          dependencies: <PackageDependencyNode>[
+            (name: 'http', version: '1.2.3'),
+          ],
+          devDependencies: <PackageDependencyNode>[
+            (name: 'flutter_test', version: '0.0.0'),
+          ],
+          derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+            'http': <PackageDependencyNode>[
+              (name: 'collection', version: '1.19.1'),
+            ],
+            'flutter_test': <PackageDependencyNode>[
+              (name: 'collection', version: '1.19.1'),
+            ],
+          },
+          nestedDerivedDependenciesByPackage:
+              <String, List<PackageDependencyNode>>{
+                'collection': <PackageDependencyNode>[
+                  (name: 'meta', version: '1.16.0'),
+                  (name: 'path', version: '1.9.1'),
+                ],
+              },
+        ),
+      );
+
+      final outgoingBadgeTextY = outgoingBadgeTextYByCount(svg, 2);
+      final transitiveEdgeStartY = edgeStartY(
+        svg,
+        'collection -> meta v1.16.0',
+      );
+
+      expect(transitiveEdgeStartY, closeTo(outgoingBadgeTextY - 1, 0.001));
     });
 
     test('render transitive incoming badge on the right side', () {
@@ -425,6 +666,7 @@ version: 1.0.0
 dependencies:
   flutter_plugin: ^1.0.0
   pure_dart: ^1.0.0
+  swiftpm_plugin: ^1.0.0
 dev_dependencies:
   desktop_browser_plugin: ^1.0.0
 ''');
@@ -435,6 +677,8 @@ packages:
     version: "1.0.0"
   pure_dart:
     version: "1.1.0"
+  swiftpm_plugin:
+    version: "1.2.0"
   desktop_browser_plugin:
     version: "2.0.0"
 ''');
@@ -457,6 +701,12 @@ packages:
       "languageVersion": "3.0"
     },
     {
+      "name": "swiftpm_plugin",
+      "rootUri": "../packages/swiftpm_plugin/",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "desktop_browser_plugin",
       "rootUri": "../packages/desktop_browser_plugin/",
       "packageUri": "lib/",
@@ -472,6 +722,8 @@ packages:
       )..createSync(recursive: true);
       File(p.join(flutterPluginDir.path, 'pubspec.yaml')).writeAsStringSync('''
 name: flutter_plugin
+environment:
+  flutter: '>=3.22.0'
 flutter:
   plugin:
     platforms:
@@ -485,7 +737,27 @@ flutter:
         ..createSync(recursive: true);
       File(p.join(pureDartDir.path, 'pubspec.yaml')).writeAsStringSync('''
 name: pure_dart
+environment:
+  sdk: ^3.3.0
 ''');
+
+      final swiftPmPluginDir = Directory(
+        p.join(packagesDir.path, 'swiftpm_plugin'),
+      )..createSync(recursive: true);
+      File(p.join(swiftPmPluginDir.path, 'pubspec.yaml')).writeAsStringSync('''
+name: swiftpm_plugin
+flutter:
+  plugin:
+    platforms:
+      ios:
+        pluginClass: SwiftPmPlugin
+''');
+      final swiftPmManifestDir = Directory(
+        p.join(swiftPmPluginDir.path, 'darwin', 'swiftpm_plugin'),
+      )..createSync(recursive: true);
+      File(
+        p.join(swiftPmManifestDir.path, 'Package.swift'),
+      ).writeAsStringSync('// swift package manifest');
 
       final desktopBrowserPluginDir = Directory(
         p.join(packagesDir.path, 'desktop_browser_plugin'),
@@ -509,8 +781,31 @@ platforms:
         isTrue,
       );
       expect(
+        graphData
+            .platformSupportByPackage['flutter_plugin']
+            ?.flutterSdkConstraint,
+        equals('>=3.22.0'),
+      );
+      expect(
         graphData.platformSupportByPackage['flutter_plugin']?.supportsIos,
         isTrue,
+      );
+      expect(
+        graphData
+            .platformSupportByPackage['flutter_plugin']
+            ?.usesLegacyIosCocoaPods,
+        isTrue,
+      );
+      expect(graphData.platformSupportByPackage['swiftpm_plugin'], isNotNull);
+      expect(
+        graphData.platformSupportByPackage['swiftpm_plugin']?.supportsIos,
+        isTrue,
+      );
+      expect(
+        graphData
+            .platformSupportByPackage['swiftpm_plugin']
+            ?.usesLegacyIosCocoaPods,
+        isFalse,
       );
       expect(
         graphData
@@ -527,6 +822,10 @@ platforms:
       expect(
         graphData.platformSupportByPackage['pure_dart']?.isPureDart,
         isTrue,
+      );
+      expect(
+        graphData.platformSupportByPackage['pure_dart']?.dartSdkConstraint,
+        equals('^3.3.0'),
       );
     });
 

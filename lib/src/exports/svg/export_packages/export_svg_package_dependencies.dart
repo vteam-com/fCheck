@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_styles.dart';
+import 'package:fcheck/src/models/app_strings.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
@@ -34,7 +35,7 @@ const double _canvasPadding = 40;
 const double _canvasExtraWidth = 240;
 const double _headerHeight = 70;
 const double _nodeWidth = 200;
-const double _nodeHeight = 58;
+const double _nodeHeight = 68;
 const double _columnGap = 240;
 const double _titleFontSize = 22;
 const double _sectionFontSize = 15;
@@ -55,7 +56,7 @@ const double _packageSlotSpacing = 20;
 const double _sectionHeaderHeight = 26;
 const double _sectionToNodesGap = 12;
 const double _derivedNodeWidth = 280;
-const double _derivedNodeHeight = 42;
+const double _derivedNodeHeight = 52;
 const double _derivedNodeNameFontSize = 12;
 const double _derivedNameYOffset = 18;
 const double _derivedColumnSpacing = 12;
@@ -64,6 +65,29 @@ const double _derivedGroupTopMargin = 48;
 const double _derivedGroupLabelFontSize = 13;
 const double _derivedGroupLabelY = 20;
 const double _derivedNodeTextPadding = 8;
+const double _derivedRightIncomingBadgeOffsetY = 5;
+const double _derivedRightOutgoingBadgeOffsetY = 6;
+
+/// Returns the vertical anchors for the right-side derived badges.
+///
+/// When a derived node shows both a right incoming badge and a right outgoing
+/// badge, the badges are stacked vertically and any outgoing edge must reuse
+/// the same outgoing anchor to stay visually aligned with the green badge.
+({double incomingY, double outgoingY}) _computeDerivedRightBadgeAnchors({
+  required double nodeCenterY,
+  required int rightIncomingCount,
+  required int outgoingCount,
+}) {
+  final hasStackedRightBadges = rightIncomingCount > 0 && outgoingCount > 0;
+  return (
+    incomingY:
+        nodeCenterY -
+        (hasStackedRightBadges ? _derivedRightIncomingBadgeOffsetY : 0),
+    outgoingY:
+        nodeCenterY +
+        (hasStackedRightBadges ? _derivedRightOutgoingBadgeOffsetY : 0),
+  );
+}
 
 const String _derivedNodeDashArray = '4,2';
 const String _backgroundColor = '#f8fafc';
@@ -570,9 +594,7 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
   );
 
   // Count only edges that are visible in this diagram.
-  final visibleDirectOutgoingCounts = buildVisibleDirectOutgoingCounts(
-    derivedMap,
-  );
+  final visibleDirectOutgoingCounts = buildVisibleOutgoingCounts(derivedMap);
   final dependencyNames = dependencies.map((package) => package.name).toSet();
   final devDependencyNames = devDependencies
       .map((package) => package.name)
@@ -588,6 +610,9 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
   final derivedPackageNames = uniqueDerived
       .map((package) => package.name)
       .toSet();
+  final visibleDerivedOutgoingCounts = buildVisibleOutgoingCounts(
+    nestedDerivedMap,
+  );
   final visibleTransitiveIncomingCounts = buildVisibleDerivedIncomingCounts(
     nestedDerivedMap,
     sourcePackageNames: derivedPackageNames,
@@ -606,9 +631,10 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
 
   buffer.writeln(SvgDefinitions.generateUnifiedDefs());
   buffer.writeln(SvgDefinitions.generateUnifiedStyles());
+  buffer.writeln(_buildPackageLabelStyles());
 
   buffer.writeln(
-    '<text x="${width / _halfDivisor}" y="$_titleY" text-anchor="middle" fill="$_titleTextColor" font-size="$_titleFontSize" font-weight="700">${escapeXml(graphData.projectName)} v${escapeXml(graphData.version)}</text>',
+    '<text x="${width / _halfDivisor}" y="$_titleY" class="$_packageTitleLabelClass" text-anchor="middle">${escapeXml(graphData.projectName)} v${escapeXml(graphData.version)}</text>',
   );
 
   writeSectionHeader(
@@ -674,6 +700,7 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
     derivedMap: nestedDerivedMap,
     sourcePositions: derivedPositions,
     targetPositions: nestedDerivedPositions,
+    rightIncomingCounts: visibleRightIncomingCounts,
     sourceNodeWidth: _derivedNodeWidth,
   );
 
@@ -711,6 +738,7 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
       derivedPositions: derivedPositions,
       leftIncomingCounts: visibleLeftIncomingCounts,
       rightIncomingCounts: visibleRightIncomingCounts,
+      outgoingCounts: visibleDerivedOutgoingCounts,
       nodeWidth: _derivedNodeWidth,
       platformSupportByPackage: platformSupportByPackage,
     );
@@ -722,6 +750,7 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
       derivedPositions: nestedDerivedPositions,
       leftIncomingCounts: const <String, int>{},
       rightIncomingCounts: visibleTransitiveIncomingCounts,
+      outgoingCounts: const <String, int>{},
       nodeWidth: _derivedNodeWidth,
       platformSupportByPackage: platformSupportByPackage,
     );
@@ -756,8 +785,6 @@ void writeDirectColumn(
       nodeHeight: _nodeHeight,
       nameYOffset: _nodeNameYOffset,
       versionYOffset: _nodeVersionYOffset,
-      nameFontSize: _nodeTextFontSize,
-      versionFontSize: _nodeVersionFontSize,
       node: package,
       fillColor: fillColor,
       strokeColor: strokeColor,
@@ -794,7 +821,7 @@ void writeDerivedSectionHeader(
 }) {
   final plural = count == _singleEntryCount ? '' : 's';
   buffer.writeln(
-    '<text x="${sectionX + (sectionWidth / _halfDivisor)}" y="${sectionY + _derivedGroupLabelY}" text-anchor="middle" fill="$_derivedGroupLabelColor" font-size="$_derivedGroupLabelFontSize" font-weight="700">$title ($count item$plural)</text>',
+    '<text x="${sectionX + (sectionWidth / _halfDivisor)}" y="${sectionY + _derivedGroupLabelY}" class="$_packageDerivedSectionLabelClass" text-anchor="middle">$title ($count item$plural)</text>',
   );
   buffer.writeln(
     '<line x1="$sectionX" y1="${sectionY + _sectionHeaderHeight}" x2="${sectionX + sectionWidth}" y2="${sectionY + _sectionHeaderHeight}" stroke="$_derivedNodeStrokeColor" stroke-width="1" opacity="0.35"/>',
@@ -808,6 +835,7 @@ void writeDerivedNodes(
   required Map<String, ({double x, double y})> derivedPositions,
   required Map<String, int> leftIncomingCounts,
   required Map<String, int> rightIncomingCounts,
+  required Map<String, int> outgoingCounts,
   required double nodeWidth,
   required Map<String, PackagePlatformSupport> platformSupportByPackage,
 }) {
@@ -824,8 +852,6 @@ void writeDerivedNodes(
       nodeHeight: _derivedNodeHeight,
       nameYOffset: _derivedNameYOffset,
       versionYOffset: 0,
-      nameFontSize: _derivedNodeNameFontSize,
-      versionFontSize: 0,
       node: node,
       fillColor: _derivedNodeFillColor,
       strokeColor: _derivedNodeStrokeColor,
@@ -837,11 +863,18 @@ void writeDerivedNodes(
     // Render badges
     final leftInCount = leftIncomingCounts[node.name] ?? 0;
     final rightInCount = rightIncomingCounts[node.name] ?? 0;
+    final outCount = outgoingCounts[node.name] ?? 0;
+    final badgeCenterY = pos.y + _derivedNodeHeight / _halfDivisor;
+    final rightBadgeAnchors = _computeDerivedRightBadgeAnchors(
+      nodeCenterY: badgeCenterY,
+      rightIncomingCount: rightInCount,
+      outgoingCount: outCount,
+    );
 
     if (leftInCount > 0) {
       final incomingBadge = BadgeModel.incoming(
         cx: pos.x,
-        cy: pos.y + _derivedNodeHeight / _halfDivisor,
+        cy: badgeCenterY,
         count: leftInCount,
         direction: BadgeDirection.east,
       );
@@ -852,11 +885,21 @@ void writeDerivedNodes(
     if (rightInCount > 0) {
       final incomingBadge = BadgeModel.incoming(
         cx: pos.x + nodeWidth,
-        cy: pos.y + _derivedNodeHeight / _halfDivisor,
+        cy: rightBadgeAnchors.incomingY,
         count: rightInCount,
         direction: BadgeDirection.west,
       );
       buffer.writeln(incomingBadge.renderSvg());
+    }
+
+    if (outCount > 0) {
+      final outgoingBadge = BadgeModel.outgoing(
+        cx: pos.x + nodeWidth,
+        cy: rightBadgeAnchors.outgoingY,
+        count: outCount,
+        direction: BadgeDirection.east,
+      );
+      buffer.writeln(outgoingBadge.renderSvg());
     }
   }
 }
@@ -874,73 +917,11 @@ void writeSectionHeader(
 }) {
   final plural = count == _singleEntryCount ? '' : 's';
   buffer.writeln(
-    '<text x="$x" y="$y" fill="$_sectionTextColor" font-size="$_sectionFontSize" font-weight="700">$title ($count item$plural)</text>',
+    '<text x="$x" y="$y" class="$_packageSectionLabelClass">$title ($count item$plural)</text>',
   );
   buffer.writeln(
     '<line x1="$x" y1="${y + _sectionUnderlineOffset}" x2="${x + _nodeWidth}" y2="${y + _sectionUnderlineOffset}" stroke="$color" stroke-width="$_edgeStrokeWidth" opacity="$_edgeOpacity"/>',
   );
-}
-
-/// Renders a package node rectangle with name and version text labels.
-///
-/// Pass [strokeDashArray] to render a dashed border (e.g. for derived nodes).
-void writePackageNodeSvg(
-  StringBuffer buffer, {
-  required double x,
-  required double y,
-  required double nodeWidth,
-  required double nodeHeight,
-  required double nameYOffset,
-  required double versionYOffset,
-  required double nameFontSize,
-  required double versionFontSize,
-  required PackageDependencyNode node,
-  required String fillColor,
-  required String strokeColor,
-  String strokeDashArray = '',
-  bool inlineVersion = false,
-  PackagePlatformSupport? platformSupport,
-}) {
-  final dashAttr = strokeDashArray.isNotEmpty
-      ? ' stroke-dasharray="$strokeDashArray"'
-      : '';
-  buffer.writeln(
-    '<rect x="$x" y="$y" width="$nodeWidth" height="$nodeHeight" rx="$_cornerRadius" ry="$_cornerRadius" fill="$fillColor" stroke="$strokeColor" stroke-width="1"$dashAttr/>',
-  );
-  writePlatformBadges(
-    buffer,
-    x: x,
-    y: y,
-    nodeWidth: nodeWidth,
-    nodeHeight: nodeHeight,
-    platformSupport: platformSupport,
-  );
-  if (inlineVersion) {
-    // Render name on left and version on right with gray styling.
-    // Only add ^ if version is a plain semver (starts with digit).
-    final escapedName = escapeXml(node.name);
-    final escapedVersion = escapeXml(node.version);
-    final versionDisplay = escapedVersion.startsWith(RegExp(r'[0-9]'))
-        ? '^$escapedVersion'
-        : escapedVersion;
-
-    // Render package name on the left
-    buffer.writeln(
-      '<text x="${x + _derivedNodeTextPadding}" y="${y + nameYOffset}" text-anchor="start" fill="$_titleTextColor" font-size="$nameFontSize">$escapedName</text>',
-    );
-    // Render version on the right in gray
-    buffer.writeln(
-      '<text x="${x + nodeWidth - _derivedNodeTextPadding}" y="${y + nameYOffset}" text-anchor="end" fill="$_versionTextColor" font-size="$nameFontSize">$versionDisplay</text>',
-    );
-  } else {
-    // Render name and version on separate lines
-    buffer.writeln(
-      '<text x="${x + (nodeWidth / _halfDivisor)}" y="${y + nameYOffset}" text-anchor="middle" fill="$_titleTextColor" font-size="$nameFontSize">${escapeXml(node.name)}</text>',
-    );
-    buffer.writeln(
-      '<text x="${x + (nodeWidth / _halfDivisor)}" y="${y + versionYOffset}" text-anchor="middle" fill="$_versionTextColor" font-size="$versionFontSize">v${escapeXml(node.version)}</text>',
-    );
-  }
 }
 
 /// Renders an SVG edge with Bezier curve routing and tooltip.

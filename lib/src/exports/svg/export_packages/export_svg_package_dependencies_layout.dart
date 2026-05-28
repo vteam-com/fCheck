@@ -17,8 +17,8 @@ List<PackageDependencyNode> collectUniqueDerived(
   return result;
 }
 
-/// Counts visible direct-to-derived edges for each direct package.
-Map<String, int> buildVisibleDirectOutgoingCounts(
+/// Counts visible outgoing edges for each rendered source package.
+Map<String, int> buildVisibleOutgoingCounts(
   Map<String, List<PackageDependencyNode>> derivedMap,
 ) {
   final counts = <String, int>{};

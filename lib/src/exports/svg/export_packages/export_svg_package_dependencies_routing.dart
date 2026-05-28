@@ -133,6 +133,7 @@ void writeDerivedLevelEdges(
   required Map<String, List<PackageDependencyNode>> derivedMap,
   required Map<String, ({double x, double y})> sourcePositions,
   required Map<String, ({double x, double y})> targetPositions,
+  required Map<String, int> rightIncomingCounts,
   required double sourceNodeWidth,
 }) {
   final edges = <_DerivedLevelEdge>[];
@@ -142,8 +143,15 @@ void writeDerivedLevelEdges(
       return;
     }
 
+    final outgoingCount = targetPackages.length;
+    final badgeCenterY = sourcePos.y + (_derivedNodeHeight / _halfDivisor);
+    final rightBadgeAnchors = _computeDerivedRightBadgeAnchors(
+      nodeCenterY: badgeCenterY,
+      rightIncomingCount: rightIncomingCounts[sourcePackage] ?? 0,
+      outgoingCount: outgoingCount,
+    );
     final startX = sourcePos.x + sourceNodeWidth;
-    final startY = sourcePos.y + (_derivedNodeHeight / _halfDivisor);
+    final startY = rightBadgeAnchors.outgoingY;
     for (final targetPackage in targetPackages) {
       final targetPos = targetPositions[targetPackage.name];
       if (targetPos == null) {

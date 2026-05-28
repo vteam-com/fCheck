@@ -382,6 +382,11 @@ Package dependency badge rules:
 - Flutter packages that declare platform metadata render compact node badges:
   `I` = iOS, `A` = Android, `W` = Windows, `M` = macOS, `L` = Linux,
   `B` = Browser.
+- Plugin packages with native iOS support that still fall back to legacy
+  CocoaPods render the package node in warning orange and the `I` badge in
+  red; the node tooltip explains that no Swift Package Manager manifest was
+  found. Packages with a Swift Package Manager manifest keep the standard
+  styling.
 - Pure Dart packages render a `Dart` badge instead of platform letters.
 - The exporter reads package declarations from `platforms:` and
   `flutter.plugin.platforms`, and falls back to `Dart` when a package pubspec
