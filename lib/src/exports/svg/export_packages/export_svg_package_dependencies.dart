@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_styles.dart';
 import 'package:yaml/yaml.dart';
+
+part 'export_svg_package_dependencies_routing.dart';
+part 'export_svg_package_dependencies_layout.dart';
 
 const String _defaultProjectName = 'project';
 const String _pubspecFileName = 'pubspec.yaml';
@@ -71,6 +75,8 @@ const String _versionTextColor = '#334155';
 const String _derivedNodeFillColor = '#f8fafc';
 const String _derivedNodeStrokeColor = '#64748b';
 const String _derivedGroupLabelColor = '#475569';
+const String _derivedPackagesSectionTitle = 'Derived packages';
+const String _transitivePackagesSectionTitle = 'Transitive packages';
 
 /// Package node info with resolved version.
 typedef PackageDependencyNode = ({String name, String version});
@@ -92,6 +98,10 @@ class PackageDependencyGraphData {
   /// One-hop derived dependencies keyed by direct package name.
   final Map<String, List<PackageDependencyNode>> derivedDependenciesByPackage;
 
+  /// Two-hop derived dependencies keyed by one-hop package name.
+  final Map<String, List<PackageDependencyNode>>
+  nestedDerivedDependenciesByPackage;
+
   /// Reverse dependency counts: how many packages in the full tree depend on each package.
   final Map<String, int> reverseDepCounts;
 
@@ -105,6 +115,8 @@ class PackageDependencyGraphData {
     required this.dependencies,
     required this.devDependencies,
     this.derivedDependenciesByPackage =
+        const <String, List<PackageDependencyNode>>{},
+    this.nestedDerivedDependenciesByPackage =
         const <String, List<PackageDependencyNode>>{},
     this.reverseDepCounts = const <String, int>{},
     this.outgoingDepCounts = const <String, int>{},
@@ -156,6 +168,7 @@ PackageDependencyGraphData loadPackageDependencyGraphData(Directory directory) {
       dependencies: dependencies,
       devDependencies: devDependencies,
       derivedDependenciesByPackage: derivedData.derivedByPackage,
+      nestedDerivedDependenciesByPackage: derivedData.nestedDerivedByPackage,
       reverseDepCounts: derivedData.reverseDepCounts,
       outgoingDepCounts: derivedData.outgoingDepCounts,
     );
@@ -271,6 +284,7 @@ List<PackageDependencyNode> toPackageNodes(
 /// Result record from [readDerivedDependenciesByPackage].
 typedef DerivedPackageData = ({
   Map<String, List<PackageDependencyNode>> derivedByPackage,
+  Map<String, List<PackageDependencyNode>> nestedDerivedByPackage,
   Map<String, int> reverseDepCounts,
   Map<String, int> outgoingDepCounts,
 });
@@ -295,6 +309,7 @@ DerivedPackageData readDerivedDependenciesByPackage(
   if (result.exitCode != 0) {
     return (
       derivedByPackage: <String, List<PackageDependencyNode>>{},
+      nestedDerivedByPackage: <String, List<PackageDependencyNode>>{},
       reverseDepCounts: <String, int>{},
       outgoingDepCounts: <String, int>{},
     );
@@ -305,6 +320,7 @@ DerivedPackageData readDerivedDependenciesByPackage(
     if (parsed is! Map<String, dynamic>) {
       return (
         derivedByPackage: <String, List<PackageDependencyNode>>{},
+        nestedDerivedByPackage: <String, List<PackageDependencyNode>>{},
         reverseDepCounts: <String, int>{},
         outgoingDepCounts: <String, int>{},
       );
@@ -313,6 +329,7 @@ DerivedPackageData readDerivedDependenciesByPackage(
     if (packages is! List<dynamic>) {
       return (
         derivedByPackage: <String, List<PackageDependencyNode>>{},
+        nestedDerivedByPackage: <String, List<PackageDependencyNode>>{},
         reverseDepCounts: <String, int>{},
         outgoingDepCounts: <String, int>{},
       );
@@ -381,6 +398,48 @@ DerivedPackageData readDerivedDependenciesByPackage(
       }
     }
 
+    final nestedDerivedByPackage = <String, List<PackageDependencyNode>>{};
+    final secondLevelPackageNames = derivedByPackage.values
+        .expand((nodeList) => nodeList.map((node) => node.name))
+        .toSet();
+    final sortedSecondLevelPackageNames = secondLevelPackageNames.toList()
+      ..sort();
+
+    for (final secondLevelPackageName in sortedSecondLevelPackageNames) {
+      final packageData = pubDepsPackages[secondLevelPackageName];
+      if (packageData == null) {
+        continue;
+      }
+
+      final nestedDerivedNames =
+          packageData.dependencies
+              .where(
+                (dependencyName) =>
+                    dependencyName != secondLevelPackageName &&
+                    !rootPackageNames.contains(dependencyName) &&
+                    !secondLevelPackageNames.contains(dependencyName),
+              )
+              .toSet()
+              .toList()
+            ..sort();
+
+      final nestedDerivedNodes = nestedDerivedNames
+          .map(
+            (nestedDerivedName) => (
+              name: nestedDerivedName,
+              version:
+                  pubDepsPackages[nestedDerivedName]?.version ??
+                  packageVersions[nestedDerivedName] ??
+                  _unknownPackageVersion,
+            ),
+          )
+          .toList(growable: false);
+
+      if (nestedDerivedNodes.isNotEmpty) {
+        nestedDerivedByPackage[secondLevelPackageName] = nestedDerivedNodes;
+      }
+    }
+
     // Build reverse dependency counts: for each package, how many others depend on it.
     final reverseDepCounts = <String, int>{};
     // Build outgoing dependency counts: for each package, how many packages it depends on.
@@ -394,12 +453,14 @@ DerivedPackageData readDerivedDependenciesByPackage(
 
     return (
       derivedByPackage: derivedByPackage,
+      nestedDerivedByPackage: nestedDerivedByPackage,
       reverseDepCounts: reverseDepCounts,
       outgoingDepCounts: outgoingDepCounts,
     );
   } catch (_) {
     return (
       derivedByPackage: <String, List<PackageDependencyNode>>{},
+      nestedDerivedByPackage: <String, List<PackageDependencyNode>>{},
       reverseDepCounts: <String, int>{},
       outgoingDepCounts: <String, int>{},
     );
@@ -409,9 +470,9 @@ DerivedPackageData readDerivedDependenciesByPackage(
 /// Builds SVG for Flutter/Dart package dependencies and dev_dependencies.
 ///
 /// The layout renders direct packages in two columns (dependencies left,
-/// dev_dependencies right) at the top, followed by a grouped container of all
-/// unique derived (transitive) packages at the bottom. Lines connect each
-/// direct package node to the derived packages it depends on.
+/// dev_dependencies right) at the top, followed by grouped containers for the
+/// next two dependency hops. Lines connect each direct package node to its
+/// first derived packages, then connect first derived packages to the next hop.
 String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
   final dependencies = graphData.dependencies;
   final devDependencies = graphData.devDependencies;
@@ -421,6 +482,8 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
 
   final derivedMap = graphData.derivedDependenciesByPackage;
   final uniqueDerived = collectUniqueDerived(derivedMap);
+  final nestedDerivedMap = graphData.nestedDerivedDependenciesByPackage;
+  final uniqueNestedDerived = collectUniqueDerived(nestedDerivedMap);
 
   final maxSlots = dependencies.length > devDependencies.length
       ? dependencies.length
@@ -436,35 +499,54 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
       directColumnsWidth;
   final derivedInnerWidth = width - (_canvasPadding * _columnCount);
   final derivedNodesPerRow = computeDerivedNodesPerRow(derivedInnerWidth);
-  final derivedRows = uniqueDerived.isEmpty
-      ? 0
-      : (uniqueDerived.length + derivedNodesPerRow - 1) ~/ derivedNodesPerRow;
-  final derivedGridHeight = derivedRows == 0
-      ? 0.0
-      : derivedRows * _derivedNodeHeight +
-            (derivedRows - 1) * _derivedRowSpacing;
-  final derivedSectionHeight = uniqueDerived.isEmpty
-      ? 0.0
-      : _sectionHeaderHeight + _sectionToNodesGap + derivedGridHeight;
+  final derivedRows = computePackageLevelRowCount(
+    uniqueDerived.length,
+    derivedNodesPerRow,
+  );
+  final derivedSectionHeight = computePackageLevelSectionHeight(derivedRows);
+  final nestedDerivedNodesPerRow = computeDerivedNodesPerRow(derivedInnerWidth);
+  final nestedDerivedRows = computePackageLevelRowCount(
+    uniqueNestedDerived.length,
+    nestedDerivedNodesPerRow,
+  );
+  final nestedDerivedSectionHeight = computePackageLevelSectionHeight(
+    nestedDerivedRows,
+  );
 
   final columnsTopY = _headerHeight + _sectionHeaderHeight + _sectionToNodesGap;
-  final derivedGroupTopY =
-      columnsTopY +
-      directColumnHeight +
-      (uniqueDerived.isEmpty ? 0 : _derivedGroupTopMargin);
-  final height = derivedGroupTopY + derivedSectionHeight + _canvasPadding;
+  var contentBottomY = columnsTopY + directColumnHeight;
+  var derivedGroupTopY = contentBottomY;
+  if (uniqueDerived.isNotEmpty) {
+    derivedGroupTopY = contentBottomY + _derivedGroupTopMargin;
+    contentBottomY = derivedGroupTopY + derivedSectionHeight;
+  }
+  var nestedDerivedGroupTopY = contentBottomY;
+  if (uniqueNestedDerived.isNotEmpty) {
+    nestedDerivedGroupTopY = contentBottomY + _derivedGroupTopMargin;
+    contentBottomY = nestedDerivedGroupTopY + nestedDerivedSectionHeight;
+  }
+  final height = contentBottomY + _canvasPadding;
 
   final leftX = (width - directColumnsWidth) / _halfDivisor;
   final rightX = leftX + _nodeWidth + _columnGap;
   final derivedNodesStartX = _canvasPadding;
   final derivedNodesStartY =
       derivedGroupTopY + _sectionHeaderHeight + _sectionToNodesGap;
+  final nestedDerivedNodesStartY =
+      nestedDerivedGroupTopY + _sectionHeaderHeight + _sectionToNodesGap;
 
   final derivedPositions = computeDerivedPositions(
     uniqueDerived,
     derivedNodesPerRow,
     startX: derivedNodesStartX,
     startY: derivedNodesStartY,
+    innerWidth: derivedInnerWidth,
+  );
+  final nestedDerivedPositions = computeDerivedPositions(
+    uniqueNestedDerived,
+    nestedDerivedNodesPerRow,
+    startX: derivedNodesStartX,
+    startY: nestedDerivedNodesStartY,
     innerWidth: derivedInnerWidth,
   );
 
@@ -483,6 +565,13 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
   final visibleRightIncomingCounts = buildVisibleDerivedIncomingCounts(
     derivedMap,
     sourcePackageNames: devDependencyNames,
+  );
+  final derivedPackageNames = uniqueDerived
+      .map((package) => package.name)
+      .toSet();
+  final visibleTransitiveIncomingCounts = buildVisibleDerivedIncomingCounts(
+    nestedDerivedMap,
+    sourcePackageNames: derivedPackageNames,
   );
 
   final buffer = StringBuffer();
@@ -526,7 +615,18 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
       sectionX: _canvasPadding,
       sectionY: derivedGroupTopY,
       sectionWidth: width - (_canvasPadding * _columnCount),
+      title: _derivedPackagesSectionTitle,
       count: uniqueDerived.length,
+    );
+  }
+  if (uniqueNestedDerived.isNotEmpty) {
+    writeDerivedSectionHeader(
+      buffer,
+      sectionX: _canvasPadding,
+      sectionY: nestedDerivedGroupTopY,
+      sectionWidth: width - (_canvasPadding * _columnCount),
+      title: _transitivePackagesSectionTitle,
+      count: uniqueNestedDerived.length,
     );
   }
 
@@ -548,6 +648,13 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
     derivedPositions: derivedPositions,
     columnsTopY: columnsTopY,
     isLeftColumn: false,
+  );
+  writeDerivedLevelEdges(
+    buffer,
+    derivedMap: nestedDerivedMap,
+    sourcePositions: derivedPositions,
+    targetPositions: nestedDerivedPositions,
+    sourceNodeWidth: _derivedNodeWidth,
   );
 
   // Draw direct package nodes
@@ -585,129 +692,19 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
       nodeWidth: _derivedNodeWidth,
     );
   }
+  if (uniqueNestedDerived.isNotEmpty) {
+    writeDerivedNodes(
+      buffer,
+      uniqueDerived: uniqueNestedDerived,
+      derivedPositions: nestedDerivedPositions,
+      leftIncomingCounts: const <String, int>{},
+      rightIncomingCounts: visibleTransitiveIncomingCounts,
+      nodeWidth: _derivedNodeWidth,
+    );
+  }
 
   writeSvgDocumentEnd(buffer);
   return buffer.toString();
-}
-
-/// Collects all unique derived packages across all direct packages, sorted by name.
-List<PackageDependencyNode> collectUniqueDerived(
-  Map<String, List<PackageDependencyNode>> derivedMap,
-) {
-  final seen = <String>{};
-  final result = <PackageDependencyNode>[];
-  for (final nodeList in derivedMap.values) {
-    for (final node in nodeList) {
-      if (seen.add(node.name)) {
-        result.add(node);
-      }
-    }
-  }
-  result.sort((a, b) => a.name.compareTo(b.name));
-  return result;
-}
-
-/// Counts visible direct-to-derived edges for each direct package.
-Map<String, int> buildVisibleDirectOutgoingCounts(
-  Map<String, List<PackageDependencyNode>> derivedMap,
-) {
-  final counts = <String, int>{};
-  derivedMap.forEach((packageName, derivedPackages) {
-    counts[packageName] = derivedPackages.length;
-  });
-  return counts;
-}
-
-/// Counts visible incoming edges for each derived package.
-Map<String, int> buildVisibleDerivedIncomingCounts(
-  Map<String, List<PackageDependencyNode>> derivedMap, {
-  required Set<String> sourcePackageNames,
-}) {
-  final counts = <String, int>{};
-  derivedMap.forEach((packageName, derivedPackages) {
-    if (!sourcePackageNames.contains(packageName)) {
-      return;
-    }
-    for (final derivedPackage in derivedPackages) {
-      counts[derivedPackage.name] = (counts[derivedPackage.name] ?? 0) + 1;
-    }
-  });
-  return counts;
-}
-
-/// Computes how many derived nodes fit in a row.
-///
-/// Derived packages are intentionally rendered as a single vertical column.
-int computeDerivedNodesPerRow(double _) {
-  return _singleDerivedColumnCount;
-}
-
-/// Computes the pixel position of each derived package node, centred in rows.
-Map<String, ({double x, double y})> computeDerivedPositions(
-  List<PackageDependencyNode> uniqueDerived,
-  int nodesPerRow, {
-  required double startX,
-  required double startY,
-  required double innerWidth,
-}) {
-  final result = <String, ({double x, double y})>{};
-  for (var i = 0; i < uniqueDerived.length; i++) {
-    final row = i ~/ nodesPerRow;
-    final col = i % nodesPerRow;
-    final remaining = uniqueDerived.length - row * nodesPerRow;
-    final rowNodes = remaining > nodesPerRow ? nodesPerRow : remaining;
-    final rowWidth =
-        rowNodes * _derivedNodeWidth + (rowNodes - 1) * _derivedColumnSpacing;
-    final rowStartX = startX + (innerWidth - rowWidth) / _halfDivisor;
-    final x = rowStartX + col * (_derivedNodeWidth + _derivedColumnSpacing);
-    final y = startY + row * (_derivedNodeHeight + _derivedRowSpacing);
-    result[uniqueDerived[i].name] = (x: x, y: y);
-  }
-  return result;
-}
-
-/// Draws edges from each direct package node to its derived package nodes.
-/// For left column, edges exit from the left edge; for right column, from the right edge.
-void writeColumnEdges(
-  StringBuffer buffer, {
-  required double x,
-  required List<PackageDependencyNode> packages,
-  required Map<String, List<PackageDependencyNode>> derivedMap,
-  required Map<String, ({double x, double y})> derivedPositions,
-  required double columnsTopY,
-  required bool isLeftColumn,
-}) {
-  for (var i = 0; i < packages.length; i++) {
-    final pkg = packages[i];
-    final pkgStartX = isLeftColumn ? x : x + _nodeWidth;
-    final pkgCenterY =
-        columnsTopY +
-        i * (_nodeHeight + _packageSlotSpacing) +
-        (_nodeHeight / _halfDivisor);
-    final derived = derivedMap[pkg.name] ?? const <PackageDependencyNode>[];
-    for (final derivedPkg in derived) {
-      final pos = derivedPositions[derivedPkg.name];
-      if (pos == null) {
-        continue;
-      }
-      final derivedEndX = isLeftColumn ? pos.x : pos.x + _derivedNodeWidth;
-      final derivedCenterY = pos.y + (_derivedNodeHeight / _halfDivisor);
-      final pathData = buildBezierEdgePath(
-        pkgStartX,
-        pkgCenterY,
-        derivedEndX,
-        derivedCenterY,
-        isLeftExit: isLeftColumn,
-        isLeftArrival: isLeftColumn,
-      );
-      writeEdge(
-        buffer,
-        pathData: pathData,
-        title:
-            '${escapeXml(pkg.name)} -> ${escapeXml(derivedPkg.name)} v${escapeXml(derivedPkg.version)}',
-      );
-    }
-  }
 }
 
 /// Renders all direct package nodes in a single column.
@@ -766,11 +763,12 @@ void writeDerivedSectionHeader(
   required double sectionX,
   required double sectionY,
   required double sectionWidth,
+  required String title,
   required int count,
 }) {
   final plural = count == _singleEntryCount ? '' : 's';
   buffer.writeln(
-    '<text x="${sectionX + (sectionWidth / _halfDivisor)}" y="${sectionY + _derivedGroupLabelY}" text-anchor="middle" fill="$_derivedGroupLabelColor" font-size="$_derivedGroupLabelFontSize" font-weight="700">Derived packages ($count item$plural)</text>',
+    '<text x="${sectionX + (sectionWidth / _halfDivisor)}" y="${sectionY + _derivedGroupLabelY}" text-anchor="middle" fill="$_derivedGroupLabelColor" font-size="$_derivedGroupLabelFontSize" font-weight="700">$title ($count item$plural)</text>',
   );
   buffer.writeln(
     '<line x1="$sectionX" y1="${sectionY + _sectionHeaderHeight}" x2="${sectionX + sectionWidth}" y2="${sectionY + _sectionHeaderHeight}" stroke="$_derivedNodeStrokeColor" stroke-width="1" opacity="0.35"/>',

@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - New package dependency SVG export from `pubspec.yaml` via `--svg-dependency` and `--output-svg-dependency`.
 
+### Changed
+
+- Extended `fcheck_packages.svg` to render one additional dependency hop below the existing derived package tier.
+
 ## [1.2.1] – 2026-05-01
 
 ### Changed

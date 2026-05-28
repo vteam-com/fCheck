@@ -418,6 +418,15 @@ Set<String> findCycleEdges(
 /// sharp angles. Applied to both control points equally for symmetric curves.
 const double bezierBellyHeight = 16.0;
 
+/// Horizontal distance between adjacent stacked edge lanes.
+const double stackedEdgeLaneStepWidth = 3.0;
+
+/// Default horizontal offset from the node anchor to the first stacked lane.
+const double stackedEdgeBaseOffset = 28.0;
+
+/// Default elbow radius for stacked edge routing.
+const double stackedEdgeCornerRadius = 6.0;
+
 /// Builds a cubic Bezier path connecting two points with a smooth curve.
 ///
 /// Creates a curved path from [startX], [startY] to [endX], [endY] by
@@ -457,4 +466,137 @@ String buildBezierEdgePath(
   final cy1 = startY + bezierBellyHeight;
   final cy2 = endY + bezierBellyHeight;
   return 'M $startX $startY C $controlX1 $cy1, $controlX2 $cy2, $endX $endY';
+}
+
+/// Builds a directional edge with stacked columns, handling both left and right lanes.
+String buildStackedEdgePath(
+  double startX,
+  double startY,
+  double endX,
+  double endY,
+  int laneIndex, {
+  required bool isLeft,
+  double? fixedColumnX,
+  double baseOffset = stackedEdgeBaseOffset,
+  double laneStepWidth = stackedEdgeLaneStepWidth,
+  double cornerRadius = stackedEdgeCornerRadius,
+}) {
+  final dirY = endY >= startY ? 1.0 : -1.0;
+  final dirX = isLeft ? -1.0 : 1.0;
+
+  final columnX =
+      fixedColumnX ??
+      (startX + (dirX * baseOffset) + (dirX * laneIndex * laneStepWidth));
+
+  final preCurveX = columnX - (dirX * cornerRadius);
+  final postCurveX = columnX - (dirX * cornerRadius);
+  final firstQx = columnX;
+  final firstQy = startY + dirY * cornerRadius;
+
+  final secondVy = endY - dirY * cornerRadius;
+  final secondQy = endY;
+
+  return 'M $startX $startY '
+      'H $preCurveX '
+      'Q $firstQx $startY $firstQx $firstQy '
+      'V $secondVy '
+      'Q $firstQx $secondQy $postCurveX $secondQy '
+      'H $endX';
+}
+
+/// Computes the shared fixed X column used by stacked edge lanes.
+double computeLaneColumnX({
+  required double gutterX,
+  required int laneIndex,
+  required int laneCount,
+  required bool isLeft,
+  required double baseOffset,
+  double laneStepWidth = stackedEdgeLaneStepWidth,
+}) {
+  final maxLaneIndex = laneCount - 1;
+  final inwardFirstLaneIndex = maxLaneIndex - laneIndex;
+  final laneDirection = isLeft ? -1.0 : 1.0;
+  return gutterX +
+      laneDirection * (baseOffset + inwardFirstLaneIndex * laneStepWidth);
+}
+
+/// Assigns stacked lane slots by vertical-span overlap.
+///
+/// Returned lane slots preserve the existing drawing convention where larger
+/// slot values represent the visually inner lanes.
+Map<String, int> buildVerticalSpanLaneSlots<T>(
+  Iterable<T> items, {
+  required String Function(T) keyOf,
+  required double? Function(T) startYOf,
+  required double? Function(T) endYOf,
+}) {
+  final innerLaneByKey = <String, int>{};
+  final laneIntervals = <List<Point<double>>>[];
+
+  final sortedItems = items.toList(growable: false)
+    ..sort((a, b) {
+      final aStartY = startYOf(a);
+      final aEndY = endYOf(a);
+      final bStartY = startYOf(b);
+      final bEndY = endYOf(b);
+
+      final aSpan = (aStartY == null || aEndY == null)
+          ? double.infinity
+          : (aStartY - aEndY).abs();
+      final bSpan = (bStartY == null || bEndY == null)
+          ? double.infinity
+          : (bStartY - bEndY).abs();
+
+      final spanCompare = aSpan.compareTo(bSpan);
+      if (spanCompare != 0) {
+        return spanCompare;
+      }
+
+      return keyOf(a).compareTo(keyOf(b));
+    });
+
+  bool overlaps(Point<double> a, Point<double> b) {
+    return math.max(a.x, b.x) < math.min(a.y, b.y);
+  }
+
+  for (final item in sortedItems) {
+    final startY = startYOf(item);
+    final endY = endYOf(item);
+    if (startY == null || endY == null) {
+      continue;
+    }
+
+    final key = keyOf(item);
+    final interval = Point(math.min(startY, endY), math.max(startY, endY));
+    var assignedLane = -1;
+
+    for (var lane = 0; lane < laneIntervals.length; lane++) {
+      final intersectsExisting = laneIntervals[lane].any(
+        (other) => overlaps(interval, other),
+      );
+      if (!intersectsExisting) {
+        assignedLane = lane;
+        laneIntervals[lane].add(interval);
+        break;
+      }
+    }
+
+    if (assignedLane == -1) {
+      laneIntervals.add([interval]);
+      assignedLane = laneIntervals.length - 1;
+    }
+
+    innerLaneByKey[key] = assignedLane;
+  }
+
+  final laneCount = laneIntervals.length;
+  if (laneCount == 0) {
+    return const <String, int>{};
+  }
+
+  final laneSlotByKey = <String, int>{};
+  for (final entry in innerLaneByKey.entries) {
+    laneSlotByKey[entry.key] = (laneCount - 1) - entry.value;
+  }
+  return laneSlotByKey;
 }

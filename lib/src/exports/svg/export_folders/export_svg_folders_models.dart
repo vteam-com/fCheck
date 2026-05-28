@@ -78,7 +78,7 @@ class _TitleVisual {
 }
 
 const double _titleLineHeight = 16.0;
-const double _edgeLaneStepWidth = 3.0;
+const double _edgeLaneStepWidth = stackedEdgeLaneStepWidth;
 const double _fileLaneBaseOffset = -14.0;
 const double _folderLaneBaseOffset = 0.0;
 

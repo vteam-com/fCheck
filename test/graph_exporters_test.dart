@@ -22,6 +22,15 @@ void main() {
       RegExp(r'<path[^>]*class="warningEdge"').allMatches(svg).length;
   int badgeCount(String svg, String cssClass) =>
       RegExp('class="badge $cssClass"').allMatches(svg).length;
+  List<double> incomingBadgeTextPositions(String svg) {
+    final matches = RegExp(
+      r'<g class="badge incomingBadge">\s*<path d="[^"]*" fill="#3b82f6"/>\s*<text x="([^"]+)"[^>]*>\d+</text>',
+    ).allMatches(svg);
+    return matches
+        .map((match) => double.parse(match.group(1)!))
+        .toList(growable: false);
+  }
+
   bool hasEdgeWithClass(String svg, String cssClass, String title) {
     final pattern = RegExp(
       '<g>\\s*<path[^>]*class="$cssClass"\\/>\\s*<title>${RegExp.escape(title)}</title>\\s*</g>',
@@ -86,6 +95,114 @@ void main() {
       expect(svg, contains('flutter_test -> async v2.13.1'));
     });
 
+    test('render package dependency SVG with transitive sections', () {
+      final svg = exportSvgPackageDependencies(
+        const PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: 'unknown',
+          dependencies: <PackageDependencyNode>[
+            (name: 'http', version: '1.2.3'),
+          ],
+          devDependencies: <PackageDependencyNode>[
+            (name: 'flutter_test', version: '0.0.0'),
+          ],
+          derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+            'http': <PackageDependencyNode>[
+              (name: 'http_parser', version: '4.1.2'),
+            ],
+            'flutter_test': <PackageDependencyNode>[
+              (name: 'async', version: '2.13.1'),
+            ],
+          },
+          nestedDerivedDependenciesByPackage:
+              <String, List<PackageDependencyNode>>{
+                'http_parser': <PackageDependencyNode>[
+                  (name: 'source_span', version: '1.10.1'),
+                ],
+                'async': <PackageDependencyNode>[
+                  (name: 'collection', version: '1.19.1'),
+                ],
+              },
+        ),
+      );
+
+      expect(svg, contains('Derived packages (2 items)'));
+      expect(svg, contains('Transitive packages (2 items)'));
+      expect(svg, contains('source_span'));
+      expect(svg, contains('collection'));
+      expect(svg, contains('http_parser -> source_span v1.10.1'));
+      expect(svg, contains('async -> collection v1.19.1'));
+
+      final stackedEdgePaths = RegExp(
+        '<path d="M [^"]* H [^"]* Q [^"]* V [^"]* Q [^"]* H [^"]*" class="edgeVertical"/>',
+      ).allMatches(svg);
+
+      expect(stackedEdgePaths.length, equals(4));
+    });
+
+    test('render incoming badges for transitive packages', () {
+      final svg = exportSvgPackageDependencies(
+        const PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: 'unknown',
+          dependencies: <PackageDependencyNode>[
+            (name: 'http', version: '1.2.3'),
+          ],
+          devDependencies: <PackageDependencyNode>[],
+          derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+            'http': <PackageDependencyNode>[
+              (name: 'http_parser', version: '4.1.2'),
+              (name: 'source_span', version: '1.10.1'),
+            ],
+          },
+          nestedDerivedDependenciesByPackage:
+              <String, List<PackageDependencyNode>>{
+                'http_parser': <PackageDependencyNode>[
+                  (name: 'collection', version: '1.19.1'),
+                ],
+                'source_span': <PackageDependencyNode>[
+                  (name: 'collection', version: '1.19.1'),
+                ],
+              },
+        ),
+      );
+
+      expect(badgeCount(svg, 'incomingBadge'), equals(3));
+      expect(svg, contains('>2</text>'));
+      expect(svg, contains('http_parser -> collection v1.19.1'));
+      expect(svg, contains('source_span -> collection v1.19.1'));
+    });
+
+    test('render transitive incoming badge on the right side', () {
+      final svg = exportSvgPackageDependencies(
+        const PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: 'unknown',
+          dependencies: <PackageDependencyNode>[
+            (name: 'http', version: '1.2.3'),
+          ],
+          devDependencies: <PackageDependencyNode>[],
+          derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+            'http': <PackageDependencyNode>[
+              (name: 'http_parser', version: '4.1.2'),
+            ],
+          },
+          nestedDerivedDependenciesByPackage:
+              <String, List<PackageDependencyNode>>{
+                'http_parser': <PackageDependencyNode>[
+                  (name: 'collection', version: '1.19.1'),
+                ],
+              },
+        ),
+      );
+
+      final badgeTextPositions = incomingBadgeTextPositions(svg);
+
+      expect(badgeTextPositions, hasLength(2));
+      expect(badgeTextPositions.last, greaterThan(badgeTextPositions.first));
+      expect(badgeTextPositions.last, greaterThan(600));
+    });
+
     test('render package dependency badges from visible edges only', () {
       final svg = exportSvgPackageDependencies(
         const PackageDependencyGraphData(
@@ -146,6 +263,44 @@ void main() {
       expect(badgeCount(svg, 'incomingBadge'), equals(2));
       expect(svg, isNot(contains('>2</text>')));
     });
+
+    test(
+      'render package dependency SVG edges with stacked lanes on both columns',
+      () {
+        final svg = exportSvgPackageDependencies(
+          const PackageDependencyGraphData(
+            projectName: 'demo_app',
+            version: 'unknown',
+            dependencies: <PackageDependencyNode>[
+              (name: 'http', version: '1.2.3'),
+            ],
+            devDependencies: <PackageDependencyNode>[
+              (name: 'flutter_test', version: '0.0.0'),
+            ],
+            derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+              'http': <PackageDependencyNode>[
+                (name: 'collection', version: '1.19.1'),
+              ],
+              'flutter_test': <PackageDependencyNode>[
+                (name: 'async', version: '2.13.1'),
+              ],
+            },
+          ),
+        );
+
+        final stackedEdgePaths = RegExp(
+          '<path d="M [^"]* H [^"]* Q [^"]* V [^"]* Q [^"]* H [^"]*" class="edgeVertical"/>',
+        ).allMatches(svg);
+        final bezierEdgePaths = RegExp(
+          '<path d="M [^"]* C [^"]*" class="edgeVertical"/>',
+        ).allMatches(svg);
+
+        expect(stackedEdgePaths.length, equals(2));
+        expect(bezierEdgePaths, isEmpty);
+        expect(svg, contains('http -> collection v1.19.1'));
+        expect(svg, contains('flutter_test -> async v2.13.1'));
+      },
+    );
 
     test('return empty outputs for empty graphs', () {
       final result = LayersAnalysisResult(

@@ -264,6 +264,8 @@
 <rect x="50.0" y="1070.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_folders/export_svg_folders_models.dart</title></rect>
 <rect x="50.0" y="1140.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_folders/export_svg_folders_paths.dart</title></rect>
 <rect x="50.0" y="1210.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_folders/export_svg_folders_rendering.dart</title></rect>
+<rect x="50.0" y="1280.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_packages/export_svg_package_dependencies_layout.dart</title></rect>
+<rect x="50.0" y="1350.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/src/exports/svg/export_packages/export_svg_package_dependencies_routing.dart</title></rect>
 <rect x="370.0" y="90.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/bin/fcheck_cli_runner.dart</title></rect>
 <rect x="690.0" y="90.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/lib/fcheck.dart</title></rect>
 <rect x="690.0" y="160.0" width="220" height="50" class="fileNode"><title>File: /Users/jp/src/github/vteam/fcheck/bin/console/console_output.dart</title></rect>
@@ -1530,6 +1532,8 @@
 <text x="160.0" y="1095.0" class="textSmall">export_svg_folders_models.dart</text>
 <text x="160.0" y="1165.0" class="textSmall">export_svg_folders_paths.dart</text>
 <text x="160.0" y="1235.0" class="textSmall">export_svg_folders_rendering.dart</text>
+<text x="160.0" y="1305.0" class="textSmall">export_svg_package_dependencies_layout.dart</text>
+<text x="160.0" y="1375.0" class="textSmall">export_svg_package_dependencies_routing.dart</text>
 <g class="badge incomingBadge">
   <path d="M 382.0,115.0 L 370.0,108.0 Q 367.0,108.0 367.0,111.0 L 367.0,119.0 Q 367.0,122.0 370.0,122.0 Z" fill="#3b82f6"/>
   <text x="371.68" y="116.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. fcheck.dart</title></g><g class="badge outgoingBadge">
