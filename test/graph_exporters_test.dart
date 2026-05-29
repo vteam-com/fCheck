@@ -21,6 +21,9 @@ import 'package:fcheck/src/exports/externals/graph_format_utils.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
+const double _svgCoordinateTolerance = 0.001;
+const int _stackedIncomingBadgeCount = 2;
+
 void main() {
   int warningPathCount(String svg) =>
       RegExp(r'<path[^>]*class="warningEdge"').allMatches(svg).length;
@@ -154,17 +157,48 @@ void main() {
     return double.parse(matches.single.group(1)!);
   }
 
+  double incomingBadgeTextYByCount(String svg, int count) {
+    final matches = RegExp(
+      '<g class="badge incomingBadge">\\s*<path d="[^"]*" fill="#3b82f6"/>\\s*<text x="[^"]+" y="([^"]+)"[^>]*>$count</text>',
+    ).allMatches(svg).toList(growable: false);
+    expect(matches, hasLength(1));
+    return double.parse(matches.single.group(1)!);
+  }
+
   double edgeStartY(String svg, String title) {
     final match = RegExp(
-      '<g>\\s*<path d="M [^ ]+ ([^ ]+) [^"]*" class="edgeVertical"/>\\s*<title>\\s*▶\\s*</title>\\s*</g>\\s*<title>${RegExp.escape(title)}</title>',
+      '<g>\\s*<path d="M [^ ]+ ([^ ]+) [^"]*" class="edgeVertical"/>\\s*<title>${RegExp.escape(title)}</title>\\s*</g>',
     ).firstMatch(svg);
     expect(match, isNotNull);
     return double.parse(match!.group(1)!);
   }
 
+  double packageEdgeEndY(String svg, String title) {
+    final match = RegExp(
+      '<g>\\s*<path d="[^"]*Q [^ ]+ [^ ]+ [^ ]+ [^ ]+ V [^ ]+ Q [^ ]+ ([^ ]+) [^ ]+ ([^ ]+) H [^"]*" class="edgeVertical"/>\\s*<title>${RegExp.escape(title)}</title>\\s*</g>',
+    ).firstMatch(svg);
+    expect(match, isNotNull);
+    expect(match!.group(1), equals(match.group(2)));
+    return double.parse(match.group(2)!);
+  }
+
   bool hasEdgeWithClass(String svg, String cssClass, String title) {
     final pattern = RegExp(
       '<g>\\s*<path[^>]*class="$cssClass"\\/>\\s*<title>${RegExp.escape(title)}</title>\\s*</g>',
+    );
+    return pattern.hasMatch(svg);
+  }
+
+  bool hasPackageEdgeWithClass(String svg, String cssClass, String title) {
+    final pattern = RegExp(
+      '<g>\\s*<path[^>]*class="$cssClass"\\/>\\s*<title>${RegExp.escape(title)}</title>\\s*</g>',
+    );
+    return pattern.hasMatch(svg);
+  }
+
+  bool hasBadgeTooltip(String svg, String cssClass, int count, String title) {
+    final pattern = RegExp(
+      '<g class="badge $cssClass">\\s*<path[^>]*\\/>\\s*<text[^>]*>$count</text><title>${RegExp.escape(title)}</title>\\s*</g>',
     );
     return pattern.hasMatch(svg);
   }
@@ -240,8 +274,63 @@ void main() {
         contains('class="packageLabelDerivedName packageLabelCaption"'),
       );
       expect(svg, contains('class="packageLabelDerivedVersion"'));
-      expect(svg, contains('http -> http_parser v4.1.2'));
-      expect(svg, contains('flutter_test -> async v2.13.1'));
+      expect(
+        hasPackageEdgeWithClass(
+          svg,
+          'edgeVertical',
+          'http -> http_parser v4.1.2',
+        ),
+        isTrue,
+      );
+      expect(
+        hasPackageEdgeWithClass(
+          svg,
+          'edgeVertical',
+          'flutter_test -> async v2.13.1',
+        ),
+        isTrue,
+      );
+    });
+
+    test('render package badge tooltips from visible peers', () {
+      final svg = exportSvgPackageDependencies(
+        const PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: 'unknown',
+          dependencies: <PackageDependencyNode>[
+            (name: 'http', version: '1.2.3'),
+          ],
+          devDependencies: <PackageDependencyNode>[
+            (name: 'flutter_test', version: '0.0.0'),
+          ],
+          derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+            'http': <PackageDependencyNode>[
+              (name: 'collection', version: '1.19.1'),
+              (name: 'meta', version: '1.16.0'),
+            ],
+            'flutter_test': <PackageDependencyNode>[
+              (name: 'collection', version: '1.19.1'),
+            ],
+          },
+          nestedDerivedDependenciesByPackage:
+              <String, List<PackageDependencyNode>>{
+                'collection': <PackageDependencyNode>[
+                  (name: 'path', version: '1.9.1'),
+                ],
+              },
+        ),
+      );
+
+      expect(
+        hasBadgeTooltip(svg, 'outgoingBadge', 2, '1. collection\n2. meta'),
+        isTrue,
+      );
+      expect(hasBadgeTooltip(svg, 'incomingBadge', 1, '1. http'), isTrue);
+      expect(
+        hasBadgeTooltip(svg, 'incomingBadge', 1, '1. flutter_test'),
+        isTrue,
+      );
+      expect(hasBadgeTooltip(svg, 'outgoingBadge', 1, '1. path'), isTrue);
     });
 
     test('render centered platform badges and a pure Dart badge', () {
@@ -330,6 +419,12 @@ void main() {
       expect(
         legacyNodeSnippet,
         contains('<title>${AppStrings.legacyIosCocoaPods}</title>'),
+      );
+      expect(
+        RegExp(
+          '<rect[^>]*fill="#fff6e8"[^>]*/>\\s*<rect[^>]*fill="url\\(#warningNodeGradient\\)"',
+        ).hasMatch(legacyNodeSnippet),
+        isTrue,
       );
       expect(legacyNodeSnippet, contains('fill="url(#warningNodeGradient)"'));
       expect(legacyNodeSnippet, contains('fill-opacity="0.68"'));
@@ -545,6 +640,113 @@ void main() {
       expect(svg, contains('source_span -> collection v1.19.1'));
     });
 
+    test('color incoming edges orange for warning-shaded derived packages', () {
+      const PackageDependencyNode leftWarningDerived = (
+        name: 'legacy_ios_derived_left',
+        version: '2.0.0',
+      );
+      const PackageDependencyNode rightWarningDerived = (
+        name: 'legacy_ios_derived_right',
+        version: '3.0.0',
+      );
+      final svg = exportSvgPackageDependencies(
+        const PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: 'unknown',
+          dependencies: <PackageDependencyNode>[
+            (name: 'http', version: '1.2.3'),
+          ],
+          devDependencies: <PackageDependencyNode>[
+            (name: 'flutter_test', version: '0.0.0'),
+          ],
+          derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+            'http': <PackageDependencyNode>[leftWarningDerived],
+            'flutter_test': <PackageDependencyNode>[rightWarningDerived],
+          },
+          platformSupportByPackage: <String, PackagePlatformSupport>{
+            'legacy_ios_derived_left': PackagePlatformSupport(
+              supportsIos: true,
+              usesLegacyIosCocoaPods: true,
+            ),
+            'legacy_ios_derived_right': PackagePlatformSupport(
+              supportsIos: true,
+              usesLegacyIosCocoaPods: true,
+            ),
+          },
+        ),
+      );
+
+      expect(warningPathCount(svg), equals(2));
+      expect(
+        hasPackageEdgeWithClass(
+          svg,
+          'warningEdge',
+          'http -> ${leftWarningDerived.name} v${leftWarningDerived.version}',
+        ),
+        isTrue,
+      );
+      expect(
+        hasPackageEdgeWithClass(
+          svg,
+          'warningEdge',
+          'flutter_test -> ${rightWarningDerived.name} v${rightWarningDerived.version}',
+        ),
+        isTrue,
+      );
+    });
+
+    test(
+      'color incoming edges orange for warning-shaded transitive packages',
+      () {
+        const PackageDependencyNode transitiveWarningTarget = (
+          name: 'legacy_ios_transitive',
+          version: '2.0.0',
+        );
+        const warningSources = <PackageDependencyNode>[
+          (name: 'http_parser', version: '4.1.2'),
+          (name: 'source_span', version: '1.10.1'),
+        ];
+        final svg = exportSvgPackageDependencies(
+          PackageDependencyGraphData(
+            projectName: 'demo_app',
+            version: 'unknown',
+            dependencies: const <PackageDependencyNode>[
+              (name: 'http', version: '1.2.3'),
+            ],
+            devDependencies: const <PackageDependencyNode>[],
+            derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+              'http': warningSources,
+            },
+            nestedDerivedDependenciesByPackage:
+                <String, List<PackageDependencyNode>>{
+                  for (final source in warningSources)
+                    source.name: <PackageDependencyNode>[
+                      transitiveWarningTarget,
+                    ],
+                },
+            platformSupportByPackage: const <String, PackagePlatformSupport>{
+              'legacy_ios_transitive': PackagePlatformSupport(
+                supportsIos: true,
+                usesLegacyIosCocoaPods: true,
+              ),
+            },
+          ),
+        );
+
+        expect(warningPathCount(svg), equals(warningSources.length));
+        for (final source in warningSources) {
+          expect(
+            hasPackageEdgeWithClass(
+              svg,
+              'warningEdge',
+              '${source.name} -> ${transitiveWarningTarget.name} v${transitiveWarningTarget.version}',
+            ),
+            isTrue,
+          );
+        }
+      },
+    );
+
     test(
       'render outgoing badges for derived packages with transitive edges',
       () {
@@ -611,7 +813,52 @@ void main() {
         'collection -> meta v1.16.0',
       );
 
-      expect(transitiveEdgeStartY, closeTo(outgoingBadgeTextY - 1, 0.001));
+      expect(
+        transitiveEdgeStartY,
+        closeTo(outgoingBadgeTextY - 1, _svgCoordinateTolerance),
+      );
+    });
+
+    test('align direct incoming edges with stacked incoming badges', () {
+      final svg = exportSvgPackageDependencies(
+        const PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: 'unknown',
+          dependencies: <PackageDependencyNode>[],
+          devDependencies: <PackageDependencyNode>[
+            (name: 'flutter_test', version: '0.0.0'),
+            (name: 'mocktail', version: '1.0.0'),
+          ],
+          derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+            'flutter_test': <PackageDependencyNode>[
+              (name: 'collection', version: '1.19.1'),
+            ],
+            'mocktail': <PackageDependencyNode>[
+              (name: 'collection', version: '1.19.1'),
+            ],
+          },
+          nestedDerivedDependenciesByPackage:
+              <String, List<PackageDependencyNode>>{
+                'collection': <PackageDependencyNode>[
+                  (name: 'meta', version: '1.16.0'),
+                ],
+              },
+        ),
+      );
+
+      final incomingBadgeTextY = incomingBadgeTextYByCount(
+        svg,
+        _stackedIncomingBadgeCount,
+      );
+      final directEdgeEndY = packageEdgeEndY(
+        svg,
+        'flutter_test -> collection v1.19.1',
+      );
+
+      expect(
+        directEdgeEndY,
+        closeTo(incomingBadgeTextY - 1, _svgCoordinateTolerance),
+      );
     });
 
     test('render transitive incoming badge on the right side', () {

@@ -94,16 +94,18 @@ buildPeerLists(
 void renderEdgeWithTooltip(
   StringBuffer buffer, {
   required String pathData,
-  required String source,
-  required String target,
+  String source = '',
+  String target = '',
   required String cssClass,
   String? pathStyle,
   String separator = '▶',
+  String? tooltipTitle,
 }) {
   final styleAttr = pathStyle == null ? '' : ' style="$pathStyle"';
+  final title = tooltipTitle ?? escapeXml('$source $separator $target');
   buffer.writeln('<g>');
   buffer.writeln('  <path d="$pathData" class="$cssClass"$styleAttr/>');
-  buffer.writeln('  <title>$source $separator $target</title>');
+  buffer.writeln('  <title>$title</title>');
   buffer.writeln('</g>');
 }
 

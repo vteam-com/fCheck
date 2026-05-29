@@ -33,6 +33,9 @@ void writeColumnEdges(
   required Map<String, ({double x, double y})> derivedPositions,
   required double columnsTopY,
   required bool isLeftColumn,
+  required Map<String, PackagePlatformSupport> platformSupportByPackage,
+  required Map<String, int> rightIncomingCounts,
+  required Map<String, int> outgoingCounts,
 }) {
   final edges = <_PackageColumnEdge>[];
   for (var i = 0; i < packages.length; i++) {
@@ -48,6 +51,12 @@ void writeColumnEdges(
       if (pos == null) {
         continue;
       }
+      final targetCenterY = pos.y + (_derivedNodeHeight / _halfDivisor);
+      final rightBadgeAnchors = _computeDerivedRightBadgeAnchors(
+        nodeCenterY: targetCenterY,
+        rightIncomingCount: rightIncomingCounts[derivedPkg.name] ?? 0,
+        outgoingCount: outgoingCounts[derivedPkg.name] ?? 0,
+      );
       edges.add((
         sourcePackage: pkg.name,
         targetPackage: derivedPkg.name,
@@ -55,7 +64,7 @@ void writeColumnEdges(
         startX: pkgStartX,
         startY: pkgCenterY,
         endX: isLeftColumn ? pos.x : pos.x + _derivedNodeWidth,
-        endY: pos.y + (_derivedNodeHeight / _halfDivisor),
+        endY: isLeftColumn ? targetCenterY : rightBadgeAnchors.incomingY,
       ));
     }
   }
@@ -121,8 +130,13 @@ void writeColumnEdges(
     writeEdge(
       buffer,
       pathData: pathData,
-      title:
-          '${escapeXml(edge.sourcePackage)} -> ${escapeXml(edge.targetPackage)} v${escapeXml(edge.targetVersion)}',
+      tooltipTitle:
+          '${edge.sourcePackage} -> ${edge.targetPackage} v${edge.targetVersion}',
+      cssClass:
+          platformSupportByPackage[edge.targetPackage]?.hasLegacyIosWarning ==
+              true
+          ? 'warningEdge'
+          : 'edgeVertical',
     );
   }
 }
@@ -135,6 +149,7 @@ void writeDerivedLevelEdges(
   required Map<String, ({double x, double y})> targetPositions,
   required Map<String, int> rightIncomingCounts,
   required double sourceNodeWidth,
+  required Map<String, PackagePlatformSupport> platformSupportByPackage,
 }) {
   final edges = <_DerivedLevelEdge>[];
   derivedMap.forEach((sourcePackage, targetPackages) {
@@ -229,8 +244,13 @@ void writeDerivedLevelEdges(
     writeEdge(
       buffer,
       pathData: pathData,
-      title:
-          '${escapeXml(edge.sourcePackage)} -> ${escapeXml(edge.targetPackage)} v${escapeXml(edge.targetVersion)}',
+      tooltipTitle:
+          '${edge.sourcePackage} -> ${edge.targetPackage} v${edge.targetVersion}',
+      cssClass:
+          platformSupportByPackage[edge.targetPackage]?.hasLegacyIosWarning ==
+              true
+          ? 'warningEdge'
+          : 'edgeVertical',
     );
   }
 }

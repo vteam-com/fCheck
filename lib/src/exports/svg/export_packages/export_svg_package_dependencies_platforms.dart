@@ -49,6 +49,7 @@ const String _platformMetadataPillStrokeColor = '#000000';
 const String _platformDartFillColor = '#0175c2';
 const String _platformDartStrokeColor = '#0369a1';
 const String _warningNodeGradientFill = 'url(#warningNodeGradient)';
+const String _warningNodeBaseFillColor = '#fff6e8';
 const String _warningNodeStrokeColor = 'gray';
 const String _platformIosFillColor = '#111827';
 const String _platformIosStrokeColor = '#0f172a';
@@ -947,6 +948,9 @@ void writePackageNodeSvg(
   if (hasLegacyIosWarning) {
     buffer.writeln(
       '<title>${escapeXml(AppStrings.legacyIosCocoaPods)}</title>',
+    );
+    buffer.writeln(
+      '<rect x="$x" y="$y" width="$nodeWidth" height="$nodeHeight" rx="$_cornerRadius" ry="$_cornerRadius" fill="$_warningNodeBaseFillColor"/>',
     );
   }
   buffer.writeln(

@@ -17,31 +17,39 @@ List<PackageDependencyNode> collectUniqueDerived(
   return result;
 }
 
-/// Counts visible outgoing edges for each rendered source package.
-Map<String, int> buildVisibleOutgoingCounts(
-  Map<String, List<PackageDependencyNode>> derivedMap,
-) {
-  final counts = <String, int>{};
-  derivedMap.forEach((packageName, derivedPackages) {
-    counts[packageName] = derivedPackages.length;
-  });
-  return counts;
+/// Builds sorted visible incoming/outgoing peer lists for package badges.
+({Map<String, List<String>> incoming, Map<String, List<String>> outgoing})
+buildVisiblePackagePeerLists(
+  Map<String, List<PackageDependencyNode>> derivedMap, {
+  Set<String>? sourcePackageNames,
+}) {
+  final visibleGraph = <String, List<String>>{};
+  final sortedSourcePackageNames = derivedMap.keys.toList()..sort();
+  for (final packageName in sortedSourcePackageNames) {
+    if (sourcePackageNames != null &&
+        !sourcePackageNames.contains(packageName)) {
+      continue;
+    }
+    final derivedPackages =
+        derivedMap[packageName] ?? const <PackageDependencyNode>[];
+    if (derivedPackages.isEmpty) {
+      continue;
+    }
+
+    visibleGraph[packageName] = derivedPackages
+        .map((derivedPackage) => derivedPackage.name)
+        .toList(growable: false);
+  }
+
+  return buildPeerLists(visibleGraph, labelFor: (packageName) => packageName);
 }
 
-/// Counts visible incoming edges for each derived package.
-Map<String, int> buildVisibleDerivedIncomingCounts(
-  Map<String, List<PackageDependencyNode>> derivedMap, {
-  required Set<String> sourcePackageNames,
-}) {
+/// Counts peers per package so routing and badge totals reuse the same source.
+Map<String, int> buildPeerCounts(Map<String, List<String>> peerListsByPackage) {
   final counts = <String, int>{};
-  derivedMap.forEach((packageName, derivedPackages) {
-    if (!sourcePackageNames.contains(packageName)) {
-      return;
-    }
-    for (final derivedPackage in derivedPackages) {
-      counts[derivedPackage.name] = (counts[derivedPackage.name] ?? 0) + 1;
-    }
-  });
+  for (final entry in peerListsByPackage.entries) {
+    counts[entry.key] = entry.value.length;
+  }
   return counts;
 }
 

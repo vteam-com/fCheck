@@ -369,6 +369,8 @@ Package dependency badge rules:
 
 - Direct package badges show the number of visible one-hop derived packages
   connected in this diagram.
+- Package dependency count badges expose hover tooltips listing the visible
+  peer packages represented by each count.
 - First-hop derived package badges show incoming counts only for visible edges
   rendered in this diagram, not full-tree totals from `dart pub deps`.
 - First-hop derived package badges are split by source column:
@@ -387,6 +389,8 @@ Package dependency badge rules:
   red; the node tooltip explains that no Swift Package Manager manifest was
   found. Packages with a Swift Package Manager manifest keep the standard
   styling.
+- Package dependency edges expose hover tooltips with source package, target
+  package, and resolved version.
 - Pure Dart packages render a `Dart` badge instead of platform letters.
 - The exporter reads package declarations from `platforms:` and
   `flutter.plugin.platforms`, and falls back to `Dart` when a package pubspec
