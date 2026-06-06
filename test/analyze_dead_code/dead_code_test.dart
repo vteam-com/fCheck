@@ -536,5 +536,59 @@ void main() {
         projectDir.deleteSync(recursive: true);
       }
     });
+
+    test('keeps imports reachable from files with parse diagnostics', () {
+      final projectDir = Directory.systemTemp.createTempSync(
+        'fcheck_dead_code_parse_diagnostics_test',
+      );
+      try {
+        File(p.join(projectDir.path, 'pubspec.yaml')).writeAsStringSync('''
+name: sample_parse_diagnostics
+version: 0.0.1
+''');
+
+        final libDir = Directory(p.join(projectDir.path, 'lib'))
+          ..createSync(recursive: true);
+
+        File(p.join(libDir.path, 'main.dart')).writeAsStringSync('''
+import 'intermediate.dart';
+
+void main() {
+  callFromMain();
+}
+''');
+
+        File(p.join(libDir.path, 'intermediate.dart')).writeAsStringSync('''
+import 'used.dart';
+
+void callFromMain() {
+  reachable();
+}
+
+void parserBroken() {
+  final final value = 1;
+  value.toString();
+}
+''');
+
+        File(p.join(libDir.path, 'used.dart')).writeAsStringSync('''
+void reachable() {}
+''');
+
+        final metrics = AnalyzeFolder(projectDir).analyze();
+        final issues = metrics.deadCodeIssues;
+
+        expect(
+          issues.where(
+            (issue) =>
+                issue.type == DeadCodeIssueType.deadFile &&
+                issue.filePath == p.join('lib', 'used.dart'),
+          ),
+          isEmpty,
+        );
+      } finally {
+        projectDir.deleteSync(recursive: true);
+      }
+    });
   });
 }

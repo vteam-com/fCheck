@@ -23,7 +23,7 @@ class DeadCodeDelegate implements AnalyzerDelegate {
   /// Returns [DeadCodeFileData] or null if the file should be skipped.
   @override
   DeadCodeFileData? analyzeFileWithContext(AnalysisFileContext context) {
-    if (context.hasParseErrors || context.compilationUnit == null) {
+    if (context.compilationUnit == null) {
       return null;
     }
     final ignoredForDeadCode = context.hasIgnoreForFileDirective(
