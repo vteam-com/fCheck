@@ -347,7 +347,7 @@
     font-weight: 900;
   }
 </style>
-<text x="600.0" y="28.0" class="packageLabelTitle" text-anchor="middle">fcheck v1.3.3</text>
+<text x="600.0" y="28.0" class="packageLabelTitle" text-anchor="middle">fcheck v1.3.4</text>
 <g class="packageMetadataPill"><title>Dart &gt;=3.11.0 &lt;4.0.0</title><rect x="553.0" y="36.0" width="94.0" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="41" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart &gt;=3.11.0 &lt;4.0.0</text></g>
 <text x="280.0" y="70.0" class="packageLabelSection">dependencies (6 items)</text>
 <line x1="280.0" y1="76.0" x2="480.0" y2="76.0" stroke="#1d4ed8" stroke-width="2.0" opacity="0.9"/>
