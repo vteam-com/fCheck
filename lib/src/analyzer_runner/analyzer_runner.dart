@@ -6,6 +6,7 @@ import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
 import 'package:fcheck/src/input_output/file_utils.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 /// Unified analyzer that performs single traversal and delegates to multiple analyzers.
 class AnalyzerRunner {
@@ -98,7 +99,7 @@ class AnalyzerRunner {
 
     final parseResult = parseString(
       content: content,
-      featureSet: FeatureSet.latestLanguageVersion(),
+      featureSet: _buildSdkFeatureSet(),
       throwIfDiagnostics: false,
     );
 
@@ -116,5 +117,38 @@ class AnalyzerRunner {
     }
 
     return context;
+  }
+
+  /// Builds a [FeatureSet] capped at the running Dart SDK version.
+  ///
+  /// [FeatureSet.latestLanguageVersion] uses the analyzer package's knowledge
+  /// of the newest Dart version (which may be ahead of the installed SDK).
+  /// When the analyzer knows about an unreleased language version (e.g. Dart
+  /// 3.13 primary-constructors while the SDK is 3.12), valid existing syntax
+  /// such as `final` in method parameters is incorrectly flagged as a parse
+  /// error by the new grammar. Using the actual SDK version avoids that.
+  static FeatureSet _buildSdkFeatureSet() {
+    /// Index of the minor version part in a semver string split by '.'.
+    const int minorPartIndex = 1;
+
+    /// Index of the patch version part in a semver string split by '.'.
+    const int patchPartIndex = 2;
+
+    try {
+      // Platform.version is like "3.12.1 (stable) (Mon ...)"
+      final versionStr = Platform.version.split(' ').first.split('-').first;
+      final parts = versionStr.split('.');
+      final sdkVersion = Version(
+        int.parse(parts[0]),
+        parts.length > minorPartIndex ? int.parse(parts[minorPartIndex]) : 0,
+        parts.length > patchPartIndex ? int.parse(parts[patchPartIndex]) : 0,
+      );
+      return FeatureSet.fromEnableFlags2(
+        sdkLanguageVersion: sdkVersion,
+        flags: const [],
+      );
+    } catch (_) {
+      return FeatureSet.latestLanguageVersion();
+    }
   }
 }

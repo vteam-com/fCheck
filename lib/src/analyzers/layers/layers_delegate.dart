@@ -40,7 +40,7 @@ class LayersDelegate implements AnalyzerDelegate {
       };
     }
 
-    if (context.hasParseErrors || context.compilationUnit == null) {
+    if (context.compilationUnit == null) {
       return {
         'filePath': context.file.path,
         'dependencies': <String>[],
