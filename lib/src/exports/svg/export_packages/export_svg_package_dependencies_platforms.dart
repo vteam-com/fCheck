@@ -698,12 +698,11 @@ bool _usesLegacyIosCocoaPods(
   if (_hasNonEmptyString(iosConfig[_pluginClassKey])) {
     return true;
   }
-
-  final hasDartOnlyImplementation =
-      _hasNonEmptyString(iosConfig[_dartPluginClassKey]) ||
-      iosConfig[_ffiPluginKey] == true;
-  if (hasDartOnlyImplementation) {
+  if (_hasNonEmptyString(iosConfig[_dartPluginClassKey])) {
     return false;
+  }
+  if (iosConfig[_ffiPluginKey] == true) {
+    return true;
   }
 
   return false;

@@ -1013,6 +1013,7 @@ environment:
   flutter: '>=3.22.0'
 dependencies:
   flutter_plugin: ^1.0.0
+  ffi_plugin: ^1.0.0
   pure_dart: ^1.0.0
   swiftpm_plugin: ^1.0.0
 dev_dependencies:
@@ -1022,6 +1023,8 @@ dev_dependencies:
       File(p.join(tempDir.path, 'pubspec.lock')).writeAsStringSync('''
 packages:
   flutter_plugin:
+    version: "1.0.0"
+  ffi_plugin:
     version: "1.0.0"
   pure_dart:
     version: "1.1.0"
@@ -1051,6 +1054,12 @@ packages:
     {
       "name": "swiftpm_plugin",
       "rootUri": "../packages/swiftpm_plugin/",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "ffi_plugin",
+      "rootUri": "../packages/ffi_plugin/",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -1121,6 +1130,19 @@ platforms:
     default_package: desktop_browser_plugin
 ''');
 
+      final ffiPluginDir = Directory(p.join(packagesDir.path, 'ffi_plugin'))
+        ..createSync(recursive: true);
+      File(p.join(ffiPluginDir.path, 'pubspec.yaml')).writeAsStringSync('''
+name: ffi_plugin
+flutter:
+  plugin:
+    platforms:
+      android:
+        ffiPlugin: true
+      ios:
+        ffiPlugin: true
+''');
+
       final graphData = loadPackageDependencyGraphData(tempDir);
 
       expect(
@@ -1183,6 +1205,21 @@ platforms:
       expect(
         graphData.platformSupportByPackage['pure_dart']?.dartSdkConstraint,
         equals('^3.3.0'),
+      );
+      expect(graphData.platformSupportByPackage['ffi_plugin'], isNotNull);
+      expect(
+        graphData.platformSupportByPackage['ffi_plugin']?.supportsIos,
+        isTrue,
+      );
+      expect(
+        graphData.platformSupportByPackage['ffi_plugin']?.supportsAndroid,
+        isTrue,
+      );
+      expect(
+        graphData
+            .platformSupportByPackage['ffi_plugin']
+            ?.usesLegacyIosCocoaPods,
+        isTrue,
       );
     });
 
