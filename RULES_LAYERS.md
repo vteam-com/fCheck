@@ -83,6 +83,7 @@ This prevents false positives where code organization naturally creates hierarch
 - Folder-level upward dependencies (`sourceFolderLayer > targetFolderLayer`) are reported as `LayersIssueType.wrongFolderLayer` using the source Dart file path for actionable refactoring
 - Upward-rendered right-lane file edges in `fcheck_folders.svg` are also promoted into `LayersIssueType.wrongFolderLayer` so CLI/JSON/report output matches the folders SVG exactly
 - In console output, these folder-layer issues are warnings; cycle issues remain failures
+- In compliance scoring, both warning-level `wrongFolderLayer` findings and cycle findings count toward `layersIssues`, so either kind can reduce the layers score and the overall compliance score
 - The layer assignment still correctly handles cycle detection and file-level layer computation
 
 ---

@@ -28,6 +28,10 @@ fCheck provides fast local quality analysis for Flutter and Dart projects with 0
 
 Detailed behavior and edge cases are documented in `RULES*.md`.
 
+### Layers scoring
+
+- Since `1.4.0`, upward folder-layer dependencies emitted as `wrongFolderLayer` are not visual-only warnings anymore. They still render as warnings in reports, but they now reduce the `Layers architecture` analyzer score and the overall compliance score.
+
 ### Hardcoded strings: how it works
 
 - Flutter projects use opt-out hardcoded-string detection: most string literals are analyzed by default, then technical, diagnostic, declaration, and framework-specific cases are excluded.
@@ -218,7 +222,7 @@ fcheck --strict
 
 ```bash
 $ fcheck .
-↓------------------------------ fCheck 1.3.2 -------------------------------↓
+↓------------------------------ fCheck 1.4.0 -------------------------------↓
 Input              : /path/to/project
 Dart Project       : my-cool-app (version: 9.0.0)
 Platforms          : [✓Android] [✓iOS]  [✓MacOS] [✓Windows] [✓Linux]   [✓Web]
@@ -408,7 +412,7 @@ Package dependency badge rules:
 
 ![fcheck Layer folders diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_folders.svg)
 
-Orange upward dependencies in `fcheck_folders.svg` are rendered from the final visual direction and are also emitted in CLI/JSON/report output as layers warnings (`wrongFolderLayer`) with the source Dart file path. That now includes the orange right-lane file edges, even inside folder cycles, so the reported findings match the folders SVG.
+Orange upward dependencies in `fcheck_folders.svg` are rendered from the final visual direction and are also emitted in CLI/JSON/report output as layers warnings (`wrongFolderLayer`) with the source Dart file path. That now includes the orange right-lane file edges, even inside folder cycles, so the reported findings match the folders SVG. As of `1.4.0`, those warnings also participate in compliance scoring instead of staying visual-only.
 
 Warning/error-highlighted file and folder nodes in layers SVGs now use a softer transparent gradient tint (instead of opaque flat fills) to preserve node text/details readability.
 

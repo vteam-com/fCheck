@@ -15,6 +15,7 @@ This file defines how the overall compliance score is calculated and displayed.
 
 Only enabled analyzers contribute to the score.
 
+- `code_size`
 - `one_class_per_file`
 - `hardcoded_strings`
 - `magic_numbers`
@@ -24,6 +25,7 @@ Only enabled analyzers contribute to the score.
 - `dead_code`
 - `duplicate_code`
 - `documentation`
+- `localization`
 
 Additional suppression inputs are tracked and can deduct points:
 
@@ -42,7 +44,7 @@ sharePerAnalyzer = 100 / N
 
 Examples:
 
-- 9 enabled analyzers -> each analyzer owns `11.11%`.
+- 11 enabled analyzers -> each analyzer owns `9.09%`.
 - 10 enabled analyzers -> each analyzer owns `10%`.
 
 This means even if one analyzer has extreme failures, the maximum loss from that
@@ -52,13 +54,28 @@ single analyzer is its own share.
 
 All domain scores are clamped to `[0.0, 1.0]`.
 
-### 1) One class per file
+### 1) Code size
+
+```text
+for each codeSizeArtifact:
+  overflow = artifact.linesOfCode - matchingThreshold
+  if overflow > 0:
+    issueCount += 1
+    penaltySum += overflow / matchingThreshold
+
+if issueCount == 0:
+  score = 1.0
+else:
+  score = 1 - (penaltySum / totalCodeSizeArtifacts)
+```
+
+### 2) One class per file
 
 ```text
 score = 1 - (violations / max(1, dartFiles))
 ```
 
-### 2) Hardcoded strings
+### 3) Hardcoded strings
 
 ```text
 if usesLocalization == false:
@@ -69,7 +86,7 @@ else:
   score = 1 - (hardcodedStringIssues / budget)
 ```
 
-### 3) Magic numbers
+### 4) Magic numbers
 
 ```text
 budget = max(
@@ -79,35 +96,39 @@ budget = max(
 score = 1 - (magicNumberIssues / budget)
 ```
 
-### 4) Source sorting
+### 5) Source sorting
 
 ```text
 budget = max(2.0, dartFiles * 0.75)
 score = 1 - (sourceSortIssues / budget)
 ```
 
-### 5) Layers architecture
+### 6) Layers architecture
 
 ```text
 budget = max(2.0, max(1, layersEdgeCount) * 0.20)
 score = 1 - (layersIssues / budget)
 ```
 
-### 6) Secrets
+`layersIssues` includes both cycle failures and warning-level `wrongFolderLayer`
+findings. Upward dependencies promoted from `fcheck_folders.svg` therefore
+reduce score even though they remain warnings in CLI/report output.
+
+### 7) Secrets
 
 ```text
 budget = 1.5
 score = 1 - (secretIssues / budget)
 ```
 
-### 7) Dead code
+### 8) Dead code
 
 ```text
 budget = max(3.0, dartFiles * 0.8)
 score = 1 - (deadCodeIssues / budget)
 ```
 
-### 8) Duplicate code
+### 9) Duplicate code
 
 ```text
 duplicateImpactLines = sum(issue.lineCount * issue.similarity)
@@ -115,11 +136,18 @@ duplicateRatio = duplicateImpactLines / max(1, linesOfCode)
 score = 1 - (duplicateRatio * 2.5)
 ```
 
-### 9) Documentation
+### 10) Documentation
 
 ```text
 budget = max(2.0, dartFiles * 0.6)
 score = 1 - (documentationIssues / budget)
+```
+
+### 11) Localization
+
+```text
+budget = max(1.0, dartFiles * 0.3)
+score = 1 - (localizationIssues / budget)
 ```
 
 ## Suppression Penalty
@@ -202,7 +230,7 @@ Example: a score of `94%` with `--strict` results in exit code `6`.
 
 ## Source of Truth
 
-- Implementation: `lib/src/analyzers/metrics/project_metrics_analyzer.dart`
-- Output model: `lib/src/metrics/project_metrics.dart`
+- Implementation: `lib/src/analyzers/metrics/metrics_analyzer.dart`
+- Output model: `lib/src/analyzers/project_metrics.dart`
 - Console rendering: `bin/console/console_output.dart`
 - CLI runner: `bin/fcheck_cli_runner.dart` (exit code logic)

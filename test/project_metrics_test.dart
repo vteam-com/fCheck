@@ -1064,6 +1064,58 @@ void main() {
       },
     );
 
+    test('should reduce compliance score for non-cycle layers warnings', () {
+      ProjectMetrics buildMetrics({required List<LayersIssue> layersIssues}) {
+        return ProjectMetrics(
+          totalFolders: 1,
+          totalFiles: 1,
+          totalDartFiles: 1,
+          totalLinesOfCode: 1,
+          totalCommentLines: 0,
+          fileMetrics: const [],
+          secretIssues: const [],
+          hardcodedStringIssues: const [],
+          magicNumberIssues: const [],
+          sourceSortIssues: const [],
+          layersIssues: layersIssues,
+          deadCodeIssues: const [],
+          layersEdgeCount: 1,
+          layersCount: 1,
+          dependencyGraph: const {},
+          projectName: 'example_project',
+          version: '1.0.0',
+          projectType: ProjectType.dart,
+          usesLocalization: true,
+        );
+      }
+
+      final cleanMetrics = buildMetrics(layersIssues: const []);
+      final warnedMetrics = buildMetrics(
+        layersIssues: [
+          LayersIssue(
+            type: LayersIssueType.wrongFolderLayer,
+            filePath: 'lib/feature/a.dart',
+            message: 'Upward dependency warning',
+          ),
+        ],
+      );
+
+      final layersScore = warnedMetrics.analyzerScores.firstWhere(
+        (score) => score.key == 'layers',
+      );
+
+      expect(
+        warnedMetrics.complianceScore,
+        lessThan(cleanMetrics.complianceScore),
+      );
+      expect(
+        warnedMetrics.complianceFocusAreaLabel,
+        equals('Layers architecture'),
+      );
+      expect(layersScore.issueCount, equals(1));
+      expect(layersScore.score, lessThan(1));
+    });
+
     test(
       'should show hardcoded strings as passive summary only for Dart projects when localization is off',
       () {
