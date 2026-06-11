@@ -186,7 +186,8 @@
 
   <rect x="590" y="465" width="20" height="420" class="activation" />
 
-  <text x="614" y="495" class="section-label">For EACH file, build shared context once, then call EVERY enabled delegate:</text>
+  <text x="614" y="495" class="section-label">For EACH file, build shared context once, then call EVERY enabled
+    delegate:</text>
 
   <rect x="622" y="505" width="275" height="34" rx="4" class="note-box" />
   <text x="634" y="524" class="note-text">Runner caches content, AST, lines, and lineInfo per file.</text>
@@ -263,16 +264,21 @@
   <text x="1295" y="1249" text-anchor="middle" class="message-text">aggregate(metricsData)</text>
   <line x1="2300" y1="1280" x2="290" y2="1280" class="return-arrow" />
 
-  <rect x="1950" y="1305" width="590" height="35" rx="4" class="note-box" />
-  <text x="1962" y="1328" class="note-text">Consistent post-processing for all complex domain analyzers, reusing Runner contexts where possible.</text>
+  <rect x="1950" y="1305" width="900" height="35" rx="4" class="note-box" />
+  <text x="1962" y="1328" class="note-text">Consistent post-processing reuses Runner contexts and now augments reported
+    layers issues from folders-SVG upward edges before ProjectMetrics.</text>
   <rect x="1950" y="1348" width="860" height="35" rx="4" class="note-box" />
-  <text x="1962" y="1371" class="note-text">Project dependency graph now reuses shared parse results instead of reparsing analyzed source files.</text>
+  <text x="1962" y="1371" class="note-text">Project dependency graph now reuses shared parse results instead of
+    reparsing analyzed source files.</text>
   <rect x="1950" y="1391" width="920" height="35" rx="4" class="note-box" />
-  <text x="1962" y="1414" class="note-text">Dead-code delegate caches ignore-line sets per file and uses analyzer lineInfo for fast node-to-line resolution during visitor checks.</text>
+  <text x="1962" y="1414" class="note-text">Dead-code delegate caches ignore-line sets per file and uses analyzer
+    lineInfo for fast node-to-line resolution during visitor checks.</text>
   <rect x="1950" y="1426" width="900" height="35" rx="4" class="note-box" />
-  <text x="1962" y="1449" class="note-text">AnalyzeFolder still scans test/integration_test Dart files for test counts/import reachability, but now combines those reads into one pass.</text>
+  <text x="1962" y="1449" class="note-text">AnalyzeFolder still scans test/integration_test Dart files for test
+    counts/import reachability, but now combines those reads into one pass.</text>
   <rect x="1950" y="1461" width="700" height="20" rx="4" class="note-box" />
-  <text x="1962" y="1475" class="note-text">CLI includes fast-path inventory modes: --excluded, --literals, and --ignores.</text>
+  <text x="1962" y="1475" class="note-text">CLI includes fast-path inventory modes: --excluded, --literals, and
+    --ignores.</text>
 
   <!-- 5. Return -->
   <text x="50" y="1490" class="section-label">5. Build ProjectMetrics &amp; Return</text>

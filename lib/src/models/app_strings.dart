@@ -352,4 +352,9 @@ class AppStrings {
   /// Builds the `total` section header line.
   static String ignoreInventoryTotalLine(String count) =>
       '  $totalLabel ($count):';
+
+  /// Builds the layers message for a dependency that renders upward in folders SVG.
+  static String renderedUpwardFolderDependency(String targetFilePath) =>
+      'Rendered upward dependency depends on file "$targetFilePath" '
+      '(upward in folders graph)';
 }

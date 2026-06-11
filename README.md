@@ -408,7 +408,7 @@ Package dependency badge rules:
 
 ![fcheck Layer folders diagram](https://raw.githubusercontent.com/vteam-com/fCheck/main/fcheck_folders.svg)
 
-Orange upward dependencies in `fcheck_folders.svg` are rendered from the final visual direction. Folder-level upward edges are also emitted in CLI report output as layers warnings (`wrongFolderLayer`) with the source Dart file path. File-level upward edges on the right lane stay orange even inside folder cycles so the culprit consuming files remain easy to spot.
+Orange upward dependencies in `fcheck_folders.svg` are rendered from the final visual direction and are also emitted in CLI/JSON/report output as layers warnings (`wrongFolderLayer`) with the source Dart file path. That now includes the orange right-lane file edges, even inside folder cycles, so the reported findings match the folders SVG.
 
 Warning/error-highlighted file and folder nodes in layers SVGs now use a softer transparent gradient tint (instead of opaque flat fills) to preserve node text/details readability.
 

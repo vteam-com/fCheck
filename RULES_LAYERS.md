@@ -81,6 +81,7 @@ This prevents false positives where code organization naturally creates hierarch
 
 - For folders that don't fall into the above categories, the layer assignment is based on the deepest file in each folder
 - Folder-level upward dependencies (`sourceFolderLayer > targetFolderLayer`) are reported as `LayersIssueType.wrongFolderLayer` using the source Dart file path for actionable refactoring
+- Upward-rendered right-lane file edges in `fcheck_folders.svg` are also promoted into `LayersIssueType.wrongFolderLayer` so CLI/JSON/report output matches the folders SVG exactly
 - In console output, these folder-layer issues are warnings; cycle issues remain failures
 - The layer assignment still correctly handles cycle detection and file-level layer computation
 
@@ -1269,7 +1270,7 @@ A “healthy / expected” direction is:
 - **Top consumes bottom**  
 (i.e., consumer above provider)
 
-This is purely a visual convention to help humans scan. The diagram remains “as-is”.
+This starts as a visual convention to help humans scan. In `fcheck_folders.svg`, the same finalized upward file edges are also promoted into layers findings so the report matches the diagram.
 
 ### 7.2 Upward Consumption Warning (Orange)
 
@@ -1290,7 +1291,7 @@ This highlights boundary inversions like:
 
 - “lower layer consuming higher layer”
 
-For `fcheck_folders.svg`, right-lane file edges keep this orange upward warning even when the same file edge is also part of a cycle. That preserves the fastest visual cue for locating the lower file that consumes upward.
+For `fcheck_folders.svg`, right-lane file edges keep this orange upward warning even when the same file edge is also part of a cycle. Those same edges are promoted into `LayersIssueType.wrongFolderLayer` findings using the source file path and exact target file path so the CLI and JSON reflect what the diagram shows.
 
 ### 7.3 Cycle Highlight (Red)
 

@@ -5,6 +5,7 @@ import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
+import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/models/rect.dart';
 import 'package:path/path.dart' as p;
 
@@ -30,15 +31,14 @@ String exportGraphSvgFolders(
 }) {
   final dependencyGraph = layersResult.dependencyGraph;
 
-  if (dependencyGraph.isEmpty) {
+  final layout = _buildFolderGraphLayoutContext(dependencyGraph);
+  if (layout == null) {
     return generateEmptySvg('No hierarchical dependencies found');
   }
 
-  // Normalize paths to a common root and include target-only files
-  final allAbsolutePaths = _collectAllFilePaths(dependencyGraph);
-  final commonRoot = _findCommonRoot(allAbsolutePaths);
-  final relativeGraph = _relativizeGraph(dependencyGraph, commonRoot);
-  final knownRelativeFiles = _collectAllFilePaths(relativeGraph);
+  final commonRoot = layout.commonRoot;
+  final relativeGraph = layout.relativeGraph;
+  final knownRelativeFiles = layout.knownRelativeFiles;
   final fileSeverityByPath = _buildRelativeFileSeverityByPath(
     layersResult.issues,
     commonRoot,
@@ -63,121 +63,28 @@ String exportGraphSvgFolders(
     knownRelativeFiles: knownRelativeFiles,
     projectMetrics: projectMetrics,
   );
-
-  // Build hierarchical folder structure from relative paths
-  final allRelativePaths = _collectAllFilePaths(relativeGraph).toList();
-  final rootNode = _buildFolderHierarchy(allRelativePaths);
-
-  // Calculate folder-level dependency counts using relative paths
-  final folderMetrics = _calculateFolderMetrics(relativeGraph, rootNode);
-  final fileMetrics = _calculateFileMetrics(relativeGraph);
-  final folderLevels = _computeFolderLevels(relativeGraph, rootNode);
-
-  final folderDependencies = _collectFolderDependencies(
-    relativeGraph,
-    rootNode,
-  );
+  final rootNode = layout.rootNode;
+  final folderMetrics = layout.folderMetrics;
+  final fileMetrics = layout.fileMetrics;
+  final folderLevels = layout.folderLevels;
+  final folderDependencies = layout.folderDependencies;
   final folderDepGraph = <String, List<String>>{};
   for (final edge in folderDependencies) {
     folderDepGraph
         .putIfAbsent(edge.sourceFolder, () => [])
         .add(edge.targetFolder);
   }
-
-  // --- Extra canvas width to accommodate left/right-routed edges ---
-  const double edgeLanePadding = 0.0;
-  const double edgeLaneBaseWidth = 0.0;
-  const double edgeLanePerEdgeWidth = _edgeLaneStepWidth;
-
-  // Extra canvas width to accommodate left/right-routed edges
-  final totalFileEdges = relativeGraph.values.fold<int>(
-    0,
-    (sum, list) => sum + list.length,
-  );
-  final fileLaneColumns = totalFileEdges;
-  final fileEdgeExtraWidth =
-      edgeLanePadding +
-      (edgeLaneBaseWidth + fileLaneColumns * edgeLanePerEdgeWidth);
-  final folderEdgeExtraWidth =
-      edgeLanePadding +
-      (edgeLaneBaseWidth + folderDependencies.length * edgeLanePerEdgeWidth);
-
-  // --- Layout Constants ---
-  const double baseFolderWidth = 260.0;
-  const double folderPadding = 24.0;
-  const double childIndent = 40.0;
-  const double childSpacing = 24.0;
-  const double margin = 80.0;
-  const double folderHeaderHeight = 32.0;
-  const double fileItemHeight = 22.0;
-  const double fileItemSpacing = 10.0;
-  const double fileTopPadding = 20.0;
-  const double filesToChildrenSpacing = 16.0;
-
-  final folderPositions = <String, Point<double>>{};
-  final folderDimensions = <String, Rect>{};
-  final maxFileNameChars = relativeGraph.keys
-      .followedBy(relativeGraph.values.expand((v) => v))
-      .map((p) => p.split('/').last.length)
-      .fold<int>(0, (a, b) => a > b ? a : b);
-  const double charToPixelFactor = 6.0;
-  const double labelPadding = 12.0;
-  final labelWidth = (maxFileNameChars * charToPixelFactor) + labelPadding;
-
-  // Measure folders bottom-up so parents grow to fit their children
-  final rootSize = _computeFolderDimensions(
-    rootNode,
-    folderDimensions,
-    labelWidth: labelWidth,
-    folderLevels: folderLevels,
-    baseWidth: baseFolderWidth,
-    padding: folderPadding,
-    childIndent: childIndent,
-    childSpacing: childSpacing,
-    headerHeight: folderHeaderHeight,
-    fileItemHeight: fileItemHeight,
-    fileItemSpacing: fileItemSpacing,
-    fileTopPadding: fileTopPadding,
-    filesToChildrenSpacing: filesToChildrenSpacing,
-  );
-
-  // Position folders top-down so each child sits inside its parent
-  _positionFolders(
-    rootNode,
-    folderPositions,
-    folderDimensions,
-    folderLevels: folderLevels,
-    startX: margin + folderEdgeExtraWidth,
-    startY: margin,
-    padding: folderPadding,
-    childIndent: childIndent,
-    childSpacing: childSpacing,
-    headerHeight: folderHeaderHeight,
-    fileItemHeight: fileItemHeight,
-    fileItemSpacing: fileItemSpacing,
-    fileTopPadding: fileTopPadding,
-    filesToChildrenSpacing: filesToChildrenSpacing,
-  );
-
-  // Depth-first order ensures parents render before their children
-  final drawOrder = _collectDepthFirst(rootNode);
-  final depthMap = _computeDepths(rootNode);
-
-  // Folders are centered, with dedicated lanes for folder and file connections
-  final totalWidth =
-      margin +
-      folderEdgeExtraWidth +
-      rootSize.width +
-      fileEdgeExtraWidth +
-      margin;
-  final totalHeight = margin + rootSize.height + margin;
+  final folderPositions = layout.folderPositions;
+  final folderDimensions = layout.folderDimensions;
+  final drawOrder = layout.drawOrder;
+  final depthMap = layout.depthMap;
 
   final buffer = StringBuffer();
 
   writeSvgDocumentStart(
     buffer,
-    width: totalWidth,
-    height: totalHeight,
+    width: layout.totalWidth,
+    height: layout.totalHeight,
     includeUnifiedStyles: true,
     backgroundFill: '#f8f9fa',
   );
@@ -188,8 +95,8 @@ String exportGraphSvgFolders(
     drawOrder,
     folderPositions,
     folderDimensions,
-    padding: folderPadding,
-    childIndent: childIndent,
+    padding: _folderGraphFolderPadding,
+    childIndent: _folderGraphChildIndent,
   );
 
   // Track file anchor positions for dependency edges
@@ -225,18 +132,18 @@ String exportGraphSvgFolders(
     fileSeverityByPath: fileSeverityByPath,
     folderWarningsByPath: folderWarningsByPath,
     fileWarningsByPath: fileWarningsByPath,
-    headerHeight: folderHeaderHeight,
-    fileItemHeight: fileItemHeight,
-    fileItemSpacing: fileItemSpacing,
-    fileTopPadding: fileTopPadding,
+    headerHeight: _folderGraphHeaderHeight,
+    fileItemHeight: _folderGraphFileItemHeight,
+    fileItemSpacing: _folderGraphFileItemSpacing,
+    fileTopPadding: _folderGraphFileTopPadding,
     projectName: projectName,
     projectVersion: projectVersion,
     inputFolderName: inputFolderName,
   );
 
   // Calculate the horizontal start of the folder column and file lane for aligned vertical edges
-  final leftLaneGutterX = margin + folderEdgeExtraWidth;
-  final rightLaneGutterX = margin + folderEdgeExtraWidth + rootSize.width;
+  final leftLaneGutterX = layout.leftLaneGutterX;
+  final rightLaneGutterX = layout.rightLaneGutterX;
 
   // Extract folder cycles and layer violations from issues (with dependencyGraph for path normalization)
   final folderIssues = _extractFolderIssuesFromIssues(
@@ -278,6 +185,254 @@ String exportGraphSvgFolders(
 
   writeSvgDocumentEnd(buffer);
   return buffer.toString();
+}
+
+/// Returns the file dependency edges that render upward in the folders graph.
+List<({String sourceFilePath, String targetFilePath})>
+findRenderedUpwardFileEdgesInFolderGraph(
+  Map<String, List<String>> dependencyGraph,
+) {
+  final layout = _buildFolderGraphLayoutContext(dependencyGraph);
+  if (layout == null) {
+    return const <({String sourceFilePath, String targetFilePath})>[];
+  }
+
+  final folderDepGraph = <String, List<String>>{};
+  for (final edge in layout.folderDependencies) {
+    folderDepGraph
+        .putIfAbsent(edge.sourceFolder, () => <String>[])
+        .add(edge.targetFolder);
+  }
+
+  final fileAnchors = <String, Map<String, Point<double>>>{};
+  final fileVisuals = <_FileVisual>[];
+  final titleVisuals = <_TitleVisual>[];
+  final folderBadges = <BadgeModel>[];
+  final folderPeers = buildPeerLists(folderDepGraph, labelFor: (path) => path);
+  final filePeers = buildPeerLists(
+    layout.relativeGraph,
+    labelFor: (path) => path,
+  );
+
+  _drawHierarchicalFolders(
+    StringBuffer(),
+    layout.drawOrder,
+    layout.folderPositions,
+    layout.folderDimensions,
+    layout.folderMetrics,
+    layout.fileMetrics,
+    layout.relativeGraph,
+    fileAnchors,
+    titleVisuals,
+    fileVisuals,
+    folderBadges,
+    folderPeers.incoming,
+    folderPeers.outgoing,
+    filePeers.incoming,
+    filePeers.outgoing,
+    layout.depthMap,
+    folderSeverityByPath: const <String, String>{},
+    fileSeverityByPath: const <String, String>{},
+    folderWarningsByPath: const <String, Map<String, int>>{},
+    fileWarningsByPath: const <String, Map<String, int>>{},
+    headerHeight: _folderGraphHeaderHeight,
+    fileItemHeight: _folderGraphFileItemHeight,
+    fileItemSpacing: _folderGraphFileItemSpacing,
+    fileTopPadding: _folderGraphFileTopPadding,
+    projectName: 'unknown',
+    projectVersion: 'unknown',
+    inputFolderName: '.',
+  );
+
+  final fileYByPath = <String, double>{
+    for (final visual in fileVisuals) visual.path: visual.textY,
+  };
+  final upwardEdges = <({String sourceFilePath, String targetFilePath})>[];
+  final seenEdges = <String>{};
+  for (final entry in layout.relativeGraph.entries) {
+    final sourceY = fileYByPath[entry.key];
+    if (sourceY == null) {
+      continue;
+    }
+
+    for (final targetFile in entry.value) {
+      final targetY = fileYByPath[targetFile];
+      if (targetY == null || sourceY <= targetY) {
+        continue;
+      }
+
+      final sourceOriginal =
+          layout.originalPathByRelative[entry.key] ?? entry.key;
+      final targetOriginal =
+          layout.originalPathByRelative[targetFile] ?? targetFile;
+      final edgeKey = '$sourceOriginal->$targetOriginal';
+      if (!seenEdges.add(edgeKey)) {
+        continue;
+      }
+
+      upwardEdges.add((
+        sourceFilePath: sourceOriginal,
+        targetFilePath: targetOriginal,
+      ));
+    }
+  }
+
+  return upwardEdges;
+}
+
+/// Builds the reported layers issue list so reports match folders-SVG warnings.
+List<LayersIssue> buildReportedLayersIssuesFromFolderGraph(
+  LayersAnalysisResult layersResult,
+) {
+  final issues = List<LayersIssue>.from(layersResult.issues);
+  final existingEdgeKeys = <String>{
+    for (final issue in issues)
+      if (issue.type == LayersIssueType.wrongFolderLayer)
+        if (_extractReportedLayerTargetPath(issue.message)
+            case final targetPath?)
+          '${issue.filePath}->$targetPath',
+  };
+
+  for (final edge in findRenderedUpwardFileEdgesInFolderGraph(
+    layersResult.dependencyGraph,
+  )) {
+    final edgeKey = '${edge.sourceFilePath}->${edge.targetFilePath}';
+    if (!existingEdgeKeys.add(edgeKey)) {
+      continue;
+    }
+
+    issues.add(
+      LayersIssue(
+        type: LayersIssueType.wrongFolderLayer,
+        filePath: edge.sourceFilePath,
+        message: AppStrings.renderedUpwardFolderDependency(edge.targetFilePath),
+      ),
+    );
+  }
+
+  return issues;
+}
+
+/// Extracts the target file path from a reported layers issue message.
+String? _extractReportedLayerTargetPath(String message) {
+  final match = RegExp(
+    r'depends on file "([^"]+)"',
+    caseSensitive: false,
+  ).firstMatch(message);
+  return match?.group(1);
+}
+
+/// Builds the shared folders-SVG layout context used during rendering.
+_FolderGraphLayoutContext? _buildFolderGraphLayoutContext(
+  Map<String, List<String>> dependencyGraph,
+) {
+  if (dependencyGraph.isEmpty) {
+    return null;
+  }
+
+  final allAbsolutePaths = _collectAllFilePaths(dependencyGraph);
+  final commonRoot = _findCommonRoot(allAbsolutePaths);
+  final relativeGraph = _relativizeGraph(dependencyGraph, commonRoot);
+  final knownRelativeFiles = _collectAllFilePaths(relativeGraph);
+  final originalPathByRelative = <String, String>{};
+  for (final entry in dependencyGraph.entries) {
+    originalPathByRelative[p.relative(entry.key, from: commonRoot)] = entry.key;
+    for (final target in entry.value) {
+      originalPathByRelative[p.relative(target, from: commonRoot)] = target;
+    }
+  }
+
+  final rootNode = _buildFolderHierarchy(knownRelativeFiles.toList());
+  final folderMetrics = _calculateFolderMetrics(relativeGraph, rootNode);
+  final fileMetrics = _calculateFileMetrics(relativeGraph);
+  final folderLevels = _computeFolderLevels(relativeGraph, rootNode);
+  final folderDependencies = _collectFolderDependencies(
+    relativeGraph,
+    rootNode,
+  );
+
+  final totalFileEdges = relativeGraph.values.fold<int>(
+    0,
+    (sum, list) => sum + list.length,
+  );
+  final fileEdgeExtraWidth =
+      _folderGraphEdgeLanePadding +
+      (_folderGraphEdgeLaneBaseWidth + totalFileEdges * _edgeLaneStepWidth);
+  final folderEdgeExtraWidth =
+      _folderGraphEdgeLanePadding +
+      (_folderGraphEdgeLaneBaseWidth +
+          folderDependencies.length * _edgeLaneStepWidth);
+
+  final folderPositions = <String, Point<double>>{};
+  final folderDimensions = <String, Rect>{};
+  final maxFileNameChars = knownRelativeFiles
+      .map((path) => path.split('/').last.length)
+      .fold<int>(0, (left, right) => left > right ? left : right);
+  final labelWidth =
+      (maxFileNameChars * _folderGraphCharToPixelFactor) +
+      _folderGraphLabelPadding;
+
+  final rootSize = _computeFolderDimensions(
+    rootNode,
+    folderDimensions,
+    labelWidth: labelWidth,
+    folderLevels: folderLevels,
+    baseWidth: _folderGraphBaseFolderWidth,
+    padding: _folderGraphFolderPadding,
+    childIndent: _folderGraphChildIndent,
+    childSpacing: _folderGraphChildSpacing,
+    headerHeight: _folderGraphHeaderHeight,
+    fileItemHeight: _folderGraphFileItemHeight,
+    fileItemSpacing: _folderGraphFileItemSpacing,
+    fileTopPadding: _folderGraphFileTopPadding,
+    filesToChildrenSpacing: _folderGraphFilesToChildrenSpacing,
+  );
+
+  _positionFolders(
+    rootNode,
+    folderPositions,
+    folderDimensions,
+    folderLevels: folderLevels,
+    startX: _folderGraphMargin + folderEdgeExtraWidth,
+    startY: _folderGraphMargin,
+    padding: _folderGraphFolderPadding,
+    childIndent: _folderGraphChildIndent,
+    childSpacing: _folderGraphChildSpacing,
+    headerHeight: _folderGraphHeaderHeight,
+    fileItemHeight: _folderGraphFileItemHeight,
+    fileItemSpacing: _folderGraphFileItemSpacing,
+    fileTopPadding: _folderGraphFileTopPadding,
+    filesToChildrenSpacing: _folderGraphFilesToChildrenSpacing,
+  );
+
+  final totalWidth =
+      _folderGraphMargin +
+      folderEdgeExtraWidth +
+      rootSize.width +
+      fileEdgeExtraWidth +
+      _folderGraphMargin;
+  final totalHeight = _folderGraphMargin + rootSize.height + _folderGraphMargin;
+
+  return _FolderGraphLayoutContext(
+    commonRoot: commonRoot,
+    relativeGraph: relativeGraph,
+    originalPathByRelative: originalPathByRelative,
+    knownRelativeFiles: knownRelativeFiles,
+    rootNode: rootNode,
+    folderDependencies: folderDependencies,
+    folderMetrics: folderMetrics,
+    fileMetrics: fileMetrics,
+    folderLevels: folderLevels,
+    folderPositions: folderPositions,
+    folderDimensions: folderDimensions,
+    drawOrder: _collectDepthFirst(rootNode),
+    depthMap: _computeDepths(rootNode),
+    totalWidth: totalWidth,
+    totalHeight: totalHeight,
+    leftLaneGutterX: _folderGraphMargin + folderEdgeExtraWidth,
+    rightLaneGutterX:
+        _folderGraphMargin + folderEdgeExtraWidth + rootSize.width,
+  );
 }
 
 /// Aggregates severity per relative file path for folder SVG rendering.

@@ -81,6 +81,20 @@ const double _titleLineHeight = 16.0;
 const double _edgeLaneStepWidth = stackedEdgeLaneStepWidth;
 const double _fileLaneBaseOffset = -14.0;
 const double _folderLaneBaseOffset = 0.0;
+const double _folderGraphEdgeLanePadding = 0.0;
+const double _folderGraphEdgeLaneBaseWidth = 0.0;
+const double _folderGraphBaseFolderWidth = 260.0;
+const double _folderGraphFolderPadding = 24.0;
+const double _folderGraphChildIndent = 40.0;
+const double _folderGraphChildSpacing = 24.0;
+const double _folderGraphMargin = 80.0;
+const double _folderGraphHeaderHeight = 32.0;
+const double _folderGraphFileItemHeight = 22.0;
+const double _folderGraphFileItemSpacing = 10.0;
+const double _folderGraphFileTopPadding = 20.0;
+const double _folderGraphFilesToChildrenSpacing = 16.0;
+const double _folderGraphCharToPixelFactor = 6.0;
+const double _folderGraphLabelPadding = 12.0;
 
 /// Represents a folder-to-folder dependency edge.
 class _FolderEdge {
@@ -94,4 +108,44 @@ class _FileEdge {
   final String sourceFile;
   final String targetFile;
   _FileEdge(this.sourceFile, this.targetFile);
+}
+
+class _FolderGraphLayoutContext {
+  final String commonRoot;
+  final Map<String, List<String>> relativeGraph;
+  final Map<String, String> originalPathByRelative;
+  final Set<String> knownRelativeFiles;
+  final FolderNode rootNode;
+  final List<_FolderEdge> folderDependencies;
+  final Map<String, Map<String, int>> folderMetrics;
+  final Map<String, Map<String, int>> fileMetrics;
+  final Map<String, int> folderLevels;
+  final Map<String, Point<double>> folderPositions;
+  final Map<String, Rect> folderDimensions;
+  final List<FolderNode> drawOrder;
+  final Map<String, int> depthMap;
+  final double totalWidth;
+  final double totalHeight;
+  final double leftLaneGutterX;
+  final double rightLaneGutterX;
+
+  const _FolderGraphLayoutContext({
+    required this.commonRoot,
+    required this.relativeGraph,
+    required this.originalPathByRelative,
+    required this.knownRelativeFiles,
+    required this.rootNode,
+    required this.folderDependencies,
+    required this.folderMetrics,
+    required this.fileMetrics,
+    required this.folderLevels,
+    required this.folderPositions,
+    required this.folderDimensions,
+    required this.drawOrder,
+    required this.depthMap,
+    required this.totalWidth,
+    required this.totalHeight,
+    required this.leftLaneGutterX,
+    required this.rightLaneGutterX,
+  });
 }

@@ -204,6 +204,17 @@ void main() {
   }
 
   group('graph exporters', () {
+    test('finds rendered upward file edges from folder graph layout', () {
+      final upwardEdges = findRenderedUpwardFileEdgesInFolderGraph(const {
+        'lib/a/a.dart': ['lib/b/b.dart'],
+        'lib/b/b.dart': ['lib/a/a.dart'],
+      });
+
+      expect(upwardEdges, hasLength(1));
+      expect(upwardEdges.single.sourceFilePath, equals('lib/b/b.dart'));
+      expect(upwardEdges.single.targetFilePath, equals('lib/a/a.dart'));
+    });
+
     test('return empty package dependency SVG for empty pubspec sections', () {
       final svg = exportSvgPackageDependencies(
         const PackageDependencyGraphData(

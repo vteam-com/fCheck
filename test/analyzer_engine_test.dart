@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:fcheck/fcheck.dart';
+import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
+import 'package:fcheck/src/models/app_strings.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
@@ -294,6 +296,47 @@ void main() {
       expect(metrics.testConsumedPaths, contains('lib/src/api.dart'));
       expect(metrics.testConsumedPaths, contains('lib/src/helper.dart'));
     });
+
+    test(
+      'should promote rendered upward folder graph file edges into project metrics',
+      () {
+        final libDir = Directory(p.join(tempDir.path, 'lib'))..createSync();
+        final aDir = Directory(p.join(libDir.path, 'a'))..createSync();
+        final bDir = Directory(p.join(libDir.path, 'b'))..createSync();
+
+        File(p.join(aDir.path, 'a.dart')).writeAsStringSync('''
+import '../b/b.dart';
+
+void useB() {
+  useA();
+}
+''');
+        File(p.join(bDir.path, 'b.dart')).writeAsStringSync('''
+import '../a/a.dart';
+
+void useA() {}
+''');
+
+        final metrics = analyzer.analyze();
+        final folderViolations = metrics.layersIssues
+            .where((issue) => issue.type == LayersIssueType.wrongFolderLayer)
+            .toList();
+
+        expect(folderViolations, hasLength(1));
+        expect(
+          folderViolations.single.filePath,
+          equals(p.join(tempDir.path, 'lib', 'b', 'b.dart')),
+        );
+        expect(
+          folderViolations.single.message,
+          equals(
+            AppStrings.renderedUpwardFolderDependency(
+              p.join(tempDir.path, 'lib', 'a', 'a.dart'),
+            ),
+          ),
+        );
+      },
+    );
 
     test(
       'should report documentation issue paths relative to analysis root',

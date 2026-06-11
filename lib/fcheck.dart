@@ -46,6 +46,7 @@ import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.da
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart';
 import 'package:fcheck/src/analyzers/layers/layers_analyzer.dart';
 import 'package:fcheck/src/analyzers/layers/layers_delegate.dart';
+import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/analyzers/localization/localization_delegate.dart';
 import 'package:fcheck/src/analyzers/localization/localization_issue.dart';
@@ -61,6 +62,7 @@ import 'package:fcheck/src/analyzers/shared/dependency_uri_utils.dart';
 import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/source_sort_delegate.dart';
+import 'package:fcheck/src/exports/svg/export_folders/export_svg_folders.dart';
 import 'package:fcheck/src/fcheck_pubspec_info.dart';
 import 'package:fcheck/src/fcheck_test_summary.dart';
 import 'package:fcheck/src/fcheck_test_visitor.dart';
@@ -356,6 +358,9 @@ class AnalyzeFolder {
             analyzedFilePaths: dartFiles.map((file) => file.path).toSet(),
           )
         : LayersAnalysisResult(issues: [], layers: {}, dependencyGraph: {});
+    final reportedLayersIssues = layersEnabled
+        ? buildReportedLayersIssuesFromFolderGraph(layersResult)
+        : <LayersIssue>[];
 
     final metricsAggregation = MetricsAnalyzer().aggregate(
       unifiedResult.resultsByType[MetricsFileData]
@@ -417,7 +422,7 @@ class AnalyzeFolder {
       hardcodedStringIssues: hardcodedStringIssues,
       magicNumberIssues: magicNumberIssues,
       sourceSortIssues: sourceSortIssues,
-      layersIssues: layersResult.issues,
+      layersIssues: reportedLayersIssues,
       layersEdgeCount: layersResult.edgeCount,
       layersCount: layersResult.layerCount,
       dependencyGraph: layersResult.dependencyGraph,
