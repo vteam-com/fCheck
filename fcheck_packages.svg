@@ -347,15 +347,15 @@
     font-weight: 900;
   }
 </style>
-<text x="600.0" y="28.0" class="packageLabelTitle" text-anchor="middle">fcheck v1.4.0</text>
+<text x="600.0" y="28.0" class="packageLabelTitle" text-anchor="middle">fcheck v1.4.1</text>
 <g class="packageMetadataPill"><title>Dart &gt;=3.12.0 &lt;4.0.0</title><rect x="553.0" y="36.0" width="94.0" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="41" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart &gt;=3.12.0 &lt;4.0.0</text></g>
 <text x="280.0" y="70.0" class="packageLabelSection">dependencies (6 items)</text>
 <line x1="280.0" y1="76.0" x2="480.0" y2="76.0" stroke="#1d4ed8" stroke-width="2.0" opacity="0.9"/>
 <text x="720.0" y="70.0" class="packageLabelSection">dev_dependencies (2 items)</text>
 <line x1="720.0" y1="76.0" x2="920.0" y2="76.0" stroke="#166534" stroke-width="2.0" opacity="0.9"/>
-<text x="600.0" y="684.0" class="packageLabelDerivedSection" text-anchor="middle">Derived packages (29 items)</text>
+<text x="600.0" y="684.0" class="packageLabelDerivedSection" text-anchor="middle">Derived packages (Depth 1) (29 items)</text>
 <line x1="40.0" y1="690.0" x2="1160.0" y2="690.0" stroke="#64748b" stroke-width="1" opacity="0.35"/>
-<text x="600.0" y="2614.0" class="packageLabelDerivedSection" text-anchor="middle">Transitive packages (11 items)</text>
+<text x="600.0" y="2614.0" class="packageLabelDerivedSection" text-anchor="middle">Derived packages (Depth 2) (11 items)</text>
 <line x1="40.0" y1="2620.0" x2="1160.0" y2="2620.0" stroke="#64748b" stroke-width="1" opacity="0.35"/>
 <g>
   <path d="M 280.0 582.0 H 268.0 Q 262.0 582.0 262.0 588.0 V 914.0 Q 262.0 920.0 268.0 920.0 H 460.0" class="edgeVertical"/>

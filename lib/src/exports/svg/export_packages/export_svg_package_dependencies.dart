@@ -13,6 +13,7 @@ part 'export_svg_package_dependencies_routing.dart';
 part 'export_svg_package_dependencies_layout.dart';
 part 'export_svg_package_dependencies_metadata.dart';
 part 'export_svg_package_dependencies_platforms.dart';
+part 'export_svg_package_dependencies_node_rendering.dart';
 part 'export_svg_package_dependencies_rendering.dart';
 
 const String _defaultProjectName = 'project';
@@ -35,6 +36,8 @@ const String _pubDepsDependenciesKey = 'dependencies';
 
 const double _canvasPadding = 40;
 const double _canvasExtraWidth = 240;
+const double _edgeLaneClipSafetyPadding = 8;
+const int _maxCanvasSizingIterations = 3;
 const double _headerHeight = 70;
 const double _nodeWidth = 200;
 const double _nodeHeight = 68;
@@ -71,27 +74,6 @@ const double _derivedNodeTextPadding = 8;
 const double _derivedRightIncomingBadgeOffsetY = 5;
 const double _derivedRightOutgoingBadgeOffsetY = 6;
 
-/// Returns the vertical anchors for the right-side derived badges.
-///
-/// When a derived node shows both a right incoming badge and a right outgoing
-/// badge, the badges are stacked vertically and any outgoing edge must reuse
-/// the same outgoing anchor to stay visually aligned with the green badge.
-({double incomingY, double outgoingY}) _computeDerivedRightBadgeAnchors({
-  required double nodeCenterY,
-  required int rightIncomingCount,
-  required int outgoingCount,
-}) {
-  final hasStackedRightBadges = rightIncomingCount > 0 && outgoingCount > 0;
-  return (
-    incomingY:
-        nodeCenterY -
-        (hasStackedRightBadges ? _derivedRightIncomingBadgeOffsetY : 0),
-    outgoingY:
-        nodeCenterY +
-        (hasStackedRightBadges ? _derivedRightOutgoingBadgeOffsetY : 0),
-  );
-}
-
 const String _derivedNodeDashArray = '4,2';
 const String _backgroundColor = '#f8fafc';
 const String _dependencyFillColor = '#dbeafe';
@@ -104,8 +86,8 @@ const String _versionTextColor = '#334155';
 const String _derivedNodeFillColor = '#f8fafc';
 const String _derivedNodeStrokeColor = '#64748b';
 const String _derivedGroupLabelColor = '#475569';
-const String _derivedPackagesSectionTitle = 'Derived packages';
-const String _transitivePackagesSectionTitle = 'Transitive packages';
+const int _firstDependencyLayerIndex = 0;
+const int _nextDependencyLayerStartIndex = 1;
 
 /// Package node info with resolved version.
 typedef PackageDependencyNode = ({String name, String version});
@@ -134,6 +116,13 @@ class PackageDependencyGraphData {
   final Map<String, List<PackageDependencyNode>>
   nestedDerivedDependenciesByPackage;
 
+  /// Additional transitive dependency layers keyed by parent package name.
+  ///
+  /// Each list entry represents one extra depth level after
+  /// [derivedDependenciesByPackage].
+  final List<Map<String, List<PackageDependencyNode>>>
+  transitiveDependencyLayersByParentPackage;
+
   /// Reverse dependency counts: how many packages in the full tree depend on each package.
   final Map<String, int> reverseDepCounts;
 
@@ -157,6 +146,8 @@ class PackageDependencyGraphData {
         const <String, List<PackageDependencyNode>>{},
     this.nestedDerivedDependenciesByPackage =
         const <String, List<PackageDependencyNode>>{},
+    this.transitiveDependencyLayersByParentPackage =
+        const <Map<String, List<PackageDependencyNode>>>[],
     this.reverseDepCounts = const <String, int>{},
     this.outgoingDepCounts = const <String, int>{},
     this.platformSupportByPackage = const <String, PackagePlatformSupport>{},
@@ -211,6 +202,8 @@ PackageDependencyGraphData loadPackageDependencyGraphData(Directory directory) {
         devDependencies: devDependencies,
         derivedDependenciesByPackage: derivedData.derivedByPackage,
         nestedDerivedDependenciesByPackage: derivedData.nestedDerivedByPackage,
+        transitiveDependencyLayersByParentPackage:
+            derivedData.transitiveDependencyLayersByParentPackage,
       ),
     );
 
@@ -222,6 +215,8 @@ PackageDependencyGraphData loadPackageDependencyGraphData(Directory directory) {
       devDependencies: devDependencies,
       derivedDependenciesByPackage: derivedData.derivedByPackage,
       nestedDerivedDependenciesByPackage: derivedData.nestedDerivedByPackage,
+      transitiveDependencyLayersByParentPackage:
+          derivedData.transitiveDependencyLayersByParentPackage,
       reverseDepCounts: derivedData.reverseDepCounts,
       outgoingDepCounts: derivedData.outgoingDepCounts,
       platformSupportByPackage: platformSupportByPackage,
@@ -339,6 +334,8 @@ List<PackageDependencyNode> toPackageNodes(
 typedef DerivedPackageData = ({
   Map<String, List<PackageDependencyNode>> derivedByPackage,
   Map<String, List<PackageDependencyNode>> nestedDerivedByPackage,
+  List<Map<String, List<PackageDependencyNode>>>
+  transitiveDependencyLayersByParentPackage,
   Map<String, int> reverseDepCounts,
   Map<String, int> outgoingDepCounts,
 });
@@ -364,6 +361,8 @@ DerivedPackageData readDerivedDependenciesByPackage(
     return (
       derivedByPackage: <String, List<PackageDependencyNode>>{},
       nestedDerivedByPackage: <String, List<PackageDependencyNode>>{},
+      transitiveDependencyLayersByParentPackage:
+          <Map<String, List<PackageDependencyNode>>>[],
       reverseDepCounts: <String, int>{},
       outgoingDepCounts: <String, int>{},
     );
@@ -375,6 +374,8 @@ DerivedPackageData readDerivedDependenciesByPackage(
       return (
         derivedByPackage: <String, List<PackageDependencyNode>>{},
         nestedDerivedByPackage: <String, List<PackageDependencyNode>>{},
+        transitiveDependencyLayersByParentPackage:
+            <Map<String, List<PackageDependencyNode>>>[],
         reverseDepCounts: <String, int>{},
         outgoingDepCounts: <String, int>{},
       );
@@ -384,6 +385,8 @@ DerivedPackageData readDerivedDependenciesByPackage(
       return (
         derivedByPackage: <String, List<PackageDependencyNode>>{},
         nestedDerivedByPackage: <String, List<PackageDependencyNode>>{},
+        transitiveDependencyLayersByParentPackage:
+            <Map<String, List<PackageDependencyNode>>>[],
         reverseDepCounts: <String, int>{},
         outgoingDepCounts: <String, int>{},
       );
@@ -452,47 +455,70 @@ DerivedPackageData readDerivedDependenciesByPackage(
       }
     }
 
-    final nestedDerivedByPackage = <String, List<PackageDependencyNode>>{};
+    final transitiveDependencyLayersByParentPackage =
+        <Map<String, List<PackageDependencyNode>>>[];
+    final seenPackageNames = <String>{...rootPackageNames};
     final secondLevelPackageNames = derivedByPackage.values
         .expand((nodeList) => nodeList.map((node) => node.name))
         .toSet();
-    final sortedSecondLevelPackageNames = secondLevelPackageNames.toList()
-      ..sort();
+    seenPackageNames.addAll(secondLevelPackageNames);
+    var currentLevelPackageNames = secondLevelPackageNames.toList()..sort();
 
-    for (final secondLevelPackageName in sortedSecondLevelPackageNames) {
-      final packageData = pubDepsPackages[secondLevelPackageName];
-      if (packageData == null) {
-        continue;
+    while (currentLevelPackageNames.isNotEmpty) {
+      final currentLayerByParent = <String, List<PackageDependencyNode>>{};
+      final nextLevelPackageNames = <String>{};
+
+      for (final currentLevelPackageName in currentLevelPackageNames) {
+        final packageData = pubDepsPackages[currentLevelPackageName];
+        if (packageData == null) {
+          continue;
+        }
+
+        final nextLevelDependencyNames =
+            packageData.dependencies
+                .where(
+                  (dependencyName) =>
+                      dependencyName != currentLevelPackageName &&
+                      !rootPackageNames.contains(dependencyName) &&
+                      !seenPackageNames.contains(dependencyName),
+                )
+                .toSet()
+                .toList()
+              ..sort();
+
+        final nextLevelDependencyNodes = nextLevelDependencyNames
+            .map(
+              (nextLevelDependencyName) => (
+                name: nextLevelDependencyName,
+                version:
+                    pubDepsPackages[nextLevelDependencyName]?.version ??
+                    packageVersions[nextLevelDependencyName] ??
+                    _unknownPackageVersion,
+              ),
+            )
+            .toList(growable: false);
+
+        if (nextLevelDependencyNodes.isEmpty) {
+          continue;
+        }
+
+        currentLayerByParent[currentLevelPackageName] =
+            nextLevelDependencyNodes;
+        nextLevelPackageNames.addAll(nextLevelDependencyNames);
       }
 
-      final nestedDerivedNames =
-          packageData.dependencies
-              .where(
-                (dependencyName) =>
-                    dependencyName != secondLevelPackageName &&
-                    !rootPackageNames.contains(dependencyName) &&
-                    !secondLevelPackageNames.contains(dependencyName),
-              )
-              .toSet()
-              .toList()
-            ..sort();
-
-      final nestedDerivedNodes = nestedDerivedNames
-          .map(
-            (nestedDerivedName) => (
-              name: nestedDerivedName,
-              version:
-                  pubDepsPackages[nestedDerivedName]?.version ??
-                  packageVersions[nestedDerivedName] ??
-                  _unknownPackageVersion,
-            ),
-          )
-          .toList(growable: false);
-
-      if (nestedDerivedNodes.isNotEmpty) {
-        nestedDerivedByPackage[secondLevelPackageName] = nestedDerivedNodes;
+      if (currentLayerByParent.isEmpty) {
+        break;
       }
+
+      transitiveDependencyLayersByParentPackage.add(currentLayerByParent);
+      seenPackageNames.addAll(nextLevelPackageNames);
+      currentLevelPackageNames = nextLevelPackageNames.toList()..sort();
     }
+    final nestedDerivedByPackage =
+        transitiveDependencyLayersByParentPackage.isEmpty
+        ? <String, List<PackageDependencyNode>>{}
+        : transitiveDependencyLayersByParentPackage.first;
 
     // Build reverse dependency counts: for each package, how many others depend on it.
     final reverseDepCounts = <String, int>{};
@@ -508,6 +534,8 @@ DerivedPackageData readDerivedDependenciesByPackage(
     return (
       derivedByPackage: derivedByPackage,
       nestedDerivedByPackage: nestedDerivedByPackage,
+      transitiveDependencyLayersByParentPackage:
+          transitiveDependencyLayersByParentPackage,
       reverseDepCounts: reverseDepCounts,
       outgoingDepCounts: outgoingDepCounts,
     );
@@ -515,6 +543,8 @@ DerivedPackageData readDerivedDependenciesByPackage(
     return (
       derivedByPackage: <String, List<PackageDependencyNode>>{},
       nestedDerivedByPackage: <String, List<PackageDependencyNode>>{},
+      transitiveDependencyLayersByParentPackage:
+          <Map<String, List<PackageDependencyNode>>>[],
       reverseDepCounts: <String, int>{},
       outgoingDepCounts: <String, int>{},
     );
@@ -524,20 +554,31 @@ DerivedPackageData readDerivedDependenciesByPackage(
 /// Builds SVG for Flutter/Dart package dependencies and dev_dependencies.
 ///
 /// The layout renders direct packages in two columns (dependencies left,
-/// dev_dependencies right) at the top, followed by grouped containers for the
-/// next two dependency hops. Lines connect each direct package node to its
-/// first derived packages, then connect first derived packages to the next hop.
+/// dev_dependencies right) at the top, followed by grouped containers for each
+/// resolved transitive dependency depth.
 String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
   final dependencies = graphData.dependencies;
   final devDependencies = graphData.devDependencies;
   if (dependencies.isEmpty && devDependencies.isEmpty) {
-    return generateEmptySvg('No package dependencies found');
+    return generateEmptySvg(AppStrings.noPackageDependenciesFound);
   }
 
   final derivedMap = graphData.derivedDependenciesByPackage;
-  final uniqueDerived = collectUniqueDerived(derivedMap);
-  final nestedDerivedMap = graphData.nestedDerivedDependenciesByPackage;
-  final uniqueNestedDerived = collectUniqueDerived(nestedDerivedMap);
+  final transitiveLayersByParent =
+      graphData.transitiveDependencyLayersByParentPackage.isNotEmpty
+      ? graphData.transitiveDependencyLayersByParentPackage
+      : (graphData.nestedDerivedDependenciesByPackage.isNotEmpty
+            ? <Map<String, List<PackageDependencyNode>>>[
+                graphData.nestedDerivedDependenciesByPackage,
+              ]
+            : const <Map<String, List<PackageDependencyNode>>>[]);
+  final dependencyLayerMaps = <Map<String, List<PackageDependencyNode>>>[
+    derivedMap,
+    ...transitiveLayersByParent,
+  ];
+  final uniquePackagesByLayer = dependencyLayerMaps
+      .map(collectUniqueDerived)
+      .toList(growable: false);
 
   final maxSlots = dependencies.length > devDependencies.length
       ? dependencies.length
@@ -547,62 +588,83 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
       : 0.0;
 
   final directColumnsWidth = (_nodeWidth * _columnCount) + _columnGap;
-  final width =
-      (_canvasPadding * _columnCount) +
-      (_canvasExtraWidth * _columnCount) +
-      directColumnsWidth;
-  final derivedInnerWidth = width - (_canvasPadding * _columnCount);
-  final derivedNodesPerRow = computeDerivedNodesPerRow(derivedInnerWidth);
-  final derivedRows = computePackageLevelRowCount(
-    uniqueDerived.length,
-    derivedNodesPerRow,
-  );
-  final derivedSectionHeight = computePackageLevelSectionHeight(derivedRows);
-  final nestedDerivedNodesPerRow = computeDerivedNodesPerRow(derivedInnerWidth);
-  final nestedDerivedRows = computePackageLevelRowCount(
-    uniqueNestedDerived.length,
-    nestedDerivedNodesPerRow,
-  );
-  final nestedDerivedSectionHeight = computePackageLevelSectionHeight(
-    nestedDerivedRows,
-  );
-
   final columnsTopY = _headerHeight + _sectionHeaderHeight + _sectionToNodesGap;
-  var contentBottomY = columnsTopY + directColumnHeight;
-  var derivedGroupTopY = contentBottomY;
-  if (uniqueDerived.isNotEmpty) {
-    derivedGroupTopY = contentBottomY + _derivedGroupTopMargin;
-    contentBottomY = derivedGroupTopY + derivedSectionHeight;
-  }
-  var nestedDerivedGroupTopY = contentBottomY;
-  if (uniqueNestedDerived.isNotEmpty) {
-    nestedDerivedGroupTopY = contentBottomY + _derivedGroupTopMargin;
-    contentBottomY = nestedDerivedGroupTopY + nestedDerivedSectionHeight;
-  }
-  final height = contentBottomY + _canvasPadding;
 
-  final leftX = (width - directColumnsWidth) / _halfDivisor;
-  final rightX = leftX + _nodeWidth + _columnGap;
-  final derivedNodesStartX = _canvasPadding;
-  final derivedNodesStartY =
-      derivedGroupTopY + _sectionHeaderHeight + _sectionToNodesGap;
-  final nestedDerivedNodesStartY =
-      nestedDerivedGroupTopY + _sectionHeaderHeight + _sectionToNodesGap;
+  ({
+    double width,
+    double height,
+    double leftX,
+    double rightX,
+    List<double> layerTopYs,
+    List<Map<String, ({double x, double y})>> layerPositions,
+  })
+  buildLayout(double sidePadding) {
+    final width =
+        (_canvasPadding * _columnCount) +
+        (sidePadding * _columnCount) +
+        directColumnsWidth;
+    final derivedInnerWidth = width - (_canvasPadding * _columnCount);
+    final layerNodesPerRow = List<int>.generate(
+      uniquePackagesByLayer.length,
+      (_) => computeDerivedNodesPerRow(derivedInnerWidth),
+      growable: false,
+    );
+    final layerRows = List<int>.generate(
+      uniquePackagesByLayer.length,
+      (index) => computePackageLevelRowCount(
+        uniquePackagesByLayer[index].length,
+        layerNodesPerRow[index],
+      ),
+      growable: false,
+    );
+    final layerSectionHeights = List<double>.generate(
+      uniquePackagesByLayer.length,
+      (index) => computePackageLevelSectionHeight(layerRows[index]),
+      growable: false,
+    );
 
-  final derivedPositions = computeDerivedPositions(
-    uniqueDerived,
-    derivedNodesPerRow,
-    startX: derivedNodesStartX,
-    startY: derivedNodesStartY,
-    innerWidth: derivedInnerWidth,
-  );
-  final nestedDerivedPositions = computeDerivedPositions(
-    uniqueNestedDerived,
-    nestedDerivedNodesPerRow,
-    startX: derivedNodesStartX,
-    startY: nestedDerivedNodesStartY,
-    innerWidth: derivedInnerWidth,
-  );
+    var contentBottomY = columnsTopY + directColumnHeight;
+    final layerTopYs = List<double>.filled(uniquePackagesByLayer.length, 0.0);
+    for (
+      var layerIndex = 0;
+      layerIndex < uniquePackagesByLayer.length;
+      layerIndex++
+    ) {
+      final layerPackages = uniquePackagesByLayer[layerIndex];
+      layerTopYs[layerIndex] = contentBottomY;
+      if (layerPackages.isEmpty) {
+        continue;
+      }
+      final layerTopY = contentBottomY + _derivedGroupTopMargin;
+      layerTopYs[layerIndex] = layerTopY;
+      contentBottomY = layerTopY + layerSectionHeights[layerIndex];
+    }
+
+    final leftX = (width - directColumnsWidth) / _halfDivisor;
+    final rightX = leftX + _nodeWidth + _columnGap;
+    final derivedNodesStartX = _canvasPadding;
+    final layerPositions = List<Map<String, ({double x, double y})>>.generate(
+      uniquePackagesByLayer.length,
+      (layerIndex) => computeDerivedPositions(
+        uniquePackagesByLayer[layerIndex],
+        layerNodesPerRow[layerIndex],
+        startX: derivedNodesStartX,
+        startY:
+            layerTopYs[layerIndex] + _sectionHeaderHeight + _sectionToNodesGap,
+        innerWidth: derivedInnerWidth,
+      ),
+      growable: false,
+    );
+
+    return (
+      width: width,
+      height: contentBottomY + _canvasPadding,
+      leftX: leftX,
+      rightX: rightX,
+      layerTopYs: layerTopYs,
+      layerPositions: layerPositions,
+    );
+  }
 
   // Count only edges that are visible in this diagram.
   final visibleDirectPeers = buildVisiblePackagePeerLists(
@@ -627,24 +689,106 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
     sourcePackageNames: devDependencyNames,
   ).incoming;
   final visibleRightIncomingCounts = buildPeerCounts(visibleRightIncomingPeers);
-  final derivedPackageNames = uniqueDerived
-      .map((package) => package.name)
-      .toSet();
-  final visibleDerivedPeers = buildVisiblePackagePeerLists(
-    nestedDerivedMap,
-    sourcePackageNames: null,
+  final layerNodeOutgoingPeers = List<Map<String, List<String>>>.generate(
+    uniquePackagesByLayer.length,
+    (layerIndex) {
+      if (layerIndex + 1 >= dependencyLayerMaps.length) {
+        return const <String, List<String>>{};
+      }
+      return buildVisiblePackagePeerLists(
+        dependencyLayerMaps[layerIndex + 1],
+        sourcePackageNames: null,
+      ).outgoing;
+    },
+    growable: false,
   );
-  final visibleDerivedOutgoingPeers = visibleDerivedPeers.outgoing;
-  final visibleDerivedOutgoingCounts = buildPeerCounts(
-    visibleDerivedOutgoingPeers,
+  final layerNodeOutgoingCounts = layerNodeOutgoingPeers
+      .map(buildPeerCounts)
+      .toList(growable: false);
+
+  final layerRightIncomingPeers = List<Map<String, List<String>>>.filled(
+    uniquePackagesByLayer.length,
+    const <String, List<String>>{},
   );
-  final visibleTransitiveIncomingPeers = buildVisiblePackagePeerLists(
-    nestedDerivedMap,
-    sourcePackageNames: derivedPackageNames,
-  ).incoming;
-  final visibleTransitiveIncomingCounts = buildPeerCounts(
-    visibleTransitiveIncomingPeers,
-  );
+  if (uniquePackagesByLayer.isNotEmpty) {
+    layerRightIncomingPeers[_firstDependencyLayerIndex] =
+        visibleRightIncomingPeers;
+    for (
+      var layerIndex = _nextDependencyLayerStartIndex;
+      layerIndex < uniquePackagesByLayer.length;
+      layerIndex++
+    ) {
+      final incomingLayerMap = dependencyLayerMaps[layerIndex];
+      layerRightIncomingPeers[layerIndex] = buildVisiblePackagePeerLists(
+        incomingLayerMap,
+        sourcePackageNames: null,
+      ).incoming;
+    }
+  }
+  final layerRightIncomingCounts = layerRightIncomingPeers
+      .map(buildPeerCounts)
+      .toList(growable: false);
+
+  var sidePadding = _canvasExtraWidth;
+  var layout = buildLayout(sidePadding);
+  for (var i = 0; i < _maxCanvasSizingIterations; i++) {
+    var maxLaneCount = 0;
+    maxLaneCount = max(
+      maxLaneCount,
+      _laneCountForColumnEdges(
+        packages: dependencies,
+        derivedMap: derivedMap,
+        derivedPositions: layout.layerPositions[_firstDependencyLayerIndex],
+        columnsTopY: columnsTopY,
+        isLeftColumn: true,
+        rightIncomingCounts: visibleRightIncomingCounts,
+        outgoingCounts: layerNodeOutgoingCounts[_firstDependencyLayerIndex],
+      ),
+    );
+    maxLaneCount = max(
+      maxLaneCount,
+      _laneCountForColumnEdges(
+        packages: devDependencies,
+        derivedMap: derivedMap,
+        derivedPositions: layout.layerPositions[_firstDependencyLayerIndex],
+        columnsTopY: columnsTopY,
+        isLeftColumn: false,
+        rightIncomingCounts: visibleRightIncomingCounts,
+        outgoingCounts: layerNodeOutgoingCounts[_firstDependencyLayerIndex],
+      ),
+    );
+
+    for (
+      var layerIndex = _nextDependencyLayerStartIndex;
+      layerIndex < uniquePackagesByLayer.length;
+      layerIndex++
+    ) {
+      maxLaneCount = max(
+        maxLaneCount,
+        _laneCountForDerivedLevelEdges(
+          derivedMap: dependencyLayerMaps[layerIndex],
+          sourcePositions: layout.layerPositions[layerIndex - 1],
+          targetPositions: layout.layerPositions[layerIndex],
+          rightIncomingCounts: layerRightIncomingCounts[layerIndex - 1],
+        ),
+      );
+    }
+
+    final requiredPadding = _requiredEdgeSidePaddingForLaneCount(maxLaneCount);
+    if (requiredPadding <= sidePadding) {
+      break;
+    }
+    sidePadding = requiredPadding;
+    layout = buildLayout(sidePadding);
+  }
+
+  final width = layout.width;
+  final height = layout.height;
+  final leftX = layout.leftX;
+  final rightX = layout.rightX;
+  final layerTopYs = layout.layerTopYs;
+  final layerPositions = layout.layerPositions;
+
   final platformSupportByPackage = graphData.platformSupportByPackage;
 
   final buffer = StringBuffer();
@@ -680,7 +824,7 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
     buffer,
     x: leftX,
     y: _headerHeight,
-    title: 'dependencies',
+    title: AppStrings.packageDependenciesTitle,
     color: _dependencyStrokeColor,
     count: dependencies.length,
   );
@@ -688,30 +832,28 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
     buffer,
     x: rightX,
     y: _headerHeight,
-    title: 'dev_dependencies',
+    title: AppStrings.packageDevDependenciesTitle,
     color: _devDependencyStrokeColor,
     count: devDependencies.length,
   );
 
-  // Draw derived section header.
-  if (uniqueDerived.isNotEmpty) {
+  for (
+    var layerIndex = 0;
+    layerIndex < uniquePackagesByLayer.length;
+    layerIndex++
+  ) {
+    final layerPackages = uniquePackagesByLayer[layerIndex];
+    if (layerPackages.isEmpty) {
+      continue;
+    }
+    final depthLevel = layerIndex + 1;
     writeDerivedSectionHeader(
       buffer,
       sectionX: _canvasPadding,
-      sectionY: derivedGroupTopY,
+      sectionY: layerTopYs[layerIndex],
       sectionWidth: width - (_canvasPadding * _columnCount),
-      title: _derivedPackagesSectionTitle,
-      count: uniqueDerived.length,
-    );
-  }
-  if (uniqueNestedDerived.isNotEmpty) {
-    writeDerivedSectionHeader(
-      buffer,
-      sectionX: _canvasPadding,
-      sectionY: nestedDerivedGroupTopY,
-      sectionWidth: width - (_canvasPadding * _columnCount),
-      title: _transitivePackagesSectionTitle,
-      count: uniqueNestedDerived.length,
+      title: 'Derived packages (Depth $depthLevel)',
+      count: layerPackages.length,
     );
   }
 
@@ -721,34 +863,40 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
     x: leftX,
     packages: dependencies,
     derivedMap: derivedMap,
-    derivedPositions: derivedPositions,
+    derivedPositions: layerPositions[_firstDependencyLayerIndex],
     columnsTopY: columnsTopY,
     isLeftColumn: true,
     platformSupportByPackage: platformSupportByPackage,
     rightIncomingCounts: visibleRightIncomingCounts,
-    outgoingCounts: visibleDerivedOutgoingCounts,
+    outgoingCounts: layerNodeOutgoingCounts[_firstDependencyLayerIndex],
   );
   writeColumnEdges(
     buffer,
     x: rightX,
     packages: devDependencies,
     derivedMap: derivedMap,
-    derivedPositions: derivedPositions,
+    derivedPositions: layerPositions[_firstDependencyLayerIndex],
     columnsTopY: columnsTopY,
     isLeftColumn: false,
     platformSupportByPackage: platformSupportByPackage,
     rightIncomingCounts: visibleRightIncomingCounts,
-    outgoingCounts: visibleDerivedOutgoingCounts,
+    outgoingCounts: layerNodeOutgoingCounts[_firstDependencyLayerIndex],
   );
-  writeDerivedLevelEdges(
-    buffer,
-    derivedMap: nestedDerivedMap,
-    sourcePositions: derivedPositions,
-    targetPositions: nestedDerivedPositions,
-    rightIncomingCounts: visibleRightIncomingCounts,
-    sourceNodeWidth: _derivedNodeWidth,
-    platformSupportByPackage: platformSupportByPackage,
-  );
+  for (
+    var layerIndex = _nextDependencyLayerStartIndex;
+    layerIndex < uniquePackagesByLayer.length;
+    layerIndex++
+  ) {
+    writeDerivedLevelEdges(
+      buffer,
+      derivedMap: dependencyLayerMaps[layerIndex],
+      sourcePositions: layerPositions[layerIndex - 1],
+      targetPositions: layerPositions[layerIndex],
+      rightIncomingCounts: layerRightIncomingCounts[layerIndex - 1],
+      sourceNodeWidth: _derivedNodeWidth,
+      platformSupportByPackage: platformSupportByPackage,
+    );
+  }
 
   // Draw direct package nodes
   writeDirectColumn(
@@ -778,33 +926,30 @@ String exportSvgPackageDependencies(PackageDependencyGraphData graphData) {
     platformSupportByPackage: platformSupportByPackage,
   );
 
-  // Draw derived nodes inside group
-  if (uniqueDerived.isNotEmpty) {
+  // Draw derived and transitive nodes inside each section.
+  for (
+    var layerIndex = 0;
+    layerIndex < uniquePackagesByLayer.length;
+    layerIndex++
+  ) {
+    final layerPackages = uniquePackagesByLayer[layerIndex];
+    if (layerPackages.isEmpty) {
+      continue;
+    }
     writeDerivedNodes(
       buffer,
-      uniqueDerived: uniqueDerived,
-      derivedPositions: derivedPositions,
-      leftIncomingCounts: visibleLeftIncomingCounts,
-      leftIncomingPeers: visibleLeftIncomingPeers,
-      rightIncomingCounts: visibleRightIncomingCounts,
-      rightIncomingPeers: visibleRightIncomingPeers,
-      outgoingCounts: visibleDerivedOutgoingCounts,
-      outgoingPeers: visibleDerivedOutgoingPeers,
-      nodeWidth: _derivedNodeWidth,
-      platformSupportByPackage: platformSupportByPackage,
-    );
-  }
-  if (uniqueNestedDerived.isNotEmpty) {
-    writeDerivedNodes(
-      buffer,
-      uniqueDerived: uniqueNestedDerived,
-      derivedPositions: nestedDerivedPositions,
-      leftIncomingCounts: const <String, int>{},
-      leftIncomingPeers: const <String, List<String>>{},
-      rightIncomingCounts: visibleTransitiveIncomingCounts,
-      rightIncomingPeers: visibleTransitiveIncomingPeers,
-      outgoingCounts: const <String, int>{},
-      outgoingPeers: const <String, List<String>>{},
+      uniqueDerived: layerPackages,
+      derivedPositions: layerPositions[layerIndex],
+      leftIncomingCounts: layerIndex == _firstDependencyLayerIndex
+          ? visibleLeftIncomingCounts
+          : const <String, int>{},
+      leftIncomingPeers: layerIndex == _firstDependencyLayerIndex
+          ? visibleLeftIncomingPeers
+          : const <String, List<String>>{},
+      rightIncomingCounts: layerRightIncomingCounts[layerIndex],
+      rightIncomingPeers: layerRightIncomingPeers[layerIndex],
+      outgoingCounts: layerNodeOutgoingCounts[layerIndex],
+      outgoingPeers: layerNodeOutgoingPeers[layerIndex],
       nodeWidth: _derivedNodeWidth,
       platformSupportByPackage: platformSupportByPackage,
     );

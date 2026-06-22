@@ -103,6 +103,10 @@ class AppStrings {
   static const String devDependency = 'DevDependencies';
   static const String dependencies = 'Dependencies';
   static const String duplicateCode = 'Duplicate Code';
+  static const String packageDependenciesTitle = 'dependencies';
+  static const String packageDevDependenciesTitle = 'dev_dependencies';
+  static const String noPackageDependenciesFound =
+      'No package dependencies found';
 
   // Indicators
   static const String noneIndicator = '  (none)';

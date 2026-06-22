@@ -23,6 +23,152 @@ typedef _DerivedLevelEdge = ({
   double endY,
 });
 
+/// Returns the vertical anchors for right-side derived badges.
+///
+/// When a node renders both incoming and outgoing badges on the right, this
+/// offsets each anchor to preserve visual separation and edge alignment.
+({double incomingY, double outgoingY}) _computeDerivedRightBadgeAnchors({
+  required double nodeCenterY,
+  required int rightIncomingCount,
+  required int outgoingCount,
+}) {
+  final hasStackedRightBadges = rightIncomingCount > 0 && outgoingCount > 0;
+  return (
+    incomingY:
+        nodeCenterY -
+        (hasStackedRightBadges ? _derivedRightIncomingBadgeOffsetY : 0),
+    outgoingY:
+        nodeCenterY +
+        (hasStackedRightBadges ? _derivedRightOutgoingBadgeOffsetY : 0),
+  );
+}
+
+/// Computes minimum side padding required to keep all routed lanes in-bounds.
+double _requiredEdgeSidePaddingForLaneCount(int laneCount) {
+  if (laneCount <= 0) {
+    return _canvasExtraWidth;
+  }
+
+  final laneSpan =
+      _packageLaneGutterOffset +
+      _packageLaneBaseOffset +
+      stackedEdgeBaseOffset +
+      (laneCount - _singleEntryCount) * stackedEdgeLaneStepWidth +
+      stackedEdgeCornerRadius +
+      _edgeLaneClipSafetyPadding;
+  return max(_canvasExtraWidth, laneSpan);
+}
+
+/// Returns lane count for direct-to-derived column edges using vertical spans.
+int _laneCountForColumnEdges({
+  required List<PackageDependencyNode> packages,
+  required Map<String, List<PackageDependencyNode>> derivedMap,
+  required Map<String, ({double x, double y})> derivedPositions,
+  required double columnsTopY,
+  required bool isLeftColumn,
+  required Map<String, int> rightIncomingCounts,
+  required Map<String, int> outgoingCounts,
+}) {
+  final edges = <_PackageColumnEdge>[];
+  for (var i = 0; i < packages.length; i++) {
+    final pkg = packages[i];
+    final pkgCenterY =
+        columnsTopY +
+        i * (_nodeHeight + _packageSlotSpacing) +
+        (_nodeHeight / _halfDivisor);
+    final derived = derivedMap[pkg.name] ?? const <PackageDependencyNode>[];
+    for (final derivedPkg in derived) {
+      final pos = derivedPositions[derivedPkg.name];
+      if (pos == null) {
+        continue;
+      }
+      final targetCenterY = pos.y + (_derivedNodeHeight / _halfDivisor);
+      final rightBadgeAnchors = _computeDerivedRightBadgeAnchors(
+        nodeCenterY: targetCenterY,
+        rightIncomingCount: rightIncomingCounts[derivedPkg.name] ?? 0,
+        outgoingCount: outgoingCounts[derivedPkg.name] ?? 0,
+      );
+      edges.add((
+        sourcePackage: pkg.name,
+        targetPackage: derivedPkg.name,
+        targetVersion: derivedPkg.version,
+        startX: 0,
+        startY: pkgCenterY,
+        endX: 0,
+        endY: isLeftColumn ? targetCenterY : rightBadgeAnchors.incomingY,
+      ));
+    }
+  }
+
+  if (edges.isEmpty) {
+    return 0;
+  }
+  final laneSlotByEdgeKey = buildVerticalSpanLaneSlots<_PackageColumnEdge>(
+    edges,
+    keyOf: (edge) => '${edge.sourcePackage}->${edge.targetPackage}',
+    startYOf: (edge) => edge.startY,
+    endYOf: (edge) => edge.endY,
+  );
+  if (laneSlotByEdgeKey.isEmpty) {
+    return 0;
+  }
+  return laneSlotByEdgeKey.values.reduce(max) + 1;
+}
+
+/// Returns lane count for derived-level edges using vertical span overlap.
+int _laneCountForDerivedLevelEdges({
+  required Map<String, List<PackageDependencyNode>> derivedMap,
+  required Map<String, ({double x, double y})> sourcePositions,
+  required Map<String, ({double x, double y})> targetPositions,
+  required Map<String, int> rightIncomingCounts,
+}) {
+  final edges = <_DerivedLevelEdge>[];
+  derivedMap.forEach((sourcePackage, targetPackages) {
+    final sourcePos = sourcePositions[sourcePackage];
+    if (sourcePos == null) {
+      return;
+    }
+
+    final outgoingCount = targetPackages.length;
+    final badgeCenterY = sourcePos.y + (_derivedNodeHeight / _halfDivisor);
+    final rightBadgeAnchors = _computeDerivedRightBadgeAnchors(
+      nodeCenterY: badgeCenterY,
+      rightIncomingCount: rightIncomingCounts[sourcePackage] ?? 0,
+      outgoingCount: outgoingCount,
+    );
+    for (final targetPackage in targetPackages) {
+      final targetPos = targetPositions[targetPackage.name];
+      if (targetPos == null) {
+        continue;
+      }
+
+      edges.add((
+        sourcePackage: sourcePackage,
+        targetPackage: targetPackage.name,
+        targetVersion: targetPackage.version,
+        startX: 0,
+        startY: rightBadgeAnchors.outgoingY,
+        endX: 0,
+        endY: targetPos.y + (_derivedNodeHeight / _halfDivisor),
+      ));
+    }
+  });
+
+  if (edges.isEmpty) {
+    return 0;
+  }
+  final laneSlotByEdgeKey = buildVerticalSpanLaneSlots<_DerivedLevelEdge>(
+    edges,
+    keyOf: (edge) => '${edge.sourcePackage}->${edge.targetPackage}',
+    startYOf: (edge) => edge.startY,
+    endYOf: (edge) => edge.endY,
+  );
+  if (laneSlotByEdgeKey.isEmpty) {
+    return 0;
+  }
+  return laneSlotByEdgeKey.values.reduce(max) + 1;
+}
+
 /// Draws edges from each direct package node to its derived package nodes.
 /// For left column, edges exit from the left edge; for right column, from the right edge.
 void writeColumnEdges(

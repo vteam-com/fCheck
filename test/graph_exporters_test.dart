@@ -601,21 +601,45 @@ void main() {
                   (name: 'collection', version: '1.19.1'),
                 ],
               },
+          transitiveDependencyLayersByParentPackage:
+              <Map<String, List<PackageDependencyNode>>>[
+                <String, List<PackageDependencyNode>>{
+                  'http_parser': <PackageDependencyNode>[
+                    (name: 'source_span', version: '1.10.1'),
+                  ],
+                  'async': <PackageDependencyNode>[
+                    (name: 'collection', version: '1.19.1'),
+                  ],
+                },
+                <String, List<PackageDependencyNode>>{
+                  'source_span': <PackageDependencyNode>[
+                    (name: 'term_glyph', version: '1.2.2'),
+                  ],
+                  'collection': <PackageDependencyNode>[
+                    (name: 'meta', version: '1.16.0'),
+                  ],
+                },
+              ],
         ),
       );
 
-      expect(svg, contains('Derived packages (2 items)'));
-      expect(svg, contains('Transitive packages (2 items)'));
+      expect(svg, contains('Derived packages (Depth 1) (2 items)'));
+      expect(svg, contains('Derived packages (Depth 2) (2 items)'));
+      expect(svg, contains('Derived packages (Depth 3) (2 items)'));
       expect(svg, contains('source_span'));
       expect(svg, contains('collection'));
+      expect(svg, contains('term_glyph'));
+      expect(svg, contains('meta'));
       expect(svg, contains('http_parser -> source_span v1.10.1'));
       expect(svg, contains('async -> collection v1.19.1'));
+      expect(svg, contains('source_span -> term_glyph v1.2.2'));
+      expect(svg, contains('collection -> meta v1.16.0'));
 
       final stackedEdgePaths = RegExp(
         '<path d="M [^"]* H [^"]* Q [^"]* V [^"]* Q [^"]* H [^"]*" class="edgeVertical"/>',
       ).allMatches(svg);
 
-      expect(stackedEdgePaths.length, equals(4));
+      expect(stackedEdgePaths.length, equals(6));
     });
 
     test('render incoming badges for transitive packages', () {
