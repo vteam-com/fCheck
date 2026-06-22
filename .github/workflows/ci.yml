@@ -39,40 +39,21 @@ jobs:
       - name: Tests
         run: flutter test --reporter=compact --no-pub
 
-      - name: Run fcheck against itself (JSON)
-        run: dart run ./bin/fcheck.dart --json --exclude "**/example" . > fcheck-report.json
+      - name: Run fcheck against itself (strict + JSON)
+        run: dart run ./bin/fcheck.dart --strict --json --exclude "**/example" . > fcheck-report.json
 
       - name: Upload fcheck report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: fcheck-report
           path: fcheck-report.json
 
-      - name: Enforce 100% compliance score
-        id: score_gate
-        shell: bash
-        run: |
-          set -euo pipefail
-          score_raw="$(grep -oE '"complianceScore"[[:space:]]*:[[:space:]]*[0-9]+([.][0-9]+)?' fcheck-report.json | head -n1 | sed -E 's/.*:[[:space:]]*//')"
-          if [ -z "${score_raw}" ]; then
-            echo "::error title=Missing compliance score::Could not read .summary.complianceScore from fcheck-report.json"
-            exit 1
-          fi
-
-          score_int="$(awk "BEGIN { printf \"%d\", ${score_raw} }")"
-          echo "score=$score_int" >> "$GITHUB_OUTPUT"
-          echo "Compliance score: ${score_int}%"
-
-          if [ "$score_int" -ne 100 ]; then
-            echo "::error title=fcheck score gate failed::Expected 100%, got ${score_int}%"
-            exit 1
-          fi
-
       - name: Add score summary
         if: always()
         run: |
           echo "### fcheck self-check" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Compliance score: \`${{ steps.score_gate.outputs.score || 'unknown' }}%\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Enforcement: \`--strict\` (fails when score < 100%)" >> "$GITHUB_STEP_SUMMARY"
           echo "- Required score: \`100%\`" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Notify PR when score gate fails
@@ -80,12 +61,11 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const score = `${{ steps.score_gate.outputs.score || 'unknown' }}`;
             const body = [
               '## fcheck CI gate failed',
               '',
               `Required compliance score: **100%**`,
-              `Observed compliance score: **${score}%**`,
+              'fcheck strict gate failed (score was below 100% or an internal error occurred).',
               '',
               'Download the `fcheck-report` artifact for details.'
             ].join('\n');
