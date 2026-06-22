@@ -7,6 +7,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1] – 2026-06-22
+
+### Added
+
+- **Package Platform Warnings Analyzer** — New informational analyzer to inventory all packages using legacy iOS CocoaPods instead of Swift Package Manager (SPM).
+  - Shows package version and source relationship for transitive dependencies.
+  - Available in Console and JSON output (`--json`).
+  - Does not affect compliance score — purely informational to help projects track down package owners and request SPM modernization.
+
 ## [1.4.0] – 2026-06-11
 
 ### Breaking

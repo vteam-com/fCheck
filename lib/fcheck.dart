@@ -63,6 +63,8 @@ import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/source_sort_delegate.dart';
 import 'package:fcheck/src/exports/svg/export_folders/export_svg_folders.dart';
+import 'package:fcheck/src/exports/svg/export_packages/export_package_platform_warning_collector.dart';
+import 'package:fcheck/src/exports/svg/export_packages/export_svg_package_dependencies.dart';
 import 'package:fcheck/src/fcheck_pubspec_info.dart';
 import 'package:fcheck/src/fcheck_test_summary.dart';
 import 'package:fcheck/src/fcheck_test_visitor.dart';
@@ -398,6 +400,10 @@ class AnalyzeFolder {
           ).analyzeProject(projectDir, analyzedContexts: analyzedContexts)
         : <LocalizationIssue>[];
 
+    final packagePlatformWarnings = collectPackagePlatformWarnings(
+      loadPackageDependencyGraphData(projectDir),
+    );
+
     return ProjectMetrics(
       totalFolders: totalFolders,
       totalFiles: totalFiles,
@@ -463,6 +469,7 @@ class AnalyzeFolder {
       localizationIssues: localizationIssues,
       duplicateCodeIssues: duplicateCodeIssues,
       deadCodeIssues: deadCodeIssues,
+      packagePlatformWarnings: packagePlatformWarnings,
       oneClassPerFileAnalyzerEnabled: oneClassPerFileEnabled,
       codeSizeAnalyzerEnabled: codeSizeEnabled,
       hardcodedStringsAnalyzerEnabled: hardcodedStringsEnabled,
@@ -730,7 +737,7 @@ class AnalyzeFolder {
           ).where(analyzedPaths.contains),
         );
       } catch (_) {
-        // Ignore unreadable/unparseable test files and continue.
+        // Ignore unreadable/un-parseable test files and continue.
       }
     }
 

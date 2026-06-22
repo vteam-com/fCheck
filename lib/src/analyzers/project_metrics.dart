@@ -12,6 +12,7 @@ import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
+import 'package:fcheck/src/models/package_platform_warning.dart';
 import 'package:fcheck/src/models/project_results.dart';
 import 'package:fcheck/src/models/project_results_breakdown.dart';
 import 'package:fcheck/src/models/project_type.dart';
@@ -77,6 +78,10 @@ class ProjectMetrics {
 
   /// List of localization coverage issues found in the project.
   final List<LocalizationIssue> localizationIssues;
+
+  /// List of package platform warnings (e.g., legacy CocoaPods iOS packages).
+  /// These are informational only and do not affect compliance scoring.
+  final List<PackagePlatformWarning> packagePlatformWarnings;
 
   /// Total number of dependency edges in the layers graph.
   final int layersEdgeCount;
@@ -317,6 +322,7 @@ class ProjectMetrics {
     this.duplicateCodeIssues = const [],
     this.documentationIssues = const [],
     this.localizationIssues = const [],
+    this.packagePlatformWarnings = const [],
     required this.layersEdgeCount,
     required this.layersCount,
     required this.dependencyGraph,
@@ -478,6 +484,9 @@ class ProjectMetrics {
     'duplicateCodeIssues': duplicateCodeIssues.map((i) => i.toJson()).toList(),
     'documentationIssues': documentationIssues.map((i) => i.toJson()).toList(),
     'localizationIssues': localizationIssues.map((i) => i.toJson()).toList(),
+    'packagePlatformWarnings': packagePlatformWarnings
+        .map((w) => w.toJson())
+        .toList(),
     'tests': {
       'imports': testImportCount,
       'consumedFiles': testConsumedFilesCount,

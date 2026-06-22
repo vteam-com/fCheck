@@ -64,6 +64,7 @@ class _ReportContext {
   final List duplicateCodeIssues;
   final List sourceSortIssues;
   final List layersIssues;
+  final List packagePlatformWarnings;
   final List nonCompliant;
 
   final bool codeSizeAnalyzerEnabled;
@@ -155,6 +156,7 @@ class _ReportContext {
     required this.duplicateCodeIssues,
     required this.sourceSortIssues,
     required this.layersIssues,
+    required this.packagePlatformWarnings,
     required this.nonCompliant,
     required this.codeSizeAnalyzerEnabled,
     required this.oneClassPerFileAnalyzerEnabled,
@@ -308,6 +310,9 @@ class _ReportContext {
     final suppressionPenaltyPoints = metrics.suppressionPenaltyPoints;
     final analyzerScoresByKey = <String, int>{
       for (final score in metrics.analyzerScores) score.key: score.scorePercent,
+      'legacy_ios_packages': metrics.packagePlatformWarnings.isEmpty
+          ? _percentageMultiplier
+          : _percentageMultiplier - 1,
       'suppression_hygiene':
           (_percentageMultiplier -
                   ((suppressionPenaltyPoints / _maxSuppressionPenaltyPoints) *
@@ -317,6 +322,7 @@ class _ReportContext {
     };
     final analyzerIssueCountsByKey = <String, int>{
       for (final score in metrics.analyzerScores) score.key: score.issueCount,
+      'legacy_ios_packages': metrics.packagePlatformWarnings.length,
       'suppression_hygiene':
           metrics.ignoreDirectivesCount +
           metrics.customExcludedFilesCount +
@@ -325,6 +331,7 @@ class _ReportContext {
     final analyzerEnabledByKey = <String, bool>{
       for (final score in metrics.analyzerScores) score.key: score.enabled,
       'suppression_hygiene': true,
+      'legacy_ios_packages': true,
     };
     if (!metrics.usesLocalization) {
       analyzerEnabledByKey[AnalyzerDomain.localization.configName] = false;
@@ -436,6 +443,7 @@ class _ReportContext {
       duplicateCodeIssues: duplicateCodeIssues,
       sourceSortIssues: metrics.sourceSortIssues,
       layersIssues: metrics.layersIssues,
+      packagePlatformWarnings: metrics.packagePlatformWarnings,
       nonCompliant: metrics.fileMetrics
           .where((metric) => !metric.isOneClassPerFileCompliant)
           .toList(),

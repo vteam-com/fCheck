@@ -14,6 +14,7 @@ import 'package:fcheck/src/exports/svg/export_files/export_svg_files.dart';
 import 'package:fcheck/src/exports/svg/export_folders/export_svg_folders.dart';
 import 'package:fcheck/src/exports/svg/export_loc/export_svg_code_size.dart';
 import 'package:fcheck/src/exports/svg/export_packages/export_svg_package_dependencies.dart';
+import 'package:fcheck/src/exports/svg/export_packages/export_package_platform_warning_collector.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/models/project_type.dart';
@@ -2392,6 +2393,160 @@ flutter:
         greaterThanOrEqualTo(3),
         reason: 'skip edge should have ≥3 L segments',
       );
+    });
+
+    test('collectPackagePlatformWarnings returns empty for no warnings', () {
+      const graphData = PackageDependencyGraphData(
+        projectName: 'test_app',
+        version: '1.0.0',
+        dependencies: <PackageDependencyNode>[(name: 'http', version: '1.0.0')],
+        devDependencies: <PackageDependencyNode>[],
+        platformSupportByPackage: <String, PackagePlatformSupport>{
+          'http': PackagePlatformSupport(
+            supportsAndroid: true,
+            supportsIos: true,
+            usesLegacyIosCocoaPods: false,
+          ),
+        },
+      );
+
+      final warnings = collectPackagePlatformWarnings(graphData);
+
+      expect(warnings, isEmpty);
+    });
+
+    test(
+      'collectPackagePlatformWarnings detects direct dependency warnings',
+      () {
+        const graphData = PackageDependencyGraphData(
+          projectName: 'test_app',
+          version: '1.0.0',
+          dependencies: <PackageDependencyNode>[
+            (name: 'firebase_core', version: '2.0.0'),
+          ],
+          devDependencies: <PackageDependencyNode>[],
+          platformSupportByPackage: <String, PackagePlatformSupport>{
+            'firebase_core': PackagePlatformSupport(
+              supportsAndroid: true,
+              supportsIos: true,
+              usesLegacyIosCocoaPods: true,
+            ),
+          },
+        );
+
+        final warnings = collectPackagePlatformWarnings(graphData);
+
+        expect(warnings, hasLength(1));
+        expect(warnings[0].packageName, equals('firebase_core'));
+        expect(warnings[0].version, equals('2.0.0'));
+        expect(warnings[0].introducedBy, isNull);
+        expect(warnings[0].warningType, equals('legacyIosCocoaPods'));
+      },
+    );
+
+    test(
+      'collectPackagePlatformWarnings detects transitive dependency warnings',
+      () {
+        const graphData = PackageDependencyGraphData(
+          projectName: 'test_app',
+          version: '1.0.0',
+          dependencies: <PackageDependencyNode>[
+            (name: 'firebase_core', version: '2.0.0'),
+          ],
+          devDependencies: <PackageDependencyNode>[],
+          derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+            'firebase_core': <PackageDependencyNode>[
+              (name: 'firebase_platform_interface', version: '1.0.0'),
+            ],
+          },
+          platformSupportByPackage: <String, PackagePlatformSupport>{
+            'firebase_core': PackagePlatformSupport(
+              supportsAndroid: true,
+              supportsIos: true,
+              usesLegacyIosCocoaPods: false,
+            ),
+            'firebase_platform_interface': PackagePlatformSupport(
+              supportsAndroid: true,
+              supportsIos: true,
+              usesLegacyIosCocoaPods: true,
+            ),
+          },
+        );
+
+        final warnings = collectPackagePlatformWarnings(graphData);
+
+        expect(warnings, hasLength(1));
+        expect(warnings[0].packageName, equals('firebase_platform_interface'));
+        expect(warnings[0].introducedBy, equals('firebase_core'));
+      },
+    );
+
+    test('collectPackagePlatformWarnings handles multiple warnings', () {
+      const graphData = PackageDependencyGraphData(
+        projectName: 'test_app',
+        version: '1.0.0',
+        dependencies: <PackageDependencyNode>[
+          (name: 'firebase_core', version: '2.0.0'),
+          (name: 'google_maps_flutter', version: '2.5.0'),
+        ],
+        devDependencies: <PackageDependencyNode>[],
+        platformSupportByPackage: <String, PackagePlatformSupport>{
+          'firebase_core': PackagePlatformSupport(
+            supportsAndroid: true,
+            supportsIos: true,
+            usesLegacyIosCocoaPods: true,
+          ),
+          'google_maps_flutter': PackagePlatformSupport(
+            supportsAndroid: true,
+            supportsIos: true,
+            usesLegacyIosCocoaPods: true,
+          ),
+        },
+      );
+
+      final warnings = collectPackagePlatformWarnings(graphData);
+
+      expect(warnings, hasLength(2));
+      expect(
+        warnings.map((w) => w.packageName),
+        containsAll(['firebase_core', 'google_maps_flutter']),
+      );
+    });
+
+    test('collectPackagePlatformWarnings avoids duplicate warnings', () {
+      const graphData = PackageDependencyGraphData(
+        projectName: 'test_app',
+        version: '1.0.0',
+        dependencies: <PackageDependencyNode>[
+          (name: 'pkg_a', version: '1.0.0'),
+          (name: 'pkg_b', version: '1.0.0'),
+        ],
+        devDependencies: <PackageDependencyNode>[],
+        derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+          'pkg_a': <PackageDependencyNode>[
+            (name: 'shared_lib', version: '1.0.0'),
+          ],
+        },
+        nestedDerivedDependenciesByPackage:
+            <String, List<PackageDependencyNode>>{
+              'pkg_b': <PackageDependencyNode>[
+                (name: 'shared_lib', version: '1.0.0'),
+              ],
+            },
+        platformSupportByPackage: <String, PackagePlatformSupport>{
+          'shared_lib': PackagePlatformSupport(
+            supportsAndroid: true,
+            supportsIos: true,
+            usesLegacyIosCocoaPods: true,
+          ),
+        },
+      );
+
+      final warnings = collectPackagePlatformWarnings(graphData);
+
+      expect(warnings, hasLength(1));
+      expect(warnings[0].packageName, equals('shared_lib'));
+      expect(warnings[0].introducedBy, equals('pkg_a'));
     });
   });
 }

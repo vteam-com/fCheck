@@ -36,6 +36,7 @@ const Map<String, String> _analyzerTitleByKey = {
   'documentation': 'Documentation',
   'localization': 'Localization',
   'suppression_hygiene': 'Checks bypassed',
+  'legacy_ios_packages': 'Legacy iOS Packages',
 };
 
 /// Returns all issues or a limited preview depending on the selected list mode.

@@ -654,6 +654,7 @@ void main() {
           ],
           'documentationIssues': [],
           'localizationIssues': [],
+          'packagePlatformWarnings': [],
           'tests': {
             'imports': 0,
             'consumedFiles': 0,

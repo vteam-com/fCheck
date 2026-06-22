@@ -76,6 +76,7 @@ void _populateAnalyzerBlocks(_ReportContext ctx, List<_ListBlock> listBlocks) {
     moreConnector: AppStrings.and,
   );
   _addCustomLocalizationBlock(ctx, listBlocks);
+  _addPackagePlatformWarningsBlock(ctx, listBlocks);
   _addLayersBlock(ctx, listBlocks);
 }
 
@@ -776,6 +777,61 @@ void _addIssueListAnalyzerBlock(
 }
 
 /// Adds a localization analyzer block.
+///
+/// When localization is disabled, it shows a skipped line.
+/// When localization is not used by the project, it reports `OFF`.
+/// When localization is used and there are no issues, it lists supported
+/// locales.
+/// When issues exist, it prints a detailed summary and per-locale stats.
+void _addPackagePlatformWarningsBlock(
+  _ReportContext ctx,
+  List<_ListBlock> listBlocks,
+) {
+  if (ctx.packagePlatformWarnings.isEmpty) {
+    _addListBlock(
+      listBlocks,
+      status: _ListBlockStatus.success,
+      sortKey: 'Legacy iOS Packages',
+      blockLines: [
+        '${okTag()} Legacy iOS packages check ${AppStrings.checkPassed}',
+      ],
+    );
+    return;
+  }
+
+  final blockLines = <String>[
+    '${warnTag()} ${formatCount(ctx.packagePlatformWarnings.length)} packages using legacy CocoaPods instead of SPM',
+  ];
+
+  if (ctx.filenamesOnly) {
+    // For filenames-only mode, show unique package names
+    final packageNames =
+        ctx.packagePlatformWarnings.map((w) => w.packageName).toSet().toList()
+          ..sort();
+    for (final name in packageNames) {
+      blockLines.add('  - ${_colorize(name, _ansiBlueBright)}');
+    }
+  } else {
+    // For full mode, show package with version and source
+    for (final warning in ctx.packagePlatformWarnings) {
+      final intro = warning.introducedBy != null
+          ? _colorize(' (via ${warning.introducedBy})', _ansiGray)
+          : '';
+      blockLines.add(
+        '  • ${_colorize(warning.packageName, _ansiBlueBright)} ${warning.version}$intro',
+      );
+    }
+  }
+
+  _addListBlock(
+    listBlocks,
+    status: _ListBlockStatus.warning,
+    sortKey: 'Legacy iOS Packages',
+    blockLines: blockLines,
+  );
+}
+
+/// Adds the localization analyzer block to report.
 ///
 /// When localization is disabled, it shows a skipped line.
 /// When localization is not used by the project, it reports `OFF`.
