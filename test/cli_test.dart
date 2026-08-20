@@ -857,7 +857,12 @@ void main() {
 
       expect(result.exitCode, equals(1));
       expect(result.stdout, contains(AppStrings.analysisError));
-      expect(result.stdout, contains('PathExistsException'));
+      // POSIX reports ENOTDIR as a plain FileSystemException, while Windows
+      // raises the PathExistsException subclass; accept either name.
+      expect(
+        result.stdout,
+        contains(RegExp(r'(?:PathExists|FileSystem)Exception')),
+      );
     });
 
     test('should disable analyzers via .fcheck', () async {
