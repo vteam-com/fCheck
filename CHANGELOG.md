@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Now builds on Windows 11 platform using BASH Terminal
 - Removed duplicated helper logic flagged by fcheck's own duplicate-code analyzer:
   - `_isInDirective` was copy-pasted between the hardcoded-strings and metrics visitors; it is now the shared `isInDirective()` in `lib/src/analyzers/shared/directive_ast_utils.dart`.
   - The widget-lint ignore-comment patterns were duplicated between the hardcoded-string visitor and delegate; they are now `HardcodedStringUtils.containsWidgetLintIgnoreComment()`, with the regexes hoisted to a `static final` list instead of being rebuilt on every scanned line.
