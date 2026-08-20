@@ -139,15 +139,12 @@ void main() {}
     });
 
     test('analyzes directory contents', () {
-      File(
-        '${tempDir.path}/file1.dart',
-      ).writeAsStringSync('void main() => print(8);');
-      File(
-        '${tempDir.path}/file2.dart',
-      ).writeAsStringSync('void main() => print(9);');
-      File(
-        '${tempDir.path}/README.txt',
-      ).writeAsStringSync('This is not a Dart file.');
+      File('${tempDir.path}/file1.dart')
+          .writeAsStringSync('void main() => print(8);');
+      File('${tempDir.path}/file2.dart')
+          .writeAsStringSync('void main() => print(9);');
+      File('${tempDir.path}/README.txt')
+          .writeAsStringSync('This is not a Dart file.');
 
       final issues = _analyzeDirectory(delegate, tempDir);
 

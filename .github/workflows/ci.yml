@@ -34,10 +34,10 @@ jobs:
         run: dart format --output=none --set-exit-if-changed .
 
       - name: Static analysis
-        run: flutter analyze lib test --no-pub
+        run: dart analyze lib test
 
       - name: Tests
-        run: flutter test --reporter=compact --no-pub
+        run: dart test --reporter=compact
 
       - name: Run fcheck against itself (strict + JSON)
         run: dart run ./bin/fcheck.dart --strict --json --exclude "**/example" . > fcheck-report.json

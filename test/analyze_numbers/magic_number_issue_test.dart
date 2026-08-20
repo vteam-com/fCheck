@@ -15,8 +15,7 @@ void main() {
 
     test('normalizes duplicated path prefixes in format output', () {
       final issue = MagicNumberIssue(
-        filePath:
-            'lib/src/analyzers/magic_numbers/magic_number_visitor.dart:lib/src/analyzers/magic_numbers/magic_number_visitor.dart',
+        filePath: 'lib/src/analyzers/magic_numbers/magic_number_visitor.dart:lib/src/analyzers/magic_numbers/magic_number_visitor.dart',
         lineNumber: 35,
         value: '2',
       );

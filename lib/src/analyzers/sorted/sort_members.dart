@@ -85,8 +85,7 @@ class MemberSorter {
       sortedFields.add(_SortableField(fieldName, fieldGroups[fieldName]!));
     }
     sortedFields.sort(
-      (final _SortableField a, final _SortableField b) =>
-          a.name.compareTo(b.name),
+      (_SortableField a, _SortableField b) => a.name.compareTo(b.name),
     );
 
     // Add sorted fields to otherMembers
@@ -125,38 +124,36 @@ class MemberSorter {
     const int defaultLifecycleSortOrder = 999;
 
     lifecycleMethods.sort(
-      (final _SortableMethod a, final _SortableMethod b) =>
+      (_SortableMethod a, _SortableMethod b) =>
           (lifecycleOrderMap[a.name] ?? defaultLifecycleSortOrder).compareTo(
             lifecycleOrderMap[b.name] ?? defaultLifecycleSortOrder,
           ),
     );
     publicMethods.sort(
-      (final _SortableMethod a, final _SortableMethod b) =>
-          a.name.compareTo(b.name),
+      (_SortableMethod a, _SortableMethod b) => a.name.compareTo(b.name),
     );
 
     privateMethods.sort(
-      (final _SortableMethod a, final _SortableMethod b) =>
-          a.name.compareTo(b.name),
+      (_SortableMethod a, _SortableMethod b) => a.name.compareTo(b.name),
     );
 
     final List<String> parts = <String>[];
     if (otherMembers.isNotEmpty) {
-      parts.addAll(otherMembers.map((final String s) => s.trimRight()));
+      parts.addAll(otherMembers.map((String s) => s.trimRight()));
     }
     if (lifecycleMethods.isNotEmpty) {
       parts.addAll(
-        lifecycleMethods.map((final _SortableMethod m) => m.source.trimRight()),
+        lifecycleMethods.map((_SortableMethod m) => m.source.trimRight()),
       );
     }
     if (publicMethods.isNotEmpty) {
       parts.addAll(
-        publicMethods.map((final _SortableMethod m) => m.source.trimRight()),
+        publicMethods.map((_SortableMethod m) => m.source.trimRight()),
       );
     }
     if (privateMethods.isNotEmpty) {
       parts.addAll(
-        privateMethods.map((final _SortableMethod m) => m.source.trimRight()),
+        privateMethods.map((_SortableMethod m) => m.source.trimRight()),
       );
     }
 
@@ -164,8 +161,7 @@ class MemberSorter {
     return result.isEmpty ? '' : '\n$result\n';
   }
 
-  String _getSource(final AstNode node) =>
-      _content.substring(node.offset, node.end);
+  String _getSource(AstNode node) => _content.substring(node.offset, node.end);
 }
 
 class _SortableMethod {

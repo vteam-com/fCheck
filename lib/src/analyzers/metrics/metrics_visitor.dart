@@ -1,5 +1,6 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
+import 'package:fcheck/src/analyzers/shared/directive_ast_utils.dart';
 
 /// A visitor that traverses the AST to collect quality metrics.
 class MetricsQualityVisitor extends RecursiveAstVisitor<void> {
@@ -79,7 +80,7 @@ class MetricsQualityVisitor extends RecursiveAstVisitor<void> {
 
   @override
   void visitSimpleStringLiteral(SimpleStringLiteral node) {
-    if (_isInDirective(node)) {
+    if (isInDirective(node)) {
       super.visitSimpleStringLiteral(node);
       return;
     }
@@ -90,7 +91,7 @@ class MetricsQualityVisitor extends RecursiveAstVisitor<void> {
 
   @override
   void visitInterpolationString(InterpolationString node) {
-    if (_isInDirective(node)) {
+    if (isInDirective(node)) {
       super.visitInterpolationString(node);
       return;
     }
@@ -147,24 +148,5 @@ class MetricsQualityVisitor extends RecursiveAstVisitor<void> {
     }
     final normalized = withoutGenerics.substring(namespaceStart + 1).trim();
     return normalized.isEmpty ? null : normalized;
-  }
-
-  /// Returns true when [node] belongs to a directive URI context.
-  ///
-  /// Directive literals (imports/exports/parts/library) are excluded from
-  /// literal inventory metrics.
-  bool _isInDirective(AstNode node) {
-    AstNode? current = node.parent;
-    while (current != null) {
-      if (current is ImportDirective ||
-          current is ExportDirective ||
-          current is PartDirective ||
-          current is PartOfDirective ||
-          current is LibraryDirective) {
-        return true;
-      }
-      current = current.parent;
-    }
-    return false;
   }
 }

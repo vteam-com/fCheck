@@ -30,9 +30,10 @@ void main() {
       RegExp(r'<path[^>]*class="warningEdge"').allMatches(svg).length;
   int badgeCount(String svg, String cssClass) =>
       RegExp('class="badge $cssClass"').allMatches(svg).length;
-  int platformBadgeCount(String svg, String cssClass) => RegExp(
-    'class="platformBadge platformBadge--$cssClass"',
-  ).allMatches(svg).length;
+  int platformBadgeCount(String svg, String cssClass) =>
+      RegExp('class="platformBadge platformBadge--$cssClass"')
+          .allMatches(svg)
+          .length;
   ({double x, double y}) textPosition(String svg, String text) {
     final match = RegExp(
       '<text x="([^"]+)" y="([^"]+)"[^>]*>${RegExp.escape(text)}</text>',
@@ -731,57 +732,52 @@ void main() {
       );
     });
 
-    test(
-      'color incoming edges orange for warning-shaded transitive packages',
-      () {
-        const PackageDependencyNode transitiveWarningTarget = (
-          name: 'legacy_ios_transitive',
-          version: '2.0.0',
-        );
-        const warningSources = <PackageDependencyNode>[
-          (name: 'http_parser', version: '4.1.2'),
-          (name: 'source_span', version: '1.10.1'),
-        ];
-        final svg = exportSvgPackageDependencies(
-          PackageDependencyGraphData(
-            projectName: 'demo_app',
-            version: 'unknown',
-            dependencies: const <PackageDependencyNode>[
-              (name: 'http', version: '1.2.3'),
-            ],
-            devDependencies: const <PackageDependencyNode>[],
-            derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
-              'http': warningSources,
-            },
-            nestedDerivedDependenciesByPackage:
-                <String, List<PackageDependencyNode>>{
-                  for (final source in warningSources)
-                    source.name: <PackageDependencyNode>[
-                      transitiveWarningTarget,
-                    ],
-                },
-            platformSupportByPackage: const <String, PackagePlatformSupport>{
-              'legacy_ios_transitive': PackagePlatformSupport(
-                supportsIos: true,
-                usesLegacyIosCocoaPods: true,
-              ),
-            },
-          ),
-        );
-
-        expect(warningPathCount(svg), equals(warningSources.length));
-        for (final source in warningSources) {
-          expect(
-            hasPackageEdgeWithClass(
-              svg,
-              'warningEdge',
-              '${source.name} -> ${transitiveWarningTarget.name} v${transitiveWarningTarget.version}',
+    test('color incoming edges orange for warning-shaded transitive packages', () {
+      const PackageDependencyNode transitiveWarningTarget = (
+        name: 'legacy_ios_transitive',
+        version: '2.0.0',
+      );
+      const warningSources = <PackageDependencyNode>[
+        (name: 'http_parser', version: '4.1.2'),
+        (name: 'source_span', version: '1.10.1'),
+      ];
+      final svg = exportSvgPackageDependencies(
+        PackageDependencyGraphData(
+          projectName: 'demo_app',
+          version: 'unknown',
+          dependencies: const <PackageDependencyNode>[
+            (name: 'http', version: '1.2.3'),
+          ],
+          devDependencies: const <PackageDependencyNode>[],
+          derivedDependenciesByPackage: <String, List<PackageDependencyNode>>{
+            'http': warningSources,
+          },
+          nestedDerivedDependenciesByPackage:
+              <String, List<PackageDependencyNode>>{
+                for (final source in warningSources)
+                  source.name: <PackageDependencyNode>[transitiveWarningTarget],
+              },
+          platformSupportByPackage: const <String, PackagePlatformSupport>{
+            'legacy_ios_transitive': PackagePlatformSupport(
+              supportsIos: true,
+              usesLegacyIosCocoaPods: true,
             ),
-            isTrue,
-          );
-        }
-      },
-    );
+          },
+        ),
+      );
+
+      expect(warningPathCount(svg), equals(warningSources.length));
+      for (final source in warningSources) {
+        expect(
+          hasPackageEdgeWithClass(
+            svg,
+            'warningEdge',
+            '${source.name} -> ${transitiveWarningTarget.name} v${transitiveWarningTarget.version}',
+          ),
+          isTrue,
+        );
+      }
+    });
 
     test(
       'render outgoing badges for derived packages with transitive edges',
@@ -1070,8 +1066,8 @@ packages:
     version: "2.0.0"
 ''');
 
-      File(p.join(dartToolDir.path, 'package_config.json')).writeAsStringSync(
-        '''
+      File(p.join(dartToolDir.path, 'package_config.json'))
+          .writeAsStringSync('''
 {
   "configVersion": 2,
   "packages": [
@@ -1107,8 +1103,7 @@ packages:
     }
   ]
 }
-''',
-      );
+''');
 
       final flutterPluginDir = Directory(
         p.join(packagesDir.path, 'flutter_plugin'),
@@ -1148,16 +1143,14 @@ flutter:
       final swiftPmManifestDir = Directory(
         p.join(swiftPmPluginDir.path, 'darwin', 'swiftpm_plugin'),
       )..createSync(recursive: true);
-      File(
-        p.join(swiftPmManifestDir.path, 'Package.swift'),
-      ).writeAsStringSync('// swift package manifest');
+      File(p.join(swiftPmManifestDir.path, 'Package.swift'))
+          .writeAsStringSync('// swift package manifest');
 
       final desktopBrowserPluginDir = Directory(
         p.join(packagesDir.path, 'desktop_browser_plugin'),
       )..createSync(recursive: true);
-      File(
-        p.join(desktopBrowserPluginDir.path, 'pubspec.yaml'),
-      ).writeAsStringSync('''
+      File(p.join(desktopBrowserPluginDir.path, 'pubspec.yaml'))
+          .writeAsStringSync('''
 name: desktop_browser_plugin
 platforms:
   windows:
@@ -1353,59 +1346,53 @@ flutter:
       expect(foldersSvg, contains('errorNodeGradient'));
     });
 
-    test(
-      'apply non-layer analyzer warnings to layers SVG exports when metrics are provided',
-      () {
-        final result = LayersAnalysisResult(
-          issues: const [],
-          layers: const {'lib/src/a.dart': 0, 'lib/src/b.dart': 0},
-          dependencyGraph: const {
-            'lib/src/a.dart': ['lib/src/b.dart'],
-            'lib/src/b.dart': <String>[],
-          },
-        );
-        final metrics = ProjectMetrics(
-          totalFolders: 0,
-          totalFiles: 0,
-          totalDartFiles: 0,
-          totalLinesOfCode: 0,
-          totalCommentLines: 0,
-          fileMetrics: const [],
-          secretIssues: const [],
-          hardcodedStringIssues: const [],
-          magicNumberIssues: [
-            MagicNumberIssue(
-              filePath: 'lib/src/a.dart',
-              lineNumber: 12,
-              value: '42',
-            ),
-          ],
-          sourceSortIssues: const [],
-          layersIssues: const [],
-          deadCodeIssues: const [],
-          layersEdgeCount: 0,
-          layersCount: 0,
-          dependencyGraph: const {},
-          projectName: 'demo',
-          version: '1.0.0',
-          projectType: ProjectType.dart,
-        );
+    test('apply non-layer analyzer warnings to layers SVG exports when metrics are provided', () {
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {'lib/src/a.dart': 0, 'lib/src/b.dart': 0},
+        dependencyGraph: const {
+          'lib/src/a.dart': ['lib/src/b.dart'],
+          'lib/src/b.dart': <String>[],
+        },
+      );
+      final metrics = ProjectMetrics(
+        totalFolders: 0,
+        totalFiles: 0,
+        totalDartFiles: 0,
+        totalLinesOfCode: 0,
+        totalCommentLines: 0,
+        fileMetrics: const [],
+        secretIssues: const [],
+        hardcodedStringIssues: const [],
+        magicNumberIssues: [
+          MagicNumberIssue(
+            filePath: 'lib/src/a.dart',
+            lineNumber: 12,
+            value: '42',
+          ),
+        ],
+        sourceSortIssues: const [],
+        layersIssues: const [],
+        deadCodeIssues: const [],
+        layersEdgeCount: 0,
+        layersCount: 0,
+        dependencyGraph: const {},
+        projectName: 'demo',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+      );
 
-        final filesSvg = exportGraphSvgFiles(result, projectMetrics: metrics);
-        expect(filesSvg, contains('warningNodeGradient'));
-        expect(filesSvg, contains('File: lib/src/a.dart'));
-        expect(filesSvg, contains('1 Magic Numbers warning'));
+      final filesSvg = exportGraphSvgFiles(result, projectMetrics: metrics);
+      expect(filesSvg, contains('warningNodeGradient'));
+      expect(filesSvg, contains('File: lib/src/a.dart'));
+      expect(filesSvg, contains('1 Magic Numbers warning'));
 
-        final foldersSvg = exportGraphSvgFolders(
-          result,
-          projectMetrics: metrics,
-        );
-        expect(foldersSvg, contains('warningNodeGradient'));
-        expect(foldersSvg, contains('File: a.dart'));
-        expect(foldersSvg, contains('Folder: .'));
-        expect(foldersSvg, contains('1 Magic Numbers warning'));
-      },
-    );
+      final foldersSvg = exportGraphSvgFolders(result, projectMetrics: metrics);
+      expect(foldersSvg, contains('warningNodeGradient'));
+      expect(foldersSvg, contains('File: a.dart'));
+      expect(foldersSvg, contains('Folder: .'));
+      expect(foldersSvg, contains('1 Magic Numbers warning'));
+    });
 
     test(
       'exclude hardcoded warnings from SVG warnings when localization is OFF',
@@ -1730,34 +1717,31 @@ flutter:
       expect(match, isNotNull);
     });
 
-    test(
-      'creates virtual folder for loose files when folder has both files and subfolders',
-      () {
-        // This test triggers _applyLooseFilesRule:
-        // - lib/ contains both a file (utils.dart) AND a subfolder (src/)
-        // - The rule should create a virtual "..." folder for the loose file
-        final result = LayersAnalysisResult(
-          issues: const [],
-          layers: const {'lib/utils.dart': 0, 'lib/src/main.dart': 1},
-          dependencyGraph: const {
-            'lib/src/main.dart': ['lib/utils.dart'],
-            'lib/utils.dart': [],
-          },
-        );
+    test('creates virtual folder for loose files when folder has both files and subfolders', () {
+      // This test triggers _applyLooseFilesRule:
+      // - lib/ contains both a file (utils.dart) AND a subfolder (src/)
+      // - The rule should create a virtual "..." folder for the loose file
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {'lib/utils.dart': 0, 'lib/src/main.dart': 1},
+        dependencyGraph: const {
+          'lib/src/main.dart': ['lib/utils.dart'],
+          'lib/utils.dart': [],
+        },
+      );
 
-        final folderSvg = exportGraphSvgFolders(
-          result,
-          projectName: 'TestProject',
-          projectVersion: '1.0.0',
-          inputFolderName: 'lib',
-        );
+      final folderSvg = exportGraphSvgFolders(
+        result,
+        projectName: 'TestProject',
+        projectVersion: '1.0.0',
+        inputFolderName: 'lib',
+      );
 
-        // The virtual "..." folder should be created for the loose file
-        expect(folderSvg, contains('...'));
-        // Should have both the virtual folder and the src subfolder
-        expect(folderSvg, contains('src'));
-      },
-    );
+      // The virtual "..." folder should be created for the loose file
+      expect(folderSvg, contains('...'));
+      // Should have both the virtual folder and the src subfolder
+      expect(folderSvg, contains('src'));
+    });
 
     test('does not color downward-rendered violation edges orange', () {
       // Use cross-folder ordering where source folder is visually lower than target
@@ -1792,42 +1776,39 @@ flutter:
       expect(warningPathCount(withViolationSvg), equals(0));
     });
 
-    test(
-      'colors upward file edges orange in folder cycles to expose culprit files',
-      () {
-        final result = LayersAnalysisResult(
-          issues: [
-            LayersIssue(
-              type: LayersIssueType.cyclicDependency,
-              filePath: 'lib/a/a.dart',
-              message: 'cycle',
-            ),
-            LayersIssue(
-              type: LayersIssueType.folderCycle,
-              filePath: 'lib/a',
-              message: 'folder cycle',
-            ),
-            LayersIssue(
-              type: LayersIssueType.folderCycle,
-              filePath: 'lib/b',
-              message: 'folder cycle',
-            ),
-          ],
-          layers: const {},
-          dependencyGraph: const {
-            'lib/a/a.dart': ['lib/b/b.dart'],
-            'lib/b/b.dart': ['lib/a/a.dart'],
-          },
-        );
+    test('colors upward file edges orange in folder cycles to expose culprit files', () {
+      final result = LayersAnalysisResult(
+        issues: [
+          LayersIssue(
+            type: LayersIssueType.cyclicDependency,
+            filePath: 'lib/a/a.dart',
+            message: 'cycle',
+          ),
+          LayersIssue(
+            type: LayersIssueType.folderCycle,
+            filePath: 'lib/a',
+            message: 'folder cycle',
+          ),
+          LayersIssue(
+            type: LayersIssueType.folderCycle,
+            filePath: 'lib/b',
+            message: 'folder cycle',
+          ),
+        ],
+        layers: const {},
+        dependencyGraph: const {
+          'lib/a/a.dart': ['lib/b/b.dart'],
+          'lib/b/b.dart': ['lib/a/a.dart'],
+        },
+      );
 
-        final folderSvg = exportGraphSvgFolders(result);
+      final folderSvg = exportGraphSvgFolders(result);
 
-        expect(
-          hasEdgeWithClass(folderSvg, 'warningEdge', 'b/b.dart ▶ a/a.dart'),
-          isTrue,
-        );
-      },
-    );
+      expect(
+        hasEdgeWithClass(folderSvg, 'warningEdge', 'b/b.dart ▶ a/a.dart'),
+        isTrue,
+      );
+    });
 
     test('handles deeply nested folders with mixed files and subfolders', () {
       // More complex scenario: nested folders with files at multiple levels
@@ -2022,95 +2003,87 @@ flutter:
       expect(innerIndex, lessThan(outerIndex));
     });
 
-    test(
-      'adjacent same-row forward edge uses straight line when single outgoing',
-      () {
-        // Single node in each column and one outgoing edge from source.
-        final result = LayersAnalysisResult(
-          issues: const [],
-          layers: const {'lib/src/a.dart': 0, 'lib/src/b.dart': 1},
-          dependencyGraph: const {
-            'lib/src/a.dart': ['lib/src/b.dart'],
-            'lib/src/b.dart': [],
-          },
-        );
+    test('adjacent same-row forward edge uses straight line when single outgoing', () {
+      // Single node in each column and one outgoing edge from source.
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {'lib/src/a.dart': 0, 'lib/src/b.dart': 1},
+        dependencyGraph: const {
+          'lib/src/a.dart': ['lib/src/b.dart'],
+          'lib/src/b.dart': [],
+        },
+      );
 
-        final svg = exportGraphSvgFiles(result);
-        final pathData = _extractFilesEdgePathData(
-          svg,
-          'lib/src/a.dart',
-          'lib/src/b.dart',
-        );
+      final svg = exportGraphSvgFiles(result);
+      final pathData = _extractFilesEdgePathData(
+        svg,
+        'lib/src/a.dart',
+        'lib/src/b.dart',
+      );
 
-        expect(pathData, isNotNull);
-        expect(
-          svg.contains('class="edge edgeFlat"'),
-          isTrue,
-          reason:
-              'single-outgoing adjacent same-row edge should use edgeFlat class',
-        );
-        // Must be one straight segment with no arch/elbow commands.
-        expect(
-          RegExp(
-            r'^M [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)? L [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)?$',
-          ).hasMatch(pathData!),
-          isTrue,
-          reason: 'single-outgoing adjacent same-row edge should be straight',
-        );
-      },
-    );
+      expect(pathData, isNotNull);
+      expect(
+        svg.contains('class="edge edgeFlat"'),
+        isTrue,
+        reason:
+            'single-outgoing adjacent same-row edge should use edgeFlat class',
+      );
+      // Must be one straight segment with no arch/elbow commands.
+      expect(
+        RegExp(
+          r'^M [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)? L [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)?$',
+        ).hasMatch(pathData!),
+        isTrue,
+        reason: 'single-outgoing adjacent same-row edge should be straight',
+      );
+    });
 
-    test(
-      'adjacent same-row forward edge uses single arch when source has multiple outgoing',
-      () {
-        final result = LayersAnalysisResult(
-          issues: const [],
-          layers: const {
-            'lib/src/a.dart': 0,
-            'lib/src/b.dart': 1,
-            'lib/src/c.dart': 1,
-          },
-          dependencyGraph: const {
-            'lib/src/a.dart': ['lib/src/b.dart', 'lib/src/c.dart'],
-            'lib/src/b.dart': [],
-            'lib/src/c.dart': [],
-          },
-        );
+    test('adjacent same-row forward edge uses single arch when source has multiple outgoing', () {
+      final result = LayersAnalysisResult(
+        issues: const [],
+        layers: const {
+          'lib/src/a.dart': 0,
+          'lib/src/b.dart': 1,
+          'lib/src/c.dart': 1,
+        },
+        dependencyGraph: const {
+          'lib/src/a.dart': ['lib/src/b.dart', 'lib/src/c.dart'],
+          'lib/src/b.dart': [],
+          'lib/src/c.dart': [],
+        },
+      );
 
-        final svg = exportGraphSvgFiles(result);
-        final pathData = _extractFilesEdgePathData(
-          svg,
-          'lib/src/a.dart',
-          'lib/src/b.dart',
-        );
+      final svg = exportGraphSvgFiles(result);
+      final pathData = _extractFilesEdgePathData(
+        svg,
+        'lib/src/a.dart',
+        'lib/src/b.dart',
+      );
 
-        expect(pathData, isNotNull);
-        expect(
-          svg.contains('class="edge edgeFlat"'),
-          isFalse,
-          reason:
-              'multi-outgoing adjacent same-row edge should not use edgeFlat class',
-        );
-        expect(
-          RegExp(
-            r'^M [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)? Q [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)?$',
-          ).hasMatch(pathData!),
-          isTrue,
-          reason:
-              'multi-outgoing adjacent same-row edge should be a single-arch path',
-        );
-        expect(
-          pathData.contains(' V '),
-          isFalse,
-          reason: 'arch path must not use elbow turns',
-        );
-        expect(
-          pathData.contains(' C '),
-          isFalse,
-          reason: 'arch path should be quadratic, not cubic',
-        );
-      },
-    );
+      expect(pathData, isNotNull);
+      expect(
+        svg.contains('class="edge edgeFlat"'),
+        isFalse,
+        reason: 'multi-outgoing adjacent same-row edge should not use edgeFlat class',
+      );
+      expect(
+        RegExp(
+          r'^M [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)? Q [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)? [0-9]+(?:\.[0-9]+)?$',
+        ).hasMatch(pathData!),
+        isTrue,
+        reason: 'multi-outgoing adjacent same-row edge should be a single-arch path',
+      );
+      expect(
+        pathData.contains(' V '),
+        isFalse,
+        reason: 'arch path must not use elbow turns',
+      );
+      expect(
+        pathData.contains(' C '),
+        isFalse,
+        reason: 'arch path should be quadratic, not cubic',
+      );
+    });
 
     test('draws far file edge after near file edge', () {
       final result = LayersAnalysisResult(

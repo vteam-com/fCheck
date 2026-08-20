@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
@@ -19,12 +20,10 @@ void main() {
       test('should exclude files matching simple wildcard pattern', () {
         // Create test files
         File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
-        File(
-          '${tempDir.path}/helper.dart',
-        ).writeAsStringSync('class Helper {}');
-        File(
-          '${tempDir.path}/misc_helper.dart',
-        ).writeAsStringSync('class MiscHelper {}');
+        File('${tempDir.path}/helper.dart')
+            .writeAsStringSync('class Helper {}');
+        File('${tempDir.path}/misc_helper.dart')
+            .writeAsStringSync('class MiscHelper {}');
 
         final files = FileUtils.listDartFiles(
           tempDir,
@@ -43,9 +42,8 @@ void main() {
         subDir.createSync();
 
         File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
-        File(
-          '${subDir.path}/misc_helper.dart',
-        ).writeAsStringSync('class MiscHelper {}');
+        File('${subDir.path}/misc_helper.dart')
+            .writeAsStringSync('class MiscHelper {}');
         File('${subDir.path}/utils.dart').writeAsStringSync('class Utils {}');
 
         final files = FileUtils.listDartFiles(
@@ -59,12 +57,10 @@ void main() {
 
       test('should support multiple exclude patterns', () {
         File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
-        File(
-          '${tempDir.path}/test_helper.dart',
-        ).writeAsStringSync('class TestHelper {}');
-        File(
-          '${tempDir.path}/misc_helper.dart',
-        ).writeAsStringSync('class MiscHelper {}');
+        File('${tempDir.path}/test_helper.dart')
+            .writeAsStringSync('class TestHelper {}');
+        File('${tempDir.path}/misc_helper.dart')
+            .writeAsStringSync('class MiscHelper {}');
         File('${tempDir.path}/utils.dart').writeAsStringSync('class Utils {}');
 
         final files = FileUtils.listDartFiles(
@@ -84,9 +80,8 @@ void main() {
         generatedDir.createSync();
 
         File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
-        File(
-          '${generatedDir.path}/model.dart',
-        ).writeAsStringSync('class Model {}');
+        File('${generatedDir.path}/model.dart')
+            .writeAsStringSync('class Model {}');
 
         final files = FileUtils.listDartFiles(
           tempDir,
@@ -99,9 +94,8 @@ void main() {
 
       test('should work with empty exclude patterns', () {
         File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
-        File(
-          '${tempDir.path}/helper.dart',
-        ).writeAsStringSync('class Helper {}');
+        File('${tempDir.path}/helper.dart')
+            .writeAsStringSync('class Helper {}');
 
         final files = FileUtils.listDartFiles(tempDir, excludePatterns: []);
 
@@ -263,31 +257,23 @@ void main() {
 
         // Create files
         File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
-        File(
-          '${hiddenDir.path}/hidden.dart',
-        ).writeAsStringSync('class Hidden {}');
-        File(
-          '${testDir.path}/test_helper.dart',
-        ).writeAsStringSync('class TestHelper {}');
-        File(
-          '${integrationTestDir.path}/integration_test_helper.dart',
-        ).writeAsStringSync('class IntegrationTestHelper {}');
-        File(
-          '${exampleDir.path}/example.dart',
-        ).writeAsStringSync('class Example {}');
+        File('${hiddenDir.path}/hidden.dart')
+            .writeAsStringSync('class Hidden {}');
+        File('${testDir.path}/test_helper.dart')
+            .writeAsStringSync('class TestHelper {}');
+        File('${integrationTestDir.path}/integration_test_helper.dart')
+            .writeAsStringSync('class IntegrationTestHelper {}');
+        File('${exampleDir.path}/example.dart')
+            .writeAsStringSync('class Example {}');
         File('${tempDir.path}/README.md').writeAsStringSync('# Test');
-        File(
-          '${hiddenDir.path}/hidden.txt',
-        ).writeAsStringSync('hidden content');
+        File('${hiddenDir.path}/hidden.txt')
+            .writeAsStringSync('hidden content');
 
         // Test excluded files listing
         final (excludedDartFiles, excludedNonDartFiles, excludedDirectories) =
             FileUtils.listExcludedFiles(tempDir);
 
-        expect(
-          excludedDartFiles.length,
-          equals(4),
-        ); // hidden.dart, test_helper.dart, integration_test_helper.dart, example.dart
+        expect(excludedDartFiles.length, equals(4)); // hidden.dart, test_helper.dart, integration_test_helper.dart, example.dart
         expect(excludedNonDartFiles.length, equals(1)); // hidden.txt
         expect(
           excludedDirectories.length,
@@ -340,12 +326,10 @@ void main() {
 
         // Create files
         File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
-        File(
-          '${helpersDir.path}/helper.dart',
-        ).writeAsStringSync('class Helper {}');
-        File(
-          '${helpersDir.path}/utils.dart',
-        ).writeAsStringSync('class Utils {}');
+        File('${helpersDir.path}/helper.dart')
+            .writeAsStringSync('class Helper {}');
+        File('${helpersDir.path}/utils.dart')
+            .writeAsStringSync('class Utils {}');
 
         // Test with exclude patterns
         final (
@@ -420,9 +404,8 @@ void main() {
 
         // Create files
         File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
-        File(
-          '${srcDir.path}/service.dart',
-        ).writeAsStringSync('class Service {}');
+        File('${srcDir.path}/service.dart')
+            .writeAsStringSync('class Service {}');
         File('${libDir.path}/utils.dart').writeAsStringSync('class Utils {}');
         File('${tempDir.path}/README.md').writeAsStringSync('# Test');
         File('${srcDir.path}/config.json').writeAsStringSync('{}');
@@ -474,15 +457,12 @@ void main() {
 
         // Create files
         File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
-        File(
-          '${srcDir.path}/service.dart',
-        ).writeAsStringSync('class Service {}');
-        File(
-          '${testDir.path}/test_helper.dart',
-        ).writeAsStringSync('class TestHelper {}');
-        File(
-          '${integrationTestDir.path}/integration_test_helper.dart',
-        ).writeAsStringSync('class IntegrationTestHelper {}');
+        File('${srcDir.path}/service.dart')
+            .writeAsStringSync('class Service {}');
+        File('${testDir.path}/test_helper.dart')
+            .writeAsStringSync('class TestHelper {}');
+        File('${integrationTestDir.path}/integration_test_helper.dart')
+            .writeAsStringSync('class IntegrationTestHelper {}');
 
         // Test unified scan with exclude patterns
         final (
@@ -543,12 +523,10 @@ void main() {
 
         // Create files
         File('${tempDir.path}/main.dart').writeAsStringSync('class Main {}');
-        File(
-          '${srcDir.path}/service.dart',
-        ).writeAsStringSync('class Service {}');
-        File(
-          '${hiddenDir.path}/hidden.dart',
-        ).writeAsStringSync('class Hidden {}');
+        File('${srcDir.path}/service.dart')
+            .writeAsStringSync('class Service {}');
+        File('${hiddenDir.path}/hidden.dart')
+            .writeAsStringSync('class Hidden {}');
 
         // Test unified scan
         final (
@@ -591,9 +569,8 @@ void main() {
         File('${helpersDir.path}/helper.dart').writeAsStringSync('class H {}');
         File('${hiddenDir.path}/hidden.dart').writeAsStringSync('class X {}');
         File('${testDir.path}/test_file.dart').writeAsStringSync('class T {}');
-        File(
-          '${integrationTestDir.path}/integration_test_file.dart',
-        ).writeAsStringSync('class IT {}');
+        File('${integrationTestDir.path}/integration_test_file.dart')
+            .writeAsStringSync('class IT {}');
 
         final (_, _, _, _, _, _, _, _, _, count) = FileUtils.scanDirectory(
           tempDir,

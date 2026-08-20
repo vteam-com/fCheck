@@ -123,7 +123,7 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
         continue;
       }
 
-      if (_hasWidgetLintIgnoreComment(line) ||
+      if (HardcodedStringUtils.containsWidgetLintIgnoreComment(line) ||
           line.contains(IgnoreConfig.ignoreDirectiveForHardcodedStrings)) {
         continue;
       }
@@ -131,7 +131,9 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
       if (lineNumber > 1) {
         final previousLine =
             context.lines[lineNumber - HardcodedStringUtils.minQuotedLength];
-        if (_hasWidgetLintIgnoreComment(previousLine)) {
+        if (HardcodedStringUtils.containsWidgetLintIgnoreComment(
+          previousLine,
+        )) {
           continue;
         }
       }
@@ -146,18 +148,6 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
     }
 
     return issues;
-  }
-
-  /// Internal helper used by fcheck analysis and reporting.
-  bool _hasWidgetLintIgnoreComment(String line) {
-    final ignorePatterns = [
-      RegExp(r'//\s*ignore:\s*avoid_hardcoded_strings_in_widgets'),
-      RegExp(r'//\s*ignore_for_file:\s*avoid_hardcoded_strings_in_widgets'),
-      RegExp(r'//\s*ignore:\s*hardcoded.string', caseSensitive: false),
-      RegExp(r'//\s*hardcoded.ok', caseSensitive: false),
-    ];
-
-    return ignorePatterns.any((pattern) => pattern.hasMatch(line));
   }
 
   /// Internal helper used by fcheck analysis and reporting.

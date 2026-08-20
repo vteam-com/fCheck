@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
@@ -327,15 +328,12 @@ void main() {
     });
 
     test('should analyze directory correctly', () {
-      File(
-        '${tempDir.path}/file1.dart',
-      ).writeAsStringSync('void main() { print("Hello"); }');
-      File(
-        '${tempDir.path}/file2.dart',
-      ).writeAsStringSync('void main() { print("World"); }');
-      File(
-        '${tempDir.path}/readme.txt',
-      ).writeAsStringSync('This is not a Dart file');
+      File('${tempDir.path}/file1.dart')
+          .writeAsStringSync('void main() { print("Hello"); }');
+      File('${tempDir.path}/file2.dart')
+          .writeAsStringSync('void main() { print("World"); }');
+      File('${tempDir.path}/readme.txt')
+          .writeAsStringSync('This is not a Dart file');
 
       final issues = _analyzeDirectory(delegate, tempDir);
 
@@ -439,14 +437,12 @@ class MyWidget extends StatelessWidget {
       expect(issues.first.value, equals('Detected text'));
     });
 
-    test(
-      'should ignore file with ignore_for_file avoid_hardcoded_strings_in_widgets',
-      () {
-        final delegate = HardcodedStringDelegate(
-          focus: HardcodedStringFocus.flutterWidgets,
-        );
-        final file = File('${tempDir.path}/widget_ignore_for_file.dart')
-          ..writeAsStringSync('''
+    test('should ignore file with ignore_for_file avoid_hardcoded_strings_in_widgets', () {
+      final delegate = HardcodedStringDelegate(
+        focus: HardcodedStringFocus.flutterWidgets,
+      );
+      final file = File('${tempDir.path}/widget_ignore_for_file.dart')
+        ..writeAsStringSync('''
 // ignore_for_file: avoid_hardcoded_strings_in_widgets
 import 'package:flutter/widgets.dart';
 
@@ -458,10 +454,9 @@ class MyWidget extends StatelessWidget {
 }
 ''');
 
-        final issues = _analyzeFile(delegate, file);
-        expect(issues, isEmpty);
-      },
-    );
+      final issues = _analyzeFile(delegate, file);
+      expect(issues, isEmpty);
+    });
 
     test('should skip acceptable widget properties', () {
       final delegate = HardcodedStringDelegate(

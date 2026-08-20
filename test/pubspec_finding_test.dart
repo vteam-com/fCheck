@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:test/test.dart';
@@ -110,18 +111,16 @@ dependencies:
         await projectA.create(recursive: true);
         await projectB.create(recursive: true);
 
-        await File('${monorepoRoot.path}/package_a/pubspec.yaml').writeAsString(
-          '''
+        await File('${monorepoRoot.path}/package_a/pubspec.yaml')
+            .writeAsString('''
 name: package_a
 version: 1.0.0
-''',
-        );
-        await File('${monorepoRoot.path}/package_b/pubspec.yaml').writeAsString(
-          '''
+''');
+        await File('${monorepoRoot.path}/package_b/pubspec.yaml')
+            .writeAsString('''
 name: package_b
 version: 1.0.0
-''',
-        );
+''');
         await File('${projectA.path}/a.dart').writeAsString('void main() {}');
         await File('${projectB.path}/b.dart').writeAsString('void main() {}');
 

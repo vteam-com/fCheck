@@ -248,9 +248,8 @@ void _drawEdgeVerticalFolders(
   for (final parentPath in sortedParentPaths) {
     final parentEdges = List<_FolderEdge>.from(edgesByParent[parentPath]!)
       ..sort((a, b) {
-        final virtualCompare = _folderEdgeVirtualRank(
-          a,
-        ).compareTo(_folderEdgeVirtualRank(b));
+        final virtualCompare = _folderEdgeVirtualRank(a)
+            .compareTo(_folderEdgeVirtualRank(b));
         if (virtualCompare != 0) return virtualCompare;
 
         final aDepth = max(

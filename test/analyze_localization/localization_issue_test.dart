@@ -159,9 +159,7 @@ void main() {
 
       expect(
         issue.coveragePercentage,
-        equals(
-          66.7,
-        ), // 1/3 = 0.333... * 100 = 33.333... rounded to 33.3, but 2/3 = 66.666... rounded to 66.7
+        equals(66.7), // 1/3 = 0.333... * 100 = 33.333... rounded to 33.3, but 2/3 = 66.666... rounded to 66.7
       );
     });
 

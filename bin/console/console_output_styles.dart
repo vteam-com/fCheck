@@ -70,8 +70,8 @@ String skipTag() => _colorize('[-]', _ansiGray);
 /// [title] is centered between repeated side characters.
 /// [downPointer] controls arrow direction (`↓` vs `↑`).
 /// [dot] switches from `-` to `·` style separators.
-String dividerLine(String title, {bool? downPointer, bool dot = false}) {
-  title = ' $title ';
+String dividerLine(String inputTitle, {bool? downPointer, bool dot = false}) {
+  final String title = ' $inputTitle ';
   final lineType = dot ? '·' : '-';
   final directionChar = downPointer == null
       ? lineType

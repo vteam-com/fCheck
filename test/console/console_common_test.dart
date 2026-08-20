@@ -2,6 +2,7 @@ import 'dart:async';
 
 import '../../bin/console/console_common.dart';
 import '../../bin/console/console_output.dart';
+
 import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/models/ignore_inventory.dart';
 import 'package:test/test.dart';

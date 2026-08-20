@@ -4,6 +4,21 @@ linter:
   rules:
     public_member_api_docs: true
 
+    # Strong types on all signatures
+    # always_declare_return_types: true
+    # type_annotate_public_apis: true
+    # avoid_dynamic_calls: true
+
+    # Do not allow assigning a value to an incoming function/method parameter.
+    parameter_assignments: true
+
 analyzer:
   exclude:
     - example/**
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
@@ -195,10 +196,8 @@ void main() {
       },
     );
 
-    test(
-      'should not honor secrets ignore directive when declared after first 10 lines',
-      () {
-        File('${tempDir.path}/late_ignore_secrets.dart').writeAsStringSync('''
+    test('should not honor secrets ignore directive when declared after first 10 lines', () {
+      File('${tempDir.path}/late_ignore_secrets.dart').writeAsStringSync('''
 void line01() {}
 void line02() {}
 void line03() {}
@@ -216,17 +215,16 @@ void main() {
 }
 ''');
 
-        final metrics = analyzer.analyze();
-        expect(
-          metrics.secretIssues.any(
-            (issue) =>
-                (issue.filePath ?? '').endsWith('late_ignore_secrets.dart') &&
-                issue.secretType == 'stripe_key',
-          ),
-          isTrue,
-        );
-      },
-    );
+      final metrics = analyzer.analyze();
+      expect(
+        metrics.secretIssues.any(
+          (issue) =>
+              (issue.filePath ?? '').endsWith('late_ignore_secrets.dart') &&
+              issue.secretType == 'stripe_key',
+        ),
+        isTrue,
+      );
+    });
 
     test('should count derived widget implementations by type', () {
       File('${tempDir.path}/base.dart').writeAsStringSync('''
@@ -297,46 +295,43 @@ void main() {
       expect(metrics.testConsumedPaths, contains('lib/src/helper.dart'));
     });
 
-    test(
-      'should promote rendered upward folder graph file edges into project metrics',
-      () {
-        final libDir = Directory(p.join(tempDir.path, 'lib'))..createSync();
-        final aDir = Directory(p.join(libDir.path, 'a'))..createSync();
-        final bDir = Directory(p.join(libDir.path, 'b'))..createSync();
+    test('should promote rendered upward folder graph file edges into project metrics', () {
+      final libDir = Directory(p.join(tempDir.path, 'lib'))..createSync();
+      final aDir = Directory(p.join(libDir.path, 'a'))..createSync();
+      final bDir = Directory(p.join(libDir.path, 'b'))..createSync();
 
-        File(p.join(aDir.path, 'a.dart')).writeAsStringSync('''
+      File(p.join(aDir.path, 'a.dart')).writeAsStringSync('''
 import '../b/b.dart';
 
 void useB() {
   useA();
 }
 ''');
-        File(p.join(bDir.path, 'b.dart')).writeAsStringSync('''
+      File(p.join(bDir.path, 'b.dart')).writeAsStringSync('''
 import '../a/a.dart';
 
 void useA() {}
 ''');
 
-        final metrics = analyzer.analyze();
-        final folderViolations = metrics.layersIssues
-            .where((issue) => issue.type == LayersIssueType.wrongFolderLayer)
-            .toList();
+      final metrics = analyzer.analyze();
+      final folderViolations = metrics.layersIssues
+          .where((issue) => issue.type == LayersIssueType.wrongFolderLayer)
+          .toList();
 
-        expect(folderViolations, hasLength(1));
-        expect(
-          folderViolations.single.filePath,
-          equals(p.join(tempDir.path, 'lib', 'b', 'b.dart')),
-        );
-        expect(
-          folderViolations.single.message,
-          equals(
-            AppStrings.renderedUpwardFolderDependency(
-              p.join(tempDir.path, 'lib', 'a', 'a.dart'),
-            ),
+      expect(folderViolations, hasLength(1));
+      expect(
+        folderViolations.single.filePath,
+        equals(p.join(tempDir.path, 'lib', 'b', 'b.dart')),
+      );
+      expect(
+        folderViolations.single.message,
+        equals(
+          AppStrings.renderedUpwardFolderDependency(
+            p.join(tempDir.path, 'lib', 'a', 'a.dart'),
           ),
-        );
-      },
-    );
+        ),
+      );
+    });
 
     test(
       'should report documentation issue paths relative to analysis root',
@@ -385,80 +380,70 @@ void main() {
       );
     });
 
-    test(
-      'should treat export directive dependencies as reachable for dead-file analysis',
-      () {
-        final libDir = Directory('${tempDir.path}/lib')..createSync();
-        File('${libDir.path}/main.dart').writeAsStringSync('''
+    test('should treat export directive dependencies as reachable for dead-file analysis', () {
+      final libDir = Directory('${tempDir.path}/lib')..createSync();
+      File('${libDir.path}/main.dart').writeAsStringSync('''
 import 'barrel.dart';
 
 void main() {
   runApp();
 }
 ''');
-        File('${libDir.path}/barrel.dart').writeAsStringSync('''
+      File('${libDir.path}/barrel.dart').writeAsStringSync('''
 export 'exported.dart';
 
 void runApp() {}
 ''');
-        File('${libDir.path}/exported.dart').writeAsStringSync('''
+      File('${libDir.path}/exported.dart').writeAsStringSync('''
 class ExportedType {}
 ''');
 
-        final metrics = analyzer.analyze();
-        final deadFileIssues = metrics.deadCodeIssues
-            .where((issue) => issue.type == DeadCodeIssueType.deadFile)
-            .toList();
+      final metrics = analyzer.analyze();
+      final deadFileIssues = metrics.deadCodeIssues
+          .where((issue) => issue.type == DeadCodeIssueType.deadFile)
+          .toList();
 
-        expect(
-          deadFileIssues.any(
-            (issue) => issue.filePath.endsWith('exported.dart'),
-          ),
-          isFalse,
-        );
-      },
-    );
+      expect(
+        deadFileIssues.any((issue) => issue.filePath.endsWith('exported.dart')),
+        isFalse,
+      );
+    });
 
-    test(
-      'should treat part directive dependencies as reachable for dead-file analysis',
-      () {
-        final libDir = Directory('${tempDir.path}/lib')..createSync();
-        File('${libDir.path}/main.dart').writeAsStringSync('''
+    test('should treat part directive dependencies as reachable for dead-file analysis', () {
+      final libDir = Directory('${tempDir.path}/lib')..createSync();
+      File('${libDir.path}/main.dart').writeAsStringSync('''
 import 'owner.dart';
 
 void main() {
   bootstrap();
 }
 ''');
-        File('${libDir.path}/owner.dart').writeAsStringSync('''
+      File('${libDir.path}/owner.dart').writeAsStringSync('''
 part 'owner_part.dart';
 
 void bootstrap() {}
 ''');
-        File('${libDir.path}/owner_part.dart').writeAsStringSync('''
+      File('${libDir.path}/owner_part.dart').writeAsStringSync('''
 part of 'owner.dart';
 
 class PartOnlyType {}
 ''');
 
-        final metrics = analyzer.analyze();
-        final deadFileIssues = metrics.deadCodeIssues
-            .where((issue) => issue.type == DeadCodeIssueType.deadFile)
-            .toList();
+      final metrics = analyzer.analyze();
+      final deadFileIssues = metrics.deadCodeIssues
+          .where((issue) => issue.type == DeadCodeIssueType.deadFile)
+          .toList();
 
-        expect(
-          deadFileIssues.any(
-            (issue) => issue.filePath.endsWith('owner_part.dart'),
-          ),
-          isFalse,
-        );
-      },
-    );
+      expect(
+        deadFileIssues.any(
+          (issue) => issue.filePath.endsWith('owner_part.dart'),
+        ),
+        isFalse,
+      );
+    });
 
-    test(
-      'should mark catch variables, function-typed parameters, and operator usages as used',
-      () {
-        File('${tempDir.path}/operators_coverage.dart').writeAsStringSync('''
+    test('should mark catch variables, function-typed parameters, and operator usages as used', () {
+      File('${tempDir.path}/operators_coverage.dart').writeAsStringSync('''
 class Ops {
   Ops(this.value);
 
@@ -553,55 +538,49 @@ void main() {
 }
 ''');
 
-        final metrics = analyzer.analyze();
-        final deadFunctionIssues = metrics.deadCodeIssues
-            .where((issue) => issue.type == DeadCodeIssueType.deadFunction)
-            .toList();
-        final unusedVariableIssues = metrics.deadCodeIssues
-            .where((issue) => issue.type == DeadCodeIssueType.unusedVariable)
-            .toList();
+      final metrics = analyzer.analyze();
+      final deadFunctionIssues = metrics.deadCodeIssues
+          .where((issue) => issue.type == DeadCodeIssueType.deadFunction)
+          .toList();
+      final unusedVariableIssues = metrics.deadCodeIssues
+          .where((issue) => issue.type == DeadCodeIssueType.unusedVariable)
+          .toList();
 
-        expect(deadFunctionIssues.any((issue) => issue.name == '[]'), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '[]='), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '+'), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '-'), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '*'), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '/'), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '~/'), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '%'), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '&'), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '|'), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '^'), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '<<'), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '>>'), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '>>>'), isFalse);
-        expect(deadFunctionIssues.any((issue) => issue.name == '~'), isFalse);
-        expect(
-          deadFunctionIssues.any((issue) => issue.name == 'applyTwice'),
-          isFalse,
-        );
-        expect(
-          unusedVariableIssues.any((issue) => issue.name == 'callback'),
-          isFalse,
-        );
-        expect(unusedVariableIssues.any((issue) => issue.name == 'e'), isFalse);
-        expect(
-          unusedVariableIssues.any((issue) => issue.name == 'st'),
-          isFalse,
-        );
-      },
-    );
+      expect(deadFunctionIssues.any((issue) => issue.name == '[]'), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '[]='), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '+'), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '-'), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '*'), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '/'), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '~/'), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '%'), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '&'), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '|'), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '^'), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '<<'), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '>>'), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '>>>'), isFalse);
+      expect(deadFunctionIssues.any((issue) => issue.name == '~'), isFalse);
+      expect(
+        deadFunctionIssues.any((issue) => issue.name == 'applyTwice'),
+        isFalse,
+      );
+      expect(
+        unusedVariableIssues.any((issue) => issue.name == 'callback'),
+        isFalse,
+      );
+      expect(unusedVariableIssues.any((issue) => issue.name == 'e'), isFalse);
+      expect(unusedVariableIssues.any((issue) => issue.name == 'st'), isFalse);
+    });
 
-    test(
-      'should suppress non-actionable generated warnings while keeping dead-code usage edges',
-      () {
-        File('${tempDir.path}/pubspec.yaml').writeAsStringSync('''
+    test('should suppress non-actionable generated warnings while keeping dead-code usage edges', () {
+      File('${tempDir.path}/pubspec.yaml').writeAsStringSync('''
 name: sample
 version: 0.0.1
 ''');
 
-        final libDir = Directory('${tempDir.path}/lib')..createSync();
-        File('${libDir.path}/main.dart').writeAsStringSync('''
+      final libDir = Directory('${tempDir.path}/lib')..createSync();
+      File('${libDir.path}/main.dart').writeAsStringSync('''
 import 'api.g.dart';
 
 void main() {
@@ -609,13 +588,13 @@ void main() {
 }
 ''');
 
-        File('${libDir.path}/service.dart').writeAsStringSync('''
+      File('${libDir.path}/service.dart').writeAsStringSync('''
 void helper() {}
 
 void unusedServiceFunction() {}
 ''');
 
-        File('${libDir.path}/api.g.dart').writeAsStringSync('''
+      File('${libDir.path}/api.g.dart').writeAsStringSync('''
 import 'service.dart';
 
 class GeneratedOne {}
@@ -632,67 +611,66 @@ void generatedCall() {
 void generatedDead() {}
 ''');
 
-        final metrics = AnalyzeFolder(
-          tempDir,
-          codeSizeThresholds: const CodeSizeThresholds(
-            maxFileLoc: 1,
-            maxClassLoc: 1,
-            maxFunctionLoc: 1,
-            maxMethodLoc: 1,
-          ),
-        ).analyze();
+      final metrics = AnalyzeFolder(
+        tempDir,
+        codeSizeThresholds: const CodeSizeThresholds(
+          maxFileLoc: 1,
+          maxClassLoc: 1,
+          maxFunctionLoc: 1,
+          maxMethodLoc: 1,
+        ),
+      ).analyze();
 
-        expect(
-          metrics.hardcodedStringIssues.any(
-            (issue) => issue.filePath.endsWith('api.g.dart'),
-          ),
-          isFalse,
-        );
-        expect(
-          metrics.magicNumberIssues.any(
-            (issue) => issue.filePath.endsWith('api.g.dart'),
-          ),
-          isFalse,
-        );
-        expect(
-          metrics.codeSizeArtifacts.any(
-            (artifact) => artifact.filePath.endsWith('api.g.dart'),
-          ),
-          isFalse,
-        );
+      expect(
+        metrics.hardcodedStringIssues.any(
+          (issue) => issue.filePath.endsWith('api.g.dart'),
+        ),
+        isFalse,
+      );
+      expect(
+        metrics.magicNumberIssues.any(
+          (issue) => issue.filePath.endsWith('api.g.dart'),
+        ),
+        isFalse,
+      );
+      expect(
+        metrics.codeSizeArtifacts.any(
+          (artifact) => artifact.filePath.endsWith('api.g.dart'),
+        ),
+        isFalse,
+      );
 
-        final generatedMetric = metrics.fileMetrics.firstWhere(
-          (metric) => metric.path.endsWith('api.g.dart'),
-        );
-        expect(generatedMetric.ignoreOneClassPerFile, isTrue);
-        expect(generatedMetric.isOneClassPerFileCompliant, isTrue);
+      final generatedMetric = metrics.fileMetrics.firstWhere(
+        (metric) => metric.path.endsWith('api.g.dart'),
+      );
+      expect(generatedMetric.ignoreOneClassPerFile, isTrue);
+      expect(generatedMetric.isOneClassPerFileCompliant, isTrue);
 
-        expect(
-          metrics.deadCodeIssues.any(
-            (issue) =>
-                issue.type == DeadCodeIssueType.deadFunction &&
-                issue.name == 'helper',
-          ),
-          isFalse,
-        );
-        expect(
-          metrics.deadCodeIssues.any(
-            (issue) =>
-                issue.filePath.endsWith('api.g.dart') &&
-                issue.type == DeadCodeIssueType.deadFunction,
-          ),
-          isFalse,
-        );
-        expect(
-          metrics.deadCodeIssues.any(
-            (issue) =>
-                issue.type == DeadCodeIssueType.deadFunction &&
-                issue.name == 'unusedServiceFunction',
-          ),
-          isTrue,
-        );
-      },
-    );
+      expect(
+        metrics.deadCodeIssues.any(
+          (issue) =>
+              issue.type == DeadCodeIssueType.deadFunction &&
+              issue.name == 'helper',
+        ),
+        isFalse,
+      );
+      expect(
+        metrics.deadCodeIssues.any(
+          (issue) =>
+              issue.filePath.endsWith('api.g.dart') &&
+              issue.type == DeadCodeIssueType.deadFunction,
+        ),
+        isFalse,
+      );
+      expect(
+        metrics.deadCodeIssues.any(
+          (issue) =>
+              issue.type == DeadCodeIssueType.deadFunction &&
+              issue.name == 'unusedServiceFunction',
+        ),
+        isTrue,
+      );
+    });
 
     test(
       'should expose code-size artifacts through analyze path and JSON output',

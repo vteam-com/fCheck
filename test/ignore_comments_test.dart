@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
@@ -38,27 +39,22 @@ void main() {
       tempDir.deleteSync(recursive: true);
     });
 
-    test(
-      'should ignore magic numbers when directive is present (// ignore: fcheck_magic_numbers)',
-      () {
-        final file = File(p.join(tempDir.path, 'ignored.dart'));
-        file.writeAsStringSync('''
+    test('should ignore magic numbers when directive is present (// ignore: fcheck_magic_numbers)', () {
+      final file = File(p.join(tempDir.path, 'ignored.dart'));
+      file.writeAsStringSync('''
 // ignore: fcheck_magic_numbers
 void main() {
   var x = 42;
 }
 ''');
 
-        final issues = delegate.analyzeFileWithContext(_contextForFile(file));
-        expect(issues, isEmpty);
-      },
-    );
+      final issues = delegate.analyzeFileWithContext(_contextForFile(file));
+      expect(issues, isEmpty);
+    });
 
-    test(
-      'should ignore magic numbers when directive is present (// ignore: fcheck_magic_numbers with multiple lines)',
-      () {
-        final file = File(p.join(tempDir.path, 'ignored_multiline.dart'));
-        file.writeAsStringSync('''
+    test('should ignore magic numbers when directive is present (// ignore: fcheck_magic_numbers with multiple lines)', () {
+      final file = File(p.join(tempDir.path, 'ignored_multiline.dart'));
+      file.writeAsStringSync('''
 // ignore: fcheck_magic_numbers
 // This is a multi-line comment
 // with additional information
@@ -67,10 +63,9 @@ void main() {
 }
 ''');
 
-        final issues = delegate.analyzeFileWithContext(_contextForFile(file));
-        expect(issues, isEmpty);
-      },
-    );
+      final issues = delegate.analyzeFileWithContext(_contextForFile(file));
+      expect(issues, isEmpty);
+    });
 
     test('should NOT ignore magic numbers when directive is absent', () {
       final file = File(p.join(tempDir.path, 'not_ignored.dart'));
@@ -138,11 +133,9 @@ void main() {
       expect(issues, isEmpty);
     });
 
-    test(
-      'should ignore hardcoded strings when directive is present ( with multiple lines)',
-      () {
-        final file = File(p.join(tempDir.path, 'ignored_multiline.dart'));
-        file.writeAsStringSync('''
+    test('should ignore hardcoded strings when directive is present ( with multiple lines)', () {
+      final file = File(p.join(tempDir.path, 'ignored_multiline.dart'));
+      file.writeAsStringSync('''
 // ignore: fcheck_hardcoded_strings
 
 // This is a multi-line comment
@@ -152,10 +145,9 @@ void main() {
 }
 ''');
 
-        final issues = delegate.analyzeFileWithContext(_contextForFile(file));
-        expect(issues, isEmpty);
-      },
-    );
+      final issues = delegate.analyzeFileWithContext(_contextForFile(file));
+      expect(issues, isEmpty);
+    });
 
     test('should NOT ignore hardcoded strings when directive is absent', () {
       final file = File(p.join(tempDir.path, 'not_ignored.dart'));

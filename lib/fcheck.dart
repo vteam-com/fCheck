@@ -343,9 +343,8 @@ class AnalyzeFolder {
         : <DeadCodeIssue>[];
     final documentationIssues = documentationEnabled
         ? _toRelativeDocumentationIssues(
-            DocumentationAnalyzer(
-              projectRoot: projectRoot,
-            ).analyze(documentationIssuesRaw),
+            DocumentationAnalyzer(projectRoot: projectRoot)
+                .analyze(documentationIssuesRaw),
             analysisRootPath: projectDir.path,
           )
         : <DocumentationIssue>[];
@@ -395,9 +394,8 @@ class AnalyzeFolder {
 
     // Perform project-wide localization analysis
     final localizationIssues = localizationEnabled
-        ? LocalizationDelegate(
-            fix: fix,
-          ).analyzeProject(projectDir, analyzedContexts: analyzedContexts)
+        ? LocalizationDelegate(fix: fix)
+              .analyzeProject(projectDir, analyzedContexts: analyzedContexts)
         : <LocalizationIssue>[];
 
     final packagePlatformWarnings = collectPackagePlatformWarnings(

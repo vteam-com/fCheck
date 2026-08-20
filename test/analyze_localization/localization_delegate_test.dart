@@ -96,16 +96,13 @@ void main() {
       expect(result, isEmpty);
     });
 
-    test(
-      'analyzeProject returns empty list when l10n directory exists but no ARB files',
-      () async {
-        final l10nDir = Directory(p.join(tempDir.path, _l10nRelativePath));
-        await l10nDir.create(recursive: true);
+    test('analyzeProject returns empty list when l10n directory exists but no ARB files', () async {
+      final l10nDir = Directory(p.join(tempDir.path, _l10nRelativePath));
+      await l10nDir.create(recursive: true);
 
-        final result = delegate.analyzeProject(tempDir);
-        expect(result, isEmpty);
-      },
-    );
+      final result = delegate.analyzeProject(tempDir);
+      expect(result, isEmpty);
+    });
 
     test('analyzeProject analyzes ARB files correctly', () async {
       // Create l10n directory
@@ -221,9 +218,8 @@ void main() {
       });
 
       // Malformed Spanish file
-      await File(
-        p.join(l10nDir.path, _spanishArb),
-      ).writeAsString('invalid yaml content {{{');
+      await File(p.join(l10nDir.path, _spanishArb))
+          .writeAsString('invalid yaml content {{{');
 
       final result = delegate.analyzeProject(tempDir);
 
@@ -321,39 +317,36 @@ void main() {
       },
     );
 
-    test(
-      'analyzeProject uses deterministic alphabetical fallback when no English file exists',
-      () async {
-        final l10nDir = Directory(p.join(tempDir.path, _l10nRelativePath));
-        await l10nDir.create(recursive: true);
+    test('analyzeProject uses deterministic alphabetical fallback when no English file exists', () async {
+      final l10nDir = Directory(p.join(tempDir.path, _l10nRelativePath));
+      await l10nDir.create(recursive: true);
 
-        await _writeArbFile(l10nDir, _frenchArb, {
-          '@@locale': 'fr',
-          _helloKey: 'Bonjour',
-        });
-        await _writeArbFile(l10nDir, _spanishArb, {
-          '@@locale': 'es',
-          _goodbyeKey: 'Adiós',
-        });
-        await _writeArbFile(l10nDir, _germanArb, {
-          '@@locale': 'de',
-          _helloKey: 'Hallo',
-          _goodbyeKey: 'Auf Wiedersehen',
-        });
+      await _writeArbFile(l10nDir, _frenchArb, {
+        '@@locale': 'fr',
+        _helloKey: 'Bonjour',
+      });
+      await _writeArbFile(l10nDir, _spanishArb, {
+        '@@locale': 'es',
+        _goodbyeKey: 'Adiós',
+      });
+      await _writeArbFile(l10nDir, _germanArb, {
+        '@@locale': 'de',
+        _helloKey: 'Hallo',
+        _goodbyeKey: 'Auf Wiedersehen',
+      });
 
-        final result = delegate.analyzeProject(tempDir);
+      final result = delegate.analyzeProject(tempDir);
 
-        expect(result, hasLength(_two));
-        final languageCodes = result.map((issue) => issue.languageCode).toSet();
-        expect(languageCodes, contains('es'));
-        expect(languageCodes, contains('fr'));
+      expect(result, hasLength(_two));
+      final languageCodes = result.map((issue) => issue.languageCode).toSet();
+      expect(languageCodes, contains('es'));
+      expect(languageCodes, contains('fr'));
 
-        for (final issue in result) {
-          expect(issue.missingCount, equals(_one));
-          expect(issue.totalCount, equals(_two));
-        }
-      },
-    );
+      for (final issue in result) {
+        expect(issue.missingCount, equals(_one));
+        expect(issue.totalCount, equals(_two));
+      }
+    });
 
     test('analyzeProject supports a non-English base locale', () async {
       final l10nDir = Directory(p.join(tempDir.path, _l10nRelativePath));
@@ -549,9 +542,8 @@ class SampleWidget extends StatelessWidget {
   }
 }
 ''');
-        await File(
-          p.join(l10nDir.path, 'app_localizations.dart'),
-        ).writeAsString('''
+        await File(p.join(l10nDir.path, 'app_localizations.dart'))
+            .writeAsString('''
 class AppLocalizations {
   String get $_helloKey => 'Hello';
   String get $_unusedKey => 'Unused';
@@ -604,9 +596,8 @@ void useKey(BuildContext context) {
   print(msg);
 }
 ''');
-        await File(
-          p.join(l10nDir.path, 'app_localizations.dart'),
-        ).writeAsString('''
+        await File(p.join(l10nDir.path, 'app_localizations.dart'))
+            .writeAsString('''
 class AppLocalizations {
   String get $_helloKey => 'Hello';
 }
@@ -644,9 +635,8 @@ class SampleWidget extends StatelessWidget {
   }
 }
 ''');
-        await File(
-          p.join(l10nDir.path, 'app_localizations.dart'),
-        ).writeAsString('''
+        await File(p.join(l10nDir.path, 'app_localizations.dart'))
+            .writeAsString('''
 class AppLocalizations {
   String get $_helloKey => 'Hello';
 }
@@ -684,9 +674,8 @@ class SampleWidget extends StatelessWidget {
   }
 }
 ''');
-        await File(
-          p.join(l10nDir.path, 'app_localizations.dart'),
-        ).writeAsString('''
+        await File(p.join(l10nDir.path, 'app_localizations.dart'))
+            .writeAsString('''
 class AppLocalizations {
   String get $_helloKey => 'Hello';
 }
@@ -886,39 +875,36 @@ class AppLocalizations {
 
         // The written file should contain 'cancel' exactly once.
         final rawContent = arbFile.readAsStringSync();
-        final cancelCount = RegExp(
-          r'"cancel"\s*:',
-        ).allMatches(rawContent).length;
+        final cancelCount = RegExp(r'"cancel"\s*:')
+            .allMatches(rawContent)
+            .length;
         expect(cancelCount, equals(_one));
       });
 
-      test(
-        'fix does not modify files that are already sorted and clean',
-        () async {
-          final l10nDir = Directory(p.join(fixTempDir.path, _l10nRelativePath));
-          await l10nDir.create(recursive: true);
+      test('fix does not modify files that are already sorted and clean', () async {
+        final l10nDir = Directory(p.join(fixTempDir.path, _l10nRelativePath));
+        await l10nDir.create(recursive: true);
 
-          const alreadySorted =
-              '{\n'
-              '  "@@locale": "en",\n'
-              '  "appName": "MyApp",\n'
-              '  "hello": "Hello"\n'
-              '}';
-          final arbFile = File(p.join(l10nDir.path, _englishArb));
-          // Write without trailing newline to exercise the identity path when
-          // the serialised output doesn't match the original whitespace exactly.
-          await arbFile.writeAsString(alreadySorted);
+        const alreadySorted =
+            '{\n'
+            '  "@@locale": "en",\n'
+            '  "appName": "MyApp",\n'
+            '  "hello": "Hello"\n'
+            '}';
+        final arbFile = File(p.join(l10nDir.path, _englishArb));
+        // Write without trailing newline to exercise the identity path when
+        // the serialised output doesn't match the original whitespace exactly.
+        await arbFile.writeAsString(alreadySorted);
 
-          final fixDelegate = LocalizationDelegate(fix: true);
-          fixDelegate.analyzeProject(fixTempDir);
+        final fixDelegate = LocalizationDelegate(fix: true);
+        fixDelegate.analyzeProject(fixTempDir);
 
-          // The file content should still decode to the same logical map.
-          final decoded =
-              jsonDecode(arbFile.readAsStringSync()) as Map<String, dynamic>;
-          expect(decoded['appName'], equals('MyApp'));
-          expect(decoded['hello'], equals('Hello'));
-        },
-      );
+        // The file content should still decode to the same logical map.
+        final decoded =
+            jsonDecode(arbFile.readAsStringSync()) as Map<String, dynamic>;
+        expect(decoded['appName'], equals('MyApp'));
+        expect(decoded['hello'], equals('Hello'));
+      });
 
       test('fix leaves @@locale at the top', () async {
         final l10nDir = Directory(p.join(fixTempDir.path, _l10nRelativePath));

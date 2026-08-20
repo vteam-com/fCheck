@@ -1,6 +1,8 @@
 import 'package:args/args.dart';
+
 import '../bin/console/console_input.dart';
 import '../bin/console/console_common.dart';
+
 import 'package:test/test.dart';
 
 /// Tests for the main() function in bin/fcheck.dart and console input parsing

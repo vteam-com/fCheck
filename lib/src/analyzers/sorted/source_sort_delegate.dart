@@ -164,9 +164,8 @@ class SourceSortDelegate implements AnalyzerDelegate {
       ..sort((a, b) {
         final uriA = a.uri;
         final uriB = b.uri;
-        final groupComparison = _importGroupPriority(
-          uriA,
-        ).compareTo(_importGroupPriority(uriB));
+        final groupComparison = _importGroupPriority(uriA)
+            .compareTo(_importGroupPriority(uriB));
         if (groupComparison != 0) {
           return groupComparison;
         }

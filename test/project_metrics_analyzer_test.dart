@@ -139,37 +139,34 @@ void main() {
       expect(result.complianceFocusAreaKey, isNot(equals('hardcoded_strings')));
     });
 
-    test(
-      'includes enabled documentation in score denominator even with zero issues',
-      () {
-        final result = analyzer.analyze(
-          _buildInput(
-            totalDartFiles: 1,
-            totalLinesOfCode: 10,
-            magicNumberIssues: [
-              MagicNumberIssue(
-                filePath: 'lib/main.dart',
-                lineNumber: 1,
-                value: '2',
-              ),
-            ],
-            codeSizeAnalyzerEnabled: false,
-            oneClassPerFileAnalyzerEnabled: false,
-            hardcodedStringsAnalyzerEnabled: false,
-            sourceSortingAnalyzerEnabled: false,
-            layersAnalyzerEnabled: false,
-            secretsAnalyzerEnabled: false,
-            deadCodeAnalyzerEnabled: false,
-            duplicateCodeAnalyzerEnabled: false,
-            magicNumbersAnalyzerEnabled: true,
-            documentationAnalyzerEnabled: true,
-            disabledAnalyzersCount: 0,
-          ),
-        );
+    test('includes enabled documentation in score denominator even with zero issues', () {
+      final result = analyzer.analyze(
+        _buildInput(
+          totalDartFiles: 1,
+          totalLinesOfCode: 10,
+          magicNumberIssues: [
+            MagicNumberIssue(
+              filePath: 'lib/main.dart',
+              lineNumber: 1,
+              value: '2',
+            ),
+          ],
+          codeSizeAnalyzerEnabled: false,
+          oneClassPerFileAnalyzerEnabled: false,
+          hardcodedStringsAnalyzerEnabled: false,
+          sourceSortingAnalyzerEnabled: false,
+          layersAnalyzerEnabled: false,
+          secretsAnalyzerEnabled: false,
+          deadCodeAnalyzerEnabled: false,
+          duplicateCodeAnalyzerEnabled: false,
+          magicNumbersAnalyzerEnabled: true,
+          documentationAnalyzerEnabled: true,
+          disabledAnalyzersCount: 0,
+        ),
+      );
 
-        expect(result.complianceScore, equals(92));
-      },
-    );
+      expect(result.complianceScore, equals(92));
+    });
 
     test('aggregate computes duplicate literal occurrences', () {
       final aggregation = analyzer.aggregate([

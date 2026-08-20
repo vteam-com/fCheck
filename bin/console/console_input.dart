@@ -181,8 +181,7 @@ ArgParser createConsoleArgParser() => ArgParser()
   ..addOption(
     'list',
     abbr: 'l',
-    help:
-        'Control list output: none | partial | full | filenames | <number> (max items per list, e.g. 3 or 999)',
+    help: 'Control list output: none | partial | full | filenames | <number> (max items per list, e.g. 3 or 999)',
     defaultsTo: ReportListMode.partial.cliName,
   )
   ..addFlag('version', abbr: 'v', help: 'Show fCheck version', negatable: false)
@@ -195,20 +194,17 @@ ArgParser createConsoleArgParser() => ArgParser()
   ..addFlag(
     'excluded',
     abbr: 'x',
-    help:
-        'List excluded files and directories (hidden folders, default exclusions, custom patterns)',
+    help: 'List excluded files and directories (hidden folders, default exclusions, custom patterns)',
     negatable: false,
   )
   ..addFlag(
     'literals',
-    help:
-        'List literals inventory (strings/numbers, duplicate ratio, hardcoded counts).',
+    help: 'List literals inventory (strings/numbers, duplicate ratio, hardcoded counts).',
     negatable: false,
   )
   ..addFlag(
     'ignores',
-    help:
-        'List all project ignore directives and suppression entries (.fcheck + Dart comments)',
+    help: 'List all project ignore directives and suppression entries (.fcheck + Dart comments)',
     negatable: false,
   )
   ..addFlag(

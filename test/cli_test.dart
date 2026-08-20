@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+
 import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/models/version.dart';
 import 'package:test/test.dart';
@@ -128,9 +129,8 @@ class TestClass {
 
     test('should accept short input option', () async {
       // Create test file
-      File(
-        '${tempDir.path}/short.dart',
-      ).writeAsStringSync('void main() => print("test");');
+      File('${tempDir.path}/short.dart')
+          .writeAsStringSync('void main() => print("test");');
 
       // Run fcheck with short option
       final result = await runCli(['-i', tempDir.path]);
@@ -308,31 +308,28 @@ void main() {
       );
     });
 
-    test(
-      'should not include directives from default-excluded folders in --ignores',
-      () async {
-        const String sourceFilePath = 'lib/main.dart';
-        const String excludedSourceFilePath = '.dart_tool/ignored.dart';
+    test('should not include directives from default-excluded folders in --ignores', () async {
+      const String sourceFilePath = 'lib/main.dart';
+      const String excludedSourceFilePath = '.dart_tool/ignored.dart';
 
-        Directory('${tempDir.path}/lib').createSync(recursive: true);
-        Directory('${tempDir.path}/.dart_tool').createSync(recursive: true);
-        File('${tempDir.path}/$sourceFilePath').writeAsStringSync('''
+      Directory('${tempDir.path}/lib').createSync(recursive: true);
+      Directory('${tempDir.path}/.dart_tool').createSync(recursive: true);
+      File('${tempDir.path}/$sourceFilePath').writeAsStringSync('''
 // ignore: fcheck_layers
 void main() {}
 ''');
-        File('${tempDir.path}/$excludedSourceFilePath').writeAsStringSync('''
+      File('${tempDir.path}/$excludedSourceFilePath').writeAsStringSync('''
 // ignore: fcheck_magic_numbers
 void ignored() {}
 ''');
 
-        final result = await runCli(['--input', tempDir.path, '--ignores']);
+      final result = await runCli(['--input', tempDir.path, '--ignores']);
 
-        expect(result.exitCode, equals(0));
-        expect(result.stdout, contains('fcheck_layers (1):'));
-        expect(result.stdout, isNot(contains('fcheck_magic_numbers')));
-        expect(result.stdout, isNot(contains(excludedSourceFilePath)));
-      },
-    );
+      expect(result.exitCode, equals(0));
+      expect(result.stdout, contains('fcheck_layers (1):'));
+      expect(result.stdout, isNot(contains('fcheck_magic_numbers')));
+      expect(result.stdout, isNot(contains(excludedSourceFilePath)));
+    });
 
     test(
       'should list ignore inventory as JSON with --ignores --json',
@@ -371,9 +368,8 @@ void main() {
     );
 
     test('should respect --list none flag', () async {
-      File(
-        '${tempDir.path}/list_none.dart',
-      ).writeAsStringSync('void main() => print("list none");');
+      File('${tempDir.path}/list_none.dart')
+          .writeAsStringSync('void main() => print("list none");');
 
       final result = await runCli(['--input', tempDir.path, '--list', 'none']);
 
@@ -551,14 +547,13 @@ void main() {
     test(
       'should not count empty interpolation segments as empty string literals',
       () async {
-        File('${tempDir.path}/literals_interpolation.dart').writeAsStringSync(
-          '''
+        File('${tempDir.path}/literals_interpolation.dart')
+            .writeAsStringSync('''
 void main() {
   final name = "n";
   print("prefix_\${name}");
 }
-''',
-        );
+''');
 
         final result = await runCli([
           '--input',
@@ -677,40 +672,37 @@ void main() {
       },
     );
 
-    test(
-      'should show hardcoded strings as passive summary for Dart projects when localization is off',
-      () async {
-        File('${tempDir.path}/pubspec.yaml').writeAsStringSync('''
+    test('should show hardcoded strings as passive summary for Dart projects when localization is off', () async {
+      File('${tempDir.path}/pubspec.yaml').writeAsStringSync('''
 name: cli_sample
 version: 1.0.0
 environment:
   sdk: ">=3.0.0 <4.0.0"
 ''');
-        File('${tempDir.path}/main.dart').writeAsStringSync('''
+      File('${tempDir.path}/main.dart').writeAsStringSync('''
 void main() {
   print("This is hardcoded");
 }
 ''');
 
-        final result = await runCli(['--input', tempDir.path]);
+      final result = await runCli(['--input', tempDir.path]);
 
-        expect(result.exitCode, equals(0));
-        expect(
-          result.stdout,
-          contains(
-            '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}).',
-          ),
-        );
-        expect(
-          result.stdout,
-          contains(RegExp(r'\[-\]\s+Hardcoded strings\s*$', multiLine: true)),
-        );
-        expect(
-          result.stdout,
-          isNot(contains('main.dart:2: "This is hardcoded"')),
-        );
-      },
-    );
+      expect(result.exitCode, equals(0));
+      expect(
+        result.stdout,
+        contains(
+          '${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.off}).',
+        ),
+      );
+      expect(
+        result.stdout,
+        contains(RegExp(r'\[-\]\s+Hardcoded strings\s*$', multiLine: true)),
+      );
+      expect(
+        result.stdout,
+        isNot(contains('main.dart:2: "This is hardcoded"')),
+      );
+    });
 
     test('should disable ANSI colors with --no-colors', () async {
       File('${tempDir.path}/no_colors.dart').writeAsStringSync('''
@@ -746,12 +738,10 @@ void main() {
       final dir1 = Directory('${tempDir.path}/dir1')..createSync();
       final dir2 = Directory('${tempDir.path}/dir2')..createSync();
 
-      File(
-        '${dir1.path}/test1.dart',
-      ).writeAsStringSync('void main() => print("dir1");');
-      File(
-        '${dir2.path}/test2.dart',
-      ).writeAsStringSync('void main() => print("dir2");');
+      File('${dir1.path}/test1.dart')
+          .writeAsStringSync('void main() => print("dir1");');
+      File('${dir2.path}/test2.dart')
+          .writeAsStringSync('void main() => print("dir2");');
 
       // Run with both explicit option and positional argument - explicit should win
       final result = await runCli(['--input', dir1.path, dir2.path]);
@@ -764,9 +754,8 @@ void main() {
 
     test('should accept positional path argument', () async {
       // Create test file
-      File(
-        '${tempDir.path}/positional.dart',
-      ).writeAsStringSync('void main() => print("positional test");');
+      File('${tempDir.path}/positional.dart')
+          .writeAsStringSync('void main() => print("positional test");');
 
       // Run fcheck with positional argument
       final result = await runCli([tempDir.path]);
@@ -842,30 +831,27 @@ void main() {
       expect(stats['testCases'], equals(2));
     });
 
-    test(
-      'should print analysis error and exit with code 1 when output generation throws',
-      () async {
-        File('${tempDir.path}/main.dart').writeAsStringSync('''
+    test('should print analysis error and exit with code 1 when output generation throws', () async {
+      File('${tempDir.path}/main.dart').writeAsStringSync('''
 void main() {
   print("ok");
 }
 ''');
-        final blockedOutputPath = '${tempDir.path}/blocked_output';
-        File(blockedOutputPath).writeAsStringSync('blocking file');
+      final blockedOutputPath = '${tempDir.path}/blocked_output';
+      File(blockedOutputPath).writeAsStringSync('blocking file');
 
-        final result = await runCli([
-          '--input',
-          tempDir.path,
-          '--svg-files',
-          '--output',
-          blockedOutputPath,
-        ], useDirectInvocation: true);
+      final result = await runCli([
+        '--input',
+        tempDir.path,
+        '--svg-files',
+        '--output',
+        blockedOutputPath,
+      ], useDirectInvocation: true);
 
-        expect(result.exitCode, equals(1));
-        expect(result.stdout, contains(AppStrings.analysisError));
-        expect(result.stdout, contains('FileSystemException'));
-      },
-    );
+      expect(result.exitCode, equals(1));
+      expect(result.stdout, contains(AppStrings.analysisError));
+      expect(result.stdout, contains('FileSystemException'));
+    });
 
     test('should disable analyzers via .fcheck', () async {
       File('${tempDir.path}/main.dart').writeAsStringSync('''

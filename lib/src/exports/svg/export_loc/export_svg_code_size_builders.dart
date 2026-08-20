@@ -537,9 +537,8 @@ _ArtifactWarningIndex _buildArtifactWarningIndex({
     }
     switch (issue.type) {
       case DeadCodeIssueType.deadFile:
-        upsertFile(
-          filePath,
-        ).add('Dead Code', deadArtifact: true, hardError: true);
+        upsertFile(filePath)
+            .add('Dead Code', deadArtifact: true, hardError: true);
         break;
       case DeadCodeIssueType.deadClass:
         upsertFile(filePath).add('Dead Code', hardError: true);
@@ -557,9 +556,8 @@ _ArtifactWarningIndex _buildArtifactWarningIndex({
         );
         upsertFile(filePath).add('Dead Code', hardError: true);
         if (callable != null) {
-          upsertCallable(
-            callable.stableId,
-          ).add('Dead Code', deadArtifact: true, hardError: true);
+          upsertCallable(callable.stableId)
+              .add('Dead Code', deadArtifact: true, hardError: true);
           if (callable.ownerName != null && callable.ownerName!.isNotEmpty) {
             upsertClass(
               filePath,

@@ -20,13 +20,15 @@ dart format . | sed 's/^/    /'
 dart fix --apply | sed 's/^/    /'
 
 echo --- Analyze
-flutter analyze lib test --no-pub | sed 's/^/    /'
+dart analyze lib test | sed 's/^/    /'
 
 echo --- Test
-if ! flutter test --reporter=compact --no-pub; then
+
+if ! NO_COLOR=1 dart test --reporter=compact; then
   echo "Tests failed"
   exit 1
 fi
+NO_COLOR=0
 
 echo --- fCheck
 # on the ./example

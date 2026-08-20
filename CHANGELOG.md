@@ -7,6 +7,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] – 2026-08-20
+
+### Changed
+
+- **Upgraded to `analyzer` 14.** Dependency constraint moved from `^13.3.0` to `^14.1.0`, with source updated for the new API surface.
+- **Raised the minimum Dart SDK to 3.13.0.** The constraint is now `>=3.13.0`; projects on Dart 3.12 or earlier must stay on 1.4.x.
+- **Toolchain moved from `flutter` to `dart` commands.** CI (`.github/workflows/ci.yml`) and `tool/check.sh` now run `dart analyze` and `dart test` directly, since fcheck is a pure Dart package and never required the Flutter SDK.
+- Enabled the `parameter_assignments` lint and excluded platform/build directories from analysis in `analysis_options.yaml`.
+- Bumped `test` to 1.31.2.
+
+### Added
+
+- Package dependency SVG export now renders all derived dependency levels.
+
+### Fixed
+
+- Removed duplicated helper logic flagged by fcheck's own duplicate-code analyzer:
+  - `_isInDirective` was copy-pasted between the hardcoded-strings and metrics visitors; it is now the shared `isInDirective()` in `lib/src/analyzers/shared/directive_ast_utils.dart`.
+  - The widget-lint ignore-comment patterns were duplicated between the hardcoded-string visitor and delegate; they are now `HardcodedStringUtils.containsWidgetLintIgnoreComment()`, with the regexes hoisted to a `static final` list instead of being rebuilt on every scanned line.
+
 ## [1.4.1] – 2026-06-22
 
 ### Added

@@ -86,9 +86,9 @@ String relativeFileLabel(String filePath) {
 /// The id must be URL-safe and unique within the graph; we strip extensions and
 /// replace path separators to satisfy Mermaid constraints.
 String mermaidNodeId(String filePath) {
-  return relativeFileLabel(
-    filePath,
-  ).replaceAll('/', '_').replaceAll('.dart', '');
+  return relativeFileLabel(filePath)
+      .replaceAll('/', '_')
+      .replaceAll('.dart', '');
 }
 
 /// PlantUML component id from a file path.

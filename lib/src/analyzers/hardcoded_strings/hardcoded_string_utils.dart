@@ -123,6 +123,22 @@ class HardcodedStringUtils {
     return _technicalPatterns.any((pattern) => pattern.hasMatch(trimmed));
   }
 
+  static final List<RegExp> _widgetLintIgnorePatterns = <RegExp>[
+    RegExp(r'//\s*ignore:\s*avoid_hardcoded_strings_in_widgets'),
+    RegExp(r'//\s*ignore_for_file:\s*avoid_hardcoded_strings_in_widgets'),
+    RegExp(r'//\s*ignore:\s*hardcoded.string', caseSensitive: false),
+    RegExp(r'//\s*hardcoded.ok', caseSensitive: false),
+  ];
+
+  /// Returns true when [line] carries a widget-lint ignore comment.
+  ///
+  /// Recognizes `ignore:`/`ignore_for_file:` comments for the
+  /// `avoid_hardcoded_strings_in_widgets` rule as well as the shorthand
+  /// `hardcoded.ok` marker.
+  static bool containsWidgetLintIgnoreComment(String line) {
+    return _widgetLintIgnorePatterns.any((pattern) => pattern.hasMatch(line));
+  }
+
   /// Fast pre-filter to avoid regex checks for plain sentence-like text.
   static bool _containsTechnicalMarker(String value) {
     return value.contains('/') ||

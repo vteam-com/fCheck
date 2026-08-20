@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import './counter_widget.dart';
 import './models.dart';
 
@@ -32,9 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CounterWidget(count: _counter),
-          ],
+          children: <Widget>[CounterWidget(count: _counter)],
         ),
       ),
       floatingActionButton: FloatingActionButton(

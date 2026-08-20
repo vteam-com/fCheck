@@ -2,6 +2,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_utils.dart';
+import 'package:fcheck/src/analyzers/shared/directive_ast_utils.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
 
 /// Focus modes for hardcoded string detection.
@@ -63,21 +64,18 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   ///
   /// [node] The simple string literal node being visited.
   @override
-  void visitSimpleStringLiteral(final SimpleStringLiteral node) {
+  void visitSimpleStringLiteral(SimpleStringLiteral node) {
     _analyzeStringLiteral(node, node.value);
   }
 
   /// Visits an interpolated string literal node in the AST.
   @override
-  void visitStringInterpolation(final StringInterpolation node) {
+  void visitStringInterpolation(StringInterpolation node) {
     _analyzeStringLiteral(node, _extractLiteralTextWithoutInterpolations(node));
   }
 
   /// Applies hardcoded-string rules to a string literal node.
-  void _analyzeStringLiteral(
-    final StringLiteral node,
-    final String issueValue,
-  ) {
+  void _analyzeStringLiteral(StringLiteral node, String issueValue) {
     // Focus filter (Flutter widgets vs Dart print).
     if (!_matchesFocus(node)) {
       return;
@@ -114,7 +112,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     }
 
     // Skip strings that are in import/part/library directives
-    if (_isInDirective(node)) {
+    if (isInDirective(node)) {
       return;
     }
 
@@ -192,7 +190,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  bool _matchesFocus(final StringLiteral node) {
+  bool _matchesFocus(StringLiteral node) {
     switch (focus) {
       case HardcodedStringFocus.general:
         return true;
@@ -203,24 +201,8 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     }
   }
 
-  /// Checks if a string literal is within a directive (import/export/part).
-  bool _isInDirective(final AstNode node) {
-    AstNode? current = node.parent;
-    while (current != null) {
-      if (current is ImportDirective ||
-          current is ExportDirective ||
-          current is PartDirective ||
-          current is PartOfDirective ||
-          current is LibraryDirective) {
-        return true;
-      }
-      current = current.parent;
-    }
-    return false;
-  }
-
   /// Internal helper used by fcheck analysis and reporting.
-  bool _isWidgetOutputString(final StringLiteral node) {
+  bool _isWidgetOutputString(StringLiteral node) {
     final ArgumentList? argumentList = node
         .thisOrAncestorOfType<ArgumentList>();
     if (argumentList == null) {
@@ -252,19 +234,21 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  bool _hasWidgetLintIgnoreComment(final StringLiteral node) {
+  bool _hasWidgetLintIgnoreComment(StringLiteral node) {
     final int lineNumber = _getLineNumber(node.offset);
     final List<String> lines = content.split('\n');
 
     if (lineNumber > 0 && lineNumber <= lines.length) {
       final String currentLine = lines[lineNumber - 1];
-      if (_containsWidgetLintIgnoreComment(currentLine)) {
+      if (HardcodedStringUtils.containsWidgetLintIgnoreComment(currentLine)) {
         return true;
       }
 
       if (lineNumber > 1) {
         final String previousLine = lines[lineNumber - _previousLineOffset];
-        if (_containsWidgetLintIgnoreComment(previousLine)) {
+        if (HardcodedStringUtils.containsWidgetLintIgnoreComment(
+          previousLine,
+        )) {
           return true;
         }
       }
@@ -274,7 +258,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Returns literal text with interpolation segments removed.
-  String _extractLiteralTextWithoutInterpolations(final StringLiteral node) {
+  String _extractLiteralTextWithoutInterpolations(StringLiteral node) {
     final String source = node.toSource();
     final (literalContent, isRaw) = _stripLiteralDelimiters(source);
     if (literalContent.isEmpty || isRaw) {
@@ -316,19 +300,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  bool _containsWidgetLintIgnoreComment(final String line) {
-    final ignorePatterns = [
-      RegExp(r'//\s*ignore:\s*avoid_hardcoded_strings_in_widgets'),
-      RegExp(r'//\s*ignore_for_file:\s*avoid_hardcoded_strings_in_widgets'),
-      RegExp(r'//\s*ignore:\s*hardcoded.string', caseSensitive: false),
-      RegExp(r'//\s*hardcoded.ok', caseSensitive: false),
-    ];
-
-    return ignorePatterns.any((pattern) => pattern.hasMatch(line));
-  }
-
-  /// Internal helper used by fcheck analysis and reporting.
-  bool _isAcceptableWidgetProperty(final StringLiteral node) {
+  bool _isAcceptableWidgetProperty(StringLiteral node) {
     final AstNode? parent = node.parent;
     if (parent is! NamedArgument) {
       return false;
@@ -365,15 +337,12 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  bool _isTechnicalString(final String value) {
+  bool _isTechnicalString(String value) {
     return HardcodedStringUtils.isTechnicalString(value);
   }
 
   /// Returns true when [node] is passed directly in [argumentList].
-  bool _isDirectArgument(
-    final StringLiteral node,
-    final ArgumentList argumentList,
-  ) {
+  bool _isDirectArgument(StringLiteral node, ArgumentList argumentList) {
     final AstNode directExpression = _getDirectArgumentExpression(node);
     for (final arg in argumentList.arguments) {
       if (identical(arg, directExpression)) {
@@ -388,7 +357,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Returns the expression that is passed directly as an argument.
-  AstNode _getDirectArgumentExpression(final StringLiteral node) {
+  AstNode _getDirectArgumentExpression(StringLiteral node) {
     final AdjacentStrings? adjacentStrings = node
         .thisOrAncestorOfType<AdjacentStrings>();
     if (adjacentStrings != null) {
@@ -398,10 +367,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Detects nested function boundaries between a literal and argument list.
-  bool _hasFunctionBoundary(
-    final StringLiteral node,
-    final ArgumentList argumentList,
-  ) {
+  bool _hasFunctionBoundary(StringLiteral node, ArgumentList argumentList) {
     AstNode? walker = node.parent;
     while (walker != null && walker != argumentList) {
       if (walker is FunctionExpression || walker is FunctionBody) {
@@ -413,7 +379,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  bool _isInsideWidgetClass(final AstNode node) {
+  bool _isInsideWidgetClass(AstNode node) {
     final ClassDeclaration? classDecl = node
         .thisOrAncestorOfType<ClassDeclaration>();
     if (classDecl == null) {
@@ -432,14 +398,14 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  bool _isInsideBuildMethod(final AstNode node) {
+  bool _isInsideBuildMethod(AstNode node) {
     final MethodDeclaration? method = node
         .thisOrAncestorOfType<MethodDeclaration>();
     return _matchesBuildOrWidgetReturningDeclaration(method);
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  bool _isInsideWidgetReturnFunction(final AstNode node) {
+  bool _isInsideWidgetReturnFunction(AstNode node) {
     final FunctionDeclaration? function = node
         .thisOrAncestorOfType<FunctionDeclaration>();
     return _matchesBuildOrWidgetReturningDeclaration(function);
@@ -474,7 +440,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  bool _isWidgetReturnType(final TypeAnnotation? type) {
+  bool _isWidgetReturnType(TypeAnnotation? type) {
     if (type == null) {
       return false;
     }
@@ -483,7 +449,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Checks if a string literal is within an annotation.
-  bool _isInAnnotation(final AstNode node) {
+  bool _isInAnnotation(AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
       if (current is Annotation) {
@@ -495,7 +461,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Checks if a string literal is used as a key in a map literal.
-  bool _isMapKey(final AstNode node) {
+  bool _isMapKey(AstNode node) {
     final AstNode? parent = node.parent;
     if (parent is MapLiteralEntry) {
       return parent.key == node;
@@ -508,7 +474,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   /// This also considers `static final` fields in dedicated string files
   /// when localization is not enabled, plus explicit typed `String`
   /// declarations used as reusable identifiers/constants.
-  bool _isInConstDeclaration(final AstNode node) {
+  bool _isInConstDeclaration(AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
       if (current is VariableDeclaration) {
@@ -557,7 +523,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Checks if a string literal is within an AppLocalizations call.
-  bool _isInL10nCall(final AstNode node) {
+  bool _isInL10nCall(AstNode node) {
     // Basic detection for AppLocalizations calls
     AstNode? current = node.parent;
     while (current != null) {
@@ -574,7 +540,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Checks if a string literal is within a RegExp constructor or call.
-  bool _isInRegExpCall(final AstNode node) {
+  bool _isInRegExpCall(AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
       if (current is MethodInvocation) {
@@ -594,7 +560,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Checks if a string literal is within a Key constructor.
-  bool _isInKey(final AstNode node) {
+  bool _isInKey(AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
       if (current is NamedArgument) {
@@ -617,7 +583,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Checks if a string literal is used as an index in a collection.
-  bool _isIndex(final AstNode node) {
+  bool _isIndex(AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
       if (current is IndexExpression) {
@@ -634,7 +600,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Checks if a string literal is compared directly in ==/!= expressions.
-  bool _isEqualityComparisonOperand(final AstNode node) {
+  bool _isEqualityComparisonOperand(AstNode node) {
     final BinaryExpression? binary = node
         .thisOrAncestorOfType<BinaryExpression>();
     if (binary == null) {
@@ -653,7 +619,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Checks if a string literal is part of a thrown exception/error message.
-  bool _isThrownDiagnosticString(final AstNode node) {
+  bool _isThrownDiagnosticString(AstNode node) {
     AstNode? current = node.parent;
     while (current != null) {
       if (current is ThrowExpression) {
@@ -671,7 +637,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Checks if a string literal is inside a toString() implementation.
-  bool _isInToStringMethod(final AstNode node) {
+  bool _isInToStringMethod(AstNode node) {
     final MethodDeclaration? method = node
         .thisOrAncestorOfType<MethodDeclaration>();
     if (method == null) {
@@ -691,7 +657,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  bool _isInPrintCall(final StringLiteral node) {
+  bool _isInPrintCall(StringLiteral node) {
     final MethodInvocation? invocation = _getOwningMethodInvocation(node);
     if (invocation == null) {
       return false;
@@ -701,7 +667,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  bool _isInPrintOrLoggerCall(final StringLiteral node) {
+  bool _isInPrintOrLoggerCall(StringLiteral node) {
     final MethodInvocation? invocation = _getOwningMethodInvocation(node);
     if (invocation == null) {
       return false;
@@ -742,7 +708,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  MethodInvocation? _getOwningMethodInvocation(final StringLiteral node) {
+  MethodInvocation? _getOwningMethodInvocation(StringLiteral node) {
     final ArgumentList? argumentList = node
         .thisOrAncestorOfType<ArgumentList>();
     if (argumentList == null) {
@@ -762,7 +728,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  String _getInvocationTargetName(final MethodInvocation invocation) {
+  String _getInvocationTargetName(MethodInvocation invocation) {
     final Expression? target = invocation.target;
     if (target == null) {
       return '';
@@ -774,7 +740,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Calculates the 1-based line number for a given character offset.
-  int _getLineNumber(final int offset) {
+  int _getLineNumber(int offset) {
     final List<String> lines = content.substring(0, offset).split('\n');
     return lines.length;
   }

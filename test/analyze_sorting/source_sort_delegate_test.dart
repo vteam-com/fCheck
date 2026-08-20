@@ -267,10 +267,8 @@ class FixableWidget extends StatelessWidget {
       );
     });
 
-    test(
-      'fix mode inserts blank line between directive sections even when already ordered',
-      () {
-        final source = '''
+    test('fix mode inserts blank line between directive sections even when already ordered', () {
+      final source = '''
 import 'dart:io';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
@@ -279,25 +277,24 @@ class FixableWidget extends StatelessWidget {
   void build() {}
 }
 ''';
-        final context = _contextForSource(
-          tempDir,
-          source,
-          fileName: 'lib/src/analyzers/layers/fixable_spacing.dart',
-        );
+      final context = _contextForSource(
+        tempDir,
+        source,
+        fileName: 'lib/src/analyzers/layers/fixable_spacing.dart',
+      );
 
-        final delegate = SourceSortDelegate(fix: true, packageName: 'fcheck');
-        final issues = delegate.analyzeFileWithContext(context);
-        expect(issues, isEmpty);
+      final delegate = SourceSortDelegate(fix: true, packageName: 'fcheck');
+      final issues = delegate.analyzeFileWithContext(context);
+      expect(issues, isEmpty);
 
-        final rewritten = context.file.readAsStringSync();
-        expect(
-          rewritten,
-          contains(
-            "import 'dart:io';\n\nimport 'package:fcheck/src/analyzers/layers/layers_issue.dart';",
-          ),
-        );
-      },
-    );
+      final rewritten = context.file.readAsStringSync();
+      expect(
+        rewritten,
+        contains(
+          "import 'dart:io';\n\nimport 'package:fcheck/src/analyzers/layers/layers_issue.dart';",
+        ),
+      );
+    });
 
     test('swallows internal exceptions and returns no issues', () {
       const source = '''

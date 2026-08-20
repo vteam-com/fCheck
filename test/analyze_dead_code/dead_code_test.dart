@@ -468,9 +468,8 @@ dependencies:
 
           final libDir = Directory(p.join(packageDir.path, 'lib'))
             ..createSync(recursive: true);
-          File(
-            p.join(libDir.path, 'sample_flutter_package.dart'),
-          ).writeAsStringSync('''
+          File(p.join(libDir.path, 'sample_flutter_package.dart'))
+              .writeAsStringSync('''
 export 'artifact.dart';
 ''');
           File(p.join(libDir.path, 'artifact.dart')).writeAsStringSync('''
@@ -483,9 +482,8 @@ class Artifact {
             packageDir.path,
             from: Directory.current.path,
           );
-          final metrics = AnalyzeFolder(
-            Directory(relativePackagePath),
-          ).analyze();
+          final metrics = AnalyzeFolder(Directory(relativePackagePath))
+              .analyze();
           final issues = metrics.deadCodeIssues;
 
           expect(

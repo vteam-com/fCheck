@@ -34,20 +34,17 @@ void main() {
       },
     );
 
-    test(
-      'should be non-compliant with one class per file rule for regular file with multiple classes',
-      () {
-        final metrics = FileMetrics(
-          path: 'lib/example.dart',
-          linesOfCode: 50,
-          commentLines: 10,
-          classCount: 3,
-          isStatefulWidget: false,
-        );
+    test('should be non-compliant with one class per file rule for regular file with multiple classes', () {
+      final metrics = FileMetrics(
+        path: 'lib/example.dart',
+        linesOfCode: 50,
+        commentLines: 10,
+        classCount: 3,
+        isStatefulWidget: false,
+      );
 
-        expect(metrics.isOneClassPerFileCompliant, isFalse);
-      },
-    );
+      expect(metrics.isOneClassPerFileCompliant, isFalse);
+    });
 
     test('should be compliant for StatefulWidget with 2 classes', () {
       final metrics = FileMetrics(
@@ -89,18 +86,22 @@ void main() {
       expect(metrics.isOneClassPerFileCompliant, isTrue);
     });
 
-    test('should handle private classes correctly (only count public classes)', () {
-      // This test demonstrates that classCount should only include public classes
-      // The actual counting logic is in the analyzer, but we test the compliance rule
-      final metrics = FileMetrics(
-        path: 'lib/example.dart',
-        linesOfCode: 100,
-        commentLines: 15,
-        classCount: 1, // Only 1 public class, even if there are private classes
-        isStatefulWidget: false,
-      );
+    test(
+      'should handle private classes correctly (only count public classes)',
+      () {
+        // This test demonstrates that classCount should only include public classes
+        // The actual counting logic is in the analyzer, but we test the compliance rule
+        final metrics = FileMetrics(
+          path: 'lib/example.dart',
+          linesOfCode: 100,
+          commentLines: 15,
+          classCount:
+              1, // Only 1 public class, even if there are private classes
+          isStatefulWidget: false,
+        );
 
-      expect(metrics.isOneClassPerFileCompliant, isTrue);
-    });
+        expect(metrics.isOneClassPerFileCompliant, isTrue);
+      },
+    );
   });
 }

@@ -23,7 +23,7 @@ class ClassVisitor extends GeneralizingAstVisitor<void> {
   ///
   /// [node] The class declaration node being visited.
   @override
-  void visitClassDeclaration(final ClassDeclaration node) {
+  void visitClassDeclaration(ClassDeclaration node) {
     final ExtendsClause? extendsClause = node.extendsClause;
     if (extendsClause != null) {
       final String superName = extendsClause.superclass.toString();
@@ -43,7 +43,7 @@ class ClassVisitor extends GeneralizingAstVisitor<void> {
   /// This method is called when visiting [AdjacentStrings] AST nodes.
   /// It continues the traversal by calling the superclass implementation.
   @override
-  void visitAdjacentStrings(final AdjacentStrings node) {
+  void visitAdjacentStrings(AdjacentStrings node) {
     super.visitAdjacentStrings(node);
   }
 
@@ -52,7 +52,7 @@ class ClassVisitor extends GeneralizingAstVisitor<void> {
   /// This method is called when visiting [AnnotatedNode] AST nodes.
   /// It continues the traversal by calling the superclass implementation.
   @override
-  void visitAnnotatedNode(final AnnotatedNode node) {
+  void visitAnnotatedNode(AnnotatedNode node) {
     super.visitAnnotatedNode(node);
   }
 
@@ -61,7 +61,7 @@ class ClassVisitor extends GeneralizingAstVisitor<void> {
   /// This method is called when visiting [Annotation] AST nodes.
   /// It continues the traversal by calling the superclass implementation.
   @override
-  void visitAnnotation(final Annotation node) {
+  void visitAnnotation(Annotation node) {
     super.visitAnnotation(node);
   }
 
@@ -70,7 +70,7 @@ class ClassVisitor extends GeneralizingAstVisitor<void> {
   /// This method is called when visiting [ArgumentList] AST nodes.
   /// It continues the traversal by calling the superclass implementation.
   @override
-  void visitArgumentList(final ArgumentList node) {
+  void visitArgumentList(ArgumentList node) {
     super.visitArgumentList(node);
   }
 
@@ -79,7 +79,7 @@ class ClassVisitor extends GeneralizingAstVisitor<void> {
   /// This method is called when visiting [AsExpression] AST nodes.
   /// It continues the traversal by calling the superclass implementation.
   @override
-  void visitAsExpression(final AsExpression node) {
+  void visitAsExpression(AsExpression node) {
     super.visitAsExpression(node);
   }
 }

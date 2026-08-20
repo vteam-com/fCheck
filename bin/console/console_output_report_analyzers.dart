@@ -150,9 +150,8 @@ void _appendOrderedAnalyzerBlocks(
                 : null),
       ),
     );
-    final firstSummaryLine = _withoutLeadingStatusTag(
-      block.lines.first,
-    ).trimLeft();
+    final firstSummaryLine = _withoutLeadingStatusTag(block.lines.first)
+        .trimLeft();
     if (!hidePassedSummaryLine && firstSummaryLine.isNotEmpty) {
       lines.add(firstSummaryLine);
     }
