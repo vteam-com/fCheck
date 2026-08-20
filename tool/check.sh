@@ -1,4 +1,5 @@
 #!/bin/sh
+set -eu
 
 echo --- Pub Clean
 flutter clean > /dev/null || { echo "flutter Clean failed"; exit 1; }

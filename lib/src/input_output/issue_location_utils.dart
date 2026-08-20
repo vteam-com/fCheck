@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fcheck/src/input_output/path_style_utils.dart';
 import 'package:path/path.dart' as p;
 
 /// Parsed and normalized issue location details.
@@ -184,6 +185,7 @@ NormalizedIssueLocation normalizeIssueLocation(String rawPath) {
   }
 
   normalized = _relativizeToCurrentDirectory(normalized);
+  normalized = normalizePathSeparators(normalized);
 
   return NormalizedIssueLocation(path: normalized, embeddedLine: embeddedLine);
 }

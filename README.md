@@ -478,7 +478,7 @@ jobs:
       - run: flutter pub get
       - run: ./tool/generate_version.sh
       - run: dart format --output=none --set-exit-if-changed .
-      - run: flutter analyze lib test --no-pub
+      - run: dart analyze lib test
       - run: dart test --reporter=compact
       - run: dart run ./bin/fcheck.dart --strict --exclude "**/example" .
       - uses: actions/upload-artifact@v4

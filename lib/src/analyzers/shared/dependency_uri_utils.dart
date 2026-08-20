@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:fcheck/src/input_output/path_style_utils.dart';
 import 'package:path/path.dart' as p;
 
 const int _relativeCurrentDirPrefixLength = 2;
@@ -28,26 +29,43 @@ String resolveProjectDependencyUri({
   required String rootPath,
   required String packageName,
 }) {
-  if (uri.startsWith('package:$packageName/')) {
-    final packagePath = uri.substring('package:$packageName/'.length);
-    return p.join(rootPath, 'lib', packagePath);
+  final prefersBackslash =
+      currentFile.contains('\\') || rootPath.contains('\\');
+
+  String formatOutputPath(String path) {
+    if (!prefersBackslash) {
+      return path;
+    }
+    return path.replaceAll('/', '\\');
   }
 
-  final currentDir = currentFile.substring(0, currentFile.lastIndexOf('/'));
+  final normalizedCurrentFile = normalizeToPosixPath(currentFile);
+  final normalizedRootPath = normalizeToPosixPath(rootPath);
+
+  if (uri.startsWith('package:$packageName/')) {
+    final packagePath = uri.substring('package:$packageName/'.length);
+    return formatOutputPath(
+      p.posix.join(normalizedRootPath, 'lib', packagePath),
+    );
+  }
+
+  final currentDir = p.posix.dirname(normalizedCurrentFile);
   if (uri.startsWith('./')) {
-    return '$currentDir/${uri.substring(_relativeCurrentDirPrefixLength)}';
+    return formatOutputPath(
+      p.posix.join(currentDir, uri.substring(_relativeCurrentDirPrefixLength)),
+    );
   }
   if (uri.startsWith('../')) {
     var resolvedPath = currentDir;
     var remainingUri = uri;
     while (remainingUri.startsWith('../')) {
-      resolvedPath = resolvedPath.substring(0, resolvedPath.lastIndexOf('/'));
+      resolvedPath = p.posix.dirname(resolvedPath);
       remainingUri = remainingUri.substring(_relativeParentDirPrefixLength);
     }
-    return '$resolvedPath/$remainingUri';
+    return formatOutputPath(p.posix.join(resolvedPath, remainingUri));
   }
 
-  return '$currentDir/$uri';
+  return formatOutputPath(p.posix.join(currentDir, uri));
 }
 
 /// Adds a resolved dependency when [uri] is a project-scoped Dart URI.

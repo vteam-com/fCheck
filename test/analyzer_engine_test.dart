@@ -352,10 +352,7 @@ class Service {}
         );
 
         expect(readmeIssue.filePath, equals('README.md'));
-        expect(
-          classIssue.filePath,
-          equals(p.join('lib', 'feature', 'service.dart')),
-        );
+        expect(classIssue.filePath, equals('lib/feature/service.dart'));
       },
     );
 
@@ -374,10 +371,7 @@ void main() {
         (issue) => issue.type == DeadCodeIssueType.unusedVariable,
       );
 
-      expect(
-        unusedVariableIssue.filePath,
-        equals(p.join('lib', 'feature', 'dead.dart')),
-      );
+      expect(unusedVariableIssue.filePath, equals('lib/feature/dead.dart'));
     });
 
     test('should treat export directive dependencies as reachable for dead-file analysis', () {

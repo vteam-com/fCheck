@@ -298,12 +298,14 @@ void main() {
       expect(result.stdout, contains('fcheck_magic_numbers (1):'));
       expect(
         result.stdout,
-        contains('$sourceFilePath:1 | // ignore: fcheck_layers'),
+        contains(RegExp(r'lib[\\/]main\.dart:1 \| // ignore: fcheck_layers')),
       );
       expect(
         result.stdout,
         contains(
-          '$sourceFilePath:3 | final value = 42; // ignore: fcheck_magic_numbers',
+          RegExp(
+            r'lib[\\/]main\.dart:3 \| final value = 42; // ignore: fcheck_magic_numbers',
+          ),
         ),
       );
     });
@@ -358,11 +360,11 @@ void main() {
         expect(decoded['groupedByType'], isA<Map<String, dynamic>>());
         final directives = decoded['dartCommentDirectives'] as List<dynamic>;
         final first = directives.first as Map<String, dynamic>;
-        expect(first['path'], equals(sourceFilePath));
         expect(first['token'], equals('fcheck_magic_numbers'));
         final groupedByType = decoded['groupedByType'] as Map<String, dynamic>;
         final groupedDirectives =
             groupedByType['dartCommentDirectives'] as Map<String, dynamic>;
+        expect(first['path'], matches(RegExp(r'^lib[\\/]main\.dart$')));
         expect(groupedDirectives['fcheck_magic_numbers'], isA<List<dynamic>>());
       },
     );
@@ -611,7 +613,9 @@ class SecondClass {
       expect(result.exitCode, equals(0));
       expect(
         result.stdout,
-        contains(RegExp(r'\[✓\]\s+One class per file\s*$', multiLine: true)),
+        contains(
+          RegExp(r'\[(?:✓|âœ“)\]\s+One class per file\s*$', multiLine: true),
+        ),
       );
       expect(
         result.stdout,
@@ -748,7 +752,10 @@ void main() {
 
       expect(result.exitCode, equals(0));
       expect(result.stdout, contains('fCheck $packageVersion'));
-      expect(result.stdout, contains(dir1.path));
+      expect(
+        result.stdout.replaceAll('\\', '/'),
+        contains(dir1.path.replaceAll('\\', '/')),
+      );
       expect(result.stdout, isNot(contains(dir2.path)));
     });
 
@@ -850,7 +857,7 @@ void main() {
 
       expect(result.exitCode, equals(1));
       expect(result.stdout, contains(AppStrings.analysisError));
-      expect(result.stdout, contains('FileSystemException'));
+      expect(result.stdout, contains('PathExistsException'));
     });
 
     test('should disable analyzers via .fcheck', () async {
@@ -971,7 +978,7 @@ analyzers:
 
         final graph = json['layers']['graph'] as Map<String, dynamic>;
         expect(graph.keys.length, equals(1));
-        expect(graph.keys.first, contains('app/main.dart'));
+        expect(graph.keys.first, matches(RegExp(r'app[\\/]main\.dart$')));
       },
     );
 

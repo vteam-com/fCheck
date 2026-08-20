@@ -27,6 +27,12 @@ void main() {
 
     test('format helpers normalize labels and ids', () {
       expect(relativeFileLabel('lib/src/a.dart'), equals('src/a.dart'));
+      expect(relativeFileLabel(r'lib\src\a.dart'), equals('src/a.dart'));
+      expect(displayFileLabel('lib/src/a.dart'), equals('a.dart'));
+      expect(
+        displayFileLabel(r'C:\repo\example\lib\src\foo_bar.dart'),
+        equals('foo_bar.dart'),
+      );
       expect(mermaidNodeId('lib/src/a.dart'), equals('src_a'));
       expect(
         plantUmlComponentId('lib/src/foo_bar.dart'),

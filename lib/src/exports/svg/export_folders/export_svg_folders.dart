@@ -5,6 +5,7 @@ import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
+import 'package:fcheck/src/input_output/path_style_utils.dart';
 import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/models/rect.dart';
 import 'package:path/path.dart' as p;
@@ -13,6 +14,27 @@ part 'export_svg_folders_models.dart';
 part 'export_svg_folders_paths.dart';
 part 'export_svg_folders_metrics_layout.dart';
 part 'export_svg_folders_rendering.dart';
+
+String _normalizeSvgPath(String path) => normalizeToPosixPath(path);
+
+String _relativeSvgPath(String path, String from) =>
+    p.posix.relative(_normalizeSvgPath(path), from: _normalizeSvgPath(from));
+
+/// Rebases [normalizedPath] to [commonRoot] using normalized POSIX paths.
+String _relativizeSvgPathFromCommonRoot({
+  required String commonRoot,
+  required String normalizedPath,
+}) {
+  final normalizedRoot = _normalizeSvgPath(commonRoot);
+  final normalizedInput = _normalizeSvgPath(normalizedPath);
+  if (p.posix.isAbsolute(normalizedInput)) {
+    return p.posix.relative(normalizedInput, from: normalizedRoot);
+  }
+  if (normalizedRoot != '.' && normalizedInput.startsWith('$normalizedRoot/')) {
+    return normalizedInput.substring(normalizedRoot.length + 1);
+  }
+  return normalizedInput;
+}
 
 /// Generates a hierarchical SVG visualization of the dependency graph.
 ///
@@ -336,9 +358,9 @@ _FolderGraphLayoutContext? _buildFolderGraphLayoutContext(
   final knownRelativeFiles = _collectAllFilePaths(relativeGraph);
   final originalPathByRelative = <String, String>{};
   for (final entry in dependencyGraph.entries) {
-    originalPathByRelative[p.relative(entry.key, from: commonRoot)] = entry.key;
+    originalPathByRelative[_relativeSvgPath(entry.key, commonRoot)] = entry.key;
     for (final target in entry.value) {
-      originalPathByRelative[p.relative(target, from: commonRoot)] = target;
+      originalPathByRelative[_relativeSvgPath(target, commonRoot)] = target;
     }
   }
 
@@ -443,23 +465,17 @@ Map<String, String> _buildRelativeFileSeverityByPath(
   required ProjectMetrics? projectMetrics,
 }) {
   final severityByPath = <String, String>{};
-  String relativize(String normalizedPath) {
-    if (p.isAbsolute(normalizedPath)) {
-      return p.relative(normalizedPath, from: commonRoot);
-    }
-    if (commonRoot != '.' && normalizedPath.startsWith('$commonRoot/')) {
-      return normalizedPath.substring(commonRoot.length + 1);
-    }
-    return normalizedPath;
-  }
 
   void push(String filePath, String? severity) {
     if (filePath.isEmpty) {
       return;
     }
-    final normalized = p.normalize(filePath);
+    final normalized = _normalizeSvgPath(filePath);
     final relative = resolvePathToKnown(
-      relativize(normalized),
+      _relativizeSvgPathFromCommonRoot(
+        commonRoot: commonRoot,
+        normalizedPath: normalized,
+      ),
       knownRelativeFiles,
       fallbackToNormalized: true,
     );
@@ -513,30 +529,24 @@ Map<String, String> _buildFolderSeverityByPath(
   required ProjectMetrics? projectMetrics,
 }) {
   final severityByPath = <String, String>{};
-  String relativize(String normalizedPath) {
-    if (p.isAbsolute(normalizedPath)) {
-      return p.relative(normalizedPath, from: commonRoot);
-    }
-    if (commonRoot != '.' && normalizedPath.startsWith('$commonRoot/')) {
-      return normalizedPath.substring(commonRoot.length + 1);
-    }
-    return normalizedPath;
-  }
 
   void pushFolder(String filePath, String? severity) {
     if (filePath.isEmpty) {
       return;
     }
-    final normalized = p.normalize(filePath);
+    final normalized = _normalizeSvgPath(filePath);
     final relative = resolvePathToKnown(
-      relativize(normalized),
+      _relativizeSvgPathFromCommonRoot(
+        commonRoot: commonRoot,
+        normalizedPath: normalized,
+      ),
       knownRelativeFiles,
       fallbackToNormalized: true,
     );
     if (relative == null || relative == '.' || relative.isEmpty) {
       return;
     }
-    final folderPath = p.dirname(relative);
+    final folderPath = p.posix.dirname(relative);
     severityByPath[folderPath] = _maxSeverity(
       severityByPath[folderPath],
       severity,
@@ -547,11 +557,17 @@ Map<String, String> _buildFolderSeverityByPath(
     if (issue.filePath.isEmpty) {
       continue;
     }
-    final normalized = p.normalize(issue.filePath);
+    final normalized = _normalizeSvgPath(issue.filePath);
     final relative = issue.type == LayersIssueType.folderCycle
-        ? relativize(normalized)
+        ? _relativizeSvgPathFromCommonRoot(
+            commonRoot: commonRoot,
+            normalizedPath: normalized,
+          )
         : resolvePathToKnown(
-            relativize(normalized),
+            _relativizeSvgPathFromCommonRoot(
+              commonRoot: commonRoot,
+              normalizedPath: normalized,
+            ),
             knownRelativeFiles,
             fallbackToNormalized: true,
           );
@@ -560,7 +576,7 @@ Map<String, String> _buildFolderSeverityByPath(
     }
     final folderPath = issue.type == LayersIssueType.folderCycle
         ? relative
-        : p.dirname(relative);
+        : p.posix.dirname(relative);
     severityByPath[folderPath] = _maxSeverity(
       severityByPath[folderPath],
       severityForLayersIssueType(issue.type),
@@ -649,7 +665,7 @@ Map<String, Map<String, int>> _buildFolderWarningsByPath(
     commonRoot,
     knownRelativeFiles: knownRelativeFiles,
     projectMetrics: projectMetrics,
-    keyForRelativePath: p.dirname,
+    keyForRelativePath: p.posix.dirname,
   );
 }
 
@@ -662,22 +678,16 @@ Map<String, Map<String, int>> _buildRelativeWarningsByPath(
   required String Function(String) keyForRelativePath,
 }) {
   final warningsByPath = <String, Map<String, int>>{};
-  String relativize(String normalizedPath) {
-    if (p.isAbsolute(normalizedPath)) {
-      return p.relative(normalizedPath, from: commonRoot);
-    }
-    if (commonRoot != '.' && normalizedPath.startsWith('$commonRoot/')) {
-      return normalizedPath.substring(commonRoot.length + 1);
-    }
-    return normalizedPath;
-  }
 
   void add(String rawPath, String warningType) {
     if (rawPath.isEmpty) {
       return;
     }
     final relative = resolvePathToKnown(
-      relativize(p.normalize(rawPath)),
+      _relativizeSvgPathFromCommonRoot(
+        commonRoot: commonRoot,
+        normalizedPath: _normalizeSvgPath(rawPath),
+      ),
       knownRelativeFiles,
       fallbackToNormalized: true,
     );

@@ -69,6 +69,7 @@ import 'package:fcheck/src/fcheck_pubspec_info.dart';
 import 'package:fcheck/src/fcheck_test_summary.dart';
 import 'package:fcheck/src/fcheck_test_visitor.dart';
 import 'package:fcheck/src/input_output/file_utils.dart';
+import 'package:fcheck/src/input_output/path_style_utils.dart';
 import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
@@ -613,7 +614,9 @@ class AnalyzeFolder {
     final absolutePath = p.isAbsolute(path)
         ? p.normalize(path)
         : p.normalize(p.join(normalizedRootPath, path));
-    return p.relative(absolutePath, from: normalizedRootPath);
+    return normalizePathSeparators(
+      p.relative(absolutePath, from: normalizedRootPath),
+    );
   }
 
   /// Heuristically detects whether the project uses Flutter localization.

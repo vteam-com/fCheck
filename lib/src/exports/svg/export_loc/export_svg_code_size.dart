@@ -5,6 +5,7 @@ import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
 import 'package:fcheck/src/input_output/number_format_utils.dart';
+import 'package:fcheck/src/input_output/path_style_utils.dart';
 import 'package:path/path.dart' as p;
 
 part 'export_svg_code_size_models.dart';

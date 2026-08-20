@@ -272,15 +272,20 @@ List<CodeSizeArtifact> _buildRolledUpFileItems(
 _FolderTreeNode _buildFolderTree(List<CodeSizeArtifact> fileItems) {
   final root = _FolderTreeNode(name: '.', path: '.');
   for (final file in fileItems) {
-    final directory = p.normalize(p.dirname(file.filePath));
+    final directory = p.posix.normalize(
+      normalizePathSeparators(p.dirname(file.filePath)),
+    );
     final segments = directory == '.' || directory.isEmpty
         ? const <String>[]
-        : p.split(directory).where((segment) => segment.isNotEmpty).toList();
+        : p.posix
+              .split(directory)
+              .where((segment) => segment.isNotEmpty)
+              .toList();
     var current = root;
     for (final segment in segments) {
       final childPath = current.path == '.'
           ? segment
-          : p.join(current.path, segment);
+          : p.posix.join(current.path, segment);
       current = current.children.putIfAbsent(
         segment,
         () => _FolderTreeNode(name: segment, path: childPath),
@@ -297,15 +302,33 @@ _FolderTreeNode _buildFolderTree(List<CodeSizeArtifact> fileItems) {
 /// Relative input paths are preserved unchanged.
 CodeSizeArtifact _rebaseArtifactPath(CodeSizeArtifact artifact, String? base) {
   if (base == null) {
-    return artifact;
+    return CodeSizeArtifact(
+      kind: artifact.kind,
+      name: artifact.name,
+      filePath: normalizePathSeparators(artifact.filePath),
+      linesOfCode: artifact.linesOfCode,
+      startLine: artifact.startLine,
+      endLine: artifact.endLine,
+      ownerName: artifact.ownerName,
+    );
   }
   final filePath = artifact.filePath;
   final normalizedPath = p.normalize(filePath);
   if (!p.isAbsolute(normalizedPath)) {
-    return artifact;
+    return CodeSizeArtifact(
+      kind: artifact.kind,
+      name: artifact.name,
+      filePath: normalizePathSeparators(filePath),
+      linesOfCode: artifact.linesOfCode,
+      startLine: artifact.startLine,
+      endLine: artifact.endLine,
+      ownerName: artifact.ownerName,
+    );
   }
 
-  final relativePath = p.relative(normalizedPath, from: base);
+  final relativePath = normalizePathSeparators(
+    p.relative(normalizedPath, from: base),
+  );
   return CodeSizeArtifact(
     kind: artifact.kind,
     name: artifact.name,
@@ -375,9 +398,11 @@ _ArtifactWarningIndex _buildArtifactWarningIndex({
   String normalizePath(String path) {
     final normalizedPath = p.normalize(path);
     if (relativeTo == null || !p.isAbsolute(normalizedPath)) {
-      return normalizedPath;
+      return normalizePathSeparators(normalizedPath);
     }
-    return p.relative(normalizedPath, from: relativeTo);
+    return normalizePathSeparators(
+      p.relative(normalizedPath, from: relativeTo),
+    );
   }
 
   _WarningAccumulator upsertFile(String filePath) =>

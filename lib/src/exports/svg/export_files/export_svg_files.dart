@@ -6,6 +6,7 @@ import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/exports/svg/export_files/source_gap_lane_ordering.dart';
 import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_common.dart';
+import 'package:fcheck/src/input_output/path_style_utils.dart';
 
 /// Builds the files-level dependency graph SVG.
 String exportGraphSvgFiles(
@@ -90,7 +91,7 @@ String exportGraphSvgFiles(
       );
       if (outDiff != 0) return outDiff;
 
-      return a.split('/').last.compareTo(b.split('/').last);
+      return _displayFileName(a).compareTo(_displayFileName(b));
     });
   }
 
@@ -731,7 +732,7 @@ String exportGraphSvgFiles(
     renderTriangularBadge(buffer, outgoingBadge);
 
     // Node Text (Filename) - Drawn LAST
-    final fileName = file.split('/').last;
+    final fileName = _displayFileName(file);
     final labelMaxWidth =
         nodeWidth - (nodeLabelHorizontalPadding * _halfDivisor);
     final textClass = fittedTextClass(
@@ -748,6 +749,11 @@ String exportGraphSvgFiles(
 
   writeSvgDocumentEnd(buffer);
   return buffer.toString();
+}
+
+String _displayFileName(String filePath) {
+  final normalizedPath = normalizePathSeparators(filePath);
+  return normalizedPath.split('/').last;
 }
 
 /// Aggregates severity labels by resolved file path.

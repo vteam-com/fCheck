@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/exports/svg/shared/badge_model.dart';
 import 'package:fcheck/src/exports/svg/shared/svg_styles.dart';
+import 'package:fcheck/src/input_output/path_style_utils.dart';
 import 'package:path/path.dart' as p;
 
 /// Default fitted label font size used by SVG text helpers.
@@ -264,7 +265,7 @@ String? resolvePathToKnown(
   Set<String> knownPaths, {
   bool fallbackToNormalized = false,
 }) {
-  final normalizedRaw = p.normalize(rawPath).replaceAll('\\', '/');
+  final normalizedRaw = normalizePathSeparators(p.normalize(rawPath));
   if (knownPaths.contains(normalizedRaw)) {
     return normalizedRaw;
   }

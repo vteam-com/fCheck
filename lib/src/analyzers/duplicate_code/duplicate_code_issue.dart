@@ -1,4 +1,5 @@
 import 'package:fcheck/src/input_output/issue_location_utils.dart';
+import 'package:fcheck/src/input_output/path_style_utils.dart';
 
 /// Represents duplicated code detected between two code blocks.
 class DuplicateCodeIssue {
@@ -77,8 +78,8 @@ class DuplicateCodeIssue {
     String firstPath,
     String secondPath,
   ) {
-    final normalizedFirst = firstPath.replaceAll('\\', '/');
-    final normalizedSecond = secondPath.replaceAll('\\', '/');
+    final normalizedFirst = normalizePathSeparators(firstPath);
+    final normalizedSecond = normalizePathSeparators(secondPath);
 
     final firstRoot = _rootPrefix(normalizedFirst);
     final secondRoot = _rootPrefix(normalizedSecond);

@@ -2165,10 +2165,7 @@ void main() {
         final joined = output.join('\n');
 
         expect(joined, isNot(contains('$absolute:$absolute:')));
-        expect(
-          joined,
-          contains('bin${Platform.pathSeparator}console_output.dart:2: 2'),
-        );
+        expect(joined, contains('bin/console_output.dart:2: 2'));
       },
     );
 

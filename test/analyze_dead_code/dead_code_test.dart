@@ -315,8 +315,8 @@ class PreviewHost {
           .map((i) => i.filePath)
           .toList();
 
-      expect(deadFiles, contains(p.join('lib', 'b.dart')));
-      expect(deadFiles, contains(p.join('lib', 'vars.dart')));
+      expect(deadFiles, contains('lib/b.dart'));
+      expect(deadFiles, contains('lib/vars.dart'));
 
       expect(
         issues.where(

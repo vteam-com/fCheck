@@ -31,8 +31,8 @@ String exportGraphMermaid(LayersAnalysisResult layersResult) {
     buffer.writeln('    subgraph Layer_$layerNum["Layer $layerNum"]');
 
     for (final file in files) {
-      // Normalize to path relative to lib directory
-      final fileName = relativeFileLabel(file); // relative path as label
+      // Keep labels short and cross-platform-safe.
+      final fileName = displayFileLabel(file);
 
       // Add counter information to label
       final incomingCount = incomingCounts[file] ?? 0;

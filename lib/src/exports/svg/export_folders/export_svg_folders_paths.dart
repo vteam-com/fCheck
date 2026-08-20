@@ -16,11 +16,11 @@ String _findCommonRoot(Set<String> paths) {
 
   final splitPaths = paths
       .map(
-        (pPath) => p
-            .normalize(pPath)
-            .split(p.separator)
-            .where((p) => p.isNotEmpty)
-            .toList(),
+        (pPath) =>
+            _normalizeSvgPath(pPath)
+                .split('/')
+                .where((p) => p.isNotEmpty)
+                .toList(),
       )
       .toList();
 
@@ -43,14 +43,14 @@ String _findCommonRoot(Set<String> paths) {
 
   if (common.isEmpty) {
     // No shared prefix; fall back to the directory of the first path.
-    final first = paths.first;
-    return p.dirname(first);
+    return p.posix.dirname(_normalizeSvgPath(paths.first));
   }
 
-  final commonPath = p.joinAll(common);
+  final commonPath = p.posix.joinAll(common);
   // Ensure absolute when originals were absolute (posix needs leading separator)
-  if (paths.any((path) => p.isAbsolute(path)) && !p.isAbsolute(commonPath)) {
-    return '${p.separator}$commonPath';
+  if (paths.any((path) => p.posix.isAbsolute(_normalizeSvgPath(path))) &&
+      !p.posix.isAbsolute(commonPath)) {
+    return '/$commonPath';
   }
 
   return commonPath;
@@ -64,9 +64,9 @@ Map<String, List<String>> _relativizeGraph(
   final relative = <String, List<String>>{};
 
   for (final entry in graph.entries) {
-    final source = p.relative(entry.key, from: root);
+    final source = _relativeSvgPath(entry.key, root);
     final targets = entry.value
-        .map((target) => p.relative(target, from: root))
+        .map((target) => _relativeSvgPath(target, root))
         .toList();
     relative[source] = targets;
   }
@@ -318,7 +318,7 @@ Map<String, Object> _extractFolderIssuesFromIssues(
   for (final issue in issues) {
     if (issue.type == LayersIssueType.folderCycle) {
       // Normalize the path the same way the SVG does
-      final normalizedPath = p.relative(issue.filePath, from: commonRoot);
+      final normalizedPath = _relativeSvgPath(issue.filePath, commonRoot);
       folderCycles.add(normalizedPath);
     } else if (issue.type == LayersIssueType.wrongFolderLayer) {
       // Extract target file path from message:
@@ -332,19 +332,19 @@ Map<String, Object> _extractFolderIssuesFromIssues(
       if (targetMatch != null) {
         final sourceFilePath = issue.filePath;
         final targetFilePath = targetMatch.group(1)!;
-        final normalizedSourceFile = p.relative(
+        final normalizedSourceFile = _relativeSvgPath(
           sourceFilePath,
-          from: commonRoot,
+          commonRoot,
         );
-        final normalizedTargetFile = p.relative(
+        final normalizedTargetFile = _relativeSvgPath(
           targetFilePath,
-          from: commonRoot,
+          commonRoot,
         );
         fileViolationEdges.add('$normalizedSourceFile->$normalizedTargetFile');
-        final sourcePath = p.dirname(sourceFilePath);
-        final targetPath = p.dirname(targetFilePath);
-        final normalizedSource = p.relative(sourcePath, from: commonRoot);
-        final normalizedTarget = p.relative(targetPath, from: commonRoot);
+        final sourcePath = p.posix.dirname(_normalizeSvgPath(sourceFilePath));
+        final targetPath = p.posix.dirname(_normalizeSvgPath(targetFilePath));
+        final normalizedSource = _relativeSvgPath(sourcePath, commonRoot);
+        final normalizedTarget = _relativeSvgPath(targetPath, commonRoot);
         layerViolationEdges.putIfAbsent(normalizedSource, () => <String>{});
         layerViolationEdges[normalizedSource]!.add(normalizedTarget);
       }

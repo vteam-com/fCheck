@@ -126,7 +126,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - `dart run ./bin/fcheck.dart` run the tool
 - `dart format .` format all Dart files
 - `dart fix --apply` apply automated fixes
-- `flutter analyze lib test` run static analysis
+- `dart analyze lib test` run static analysis
 - `dart test` run all tests
 - `./tool/check.sh` run format, analyze, tests, and fCheck on the example
 

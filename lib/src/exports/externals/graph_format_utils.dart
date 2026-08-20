@@ -1,4 +1,5 @@
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
+import 'package:fcheck/src/input_output/path_style_utils.dart';
 
 /// Shared helpers for preparing dependency graphs for text/diagram renderers.
 ///
@@ -76,9 +77,17 @@ GraphFormattingData prepareGraphFormatting(LayersAnalysisResult layersResult) {
 /// This keeps diagram labels short while still being unambiguous across the
 /// project tree.
 String relativeFileLabel(String filePath) {
-  final parts = filePath.split('/');
+  final normalizedPath = normalizePathSeparators(filePath);
+  final parts = normalizedPath.split('/');
   final libIndex = parts.indexOf('lib');
-  return libIndex >= 0 ? parts.sublist(libIndex + 1).join('/') : filePath;
+  return libIndex >= 0 ? parts.sublist(libIndex + 1).join('/') : normalizedPath;
+}
+
+/// Returns the filename-only label from any project path.
+///
+/// This keeps text exporters consistent with SVG exports across platforms.
+String displayFileLabel(String filePath) {
+  return relativeFileLabel(filePath).split('/').last;
 }
 
 /// Mermaid-compatible node id from a file path.
