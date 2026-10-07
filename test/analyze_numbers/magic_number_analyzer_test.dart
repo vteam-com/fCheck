@@ -153,25 +153,25 @@ void main() {}
       expect(issues.map((issue) => issue.value), contains('9'));
     });
 
-    test('skips static const declarations with descriptive names', () {
+    test('skips static const declarations regardless of name length', () {
       final file = File('${tempDir.path}/static_const.dart')
         ..writeAsStringSync('''
         class MyClass {
-          static const int searchBoxFillAlpha = 77;
-          static const double roomItemLeadingWidth = 40.0;
+          static const X = 100;
+          static const Y = 40.0;
         }
       ''');
       final issues = _analyzeFile(delegate, file);
       expect(issues, isEmpty);
     });
 
-    test('skips final numeric declarations with descriptive names', () {
+    test('skips final numeric declarations regardless of name length', () {
       final file = File('${tempDir.path}/final_numeric.dart')
         ..writeAsStringSync('''
         class MyClass {
-          final int theFinalIntValue = 42;
-          final double theFinalDoubleValue = 3.14;
-          final num theFinalNumValue = 100;
+          final int x = 42;
+          final double y = 3.14;
+          final num z = 100;
         }
       ''');
       final issues = _analyzeFile(delegate, file);

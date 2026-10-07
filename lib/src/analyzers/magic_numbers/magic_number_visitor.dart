@@ -18,7 +18,6 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
   final List<MagicNumberIssue> foundIssues = <MagicNumberIssue>[];
 
   static const Set<num> _allowedValues = {0, 1, -1};
-  static const int _minDescriptiveNameLength = 3; // New constant
 
   @override
   void visitDoubleLiteral(DoubleLiteral node) {
@@ -82,11 +81,11 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
         if (current.parent is VariableDeclarationList) {
           final list = current.parent as VariableDeclarationList;
           if (list.isConst) {
-            return _hasDescriptiveName(current);
+            return true;
           }
         }
       } else if (current is FieldDeclaration && current.fields.isConst) {
-        return _hasDescriptiveName(current.fields.variables.first);
+        return true;
       }
       current = current.parent;
     }
@@ -94,11 +93,6 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  bool _hasDescriptiveName(VariableDeclaration declaration) {
-    final name = declaration.name.toString();
-    return name.length > _minDescriptiveNameLength;
-  }
-
   /// Internal helper used by fcheck analysis and reporting.
   bool _isInsideConstExpression(AstNode node) {
     AstNode? current = node.parent;
@@ -121,7 +115,7 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
       if (current is FieldDeclaration &&
           current.isStatic &&
           current.fields.isConst) {
-        return _hasDescriptiveName(current.fields.variables.first);
+        return true;
       }
       current = current.parent;
     }
@@ -139,7 +133,7 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
               (list.type?.toString() == 'int' ||
                   list.type?.toString() == 'double' ||
                   list.type?.toString() == 'num')) {
-            return _hasDescriptiveName(current);
+            return true;
           }
         }
       }
