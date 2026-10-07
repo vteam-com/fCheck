@@ -380,11 +380,11 @@
 </g>
 <g>
   <path d="M 280.0 142.0 H 253.0 Q 247.0 142.0 247.0 148.0 V 1266.0 Q 247.0 1272.0 253.0 1272.0 H 460.0" class="edgeVertical"/>
-  <title>flutter -> vector_math v2.4.2</title>
+  <title>flutter -> vector_math v2.4.3</title>
 </g>
 <g>
   <path d="M 920.0 230.0 H 932.0 Q 938.0 230.0 938.0 236.0 V 434.0 Q 938.0 440.0 932.0 440.0 H 740.0" class="edgeVertical"/>
-  <title>flutter_test -> clock v1.1.2</title>
+  <title>flutter_test -> clock v1.1.3</title>
 </g>
 <g>
   <path d="M 920.0 230.0 H 935.0 Q 941.0 230.0 941.0 236.0 V 498.0 Q 941.0 504.0 935.0 504.0 H 740.0" class="edgeVertical"/>
@@ -416,7 +416,7 @@
 </g>
 <g>
   <path d="M 920.0 230.0 H 956.0 Q 962.0 230.0 962.0 236.0 V 1074.0 Q 962.0 1080.0 956.0 1080.0 H 740.0" class="edgeVertical"/>
-  <title>flutter_test -> stack_trace v1.12.1</title>
+  <title>flutter_test -> stack_trace v1.12.2</title>
 </g>
 <g>
   <path d="M 920.0 230.0 H 959.0 Q 965.0 230.0 965.0 236.0 V 1133.0 Q 965.0 1139.0 959.0 1139.0 H 740.0" class="edgeVertical"/>
@@ -428,7 +428,7 @@
 </g>
 <g>
   <path d="M 920.0 230.0 H 965.0 Q 971.0 230.0 971.0 236.0 V 1266.0 Q 971.0 1272.0 965.0 1272.0 H 740.0" class="edgeVertical"/>
-  <title>flutter_test -> vector_math v2.4.2</title>
+  <title>flutter_test -> vector_math v2.4.3</title>
 </g>
 <g>
   <path d="M 740.0 1214.0 H 752.0 Q 758.0 1214.0 758.0 1220.0 V 1404.0 Q 758.0 1410.0 752.0 1410.0 H 460.0" class="edgeVertical"/>
@@ -528,7 +528,7 @@
 <g class="packageMetadataPill"><title>Dart ^3.4.0</title><rect x="571.45" y="453.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="458" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.4.0</text></g>
 <g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.4.0</title><rect x="586.0" y="437.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="443.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
 <text x="468.0" y="432.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">clock</text>
-<text x="732.0" y="432.0" class="packageLabelDerivedVersion" text-anchor="end">^1.1.2</text>
+<text x="732.0" y="432.0" class="packageLabelDerivedVersion" text-anchor="end">^1.1.3</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,440.0 L 746.0,433.0 Q 749.0,433.0 749.0,436.0 L 749.0,444.0 Q 749.0,447.0 746.0,447.0 Z" fill="#3b82f6"/>
@@ -627,7 +627,7 @@
 <g class="packageMetadataPill"><title>Dart ^3.4.0</title><rect x="571.45" y="1093.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="1098" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.4.0</text></g>
 <g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.4.0</title><rect x="586.0" y="1077.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1083.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
 <text x="468.0" y="1072.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">stack_trace</text>
-<text x="732.0" y="1072.0" class="packageLabelDerivedVersion" text-anchor="end">^1.12.1</text>
+<text x="732.0" y="1072.0" class="packageLabelDerivedVersion" text-anchor="end">^1.12.2</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,1080.0 L 746.0,1073.0 Q 749.0,1073.0 749.0,1076.0 L 749.0,1084.0 Q 749.0,1087.0 746.0,1087.0 Z" fill="#3b82f6"/>
@@ -662,7 +662,7 @@
 <g class="packageMetadataPill"><title>Dart ^3.10.0</title><rect x="569.4" y="1285.0" width="61.199999999999996" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="1290" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.10.0</text></g>
 <g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.10.0</title><rect x="586.0" y="1269.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1275.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
 <text x="468.0" y="1264.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">vector_math</text>
-<text x="732.0" y="1264.0" class="packageLabelDerivedVersion" text-anchor="end">^2.4.2</text>
+<text x="732.0" y="1264.0" class="packageLabelDerivedVersion" text-anchor="end">^2.4.3</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 466.0,1272.0 L 454.0,1265.0 Q 451.0,1265.0 451.0,1268.0 L 451.0,1276.0 Q 451.0,1279.0 454.0,1279.0 Z" fill="#3b82f6"/>
