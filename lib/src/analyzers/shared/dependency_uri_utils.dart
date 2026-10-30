@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/input_output/path_style_utils.dart';
 import 'package:path/path.dart' as p;
 
@@ -119,5 +120,69 @@ void addDirectiveDartDependencies({
       rootPath: rootPath,
       dependencies: dependencies,
     );
+  }
+}
+
+/// Builds a normalized project-only dependency graph for analyzed Dart files.
+///
+/// Each key is the normalized absolute path of an analyzed file and each
+/// value contains the normalized project dependencies referenced from that
+/// file through imports, exports, and parts.
+Map<String, List<String>> buildProjectDependencyGraph(
+  List<AnalysisFileContext> contexts, {
+  required String rootPath,
+  required String packageName,
+}) {
+  final dependencyGraph = <String, List<String>>{};
+  for (final context in contexts) {
+    final normalizedPath = p.normalize(context.file.path);
+    dependencyGraph[normalizedPath] = collectProjectDependencies(
+      context,
+      rootPath: rootPath,
+      packageName: packageName,
+    );
+  }
+  return Map<String, List<String>>.unmodifiable(dependencyGraph);
+}
+
+/// Collects normalized in-project Dart dependencies declared by [context].
+///
+/// Only project-resolvable imports, exports, and part directives are
+/// returned. Unreadable or unparsable files fall back to an empty list.
+List<String> collectProjectDependencies(
+  AnalysisFileContext context, {
+  required String rootPath,
+  required String packageName,
+}) {
+  try {
+    final dependencies = <String>[];
+    final filePath = p.normalize(context.file.path);
+    final normalizedRootPath = p.normalize(rootPath);
+    for (final directive in context.parseResult.unit.directives) {
+      if (directive is NamespaceDirective) {
+        addDirectiveDartDependencies(
+          uri: directive.uri.stringValue,
+          configurations: directive.configurations,
+          packageName: packageName,
+          filePath: filePath,
+          rootPath: normalizedRootPath,
+          dependencies: dependencies,
+        );
+        continue;
+      }
+      if (directive is PartDirective) {
+        addResolvedProjectDartDependency(
+          uri: directive.uri.stringValue,
+          packageName: packageName,
+          filePath: filePath,
+          rootPath: normalizedRootPath,
+          dependencies: dependencies,
+        );
+      }
+    }
+    return dependencies.map(p.normalize).toSet().toList(growable: false)
+      ..sort();
+  } catch (_) {
+    return const <String>[];
   }
 }

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:fcheck/fcheck.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
-import 'package:fcheck/src/analyzers/project_metrics.dart';
 import 'package:fcheck/src/exports/externals/export_mermaid.dart';
 import 'package:fcheck/src/exports/externals/export_plantuml.dart';
 import 'package:fcheck/src/exports/svg/export_files/export_svg_files.dart';
@@ -13,7 +12,6 @@ import 'package:fcheck/src/exports/svg/export_packages/export_svg_package_depend
 import 'package:fcheck/src/input_output/issue_location_utils.dart';
 import 'package:fcheck/src/models/app_strings.dart';
 import 'package:fcheck/src/models/constants.dart';
-import 'package:fcheck/src/models/fcheck_config.dart';
 import 'package:fcheck/src/models/ignore_inventory.dart';
 import 'package:fcheck/src/models/version.dart';
 import 'package:path/path.dart' as p;
@@ -106,20 +104,12 @@ _CliContext _resolveCliContext(ConsoleInput input) {
 
   try {
     final fcheckConfig = FcheckConfig.loadForInputDirectory(inputDirectory);
-    final directory = Directory(
-      p.normalize(fcheckConfig.resolveAnalysisDirectory().absolute.path),
-    );
+    final directory = fcheckConfig.analysisDirectory;
     if (!directory.existsSync()) {
       printMissingDirectoryError(directory.path);
       exit(1);
     }
-    return _CliContext(
-      fcheckConfig: fcheckConfig,
-      directory: directory,
-      effectiveExcludePatterns: fcheckConfig.mergeExcludePatterns(
-        input.excludePatterns,
-      ),
-    );
+    return _CliContext(fcheckConfig: fcheckConfig, directory: directory);
   } on FormatException catch (error) {
     printConfigurationError(error.message.toString());
     exit(1);
@@ -128,17 +118,10 @@ _CliContext _resolveCliContext(ConsoleInput input) {
 
 /// Executes the main non-bootstrap CLI flow after configuration is resolved.
 void _executeCliRun(ConsoleInput input, _CliContext context) {
-  final engine = AnalyzeFolder(
-    context.directory,
+  final engine = AnalyzeFolder.fromConfig(
+    context.fcheckConfig,
     fix: input.fix,
-    excludePatterns: context.effectiveExcludePatterns,
-    enabledAnalyzers: context.fcheckConfig.effectiveEnabledAnalyzers,
-    duplicateCodeSimilarityThreshold:
-        context.fcheckConfig.duplicateCodeSimilarityThreshold,
-    duplicateCodeMinTokenCount: context.fcheckConfig.duplicateCodeMinTokens,
-    duplicateCodeMinNonEmptyLineCount:
-        context.fcheckConfig.duplicateCodeMinNonEmptyLines,
-    codeSizeThresholds: context.fcheckConfig.codeSizeThresholds,
+    extraExcludePatterns: input.excludePatterns,
   );
 
   if (_handleExcludedListing(input, engine)) {
@@ -467,13 +450,8 @@ String _inputFolderName(Directory directory) {
 class _CliContext {
   final FcheckConfig fcheckConfig;
   final Directory directory;
-  final List<String> effectiveExcludePatterns;
 
-  const _CliContext({
-    required this.fcheckConfig,
-    required this.directory,
-    required this.effectiveExcludePatterns,
-  });
+  const _CliContext({required this.fcheckConfig, required this.directory});
 }
 
 class _OutputFileResolver {

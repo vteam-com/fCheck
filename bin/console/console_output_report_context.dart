@@ -336,23 +336,8 @@ class _ReportContext {
     if (!metrics.usesLocalization) {
       analyzerEnabledByKey[AnalyzerDomain.localization.configName] = false;
     }
-    final enabledScoredAnalyzerCount = metrics.analyzerScores
-        .where((score) => score.enabled)
-        .where(
-          (score) =>
-              score.key != 'documentation' ||
-              metrics.documentationIssues.isNotEmpty,
-        )
-        .length;
-    final safeEnabledScoredAnalyzerCount = enabledScoredAnalyzerCount == 0
-        ? 1
-        : enabledScoredAnalyzerCount;
     final analyzerDeductionPercentByKey = <String, double>{
-      for (final score in metrics.analyzerScores)
-        score.key: score.enabled
-            ? ((1 - score.score).clamp(0.0, 1.0) * _percentageMultiplier) /
-                  safeEnabledScoredAnalyzerCount
-            : 0,
+      ...metrics.analyzerDeductionPercents,
       'suppression_hygiene': suppressionPenaltyPoints.toDouble(),
     };
 

@@ -17,13 +17,8 @@
 // final metrics = engine.analyze();
 // ```
 
-import 'dart:collection';
 import 'dart:io';
 
-import 'package:analyzer/dart/analysis/features.dart';
-import 'package:analyzer/dart/analysis/utilities.dart';
-import 'package:analyzer/dart/ast/ast.dart';
-import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
@@ -66,8 +61,7 @@ import 'package:fcheck/src/exports/svg/export_folders/export_svg_folders.dart';
 import 'package:fcheck/src/exports/svg/export_packages/export_package_platform_warning_collector.dart';
 import 'package:fcheck/src/exports/svg/export_packages/export_svg_package_dependencies.dart';
 import 'package:fcheck/src/fcheck_pubspec_info.dart';
-import 'package:fcheck/src/fcheck_test_summary.dart';
-import 'package:fcheck/src/fcheck_test_visitor.dart';
+import 'package:fcheck/src/fcheck_test_analysis.dart';
 import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:fcheck/src/input_output/path_style_utils.dart';
 import 'package:fcheck/src/models/code_size_thresholds.dart';
@@ -76,23 +70,31 @@ import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:path/path.dart' as p;
 
-const Set<String> _testDirectoryNames = {'test', 'integration_test'};
+export 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
+export 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
+export 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
+export 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
+export 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
+export 'package:fcheck/src/analyzers/layers/layers_issue.dart';
+export 'package:fcheck/src/analyzers/localization/localization_issue.dart';
+export 'package:fcheck/src/analyzers/localization/localization_issue_detail.dart';
+export 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
+export 'package:fcheck/src/analyzers/project_metrics.dart';
+export 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
+export 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
+export 'package:fcheck/src/models/code_size_thresholds.dart';
+export 'package:fcheck/src/models/fcheck_config.dart';
+export 'package:fcheck/src/models/file_metrics.dart';
+export 'package:fcheck/src/models/package_platform_warning.dart';
+export 'package:fcheck/src/models/project_results_breakdown.dart';
+export 'package:fcheck/src/models/project_type.dart';
+
 const String _androidPlatformFolder = 'android';
 const String _iosPlatformFolder = 'ios';
 const String _macosPlatformFolder = 'macos';
 const String _windowsPlatformFolder = 'windows';
 const String _linuxPlatformFolder = 'linux';
 const String _webPlatformFolder = 'web';
-
-class _TestAnalysisSummary {
-  const _TestAnalysisSummary({
-    required this.testCaseCount,
-    required this.importedPaths,
-  });
-
-  final int testCaseCount;
-  final Set<String> importedPaths;
-}
 
 /// The main engine for analyzing Flutter/Dart project quality.
 ///
@@ -150,6 +152,42 @@ class AnalyzeFolder {
         DuplicateCodeDelegate.defaultMinNonEmptyLineCount,
     this.codeSizeThresholds = const CodeSizeThresholds(),
   });
+
+  /// Creates an engine configured like the `fcheck` CLI from a loaded
+  /// `.fcheck` [config]: its analysis root, exclude patterns (plus
+  /// [extraExcludePatterns]), enabled analyzers and thresholds.
+  ///
+  /// [duplicateCodeSimilarityThreshold] and
+  /// [duplicateCodeMinNonEmptyLineCount] override the configured values,
+  /// e.g. to surface near-duplicates for a review.
+  ///
+  /// Tools embedding fcheck use this so their results match the CLI's:
+  /// ```dart
+  /// final config = FcheckConfig.loadForInputDirectory(Directory('my_app'));
+  /// final metrics = AnalyzeFolder.fromConfig(config).analyze();
+  /// ```
+  factory AnalyzeFolder.fromConfig(
+    FcheckConfig config, {
+    bool fix = false,
+    List<String> extraExcludePatterns = const [],
+    double? duplicateCodeSimilarityThreshold,
+    int? duplicateCodeMinNonEmptyLineCount,
+  }) {
+    return AnalyzeFolder(
+      config.analysisDirectory,
+      fix: fix,
+      excludePatterns: config.mergeExcludePatterns(extraExcludePatterns),
+      enabledAnalyzers: config.effectiveEnabledAnalyzers,
+      duplicateCodeSimilarityThreshold:
+          duplicateCodeSimilarityThreshold ??
+          config.duplicateCodeSimilarityThreshold,
+      duplicateCodeMinTokenCount: config.duplicateCodeMinTokens,
+      duplicateCodeMinNonEmptyLineCount:
+          duplicateCodeMinNonEmptyLineCount ??
+          config.duplicateCodeMinNonEmptyLines,
+      codeSizeThresholds: config.codeSizeThresholds,
+    );
+  }
 
   /// Global ignore configuration from .fcheck file and constructor.
   final Map<String, bool> ignoreConfig;
@@ -370,17 +408,18 @@ class AnalyzeFolder {
               .toList() ??
           [],
     );
-    final projectDependencyGraph = _buildProjectDependencyGraph(
+    final projectDependencyGraph = buildProjectDependencyGraph(
       analyzedContexts,
       rootPath: projectRoot.path,
       packageName: pubspecInfo.packageName,
     );
-    final testAnalysisSummary = _analyzeTestFiles(
+    final testAnalysisSummary = analyzeTestFiles(
+      projectDir: projectDir,
       rootPath: projectRoot.path,
       packageName: pubspecInfo.packageName,
       analyzedPaths: projectDependencyGraph.keys.toSet(),
     );
-    final testConsumption = _analyzeTestConsumption(
+    final testConsumption = analyzeTestConsumption(
       dependencyGraph: projectDependencyGraph,
       fileMetrics: metricsAggregation.fileMetrics,
       analysisRootPath: projectDir.path,
@@ -563,7 +602,7 @@ class AnalyzeFolder {
         .map(
           (issue) => DocumentationIssue(
             type: issue.type,
-            filePath: _toRelativePathForDisplay(
+            filePath: toRelativePathForDisplay(
               issue.filePath,
               normalizedRootPath: normalizedRoot,
             ),
@@ -590,7 +629,7 @@ class AnalyzeFolder {
         .map(
           (issue) => DeadCodeIssue(
             type: issue.type,
-            filePath: _toRelativePathForDisplay(
+            filePath: toRelativePathForDisplay(
               issue.filePath,
               normalizedRootPath: normalizedRoot,
             ),
@@ -600,23 +639,6 @@ class AnalyzeFolder {
           ),
         )
         .toList(growable: false);
-  }
-
-  /// Returns [path] rebased to [normalizedRootPath] for user-facing output.
-  String _toRelativePathForDisplay(
-    String path, {
-    required String normalizedRootPath,
-  }) {
-    if (path.isEmpty) {
-      return path;
-    }
-
-    final absolutePath = p.isAbsolute(path)
-        ? p.normalize(path)
-        : p.normalize(p.join(normalizedRootPath, path));
-    return normalizePathSeparators(
-      p.relative(absolutePath, from: normalizedRootPath),
-    );
   }
 
   /// Heuristically detects whether the project uses Flutter localization.
@@ -701,231 +723,6 @@ class AnalyzeFolder {
       // Failed to read or parse config file
     }
     return null;
-  }
-
-  /// Counts test cases and collects project imports from test sources in one pass.
-  _TestAnalysisSummary _analyzeTestFiles({
-    required String rootPath,
-    required String packageName,
-    required Set<String> analyzedPaths,
-  }) {
-    var totalTestCases = 0;
-    final importedPaths = <String>{};
-
-    for (final file in _listTestDartFiles(projectDir)) {
-      try {
-        final content = file.readAsStringSync();
-        final parseResult = parseString(
-          content: content,
-          featureSet: FeatureSet.latestLanguageVersion(),
-        );
-        final context = AnalysisFileContext(
-          file: file,
-          content: content,
-          parseResult: parseResult,
-          lines: content.split('\n'),
-          compilationUnit: parseResult.unit,
-          hasParseErrors: parseResult.errors.isNotEmpty,
-        );
-        final counter = TestCaseVisitor();
-        parseResult.unit.accept(counter);
-        totalTestCases += counter.testCaseCount;
-        importedPaths.addAll(
-          _collectProjectDependenciesFromContext(
-            context,
-            rootPath: rootPath,
-            packageName: packageName,
-          ).where(analyzedPaths.contains),
-        );
-      } catch (_) {
-        // Ignore unreadable/un-parseable test files and continue.
-      }
-    }
-
-    return _TestAnalysisSummary(
-      testCaseCount: totalTestCases,
-      importedPaths: importedPaths,
-    );
-  }
-
-  /// Lists Dart files located under canonical test directories.
-  List<File> _listTestDartFiles(Directory dir) {
-    final files = <File>[];
-    for (final entity in dir.listSync(recursive: true)) {
-      if (entity is! File || p.extension(entity.path) != '.dart') {
-        continue;
-      }
-      final relativePath = p.relative(entity.path, from: dir.path);
-      final pathParts = p.split(relativePath);
-      final isHidden = pathParts.any((part) => part.startsWith('.'));
-      if (isHidden) {
-        continue;
-      }
-      final isTestFile = pathParts.any(_testDirectoryNames.contains);
-      if (isTestFile) {
-        files.add(entity);
-      }
-    }
-    return files;
-  }
-
-  /// Builds a normalized project-only dependency graph for analyzed Dart files.
-  ///
-  /// Each key is the normalized absolute path of an analyzed file and each
-  /// value contains the normalized project dependencies referenced from that
-  /// file through imports, exports, and parts.
-  Map<String, List<String>> _buildProjectDependencyGraph(
-    List<AnalysisFileContext> contexts, {
-    required String rootPath,
-    required String packageName,
-  }) {
-    final dependencyGraph = <String, List<String>>{};
-    for (final context in contexts) {
-      final normalizedPath = p.normalize(context.file.path);
-      dependencyGraph[normalizedPath] = _collectProjectDependenciesFromContext(
-        context,
-        rootPath: rootPath,
-        packageName: packageName,
-      );
-    }
-    return Map<String, List<String>>.unmodifiable(dependencyGraph);
-  }
-
-  /// Resolves which analyzed files are statically exercised by test imports.
-  ///
-  /// The analysis starts from project files imported by test files, then walks
-  /// the dependency graph transitively to estimate consumed files, LOC,
-  /// classes, methods, and top-level functions.
-  TestConsumptionSummary _analyzeTestConsumption({
-    required Map<String, List<String>> dependencyGraph,
-    required List<FileMetrics> fileMetrics,
-    required String analysisRootPath,
-    required Set<String> importedPathsSet,
-  }) {
-    if (dependencyGraph.isEmpty || importedPathsSet.isEmpty) {
-      return const TestConsumptionSummary.empty();
-    }
-
-    final analyzedPaths = dependencyGraph.keys.toSet();
-    final queue = Queue<String>()..addAll(importedPathsSet);
-    final consumedPathsSet = <String>{};
-    while (queue.isNotEmpty) {
-      final currentPath = queue.removeFirst();
-      if (!consumedPathsSet.add(currentPath)) {
-        continue;
-      }
-      for (final dependency
-          in dependencyGraph[currentPath] ?? const <String>[]) {
-        if (!analyzedPaths.contains(dependency) ||
-            consumedPathsSet.contains(dependency)) {
-          continue;
-        }
-        queue.add(dependency);
-      }
-    }
-
-    final metricsByPath = <String, FileMetrics>{
-      for (final metric in fileMetrics) p.normalize(metric.path): metric,
-    };
-    var linesOfCode = 0;
-    var classCount = 0;
-    var methodCount = 0;
-    var topLevelFunctionCount = 0;
-    for (final path in consumedPathsSet) {
-      final metric = metricsByPath[path];
-      if (metric == null) {
-        continue;
-      }
-      linesOfCode += metric.linesOfCode;
-      classCount += metric.classCount;
-      methodCount += metric.methodCount;
-      topLevelFunctionCount += metric.topLevelFunctionCount;
-    }
-
-    final normalizedAnalysisRoot = p.normalize(
-      Directory(analysisRootPath).absolute.path,
-    );
-    final importedPaths =
-        importedPathsSet
-            .map(
-              (path) => _toRelativePathForDisplay(
-                path,
-                normalizedRootPath: normalizedAnalysisRoot,
-              ),
-            )
-            .toList(growable: false)
-          ..sort();
-    final consumedPaths =
-        consumedPathsSet
-            .map(
-              (path) => _toRelativePathForDisplay(
-                path,
-                normalizedRootPath: normalizedAnalysisRoot,
-              ),
-            )
-            .toList(growable: false)
-          ..sort();
-
-    return TestConsumptionSummary(
-      importedPaths: importedPaths,
-      consumedPaths: consumedPaths,
-      linesOfCode: linesOfCode,
-      classCount: classCount,
-      methodCount: methodCount,
-      topLevelFunctionCount: topLevelFunctionCount,
-    );
-  }
-
-  /// Collects normalized in-project Dart dependencies declared by [context].
-  ///
-  /// Only project-resolvable imports, exports, and part directives are
-  /// returned. Unreadable or unparsable files fall back to an empty list.
-  List<String> _collectProjectDependenciesFromContext(
-    AnalysisFileContext context, {
-    required String rootPath,
-    required String packageName,
-  }) {
-    try {
-      final dependencies = <String>[];
-      for (final directive in context.parseResult.unit.directives) {
-        if (directive is ImportDirective) {
-          addDirectiveDartDependencies(
-            uri: directive.uri.stringValue,
-            configurations: directive.configurations,
-            packageName: packageName,
-            filePath: p.normalize(context.file.path),
-            rootPath: p.normalize(rootPath),
-            dependencies: dependencies,
-          );
-          continue;
-        }
-        if (directive is ExportDirective) {
-          addDirectiveDartDependencies(
-            uri: directive.uri.stringValue,
-            configurations: directive.configurations,
-            packageName: packageName,
-            filePath: p.normalize(context.file.path),
-            rootPath: p.normalize(rootPath),
-            dependencies: dependencies,
-          );
-          continue;
-        }
-        if (directive is PartDirective) {
-          addResolvedProjectDartDependency(
-            uri: directive.uri.stringValue,
-            packageName: packageName,
-            filePath: p.normalize(context.file.path),
-            rootPath: p.normalize(rootPath),
-            dependencies: dependencies,
-          );
-        }
-      }
-      final uniqueDependencies =
-          dependencies.map(p.normalize).toSet().toList(growable: false)..sort();
-      return uniqueDependencies;
-    } catch (_) {
-      return const <String>[];
-    }
   }
 
   /// Detects supported platform folders in the effective project root.

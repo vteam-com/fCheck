@@ -1,11 +1,6 @@
 import 'dart:io';
 
 import 'package:fcheck/fcheck.dart';
-import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
-import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
-import 'package:fcheck/src/models/code_size_thresholds.dart';
-import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
-import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
 import 'package:fcheck/src/models/app_strings.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:fcheck/fcheck.dart';
-import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 

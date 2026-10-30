@@ -1118,6 +1118,61 @@ void main() {
       expect(layersScore.score, lessThan(1));
     });
 
+    test('spreads each analyzer shortfall over the counted analyzers', () {
+      final metrics = ProjectMetrics(
+        totalFolders: 1,
+        totalFiles: 1,
+        totalDartFiles: 1,
+        totalLinesOfCode: 100,
+        totalCommentLines: 10,
+        fileMetrics: const [],
+        secretIssues: const [],
+        hardcodedStringIssues: const [],
+        magicNumberIssues: const [],
+        sourceSortIssues: const [],
+        layersIssues: [
+          LayersIssue(
+            type: LayersIssueType.wrongFolderLayer,
+            filePath: 'lib/feature/a.dart',
+            message: 'Upward dependency warning',
+          ),
+        ],
+        deadCodeIssues: const [],
+        layersEdgeCount: 1,
+        layersCount: 1,
+        dependencyGraph: const {},
+        projectName: 'example_project',
+        version: '1.0.0',
+        projectType: ProjectType.dart,
+        usesLocalization: true,
+      );
+
+      final deductions = metrics.analyzerDeductionPercents;
+      final counted = metrics.analyzerScores
+          .where((score) => score.enabled)
+          .where(
+            (score) =>
+                score.key != 'documentation' ||
+                metrics.documentationIssues.isNotEmpty,
+          )
+          .length;
+      final layersScore = metrics.analyzerScores.firstWhere(
+        (score) => score.key == 'layers',
+      );
+
+      expect(
+        deductions['layers'],
+        closeTo((1 - layersScore.score) * 100 / counted, 1e-9),
+      );
+      expect(deductions['layers'], greaterThan(0));
+      expect(
+        deductions.entries
+            .where((entry) => entry.key != 'layers')
+            .every((entry) => entry.value == 0),
+        isTrue,
+      );
+    });
+
     test('should show hardcoded strings as passive summary only for Dart projects when localization is off', () {
       final projectMetrics = ProjectMetrics(
         totalFolders: 1,

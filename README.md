@@ -2,6 +2,14 @@
 
 fCheck provides fast local quality analysis for Flutter and Dart projects with 0-100% compliance scoring. Single analysis pass covering architecture, maintainability, and safety issues beyond standard linting, with deterministic CLI/JSON reports for CI/CD pipelines and fully private execution: it does not require any AI service, no network calls are needed, and no source code is sent to external services.
 
+## New in 1.6.0: reuse fCheck in any app
+
+fCheck is no longer just a CLI. `package:fcheck/fcheck.dart` now exports the full result model (`ProjectMetrics`, every `*Issue` type, `CodeSizeArtifact`, `FileMetrics`, …) and `AnalyzeFolder.fromConfig(config)` runs the exact same analysis as the CLI, honoring the project's `.fcheck` file. Build fCheck into your own IDE, dashboard, bot, or AI review pipeline. See [Use as a Dart package](#option-3-use-as-a-dart-package-in-your-apptool).
+
+**Showcase: [FIDE](https://github.com/vteam-com/FIDE)**, the open-source Flutter Integrated Developer Environment, uses fCheck under the hood to power its AI code reviews: fCheck finds the largest classes, the most coupled files, layer violations, and near-duplicate code, and FIDE hands only that focused context to the AI instead of the whole `lib` folder.
+
+👉 **Building Flutter apps? Give [FIDE](https://github.com/vteam-com/FIDE) a try for all your Flutter projects**: a Flutter-first IDE, built in Flutter, with fCheck quality insights built in. Stars, issues, and contributions are welcome.
+
 ## Why fCheck
 
 - Single local run for multiple quality domains
@@ -173,10 +181,45 @@ import 'dart:io';
 import 'package:fcheck/fcheck.dart';
 
 void main() {
-  final metrics = AnalyzeFolder(Directory('.')).analyze();
+  // Honors the project's .fcheck file, like the CLI
+  final config = FcheckConfig.loadForInputDirectory(Directory('.'));
+  final metrics = AnalyzeFolder.fromConfig(config).analyze();
   print('Score: ${metrics.complianceScore}%');
+  for (final issue in metrics.duplicateCodeIssues) {
+    print(issue);
+  }
 }
 ```
+
+`analyze()` is synchronous and parses every file; in a Flutter app run it off the UI thread, e.g. `await Isolate.run(() => AnalyzeFolder.fromConfig(config).analyze())`.
+
+#### Real-world example: FIDE
+
+[FIDE](https://github.com/vteam-com/FIDE) runs fCheck on a background isolate and loosens duplicate detection to catch code that was copied and has since drifted, before feeding the findings to its AI review:
+
+```dart
+import 'dart:io';
+import 'dart:isolate';
+
+import 'package:fcheck/fcheck.dart' as fcheck;
+
+Future<fcheck.ProjectMetrics> analyze(
+  String projectPath, {
+  bool nearDuplicates = false,
+}) => Isolate.run(
+  () => fcheck.AnalyzeFolder.fromConfig(
+    fcheck.FcheckConfig.loadForInputDirectory(Directory(projectPath)),
+    duplicateCodeSimilarityThreshold: nearDuplicates ? 0.75 : null,
+    duplicateCodeMinNonEmptyLineCount: nearDuplicates ? 6 : null,
+  ).analyze(),
+);
+
+// Then use the typed results, e.g. the largest classes:
+// final classes = [...metrics.codeSizeClassArtifacts]
+//   ..sort((a, b) => b.linesOfCode.compareTo(a.linesOfCode));
+```
+
+See the full integration in FIDE's [`lib/providers/code_review.dart`](https://github.com/vteam-com/FIDE/blob/main/lib/providers/code_review.dart).
 
 ## Quick Start (CLI)
 

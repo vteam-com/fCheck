@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:fcheck/fcheck.dart';
-import 'package:fcheck/src/models/project_type.dart';
 import 'package:test/test.dart';
 
 void main() {

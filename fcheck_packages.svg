@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1200.0" height="3364.0" viewBox="0 0 1200.0 3364.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+<svg width="1200.0" height="3566.0" viewBox="0 0 1200.0 3566.0" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
 <defs>
   <filter id="whiteShadow" x="-20%" y="-20%" width="140%" height="140%">
     <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
@@ -347,7 +347,7 @@
     font-weight: 900;
   }
 </style>
-<text x="600.0" y="28.0" class="packageLabelTitle" text-anchor="middle">fcheck v1.5.1</text>
+<text x="600.0" y="28.0" class="packageLabelTitle" text-anchor="middle">fcheck v1.6.0</text>
 <g class="packageMetadataPill"><title>Dart &gt;=3.13.0 &lt;4.0.0</title><rect x="553.0" y="36.0" width="94.0" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="41" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart &gt;=3.13.0 &lt;4.0.0</text></g>
 <text x="280.0" y="70.0" class="packageLabelSection">dependencies (6 items)</text>
 <line x1="280.0" y1="76.0" x2="480.0" y2="76.0" stroke="#1d4ed8" stroke-width="2.0" opacity="0.9"/>
@@ -355,8 +355,10 @@
 <line x1="720.0" y1="76.0" x2="920.0" y2="76.0" stroke="#166534" stroke-width="2.0" opacity="0.9"/>
 <text x="600.0" y="684.0" class="packageLabelDerivedSection" text-anchor="middle">Derived packages (Depth 1) (29 items)</text>
 <line x1="40.0" y1="690.0" x2="1160.0" y2="690.0" stroke="#64748b" stroke-width="1" opacity="0.35"/>
-<text x="600.0" y="2614.0" class="packageLabelDerivedSection" text-anchor="middle">Derived packages (Depth 2) (11 items)</text>
+<text x="600.0" y="2614.0" class="packageLabelDerivedSection" text-anchor="middle">Derived packages (Depth 2) (12 items)</text>
 <line x1="40.0" y1="2620.0" x2="1160.0" y2="2620.0" stroke="#64748b" stroke-width="1" opacity="0.35"/>
+<text x="600.0" y="3456.0" class="packageLabelDerivedSection" text-anchor="middle">Derived packages (Depth 3) (1 item)</text>
+<line x1="40.0" y1="3462.0" x2="1160.0" y2="3462.0" stroke="#64748b" stroke-width="1" opacity="0.35"/>
 <g>
   <path d="M 280.0 582.0 H 268.0 Q 262.0 582.0 262.0 588.0 V 914.0 Q 262.0 920.0 268.0 920.0 H 460.0" class="edgeVertical"/>
   <title>yaml -> collection v1.19.1</title>
@@ -371,7 +373,7 @@
 </g>
 <g>
   <path d="M 280.0 142.0 H 259.0 Q 253.0 142.0 253.0 148.0 V 722.0 Q 253.0 728.0 259.0 728.0 H 460.0" class="edgeVertical"/>
-  <title>analyzer -> _fe_analyzer_shared v109.0.0</title>
+  <title>analyzer -> _fe_analyzer_shared v111.0.0</title>
 </g>
 <g>
   <path d="M 280.0 318.0 H 256.0 Q 250.0 318.0 250.0 324.0 V 914.0 Q 250.0 920.0 256.0 920.0 H 460.0" class="edgeVertical"/>
@@ -391,7 +393,7 @@
 </g>
 <g>
   <path d="M 280.0 142.0 H 244.0 Q 238.0 142.0 238.0 148.0 V 1106.0 Q 238.0 1112.0 244.0 1112.0 H 460.0" class="edgeVertical"/>
-  <title>analyzer -> crypto v3.0.7</title>
+  <title>analyzer -> crypto v3.0.8</title>
 </g>
 <g>
   <path d="M 280.0 142.0 H 241.0 Q 235.0 142.0 235.0 148.0 V 1426.0 Q 235.0 1432.0 241.0 1432.0 H 460.0" class="edgeVertical"/>
@@ -435,11 +437,11 @@
 </g>
 <g>
   <path d="M 920.0 230.0 H 941.0 Q 947.0 230.0 947.0 236.0 V 1037.0 Q 947.0 1043.0 941.0 1043.0 H 740.0" class="edgeVertical"/>
-  <title>test -> coverage v1.15.1</title>
+  <title>test -> coverage v1.16.0</title>
 </g>
 <g>
   <path d="M 920.0 230.0 H 944.0 Q 950.0 230.0 950.0 236.0 V 1234.0 Q 950.0 1240.0 944.0 1240.0 H 740.0" class="edgeVertical"/>
-  <title>test -> http_multi_server v3.2.2</title>
+  <title>test -> http_multi_server v3.2.3</title>
 </g>
 <g>
   <path d="M 920.0 230.0 H 947.0 Q 953.0 230.0 953.0 236.0 V 1298.0 Q 953.0 1304.0 947.0 1304.0 H 740.0" class="edgeVertical"/>
@@ -463,7 +465,7 @@
 </g>
 <g>
   <path d="M 920.0 230.0 H 962.0 Q 968.0 230.0 968.0 236.0 V 1677.0 Q 968.0 1683.0 962.0 1683.0 H 740.0" class="edgeVertical"/>
-  <title>test -> shelf v1.4.2</title>
+  <title>test -> shelf v1.4.3</title>
 </g>
 <g>
   <path d="M 920.0 230.0 H 965.0 Q 971.0 230.0 971.0 236.0 V 1746.0 Q 971.0 1752.0 965.0 1752.0 H 740.0" class="edgeVertical"/>
@@ -471,7 +473,7 @@
 </g>
 <g>
   <path d="M 920.0 230.0 H 968.0 Q 974.0 230.0 974.0 236.0 V 1805.0 Q 974.0 1811.0 968.0 1811.0 H 740.0" class="edgeVertical"/>
-  <title>test -> shelf_static v1.1.3</title>
+  <title>test -> shelf_static v1.2.0</title>
 </g>
 <g>
   <path d="M 920.0 230.0 H 971.0 Q 977.0 230.0 977.0 236.0 V 1874.0 Q 977.0 1880.0 971.0 1880.0 H 740.0" class="edgeVertical"/>
@@ -510,51 +512,51 @@
   <title>test -> webkit_inspection_protocol v1.2.1</title>
 </g>
 <g>
-  <path d="M 740.0 2526.0 H 752.0 Q 758.0 2526.0 758.0 2532.0 V 2844.0 Q 758.0 2850.0 752.0 2850.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 2526.0 H 752.0 Q 758.0 2526.0 758.0 2532.0 V 2908.0 Q 758.0 2914.0 752.0 2914.0 H 460.0" class="edgeVertical"/>
   <title>webkit_inspection_protocol -> logging v1.3.0</title>
 </g>
 <g>
-  <path d="M 740.0 2270.0 H 755.0 Q 761.0 2270.0 761.0 2276.0 V 2716.0 Q 761.0 2722.0 755.0 2722.0 H 460.0" class="edgeVertical"/>
-  <title>test_core -> frontend_server_client v4.1.0</title>
+  <path d="M 740.0 2270.0 H 755.0 Q 761.0 2270.0 761.0 2276.0 V 2780.0 Q 761.0 2786.0 755.0 2786.0 H 460.0" class="edgeVertical"/>
+  <title>test_core -> frontend_server_client v4.2.0</title>
 </g>
 <g>
-  <path d="M 740.0 2270.0 H 758.0 Q 764.0 2270.0 764.0 2276.0 V 2972.0 Q 764.0 2978.0 758.0 2978.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 2270.0 H 758.0 Q 764.0 2270.0 764.0 2276.0 V 3036.0 Q 764.0 3042.0 758.0 3042.0 H 460.0" class="edgeVertical"/>
   <title>test_core -> source_map_stack_trace v2.1.2</title>
 </g>
 <g>
-  <path d="M 740.0 2270.0 H 761.0 Q 767.0 2270.0 767.0 2276.0 V 3036.0 Q 767.0 3042.0 761.0 3042.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 2270.0 H 761.0 Q 767.0 2270.0 767.0 2276.0 V 3100.0 Q 767.0 3106.0 761.0 3106.0 H 460.0" class="edgeVertical"/>
   <title>test_core -> source_maps v0.10.14</title>
 </g>
 <g>
-  <path d="M 740.0 2462.0 H 764.0 Q 770.0 2462.0 770.0 2468.0 V 3228.0 Q 770.0 3234.0 764.0 3234.0 H 460.0" class="edgeVertical"/>
-  <title>web_socket_channel -> web v1.1.1</title>
+  <path d="M 740.0 2462.0 H 764.0 Q 770.0 2462.0 770.0 2468.0 V 3292.0 Q 770.0 3298.0 764.0 3298.0 H 460.0" class="edgeVertical"/>
+  <title>web_socket_channel -> web v1.1.2</title>
 </g>
 <g>
-  <path d="M 740.0 2462.0 H 767.0 Q 773.0 2462.0 773.0 2468.0 V 3292.0 Q 773.0 3298.0 767.0 3298.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 2462.0 H 767.0 Q 773.0 2462.0 773.0 2468.0 V 3356.0 Q 773.0 3362.0 767.0 3362.0 H 460.0" class="edgeVertical"/>
   <title>web_socket_channel -> web_socket v1.0.1</title>
 </g>
 <g>
-  <path d="M 740.0 2206.0 H 770.0 Q 776.0 2206.0 776.0 2212.0 V 3100.0 Q 776.0 3106.0 770.0 3106.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 2206.0 H 770.0 Q 776.0 2206.0 776.0 2212.0 V 3164.0 Q 776.0 3170.0 770.0 3170.0 H 460.0" class="edgeVertical"/>
   <title>test_api -> term_glyph v1.2.2</title>
 </g>
 <g>
-  <path d="M 740.0 2270.0 H 773.0 Q 779.0 2270.0 779.0 2276.0 V 3164.0 Q 779.0 3170.0 773.0 3170.0 H 460.0" class="edgeVertical"/>
-  <title>test_core -> vm_service v15.3.0</title>
+  <path d="M 740.0 2270.0 H 773.0 Q 779.0 2270.0 779.0 2276.0 V 3228.0 Q 779.0 3234.0 773.0 3234.0 H 460.0" class="edgeVertical"/>
+  <title>test_core -> vm_service v15.4.0</title>
 </g>
 <g>
-  <path d="M 740.0 1822.0 H 776.0 Q 782.0 1822.0 782.0 1828.0 V 2780.0 Q 782.0 2786.0 776.0 2786.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 1822.0 H 776.0 Q 782.0 1822.0 782.0 1828.0 V 2844.0 Q 782.0 2850.0 776.0 2850.0 H 460.0" class="edgeVertical"/>
   <title>shelf_static -> http_parser v4.1.2</title>
 </g>
 <g>
-  <path d="M 740.0 1694.0 H 779.0 Q 785.0 1694.0 785.0 1700.0 V 2780.0 Q 785.0 2786.0 779.0 2786.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 1694.0 H 779.0 Q 785.0 1694.0 785.0 1700.0 V 2844.0 Q 785.0 2850.0 779.0 2850.0 H 460.0" class="edgeVertical"/>
   <title>shelf -> http_parser v4.1.2</title>
 </g>
 <g>
-  <path d="M 740.0 1822.0 H 782.0 Q 788.0 1822.0 788.0 1828.0 V 2908.0 Q 788.0 2914.0 782.0 2914.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 1822.0 H 782.0 Q 788.0 1822.0 788.0 1828.0 V 2972.0 Q 788.0 2978.0 782.0 2978.0 H 460.0" class="edgeVertical"/>
   <title>shelf_static -> mime v2.1.0</title>
 </g>
 <g>
-  <path d="M 740.0 1950.0 H 785.0 Q 791.0 1950.0 791.0 1956.0 V 3100.0 Q 791.0 3106.0 785.0 3106.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 1950.0 H 785.0 Q 791.0 1950.0 791.0 1956.0 V 3164.0 Q 791.0 3170.0 785.0 3170.0 H 460.0" class="edgeVertical"/>
   <title>source_span -> term_glyph v1.2.2</title>
 </g>
 <g>
@@ -562,27 +564,35 @@
   <title>coverage -> cli_config v0.2.0</title>
 </g>
 <g>
-  <path d="M 740.0 1374.0 H 791.0 Q 797.0 1374.0 797.0 1380.0 V 3100.0 Q 797.0 3106.0 791.0 3106.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 1054.0 H 791.0 Q 797.0 1054.0 797.0 1060.0 V 2716.0 Q 797.0 2722.0 791.0 2722.0 H 460.0" class="edgeVertical"/>
+  <title>coverage -> cli_util v0.6.0</title>
+</g>
+<g>
+  <path d="M 740.0 1374.0 H 794.0 Q 800.0 1374.0 800.0 1380.0 V 3164.0 Q 800.0 3170.0 794.0 3170.0 H 460.0" class="edgeVertical"/>
   <title>matcher -> term_glyph v1.2.2</title>
 </g>
 <g>
-  <path d="M 740.0 1054.0 H 794.0 Q 800.0 1054.0 800.0 1060.0 V 2844.0 Q 800.0 2850.0 794.0 2850.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 1054.0 H 797.0 Q 803.0 1054.0 803.0 1060.0 V 2908.0 Q 803.0 2914.0 797.0 2914.0 H 460.0" class="edgeVertical"/>
   <title>coverage -> logging v1.3.0</title>
 </g>
 <g>
-  <path d="M 740.0 1054.0 H 797.0 Q 803.0 1054.0 803.0 1060.0 V 3036.0 Q 803.0 3042.0 797.0 3042.0 H 460.0" class="edgeVertical"/>
+  <path d="M 740.0 1054.0 H 800.0 Q 806.0 1054.0 806.0 1060.0 V 3100.0 Q 806.0 3106.0 800.0 3106.0 H 460.0" class="edgeVertical"/>
   <title>coverage -> source_maps v0.10.14</title>
 </g>
 <g>
-  <path d="M 740.0 1054.0 H 800.0 Q 806.0 1054.0 806.0 1060.0 V 3164.0 Q 806.0 3170.0 800.0 3170.0 H 460.0" class="edgeVertical"/>
-  <title>coverage -> vm_service v15.3.0</title>
+  <path d="M 740.0 1054.0 H 803.0 Q 809.0 1054.0 809.0 1060.0 V 3228.0 Q 809.0 3234.0 803.0 3234.0 H 460.0" class="edgeVertical"/>
+  <title>coverage -> vm_service v15.4.0</title>
+</g>
+<g>
+  <path d="M 740.0 2728.0 H 752.0 Q 758.0 2728.0 758.0 2734.0 V 3494.0 Q 758.0 3500.0 752.0 3500.0 H 460.0" class="edgeVertical"/>
+  <title>cli_util -> ffi v2.2.0</title>
 </g>
 <g class="packageNode">
 <rect x="280.0" y="108.0" width="200.0" height="68.0" rx="8.0" ry="8.0" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1"/>
-<g class="packageMetadataPill"><title>Dart ^3.11.0</title><rect x="349.4" y="163.0" width="61.199999999999996" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="380.0" y="168" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.11.0</text></g>
-<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.11.0</title><rect x="366.0" y="147.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="380.0" y="153.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<g class="packageMetadataPill"><title>Dart ^3.13.0</title><rect x="349.4" y="163.0" width="61.199999999999996" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="380.0" y="168" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.13.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.13.0</title><rect x="366.0" y="147.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="380.0" y="153.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
 <text x="380.0" y="128.0" class="packageLabelNodeName packageLabelCaption" text-anchor="middle">analyzer</text>
-<text x="380.0" y="141.0" class="packageLabelNodeVersion" text-anchor="middle">v14.5.0</text>
+<text x="380.0" y="141.0" class="packageLabelNodeVersion" text-anchor="middle">v14.7.0</text>
 </g>
 <g class="badge outgoingBadge">
   <path d="M 274.0,142.0 L 286.0,135.0 Q 289.0,135.0 289.0,138.0 L 289.0,146.0 Q 289.0,149.0 286.0,149.0 Z" fill="#10b981"/>
@@ -678,10 +688,10 @@
 21. web_socket_channel
 22. webkit_inspection_protocol</title></g><g class="packageNode">
 <rect x="460.0" y="702.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<g class="packageMetadataPill"><title>Dart ^3.11.0</title><rect x="569.4" y="741.0" width="61.199999999999996" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="746" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.11.0</text></g>
-<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.11.0</title><rect x="586.0" y="725.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="731.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<g class="packageMetadataPill"><title>Dart ^3.13.0</title><rect x="569.4" y="741.0" width="61.199999999999996" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="746" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.13.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.13.0</title><rect x="586.0" y="725.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="731.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
 <text x="468.0" y="720.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">_fe_analyzer_shared</text>
-<text x="732.0" y="720.0" class="packageLabelDerivedVersion" text-anchor="end">^109.0.0</text>
+<text x="732.0" y="720.0" class="packageLabelDerivedVersion" text-anchor="end">^111.0.0</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 466.0,728.0 L 454.0,721.0 Q 451.0,721.0 451.0,724.0 L 451.0,732.0 Q 451.0,735.0 454.0,735.0 Z" fill="#3b82f6"/>
@@ -730,24 +740,25 @@
   <path d="M 466.0,984.0 L 454.0,977.0 Q 451.0,977.0 451.0,980.0 L 451.0,988.0 Q 451.0,991.0 454.0,991.0 Z" fill="#3b82f6"/>
   <text x="455.68" y="985.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. analyzer</title></g><g class="packageNode">
 <rect x="460.0" y="1022.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<g class="packageMetadataPill"><title>Dart ^3.4.0</title><rect x="571.45" y="1061.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="1066" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.4.0</text></g>
-<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.4.0</title><rect x="586.0" y="1045.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1051.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<g class="packageMetadataPill"><title>Dart ^3.9.0</title><rect x="571.45" y="1061.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="1066" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.9.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.9.0</title><rect x="586.0" y="1045.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1051.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
 <text x="468.0" y="1040.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">coverage</text>
-<text x="732.0" y="1040.0" class="packageLabelDerivedVersion" text-anchor="end">^1.15.1</text>
+<text x="732.0" y="1040.0" class="packageLabelDerivedVersion" text-anchor="end">^1.16.0</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,1043.0 L 746.0,1036.0 Q 749.0,1036.0 749.0,1039.0 L 749.0,1047.0 Q 749.0,1050.0 746.0,1050.0 Z" fill="#3b82f6"/>
   <text x="744.32" y="1044.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. test</title></g><g class="badge outgoingBadge">
   <path d="M 746.0,1054.0 L 734.0,1047.0 Q 731.0,1047.0 731.0,1050.0 L 731.0,1058.0 Q 731.0,1061.0 734.0,1061.0 Z" fill="#10b981"/>
-  <text x="735.68" y="1055.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">4</text><title>1. cli_config
-2. logging
-3. source_maps
-4. vm_service</title></g><g class="packageNode">
+  <text x="735.68" y="1055.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">5</text><title>1. cli_config
+2. cli_util
+3. logging
+4. source_maps
+5. vm_service</title></g><g class="packageNode">
 <rect x="460.0" y="1086.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
 <g class="packageMetadataPill"><title>Dart ^3.4.0</title><rect x="571.45" y="1125.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="1130" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.4.0</text></g>
 <g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.4.0</title><rect x="586.0" y="1109.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1115.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
 <text x="468.0" y="1104.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">crypto</text>
-<text x="732.0" y="1104.0" class="packageLabelDerivedVersion" text-anchor="end">^3.0.7</text>
+<text x="732.0" y="1104.0" class="packageLabelDerivedVersion" text-anchor="end">^3.0.8</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 466.0,1112.0 L 454.0,1105.0 Q 451.0,1105.0 451.0,1108.0 L 451.0,1116.0 Q 451.0,1119.0 454.0,1119.0 Z" fill="#3b82f6"/>
@@ -765,7 +776,7 @@
 <g class="packageMetadataPill"><title>Dart ^3.2.0</title><rect x="571.45" y="1253.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="1258" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.2.0</text></g>
 <g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.2.0</title><rect x="586.0" y="1237.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1243.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
 <text x="468.0" y="1232.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">http_multi_server</text>
-<text x="732.0" y="1232.0" class="packageLabelDerivedVersion" text-anchor="end">^3.2.2</text>
+<text x="732.0" y="1232.0" class="packageLabelDerivedVersion" text-anchor="end">^3.2.3</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,1240.0 L 746.0,1233.0 Q 749.0,1233.0 749.0,1236.0 L 749.0,1244.0 Q 749.0,1247.0 746.0,1247.0 Z" fill="#3b82f6"/>
@@ -829,10 +840,10 @@
   <path d="M 734.0,1624.0 L 746.0,1617.0 Q 749.0,1617.0 749.0,1620.0 L 749.0,1628.0 Q 749.0,1631.0 746.0,1631.0 Z" fill="#3b82f6"/>
   <text x="744.32" y="1625.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. test</title></g><g class="packageNode">
 <rect x="460.0" y="1662.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<g class="packageMetadataPill"><title>Dart ^3.4.0</title><rect x="571.45" y="1701.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="1706" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.4.0</text></g>
-<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.4.0</title><rect x="586.0" y="1685.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1691.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<g class="packageMetadataPill"><title>Dart ^3.9.0</title><rect x="571.45" y="1701.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="1706" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.9.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.9.0</title><rect x="586.0" y="1685.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1691.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
 <text x="468.0" y="1680.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">shelf</text>
-<text x="732.0" y="1680.0" class="packageLabelDerivedVersion" text-anchor="end">^1.4.2</text>
+<text x="732.0" y="1680.0" class="packageLabelDerivedVersion" text-anchor="end">^1.4.3</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,1683.0 L 746.0,1676.0 Q 749.0,1676.0 749.0,1679.0 L 749.0,1687.0 Q 749.0,1690.0 746.0,1690.0 Z" fill="#3b82f6"/>
@@ -849,10 +860,10 @@
   <path d="M 734.0,1752.0 L 746.0,1745.0 Q 749.0,1745.0 749.0,1748.0 L 749.0,1756.0 Q 749.0,1759.0 746.0,1759.0 Z" fill="#3b82f6"/>
   <text x="744.32" y="1753.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. test</title></g><g class="packageNode">
 <rect x="460.0" y="1790.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<g class="packageMetadataPill"><title>Dart ^3.3.0</title><rect x="571.45" y="1829.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="1834" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.3.0</text></g>
-<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.3.0</title><rect x="586.0" y="1813.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1819.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<g class="packageMetadataPill"><title>Dart ^3.9.0</title><rect x="571.45" y="1829.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="1834" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.9.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.9.0</title><rect x="586.0" y="1813.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="1819.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
 <text x="468.0" y="1808.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">shelf_static</text>
-<text x="732.0" y="1808.0" class="packageLabelDerivedVersion" text-anchor="end">^1.1.3</text>
+<text x="732.0" y="1808.0" class="packageLabelDerivedVersion" text-anchor="end">^1.2.0</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,1811.0 L 746.0,1804.0 Q 749.0,1804.0 749.0,1807.0 L 749.0,1815.0 Q 749.0,1818.0 746.0,1818.0 Z" fill="#3b82f6"/>
@@ -987,98 +998,118 @@
   <path d="M 734.0,2658.0 L 746.0,2651.0 Q 749.0,2651.0 749.0,2654.0 L 749.0,2662.0 Q 749.0,2665.0 746.0,2665.0 Z" fill="#3b82f6"/>
   <text x="744.32" y="2659.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. coverage</title></g><g class="packageNode">
 <rect x="460.0" y="2696.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<g class="packageMetadataPill"><title>Dart ^3.10.0-0.0.dev</title><rect x="553.0" y="2735.0" width="94.0" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="2740" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.10.0-0.0.dev</text></g>
-<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.10.0-0.0.dev</title><rect x="586.0" y="2719.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="2725.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
-<text x="468.0" y="2714.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">frontend_server_client</text>
-<text x="732.0" y="2714.0" class="packageLabelDerivedVersion" text-anchor="end">^4.1.0</text>
+<g class="packageMetadataPill"><title>Dart ^3.7.0</title><rect x="571.45" y="2735.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="2740" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.7.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.7.0</title><rect x="586.0" y="2719.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="2725.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<text x="468.0" y="2714.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">cli_util</text>
+<text x="732.0" y="2714.0" class="packageLabelDerivedVersion" text-anchor="end">^0.6.0</text>
 </g>
 <g class="badge incomingBadge">
-  <path d="M 734.0,2722.0 L 746.0,2715.0 Q 749.0,2715.0 749.0,2718.0 L 749.0,2726.0 Q 749.0,2729.0 746.0,2729.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="2723.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. test_core</title></g><g class="packageNode">
+  <path d="M 734.0,2717.0 L 746.0,2710.0 Q 749.0,2710.0 749.0,2713.0 L 749.0,2721.0 Q 749.0,2724.0 746.0,2724.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="2718.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. coverage</title></g><g class="badge outgoingBadge">
+  <path d="M 746.0,2728.0 L 734.0,2721.0 Q 731.0,2721.0 731.0,2724.0 L 731.0,2732.0 Q 731.0,2735.0 734.0,2735.0 Z" fill="#10b981"/>
+  <text x="735.68" y="2729.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. ffi</title></g><g class="packageNode">
 <rect x="460.0" y="2760.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<g class="packageMetadataPill"><title>Dart ^3.4.0</title><rect x="571.45" y="2799.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="2804" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.4.0</text></g>
-<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.4.0</title><rect x="586.0" y="2783.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="2789.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
-<text x="468.0" y="2778.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">http_parser</text>
-<text x="732.0" y="2778.0" class="packageLabelDerivedVersion" text-anchor="end">^4.1.2</text>
+<g class="packageMetadataPill"><title>Dart ^3.13.0-0.0.dev</title><rect x="553.0" y="2799.0" width="94.0" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="2804" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.13.0-0.0.dev</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.13.0-0.0.dev</title><rect x="586.0" y="2783.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="2789.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<text x="468.0" y="2778.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">frontend_server_client</text>
+<text x="732.0" y="2778.0" class="packageLabelDerivedVersion" text-anchor="end">^4.2.0</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,2786.0 L 746.0,2779.0 Q 749.0,2779.0 749.0,2782.0 L 749.0,2790.0 Q 749.0,2793.0 746.0,2793.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="2787.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. shelf
-2. shelf_static</title></g><g class="packageNode">
+  <text x="744.32" y="2787.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. test_core</title></g><g class="packageNode">
 <rect x="460.0" y="2824.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
 <g class="packageMetadataPill"><title>Dart ^3.4.0</title><rect x="571.45" y="2863.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="2868" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.4.0</text></g>
 <g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.4.0</title><rect x="586.0" y="2847.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="2853.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
-<text x="468.0" y="2842.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">logging</text>
-<text x="732.0" y="2842.0" class="packageLabelDerivedVersion" text-anchor="end">^1.3.0</text>
+<text x="468.0" y="2842.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">http_parser</text>
+<text x="732.0" y="2842.0" class="packageLabelDerivedVersion" text-anchor="end">^4.1.2</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,2850.0 L 746.0,2843.0 Q 749.0,2843.0 749.0,2846.0 L 749.0,2854.0 Q 749.0,2857.0 746.0,2857.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="2851.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. coverage
-2. webkit_inspection_protocol</title></g><g class="packageNode">
+  <text x="744.32" y="2851.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. shelf
+2. shelf_static</title></g><g class="packageNode">
 <rect x="460.0" y="2888.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<g class="packageMetadataPill"><title>Dart ^3.2.0</title><rect x="571.45" y="2927.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="2932" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.2.0</text></g>
-<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.2.0</title><rect x="586.0" y="2911.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="2917.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
-<text x="468.0" y="2906.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">mime</text>
-<text x="732.0" y="2906.0" class="packageLabelDerivedVersion" text-anchor="end">^2.1.0</text>
+<g class="packageMetadataPill"><title>Dart ^3.4.0</title><rect x="571.45" y="2927.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="2932" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.4.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.4.0</title><rect x="586.0" y="2911.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="2917.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<text x="468.0" y="2906.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">logging</text>
+<text x="732.0" y="2906.0" class="packageLabelDerivedVersion" text-anchor="end">^1.3.0</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,2914.0 L 746.0,2907.0 Q 749.0,2907.0 749.0,2910.0 L 749.0,2918.0 Q 749.0,2921.0 746.0,2921.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="2915.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. shelf_static</title></g><g class="packageNode">
+  <text x="744.32" y="2915.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. coverage
+2. webkit_inspection_protocol</title></g><g class="packageNode">
 <rect x="460.0" y="2952.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<g class="packageMetadataPill"><title>Dart ^3.3.0</title><rect x="571.45" y="2991.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="2996" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.3.0</text></g>
-<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.3.0</title><rect x="586.0" y="2975.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="2981.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
-<text x="468.0" y="2970.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">source_map_stack_trace</text>
-<text x="732.0" y="2970.0" class="packageLabelDerivedVersion" text-anchor="end">^2.1.2</text>
+<g class="packageMetadataPill"><title>Dart ^3.2.0</title><rect x="571.45" y="2991.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="2996" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.2.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.2.0</title><rect x="586.0" y="2975.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="2981.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<text x="468.0" y="2970.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">mime</text>
+<text x="732.0" y="2970.0" class="packageLabelDerivedVersion" text-anchor="end">^2.1.0</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,2978.0 L 746.0,2971.0 Q 749.0,2971.0 749.0,2974.0 L 749.0,2982.0 Q 749.0,2985.0 746.0,2985.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="2979.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. test_core</title></g><g class="packageNode">
+  <text x="744.32" y="2979.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. shelf_static</title></g><g class="packageNode">
 <rect x="460.0" y="3016.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
 <g class="packageMetadataPill"><title>Dart ^3.3.0</title><rect x="571.45" y="3055.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="3060" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.3.0</text></g>
 <g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.3.0</title><rect x="586.0" y="3039.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="3045.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
-<text x="468.0" y="3034.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">source_maps</text>
-<text x="732.0" y="3034.0" class="packageLabelDerivedVersion" text-anchor="end">^0.10.14</text>
+<text x="468.0" y="3034.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">source_map_stack_trace</text>
+<text x="732.0" y="3034.0" class="packageLabelDerivedVersion" text-anchor="end">^2.1.2</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,3042.0 L 746.0,3035.0 Q 749.0,3035.0 749.0,3038.0 L 749.0,3046.0 Q 749.0,3049.0 746.0,3049.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="3043.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. coverage
-2. test_core</title></g><g class="packageNode">
+  <text x="744.32" y="3043.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. test_core</title></g><g class="packageNode">
 <rect x="460.0" y="3080.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<g class="packageMetadataPill"><title>Dart ^3.1.0</title><rect x="571.45" y="3119.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="3124" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.1.0</text></g>
-<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.1.0</title><rect x="586.0" y="3103.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="3109.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
-<text x="468.0" y="3098.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">term_glyph</text>
-<text x="732.0" y="3098.0" class="packageLabelDerivedVersion" text-anchor="end">^1.2.2</text>
+<g class="packageMetadataPill"><title>Dart ^3.3.0</title><rect x="571.45" y="3119.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="3124" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.3.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.3.0</title><rect x="586.0" y="3103.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="3109.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<text x="468.0" y="3098.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">source_maps</text>
+<text x="732.0" y="3098.0" class="packageLabelDerivedVersion" text-anchor="end">^0.10.14</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,3106.0 L 746.0,3099.0 Q 749.0,3099.0 749.0,3102.0 L 749.0,3110.0 Q 749.0,3113.0 746.0,3113.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="3107.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. matcher
-2. source_span
-3. test_api</title></g><g class="packageNode">
+  <text x="744.32" y="3107.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. coverage
+2. test_core</title></g><g class="packageNode">
 <rect x="460.0" y="3144.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<g class="packageMetadataPill"><title>Dart ^3.5.0</title><rect x="571.45" y="3183.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="3188" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.5.0</text></g>
-<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.5.0</title><rect x="586.0" y="3167.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="3173.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
-<text x="468.0" y="3162.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">vm_service</text>
-<text x="732.0" y="3162.0" class="packageLabelDerivedVersion" text-anchor="end">^15.3.0</text>
+<g class="packageMetadataPill"><title>Dart ^3.1.0</title><rect x="571.45" y="3183.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="3188" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.1.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.1.0</title><rect x="586.0" y="3167.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="3173.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<text x="468.0" y="3162.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">term_glyph</text>
+<text x="732.0" y="3162.0" class="packageLabelDerivedVersion" text-anchor="end">^1.2.2</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,3170.0 L 746.0,3163.0 Q 749.0,3163.0 749.0,3166.0 L 749.0,3174.0 Q 749.0,3177.0 746.0,3177.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="3171.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. coverage
-2. test_core</title></g><g class="packageNode">
+  <text x="744.32" y="3171.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">3</text><title>1. matcher
+2. source_span
+3. test_api</title></g><g class="packageNode">
 <rect x="460.0" y="3208.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<g class="packageMetadataPill"><title>Dart ^3.4.0</title><rect x="571.45" y="3247.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="3252" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.4.0</text></g>
-<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.4.0</title><rect x="586.0" y="3231.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="3237.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
-<text x="468.0" y="3226.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">web</text>
-<text x="732.0" y="3226.0" class="packageLabelDerivedVersion" text-anchor="end">^1.1.1</text>
+<g class="packageMetadataPill"><title>Dart ^3.5.0</title><rect x="571.45" y="3247.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="3252" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.5.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.5.0</title><rect x="586.0" y="3231.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="3237.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<text x="468.0" y="3226.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">vm_service</text>
+<text x="732.0" y="3226.0" class="packageLabelDerivedVersion" text-anchor="end">^15.4.0</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,3234.0 L 746.0,3227.0 Q 749.0,3227.0 749.0,3230.0 L 749.0,3238.0 Q 749.0,3241.0 746.0,3241.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="3235.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. web_socket_channel</title></g><g class="packageNode">
+  <text x="744.32" y="3235.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">2</text><title>1. coverage
+2. test_core</title></g><g class="packageNode">
 <rect x="460.0" y="3272.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
-<g class="packageMetadataPill"><title>Dart ^3.4.0</title><rect x="571.45" y="3311.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="3316" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.4.0</text></g>
-<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.4.0</title><rect x="586.0" y="3295.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="3301.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
-<text x="468.0" y="3290.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">web_socket</text>
-<text x="732.0" y="3290.0" class="packageLabelDerivedVersion" text-anchor="end">^1.0.1</text>
+<g class="packageMetadataPill"><title>Dart ^3.13.0</title><rect x="569.4" y="3311.0" width="61.199999999999996" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="3316" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.13.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.13.0</title><rect x="586.0" y="3295.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="3301.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<text x="468.0" y="3290.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">web</text>
+<text x="732.0" y="3290.0" class="packageLabelDerivedVersion" text-anchor="end">^1.1.2</text>
 </g>
 <g class="badge incomingBadge">
   <path d="M 734.0,3298.0 L 746.0,3291.0 Q 749.0,3291.0 749.0,3294.0 L 749.0,3302.0 Q 749.0,3305.0 746.0,3305.0 Z" fill="#3b82f6"/>
-  <text x="744.32" y="3299.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. web_socket_channel</title></g></svg>
+  <text x="744.32" y="3299.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. web_socket_channel</title></g><g class="packageNode">
+<rect x="460.0" y="3336.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="packageMetadataPill"><title>Dart ^3.4.0</title><rect x="571.45" y="3375.0" width="57.099999999999994" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="3380" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart ^3.4.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK ^3.4.0</title><rect x="586.0" y="3359.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="3365.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<text x="468.0" y="3354.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">web_socket</text>
+<text x="732.0" y="3354.0" class="packageLabelDerivedVersion" text-anchor="end">^1.0.1</text>
+</g>
+<g class="badge incomingBadge">
+  <path d="M 734.0,3362.0 L 746.0,3355.0 Q 749.0,3355.0 749.0,3358.0 L 749.0,3366.0 Q 749.0,3369.0 746.0,3369.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="3363.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. web_socket_channel</title></g><g class="packageNode">
+<rect x="460.0" y="3474.0" width="280.0" height="52.0" rx="8.0" ry="8.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2"/>
+<g class="packageMetadataPill"><title>Dart &gt;=3.7.0 &lt;4.0.0</title><rect x="555.05" y="3513.0" width="89.89999999999999" height="9.0" rx="4.5" ry="4.5" class="packageMetadataPillShape"/><text x="600.0" y="3518" class="packageLabelMetadata" text-anchor="middle" dominant-baseline="middle">Dart &gt;=3.7.0 &lt;4.0.0</text></g>
+<g class="platformBadge platformBadge--dart"><title>Dart SDK &gt;=3.7.0 &lt;4.0.0</title><rect x="586.0" y="3497.0" width="28.0" height="13.0" rx="6.5" ry="6.5" fill="#0175c2" stroke="#0369a1" stroke-width="0.6"/><text x="600.0" y="3503.5" class="packageLabelPlatformBadge" text-anchor="middle" dominant-baseline="middle">Dart</text></g>
+<text x="468.0" y="3492.0" class="packageLabelDerivedName packageLabelCaption" text-anchor="start">ffi</text>
+<text x="732.0" y="3492.0" class="packageLabelDerivedVersion" text-anchor="end">^2.2.0</text>
+</g>
+<g class="badge incomingBadge">
+  <path d="M 734.0,3500.0 L 746.0,3493.0 Q 749.0,3493.0 749.0,3496.0 L 749.0,3504.0 Q 749.0,3507.0 746.0,3507.0 Z" fill="#3b82f6"/>
+  <text x="744.32" y="3501.0" text-anchor="middle" fill="white" font-size="8.0" font-weight="bold">1</text><title>1. cli_util</title></g></svg>

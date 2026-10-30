@@ -267,6 +267,11 @@ class FcheckConfig {
     );
   }
 
+  /// The analysis directory from [resolveAnalysisDirectory], absolute and
+  /// normalized.
+  Directory get analysisDirectory =>
+      Directory(p.normalize(resolveAnalysisDirectory().absolute.path));
+
   /// Resolves the effective analysis directory using `input.root` when present.
   Directory resolveAnalysisDirectory() {
     final root = inputRoot?.trim();

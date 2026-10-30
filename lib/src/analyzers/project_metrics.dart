@@ -25,6 +25,9 @@ import 'package:fcheck/src/models/project_type.dart';
 class ProjectMetrics {
   static const MetricsAnalyzer _metricsAnalyzer = MetricsAnalyzer();
 
+  /// Multiplier converting a [0.0, 1.0] ratio into percentage points.
+  static const int _percentageMultiplier = 100;
+
   /// The detected type of the analyzed project.
   final ProjectType projectType;
 
@@ -607,6 +610,30 @@ class ProjectMetrics {
   /// Per-analyzer scoring breakdown from the project metrics analyzer.
   List<AnalyzerScoreBreakdown> get analyzerScores =>
       _analysisResult.analyzerScores;
+
+  /// Percentage points each analyzer takes off a perfect score, by analyzer
+  /// key, as the CLI reports them (for example `-9.01%`).
+  ///
+  /// An enabled analyzer's shortfall `1 - score` is spread over the enabled
+  /// analyzers that count; documentation counts only once it has issues.
+  /// Disabled analyzers deduct nothing.
+  Map<String, double> get analyzerDeductionPercents {
+    final countedAnalyzers = analyzerScores
+        .where((score) => score.enabled)
+        .where(
+          (score) =>
+              score.key != 'documentation' || documentationIssues.isNotEmpty,
+        )
+        .length;
+    final divisor = countedAnalyzers == 0 ? 1 : countedAnalyzers;
+    return {
+      for (final score in analyzerScores)
+        score.key: score.enabled
+            ? ((1 - score.score).clamp(0.0, 1.0) * _percentageMultiplier) /
+                  divisor
+            : 0,
+    };
+  }
 
   /// Dead code issues classified as dead files.
   List<DeadCodeIssue> get deadFileIssues => deadCodeIssues
