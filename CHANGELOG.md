@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - The CLI builds its engine through `AnalyzeFolder.fromConfig`.
+- README: new "reuse fCheck in any app" section with [FIDE](https://github.com/vteam-com/FIDE) as a real-world embedding example.
 
 ## [1.5.1] – 2026-10-07
 
