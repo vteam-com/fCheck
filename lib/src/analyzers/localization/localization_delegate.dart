@@ -27,12 +27,48 @@ final RegExp _currentLocalizationMemberAccessPattern = RegExp(
 final RegExp _contextL10nMemberAccessPattern = RegExp(
   r'\b[A-Za-z_][A-Za-z0-9_]*\.l10n\.([A-Za-z_][A-Za-z0-9_]*)\s*(?:\(|\b)',
 );
+
+/// Literal every [_contextL10nMemberAccessPattern] match contains; checking it
+/// first skips the identifier-anchored regex scan on most files.
+const String _contextL10nMemberAccessMarker = '.l10n.';
+
+/// Literals of which every [_assignedLocalizationVariablePattern] match
+/// contains at least one; checking them first skips that costly scan.
+const List<String> _assignedLocalizationVariableMarkers = <String>[
+  'AppLocalizations.of(',
+  'S.of(',
+  '.l10n',
+];
+
 final RegExp _typedLocalizationVariablePattern = RegExp(
   r'\b(?:AppLocalizations(?:[A-Za-z_][A-Za-z0-9_]*)?|S)\??\s+([A-Za-z_][A-Za-z0-9_]*)\b',
 );
 final RegExp _assignedLocalizationVariablePattern = RegExp(
   r'\b(?:final|var|const|[A-Za-z_][A-Za-z0-9_<>,?]*)\s+([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(?:(?:AppLocalizations|S)\.of\([^)]*\)|[A-Za-z_][A-Za-z0-9_]*\.l10n)\b',
 );
+
+/// Discovers variable names that hold localization accessor instances.
+Set<String> _extractLocalizationAccessorNames(String content) {
+  final accessorNames = <String>{..._knownLocalizationAccessorNames};
+  for (final match in _typedLocalizationVariablePattern.allMatches(content)) {
+    final variableName = match.group(1);
+    if (variableName != null) {
+      accessorNames.add(variableName);
+    }
+  }
+  if (!_assignedLocalizationVariableMarkers.any(content.contains)) {
+    return accessorNames;
+  }
+  for (final match in _assignedLocalizationVariablePattern.allMatches(
+    content,
+  )) {
+    final variableName = match.group(1);
+    if (variableName != null) {
+      accessorNames.add(variableName);
+    }
+  }
+  return accessorNames;
+}
 
 class _ParsedLocalizationArbFile {
   const _ParsedLocalizationArbFile({
@@ -746,14 +782,16 @@ class LocalizationDelegate implements AnalyzerDelegate {
           usedKeys: usedKeys,
         ) ||
         hasLocalizationAccess;
-    hasLocalizationAccess =
-        _addUsedKeysFromMatches(
-          pattern: _contextL10nMemberAccessPattern,
-          content: content,
-          candidateKeys: candidateKeys,
-          usedKeys: usedKeys,
-        ) ||
-        hasLocalizationAccess;
+    if (content.contains(_contextL10nMemberAccessMarker)) {
+      hasLocalizationAccess =
+          _addUsedKeysFromMatches(
+            pattern: _contextL10nMemberAccessPattern,
+            content: content,
+            candidateKeys: candidateKeys,
+            usedKeys: usedKeys,
+          ) ||
+          hasLocalizationAccess;
+    }
     final accessorNames = _extractLocalizationAccessorNames(content);
     for (final accessorName in accessorNames) {
       // This pattern matches dynamic localization member access such as
@@ -802,26 +840,6 @@ class LocalizationDelegate implements AnalyzerDelegate {
       }
     }
     return foundMatch;
-  }
-
-  /// Discovers variable names that hold localization accessor instances.
-  Set<String> _extractLocalizationAccessorNames(String content) {
-    final accessorNames = <String>{..._knownLocalizationAccessorNames};
-    for (final match in _typedLocalizationVariablePattern.allMatches(content)) {
-      final variableName = match.group(1);
-      if (variableName != null) {
-        accessorNames.add(variableName);
-      }
-    }
-    for (final match in _assignedLocalizationVariablePattern.allMatches(
-      content,
-    )) {
-      final variableName = match.group(1);
-      if (variableName != null) {
-        accessorNames.add(variableName);
-      }
-    }
-    return accessorNames;
   }
 
   /// Collects duplicate-key localization issues from parsed ARB files.

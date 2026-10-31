@@ -32,12 +32,20 @@ class DocumentationVisitor extends RecursiveAstVisitor<void> {
   /// Issues found in this file.
   final List<DocumentationIssue> issues = <DocumentationIssue>[];
 
+  /// Offset-to-line lookup matching [lines] numbering, built once per file.
+  late final int Function(int offset) _newlineLineNumberForOffset =
+      IgnoreConfig.newlineLineNumberLookup(content);
+
+  /// Lines carrying `// ignore: fcheck_documentation`, collected once.
+  late final Set<int> _ignoredLineNumbers =
+      IgnoreConfig.collectIgnoredLineNumbers(lines, 'documentation');
+
   @override
   void visitClassDeclaration(ClassDeclaration node) {
     final className = node.namePart.toString();
     if (_isPublicName(className) &&
         !_hasDocumentationComment(node) &&
-        !IgnoreConfig.isNodeIgnored(node, content, 'documentation')) {
+        !_isNodeIgnored(node)) {
       issues.add(
         DocumentationIssue(
           type: DocumentationIssueType.undocumentedPublicClass,
@@ -64,7 +72,7 @@ class DocumentationVisitor extends RecursiveAstVisitor<void> {
       return;
     }
 
-    if (IgnoreConfig.isNodeIgnored(node, content, 'documentation')) {
+    if (_isNodeIgnored(node)) {
       super.visitFunctionDeclaration(node);
       return;
     }
@@ -97,7 +105,7 @@ class DocumentationVisitor extends RecursiveAstVisitor<void> {
 
   @override
   void visitMethodDeclaration(MethodDeclaration node) {
-    if (IgnoreConfig.isNodeIgnored(node, content, 'documentation')) {
+    if (_isNodeIgnored(node)) {
       super.visitMethodDeclaration(node);
       return;
     }
@@ -202,6 +210,14 @@ class DocumentationVisitor extends RecursiveAstVisitor<void> {
     }
     return false;
   }
+
+  /// Returns whether the node or an ancestor is covered by a documentation
+  /// ignore directive.
+  bool _isNodeIgnored(AstNode node) => IgnoreConfig.isNodeIgnoredWithLines(
+    node,
+    ignoredLineNumbers: _ignoredLineNumbers,
+    lineNumberForOffset: _newlineLineNumberForOffset,
+  );
 }
 
 class _ComplexityCounter extends RecursiveAstVisitor<void> {

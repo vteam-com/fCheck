@@ -17,6 +17,17 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
   /// Issues discovered during traversal.
   final List<MagicNumberIssue> foundIssues = <MagicNumberIssue>[];
 
+  /// Offset-to-line lookup built once per file.
+  late final int Function(int offset) _lineNumberForOffset =
+      IgnoreConfig.newlineLineNumberLookup(content);
+
+  /// Lines carrying `// ignore: fcheck_magic_numbers`, collected once per file.
+  late final Set<int> _ignoredLineNumbers =
+      IgnoreConfig.collectIgnoredLineNumbers(
+        content.split('\n'),
+        'magic_numbers',
+      );
+
   static const Set<num> _allowedValues = {0, 1, -1};
 
   @override
@@ -46,7 +57,11 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
         _isInStaticConstDeclaration(node) ||
         _isInFinalIntDeclaration(node) ||
         _isInsideConstExpression(node) ||
-        IgnoreConfig.isNodeIgnored(node, content, 'magic_numbers')) {
+        IgnoreConfig.isNodeIgnoredWithLines(
+          node,
+          ignoredLineNumbers: _ignoredLineNumbers,
+          lineNumberForOffset: _lineNumberForOffset,
+        )) {
       return;
     }
 
@@ -143,8 +158,5 @@ class MagicNumberVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Internal helper used by fcheck analysis and reporting.
-  int _getLineNumber(int offset) {
-    final lines = content.substring(0, offset).split('\n');
-    return lines.length;
-  }
+  int _getLineNumber(int offset) => _lineNumberForOffset(offset);
 }

@@ -54,6 +54,17 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   /// Whether the project uses localization.
   final bool usesLocalization;
 
+  /// File lines, split once per file.
+  late final List<String> _lines = content.split('\n');
+
+  /// Offset-to-line lookup built once per file.
+  late final int Function(int offset) _lineNumberForOffset =
+      IgnoreConfig.newlineLineNumberLookup(content);
+
+  /// Lines carrying `// ignore: fcheck_hardcoded_strings`, collected once.
+  late final Set<int> _ignoredLineNumbers =
+      IgnoreConfig.collectIgnoredLineNumbers(_lines, 'hardcoded_strings');
+
   /// Visits a simple string literal node in the AST.
   ///
   /// This method is called for each simple string literal encountered during
@@ -173,7 +184,11 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     }
 
     // Skip strings in ignored sections
-    if (IgnoreConfig.isNodeIgnored(node, content, 'hardcoded_strings')) {
+    if (IgnoreConfig.isNodeIgnoredWithLines(
+      node,
+      ignoredLineNumbers: _ignoredLineNumbers,
+      lineNumberForOffset: _lineNumberForOffset,
+    )) {
       return;
     }
 
@@ -236,7 +251,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   /// Internal helper used by fcheck analysis and reporting.
   bool _hasWidgetLintIgnoreComment(StringLiteral node) {
     final int lineNumber = _getLineNumber(node.offset);
-    final List<String> lines = content.split('\n');
+    final List<String> lines = _lines;
 
     if (lineNumber > 0 && lineNumber <= lines.length) {
       final String currentLine = lines[lineNumber - 1];
@@ -740,8 +755,5 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   }
 
   /// Calculates the 1-based line number for a given character offset.
-  int _getLineNumber(int offset) {
-    final List<String> lines = content.substring(0, offset).split('\n');
-    return lines.length;
-  }
+  int _getLineNumber(int offset) => _lineNumberForOffset(offset);
 }

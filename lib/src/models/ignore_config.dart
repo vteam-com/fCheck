@@ -2,6 +2,7 @@ import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/token.dart';
+import 'package:analyzer/source/line_info.dart';
 
 /// Utility for detecting ignore directives in Dart files.
 class IgnoreConfig {
@@ -48,6 +49,7 @@ class IgnoreConfig {
     r'\bfcheck_[a-z_]+\b',
     caseSensitive: false,
   );
+  static final int _newlineCodeUnit = '\n'.codeUnitAt(0);
 
   /// Checks for a top-of-file ignore directive matching [expectedComment].
   ///
@@ -224,33 +226,20 @@ class IgnoreConfig {
     return buffer.toString();
   }
 
-  /// Checks if a specific AST node is within an ignored section.
+  /// Builds a 1-based offset-to-line lookup for [content].
   ///
-  /// This method traverses up the AST to check if any parent node is within
-  /// an ignored section based on comment directives.
-  ///
-  /// [node] The AST node to check.
-  /// [content] The raw content of the file.
-  /// [domain] The specific domain to check for.
-  ///
-  /// Returns true if the node or any of its parents are within an ignored section.
-  static bool isNodeIgnored(AstNode node, String content, String domain) {
-    final lines = content.split('\n');
-    final ignoredLineNumbers = collectIgnoredLineNumbers(lines, domain);
-    if (ignoredLineNumbers.isEmpty) {
-      return false;
-    }
-    AstNode? current = node;
-    while (current != null) {
-      final offset = current.offset;
-      final lineNumber = _getLineNumber(content, offset);
-      if (ignoredLineNumbers.contains(lineNumber)) {
-        return true;
+  /// Only `\n` counts as a line break, so line numbers align with the indices
+  /// of `content.split('\n')` used by [collectIgnoredLineNumbers]. Lookups are
+  /// a binary search instead of a scan of the content before each offset.
+  static int Function(int) newlineLineNumberLookup(String content) {
+    final lineStarts = <int>[0];
+    for (var index = 0; index < content.length; index++) {
+      if (content.codeUnitAt(index) == _newlineCodeUnit) {
+        lineStarts.add(index + 1);
       }
-
-      current = current.parent;
     }
-    return false;
+    final lineInfo = LineInfo(lineStarts);
+    return (offset) => lineInfo.getLocation(offset).lineNumber;
   }
 
   /// Checks whether [lineContent] has `// ignore: fcheck_<domain>`.
@@ -308,11 +297,5 @@ class IgnoreConfig {
       current = current.parent;
     }
     return false;
-  }
-
-  /// Calculates the 1-based line number for a given character offset.
-  static int _getLineNumber(String content, int offset) {
-    final lines = content.substring(0, offset).split('\n');
-    return lines.length;
   }
 }

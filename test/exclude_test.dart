@@ -158,6 +158,7 @@ void main() {
           _,
           _,
           _,
+          _,
         ) = FileUtils.scanDirectory(
           tempDir,
         );
@@ -199,6 +200,7 @@ void main() {
           excludedDartFilesCount,
           excludedFoldersCount,
           excludedFilesCount,
+          _,
           _,
           _,
           _,
@@ -423,6 +425,7 @@ void main() {
           testFilesCount,
           testDartFilesCount,
           _,
+          _,
         ) = FileUtils.scanDirectory(
           tempDir,
         );
@@ -477,6 +480,7 @@ void main() {
           testFilesCount,
           testDartFilesCount,
           customExcludedDartFilesCount,
+          testDartFiles,
         ) = FileUtils.scanDirectory(
           tempDir,
           excludePatterns: ['test/*'],
@@ -503,6 +507,7 @@ void main() {
         expect(testDirectoriesCount, equals(2));
         expect(testFilesCount, equals(2));
         expect(testDartFilesCount, equals(2));
+        expect(testDartFiles, hasLength(testDartFilesCount));
         expect(customExcludedDartFilesCount, equals(0));
 
         expect(dartFiles.any((f) => f.path.contains('main.dart')), isTrue);
@@ -541,6 +546,7 @@ void main() {
           _,
           _,
           _,
+          _,
         ) = FileUtils.scanDirectory(
           tempDir,
         );
@@ -575,7 +581,7 @@ void main() {
         File('${integrationTestDir.path}/integration_test_file.dart')
             .writeAsStringSync('class IT {}');
 
-        final (_, _, _, _, _, _, _, _, _, count) = FileUtils.scanDirectory(
+        final (_, _, _, _, _, _, _, _, _, count, _) = FileUtils.scanDirectory(
           tempDir,
           excludePatterns: ['helpers/*'],
         );
@@ -585,7 +591,7 @@ void main() {
 
       test('returns zero when no custom patterns are provided', () {
         File('${tempDir.path}/main.dart').writeAsStringSync('void main() {}');
-        final (_, _, _, _, _, _, _, _, _, count) = FileUtils.scanDirectory(
+        final (_, _, _, _, _, _, _, _, _, count, _) = FileUtils.scanDirectory(
           tempDir,
         );
         expect(count, equals(0));
@@ -685,10 +691,10 @@ void main() {
           ..createSync(recursive: true)
           ..writeAsStringSync(testSource);
 
-        final (_, _, _, _, _, _, _, _, testDartFilesCount, _) =
+        final (_, _, _, _, _, _, _, _, testDartFilesCount, _, testDartFiles) =
             FileUtils.scanDirectory(tempDir);
         final testFiles = analyzeTestFiles(
-          projectDir: tempDir,
+          testDartFiles: testDartFiles,
           rootPath: tempDir.path,
           packageName: 'app',
           analyzedPaths: const <String>{},
@@ -696,6 +702,67 @@ void main() {
 
         expect(testDartFilesCount, equals(1));
         expect(testFiles.testCaseCount, equals(1));
+      });
+    });
+
+    group('FileUtils.scanDirectory root path spellings', () {
+      test('absolute, trailing-slash and relative roots give same results', () {
+        for (final relativeFile in [
+          'lib/main.dart',
+          'lib/gen/model.g.dart',
+          'lib/helpers/util.dart',
+          'test/main_test.dart',
+          'build/plugin/test/plugin_test.dart',
+          '.dart_tool/tool.dart',
+        ]) {
+          File(p.join(tempDir.path, relativeFile))
+            ..createSync(recursive: true)
+            ..writeAsStringSync('void f() {}');
+        }
+
+        List<Object> scanSummary(Directory root) {
+          final (
+            dartFiles,
+            folderCount,
+            fileCount,
+            excludedDartFilesCount,
+            excludedFoldersCount,
+            excludedFilesCount,
+            testDirectoriesCount,
+            testFilesCount,
+            testDartFilesCount,
+            customExcludedDartFilesCount,
+            testDartFiles,
+          ) = FileUtils.scanDirectory(
+            root,
+            excludePatterns: ['**/helpers/**', 'lib/gen/*'],
+          );
+          String relative(File file) => p.relative(file.path, from: root.path);
+          return [
+            dartFiles.map(relative).toList()..sort(),
+            folderCount,
+            fileCount,
+            excludedDartFilesCount,
+            excludedFoldersCount,
+            excludedFilesCount,
+            testDirectoriesCount,
+            testFilesCount,
+            testDartFilesCount,
+            customExcludedDartFilesCount,
+            testDartFiles.map(relative).toList()..sort(),
+          ];
+        }
+
+        final absolute = scanSummary(tempDir);
+        expect(absolute.first, equals(['lib/main.dart']));
+        expect(
+          scanSummary(Directory('${tempDir.path}${p.separator}')),
+          equals(absolute),
+        );
+        expect(
+          scanSummary(Directory(p.relative(tempDir.path))),
+          equals(absolute),
+        );
       });
     });
   });

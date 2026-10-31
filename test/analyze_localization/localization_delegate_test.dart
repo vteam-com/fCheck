@@ -571,6 +571,55 @@ class AppLocalizations {
       },
     );
 
+    // Each form reaches the key through a regex that is gated by a literal
+    // pre-check ('.l10n.' or 'AppLocalizations.of(' / 'S.of(' / '.l10n').
+    final usageCases = <String, ({String body, bool keyCountsAsUsed})>{
+      'context.l10n.key': (
+        body: 'print(context.l10n.$_helloKey);',
+        keyCountsAsUsed: true,
+      ),
+      'alias assigned from context.l10n': (
+        body: 'final tr = context.l10n;\n  print(tr.$_helloKey);',
+        keyCountsAsUsed: true,
+      ),
+      'alias assigned from AppLocalizations.of()': (
+        body:
+            'final tr = AppLocalizations.of(context);\n  print(tr.$_helloKey);',
+        keyCountsAsUsed: true,
+      ),
+      'alias assigned from S.of()': (
+        body: 'final tr = S.of(context);\n  print(tr.$_helloKey);',
+        keyCountsAsUsed: true,
+      ),
+      'alias assigned from an unrelated .of()': (
+        body:
+            'print(context.l10n.other);\n'
+            '  final tr = Theme.of(context);\n  print(tr.$_helloKey);',
+        keyCountsAsUsed: false,
+      ),
+    };
+    for (final MapEntry(key: label, value: usage) in usageCases.entries) {
+      test('analyzeProject key usage via $label', () async {
+        final l10nDir = Directory(p.join(tempDir.path, _l10nRelativePath));
+        final libDir = Directory(p.join(tempDir.path, 'lib'));
+        await l10nDir.create(recursive: true);
+        await libDir.create(recursive: true);
+        await _writeArbFile(l10nDir, _englishArb, {
+          '@@locale': 'en',
+          _helloKey: 'Hello',
+        });
+        await File(p.join(libDir.path, 'main.dart')).writeAsString('''
+void useKey(dynamic context) {
+  ${usage.body}
+}
+''');
+
+        final result = delegate.analyzeProject(tempDir);
+
+        expect(result, usage.keyCountsAsUsed ? isEmpty : hasLength(_one));
+      });
+    }
+
     test(
       'analyzeProject does not flag key used via AppLocalizations.of()!.key',
       () async {

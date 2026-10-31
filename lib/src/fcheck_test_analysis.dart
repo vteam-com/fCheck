@@ -7,19 +7,17 @@ import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzers/shared/dependency_uri_utils.dart';
 import 'package:fcheck/src/fcheck_test_summary.dart';
 import 'package:fcheck/src/fcheck_test_visitor.dart';
-import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:fcheck/src/input_output/path_style_utils.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:path/path.dart' as p;
 
-const Set<String> _testDirectoryNames = {'test', 'integration_test'};
-
-/// Counts test cases and collects project imports from the test sources
-/// under [projectDir] in one pass.
+/// Counts test cases and collects project imports from [testDartFiles] in
+/// one pass.
 ///
-/// Only imports found in [analyzedPaths] are kept.
+/// [testDartFiles] comes from the project directory scan, so the tree is not
+/// walked a second time. Only imports found in [analyzedPaths] are kept.
 ({int testCaseCount, Set<String> importedPaths}) analyzeTestFiles({
-  required Directory projectDir,
+  required List<File> testDartFiles,
   required String rootPath,
   required String packageName,
   required Set<String> analyzedPaths,
@@ -27,7 +25,7 @@ const Set<String> _testDirectoryNames = {'test', 'integration_test'};
   var totalTestCases = 0;
   final importedPaths = <String>{};
 
-  for (final file in _listTestDartFiles(projectDir)) {
+  for (final file in testDartFiles) {
     try {
       final content = file.readAsStringSync();
       final parseResult = parseString(
@@ -132,25 +130,4 @@ TestConsumptionSummary analyzeTestConsumption({
     methodCount: methodCount,
     topLevelFunctionCount: topLevelFunctionCount,
   );
-}
-
-/// Lists Dart files located under canonical test directories.
-List<File> _listTestDartFiles(Directory dir) {
-  final files = <File>[];
-  for (final entity in FileUtils.listProjectEntities(dir)) {
-    if (entity is! File || p.extension(entity.path) != '.dart') {
-      continue;
-    }
-    final relativePath = p.relative(entity.path, from: dir.path);
-    final pathParts = p.split(relativePath);
-    final isHidden = pathParts.any((part) => part.startsWith('.'));
-    if (isHidden) {
-      continue;
-    }
-    final isTestFile = pathParts.any(_testDirectoryNames.contains);
-    if (isTestFile) {
-      files.add(entity);
-    }
-  }
-  return files;
 }

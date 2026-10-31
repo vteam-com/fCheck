@@ -17,6 +17,7 @@ topics:
 
 false_secrets:
   - /test/analyzer_engine_test.dart
+  - /test/analyze_secrets/secret_scanner_equivalence_test.dart
 
 executables:
   fcheck:

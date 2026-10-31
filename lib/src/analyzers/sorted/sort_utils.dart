@@ -1,9 +1,14 @@
 /// Shared sorting helpers for source sorting analysis.
 class SortUtils {
+  static final RegExp _whitespacePattern = RegExp(r'\s+');
+
   /// Returns true when the normalized class bodies differ.
   static bool bodiesDiffer(String sorted, String original) {
-    final normalizedSorted = sorted.trim().replaceAll(RegExp(r'\s+'), ' ');
-    final normalizedOriginal = original.trim().replaceAll(RegExp(r'\s+'), ' ');
+    final normalizedSorted = sorted.trim().replaceAll(_whitespacePattern, ' ');
+    final normalizedOriginal = original.trim().replaceAll(
+      _whitespacePattern,
+      ' ',
+    );
     return normalizedSorted != normalizedOriginal;
   }
 }

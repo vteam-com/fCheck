@@ -170,32 +170,21 @@ void main() {}
     });
   });
 
-  group('IgnoreConfig.isNodeIgnored', () {
-    test('returns false when no ignore directive is present', () {
-      const source = 'void main() { final x = 42; }';
-      final unit = parseString(
-        content: source,
-        featureSet: FeatureSet.latestLanguageVersion(),
-        throwIfDiagnostics: false,
-      ).unit;
-      // Use the compilation unit itself as the node.
-      expect(
-        IgnoreConfig.isNodeIgnored(unit, source, 'magic_numbers'),
-        isFalse,
-      );
+  group('IgnoreConfig.newlineLineNumberLookup', () {
+    test('matches split-based line numbering at every offset', () {
+      const source = 'a\nbb\r\nccc\rdd\n\nlast';
+      final lineNumberForOffset = IgnoreConfig.newlineLineNumberLookup(source);
+      for (var offset = 0; offset <= source.length; offset++) {
+        expect(
+          lineNumberForOffset(offset),
+          source.substring(0, offset).split('\n').length,
+          reason: 'offset $offset',
+        );
+      }
     });
 
-    test('returns false when directive is for a different domain', () {
-      const source = '// ignore: fcheck_hardcoded_strings\nvoid main() {}';
-      final unit = parseString(
-        content: source,
-        featureSet: FeatureSet.latestLanguageVersion(),
-        throwIfDiagnostics: false,
-      ).unit;
-      expect(
-        IgnoreConfig.isNodeIgnored(unit, source, 'magic_numbers'),
-        isFalse,
-      );
+    test('returns line 1 for empty content', () {
+      expect(IgnoreConfig.newlineLineNumberLookup('')(0), 1);
     });
   });
 

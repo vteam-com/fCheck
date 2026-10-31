@@ -12,6 +12,8 @@ class DuplicateCodeVisitor extends RecursiveAstVisitor<void> {
 
   static final RegExp _identifierPattern = RegExp(r'^[A-Za-z_]\w*$');
 
+  static final RegExp _whitespacePattern = RegExp(r'\s+');
+
   static final RegExp _numberPattern = RegExp(
     r'^(?:0x[0-9A-Fa-f]+|\d+(?:\.\d+)?)$',
   );
@@ -310,7 +312,7 @@ class DuplicateCodeVisitor extends RecursiveAstVisitor<void> {
     if (node == null) {
       return '';
     }
-    return node.toSource().replaceAll(RegExp(r'\s+'), '');
+    return node.toSource().replaceAll(_whitespacePattern, '');
   }
 
   /// Internal helper used by fcheck analysis and reporting.

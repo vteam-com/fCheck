@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Hidden folders and `build/` are no longer walked.** They are still reported as excluded, but their contents (`.dart_tool`, `.git`, Flutter's `.symlinks` into the pub cache, build outputs) are no longer listed by `--excluded` or counted in "Excluded Files", which drops from e.g. 7,934 to 278. Analysis is up to 2.5× faster on projects with large build or cache folders, and unchanged on others.
+- **Faster analysis (about 3× on real projects), with identical results.**
+  - Secrets: regexes are compiled once instead of per line, with cheap literal pre-checks; high-entropy candidates use a linear scan.
+  - Documentation, hardcoded-string and magic-number checks collect `// ignore:` lines once per file instead of once per AST node, and use a binary-search line lookup.
+  - Directory scanning strips the root prefix instead of calling `path.relative` for every entry, and test analysis reuses the scan's test file list instead of walking the tree again.
+  - Localization skips two costly key-usage regexes on files that lack their required literals.
 
 ### Fixed
 

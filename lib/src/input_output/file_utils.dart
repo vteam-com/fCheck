@@ -58,6 +58,21 @@ class FileUtils {
     return expandedPatterns.map((p) => Glob(p)).toList();
   }
 
+  /// Returns [entityPath] relative to [rootPath].
+  ///
+  /// Entities produced by listing [rootPath] always start with it, so a
+  /// prefix strip avoids the far costlier normalization in [p.relative],
+  /// which dominates scan time on large trees.
+  static String _relativeToRoot(String entityPath, String rootPath) {
+    final rootPrefix = rootPath.endsWith(p.separator)
+        ? rootPath
+        : '$rootPath${p.separator}';
+    if (entityPath.startsWith(rootPrefix)) {
+      return entityPath.substring(rootPrefix.length);
+    }
+    return p.relative(entityPath, from: rootPath);
+  }
+
   /// Lists [dir] recursively in the same order as `listSync(recursive: true)`
   /// but without descending into hidden directories or `build/`.
   ///
@@ -189,7 +204,7 @@ class FileUtils {
         .where((file) => p.extension(file.path) == '.dart')
         .where((file) {
           // Skip files in hidden directories (directories starting with '.')
-          final relativePath = p.relative(file.path, from: dir.path);
+          final relativePath = _relativeToRoot(file.path, dir.path);
           final pathParts = p.split(relativePath);
           if (_isHiddenPath(pathParts)) {
             return false;
@@ -240,7 +255,7 @@ class FileUtils {
     final excludedDirectories = <Directory>[];
 
     listProjectEntities(dir).forEach((entity) {
-      final relativePath = p.relative(entity.path, from: dir.path);
+      final relativePath = _relativeToRoot(entity.path, dir.path);
       final pathParts = p.split(relativePath);
 
       // Check if entity is in hidden directories
@@ -308,6 +323,8 @@ class FileUtils {
   /// - Test files count (all files under test roots)
   /// - Test Dart files count (Dart files under test roots)
   /// - Custom excluded Dart files count (matched by user-provided globs only)
+  /// - Test Dart files (the files behind the test Dart files count), so test
+  ///   analysis can reuse this walk instead of listing the tree again
   static (
     List<File> dartFiles,
     int folderCount,
@@ -319,6 +336,7 @@ class FileUtils {
     int testFilesCount,
     int testDartFilesCount,
     int customExcludedDartFilesCount,
+    List<File> testDartFiles,
   )
   scanDirectory(Directory dir, {List<String> excludePatterns = const []}) {
     final globs = _buildExcludeGlobs(excludePatterns);
@@ -329,7 +347,7 @@ class FileUtils {
     final dartFiles = <File>[];
 
     listProjectEntities(dir).forEach((entity) {
-      final relativePath = p.relative(entity.path, from: dir.path);
+      final relativePath = _relativeToRoot(entity.path, dir.path);
       final pathParts = p.split(relativePath);
 
       // Skip hidden directories and their contents
@@ -381,6 +399,7 @@ class FileUtils {
       excludedCounts.testFilesCount,
       excludedCounts.testDartFilesCount,
       excludedCounts.customExcludedDartFilesCount,
+      excludedCounts.testDartFiles,
     );
   }
 }
@@ -393,6 +412,7 @@ class _ScanCounts {
   int testFilesCount = 0;
   int testDartFilesCount = 0;
   int customExcludedDartFilesCount = 0;
+  final List<File> testDartFiles = <File>[];
 
   /// Records one excluded entity and updates per-kind counters.
   ///
@@ -422,6 +442,7 @@ class _ScanCounts {
       testFilesCount++;
       if (p.extension(entity.path) == '.dart') {
         testDartFilesCount++;
+        testDartFiles.add(entity);
       }
     }
   }

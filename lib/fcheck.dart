@@ -261,6 +261,7 @@ class AnalyzeFolder {
       testFilesCount,
       testDartFilesCount,
       customExcludedDartFilesCount,
+      testDartFiles,
     ) = FileUtils.scanDirectory(
       projectDir,
       excludePatterns: excludePatterns,
@@ -414,7 +415,7 @@ class AnalyzeFolder {
       packageName: pubspecInfo.packageName,
     );
     final testAnalysisSummary = analyzeTestFiles(
-      projectDir: projectDir,
+      testDartFiles: testDartFiles,
       rootPath: projectRoot.path,
       packageName: pubspecInfo.packageName,
       analyzedPaths: projectDependencyGraph.keys.toSet(),
