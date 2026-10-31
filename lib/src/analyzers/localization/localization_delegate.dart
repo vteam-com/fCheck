@@ -7,6 +7,7 @@ import 'package:fcheck/src/analyzers/localization/localization_issue.dart';
 import 'package:fcheck/src/analyzers/localization/localization_issue_detail.dart';
 import 'package:fcheck/src/analyzers/localization/localization_utils.dart';
 import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
+import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:path/path.dart' as p;
 
 const Set<String> _knownLocalizationAccessorNames = {
@@ -285,7 +286,7 @@ class LocalizationDelegate implements AnalyzerDelegate {
     final arbFiles = <File>[];
 
     try {
-      for (final entity in dir.listSync(recursive: true)) {
+      for (final entity in FileUtils.listProjectEntities(dir)) {
         if (entity is File && entity.path.endsWith('.arb')) {
           arbFiles.add(entity);
         }

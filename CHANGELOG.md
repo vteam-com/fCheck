@@ -7,6 +7,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **Hidden folders and `build/` are no longer walked.** They are still reported as excluded, but their contents (`.dart_tool`, `.git`, Flutter's `.symlinks` into the pub cache, build outputs) are no longer listed by `--excluded` or counted in "Excluded Files", which drops from e.g. 7,934 to 278. Analysis is up to 2.5× faster on projects with large build or cache folders, and unchanged on others.
+
+### Fixed
+
+- Dart files under `build/`, such as plugin example tests copied into `build/ios/SourcePackages`, no longer count as project test files or test cases (e.g. a project reporting 1,086 test cases now correctly reports 1).
+
 ## [1.6.0] – 2026-10-30
 
 ### Added

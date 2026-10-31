@@ -7,6 +7,7 @@ import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzers/shared/dependency_uri_utils.dart';
 import 'package:fcheck/src/fcheck_test_summary.dart';
 import 'package:fcheck/src/fcheck_test_visitor.dart';
+import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:fcheck/src/input_output/path_style_utils.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:path/path.dart' as p;
@@ -136,7 +137,7 @@ TestConsumptionSummary analyzeTestConsumption({
 /// Lists Dart files located under canonical test directories.
 List<File> _listTestDartFiles(Directory dir) {
   final files = <File>[];
-  for (final entity in dir.listSync(recursive: true)) {
+  for (final entity in FileUtils.listProjectEntities(dir)) {
     if (entity is! File || p.extension(entity.path) != '.dart') {
       continue;
     }

@@ -682,8 +682,7 @@ class AnalyzeFolder {
       }
     }
 
-    final arbAnywhere = projectDir
-        .listSync(recursive: true)
+    final arbAnywhere = FileUtils.listProjectEntities(projectDir)
         .whereType<File>()
         .any((file) => file.path.endsWith('.arb'));
     if (arbAnywhere) {

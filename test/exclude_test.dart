@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fcheck/src/fcheck_test_analysis.dart';
 import 'package:fcheck/src/input_output/file_utils.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
@@ -273,8 +274,13 @@ void main() {
         final (excludedDartFiles, excludedNonDartFiles, excludedDirectories) =
             FileUtils.listExcludedFiles(tempDir);
 
-        expect(excludedDartFiles.length, equals(4)); // hidden.dart, test_helper.dart, integration_test_helper.dart, example.dart
-        expect(excludedNonDartFiles.length, equals(1)); // hidden.txt
+        // Hidden folders are listed but not walked, so hidden.dart and
+        // hidden.txt inside .hidden are not listed.
+        expect(
+          excludedDartFiles.length,
+          equals(3),
+        ); // test_helper.dart, integration_test_helper.dart, example.dart
+        expect(excludedNonDartFiles, isEmpty);
         expect(
           excludedDirectories.length,
           equals(4),
@@ -282,7 +288,7 @@ void main() {
 
         expect(
           excludedDartFiles.any((f) => f.path.contains('hidden.dart')),
-          isTrue,
+          isFalse,
         );
         expect(
           excludedDartFiles.any((f) => f.path.contains('test_helper.dart')),
@@ -296,11 +302,6 @@ void main() {
         );
         expect(
           excludedDartFiles.any((f) => f.path.contains('example.dart')),
-          isTrue,
-        );
-
-        expect(
-          excludedNonDartFiles.any((f) => f.path.contains('hidden.txt')),
           isTrue,
         );
 
@@ -547,9 +548,11 @@ void main() {
         expect(dartFiles.length, equals(2)); // Only main.dart and service.dart
         expect(folderCount, equals(1)); // Only src (hidden folder excluded)
         expect(fileCount, equals(2)); // Only main.dart and service.dart
-        expect(excludedDartFilesCount, equals(1)); // hidden.dart excluded
+        // .hidden is counted as excluded but not walked, so hidden.dart
+        // inside it is neither analyzed nor counted.
+        expect(excludedDartFilesCount, equals(0));
         expect(excludedFoldersCount, equals(1)); // .hidden folder excluded
-        expect(excludedFilesCount, equals(1)); // hidden.dart excluded
+        expect(excludedFilesCount, equals(0));
 
         expect(dartFiles.any((f) => f.path.contains('main.dart')), isTrue);
         expect(dartFiles.any((f) => f.path.contains('service.dart')), isTrue);
@@ -586,6 +589,113 @@ void main() {
           tempDir,
         );
         expect(count, equals(0));
+      });
+    });
+
+    group('FileUtils.listProjectEntities', () {
+      void createFiles(Directory root, List<String> relativePaths) {
+        for (final relativePath in relativePaths) {
+          File(p.join(root.path, relativePath))
+            ..createSync(recursive: true)
+            ..writeAsStringSync('void f() {}');
+        }
+      }
+
+      List<String> relativePaths(Iterable<FileSystemEntity> entities) => [
+        for (final entity in entities)
+          p.relative(entity.path, from: tempDir.path),
+      ];
+
+      test(
+        'matches listSync(recursive: true) order when nothing is pruned',
+        () {
+          createFiles(tempDir, [
+            'lib/a.dart',
+            'lib/src/b.dart',
+            'lib/src/deep/c.dart',
+            'test/a_test.dart',
+            'README.md',
+          ]);
+
+          expect(
+            relativePaths(FileUtils.listProjectEntities(tempDir)),
+            equals(relativePaths(tempDir.listSync(recursive: true))),
+          );
+        },
+      );
+
+      test('yields hidden and build folders without walking into them', () {
+        createFiles(tempDir, [
+          'lib/main.dart',
+          'lib/build/generated.dart',
+          '.dart_tool/cache.dart',
+          'build/ios/plugin/test/plugin_test.dart',
+          'packages/app/.dart_tool/x.dart',
+        ]);
+
+        final paths = relativePaths(FileUtils.listProjectEntities(tempDir));
+
+        expect(
+          paths,
+          containsAll([
+            '.dart_tool',
+            'build',
+            'lib/build',
+            'packages/app/.dart_tool',
+          ]),
+        );
+        expect(paths, contains('lib/main.dart'));
+        expect(paths.where((path) => path.startsWith('.dart_tool/')), isEmpty);
+        expect(paths.where((path) => path.startsWith('build/')), isEmpty);
+        expect(paths, isNot(contains('lib/build/generated.dart')));
+        expect(paths, isNot(contains('packages/app/.dart_tool/x.dart')));
+      });
+
+      test('walks the root even when the root itself is named build', () {
+        final root = Directory(p.join(tempDir.path, 'build'))..createSync();
+        createFiles(root, ['lib/main.dart']);
+
+        expect(
+          FileUtils.listProjectEntities(root).whereType<File>(),
+          hasLength(1),
+        );
+      });
+
+      test('does not loop on a symlink back to an ancestor', () {
+        createFiles(tempDir, ['lib/main.dart']);
+        Link(p.join(tempDir.path, 'lib', 'loop')).createSync(tempDir.path);
+
+        final paths = relativePaths(FileUtils.listProjectEntities(tempDir));
+
+        expect(paths, containsAll(['lib', 'lib/main.dart', 'lib/loop']));
+        expect(paths.where((path) => path.startsWith('lib/loop/')), isEmpty);
+      });
+
+      test('build output does not count as project tests', () {
+        const testSource = "void main() { test('a', () {}); }";
+        File(p.join(tempDir.path, 'test', 'app_test.dart'))
+          ..createSync(recursive: true)
+          ..writeAsStringSync(testSource);
+        File(
+            p.join(
+              tempDir.path,
+              'build/ios/SourcePackages/plugin/example/integration_test/e2e.dart',
+            ),
+          )
+          ..createSync(recursive: true)
+          ..writeAsStringSync(testSource);
+
+        final (_, _, _, _, _, _, _, _, testDartFilesCount, _) =
+            FileUtils.scanDirectory(tempDir);
+        final testFiles = analyzeTestFiles(
+          projectDir: tempDir,
+          rootPath: tempDir.path,
+          packageName: 'app',
+          analyzedPaths: const <String>{},
+        );
+
+        expect(testDartFilesCount, equals(1));
+        expect(testFiles.testCaseCount, equals(1));
       });
     });
   });

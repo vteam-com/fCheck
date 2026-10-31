@@ -255,3 +255,4 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
 - File-level ignore: `// ignore: fcheck_<domain>` at the top of a Dart file.
 - Node-level ignore: `// ignore: fcheck_<domain>` on the same line as a literal for AST-based rules.
 - Default excluded directories and hidden folders are defined in `FileUtils.defaultExcludedDirs`.
+- Hidden folders and `build` folders are never walked (`FileUtils.listProjectEntities`): they are reported as excluded, but their contents are not listed or counted, including test files.

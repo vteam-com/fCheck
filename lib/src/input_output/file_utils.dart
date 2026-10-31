@@ -14,6 +14,7 @@ import 'package:path/path.dart' as p;
 class FileUtils {
   static const String _testDirName = 'test';
   static const String _integrationTestDirName = 'integration_test';
+  static const String _buildDirName = 'build';
 
   /// Expands glob patterns to handle common use cases that the glob library
   /// doesn't handle intuitively.
@@ -55,6 +56,42 @@ class FileUtils {
       expandedPatterns.addAll(_expandGlobPattern(pattern));
     }
     return expandedPatterns.map((p) => Glob(p)).toList();
+  }
+
+  /// Lists [dir] recursively in the same order as `listSync(recursive: true)`
+  /// but without descending into hidden directories or `build/`.
+  ///
+  /// Those directories are still yielded, so they remain visible as excluded
+  /// entries; only their contents are skipped. Their contents are never
+  /// analyzed, yet they are usually most of a project tree: tool caches
+  /// (`.dart_tool`, `.git`), build outputs, and Flutter's `.symlinks` /
+  /// `.plugin_symlinks` folders, which link into whole pub-cache packages.
+  static Iterable<FileSystemEntity> listProjectEntities(Directory dir) =>
+      _listProjectEntities(dir, {dir.resolveSymbolicLinksSync()});
+
+  /// Walks [dir] depth-first, skipping symlinked directories that loop back to
+  /// one of [ancestorRealPaths].
+  static Iterable<FileSystemEntity> _listProjectEntities(
+    Directory dir,
+    Set<String> ancestorRealPaths,
+  ) sync* {
+    for (final entity in dir.listSync()) {
+      yield entity;
+      if (entity is! Directory || _isPrunedDirectory(entity)) {
+        continue;
+      }
+      final realPath = entity.resolveSymbolicLinksSync();
+      if (ancestorRealPaths.contains(realPath)) {
+        continue;
+      }
+      yield* _listProjectEntities(entity, {...ancestorRealPaths, realPath});
+    }
+  }
+
+  /// Returns true for directories whose contents are never walked.
+  static bool _isPrunedDirectory(Directory directory) {
+    final name = p.basename(directory.path);
+    return name.startsWith('.') || name == _buildDirName;
   }
 
   static bool _isHiddenPath(List<String> pathParts) =>
@@ -116,7 +153,7 @@ class FileUtils {
     _integrationTestDirName,
     'tool',
     '.dart_tool',
-    'build',
+    _buildDirName,
     '.git',
     'ios',
     'android',
@@ -147,8 +184,7 @@ class FileUtils {
   }) {
     final globs = _buildExcludeGlobs(excludePatterns);
 
-    return dir
-        .listSync(recursive: true)
+    return listProjectEntities(dir)
         .whereType<File>()
         .where((file) => p.extension(file.path) == '.dart')
         .where((file) {
@@ -203,7 +239,7 @@ class FileUtils {
     final excludedNonDartFiles = <File>[];
     final excludedDirectories = <Directory>[];
 
-    dir.listSync(recursive: true).forEach((entity) {
+    listProjectEntities(dir).forEach((entity) {
       final relativePath = p.relative(entity.path, from: dir.path);
       final pathParts = p.split(relativePath);
 
@@ -292,7 +328,7 @@ class FileUtils {
     final excludedCounts = _ScanCounts();
     final dartFiles = <File>[];
 
-    dir.listSync(recursive: true).forEach((entity) {
+    listProjectEntities(dir).forEach((entity) {
       final relativePath = p.relative(entity.path, from: dir.path);
       final pathParts = p.split(relativePath);
 

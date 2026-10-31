@@ -496,7 +496,10 @@ fcheck --literals --json
 `--ignores` groups results by suppression type (`exclude`, analyzer skips, and Dart comment directive type) so cleanup work can be prioritized.
 `--literals` full list text output od all the literals in your project.
 
-Default exclusion behavior includes hidden folders and common non-analysis directories (`.git`, `.dart_tool`, `build`, `example`, `test`, `integration_test`, platform folders, etc.).
+By default, two kinds of folders are excluded from analysis:
+
+- Hidden folders (any name starting with `.`, such as `.git` and `.dart_tool`) and `build` folders are not walked at all: they are reported as excluded, but their contents are not listed or counted.
+- `example`, `test`, `integration_test`, `tool` and the platform folders (`android`, `ios`, `macos`, `windows`, `linux`, `web`) are walked, so their files are listed as excluded (and test files are counted as tests), but not analyzed.
 
 Generated Dart files ending with `*.g.dart` are analyzed for dependency/usage flow, but non-actionable checks are suppressed (for example code size, one-class-per-file, dead-code declarations, hardcoded strings, magic numbers, sorting, duplicate code, and documentation).
 
