@@ -201,7 +201,13 @@ class DeadCodeVisitor extends GeneralizingAstVisitor<void> {
   @override
   void visitRegularFormalParameter(RegularFormalParameter node) {
     final identifier = node.name;
-    if (identifier != null && !_isNodeIgnored(node)) {
+    // Names in function types, like `bool Function(String name)`, only
+    // document the type and declare no variable.
+    final owner = node.parent?.parent;
+    final isTypeOnly =
+        owner is GenericFunctionType ||
+        owner is FunctionTypedFormalParameterSuffix;
+    if (identifier != null && !isTypeOnly && !_isNodeIgnored(node)) {
       _declareVariable(identifier.lexeme, node, isParameter: true);
     }
     super.visitRegularFormalParameter(node);

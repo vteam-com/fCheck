@@ -1,7 +1,6 @@
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
-import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_utils.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart';
 import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
@@ -23,8 +22,6 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
 
   /// Whether the project uses localization.
   final bool usesLocalization;
-
-  static const int _maxShortWidgetStringLength = 2;
 
   /// Analyzes a file for hardcoded strings using the unified context.
   ///
@@ -53,14 +50,8 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
       return [];
     }
 
-    final issues = <HardcodedStringIssue>[];
-
-    if (focus == HardcodedStringFocus.flutterWidgets) {
-      issues.addAll(_scanWidgetTextLiterals(context));
-    }
-
     if (context.compilationUnit == null) {
-      return issues;
+      return [];
     }
 
     final visitor = HardcodedStringVisitor(
@@ -70,95 +61,6 @@ class HardcodedStringDelegate implements AnalyzerDelegate {
       usesLocalization: usesLocalization,
     );
     context.compilationUnit!.accept(visitor);
-
-    if (issues.isEmpty) {
-      return visitor.foundIssues;
-    }
-
-    final seen = <String>{
-      for (final issue in issues) '${issue.lineNumber}:${issue.value}',
-    };
-    for (final issue in visitor.foundIssues) {
-      final key = '${issue.lineNumber}:${issue.value}';
-      if (seen.add(key)) {
-        issues.add(issue);
-      }
-    }
-
-    return issues;
-  }
-
-  /// Scans fallback widget text literals when AST-based detection finds none.
-  List<HardcodedStringIssue> _scanWidgetTextLiterals(
-    AnalysisFileContext context,
-  ) {
-    final issues = <HardcodedStringIssue>[];
-    final regex = RegExp(r'''\bText\s*\(\s*(['"])(.*?)\1''', dotAll: true);
-
-    for (final match in regex.allMatches(context.content)) {
-      final value = match.group(HardcodedStringUtils.minQuotedLength) ?? '';
-      if (value.isEmpty || value.length <= _maxShortWidgetStringLength) {
-        continue;
-      }
-
-      if (_isInterpolationOnlyString(value)) {
-        continue;
-      }
-
-      if (_isTechnicalString(value)) {
-        continue;
-      }
-
-      final matchText = match.group(0) ?? '';
-      final valueOffsetInMatch = matchText.indexOf(value);
-      final literalOffset =
-          match.start + (valueOffsetInMatch < 0 ? 0 : valueOffsetInMatch);
-      final lineNumber = context.getLineNumber(literalOffset);
-      if (lineNumber <= 0 || lineNumber > context.lines.length) {
-        continue;
-      }
-
-      final line = context.lines[lineNumber - 1];
-      if (line.trimLeft().startsWith('//')) {
-        continue;
-      }
-
-      if (HardcodedStringUtils.containsWidgetLintIgnoreComment(line) ||
-          line.contains(IgnoreConfig.ignoreDirectiveForHardcodedStrings)) {
-        continue;
-      }
-
-      if (lineNumber > 1) {
-        final previousLine =
-            context.lines[lineNumber - HardcodedStringUtils.minQuotedLength];
-        if (HardcodedStringUtils.containsWidgetLintIgnoreComment(
-          previousLine,
-        )) {
-          continue;
-        }
-      }
-
-      issues.add(
-        HardcodedStringIssue(
-          filePath: context.file.path,
-          lineNumber: lineNumber,
-          value: value,
-        ),
-      );
-    }
-
-    return issues;
-  }
-
-  /// Internal helper used by fcheck analysis and reporting.
-  bool _isInterpolationOnlyString(String value) {
-    final String withoutInterpolations =
-        HardcodedStringUtils.removeInterpolations(value);
-    return !HardcodedStringUtils.containsMeaningfulText(withoutInterpolations);
-  }
-
-  /// Internal helper used by fcheck analysis and reporting.
-  bool _isTechnicalString(String value) {
-    return HardcodedStringUtils.isTechnicalString(value);
+    return visitor.foundIssues;
   }
 }

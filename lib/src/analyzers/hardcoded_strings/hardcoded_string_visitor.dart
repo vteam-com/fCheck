@@ -1,6 +1,9 @@
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/token.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_role_classifier.dart';
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_site.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_utils.dart';
 import 'package:fcheck/src/analyzers/shared/directive_ast_utils.dart';
 import 'package:fcheck/src/models/ignore_config.dart';
@@ -26,7 +29,10 @@ enum HardcodedStringFocus {
 class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   static const int _maxShortWidgetStringLength = 2;
   static const int _previousLineOffset = 2;
-  static const int _tripleQuoteLength = 3;
+
+  /// `State` methods where `context` exists but inherited widgets, such as
+  /// localizations, cannot be looked up yet or anymore.
+  static const Set<String> _contextlessStateMethods = {'initState', 'dispose'};
 
   /// Creates a new visitor for the specified file.
   ///
@@ -64,6 +70,9 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
   /// Lines carrying `// ignore: fcheck_hardcoded_strings`, collected once.
   late final Set<int> _ignoredLineNumbers =
       IgnoreConfig.collectIgnoredLineNumbers(_lines, 'hardcoded_strings');
+
+  /// Judges string roles in this file, indexed on first use.
+  HardcodedStringRoleClassifier? _roles;
 
   /// Visits a simple string literal node in the AST.
   ///
@@ -200,8 +209,168 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
         filePath: filePath,
         lineNumber: lineNumber,
         value: issueValue,
+        site: _siteOf(node, isWidgetOutput: isWidgetOutputString),
       ),
     );
+  }
+
+  /// Where [node] sits and what replacing it needs; adjacent strings are
+  /// taken whole.
+  HardcodedStringSite _siteOf(
+    StringLiteral node, {
+    required bool isWidgetOutput,
+  }) {
+    final StringLiteral whole =
+        node.thisOrAncestorOfType<AdjacentStrings>() ?? node;
+    final textParts = <String>[''];
+    final interpolations = <String>[];
+    void collect(StringLiteral literal) {
+      if (literal is SimpleStringLiteral) {
+        textParts.last += literal.value;
+      } else if (literal is StringInterpolation) {
+        for (final element in literal.elements) {
+          if (element is InterpolationString) {
+            textParts.last += element.value;
+          } else if (element is InterpolationExpression) {
+            interpolations.add(element.expression.toSource());
+            textParts.add('');
+          }
+        }
+      } else if (literal is AdjacentStrings) {
+        literal.strings.forEach(collect);
+      }
+    }
+
+    collect(whole);
+    final (calleeName, argumentName) = _argumentOf(whole);
+    final verdict = (_roles ??= HardcodedStringRoleClassifier(
+      whole.root as CompilationUnit,
+    )).classify(whole);
+    return HardcodedStringSite(
+      calleeName: calleeName,
+      argumentName: argumentName,
+      offset: whole.offset,
+      length: whole.length,
+      textParts: textParts,
+      interpolations: interpolations,
+      isWidgetOutput: isWidgetOutput,
+      buildContextName: _buildContextName(whole),
+      constKeywordOffsets: _constKeywordOffsets(whole),
+      role: verdict.role,
+      roleEvidence: verdict.evidence,
+    );
+  }
+
+  /// The callee and named argument [node] is passed as, looking through
+  /// parentheses, `?:` branches and `??`; nulls when it is no argument.
+  (String?, String?) _argumentOf(Expression node) {
+    Expression expression = node;
+    for (AstNode? parent = expression.parent; ; parent = expression.parent) {
+      final bool isPassedThrough =
+          parent is ParenthesizedExpression ||
+          (parent is ConditionalExpression &&
+              !identical(parent.condition, expression)) ||
+          (parent is BinaryExpression && parent.operator.lexeme == '??');
+      if (!isPassedThrough) {
+        break;
+      }
+      expression = parent as Expression;
+    }
+    AstNode argument = expression;
+    String? argumentName;
+    final AstNode? named = argument.parent;
+    if (named is NamedArgument) {
+      argumentName = named.name.lexeme;
+      argument = named;
+    }
+    final String? calleeName = switch (argument.parent?.parent) {
+      InstanceCreationExpression(:final constructorName) =>
+        constructorName.type.toSource().split('<').first.split('.').last,
+      MethodInvocation(:final methodName) => methodName.name,
+      _ => null,
+    };
+    return calleeName == null ? (null, null) : (calleeName, argumentName);
+  }
+
+  /// The name of a `BuildContext` in scope at [node]: the nearest
+  /// parameter typed `BuildContext` (or an untyped one named `context`), or
+  /// `context` in an instance method of a `State`; null in constant
+  /// positions and where inherited widgets cannot be looked up.
+  String? _buildContextName(AstNode node) {
+    for (
+      AstNode? current = node.parent;
+      current != null;
+      current = current.parent
+    ) {
+      if (current is Annotation ||
+          current is FormalParameterDefaultClause ||
+          current is ConstantPattern ||
+          current is EnumConstantDeclaration ||
+          current is ConstructorDeclaration ||
+          current is FieldDeclaration) {
+        return null;
+      }
+      final FormalParameterList? parameters = switch (current) {
+        FunctionExpression(:final parameters) => parameters,
+        MethodDeclaration(:final parameters) => parameters,
+        _ => null,
+      };
+      for (final parameter in parameters?.parameters ?? <FormalParameter>[]) {
+        final String? name = parameter.name?.lexeme;
+        // A wildcard `_` binds nothing, so an outer context stays usable
+        if (name == null ||
+            name == '_' ||
+            parameter is! RegularFormalParameter) {
+          continue;
+        }
+        final String? type = parameter.type?.toSource();
+        if (type == 'BuildContext' || (type == null && name == 'context')) {
+          return name;
+        }
+      }
+      if (current is MethodDeclaration) {
+        final bool hasContext =
+            !current.isStatic &&
+            !_contextlessStateMethods.contains(current.name.lexeme) &&
+            _isInsideStateClass(current);
+        return hasContext ? 'context' : null;
+      }
+    }
+    return null;
+  }
+
+  /// Whether [node] is in a class extending `State`.
+  bool _isInsideStateClass(AstNode node) {
+    final String superName =
+        node
+            .thisOrAncestorOfType<ClassDeclaration>()
+            ?.extendsClause
+            ?.superclass
+            .toString() ??
+        '';
+    return superName == 'State' || superName.startsWith('State<');
+  }
+
+  /// Offsets of the `const` keywords of the expressions enclosing [node]
+  /// within its function body, innermost first.
+  List<int> _constKeywordOffsets(AstNode node) {
+    final offsets = <int>[];
+    for (
+      AstNode? current = node.parent;
+      current != null && current is! FunctionBody;
+      current = current.parent
+    ) {
+      final Token? keyword = switch (current) {
+        InstanceCreationExpression(:final keyword) => keyword,
+        TypedLiteral(:final constKeyword) => constKeyword,
+        RecordLiteral(:final constKeyword) => constKeyword,
+        _ => null,
+      };
+      if (keyword != null && keyword.keyword == Keyword.CONST) {
+        offsets.add(keyword.offset);
+      }
+    }
+    return offsets;
   }
 
   /// Internal helper used by fcheck analysis and reporting.
@@ -272,47 +441,10 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     return false;
   }
 
-  /// Returns literal text with interpolation segments removed.
-  String _extractLiteralTextWithoutInterpolations(StringLiteral node) {
-    final String source = node.toSource();
-    final (literalContent, isRaw) = _stripLiteralDelimiters(source);
-    if (literalContent.isEmpty || isRaw) {
-      return literalContent;
-    }
-
-    return HardcodedStringUtils.removeInterpolations(literalContent);
-  }
-
-  /// Strips Dart string delimiters and reports whether the literal is raw.
-  (String content, bool isRaw) _stripLiteralDelimiters(String source) {
-    var working = source;
-    var isRaw = false;
-
-    if (working.startsWith('r') || working.startsWith('R')) {
-      isRaw = true;
-      working = working.substring(1);
-    }
-
-    if (working.startsWith("'''") || working.startsWith('"""')) {
-      if (working.length >=
-          _tripleQuoteLength * HardcodedStringUtils.minQuotedLength) {
-        return (
-          working.substring(
-            _tripleQuoteLength,
-            working.length - _tripleQuoteLength,
-          ),
-          isRaw,
-        );
-      }
-      return ('', isRaw);
-    }
-
-    if (working.length >= HardcodedStringUtils.minQuotedLength) {
-      return (working.substring(1, working.length - 1), isRaw);
-    }
-
-    return ('', isRaw);
-  }
+  /// Returns the text of [node] with interpolations removed and escapes
+  /// resolved, as the string shows it.
+  String _extractLiteralTextWithoutInterpolations(StringInterpolation node) =>
+      node.elements.whereType<InterpolationString>().map((e) => e.value).join();
 
   /// Internal helper used by fcheck analysis and reporting.
   bool _isAcceptableWidgetProperty(StringLiteral node) {
@@ -408,8 +540,7 @@ class HardcodedStringVisitor extends GeneralizingAstVisitor<void> {
     final String superName = extendsClause.superclass.toString();
     return superName == 'StatelessWidget' ||
         superName == 'StatefulWidget' ||
-        superName == 'State' ||
-        superName.startsWith('State<');
+        _isInsideStateClass(node);
   }
 
   /// Internal helper used by fcheck analysis and reporting.

@@ -45,6 +45,7 @@ import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_results.dart';
 import 'package:fcheck/src/analyzers/localization/localization_delegate.dart';
 import 'package:fcheck/src/analyzers/localization/localization_issue.dart';
+import 'package:fcheck/src/analyzers/localization/localization_sync_checker.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_delegate.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
@@ -75,9 +76,12 @@ export 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 export 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
 export 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 export 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
+export 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_role.dart';
+export 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_site.dart';
 export 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 export 'package:fcheck/src/analyzers/localization/localization_issue.dart';
 export 'package:fcheck/src/analyzers/localization/localization_issue_detail.dart';
+export 'package:fcheck/src/analyzers/localization/localization_sync.dart';
 export 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 export 'package:fcheck/src/analyzers/project_metrics.dart';
 export 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
@@ -438,6 +442,9 @@ class AnalyzeFolder {
         ? LocalizationDelegate(fix: fix)
               .analyzeProject(projectDir, analyzedContexts: analyzedContexts)
         : <LocalizationIssue>[];
+    final localizationSync = localizationEnabled
+        ? const LocalizationSyncChecker().check(projectDir)
+        : null;
 
     final packagePlatformWarnings = collectPackagePlatformWarnings(
       loadPackageDependencyGraphData(projectDir),
@@ -506,6 +513,7 @@ class AnalyzeFolder {
       secretIssues: secretIssues,
       documentationIssues: documentationIssues,
       localizationIssues: localizationIssues,
+      localizationSync: localizationSync,
       duplicateCodeIssues: duplicateCodeIssues,
       deadCodeIssues: deadCodeIssues,
       packagePlatformWarnings: packagePlatformWarnings,

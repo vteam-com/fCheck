@@ -5,6 +5,7 @@ import 'package:fcheck/src/analyzers/duplicate_code/duplicate_code_issue.dart';
 import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart';
 import 'package:fcheck/src/analyzers/layers/layers_issue.dart';
 import 'package:fcheck/src/analyzers/localization/localization_issue.dart';
+import 'package:fcheck/src/analyzers/localization/localization_sync.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_input.dart';
@@ -81,6 +82,11 @@ class ProjectMetrics {
 
   /// List of localization coverage issues found in the project.
   final List<LocalizationIssue> localizationIssues;
+
+  /// How the generated localizations class compares with the template ARB
+  /// file; null when there is nothing to compare. Informational only: it
+  /// does not affect compliance scoring.
+  final LocalizationSync? localizationSync;
 
   /// List of package platform warnings (e.g., legacy CocoaPods iOS packages).
   /// These are informational only and do not affect compliance scoring.
@@ -325,6 +331,7 @@ class ProjectMetrics {
     this.duplicateCodeIssues = const [],
     this.documentationIssues = const [],
     this.localizationIssues = const [],
+    this.localizationSync,
     this.packagePlatformWarnings = const [],
     required this.layersEdgeCount,
     required this.layersCount,
@@ -500,7 +507,10 @@ class ProjectMetrics {
       'importedPaths': testImportedPaths,
       'consumedPaths': testConsumedPaths,
     },
-    'localization': {'usesLocalization': usesLocalization},
+    'localization': {
+      'usesLocalization': usesLocalization,
+      if (localizationSync case final sync?) 'generatedClass': sync.toJson(),
+    },
     'compliance': {
       'score': complianceScore,
       'suppressionPenalty': suppressionPenaltyPoints,

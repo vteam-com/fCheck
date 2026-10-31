@@ -109,7 +109,8 @@ In non-localized projects, it is common to centralize user-facing strings in ded
 - Focus mode details:
   - Flutter: opt-out detection for string literals, excluding print/logger/debug output and the documented skip cases.
   - Dart: only string literals passed to `print()`.
-- In Flutter focus, a fallback scan looks for `Text("...")` literals in the raw source to catch parse-error or AST edge cases.
+- Files with syntax errors are analyzed from the parser's recovered AST; there is no separate raw-source scan.
+- An interpolated string is judged by its text with the interpolations removed and escapes resolved: `'Error: $e'` is reported as `Error: `, and `'Version\n$v'` as `Version` followed by a newline.
 
 ### CLI Output
 
@@ -138,10 +139,33 @@ In non-localized projects, it is common to centralize user-facing strings in ded
 - Prefer localization for visible UI text, error text shown to users, prompts, labels, and marketing/product copy.
 - Avoid embedding literals in business logic because it weakens maintainability and makes later localization expensive.
 
+## Rewrite Support (Library API)
+
+Issues found by parsing a file carry a `HardcodedStringSite` (`issue.site`) so tools can localize them without re-analyzing the code:
+
+- `offset` / `length`: the whole string expression in the file; adjacent strings (`'a' 'b'`) are one expression, so their issues share one site.
+- `textParts` / `interpolations`: the text split around each interpolated expression's source (`'Error: $e'` → `['Error: ', '']` and `['e']`).
+- `calleeName` / `argumentName`: the constructor or method the string is passed to and the named argument it is passed as, looking through parentheses, `?:` branches and `??` (`PopupMenuItem(value: 'edit')` → `PopupMenuItem`, `value`; `error.contains('network')` → `contains`); both `null` when the string is not an argument. Tools use them to tell displayed text from identifiers.
+- `buildContextName`: the `BuildContext` in scope (a parameter typed `BuildContext`, an untyped `context` parameter, or `context` in a `State` instance method; wildcard `_` parameters are looked past); `null` in models, static members, constructors, field initializers, `initState`, `dispose` and constant positions.
+- `constKeywordOffsets`: the `const` keywords of enclosing expressions, innermost first, which must be removed before the string becomes a runtime lookup.
+- `isWidgetOutput`: whether the string is passed directly to a widget.
+- `role` / `roleEvidence`: what the string is for (`HardcodedStringRole`), judged from how the code uses it, and the use that decided it:
+  - `data`: compared or looked up, so it must stay as is and becomes a constant: `==`/`!=` operands, `case` patterns, `switch` subjects, `[…]` and map keys, string matching (`contains`, `startsWith`, `split`, …), Firestore, preferences, navigation, parsing and asset calls (`collection`, `doc`, `getString`, `pushNamed`, `Uri.parse`, `Image.asset`, …) and identifier arguments (`value:`, `groupValue:`, `key:`, `id:`, `route:`, `path:`, `url:`, …).
+  - `presentation`: read by users, so it is localized: `Text`, `SelectableText`, `TextSpan` and `Tooltip`, text arguments (`label:`, `labelText:`, `hintText:`, `title:`, `message:`, `content:`, …) and the positional argument of other constructors.
+  - `fragment`: shown only inside another message, such as a placeholder of a localized message (`context.l10n.deleted(name)`, `AppLocalizations.of(context)!…`) or an interpolation; the whole message should be translated instead.
+  - `unknown`: no use decided.
+
+  The string is followed through parentheses, `?:`, `??`, `+`, `!`, `as`, `await`, text calls (`toLowerCase`, `trim`, …), switch expressions and the list, set or map (as a value) it is an element of, and up to 3 steps into the file's own declarations: parameters of its methods, functions and constructors (`this.title` fields and default values included), local variables, fields and assignments, and values returned to callers. `== null` checks decide nothing. When a value has several uses, `data` wins over `presentation`, then `fragment`: a value both shown and compared must stay as is. Uses in other files are not followed: there, and when the uses decide nothing, the last word of the argument, parameter or variable name decides (`searchHint`, `errorMessage`, `labelText` → `presentation`; `userId`, `prefKey`, `contentType` → `data`). The evidence lists the steps, such as `photoType → l10n.onlyDeleteOwnPhotos(…)`. The file is parsed without types, so uses are matched by name.
+
+Every issue fcheck reports has a site; `site` is null only on issues built without one.
+
 ## Related Files
 
 - `lib/src/analyzers/hardcoded_strings/hardcoded_string_visitor.dart`
 - `lib/src/analyzers/hardcoded_strings/hardcoded_string_issue.dart`
+- `lib/src/analyzers/hardcoded_strings/hardcoded_string_site.dart`
+- `lib/src/analyzers/hardcoded_strings/hardcoded_string_role.dart`
+- `lib/src/analyzers/hardcoded_strings/hardcoded_string_role_classifier.dart`
 - `lib/src/analyzers/hardcoded_strings/hardcoded_string_utils.dart`
 - `lib/src/analyzer_runner/analyzer_delegates.dart`
 - `lib/src/analyzer_runner/analysis_file_context.dart`

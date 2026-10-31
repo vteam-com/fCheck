@@ -7,10 +7,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.6.1] – 2026-10-31
+
+### Added
+
+- `ProjectMetrics.localizationSync` (`LocalizationSync`): whether the generated localizations class matches the template ARB file, with the keys and hand-written code `flutter gen-l10n` would drop and the ARB keys it has not generated yet; informational, in JSON under `localization.generatedClass`.
+- `HardcodedStringIssue.site` (`HardcodedStringSite`): where each parsed hardcoded string sits (offset, length, text split around interpolations), the call and named argument it is passed to, the `BuildContext` in scope and the enclosing `const` keywords, so tools can rewrite strings into localized lookups without re-analyzing.
+- `HardcodedStringSite.role` (`HardcodedStringRole`: `presentation`, `data`, `fragment`, `unknown`) and `roleEvidence`: what each hardcoded string is for, judged by following it through the file's parameters, variables, fields and returned values to where it is used, so tools can localize text users read and make compared values constants.
 
 ### Changed
 
+- Dead code: parameter names inside function types (`bool Function(String name)`, `void callback(int count)`) are no longer reported as unused variables.
 - **Hidden folders and `build/` are no longer walked.** They are still reported as excluded, but their contents (`.dart_tool`, `.git`, Flutter's `.symlinks` into the pub cache, build outputs) are no longer listed by `--excluded` or counted in "Excluded Files", which drops from e.g. 7,934 to 278. Analysis is up to 2.5× faster on projects with large build or cache folders, and unchanged on others.
 - **Faster analysis (about 3× on real projects), with identical results.**
   - Secrets: regexes are compiled once instead of per line, with cheap literal pre-checks; high-entropy candidates use a linear scan.
@@ -19,6 +26,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Localization skips two costly key-usage regexes on files that lack their required literals.
 
 ### Fixed
+
+- Hardcoded strings: the Flutter `Text("...")` regex scan is removed. It reported every interpolated `Text('Error: $e')` a second time under its raw source (e.g. 712 → 687 strings in one project). Files with syntax errors are still covered: the parser recovers them.
+- Hardcoded strings: escapes in interpolated strings are resolved before checking them, so `'Version\n$v'` is no longer skipped as a Windows path and strings made only of escapes, like `'\n\n'`, are no longer reported.
+- Hardcoded strings: identical strings on one line are each reported, as they already were in files the regex scan matched nothing in.
 
 - Dart files under `build/`, such as plugin example tests copied into `build/ios/SourcePackages`, no longer count as project test files or test cases (e.g. a project reporting 1,086 test cases now correctly reports 1).
 

@@ -1,11 +1,5 @@
 /// Shared helpers for hardcoded string analysis.
 class HardcodedStringUtils {
-  /// Minimum quote length for non-empty string literals.
-  static const int minQuotedLength = 2;
-
-  /// Offset from `$` to the next character when parsing interpolation.
-  static const int dollarSignOffset = 1;
-
   /// ASCII code start for digits.
   static const int asciiDigitStart = 48;
 
@@ -47,52 +41,6 @@ class HardcodedStringUtils {
     RegExp(r'^[\w\-]+\.[\w]+'),
     RegExp(r'^[a-zA-Z0-9]*[_\-0-9]+[a-zA-Z0-9_\-]*'),
   ];
-
-  /// Removes interpolation segments from a string literal's content.
-  static String removeInterpolations(String source) {
-    final buffer = StringBuffer();
-    var i = 0;
-    while (i < source.length) {
-      final char = source[i];
-      if (char == r'$' && (i == 0 || source[i - 1] != r'\')) {
-        if (i + dollarSignOffset < source.length &&
-            source[i + dollarSignOffset] == '{') {
-          i += minQuotedLength;
-          var depth = 1;
-          while (i < source.length && depth > 0) {
-            final current = source[i];
-            if (current == '{') {
-              depth++;
-            } else if (current == '}') {
-              depth--;
-            }
-            i++;
-          }
-          continue;
-        }
-
-        i += dollarSignOffset;
-        while (i < source.length && isIdentifierChar(source[i])) {
-          i++;
-        }
-        continue;
-      }
-
-      buffer.write(char);
-      i++;
-    }
-
-    return buffer.toString();
-  }
-
-  /// Returns true if [char] can appear in a Dart identifier.
-  static bool isIdentifierChar(String char) {
-    final code = char.codeUnitAt(0);
-    return (code >= asciiDigitStart && code <= asciiDigitEnd) || // 0-9
-        (code >= asciiUpperStart && code <= asciiUpperEnd) || // A-Z
-        (code >= asciiLowerStart && code <= asciiLowerEnd) || // a-z
-        char == '_';
-  }
 
   /// Returns true if [text] contains any alphanumeric characters.
   static bool containsMeaningfulText(String text) {

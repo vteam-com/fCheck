@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:fcheck/src/analyzer_runner/analysis_file_context.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
+import 'package:fcheck/src/analyzers/localization/localization_config.dart';
 import 'package:fcheck/src/analyzers/localization/localization_issue.dart';
 import 'package:fcheck/src/analyzers/localization/localization_issue_detail.dart';
 import 'package:fcheck/src/analyzers/localization/localization_utils.dart';
@@ -156,29 +157,8 @@ class LocalizationDelegate implements AnalyzerDelegate {
   }
 
   /// Resolves the ARB directory path from l10n.yaml or returns the default.
-  String _resolveArbDirectory(Directory projectDir) {
-    final l10nConfigPath = p.join(projectDir.path, 'l10n.yaml');
-    final configFile = File(l10nConfigPath);
-    if (configFile.existsSync()) {
-      try {
-        final content = configFile.readAsStringSync();
-        final arbDirMatch = RegExp(
-          r'^arb-dir:\s*(.+)$',
-          multiLine: true,
-        ).firstMatch(content);
-        if (arbDirMatch != null) {
-          final configuredDir = arbDirMatch.group(1)?.trim();
-          if (configuredDir != null && configuredDir.isNotEmpty) {
-            return p.join(projectDir.path, configuredDir);
-          }
-        }
-      } catch (_) {
-        // Failed to read or parse config file
-      }
-    }
-    // Default location
-    return p.join(projectDir.path, 'lib', 'l10n');
-  }
+  String _resolveArbDirectory(Directory projectDir) =>
+      p.join(projectDir.path, LocalizationConfig.load(projectDir).arbDir);
 
   // /// Performs detailed localization analysis with locale statistics.
   // ///

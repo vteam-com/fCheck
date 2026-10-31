@@ -408,6 +408,39 @@ class MyWidget extends StatelessWidget {
       expect(issues.first.value, equals('Detected text'));
     });
 
+    test('should report each widget string once, interpolated or not', () {
+      final delegate = HardcodedStringDelegate(
+        focus: HardcodedStringFocus.flutterWidgets,
+      );
+      final file = File('${tempDir.path}/widget_strings_once.dart')
+        ..writeAsStringSync('''
+import 'package:flutter/widgets.dart';
+
+class MyWidget extends StatelessWidget {
+  final String error = '';
+  final String version = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('Failed to load: \$error'),
+        Text('Version\\n\$version'),
+        Row(children: [Text('Save now'), Text('Save now')]),
+      ],
+    );
+  }
+}
+''');
+
+      final issues = _analyzeFile(delegate, file);
+      expect(
+        issues.map((issue) => issue.value),
+        equals(['Failed to load: ', 'Version\n', 'Save now', 'Save now']),
+      );
+      expect(issues.every((issue) => issue.site != null), isTrue);
+    });
+
     test('should skip widget strings with hardcoded ok comment forms', () {
       final delegate = HardcodedStringDelegate(
         focus: HardcodedStringFocus.flutterWidgets,
@@ -735,14 +768,12 @@ class Example {
       expect(issues, isEmpty);
     });
 
-    test(
-      'should use fallback scan for widget text when parse errors exist',
-      () {
-        final delegate = HardcodedStringDelegate(
-          focus: HardcodedStringFocus.flutterWidgets,
-        );
-        final file = File('${tempDir.path}/fallback_widget_scan.dart')
-          ..writeAsStringSync('''
+    test('should find widget text in files with parse errors', () {
+      final delegate = HardcodedStringDelegate(
+        focus: HardcodedStringFocus.flutterWidgets,
+      );
+      final file = File('${tempDir.path}/parse_error_widget.dart')
+        ..writeAsStringSync('''
 import 'package:flutter/widgets.dart';
 
 class MyWidget extends StatelessWidget {
@@ -757,17 +788,18 @@ class MyWidget extends StatelessWidget {
 }
 ''');
 
-        final issues = _analyzeFile(delegate, file);
-        expect(issues.any((issue) => issue.value == 'Recovered text'), isTrue);
-      },
-    );
+      final issues = _analyzeFile(delegate, file);
+      expect(issues.any((issue) => issue.value == 'Recovered text'), isTrue);
+    });
 
-    test('should skip technical and ignored strings in fallback scan', () {
-      final delegate = HardcodedStringDelegate(
-        focus: HardcodedStringFocus.flutterWidgets,
-      );
-      final file = File('${tempDir.path}/fallback_widget_skip.dart')
-        ..writeAsStringSync('''
+    test(
+      'should skip technical and ignored strings in files with parse errors',
+      () {
+        final delegate = HardcodedStringDelegate(
+          focus: HardcodedStringFocus.flutterWidgets,
+        );
+        final file = File('${tempDir.path}/parse_error_widget_skip.dart')
+          ..writeAsStringSync('''
 import 'package:flutter/widgets.dart';
 
 class MyWidget extends StatelessWidget {
@@ -786,10 +818,11 @@ class MyWidget extends StatelessWidget {
 }
 ''');
 
-      final issues = _analyzeFile(delegate, file);
-      expect(issues.length, equals(1));
-      expect(issues.first.value, equals('Detected text'));
-    });
+        final issues = _analyzeFile(delegate, file);
+        expect(issues.length, equals(1));
+        expect(issues.first.value, equals('Detected text'));
+      },
+    );
   });
 
   group('HardcodedStringDelegate dart print focus', () {

@@ -1,3 +1,4 @@
+import 'package:fcheck/src/analyzers/hardcoded_strings/hardcoded_string_site.dart';
 import 'package:fcheck/src/input_output/issue_location_utils.dart';
 
 /// Represents a hardcoded string finding.
@@ -14,15 +15,21 @@ class HardcodedStringIssue {
   /// The hardcoded string value.
   final String value;
 
+  /// Where the string sits in its source and what replacing it needs;
+  /// null only when the issue was built without one.
+  final HardcodedStringSite? site;
+
   /// Creates a new hardcoded string issue.
   ///
   /// [filePath] should be the relative or absolute path to the source file.
   /// [lineNumber] should be the 1-based line number where the string appears.
   /// [value] should be the actual string content without quotes.
+  /// [site] locates the string expression for tools that rewrite it.
   HardcodedStringIssue({
     required this.filePath,
     required this.lineNumber,
     required this.value,
+    this.site,
   });
 
   /// Returns a string representation of this hardcoded string issue.

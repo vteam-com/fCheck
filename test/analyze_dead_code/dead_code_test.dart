@@ -534,6 +534,41 @@ void main() {
       }
     });
 
+    test('does not report parameter names of function types', () {
+      final projectDir = Directory.systemTemp.createTempSync(
+        'fcheck_dead_code_function_type_test',
+      );
+      try {
+        File(p.join(projectDir.path, 'pubspec.yaml')).writeAsStringSync('''
+name: sample_function_type
+version: 0.0.1
+''');
+        File(p.join(projectDir.path, 'main.dart')).writeAsStringSync('''
+bool check(String text, bool Function(String name) isTaken) {
+  return isTaken(text);
+}
+
+void apply(String text, void callback(int count)) {
+  callback(text.length);
+}
+
+void main() {
+  print(check('a', (value) => value.isEmpty));
+  apply('b', print);
+}
+''');
+
+        final metrics = AnalyzeFolder(projectDir).analyze();
+
+        expect(
+          metrics.unusedVariableIssues.map((issue) => issue.name),
+          isNot(anyOf(contains('name'), contains('count'))),
+        );
+      } finally {
+        projectDir.deleteSync(recursive: true);
+      }
+    });
+
     test('keeps imports reachable from files with parse diagnostics', () {
       final projectDir = Directory.systemTemp.createTempSync(
         'fcheck_dead_code_parse_diagnostics_test',

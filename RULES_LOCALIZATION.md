@@ -88,6 +88,17 @@ Issues are reported only when:
 - ARB files are found
 - Language has missing translations (complete translations are not reported)
 
+## Generated Class Sync (Informational)
+
+`ProjectMetrics.localizationSync` (`LocalizationSync`) compares the generated localizations class with the template ARB file, using `l10n.yaml` (`arb-dir`, `template-arb-file`, `output-class`, `output-localization-file`, `output-dir`) or Flutter's defaults:
+
+- `generatedOnlyKeys`: keys of the class (its abstract `String` getters and methods) that the template ARB file lacks.
+- `missingKeys`: keys of the template ARB file that the class lacks, as when it was not regenerated after the ARB file changed.
+- `handWrittenMembers`: code gen-l10n does not write: extensions, extra top-level declarations, static members other than `of`, `delegate`, `localizationsDelegates` and `supportedLocales`, named constructors, and instance members other than `localeName` and the keys.
+- `isInSync`: all three lists are empty, so the class matches what `flutter gen-l10n` would write.
+
+It is `null` when the project has no template ARB file, no generated file declaring the configured class, or uses the synthetic `flutter_gen` package. It does not affect the score and appears in JSON output under `localization.generatedClass`.
+
 ## Language Support
 
 ### Supported Languages
