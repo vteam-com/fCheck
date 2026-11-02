@@ -65,6 +65,7 @@ class _ReportContext {
   final List sourceSortIssues;
   final List layersIssues;
   final List packagePlatformWarnings;
+  final List appIconIssues;
   final List nonCompliant;
 
   final bool codeSizeAnalyzerEnabled;
@@ -157,6 +158,7 @@ class _ReportContext {
     required this.sourceSortIssues,
     required this.layersIssues,
     required this.packagePlatformWarnings,
+    required this.appIconIssues,
     required this.nonCompliant,
     required this.codeSizeAnalyzerEnabled,
     required this.oneClassPerFileAnalyzerEnabled,
@@ -313,6 +315,9 @@ class _ReportContext {
       'legacy_ios_packages': metrics.packagePlatformWarnings.isEmpty
           ? _percentageMultiplier
           : _percentageMultiplier - 1,
+      'app_icons': metrics.appIconIssues.isEmpty
+          ? _percentageMultiplier
+          : _percentageMultiplier - 1,
       'suppression_hygiene':
           (_percentageMultiplier -
                   ((suppressionPenaltyPoints / _maxSuppressionPenaltyPoints) *
@@ -323,6 +328,7 @@ class _ReportContext {
     final analyzerIssueCountsByKey = <String, int>{
       for (final score in metrics.analyzerScores) score.key: score.issueCount,
       'legacy_ios_packages': metrics.packagePlatformWarnings.length,
+      'app_icons': metrics.appIconIssues.length,
       'suppression_hygiene':
           metrics.ignoreDirectivesCount +
           metrics.customExcludedFilesCount +
@@ -332,6 +338,7 @@ class _ReportContext {
       for (final score in metrics.analyzerScores) score.key: score.enabled,
       'suppression_hygiene': true,
       'legacy_ios_packages': true,
+      'app_icons': true,
     };
     if (!metrics.usesLocalization) {
       analyzerEnabledByKey[AnalyzerDomain.localization.configName] = false;
@@ -429,6 +436,7 @@ class _ReportContext {
       sourceSortIssues: metrics.sourceSortIssues,
       layersIssues: metrics.layersIssues,
       packagePlatformWarnings: metrics.packagePlatformWarnings,
+      appIconIssues: metrics.appIconIssues,
       nonCompliant: metrics.fileMetrics
           .where((metric) => !metric.isOneClassPerFileCompliant)
           .toList(),

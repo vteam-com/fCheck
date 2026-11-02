@@ -34,6 +34,8 @@ fCheck is no longer just a CLI. `package:fcheck/fcheck.dart` now exports the ful
 - `secrets`
 - `source_sorting`
 
+Informational, not scored: app icons of each platform folder (Android `mipmap` densities and `android:icon`, iOS/macOS asset catalog icon sets including an opaque iOS App Store icon, web favicon and manifest icons, the Windows `.ico` sizes, the Linux GTK window icon), and legacy CocoaPods iOS packages.
+
 Detailed behavior and edge cases are documented in `RULES*.md`.
 
 ### Layers scoring

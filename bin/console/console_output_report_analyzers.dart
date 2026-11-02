@@ -77,6 +77,7 @@ void _populateAnalyzerBlocks(_ReportContext ctx, List<_ListBlock> listBlocks) {
   );
   _addCustomLocalizationBlock(ctx, listBlocks);
   _addPackagePlatformWarningsBlock(ctx, listBlocks);
+  _addAppIconIssuesBlock(ctx, listBlocks);
   _addLayersBlock(ctx, listBlocks);
 }
 

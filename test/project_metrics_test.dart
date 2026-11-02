@@ -656,6 +656,7 @@ void main() {
           'documentationIssues': [],
           'localizationIssues': [],
           'packagePlatformWarnings': [],
+          'appIconIssues': [],
           'tests': {
             'imports': 0,
             'consumedFiles': 0,

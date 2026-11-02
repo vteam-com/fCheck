@@ -1,3 +1,4 @@
+import 'package:fcheck/src/analyzers/app_icons/app_icon_issue.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 import 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
@@ -91,6 +92,11 @@ class ProjectMetrics {
   /// List of package platform warnings (e.g., legacy CocoaPods iOS packages).
   /// These are informational only and do not affect compliance scoring.
   final List<PackagePlatformWarning> packagePlatformWarnings;
+
+  /// Problems with the app icons of the project's platform folders (missing
+  /// files, wrong sizes, alpha in the iOS App Store icon...). These are
+  /// informational only and do not affect compliance scoring.
+  final List<AppIconIssue> appIconIssues;
 
   /// Total number of dependency edges in the layers graph.
   final int layersEdgeCount;
@@ -333,6 +339,7 @@ class ProjectMetrics {
     this.localizationIssues = const [],
     this.localizationSync,
     this.packagePlatformWarnings = const [],
+    this.appIconIssues = const [],
     required this.layersEdgeCount,
     required this.layersCount,
     required this.dependencyGraph,
@@ -497,6 +504,7 @@ class ProjectMetrics {
     'packagePlatformWarnings': packagePlatformWarnings
         .map((w) => w.toJson())
         .toList(),
+    'appIconIssues': appIconIssues.map((i) => i.toJson()).toList(),
     'tests': {
       'imports': testImportCount,
       'consumedFiles': testConsumedFilesCount,

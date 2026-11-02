@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- App icons check (`AppIconChecker`, `ProjectMetrics.appIconIssues` of `AppIconIssue`): for each platform folder, flags missing or unreadable icons, wrong sizes, empty icon slots, an alpha channel in the iOS App Store icon, web manifests without 192 and 512 px icons, Windows `.ico` files missing 16, 32, 48 or 256 px images, and a Linux window icon that is missing or loaded relative to the working directory. Flags icons still showing Flutter's default artwork (any version `flutter create` wrote), comparing 8×8 color thumbnails of the 64 px and larger icons. `AppIconChecker.inspect` also returns every icon slot (`AppIconSlot`: group and label as Xcode shows them, file, expected size) for tools showing an Xcode-like review. Icons are read with PNG/ICO header parsing and a small PNG decoder, without new dependencies. Informational like Legacy iOS Packages: in JSON under `appIconIssues` and as an `App icons` report block, without affecting the score. The expected paths and sizes are public constants so tools can generate icons that pass.
+
 ## [1.6.1] – 2026-10-31
 
 ### Added

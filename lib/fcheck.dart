@@ -22,6 +22,7 @@ import 'dart:io';
 import 'package:fcheck/src/analyzer_runner/analyzer_delegate_abstract.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner.dart';
 import 'package:fcheck/src/analyzer_runner/analyzer_runner_result.dart';
+import 'package:fcheck/src/analyzers/app_icons/app_icon_checker.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_delegate.dart';
 import 'package:fcheck/src/analyzers/code_size/code_size_file_data.dart';
@@ -71,6 +72,14 @@ import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:fcheck/src/models/project_type.dart';
 import 'package:path/path.dart' as p;
 
+export 'package:fcheck/src/analyzers/app_icons/app_icon_checker.dart';
+export 'package:fcheck/src/analyzers/app_icons/app_icon_file_info.dart';
+export 'package:fcheck/src/analyzers/app_icons/app_icon_issue.dart';
+export 'package:fcheck/src/analyzers/app_icons/app_icon_issue_type.dart';
+export 'package:fcheck/src/analyzers/app_icons/app_icon_platform.dart';
+export 'package:fcheck/src/analyzers/app_icons/app_icon_report.dart';
+export 'package:fcheck/src/analyzers/app_icons/app_icon_slot.dart';
+export 'package:fcheck/src/analyzers/app_icons/app_icon_thumbnail.dart';
 export 'package:fcheck/src/analyzers/code_size/code_size_artifact.dart';
 export 'package:fcheck/src/analyzers/dead_code/dead_code_issue.dart';
 export 'package:fcheck/src/analyzers/documentation/documentation_issue.dart';
@@ -449,6 +458,7 @@ class AnalyzeFolder {
     final packagePlatformWarnings = collectPackagePlatformWarnings(
       loadPackageDependencyGraphData(projectDir),
     );
+    final appIconIssues = const AppIconChecker().check(projectDir);
 
     return ProjectMetrics(
       totalFolders: totalFolders,
@@ -517,6 +527,7 @@ class AnalyzeFolder {
       duplicateCodeIssues: duplicateCodeIssues,
       deadCodeIssues: deadCodeIssues,
       packagePlatformWarnings: packagePlatformWarnings,
+      appIconIssues: appIconIssues,
       oneClassPerFileAnalyzerEnabled: oneClassPerFileEnabled,
       codeSizeAnalyzerEnabled: codeSizeEnabled,
       hardcodedStringsAnalyzerEnabled: hardcodedStringsEnabled,
