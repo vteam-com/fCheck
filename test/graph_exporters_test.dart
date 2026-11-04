@@ -2521,6 +2521,136 @@ flutter:
       expect(warnings[0].packageName, equals('shared_lib'));
       expect(warnings[0].introducedBy, equals('pkg_a'));
     });
+
+    test('readPackagePlatformSupportFromPubspec reads implements', () {
+      final tempDir = Directory.systemTemp.createTempSync('fcheck_implements_');
+      addTearDown(() => tempDir.deleteSync(recursive: true));
+      final pubspec = File(p.join(tempDir.path, 'pubspec.yaml'))
+        ..writeAsStringSync('''
+name: google_maps_flutter_ios
+flutter:
+  plugin:
+    implements: google_maps_flutter
+    platforms:
+      ios:
+        pluginClass: FLTGoogleMapsPlugin
+''');
+
+      final support = readPackagePlatformSupportFromPubspec(pubspec);
+
+      expect(support.iosImplementedPlugin, equals('google_maps_flutter'));
+      expect(support.hasLegacyIosWarning, isTrue);
+    });
+
+    test('implements counts for iOS only when flutter.plugin declares ios', () {
+      final tempDir = Directory.systemTemp.createTempSync('fcheck_implements_');
+      addTearDown(() => tempDir.deleteSync(recursive: true));
+      final pubspec = File(p.join(tempDir.path, 'pubspec.yaml'))
+        ..writeAsStringSync('''
+name: foo_android
+platforms:
+  ios:
+flutter:
+  plugin:
+    implements: foo
+    platforms:
+      android:
+        package: com.example.foo
+        pluginClass: FooPlugin
+''');
+
+      final support = readPackagePlatformSupportFromPubspec(pubspec);
+
+      expect(support.supportsIos, isTrue);
+      expect(support.iosImplementedPlugin, isEmpty);
+    });
+
+    test('withoutReplacedIosImplementations drops the default implementation '
+        'the app replaced', () {
+      const appFacing = PackagePlatformSupport(supportsIos: true);
+      const defaultIos = PackagePlatformSupport(
+        supportsIos: true,
+        usesLegacyIosCocoaPods: true,
+        iosImplementedPlugin: 'google_maps_flutter',
+      );
+      const sdk10 = PackagePlatformSupport(
+        supportsIos: true,
+        iosImplementedPlugin: 'google_maps_flutter',
+      );
+      const unrelated = PackagePlatformSupport(
+        supportsIos: true,
+        usesLegacyIosCocoaPods: true,
+        iosImplementedPlugin: 'other_plugin',
+      );
+      final support = <String, PackagePlatformSupport>{
+        'google_maps_flutter': appFacing,
+        'google_maps_flutter_ios': defaultIos,
+        'google_maps_flutter_ios_sdk10': sdk10,
+        'other_plugin_ios': unrelated,
+      };
+
+      const replacingApp = {
+        'google_maps_flutter',
+        'google_maps_flutter_ios_sdk10',
+      };
+      final replaced = withoutReplacedIosImplementations(
+        support,
+        runtimePackageNames: replacingApp,
+        directPackageNames: replacingApp,
+      );
+      final notReplaced = withoutReplacedIosImplementations(
+        support,
+        runtimePackageNames: const {'google_maps_flutter'},
+        directPackageNames: const {'google_maps_flutter'},
+      );
+      const choosingApp = {
+        'google_maps_flutter_ios',
+        'google_maps_flutter_ios_sdk10',
+      };
+      final directlyChosen = withoutReplacedIosImplementations(
+        support,
+        runtimePackageNames: choosingApp,
+        directPackageNames: choosingApp,
+      );
+      final replacedByDevDependency = withoutReplacedIosImplementations(
+        support,
+        runtimePackageNames: const {'google_maps_flutter'},
+        directPackageNames: replacingApp,
+      );
+
+      expect(replaced['google_maps_flutter_ios']?.hasLegacyIosWarning, isFalse);
+      expect(
+        replaced['google_maps_flutter_ios']?.iosImplementedPlugin,
+        equals('google_maps_flutter'),
+      );
+      expect(replaced['other_plugin_ios']?.hasLegacyIosWarning, isTrue);
+      expect(notReplaced, same(support));
+      expect(replacedByDevDependency, same(support));
+      expect(
+        directlyChosen['google_maps_flutter_ios']?.hasLegacyIosWarning,
+        isTrue,
+      );
+      expect(
+        collectPackagePlatformWarnings(
+          PackageDependencyGraphData(
+            projectName: 'maps_app',
+            version: '1.0.0',
+            dependencies: const <PackageDependencyNode>[
+              (name: 'google_maps_flutter', version: '2.18.0'),
+              (name: 'google_maps_flutter_ios_sdk10', version: '2.18.5'),
+            ],
+            devDependencies: const <PackageDependencyNode>[],
+            derivedDependenciesByPackage: const {
+              'google_maps_flutter': <PackageDependencyNode>[
+                (name: 'google_maps_flutter_ios', version: '2.18.0'),
+              ],
+            },
+            platformSupportByPackage: replaced,
+          ),
+        ),
+        isEmpty,
+      );
+    });
   });
 }
 

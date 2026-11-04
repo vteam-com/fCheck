@@ -11,6 +11,7 @@ const String _platformsKey = 'platforms';
 const String _flutterKey = 'flutter';
 const String _pluginKey = 'plugin';
 const String _defaultPackageKey = 'default_package';
+const String _implementsKey = 'implements';
 const String _dartPluginClassKey = 'dartPluginClass';
 const String _ffiPluginKey = 'ffiPlugin';
 const String _pluginClassKey = 'pluginClass';
@@ -54,6 +55,11 @@ class PackagePlatformSupport {
   /// The declared Flutter SDK constraint from `environment.flutter`, when present.
   final String flutterSdkConstraint;
 
+  /// The federated plugin this package implements on iOS, from
+  /// `flutter.plugin.implements` when `flutter.plugin.platforms` declares
+  /// `ios`; empty otherwise.
+  final String iosImplementedPlugin;
+
   /// Creates a package platform support value.
   const PackagePlatformSupport({
     this.supportsAndroid = false,
@@ -66,6 +72,7 @@ class PackagePlatformSupport {
     this.isPureDart = false,
     this.dartSdkConstraint = '',
     this.flutterSdkConstraint = '',
+    this.iosImplementedPlugin = '',
   });
 
   /// Returns whether at least one explicit platform is declared.
@@ -82,6 +89,34 @@ class PackagePlatformSupport {
 
   /// Returns whether the package should render the legacy iOS warning state.
   bool get hasLegacyIosWarning => supportsIos && usesLegacyIosCocoaPods;
+
+  /// Returns a copy of this support with the given fields replaced.
+  PackagePlatformSupport copyWith({
+    bool? supportsAndroid,
+    bool? supportsIos,
+    bool? usesLegacyIosCocoaPods,
+    bool? supportsWindows,
+    bool? supportsMacos,
+    bool? supportsLinux,
+    bool? supportsWeb,
+    bool? isPureDart,
+    String? dartSdkConstraint,
+    String? flutterSdkConstraint,
+    String? iosImplementedPlugin,
+  }) => PackagePlatformSupport(
+    supportsAndroid: supportsAndroid ?? this.supportsAndroid,
+    supportsIos: supportsIos ?? this.supportsIos,
+    usesLegacyIosCocoaPods:
+        usesLegacyIosCocoaPods ?? this.usesLegacyIosCocoaPods,
+    supportsWindows: supportsWindows ?? this.supportsWindows,
+    supportsMacos: supportsMacos ?? this.supportsMacos,
+    supportsLinux: supportsLinux ?? this.supportsLinux,
+    supportsWeb: supportsWeb ?? this.supportsWeb,
+    isPureDart: isPureDart ?? this.isPureDart,
+    dartSdkConstraint: dartSdkConstraint ?? this.dartSdkConstraint,
+    flutterSdkConstraint: flutterSdkConstraint ?? this.flutterSdkConstraint,
+    iosImplementedPlugin: iosImplementedPlugin ?? this.iosImplementedPlugin,
+  );
 
   /// Returns a merged support set containing every supported platform from both values.
   PackagePlatformSupport merge(PackagePlatformSupport other) {
@@ -100,18 +135,12 @@ class PackagePlatformSupport {
       flutterSdkConstraint: flutterSdkConstraint.isNotEmpty
           ? flutterSdkConstraint
           : other.flutterSdkConstraint,
+      iosImplementedPlugin: iosImplementedPlugin.isNotEmpty
+          ? iosImplementedPlugin
+          : other.iosImplementedPlugin,
     );
-    return PackagePlatformSupport(
-      supportsAndroid: mergedSupport.supportsAndroid,
-      supportsIos: mergedSupport.supportsIos,
-      usesLegacyIosCocoaPods: mergedSupport.usesLegacyIosCocoaPods,
-      supportsWindows: mergedSupport.supportsWindows,
-      supportsMacos: mergedSupport.supportsMacos,
-      supportsLinux: mergedSupport.supportsLinux,
-      supportsWeb: mergedSupport.supportsWeb,
+    return mergedSupport.copyWith(
       isPureDart: !mergedSupport.hasAny && (isPureDart || other.isPureDart),
-      dartSdkConstraint: mergedSupport.dartSdkConstraint,
-      flutterSdkConstraint: mergedSupport.flutterSdkConstraint,
     );
   }
 }
@@ -259,14 +288,7 @@ PackagePlatformSupport readPackagePlatformSupportFromPubspec(File pubspecFile) {
     );
     final mergedPlatformSupport = declaredPlatforms.merge(flutterPlatforms);
     if (mergedPlatformSupport.hasAny) {
-      return PackagePlatformSupport(
-        supportsAndroid: mergedPlatformSupport.supportsAndroid,
-        supportsIos: mergedPlatformSupport.supportsIos,
-        usesLegacyIosCocoaPods: mergedPlatformSupport.usesLegacyIosCocoaPods,
-        supportsWindows: mergedPlatformSupport.supportsWindows,
-        supportsMacos: mergedPlatformSupport.supportsMacos,
-        supportsLinux: mergedPlatformSupport.supportsLinux,
-        supportsWeb: mergedPlatformSupport.supportsWeb,
+      return mergedPlatformSupport.copyWith(
         dartSdkConstraint: dartSdkConstraint,
         flutterSdkConstraint: flutterSdkConstraint,
       );
@@ -375,19 +397,53 @@ PackagePlatformSupport _parseFlutterPluginPlatformSupport(
     return platformSupport;
   }
 
-  return PackagePlatformSupport(
-    supportsAndroid: platformSupport.supportsAndroid,
-    supportsIos: platformSupport.supportsIos,
+  final implementedPlugin = pluginValue[_implementsKey];
+  return platformSupport.copyWith(
     usesLegacyIosCocoaPods: _usesLegacyIosCocoaPods(
       pluginValue[_platformsKey],
       packageRoot: packageRoot,
       packageName: packageName,
     ),
-    supportsWindows: platformSupport.supportsWindows,
-    supportsMacos: platformSupport.supportsMacos,
-    supportsLinux: platformSupport.supportsLinux,
-    supportsWeb: platformSupport.supportsWeb,
+    iosImplementedPlugin: implementedPlugin is String
+        ? implementedPlugin.trim()
+        : '',
   );
+}
+
+/// Returns [supportByPackage] without the legacy CocoaPods flag of the iOS
+/// implementations the app replaced.
+///
+/// When a runtime dependency in [runtimePackageNames] implements a federated
+/// plugin on iOS, Flutter builds it instead of the plugin's other
+/// implementations, such as its endorsed `default_package`, which then only
+/// sit in the lockfile (e.g. `google_maps_flutter_ios` once the app depends
+/// on `google_maps_flutter_ios_sdk10`). Dev dependencies never replace an
+/// implementation, since release builds leave them out. Any package in
+/// [directPackageNames] keeps its flag: a CocoaPods plugin the app depends on
+/// directly is always reported, whatever the Flutter version.
+Map<String, PackagePlatformSupport> withoutReplacedIosImplementations(
+  Map<String, PackagePlatformSupport> supportByPackage, {
+  required Set<String> runtimePackageNames,
+  required Set<String> directPackageNames,
+}) {
+  final pluginsImplementedByApp = <String>{
+    for (final name in runtimePackageNames)
+      if (supportByPackage[name]?.iosImplementedPlugin case final plugin?
+          when plugin.isNotEmpty)
+        plugin,
+  };
+  if (pluginsImplementedByApp.isEmpty) {
+    return supportByPackage;
+  }
+  return <String, PackagePlatformSupport>{
+    for (final MapEntry(key: name, value: support) in supportByPackage.entries)
+      name:
+          support.usesLegacyIosCocoaPods &&
+              !directPackageNames.contains(name) &&
+              pluginsImplementedByApp.contains(support.iosImplementedPlugin)
+          ? support.copyWith(usesLegacyIosCocoaPods: false)
+          : support,
+  };
 }
 
 /// Returns whether an iOS plugin declaration still falls back to CocoaPods.

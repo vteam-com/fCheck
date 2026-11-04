@@ -437,12 +437,17 @@ Package dependency badge rules:
   CocoaPods render the package node in warning orange and the `I` badge in
   red; the node tooltip explains that no Swift Package Manager manifest was
   found. Packages with a Swift Package Manager manifest keep the standard
-  styling.
+  styling. A federated iOS implementation the app replaced is not flagged:
+  when a package under `dependencies` declares `flutter.plugin.implements` for
+  the same plugin on iOS (e.g. `google_maps_flutter_ios_sdk10` next to
+  `google_maps_flutter`), Flutter builds that one instead of the endorsed
+  default. A CocoaPods plugin the app lists directly is always flagged,
+  whatever the Flutter version.
 - Package dependency edges expose hover tooltips with source package, target
   package, and resolved version.
 - Pure Dart packages render a `Dart` badge instead of platform letters.
-- The exporter reads package declarations from `platforms:` and
-  `flutter.plugin.platforms`, and falls back to `Dart` when a package pubspec
+- The exporter reads package declarations from `platforms:`,
+  `flutter.plugin.platforms` and `flutter.plugin.implements`, and falls back to `Dart` when a package pubspec
   is runtime-agnostic and does not depend on the Flutter SDK.
 
 ### Package Dependencies diagram

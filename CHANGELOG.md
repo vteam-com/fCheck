@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Legacy iOS Packages no longer flags a federated plugin implementation the app replaced. When a package under `dependencies` implements the same plugin on iOS (e.g. `google_maps_flutter_ios_sdk10` next to `google_maps_flutter`), Flutter builds that one instead of the endorsed default (`google_maps_flutter_ios`) ([flutter#186770](https://github.com/flutter/flutter/issues/186770)). fCheck now follows the same rule, in the report, JSON and package SVG. Dev dependencies never count as a replacement, and a CocoaPods plugin the app lists directly is always flagged, whatever the Flutter version. `PackagePlatformSupport.iosImplementedPlugin` exposes each package's iOS `flutter.plugin.implements`, and `PackagePlatformSupport.copyWith` was added.
+
 ## [1.6.2] – 2026-11-02
 
 ### Added

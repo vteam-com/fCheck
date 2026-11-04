@@ -195,16 +195,21 @@ PackageDependencyGraphData loadPackageDependencyGraphData(Directory directory) {
       rootPackageNames: allDirectPackageNames,
       packageVersions: packageVersions,
     );
-    final platformSupportByPackage = readPackagePlatformSupportByPackage(
-      directory,
-      collectVisiblePackageNames(
-        dependencies: dependencies,
-        devDependencies: devDependencies,
-        derivedDependenciesByPackage: derivedData.derivedByPackage,
-        nestedDerivedDependenciesByPackage: derivedData.nestedDerivedByPackage,
-        transitiveDependencyLayersByParentPackage:
-            derivedData.transitiveDependencyLayersByParentPackage,
+    final platformSupportByPackage = withoutReplacedIosImplementations(
+      readPackagePlatformSupportByPackage(
+        directory,
+        collectVisiblePackageNames(
+          dependencies: dependencies,
+          devDependencies: devDependencies,
+          derivedDependenciesByPackage: derivedData.derivedByPackage,
+          nestedDerivedDependenciesByPackage:
+              derivedData.nestedDerivedByPackage,
+          transitiveDependencyLayersByParentPackage:
+              derivedData.transitiveDependencyLayersByParentPackage,
+        ),
       ),
+      runtimePackageNames: dependencyNames.toSet(),
+      directPackageNames: allDirectPackageNames,
     );
 
     return PackageDependencyGraphData(
