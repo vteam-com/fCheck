@@ -2,12 +2,12 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:fcheck/src/analyzers/shared/dependency_uri_utils.dart';
 
-/// A visitor that traverses the AST to collect import/export references and entry points.
+/// A visitor that traverses the AST to collect import/export/part references and entry points.
 ///
-/// This class extends the analyzer's AST visitor to identify import and export
-/// directives in Dart source code. It collects all the files that each Dart
-/// file depends on through imports and exports, and identifies entry points
-/// (files containing main() functions).
+/// This class extends the analyzer's AST visitor to identify import, export
+/// and part directives in Dart source code. It collects all the files that
+/// each Dart file depends on through imports, exports and parts, and
+/// identifies entry points (files containing main() functions).
 class LayersVisitor extends GeneralizingAstVisitor<void> {
   /// Creates a new visitor for the specified file.
   ///
@@ -25,7 +25,7 @@ class LayersVisitor extends GeneralizingAstVisitor<void> {
   /// The package name from pubspec.yaml.
   final String packageName;
 
-  /// The list of files that this file imports or exports.
+  /// The list of files that this file imports, exports or declares as parts.
   final List<String> dependencies = <String>[];
 
   /// Whether this file contains a main() function (entry point).
@@ -55,6 +55,19 @@ class LayersVisitor extends GeneralizingAstVisitor<void> {
   void visitExportDirective(ExportDirective node) {
     _addDirectiveDependencies(node.uri.stringValue, node.configurations);
     super.visitExportDirective(node);
+  }
+
+  /// Visits a part directive node in the AST.
+  ///
+  /// A part file is compiled into the library that declares it, so the
+  /// library depends on it. Recording the edge keeps part files connected
+  /// in the dependency graph instead of showing them as orphans.
+  ///
+  /// [node] The part directive node being visited.
+  @override
+  void visitPartDirective(PartDirective node) {
+    _addDirectiveDependencies(node.uri.stringValue, const []);
+    super.visitPartDirective(node);
   }
 
   /// Visits a function declaration node in the AST.

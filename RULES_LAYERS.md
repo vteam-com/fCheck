@@ -8,7 +8,7 @@ Shared analysis/exclusion conventions are defined in `RULES.md`.
 
 ## What It Collects
 
-- Dependencies from `import` and `export` directives.
+- Dependencies from `import`, `export` and `part` directives. A `part` edge goes from the library to its part file; `part of` is not followed, so the pair does not form a cycle.
 - Entry points are files with a top-level `main()` function.
 
 ## How It Works (Project Analysis via `AnalyzeFolder.analyze()`)

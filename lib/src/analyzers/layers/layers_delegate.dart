@@ -21,7 +21,7 @@ class LayersDelegate implements AnalyzerDelegate {
 
   /// Analyzes a file for layers dependencies using the unified context.
   ///
-  /// This method extracts import/export dependencies and entry point status
+  /// This method extracts import/export/part dependencies and entry point status
   /// for layers architecture analysis.
   ///
   /// [context] The pre-analyzed file context containing AST and content.

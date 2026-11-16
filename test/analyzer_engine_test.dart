@@ -431,6 +431,46 @@ class PartOnlyType {}
       );
     });
 
+    test(
+      'should include part directive edges in the layers dependency graph',
+      () {
+        final libDir = Directory('${tempDir.path}/lib')..createSync();
+        File('${libDir.path}/main.dart').writeAsStringSync('''
+import 'owner.dart';
+
+void main() {
+  bootstrap();
+}
+''');
+        File('${libDir.path}/owner.dart').writeAsStringSync('''
+part 'owner_part.dart';
+
+void bootstrap() => _PartOnlyType();
+''');
+        File('${libDir.path}/owner_part.dart').writeAsStringSync('''
+part of 'owner.dart';
+
+class _PartOnlyType {}
+''');
+
+        final metrics = analyzer.analyze();
+        final ownerEntry = metrics.dependencyGraph.entries.firstWhere(
+          (entry) => entry.key.endsWith('owner.dart'),
+        );
+
+        expect(
+          ownerEntry.value.any((dep) => dep.endsWith('owner_part.dart')),
+          isTrue,
+        );
+        expect(
+          metrics.layersByFile.keys.any(
+            (path) => path.endsWith('owner_part.dart'),
+          ),
+          isTrue,
+        );
+      },
+    );
+
     test('should mark catch variables, function-typed parameters, and operator usages as used', () {
       File('${tempDir.path}/operators_coverage.dart').writeAsStringSync('''
 class Ops {
