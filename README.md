@@ -195,6 +195,8 @@ void main() {
 
 `analyze()` is synchronous and parses every file; in a Flutter app run it off the UI thread, e.g. `await Isolate.run(() => AnalyzeFolder.fromConfig(config).analyze())`.
 
+To check a planned change before making it, such as moving files between folders, give `validateLayers` the dependency graph it would make: it returns the Layers issues fCheck would then report, the same as `metrics.layersIssues` for the current graph (`metrics.dependencyGraph`).
+
 #### Real-world example: FIDE
 
 [FIDE](https://github.com/vteam-com/FIDE) runs fCheck on a background isolate and loosens duplicate detection to catch code that was copied and has since drifted, before feeding the findings to its AI review:

@@ -109,6 +109,19 @@ const String _windowsPlatformFolder = 'windows';
 const String _linuxPlatformFolder = 'linux';
 const String _webPlatformFolder = 'web';
 
+/// The Layers issues `fcheck` reports for [dependencyGraph], each file's
+/// project dependencies by path: file and folder cycles, and files and
+/// folders depending on a layer above theirs, as the folders diagram
+/// draws them.
+///
+/// Lets a tool check a planned change, such as moving files between
+/// folders, before making it: compare the issues of the graph it would
+/// make with those of the current one.
+List<LayersIssue> validateLayers(Map<String, List<String>> dependencyGraph) =>
+    buildReportedLayersIssuesFromFolderGraph(
+      LayersAnalyzer.forGraph().analyzeGraph(dependencyGraph),
+    );
+
 /// The main engine for analyzing Flutter/Dart project quality.
 ///
 /// This class provides comprehensive analysis of Dart projects, examining
@@ -412,8 +425,9 @@ class AnalyzeFolder {
             analyzedFilePaths: dartFiles.map((file) => file.path).toSet(),
           )
         : LayersAnalysisResult(issues: [], layers: {}, dependencyGraph: {});
+    // The same verdict a tool gets for a planned graph
     final reportedLayersIssues = layersEnabled
-        ? buildReportedLayersIssuesFromFolderGraph(layersResult)
+        ? validateLayers(layersResult.dependencyGraph)
         : <LayersIssue>[];
 
     final metricsAggregation = MetricsAnalyzer().aggregate(

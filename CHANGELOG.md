@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `validateLayers(dependencyGraph)` returns the Layers issues fCheck reports for a dependency graph: file and folder cycles, and files and folders depending on a layer above theirs, as the folders SVG draws them. A tool can check a planned change before making it, such as moving files between folders, by comparing the issues of the graph it would make with the current ones. The analysis reports its own Layers issues through it, so both always agree. `LayersAnalyzer.forGraph().analyzeGraph(graph)` runs the layers analysis on a graph alone.
+
 ## [1.6.4] – 2026-11-16
 
 ### Fixed

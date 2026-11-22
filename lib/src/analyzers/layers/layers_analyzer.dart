@@ -21,6 +21,10 @@ class LayersAnalyzer {
     required String packageName,
   });
 
+  /// Creates an analyzer of a dependency graph alone, for [analyzeGraph],
+  /// which needs no project metadata.
+  LayersAnalyzer.forGraph();
+
   /// Analyzes pre-collected per-file dependency data for layers violations.
   ///
   /// [fileData] should contain maps:
@@ -53,7 +57,7 @@ class LayersAnalyzer {
       filteredGraph[entry.key] = filteredDeps;
     }
 
-    return _analyzeGraph(filteredGraph);
+    return analyzeGraph(filteredGraph);
   }
 
   /// Analyzes the dependency graph for layers violations.
@@ -65,9 +69,7 @@ class LayersAnalyzer {
   /// [dependencyGraph] A map from file paths to their dependencies.
   ///
   /// Returns a [LayersAnalysisResult] with issues and layer assignments.
-  LayersAnalysisResult _analyzeGraph(
-    Map<String, List<String>> dependencyGraph,
-  ) {
+  LayersAnalysisResult analyzeGraph(Map<String, List<String>> dependencyGraph) {
     final List<LayersIssue> issues = <LayersIssue>[];
 
     // Detect cycles using DFS at file level
