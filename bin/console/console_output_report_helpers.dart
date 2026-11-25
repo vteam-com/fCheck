@@ -35,6 +35,7 @@ const Map<String, String> _analyzerTitleByKey = {
   'duplicate_code': 'Duplicate code',
   'documentation': 'Documentation',
   'localization': 'Localization',
+  'widget_state': 'Widget states',
   'suppression_hygiene': 'Checks bypassed',
   'legacy_ios_packages': 'Legacy iOS Packages',
   'app_icons': 'App icons',

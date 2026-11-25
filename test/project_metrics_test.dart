@@ -568,6 +568,8 @@ void main() {
             'duplicateCodeIssues': 1,
             'documentationIssues': 0,
             'localizationIssues': 0,
+            'widgetStates': 0,
+            'widgetStateIssues': 0,
             'complianceScore': 58,
           },
           'layers': {
@@ -655,6 +657,7 @@ void main() {
           ],
           'documentationIssues': [],
           'localizationIssues': [],
+          'widgetStateIssues': [],
           'packagePlatformWarnings': [],
           'appIconIssues': [],
           'tests': {

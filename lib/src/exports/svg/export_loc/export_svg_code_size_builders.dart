@@ -525,6 +525,13 @@ _ArtifactWarningIndex _buildArtifactWarningIndex({
       warningType: 'Documentation',
     );
   }
+  for (final issue in projectMetrics.widgetStateIssues) {
+    addLineScopedIssue(
+      rawPath: issue.filePath,
+      lineNumber: issue.lineNumber,
+      warningType: 'Widget States',
+    );
+  }
   for (final issue in projectMetrics.sourceSortIssues) {
     addLineScopedIssue(
       rawPath: issue.filePath,

@@ -128,6 +128,9 @@ class AppStrings {
   static const String deadCodeIssuesDetected = 'dead code issues detected:';
   static const String documentationIssuesDetected =
       'documentation issues detected:';
+  static const String widgetStateCheck = 'Widget state check';
+  static const String widgetStateIssuesDetected =
+      'widget state issues detected:';
   static const String layersViolationsDetected =
       'layers architecture violations detected:';
   static const String duplicateBlocksDetected =
@@ -262,6 +265,8 @@ class AppStrings {
       '  - duplicate_code: 1 - ((impactLines / max(1, loc)) * 2.5)';
   static const String impactLinesSum =
       '    impactLines = sum(issue.lineCount * issue.similarity)';
+  static const String formulaWidgetState =
+      '  - widget_state: 1 - (issues / max(2.0, widgetStates * 0.5)); without widget States -> excluded from score';
   static const String suppressionPenaltyBudget =
       'Suppression penalty (budget-based):';
   static const String formulaIgnoreBudget =

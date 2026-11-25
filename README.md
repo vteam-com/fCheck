@@ -33,6 +33,7 @@ fCheck is no longer just a CLI. `package:fcheck/fcheck.dart` now exports the ful
 - `one_class_per_file`
 - `secrets`
 - `source_sorting`
+- `widget_state`
 
 Informational, not scored: app icons of each platform folder (Android `mipmap` densities and `android:icon`, iOS/macOS asset catalog icon sets including an opaque iOS App Store icon, web favicon and manifest icons, the Windows `.ico` sizes, the Linux GTK window icon), and legacy CocoaPods iOS packages.
 
@@ -302,6 +303,7 @@ Numbers            :   842 (74 hardcoded)
 [✓] One class per file
 [✓] Secrets
 [✓] Source sorting
+[✓] Widget states
 --------------------------------- Scorecard ---------------------------------
 Total Score        : 100%
 Invest Next        : Maintain this level by enforcing fcheck in CI on every pull request.
@@ -369,6 +371,7 @@ Use top-of-file or line-level ignore directives:
 // ignore: fcheck_magic_numbers
 // ignore: fcheck_one_class_per_file
 // ignore: fcheck_secrets
+// ignore: fcheck_widget_state
 ```
 
 CLI help to guide you on how to exclude some of checks

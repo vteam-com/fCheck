@@ -15,6 +15,7 @@ fCheck is a Dart CLI tool for analyzing Flutter and Dart project quality. It pro
 - Code size threshold analysis
 - Layer dependency analysis and visualization
 - Localization coverage and translation completeness analysis
+- Flutter widget `State` placement, privacy and tests reaching into it
 - Project metrics (files, folders, LOC, comment ratios, widget implementation counts, literal inventory with duplicate ratios, and test discovery counts including test case totals)
 
 ## Domain Rules (Start Here)
@@ -28,6 +29,7 @@ fCheck is a Dart CLI tool for analyzing Flutter and Dart project quality. It pro
 - `RULES_LOCALIZATION.md` for localization coverage and translation completeness rules.
 - Localization rules also include orphan English ARB key detection based on actual app-source usage under `lib/`.
 - `RULES_SORTING.md` for Flutter widget member ordering rules.
+- `RULES_WIDGET_STATE.md` for widget `State` placement and privacy rules.
 - `RULES_LAYERS.md` for dependency graph and layer analysis rules.
 
 ## Analyzer Naming and Sorting Conventions
@@ -68,6 +70,7 @@ When titles are compared alphabetically, the current analyzer names are:
 10. One class per file
 11. Secrets
 12. Source sorting
+13. Widget states
 
 - `RULES_LOC.md` for code-size thresholds, scoring, and reporting.
 - `RULE_METRICS.md` for project metrics analyzer architecture.
@@ -249,7 +252,7 @@ These `RULES_*.md` files are the source of truth for rule behavior. Keep
   - `analyzers.disabled`: explicit opt-out list
   - `analyzers.options.duplicate_code`: threshold/size tuning for duplicate-code analysis
   - `analyzers.options.code_size`: LOC threshold tuning (`max_file_loc`, `max_class_loc`, `max_function_loc`, `max_method_loc`)
-- Supported analyzer keys: `code_size`, `one_class_per_file`, `hardcoded_strings`, `magic_numbers`, `source_sorting`, `layers`, `secrets`, `dead_code`, `duplicate_code`, `documentation`, `localization`.
+- Supported analyzer keys: `code_size`, `one_class_per_file`, `hardcoded_strings`, `magic_numbers`, `source_sorting`, `layers`, `secrets`, `dead_code`, `duplicate_code`, `documentation`, `localization`, `widget_state`.
 - Legacy `ignores.<analyzer>: true` remains supported as a compatibility alias for disabling analyzers.
 - Precedence: built-in defaults < `.fcheck` < CLI flags.
 - File-level ignore: `// ignore: fcheck_<domain>` at the top of a Dart file.

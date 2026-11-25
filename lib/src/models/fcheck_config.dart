@@ -38,6 +38,9 @@ enum AnalyzerDomain {
 
   /// Localization coverage and translation completeness analysis.
   localization,
+
+  /// Flutter widget `State` placement and privacy checks.
+  widgetState,
 }
 
 /// Helpers for mapping analyzer domains to configuration keys.
@@ -67,6 +70,8 @@ extension AnalyzerDomainName on AnalyzerDomain {
         return 'documentation';
       case AnalyzerDomain.localization:
         return 'localization';
+      case AnalyzerDomain.widgetState:
+        return 'widget_state';
     }
   }
 }
@@ -721,6 +726,7 @@ class FcheckConfig {
     'duplicate_code': AnalyzerDomain.duplicateCode,
     'documentation': AnalyzerDomain.documentation,
     'localization': AnalyzerDomain.localization,
+    'widget_state': AnalyzerDomain.widgetState,
   };
 }
 

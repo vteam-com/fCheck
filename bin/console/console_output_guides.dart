@@ -28,6 +28,8 @@ String? _ignoreDirectiveForAnalyzer(AnalyzerDomain analyzer) {
       return IgnoreConfig.ignoreDirectiveForDuplicateCode;
     case AnalyzerDomain.localization:
       return null;
+    case AnalyzerDomain.widgetState:
+      return IgnoreConfig.ignoreDirectiveForWidgetState;
   }
 }
 
@@ -145,6 +147,7 @@ void printScoreSystemGuide() {
   print(AppStrings.formulaDeadCode);
   print(AppStrings.formulaDuplicateCode);
   print(AppStrings.impactLinesSum);
+  print(AppStrings.formulaWidgetState);
   print('');
   print(AppStrings.suppressionPenaltyBudget);
   print(AppStrings.formulaIgnoreBudget);

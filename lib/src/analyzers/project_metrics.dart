@@ -12,6 +12,7 @@ import 'package:fcheck/src/analyzers/metrics/metrics_analyzer.dart';
 import 'package:fcheck/src/analyzers/metrics/metrics_input.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
+import 'package:fcheck/src/analyzers/widget_state/widget_state_issue.dart';
 import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 import 'package:fcheck/src/models/package_platform_warning.dart';
@@ -97,6 +98,14 @@ class ProjectMetrics {
   /// files, wrong sizes, alpha in the iOS App Store icon...). These are
   /// informational only and do not affect compliance scoring.
   final List<AppIconIssue> appIconIssues;
+
+  /// Widget `State`s out of place (apart from their widget, or public
+  /// though no other library names them) and test lines reaching into one.
+  final List<WidgetStateIssue> widgetStateIssues;
+
+  /// Number of widget `State` classes the analyzed code declares, the
+  /// widget state analyzer's scope.
+  final int widgetStateCount;
 
   /// Total number of dependency edges in the layers graph.
   final int layersEdgeCount;
@@ -262,6 +271,9 @@ class ProjectMetrics {
   /// Whether the localization analyzer was enabled for this run.
   final bool localizationAnalyzerEnabled;
 
+  /// Whether the widget state analyzer was enabled for this run.
+  final bool widgetStateAnalyzerEnabled;
+
   /// Creates a new ProjectMetrics instance.
   ///
   /// [totalFolders] Total number of folders in the project.
@@ -310,6 +322,8 @@ class ProjectMetrics {
   /// [ignoreDirectivesCount] Number of `// ignore: fcheck_*` directives found.
   /// [ignoreDirectiveFiles] Unique file paths containing `// ignore: fcheck_*`.
   /// [ignoreDirectiveCountsByFile] Per-file counts for `// ignore: fcheck_*`.
+  /// [widgetStateIssues] Widget `State`s out of place and tests reaching into one.
+  /// [widgetStateCount] Number of widget `State` classes declared.
   ProjectMetrics({
     required this.totalFolders,
     required this.totalFiles,
@@ -340,6 +354,8 @@ class ProjectMetrics {
     this.localizationSync,
     this.packagePlatformWarnings = const [],
     this.appIconIssues = const [],
+    this.widgetStateIssues = const [],
+    this.widgetStateCount = 0,
     required this.layersEdgeCount,
     required this.layersCount,
     required this.dependencyGraph,
@@ -385,6 +401,7 @@ class ProjectMetrics {
     this.duplicateCodeAnalyzerEnabled = true,
     this.documentationAnalyzerEnabled = true,
     this.localizationAnalyzerEnabled = true,
+    this.widgetStateAnalyzerEnabled = true,
   });
 
   late final ProjectMetricsAnalysisResult _analysisResult = _metricsAnalyzer
@@ -404,6 +421,8 @@ class ProjectMetrics {
           duplicateCodeIssues: duplicateCodeIssues,
           documentationIssues: documentationIssues,
           localizationIssues: localizationIssues,
+          widgetStateIssues: widgetStateIssues,
+          widgetStateCount: widgetStateCount,
           layersEdgeCount: layersEdgeCount,
           usesLocalization: usesLocalization,
           ignoreDirectivesCount: ignoreDirectivesCount,
@@ -420,6 +439,7 @@ class ProjectMetrics {
           duplicateCodeAnalyzerEnabled: duplicateCodeAnalyzerEnabled,
           documentationAnalyzerEnabled: documentationAnalyzerEnabled,
           localizationAnalyzerEnabled: localizationAnalyzerEnabled,
+          widgetStateAnalyzerEnabled: widgetStateAnalyzerEnabled,
         ),
       );
 
@@ -477,6 +497,8 @@ class ProjectMetrics {
       'duplicateCodeIssues': duplicateCodeIssues.length,
       'documentationIssues': documentationIssues.length,
       'localizationIssues': localizationIssues.length,
+      'widgetStates': widgetStateCount,
+      'widgetStateIssues': widgetStateIssues.length,
       'complianceScore': complianceScore,
     },
     'layers': {
@@ -501,6 +523,7 @@ class ProjectMetrics {
     'duplicateCodeIssues': duplicateCodeIssues.map((i) => i.toJson()).toList(),
     'documentationIssues': documentationIssues.map((i) => i.toJson()).toList(),
     'localizationIssues': localizationIssues.map((i) => i.toJson()).toList(),
+    'widgetStateIssues': widgetStateIssues.map((i) => i.toJson()).toList(),
     'packagePlatformWarnings': packagePlatformWarnings
         .map((w) => w.toJson())
         .toList(),

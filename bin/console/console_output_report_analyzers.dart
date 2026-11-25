@@ -17,10 +17,6 @@ void _populateAnalyzerBlocks(_ReportContext ctx, List<_ListBlock> listBlocks) {
     issues: ctx.magicNumberIssues,
     summaryLine:
         '${warnTag()} ${formatCount(ctx.magicNumberIssues.length)} ${AppStrings.magicNumbersDetected}',
-    status: _ListBlockStatus.warning,
-    filePathExtractor: (issue) => issue.filePath as String?,
-    detailFormatter: (issue) => issue.format() as String,
-    moreConnector: AppStrings.and,
   );
   _addIssueListAnalyzerBlock(
     ctx,
@@ -34,10 +30,6 @@ void _populateAnalyzerBlocks(_ReportContext ctx, List<_ListBlock> listBlocks) {
     issues: ctx.sourceSortIssues,
     summaryLine:
         '${warnTag()} ${formatCount(ctx.sourceSortIssues.length)} ${AppStrings.unsortedMembers}',
-    status: _ListBlockStatus.warning,
-    filePathExtractor: (issue) => issue.filePath as String?,
-    detailFormatter: (issue) => issue.format() as String,
-    moreConnector: AppStrings.and,
   );
   _addIssueListAnalyzerBlock(
     ctx,
@@ -51,10 +43,6 @@ void _populateAnalyzerBlocks(_ReportContext ctx, List<_ListBlock> listBlocks) {
     issues: ctx.secretIssues,
     summaryLine:
         '${warnTag()} ${formatCount(ctx.secretIssues.length)} ${AppStrings.potentialSecretsDetected}',
-    status: _ListBlockStatus.warning,
-    filePathExtractor: (issue) => issue.filePath as String?,
-    detailFormatter: (issue) => issue.format() as String,
-    moreConnector: AppStrings.and,
   );
   _addDeadCodeBlock(ctx, listBlocks);
   _addDuplicateCodeBlock(ctx, listBlocks);
@@ -70,11 +58,8 @@ void _populateAnalyzerBlocks(_ReportContext ctx, List<_ListBlock> listBlocks) {
     issues: ctx.documentationIssues,
     summaryLine:
         '${warnTag()} ${formatCount(ctx.documentationIssues.length)} ${AppStrings.documentationIssuesDetected}',
-    status: _ListBlockStatus.warning,
-    filePathExtractor: (issue) => issue.filePath as String?,
-    detailFormatter: (issue) => issue.format() as String,
-    moreConnector: AppStrings.and,
   );
+  _addWidgetStateBlock(ctx, listBlocks);
   _addCustomLocalizationBlock(ctx, listBlocks);
   _addPackagePlatformWarningsBlock(ctx, listBlocks);
   _addAppIconIssuesBlock(ctx, listBlocks);
@@ -445,9 +430,6 @@ void _addHardcodedStringsBlock(
     summaryLine:
         '${failTag()} ${formatCount(ctx.hardcodedStringIssues.length)} ${AppStrings.hardcodedStringsDetected} (localization ${AppStrings.enabled}):',
     status: _ListBlockStatus.failure,
-    filePathExtractor: (issue) => issue.filePath as String?,
-    detailFormatter: (issue) => issue.format() as String,
-    moreConnector: AppStrings.and,
   );
 }
 
@@ -647,9 +629,7 @@ void _addLayersBlock(_ReportContext ctx, List<_ListBlock> listBlocks) {
     summaryLine:
         '$summaryTag ${formatCount(ctx.layersIssues.length)} ${AppStrings.layersViolationsDetected}',
     status: status,
-    filePathExtractor: (issue) => issue.filePath as String?,
     detailFormatter: _formatLayersIssue,
-    moreConnector: AppStrings.and,
     appendTrailingBlankLine: false,
   );
 }
@@ -707,6 +687,9 @@ bool _looksLikePath(String value) {
 }
 
 /// Adds a generic analyzer block for issue-list based analyzers.
+///
+/// By default the issues are warnings, each listed under its `filePath`
+/// by its `format()`, and a truncated list ends with "and N more".
 void _addIssueListAnalyzerBlock(
   _ReportContext ctx,
   List<_ListBlock> listBlocks, {
@@ -716,10 +699,10 @@ void _addIssueListAnalyzerBlock(
   required String passedLine,
   required List issues,
   required String summaryLine,
-  required _ListBlockStatus status,
-  required String? Function(dynamic) filePathExtractor,
-  required String Function(dynamic) detailFormatter,
-  required String moreConnector,
+  _ListBlockStatus status = _ListBlockStatus.warning,
+  String? Function(dynamic) filePathExtractor = _issueFilePath,
+  String Function(dynamic) detailFormatter = _formatIssue,
+  String moreConnector = AppStrings.and,
   bool appendTrailingBlankLine = true,
 }) {
   if (!enabled) {
@@ -928,3 +911,9 @@ void _addCustomLocalizationBlock(
     issueCountOverride: localizationIssues.length,
   );
 }
+
+/// The `filePath` of an analyzer issue.
+String? _issueFilePath(dynamic issue) => issue.filePath as String?;
+
+/// An analyzer issue as its `format()` writes it.
+String _formatIssue(dynamic issue) => issue.format() as String;

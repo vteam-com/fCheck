@@ -507,6 +507,9 @@ Map<String, String> _buildRelativeFileSeverityByPath(
     for (final issue in projectMetrics.documentationIssues) {
       push(issue.filePath, 'warning');
     }
+    for (final issue in projectMetrics.widgetStateIssues) {
+      push(issue.filePath, 'warning');
+    }
     for (final issue in projectMetrics.sourceSortIssues) {
       push(issue.filePath, 'warning');
     }
@@ -599,6 +602,9 @@ Map<String, String> _buildFolderSeverityByPath(
       }
     }
     for (final issue in projectMetrics.documentationIssues) {
+      pushFolder(issue.filePath, 'warning');
+    }
+    for (final issue in projectMetrics.widgetStateIssues) {
       pushFolder(issue.filePath, 'warning');
     }
     for (final issue in projectMetrics.sourceSortIssues) {
@@ -719,6 +725,9 @@ Map<String, Map<String, int>> _buildRelativeWarningsByPath(
     }
     for (final issue in projectMetrics.documentationIssues) {
       add(issue.filePath, 'Documentation');
+    }
+    for (final issue in projectMetrics.widgetStateIssues) {
+      add(issue.filePath, 'Widget States');
     }
     for (final issue in projectMetrics.sourceSortIssues) {
       add(issue.filePath, 'Source Sorting');

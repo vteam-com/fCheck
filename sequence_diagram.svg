@@ -264,6 +264,15 @@
   <text x="1295" y="1249" text-anchor="middle" class="message-text">aggregate(metricsData)</text>
   <line x1="2300" y1="1280" x2="290" y2="1280" class="return-arrow" />
 
+  <rect x="590" y="1305" width="20" height="40" class="activation" />
+  <line x1="290" y1="1315" x2="590" y2="1315" class="message-arrow" />
+  <text x="440" y="1309" text-anchor="middle" class="message-text">analyzeAll([WidgetStateDelegate]) on tests</text>
+  <line x1="590" y1="1345" x2="290" y2="1345" class="return-arrow" />
+  <text x="440" y="1360" text-anchor="middle" class="message-text">tests' WidgetStateFileData</text>
+  <rect x="640" y="1300" width="560" height="50" rx="4" class="note-box" />
+  <text x="652" y="1320" class="note-text">widget_state: WidgetStateAnalyzer.analyze(code, tests) judges each State</text>
+  <text x="652" y="1338" class="note-text">across files (apart, public) and test lines reaching into one (reachedByTest).</text>
+
   <rect x="1950" y="1305" width="900" height="35" rx="4" class="note-box" />
   <text x="1962" y="1328" class="note-text">Consistent post-processing reuses Runner contexts and now augments reported
     layers issues from folders-SVG upward edges before ProjectMetrics.</text>

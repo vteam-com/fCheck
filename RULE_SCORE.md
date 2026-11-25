@@ -26,6 +26,7 @@ Only enabled analyzers contribute to the score.
 - `duplicate_code`
 - `documentation`
 - `localization`
+- `widget_state` (only when the analyzed code declares a widget `State`)
 
 Additional suppression inputs are tracked and can deduct points:
 
@@ -148,6 +149,15 @@ score = 1 - (documentationIssues / budget)
 ```text
 budget = max(1.0, dartFiles * 0.3)
 score = 1 - (localizationIssues / budget)
+```
+
+### 12) Widget state
+
+Counts only when the analyzed code declares at least one widget `State`.
+
+```text
+budget = max(2.0, widgetStates * 0.5)
+score = 1 - (widgetStateIssues / budget)
 ```
 
 ## Suppression Penalty

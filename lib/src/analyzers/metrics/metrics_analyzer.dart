@@ -27,6 +27,8 @@ class MetricsAnalyzer {
   static const double _documentationBudgetPerFile = 0.6;
   static const double _minLocalizationBudget = 1.0;
   static const double _localizationBudgetPerFile = 0.3;
+  static const double _minWidgetStateBudget = 2.0;
+  static const double _widgetStateBudgetPerState = 0.5;
   static const double _duplicateRatioPenaltyMultiplier = 2.5;
   static const double _minIgnoreDirectiveBudget = 3.0;
   static const double _ignoreDirectiveBudgetPerFile = 0.12;
@@ -146,6 +148,13 @@ class MetricsAnalyzer {
       _minLocalizationBudget,
       safeDartFileCount * _localizationBudgetPerFile,
     );
+    final widgetStateBudget = math.max(
+      _minWidgetStateBudget,
+      input.widgetStateCount * _widgetStateBudgetPerState,
+    );
+    // Without a widget State there is nothing to judge
+    final widgetStateEnabled =
+        input.widgetStateAnalyzerEnabled && input.widgetStateCount > 0;
     final duplicateImpactLines = input.duplicateCodeIssues.fold<double>(
       0,
       (sum, issue) => sum + (issue.lineCount * issue.similarity),
@@ -260,6 +269,16 @@ class MetricsAnalyzer {
         score: _budgetScore(
           issues: input.localizationIssues.length,
           budget: localizationBudget,
+        ),
+      ),
+      _ComplianceAreaScore(
+        key: 'widget_state',
+        label: 'Widget states',
+        enabled: widgetStateEnabled,
+        issueCount: input.widgetStateIssues.length,
+        score: _budgetScore(
+          issues: input.widgetStateIssues.length,
+          budget: widgetStateBudget,
         ),
       ),
     ];
@@ -404,6 +423,8 @@ class MetricsAnalyzer {
         return 'Extract repeated code paths into shared helpers or reusable widgets.';
       case 'documentation':
         return 'Document public APIs and add context comments to complex private logic.';
+      case 'widget_state':
+        return 'Keep each widget State private, beside its widget, and test the widget rather than its State.';
       case 'suppression_hygiene':
         return 'Reduce custom excludes, restore disabled analyzers, and remove stale fcheck ignore directives.';
     }

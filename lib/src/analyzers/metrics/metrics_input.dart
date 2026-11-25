@@ -8,6 +8,7 @@ import 'package:fcheck/src/analyzers/localization/localization_issue.dart';
 import 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 import 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
+import 'package:fcheck/src/analyzers/widget_state/widget_state_issue.dart';
 import 'package:fcheck/src/models/code_size_thresholds.dart';
 import 'package:fcheck/src/models/file_metrics.dart';
 
@@ -29,6 +30,8 @@ class ProjectMetricsAnalysisInput {
     required this.duplicateCodeIssues,
     required this.documentationIssues,
     required this.localizationIssues,
+    this.widgetStateIssues = const [],
+    this.widgetStateCount = 0,
     required this.layersEdgeCount,
     required this.usesLocalization,
     required this.ignoreDirectivesCount,
@@ -45,6 +48,7 @@ class ProjectMetricsAnalysisInput {
     required this.duplicateCodeAnalyzerEnabled,
     required this.documentationAnalyzerEnabled,
     required this.localizationAnalyzerEnabled,
+    this.widgetStateAnalyzerEnabled = true,
   });
 
   /// Total number of analyzed Dart files.
@@ -136,4 +140,13 @@ class ProjectMetricsAnalysisInput {
 
   /// Whether localization analyzer is enabled.
   final bool localizationAnalyzerEnabled;
+
+  /// Widget `State`s out of place and test lines reaching into one.
+  final List<WidgetStateIssue> widgetStateIssues;
+
+  /// Number of widget `State` classes declared.
+  final int widgetStateCount;
+
+  /// Whether widget state analyzer is enabled.
+  final bool widgetStateAnalyzerEnabled;
 }

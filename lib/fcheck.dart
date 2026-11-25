@@ -59,6 +59,10 @@ import 'package:fcheck/src/analyzers/shared/dependency_uri_utils.dart';
 import 'package:fcheck/src/analyzers/shared/generated_file_utils.dart';
 import 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
 import 'package:fcheck/src/analyzers/sorted/source_sort_delegate.dart';
+import 'package:fcheck/src/analyzers/widget_state/widget_state_analyzer.dart';
+import 'package:fcheck/src/analyzers/widget_state/widget_state_delegate.dart';
+import 'package:fcheck/src/analyzers/widget_state/widget_state_file_data.dart';
+import 'package:fcheck/src/analyzers/widget_state/widget_state_issue.dart';
 import 'package:fcheck/src/exports/svg/export_folders/export_svg_folders.dart';
 import 'package:fcheck/src/exports/svg/export_packages/export_package_platform_warning_collector.dart';
 import 'package:fcheck/src/exports/svg/export_packages/export_svg_package_dependencies.dart';
@@ -95,6 +99,7 @@ export 'package:fcheck/src/analyzers/magic_numbers/magic_number_issue.dart';
 export 'package:fcheck/src/analyzers/project_metrics.dart';
 export 'package:fcheck/src/analyzers/secrets/secret_issue.dart';
 export 'package:fcheck/src/analyzers/sorted/sort_issue.dart';
+export 'package:fcheck/src/analyzers/widget_state/widget_state_issue.dart';
 export 'package:fcheck/src/models/code_size_thresholds.dart';
 export 'package:fcheck/src/models/fcheck_config.dart';
 export 'package:fcheck/src/models/file_metrics.dart';
@@ -317,6 +322,7 @@ class AnalyzeFolder {
       AnalyzerDomain.documentation,
     );
     final localizationEnabled = _isAnalyzerEnabled(AnalyzerDomain.localization);
+    final widgetStateEnabled = _isAnalyzerEnabled(AnalyzerDomain.widgetState);
     final hardcodedStringsFocus = projectType == ProjectType.flutter
         ? HardcodedStringFocus.flutterWidgets
         : projectType == ProjectType.dart
@@ -349,6 +355,7 @@ class AnalyzeFolder {
         ),
       if (documentationEnabled) DocumentationDelegate(),
       if (localizationEnabled) LocalizationDelegate(fix: fix),
+      if (widgetStateEnabled) WidgetStateDelegate(),
     ];
 
     final unifiedAnalyzer = AnalyzerRunner(
@@ -414,6 +421,10 @@ class AnalyzeFolder {
             analysisRootPath: projectDir.path,
           )
         : <DocumentationIssue>[];
+
+    final widgetStateResult = widgetStateEnabled
+        ? _analyzeWidgetStates(unifiedResult, testDartFiles)
+        : (issues: <WidgetStateIssue>[], stateCount: 0);
 
     final layersResult = layersEnabled
         ? LayersAnalyzer(
@@ -542,6 +553,8 @@ class AnalyzeFolder {
       deadCodeIssues: deadCodeIssues,
       packagePlatformWarnings: packagePlatformWarnings,
       appIconIssues: appIconIssues,
+      widgetStateIssues: widgetStateResult.issues,
+      widgetStateCount: widgetStateResult.stateCount,
       oneClassPerFileAnalyzerEnabled: oneClassPerFileEnabled,
       codeSizeAnalyzerEnabled: codeSizeEnabled,
       hardcodedStringsAnalyzerEnabled: hardcodedStringsEnabled,
@@ -553,6 +566,43 @@ class AnalyzeFolder {
       duplicateCodeAnalyzerEnabled: duplicateCodeEnabled,
       documentationAnalyzerEnabled: documentationEnabled,
       localizationAnalyzerEnabled: localizationEnabled,
+      widgetStateAnalyzerEnabled: widgetStateEnabled,
+    );
+  }
+
+  /// Judges the widget `State`s of the files [unifiedResult] analyzed and
+  /// the reaches of [testDartFiles] into them, with paths relative to the
+  /// analyzed folder.
+  ({List<WidgetStateIssue> issues, int stateCount}) _analyzeWidgetStates(
+    AnalysisRunnerResult unifiedResult,
+    List<File> testDartFiles,
+  ) {
+    List<WidgetStateFileData> dataOf(AnalysisRunnerResult result) =>
+        (result.resultsByType[WidgetStateFileData] ?? const <dynamic>[])
+            .whereType<WidgetStateFileData>()
+            .toList();
+    // Tests are no analyzed code, but name the States they reach into
+    final tests = AnalyzerRunner(
+      projectDir: projectDir,
+      delegates: [WidgetStateDelegate()],
+      dartFiles: testDartFiles,
+    ).analyzeAll();
+    final result = const WidgetStateAnalyzer().analyze(
+      files: dataOf(unifiedResult),
+      tests: dataOf(tests),
+    );
+    final normalizedRoot = p.normalize(projectDir.absolute.path);
+    return (
+      issues: [
+        for (final issue in result.issues)
+          issue.withPaths(
+            (path) => toRelativePathForDisplay(
+              path,
+              normalizedRootPath: normalizedRoot,
+            ),
+          ),
+      ],
+      stateCount: result.stateCount,
     );
   }
 

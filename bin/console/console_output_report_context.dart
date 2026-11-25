@@ -61,6 +61,8 @@ class _ReportContext {
   final List unusedVariableIssues;
   final List documentationIssues;
   final List localizationIssues;
+  final List widgetStateIssues;
+  final int widgetStateCount;
   final List duplicateCodeIssues;
   final List sourceSortIssues;
   final List layersIssues;
@@ -78,6 +80,7 @@ class _ReportContext {
   final bool duplicateCodeAnalyzerEnabled;
   final bool documentationAnalyzerEnabled;
   final bool localizationAnalyzerEnabled;
+  final bool widgetStateAnalyzerEnabled;
   final bool layersAnalyzerEnabled;
 
   final List<({String title, int threshold, List<CodeSizeArtifact> artifacts})>
@@ -154,6 +157,8 @@ class _ReportContext {
     required this.unusedVariableIssues,
     required this.documentationIssues,
     required this.localizationIssues,
+    required this.widgetStateIssues,
+    required this.widgetStateCount,
     required this.duplicateCodeIssues,
     required this.sourceSortIssues,
     required this.layersIssues,
@@ -170,6 +175,7 @@ class _ReportContext {
     required this.duplicateCodeAnalyzerEnabled,
     required this.documentationAnalyzerEnabled,
     required this.localizationAnalyzerEnabled,
+    required this.widgetStateAnalyzerEnabled,
     required this.layersAnalyzerEnabled,
     required this.codeSizeSections,
     required this.disabledAnalyzerKeys,
@@ -307,6 +313,8 @@ class _ReportContext {
         AnalyzerDomain.documentation.configName,
       if (!metrics.localizationAnalyzerEnabled)
         AnalyzerDomain.localization.configName,
+      if (!metrics.widgetStateAnalyzerEnabled)
+        AnalyzerDomain.widgetState.configName,
     ]..sort();
 
     final suppressionPenaltyPoints = metrics.suppressionPenaltyPoints;
@@ -432,6 +440,8 @@ class _ReportContext {
       unusedVariableIssues: metrics.unusedVariableIssues,
       documentationIssues: metrics.documentationIssues,
       localizationIssues: metrics.localizationIssues,
+      widgetStateIssues: metrics.widgetStateIssues,
+      widgetStateCount: metrics.widgetStateCount,
       duplicateCodeIssues: duplicateCodeIssues,
       sourceSortIssues: metrics.sourceSortIssues,
       layersIssues: metrics.layersIssues,
@@ -450,6 +460,7 @@ class _ReportContext {
       duplicateCodeAnalyzerEnabled: metrics.duplicateCodeAnalyzerEnabled,
       documentationAnalyzerEnabled: metrics.documentationAnalyzerEnabled,
       localizationAnalyzerEnabled: metrics.localizationAnalyzerEnabled,
+      widgetStateAnalyzerEnabled: metrics.widgetStateAnalyzerEnabled,
       layersAnalyzerEnabled: metrics.layersAnalyzerEnabled,
       codeSizeSections: codeSizeSections,
       disabledAnalyzerKeys: disabledAnalyzerKeys,

@@ -916,6 +916,24 @@ analyzers:
       },
     );
 
+    test(
+      'should show widget states as passive without a widget State',
+      () async {
+        File('${tempDir.path}/main.dart').writeAsStringSync('''
+void main() {}
+''');
+
+        final result = await runCli(['--input', tempDir.path, '--no-colors']);
+
+        expect(result.exitCode, equals(0));
+        expect(result.stdout, contains('[-] Widget states'));
+        expect(
+          result.stdout,
+          isNot(contains('${AppStrings.widgetStateCheck} ')),
+        );
+      },
+    );
+
     test('should support analyzer opt-in mode via .fcheck', () async {
       File('${tempDir.path}/main.dart').writeAsStringSync('''
 void main() {

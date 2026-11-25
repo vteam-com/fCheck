@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Widget state analyzer (`widget_state`) for Flutter, Riverpod and flutter_hooks stateful widgets. A widget's `State` belongs beside its widget and private (`_FooState`). It reports:
+  - `apart`: the `State` is declared in a different file than its widget (a part file or a library of its own).
+  - `public`: the `State` is public and no other library of the app or its tests names it. A public `State` another library uses, such as through `GlobalKey<FooState>`, is not flagged.
+  - `reachedByTest`: a test line names the `State` type or calls the widget's `createState()`, one issue per line.
+
+  Suppress a finding with `// ignore: fcheck_widget_state` on the `State` declaration, on the test line, or at the top of the file. The analyzer counts toward the score only when the code declares at least one widget `State`: `1 - issues / max(2.0, widgetStates * 0.5)`; otherwise the report shows it as `[-] Widget states`. Results are in `ProjectMetrics.widgetStateIssues` and `widgetStateCount`, JSON `widgetStateIssues` and `stats.widgetStates`, and the SVG warnings. See `RULES_WIDGET_STATE.md`.
+
 - `validateLayers(dependencyGraph)` returns the Layers issues fCheck reports for a dependency graph: file and folder cycles, and files and folders depending on a layer above theirs, as the folders SVG draws them. A tool can check a planned change before making it, such as moving files between folders, by comparing the issues of the graph it would make with the current ones. The analysis reports its own Layers issues through it, so both always agree. `LayersAnalyzer.forGraph().analyzeGraph(graph)` runs the layers analysis on a graph alone.
 
 ## [1.6.4] – 2026-11-16

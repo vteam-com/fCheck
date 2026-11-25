@@ -36,6 +36,11 @@ class IgnoreConfig {
   static const String ignoreDirectiveForOneClassPerFile =
       '// ignore: fcheck_one_class_per_file';
 
+  /// `// ignore: fcheck_widget_state` directive used to skip widget `State`
+  /// checks.
+  static const String ignoreDirectiveForWidgetState =
+      '// ignore: fcheck_widget_state';
+
   /// `// ignore_for_file: avoid_hardcoded_strings_in_widgets` directive.
   static const String ignoreForFileDirectiveForHardcodedStrings =
       '// ignore_for_file: avoid_hardcoded_strings_in_widgets';
