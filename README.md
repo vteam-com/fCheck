@@ -270,7 +270,7 @@ fcheck --strict
 
 ```bash
 $ fcheck .
-↓------------------------------ fCheck 1.6.4 -------------------------------↓
+↓------------------------------ fCheck 1.6.5 -------------------------------↓
 Input              : /path/to/project
 Dart Project       : my-cool-app (version: 9.0.0)
 Platforms          : [✓Android] [✓iOS]  [✓MacOS] [✓Windows] [✓Linux]   [✓Web]
